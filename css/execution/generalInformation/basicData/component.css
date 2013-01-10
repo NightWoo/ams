@@ -1,0 +1,27 @@
+/* CSS Document */
+#tableComponent {
+	border-bottom: solid 1px #DDDDDD;
+	font-size: 12px;
+
+}
+
+#tableComponent .btn-link {
+	font-size: 12px;
+}
+
+#tabs {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.breadcrumb {
+	margin-bottom: 5px;
+}
+
+#btnQueryF0,#btnQueryM6 {
+	margin-left: 10px;
+}
+
+#btnAddF0,#btnAddM6 {
+	margin-right: 10px;
+}

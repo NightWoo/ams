@@ -1,0 +1,21 @@
+.carousel-inner .item img {
+	margin: 0 auto;
+}
+
+.carousel-caption {
+	position: relative;
+}
+
+#downOverview {
+	display: inline-block;
+}
+
+a p,i{
+	margin: 0;
+	cursor: pointer;
+	display: inline-block;
+}
+
+a p {
+	margin-left: 5px;
+}

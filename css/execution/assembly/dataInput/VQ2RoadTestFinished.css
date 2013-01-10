@@ -1,0 +1,25 @@
+/* CSS Document */
+label {
+	margin: 0px;
+}
+
+#divAlert {
+	margin-top: 20px;
+}
+
+#tabs {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+#tabContent table {
+	margin-bottom: 0px;
+}
+
+#formFailure {
+	margin-bottom: 10px;
+}
+
+.table th, .table td{
+	vertical-align: middle;
+}

@@ -1,0 +1,39 @@
+/* CSS Document */
+
+#form {
+	margin-bottom: 10px;
+}
+
+.btn-success {
+	margin-left: 2px;
+}
+
+#messageAlert {
+	margin-left: 5px;
+}
+
+table label {
+	margin-bottom: 0px;
+	margin-right: 10px;
+}
+
+td p {
+	margin: 0;	
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#tableUpload td {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+.btnDelect {
+	cursor:pointer;
+}
+
+#queryRefresh {
+	cursor:pointer;
+}

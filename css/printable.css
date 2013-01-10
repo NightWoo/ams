@@ -1,0 +1,10 @@
+.notPrintable{
+	display: none;
+}
+.printable{
+	display: block;
+}
+
+td{border:1px solid black;font-size: 8px;font-family: "宋体"}
+        thead{padding: 0;margin: 0;border:none;}
+        thead td{border:none;}

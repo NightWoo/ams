@@ -1,0 +1,46 @@
+#toggle-left {
+	position: fixed;
+	left:160px;
+	height:100%;
+	width:20px;
+}
+
+#icon-left {
+	position: relative;
+	top: 35px;
+	opacity: 0.5;
+}
+
+.marginleft {
+	margin-left: 20px;
+}
+
+#toggle-top {
+	position: fixed;
+	top:43px;
+	width:100%;
+	height:14px;
+}
+
+#icon-top {
+	position: relative;
+	left: 99%;
+	opacity: 0.5;
+	margin-top: 0;
+}
+
+.offhead {
+	margin-top:60px;
+	margin-right:20px;
+}
+
+#divLeft {
+	background-color:#FFF;
+	z-index:999;
+	position:fixed; 
+	height:100%;
+}
+
+#bodyright {
+	margin-left:20px;
+}

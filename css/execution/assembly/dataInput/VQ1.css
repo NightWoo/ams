@@ -1,0 +1,44 @@
+label {
+	margin: 0px;
+}
+
+#divAlert {
+	margin-top: 20px;
+}
+
+#tabs {
+	height: 37px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+#tabContent table {
+	margin-bottom: 0px;
+}
+
+#formFailure {
+	margin-bottom: 10px;
+}
+
+.form-search .input-append .btn {
+    border-radius: 0 3px 3px 0;
+    width: 8px;
+}
+
+.table th, .table td{
+	vertical-align: middle;
+}
+
+input[type="checkbox"] {
+	margin-top:0px;
+	margin-bottom:2px;
+}
+
+.input-append select {
+	width: 164px;
+}
+/*
+strong {
+	color: #317eac;
+}
+*/

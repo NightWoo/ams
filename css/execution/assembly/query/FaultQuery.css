@@ -1,0 +1,30 @@
+.well {
+	margin-bottom: 10px;	
+}
+
+#selectNode {
+	margin-left: 6px;
+}
+.form-search .checkbox {
+	margin-left: 10px;
+}
+
+#btnQuery{
+	margin-left: 6px;
+}
+
+#btnExport {
+	margin-left: 2px;
+}
+
+#tabs {
+	margin-bottom: 10px;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#resultTable, #tableFaultDistribute, #tableDpu {
+	font-size:12px;	
+}

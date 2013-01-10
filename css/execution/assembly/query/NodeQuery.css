@@ -1,0 +1,28 @@
+.well {
+	margin-bottom: 10px;	
+}
+
+
+.form-search .checkbox {
+	margin-left: 15px;
+}
+
+#btnQuery {
+	margin-left: 9px;
+}
+
+#tabs {
+	margin-bottom: 10px;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#resultTable, #tablePlato, #tableDpu {
+	font-size:12px;	
+}
+
+.checkbox {
+	margin-left: 10px;
+}
