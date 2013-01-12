@@ -4,10 +4,10 @@ $(document).ready(function () {
 		ajaxRefresh();
 	// 	seatController.animateChainCall("EF1");
 	// seatController.animateChainPause("mainChain");
-	},60000);
+	},10000);
 	setInterval(function () {
 		ajaxRefreshSeats();
-	},10000);
+	},2000);
 	
 });
 

@@ -2,11 +2,11 @@ $(document).ready(function () {
 	initPage();
 	setInterval(function () {
 		ajaxRefresh();
-	},60000);
+	},10000);
 	setInterval(function () {
 		ajaxRefreshSeats ();
 
-	},10000);
+	},2000);
 	var sectionName = $("#section").val();
 	$("#EF1").hide();
 	$("#EF2").hide();

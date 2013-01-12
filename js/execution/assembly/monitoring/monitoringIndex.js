@@ -104,11 +104,11 @@ $(document).ready(function () {
 	getTipInfo();
 	setInterval(function () {
 		getTipInfo();
-	},90000);
+	},10000);
 	ajaxRefresh();
 	setInterval(function () {
 		ajaxRefresh();
-	},60000);
+	},5000);
 });
 
 !function (window) {
