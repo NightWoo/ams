@@ -79,6 +79,7 @@ $("document").ready(function() {
 				if(response.success){
 				  	fadeMessageAlert(response.message,"alert-success");
 				  	$("#vinHint").html("上一辆" + response.data);	//added by wujun
+				  	recordArray = [];		//added by wujun
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");

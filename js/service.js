@@ -132,6 +132,10 @@ var SAVE_FAULT_STANDARD  = "/bms/fault/saveFaultStandard";
 var REMOVE_FAULT_STANDARD = "/bms/fault/removeFaultStandard";
 var GENERATE_FAULT_CODE = "/bms/fault/generateFaultCode";
 
+var SEARCH_PROVIDER = "/bms/provider/search";
+var SAVE_PROVIDER = "/bms/provider/save";
+var DELETE_PROVIDER = "/bms/provider/delete";
+
 var SEARCH_PLAN = "/bms/plan/search";
 var SAVE_PLAN = "/bms/plan/save";
 var DELETE_PLAN = "/bms/plan/remove";

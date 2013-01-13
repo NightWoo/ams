@@ -26,4 +26,12 @@ class GeneralInformationController extends BmsBaseController
 	public function actionFaultMaintain() {
 		$this->render('basicData/faultMaintain');
 	}
+
+	public function actionProviderMaintain() {
+		$this->render('basicData/providerMaintain');
+	}
+
+	public function actionDistributorMaintain() {
+		$this->render('basicData/distributorMaintain');
+	}
 }

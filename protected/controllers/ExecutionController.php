@@ -471,27 +471,63 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
+        $name = '';
+        $code = '222';
+        $sql = "SELECT id AS provider_id, code AS provider_code, name AS provider_name, display_name FROM provider";
+        
+
+        $conditionsName = array();      
+        if(!empty($name)){
+            $conditions = array();
+            $conditions[] = $conditionsName[][] = "name LIKE '%$name%'";
+            $conditions[] = $conditionsName[][] = "display_name LIKE '%$name%'";
+        }
+
+        if(!empty($code)) {
+            $conditions = array();
+            if(!empty($conditionsName)){
+                foreach($conditionsName as $condition){
+                    $condition[] = "code LIKE '%$code%'";
+                    $conditions[] = join(' AND ', $condition);
+                }                        
+            } else {
+                $conditions[] = "code LIKE '%$code%'";
+            }           
+        }
+
+        $sqls = array();
+        if(!empty($conditions)){
+            foreach($conditions as $condition){
+                $sqls[] = $sql . ' WHERE ' . $condition;
+            }
+        } else {
+            $sqls[] = $sql;
+        }
+
+        $sql = join(' UNION ', $sqls);
+
+        print_r($sql);
         //$seeker = new MonitorSeeker();
         //echo $seeker->getRestTime(date("Y-m-d H:i:s"));
-        $lastDate = DateUtil::getLastDate();
-        print_r($lastDate);
-        $plans = PlanAR::model()->findAll("plan_date=? ORDER BY priority ASC", array($lastDate));
-        $count = PlanAR::model()->count("plan_date=? ORDER BY priority ASC", array($lastDate));
-        $data = array();
-        foreach($plans as $plan){
-            $data[] = $plan->getAttributes();
-        }
-        print_r($data);
-        echo '<br>';
-        print_r($count);
+        // $lastDate = DateUtil::getLastDate();
+        // print_r($lastDate);
+        // $plans = PlanAR::model()->findAll("plan_date=? ORDER BY priority ASC", array($lastDate));
+        // $count = PlanAR::model()->count("plan_date=? ORDER BY priority ASC", array($lastDate));
+        // $data = array();
+        // foreach($plans as $plan){
+        //     $data[] = $plan->getAttributes();
+        // }
+        // print_r($data);
+        // echo '<br>';
+        // print_r($count);
 
-        echo '<br>';
-        $curYear = date('Y');
-        $year = CarYear::getYearCode($curYear);
-        echo $year;
+        // echo '<br>';
+        // $curYear = date('Y');
+        // $year = CarYear::getYearCode($curYear);
+        // echo $year;
 
-        $vin = "4C0127057";
-        $car = CarAR::model()->find("vin like ?", array("%$vin"));
-           echo $car->vin;
+        // $vin = "4C0127057";
+        // $car = CarAR::model()->find("vin like ?", array("%$vin"));
+        //    echo $car->vin;
     }
 }

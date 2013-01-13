@@ -47,7 +47,7 @@ class ConfigController extends BmsBaseController
 			}
 			if(empty($configName)) {
 				throw new Exception("配置名称不能为空");
-			}else {
+			} else if(empty($id)) {
 				$exist = CarConfigAR::model()->find('name=?', array($configName));
 				if(!empty($exist)){
 					throw new Exception("配置名称 $configName 已经存在，请重新命名");

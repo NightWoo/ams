@@ -184,5 +184,7 @@ $(document).ready(function() {
 		$("#newConfigName").val("");
 		$("#newRemark").text("");	
 	}
-	
+
 });
+
+//changed

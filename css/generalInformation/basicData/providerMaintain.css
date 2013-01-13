@@ -1,6 +1,7 @@
 /* CSS Document */
 #tableProvider {
 	border-bottom: solid 1px #DDDDDD;
+	font-size: 12px;
 }
 
 #btnQuery {

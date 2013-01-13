@@ -5,7 +5,7 @@
 	<title>零部件清单</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
-    <link href="/bms/css/generalInformation/basicData/component.css" rel="stylesheet">
+    <link href="/bms/css/generalInformation/basicData/componentMaintain.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>

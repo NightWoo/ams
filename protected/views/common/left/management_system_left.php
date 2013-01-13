@@ -1,5 +1,5 @@
 <div id="divLeft">
-<div id="bodyleft" class="span2" ><!-- 侧边栏 -->
+<div id="bodyleft" class="span2" style="width:170px;"><!-- 侧边栏 -->
 	<ul class="nav nav-list affix">
 		<li></li>
 		<li class="nav-header">管理手册</li>
