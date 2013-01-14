@@ -1,5 +1,24 @@
 $(document).ready(function () {
+	$(".in").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".out").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
+	$(".vq2-road,.vq2-check,.vq2-leak").hover(
+	  function () {
+	    $(".vq2-road").addClass("border-purple");
+	    $(".vq2-check").addClass("border-purple");
+	  },
+	  function () {
+	    $(".vq2-road").removeClass("border-purple");
+	    $(".vq2-check").removeClass("border-purple");
+	  }
+	);
+
+
+
 	window.markMap = {"T0":209,"T1":220,"T2":224,"T3":228,"T4":232,"T5":236,"T6":240,"T7":244,"T8":248,"T9":252,"T10":256,
 	"T11":271,"T12":282,"T13":286,"T14":290,"T15":294,"T16":298,"T17":302,"T18":306,"T19":310,"T20":311,
 	"T21":333,"T22":344,"T23":350,"T24":356,"T25":362,"T26":268,"T27":374,"T28":380,"T29":386,"T30":392,"T31":398,"T32":414,
@@ -215,12 +234,20 @@ function ajaxThreeInfo () {
 
 $("#liDetecthouse").live("click", hideAllTips);
 $("#liAssembly").live("click", showAllTips);
+
 function hideAllTips (argument) {
 	$('.node_pbs').qtip('toggle', false);
 	$('.node_t0').qtip('toggle', false);
 	$('.node_vq1').qtip('toggle', false);
 	$('.pbs').qtip('toggle', false);
 	$('.vq1').qtip('toggle', false);
+
+	$('.in').qtip('toggle', true);
+	$('.out').qtip('toggle', true);
+	$('.vq3').qtip('toggle', true);
+	$('.road').qtip('toggle', true);
+	$('.check').qtip('toggle', true);
+	$('.leak').qtip('toggle', true);
 }
 function showAllTips (argument) {
 	$('.node_pbs').qtip('toggle', true);
@@ -228,6 +255,13 @@ function showAllTips (argument) {
 	$('.node_vq1').qtip('toggle', true);
 	$('.pbs').qtip('toggle', true);
 	$('.vq1').qtip('toggle', true);
+
+	$('.in').qtip('toggle', false);
+	$('.out').qtip('toggle', false);
+	$('.vq3').qtip('toggle', false);
+	$('.road').qtip('toggle', false);
+	$('.check').qtip('toggle', false);
+	$('.leak').qtip('toggle', false);
 }
 function ajaxProductInfo () {
 	$.ajax({

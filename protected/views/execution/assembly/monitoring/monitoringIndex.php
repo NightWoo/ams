@@ -10,10 +10,12 @@
         <link href="/bms/css/execution/assembly/monitoring/monitoringIndex.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 		<script type="text/javascript" src="/bms/js/head.js"></script>
-		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/monitoringIndex.js"></script>
-		<script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/jquery.qtip.js"></script>
 		<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/bms/js/service.js"></script>
+		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/monitoringIndex.js"></script>
+		
+		
 		<style type="text/css">
 			#tableInfo td{text-align: center;}
 			
@@ -58,7 +60,7 @@
 			    </div>
 			    <div class="tab-content">
 				    
-		            <div id="index" class="tab-pane  main">
+		            <div id="index" class="tab-pane active main">
 		            	<div class="stop_mark" id="stopMark"></div>
 		            	<div class="t1 range" id="rangeT1"></div>
 		            	<div class="t2 range" id="rangeT2"></div>
@@ -94,7 +96,7 @@
 		            			
 		            	</div>
 		            </div>
-		            <div id="detecthouse" class="tab-pane active">
+		            <div id="detecthouse" class="tab-pane ">
 				    	<div class="A01 stockyard">A01</div>
 				    	<div class="A02 stockyard">A02</div>
 				    	<div class="A03 stockyard">A03</div>
@@ -119,6 +121,10 @@
 				    	<div class="leak node"></div>
 				    	<div class="road node"></div>
 				    	<div class="check node"></div>
+				    	<div class="vq3-balance">36</div>
+				    	<div class="vq2-road">84</div>
+				    	<div class="vq2-leak"></div>
+				    	<div class="vq2-check"></div>
 				    </div>
 		            <div id="warehouse" class="tab-pane ">
 		            	
@@ -152,6 +158,7 @@
 		           		<label style="padding-top:7px; margin-bottom: 0">，合计：&nbsp;&nbsp;<span id="totalPauseTime"></span></label>
 						<label style="padding-top:7px; margin-bottom: 0">。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产利用率：&nbsp;&nbsp;<span id="line_urate"></span></label>
 						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线速：&nbsp;&nbsp;<span id="line_speed"></span></label>
+						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周转车：&nbsp;&nbsp;<span id="recycleCar"></span></label>
 					</div>
 	          	</form>	
 	            <div style="width:756px;margin-left:44px;display:none;">

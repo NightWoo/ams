@@ -302,3 +302,11 @@ color: white;
 .leak{left: 108px;top: 293px;}
 .check{left: 110px;top: 345px;}
 
+.vq3-balance{color:transparent; height: 64px;position: absolute;width: 68px;cursor: pointer;border:2px solid transparent;left: 34px;top: 276px;line-height: 96px;
+font-size: 16px;}
+.vq3-balance:hover{color: #9963FF;border-color:  #9963FF;}
+.vq2-road{color: transparent;height: 51px;position: absolute;width: 78px;cursor: pointer;border-width: 2px;border-style: solid none none solid;border-color:  transparent;left: 107px;top: 291px;font-size: 14px;line-height: 76px;}
+.vq2-check{color: #9963FF;height: 23px;position: absolute;width: 71px;cursor: pointer;border-width: 2px;border-style: solid none none solid;border-color:  transparent;left: 34px;top: 342px;}
+.vq2-leak{color: #9963FF;height: 23px;position: absolute;width: 71px;cursor: pointer;border-width: 2px;border-style: solid none none solid;border-color:  transparent;left: 107px;top: 342px;}
+
+.border-purple{border-color:  #9963FF;color: #9963FF;}
