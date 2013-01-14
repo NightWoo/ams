@@ -21,13 +21,13 @@
 	position: relative;
 	/*background-image:url('../../../../img/detecthouse.png');*/
 	/*background-image:url('../../../../img/detecthouse_w721h400.png');*/
-	background-image:url('../../../../img/house_w595h420.png');
+	background-image:url('../../../../img/house420x552.png');
 	background-repeat:no-repeat;
 	/*width:1024px;*/
 	/*height:568px;*/
 	/*width:721px;*/
 	/*height:400px;*/
-	width:595px;
+	width:552px;
 	height:420px;
 	/*color: #FFF;*/
 	font-weight:bold;
@@ -262,3 +262,43 @@ color: white;
 .tab-pane {
 	margin: 0 auto;
 }
+
+.stockyard{position: absolute;color: white;width: 38px;height: 14px;cursor: pointer;border-radius: 2px;border:2px solid #7ECAE2;line-height: 14px;}
+.stockyard:hover{border:2px solid #ff01ed;}
+.A01{left:412px;top: 216px;}
+.A03{left:412px;top: 194px;}
+.A05{left:412px;top: 172px;}
+.A07{left:412px;top: 151px;}
+.A09{left:412px;top: 129px;}
+.A11{left:412px;top: 107px;}
+.A13{left:412px;top: 85px;}
+.A15{left:412px;top: 63px;}
+
+.A02{left:365px;top: 216px;}
+.A04{left:365px;top: 194px;}
+.A06{left:365px;top: 172px;}
+.A08{left:365px;top: 151px;}
+.A10{left:365px;top: 129px;}
+.A12{left:365px;top: 107px;}
+.A14{left:365px;top: 85px;}
+.A16{left:365px;top: 63px;}
+
+.B01{position: absolute;color: white;width: 38px;height: 26px;cursor: pointer;border-radius: 2px;border:2px solid #7ECAE2;line-height: 26px;left:412px;top: 29px;}
+.B02{position: absolute;color: white;width: 38px;height: 26px;cursor: pointer;border-radius: 2px;border:2px solid #7ECAE2;line-height: 26px;left:365px;top: 29px;}
+.B01:hover{border:2px solid #ff01ed;}
+.B02:hover{border:2px solid #ff01ed;}
+
+
+.node:hover{border:2px solid #ff01ed;}
+
+.node{border-radius: 23px;color: white;
+    font-size: 10px;
+    height: 21px;position: absolute;width: 21px;cursor: pointer;border:2px solid transparent;}
+
+.out{left: 177px;top: 229px;}
+.in{left: 203px;top: 265px;}
+.road{left: 177px;top: 293px;}
+.vq3{left: 61px;top: 293px;}
+.leak{left: 108px;top: 293px;}
+.check{left: 110px;top: 345px;}
+

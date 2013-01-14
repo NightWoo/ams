@@ -58,7 +58,7 @@
 			    </div>
 			    <div class="tab-content">
 				    
-		            <div id="index" class="tab-pane active main">
+		            <div id="index" class="tab-pane  main">
 		            	<div class="stop_mark" id="stopMark"></div>
 		            	<div class="t1 range" id="rangeT1"></div>
 		            	<div class="t2 range" id="rangeT2"></div>
@@ -94,8 +94,31 @@
 		            			
 		            	</div>
 		            </div>
-		            <div id="detecthouse" class="tab-pane">
-				    	
+		            <div id="detecthouse" class="tab-pane active">
+				    	<div class="A01 stockyard">A01</div>
+				    	<div class="A02 stockyard">A02</div>
+				    	<div class="A03 stockyard">A03</div>
+				    	<div class="A04 stockyard">A04</div>
+				    	<div class="A05 stockyard">A05</div>
+				    	<div class="A06 stockyard">A06</div>
+				    	<div class="A07 stockyard">A07</div>
+				    	<div class="A08 stockyard">A08</div>
+				    	<div class="A09 stockyard">A09</div>
+				    	<div class="A10 stockyard">A10</div>
+				    	<div class="A11 stockyard">A11</div>
+				    	<div class="A12 stockyard">A12</div>
+				    	<div class="A13 stockyard">A13</div>
+				    	<div class="A14 stockyard">A14</div>
+				    	<div class="A15 stockyard">A15</div>
+				    	<div class="A16 stockyard">A16</div>
+				    	<div class="B01">B01</div>
+				    	<div class="B02">B02</div>
+				    	<div class="out node"></div>
+				    	<div class="in node"></div>
+				    	<div class="vq3 node"></div>
+				    	<div class="leak node"></div>
+				    	<div class="road node"></div>
+				    	<div class="check node"></div>
 				    </div>
 		            <div id="warehouse" class="tab-pane ">
 		            	
