@@ -816,10 +816,15 @@ class FaultSeeker
 			$format = 'Y-m-d';
 			$stime = date($format, $s) . " 00:00:00";
 			$etime = date($format, $e) . " 23:59:59";
+			//$stime = date($format, $s) . " 08:00:00";				//added by haven't test
+			//$etime = date($format, $e + 86400) . " 07:59:59";		//added by haven't test
 		} else {//month
 			$format = 'Y-m';
 			$stime = date($format, $s) . "-01 00:00:00";
 			$etime = date('Y-m-t', $e) . " 23:59:59";
+			//$stime = date($format, $s) . "-01 08:00:00";			//added by haven't test
+			//$eNextM = strtotime('+1 month', $e)					//added by haven't test
+			//$etime = date('Y-m', $eNextM) . "-01 07:59:59";		//added by haven't test
 		}
 
 
