@@ -10,10 +10,12 @@
         <link href="/bms/css/execution/assembly/monitoring/monitoringIndex.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 		<script type="text/javascript" src="/bms/js/head.js"></script>
-		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/monitoringIndex.js"></script>
-		<script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/jquery.qtip.js"></script>
 		<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/bms/js/service.js"></script>
+		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/monitoringIndex.js"></script>
+		
+		
 		<style type="text/css">
 			#tableInfo td{text-align: center;}
 			
@@ -119,6 +121,10 @@
 				    	<div class="leak node"></div>
 				    	<div class="road node"></div>
 				    	<div class="check node"></div>
+				    	<div class="vq3-balance">36</div>
+				    	<div class="vq2-road"></div>
+				    	<div class="vq2-leak"></div>
+				    	<div class="vq2-check"></div>
 				    </div>
 		            <div id="warehouse" class="tab-pane ">
 		            	
