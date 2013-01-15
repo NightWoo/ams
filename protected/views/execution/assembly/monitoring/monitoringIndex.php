@@ -115,8 +115,8 @@
 				    	<div class="A16 stockyard">A16</div>
 				    	<div class="B01">B01</div>
 				    	<div class="B02">B02</div>
-				    	<div class="out node"></div>
-				    	<div class="in node"></div>
+				    	<div class="outware node"></div>
+				    	<div class="inware node"></div>
 				    	<div class="vq3 node"></div>
 				    	<div class="leak node"></div>
 				    	<div class="road node"></div>
@@ -282,5 +282,28 @@
 		  	</div>
 		</div>
 
+		<!-- stockyard record -->
+		<div class="modal" id="stockyardModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h3 id="stockyardTitle">VQ1异常结存明细</h3>
+		  	</div>
+		  	<div class="modal-body">
+		  		<table class="table table-bordered" id="stockyardTable">
+            		<thead>
+            			<th>车系</th>
+            			<th>VIN号</th>
+            			<th>车型/车身</th>
+            			<th>颜色</th>
+            			<th>进入时间</th>
+
+            		</thead>
+            		<tbody></tbody>
+	            </table>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
     </body>
 </html>

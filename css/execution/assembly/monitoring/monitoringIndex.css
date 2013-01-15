@@ -21,13 +21,13 @@
 	position: relative;
 	/*background-image:url('../../../../img/detecthouse.png');*/
 	/*background-image:url('../../../../img/detecthouse_w721h400.png');*/
-	background-image:url('../../../../img/house420x552.png');
+	background-image:url('../../../../img/house551x420.png');
 	background-repeat:no-repeat;
 	/*width:1024px;*/
 	/*height:568px;*/
 	/*width:721px;*/
 	/*height:400px;*/
-	width:552px;
+	width:551px;
 	height:420px;
 	/*color: #FFF;*/
 	font-weight:bold;
@@ -289,17 +289,17 @@ color: white;
 .B02:hover{border:2px solid #ff01ed;}
 
 
-.node:hover{border:2px solid #ff01ed;}
+/*.node:hover{border:2px solid #ff01ed;}*/
 
 .node{border-radius: 23px;color: white;
     font-size: 10px;
     height: 21px;position: absolute;width: 21px;cursor: pointer;border:2px solid transparent;}
 
-.out{left: 177px;top: 229px;}
-.in{left: 203px;top: 265px;}
+.outware{left: 177px;top: 229px;}
+.inware{left: 203px;top: 265px;}
 .road{left: 177px;top: 293px;}
-.vq3{left: 61px;top: 293px;}
-.leak{left: 108px;top: 293px;}
+.vq3{left: 61px;top: 300px;}
+.leak{left: 108px;top: 300px;}
 .check{left: 110px;top: 345px;}
 
 .vq3-balance{color:transparent; height: 64px;position: absolute;width: 68px;cursor: pointer;border:2px solid transparent;left: 34px;top: 276px;line-height: 96px;
