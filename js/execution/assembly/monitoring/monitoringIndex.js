@@ -4,7 +4,7 @@ $(document).ready(function () {
 	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	// $(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
 	qtipMe(".node_pbs", "0", "blue");
 	qtipMe(".node_t0", "0", "blue");
@@ -333,6 +333,8 @@ function ajaxGetStock (argument) {
 	    		$("#line_speed").text(response.data.line_speed);
 	    		$("#line_urate").text(response.data.line_urate);
 	    		$("#totalPauseTime").text(response.data.pause_time.total);
+	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
+	    			parseInt(response.data.balance.VQ3));
 	    		//refresh tips
 	    		$(".outware").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
 	    		$(".inware").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
@@ -342,7 +344,7 @@ function ajaxGetStock (argument) {
     			//refresh stock
     			$(".vq3-balance").html(response.data.balance.VQ3);
     			$(".vq2-road").html(response.data.balance.VQ2);
-    			$(".stock-amount").html(response.data.balance.stock);
+    			$(".stock-amount").html(response.data.balance.warehourse_cars);
 	    	} else {
 	    		alert(response.message);
 	    	}
