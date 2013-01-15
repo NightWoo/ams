@@ -73,15 +73,28 @@ class MonitorSeeker
 			$states = array('VQ1异常','整车下线','出生产车间','检测线缓冲');
 		} elseif($node === 'VQ1-EXCEPTION') {
 			$states = array('VQ1异常');
+		} elseif($node === 'VQ2') {
+			$states = array('VQ2异常.路试','VQ2异常.漏雨');
+		} elseif($node === 'VQ3') {
+			$states = array('VQ3异常');
 		}
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
         return Yii::app()->db->createCommand($sql)->queryAll();
 	}
 
-	public function queryStateCars($states) {
+	public function queryStateCars($states,$stime = null, $etime = null) {
+		$conditions = array();
+		if(!empty($stime)) {
+			$conditions[] = "modify_time >= '$stime'";
+		}
+		if(!empty($etime)) {
+            $conditions[] = "modify_time <= '$etime'";
+        }   
+        $condition = join(' AND ', $conditions);
+
 		$str = "'" . join("','", $states) . "'";
-		$sql = "SELECT count(*) FROM car WHERE status IN ($str)";
+		$sql = "SELECT count(*) FROM car WHERE status IN ($str) $condition";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
 

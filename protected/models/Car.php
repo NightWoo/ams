@@ -577,17 +577,14 @@ class Car
 
 
 	public function generateCheckTraceData() {
-		$vinBarCode = new BarCode($this->car->vin,$this->car->vin);
-        $vinBarCodePath = "tmp/" .$this->car->vin .".png";
-        $vinBarCode->setHeight(10);
-        $vinBarCode->createBarCode('png','./' .$vinBarCodePath);
+		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
 
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
-		$engineBarCode = new BarCode($engineTrace->bar_code,$engineTrace->bar_code);
         $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
-        $engineBarCode->setHeight(10);
-        $engineBarCode->createBarCode('png','./' . $engineBarCodePath);
+		$barcodeGenerator->generate($engineTrace->bar_code,'./' . $engineBarCodePath);
 			
 		$ret = array(
 			'vinBarCode' => "/bms/" .$vinBarCodePath,

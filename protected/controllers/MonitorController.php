@@ -78,6 +78,42 @@ class MonitorController extends BmsBaseController
         $this->renderJsonBms(true, 'OK', $data);
 	}
 
+	public function actionShowProductInfo() {
+		$seeker = new MonitorSeeker();
+
+		list($stime, $etime) = $this->getSETime();
+	
+		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
+        $lineSpeed = $seeker->queryLineSpeed();
+
+		$vq2Balance = $seeker->queryBalanceDetail('VQ2');
+		$vq3Balance = $seeker->queryBalanceDetail('VQ3');
+
+		$drrs = array(
+            'VQ2_LEAK' => $seeker->queryQualified($stime, $etime, 'VQ2'),
+            'VQ2_ROAD' => $seeker->queryQualified($stime, $etime, 'ROAD_TEST_FINISH'),
+            'VQ3' => $seeker->queryQualified($stime, $etime, 'VQ3'),
+            );
+
+        $data = array(
+            'line_speed' => $lineSpeed,
+            'line_run_time' => intval($lineRunTime / 60),
+            'line_urate' =>  $seeker->queryLineURate($stime, $etime),
+            'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
+			'balance' => array(
+				'VQ2' => count($vq2Balance),
+				'VQ3' => count($vq3Balance),
+			),
+			'pass_car' => array(
+				'warehourse_in' => 0,
+				'warehourse_out' => 0,
+			),
+			'drr' => $drrs,
+		);
+
+        $this->renderJsonBms(true, 'OK', $data);
+	}
+
 	public function actionShowBalanceDetail() {
 		$node = $this->validateStringVal('node', 'PBS');//production,quality,balance
         $seeker = new MonitorSeeker();
