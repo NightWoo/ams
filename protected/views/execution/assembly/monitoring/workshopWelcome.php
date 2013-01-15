@@ -13,7 +13,7 @@
     </head>
     <body>
         <div class="main">
-           <h1>欢迎比亚迪经销商</h1>
+           <h1>欢迎经销商</h1>
            <br>
            <h1>莅临总装工厂</h1>
         </div>
