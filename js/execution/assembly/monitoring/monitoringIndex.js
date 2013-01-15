@@ -1,11 +1,17 @@
 $(document).ready(function () {
-	$(".in").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".out").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".outware").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
+	qtipMe(".node_pbs", "0", "blue");
+	qtipMe(".node_t0", "0", "blue");
+	qtipMe(".node_vq1", "0", "red");
+	qtipMe(".pbs", "0", "purple");
+	qtipMe(".vq1", "0", "purple");
+
 	$(".vq2-road,.vq2-check,.vq2-leak").hover(
 	  function () {
 	    $(".vq2-road").addClass("border-purple");
@@ -17,6 +23,12 @@ $(document).ready(function () {
 	  }
 	);
 
+
+	$("#stockyardModal").modal("hide");
+	$(".stockyard,.B01,.B02").live("click", function () {
+		$("#stockyardTitle").html($(this).html() + "结存明细");
+		$("#stockyardModal").modal("show");
+	});
 
 
 	window.markMap = {"T0":209,"T1":220,"T2":224,"T3":228,"T4":232,"T5":236,"T6":240,"T7":244,"T8":248,"T9":252,"T10":256,
@@ -128,6 +140,10 @@ $(document).ready(function () {
 	setInterval(function () {
 		ajaxRefresh();
 	},5000);
+	getStockInfo();
+	setInterval(function () {
+		getStockInfo();
+	},10000);
 });
 
 !function (window) {
@@ -219,11 +235,12 @@ function ajaxThreeInfo () {
 	    data: {},
 	    success:function (response) {
 	    	if (response.success){
-	    		qtipMe(".node_pbs", response.data.list.production.PBS, "blue");
-	    		qtipMe(".node_t0", response.data.list.production.T0, "blue");
-	    		qtipMe(".node_vq1", response.data.list.quality.VQ1, "red");
-    			qtipMe(".pbs", response.data.list.balance.PBS, "purple");
-    			qtipMe(".vq1", response.data.list.balance.VQ1, "purple");
+	    		$(".node_pbs").qtip('option', 'content.text', response.data.list.production.PBS);
+	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0);
+	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1);
+    			$(".pbs").qtip('option', 'content.text', response.data.list.balance.PBS);
+    			$(".vq1").qtip('option', 'content.text', response.data.list.balance.VQ1);
+
 	    	} else {
 	    		alert(response.message);
 	    	}
@@ -232,6 +249,12 @@ function ajaxThreeInfo () {
 	});
 }
 
+function getStockInfo (argument) {
+	ajaxGetStock();
+}
+function ajaxGetStock (argument) {
+	// body...
+}
 $("#liDetecthouse").live("click", hideAllTips);
 $("#liAssembly").live("click", showAllTips);
 
@@ -242,8 +265,8 @@ function hideAllTips (argument) {
 	$('.pbs').qtip('toggle', false);
 	$('.vq1').qtip('toggle', false);
 
-	$('.in').qtip('toggle', true);
-	$('.out').qtip('toggle', true);
+	$('.inware').qtip('toggle', true);
+	$('.outware').qtip('toggle', true);
 	$('.vq3').qtip('toggle', true);
 	$('.road').qtip('toggle', true);
 	$('.check').qtip('toggle', true);
@@ -256,87 +279,12 @@ function showAllTips (argument) {
 	$('.pbs').qtip('toggle', true);
 	$('.vq1').qtip('toggle', true);
 
-	$('.in').qtip('toggle', false);
-	$('.out').qtip('toggle', false);
+	$('.inware').qtip('toggle', false);
+	$('.outware').qtip('toggle', false);
 	$('.vq3').qtip('toggle', false);
 	$('.road').qtip('toggle', false);
 	$('.check').qtip('toggle', false);
 	$('.leak').qtip('toggle', false);
-}
-function ajaxProductInfo () {
-	$.ajax({
-		type: "get",//使用get方法访问后台
-	    dataType: "json",//返回json格式的数据
-	    url: SHOW_MONITOR_LABEL,//ref:  /bms/js/service.js
-	    data: {"type":"production"},
-	    success:function (response) {
-	    	if (response.success){
-	    		if (window.tipRadio.type === "productInfo") {
-	    			$(".node_pbs").qtip('option', 'content.text', response.data.list.PBS);
-	    			$(".node_vq1").qtip('option', 'content.text', response.data.list.VQ1);
-	    			$(".node_t0").qtip('option', 'content.text', response.data.list.T0);
-	    		} else {
-	    			qtipMe(".node_pbs", response.data.list.PBS, "blue");
-		    		qtipMe(".node_vq1", response.data.list.VQ1, "blue");
-		    		qtipMe(".node_t0", response.data.list.T0, "blue");
-	    		}
-	    		window.tipRadio.type = "productInfo";
-	    		
-
-	    	} else {
-	    		alert(response.message);
-	    	}
-	    },
-	    error:function(){alertError();}
-	});
-}
-
-function ajaxQualityInfo () {
-	$.ajax({
-		type: "get",//使用get方法访问后台
-	    dataType: "json",//返回json格式的数据
-	    url: SHOW_MONITOR_LABEL,//ref:  /bms/js/service.js
-	    data: {"type":"quality"},
-	    success:function (response) {
-	    	if (response.success){
-	    		if (window.tipRadio.type === "qualityInfo") {
-	    			$(".node_vq1").qtip('option', 'content.text', response.data.list.VQ1);
-	    		} else {
-	    			qtipMe(".node_vq1", response.data.list.VQ1, "red");
-	    		}
-	    		window.tipRadio.type = "qualityInfo";
-	    		
-	    	} else {
-	    		alert(response.message);
-	    	}
-	    },
-	    error:function(){alertError();}
-	});
-}
-
-function ajaxStoreInfo () {
-	$.ajax({
-		type: "get",//使用get方法访问后台
-	    dataType: "json",//返回json格式的数据
-	    url: SHOW_MONITOR_LABEL,//ref:  /bms/js/service.js
-	    data: {"type":"balance"},
-	    success:function (response) {
-	    	if (response.success){
-	    		if (window.tipRadio.type === "storeInfo") {
-	    			$(".pbs").qtip('option', 'content.text', response.data.list.PBS);
-	    			$(".vq1").qtip('option', 'content.text', response.data.list.VQ1);
-	    		} else {
-	    			qtipMe(".pbs", response.data.list.PBS, "purple");
-	    			qtipMe(".vq1", response.data.list.VQ1, "purple");
-	    		}
-	    		window.tipRadio.type = "storeInfo";
-	    		
-	    	} else {
-	    		alert(response.message);
-	    	}
-	    },
-	    error:function(){alertError();}
-	});
 }
 
 function qtipMe (target, text, color) {
