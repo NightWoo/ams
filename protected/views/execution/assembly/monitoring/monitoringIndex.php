@@ -125,6 +125,7 @@
 				    	<div class="vq2-road">84</div>
 				    	<div class="vq2-leak"></div>
 				    	<div class="vq2-check"></div>
+				    	<div class="stock-amount">36</div>
 				    </div>
 		            <div id="warehouse" class="tab-pane ">
 		            	

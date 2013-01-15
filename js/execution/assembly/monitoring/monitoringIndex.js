@@ -1,6 +1,6 @@
 $(document).ready(function () {
-	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".outware").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".outware").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
@@ -124,27 +124,114 @@ $(document).ready(function () {
 		window.open("/bms/execution/WelcomeSection","_blank","width=320, height=128, location=no");
 	});
 
-	$("#radioInfo").click(function () {
-		getTipInfo();
-	});
+	// $("#radioInfo").click(function () {
+	// 	getTipInfo();
+	// });
 
 	//added by wujun
 
 
 	
-	getTipInfo();
-	setInterval(function () {
-		getTipInfo();
+	ajaxThreeInfo();
+	var assemblyHouseIntervalId = setInterval(function () {
+		ajaxThreeInfo();
 	},10000);
+	console.log(assemblyHouseIntervalId);
 	ajaxRefresh();
-	setInterval(function () {
+	var assemblyHouseRefreshId = setInterval(function () {
 		ajaxRefresh();
 	},5000);
-	getStockInfo();
-	setInterval(function () {
-		getStockInfo();
+	
+	var detectHouseRefreshId ;
+	$("#liDetecthouse").live("click", hideAllTips);
+$("#liAssembly").live("click", showAllTips);
+
+function hideAllTips (argument) {
+	ajaxGetStock();
+	detectHouseRefreshId = setInterval(function () {
+		ajaxGetStock();
 	},10000);
+	clearInterval(assemblyHouseIntervalId);
+	clearInterval(assemblyHouseRefreshId);
+	$('.node_pbs').qtip('toggle', false);
+	$('.node_t0').qtip('toggle', false);
+	$('.node_vq1').qtip('toggle', false);
+	$('.pbs').qtip('toggle', false);
+	$('.vq1').qtip('toggle', false);
+
+	$('.inware').qtip('toggle', true);
+	$('.outware').qtip('toggle', true);
+	$('.vq3').qtip('toggle', true);
+	$('.road').qtip('toggle', true);
+	$('.check').qtip('toggle', true);
+	$('.leak').qtip('toggle', true);
+}
+function showAllTips (argument) {
+	ajaxThreeInfo();
+	assemblyHouseIntervalId = setInterval(function () {
+		ajaxThreeInfo();
+	},10000);
+	ajaxRefresh();
+	assemblyHouseRefreshId = setInterval(function () {
+		ajaxRefresh();
+	},5000);
+	$('.node_pbs').qtip('toggle', true);
+	$('.node_t0').qtip('toggle', true);
+	$('.node_vq1').qtip('toggle', true);
+	$('.pbs').qtip('toggle', true);
+	$('.vq1').qtip('toggle', true);
+
+	$('.inware').qtip('toggle', false);
+	$('.outware').qtip('toggle', false);
+	$('.vq3').qtip('toggle', false);
+	$('.road').qtip('toggle', false);
+	$('.check').qtip('toggle', false);
+	$('.leak').qtip('toggle', false);
+}
 });
+
+
+
+function qtipMe (target, text, color) {
+	if (target === ".pbs") {
+		$(target).qtip({
+			content: text,
+			position: {
+				my: 'bottom center', 
+				at: 'top center',
+				adjust: {  
+		            y:35
+		        } 
+			},
+			show: {
+						event: false, // Don't specify a show event...
+						ready: true // ... but show the tooltip when ready
+					},
+					hide: false, // Don't specify a hide event either!
+			style: {
+				tip: true,
+				classes: 'ui-tooltip-' + color
+			}
+	    });
+	} else {
+		$(target).qtip({
+			content: text,
+			position: {
+				my: 'bottom center', 
+				at: 'top center'
+			},
+			show: {
+						event: false, // Don't specify a show event...
+						ready: true // ... but show the tooltip when ready
+					},
+					hide: false, // Don't specify a hide event either!
+			style: {
+				tip: true,
+				classes: 'ui-tooltip-' + color
+			}
+	    });
+	}
+}
 
 !function (window) {
 	window.tipRadio = {};
@@ -163,25 +250,8 @@ $(document).ready(function () {
 		} 
 	};
 }(window);
-// {"success":true,"message":"OK","data":{"line_speed":120,"line_run_time":0,"line_urate":"-","pause_time":{"total":-3029,"T1":0,"T2":0,"T3":-3029,"C1":0,"C2":0,"F1":0,"F2":0,"VQ1":0,"L1":0,"EF1":0,"EF2":0,"EF3":0}}}
-function getTipInfo (argument) {
-	ajaxThreeInfo();
-	// // hideAllTips();
-	// var type = $("#radioInfo input:checked").val();
-	// if(type !== window.tipRadio.type) {
-	// 	window.tipRadio.clearLast();
-	// }
-	
-	// if (type === "productInfo") {
-	// 	ajaxProductInfo();
-	// } else if (type === "qualityInfo") {
-	// 	ajaxQualityInfo();
-	// } else if (type === "storeInfo") {
-	// 	ajaxStoreInfo();
-	// } else {
-	// 	window.tipRadio.type = "hideAllInfo";
-	// }
-}
+
+
 function ajaxRefresh () {
 	$.ajax({
 		type: "get",//使用get方法访问后台
@@ -235,6 +305,7 @@ function ajaxThreeInfo () {
 	    data: {},
 	    success:function (response) {
 	    	if (response.success){
+
 	    		$(".node_pbs").qtip('option', 'content.text', response.data.list.production.PBS);
 	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0);
 	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1);
@@ -249,87 +320,35 @@ function ajaxThreeInfo () {
 	});
 }
 
-function getStockInfo (argument) {
-	ajaxGetStock();
-}
+
 function ajaxGetStock (argument) {
-	// body...
-}
-$("#liDetecthouse").live("click", hideAllTips);
-$("#liAssembly").live("click", showAllTips);
-
-function hideAllTips (argument) {
-	$('.node_pbs').qtip('toggle', false);
-	$('.node_t0').qtip('toggle', false);
-	$('.node_vq1').qtip('toggle', false);
-	$('.pbs').qtip('toggle', false);
-	$('.vq1').qtip('toggle', false);
-
-	$('.inware').qtip('toggle', true);
-	$('.outware').qtip('toggle', true);
-	$('.vq3').qtip('toggle', true);
-	$('.road').qtip('toggle', true);
-	$('.check').qtip('toggle', true);
-	$('.leak').qtip('toggle', true);
-}
-function showAllTips (argument) {
-	$('.node_pbs').qtip('toggle', true);
-	$('.node_t0').qtip('toggle', true);
-	$('.node_vq1').qtip('toggle', true);
-	$('.pbs').qtip('toggle', true);
-	$('.vq1').qtip('toggle', true);
-
-	$('.inware').qtip('toggle', false);
-	$('.outware').qtip('toggle', false);
-	$('.vq3').qtip('toggle', false);
-	$('.road').qtip('toggle', false);
-	$('.check').qtip('toggle', false);
-	$('.leak').qtip('toggle', false);
-}
-
-function qtipMe (target, text, color) {
-	if (target === ".pbs") {
-		$(target).qtip({
-			content: text,
-			position: {
-				my: 'bottom center', 
-				at: 'top center',
-				adjust: {  
-		            y:35
-		        } 
-			},
-			show: {
-						event: false, // Don't specify a show event...
-						ready: true // ... but show the tooltip when ready
-					},
-					hide: false, // Don't specify a hide event either!
-			style: {
-				tip: true,
-				classes: 'ui-tooltip-' + color
-			}
-	         
-	    });
-	} else {
-		$(target).qtip({
-			content: text,
-			position: {
-				my: 'bottom center', 
-				at: 'top center'
-			},
-			show: {
-						event: false, // Don't specify a show event...
-						ready: true // ... but show the tooltip when ready
-					},
-					hide: false, // Don't specify a hide event either!
-			style: {
-				tip: true,
-				classes: 'ui-tooltip-' + color
-			}
-	         
-	    });
-	}
-	
-     
+	$.ajax({
+		type: "get",//使用get方法访问后台
+	    dataType: "json",//返回json格式的数据
+	    url: MONITOR_PRODUCT_INFO,//ref:  /bms/js/service.js
+	    data: {},
+	    success:function (response) {
+	    	if (response.success){
+	    		//refresh linespeed ,line urate ,total pause time
+	    		$("#line_speed").text(response.data.line_speed);
+	    		$("#line_urate").text(response.data.line_urate);
+	    		$("#totalPauseTime").text(response.data.pause_time.total);
+	    		//refresh tips
+	    		$(".outware").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
+	    		$(".inware").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
+	    		$(".vq3").qtip('option', 'content.text', response.data.drr.VQ3);
+    			$(".road").qtip('option', 'content.text', response.data.drr.VQ2_ROAD);
+    			$(".leak").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
+    			//refresh stock
+    			$(".vq3-balance").html(response.data.balance.VQ3);
+    			$(".vq2-road").html(response.data.balance.VQ2);
+    			$(".stock-amount").html(response.data.balance.stock);
+	    	} else {
+	    		alert(response.message);
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
 }
 
 
