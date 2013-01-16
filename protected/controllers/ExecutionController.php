@@ -471,42 +471,62 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $name = '';
-        $code = '222';
-        $sql = "SELECT id AS provider_id, code AS provider_code, name AS provider_name, display_name FROM provider";
+        $s = strtotime('2012-12-11');
+        $e = strtotime('2013-2-21');
+                    //added by haven't test
+        $eNextD = strtotime('+1 day', $s);
+        $stime = date('Y-m-d', $eNextD) . " 07:59:59";
+        echo $stime;
+        echo '<br>';
+                 //added by haven't test
+        $eNextM = strtotime('+1 month', $e);                   //added by haven't test
+        $etime = date('Y-m', $eNextM) . "-01 07:59:59";
+        echo $etime;
+        echo '<br>';
+
+        $stime = date('Y-m', $s) . "-01 08:00:00";
+        $etime = date('Y-m', $eNextM) . "-01 07:59:59";
+        echo $stime;
+        echo '<br>';
+        echo $etime;
+        echo '<br>';
+
+        // $name = '';
+        // $code = '222';
+        // $sql = "SELECT id AS provider_id, code AS provider_code, name AS provider_name, display_name FROM provider";
         
 
-        $conditionsName = array();      
-        if(!empty($name)){
-            $conditions = array();
-            $conditions[] = $conditionsName[][] = "name LIKE '%$name%'";
-            $conditions[] = $conditionsName[][] = "display_name LIKE '%$name%'";
-        }
+        // $conditionsName = array();      
+        // if(!empty($name)){
+        //     $conditions = array();
+        //     $conditions[] = $conditionsName[][] = "name LIKE '%$name%'";
+        //     $conditions[] = $conditionsName[][] = "display_name LIKE '%$name%'";
+        // }
 
-        if(!empty($code)) {
-            $conditions = array();
-            if(!empty($conditionsName)){
-                foreach($conditionsName as $condition){
-                    $condition[] = "code LIKE '%$code%'";
-                    $conditions[] = join(' AND ', $condition);
-                }                        
-            } else {
-                $conditions[] = "code LIKE '%$code%'";
-            }           
-        }
+        // if(!empty($code)) {
+        //     $conditions = array();
+        //     if(!empty($conditionsName)){
+        //         foreach($conditionsName as $condition){
+        //             $condition[] = "code LIKE '%$code%'";
+        //             $conditions[] = join(' AND ', $condition);
+        //         }                        
+        //     } else {
+        //         $conditions[] = "code LIKE '%$code%'";
+        //     }           
+        // }
 
-        $sqls = array();
-        if(!empty($conditions)){
-            foreach($conditions as $condition){
-                $sqls[] = $sql . ' WHERE ' . $condition;
-            }
-        } else {
-            $sqls[] = $sql;
-        }
+        // $sqls = array();
+        // if(!empty($conditions)){
+        //     foreach($conditions as $condition){
+        //         $sqls[] = $sql . ' WHERE ' . $condition;
+        //     }
+        // } else {
+        //     $sqls[] = $sql;
+        // }
 
-        $sql = join(' UNION ', $sqls);
+        // $sql = join(' UNION ', $sqls);
 
-        print_r($sql);
+        // print_r($sql);
         //$seeker = new MonitorSeeker();
         //echo $seeker->getRestTime(date("Y-m-d H:i:s"));
         // $lastDate = DateUtil::getLastDate();

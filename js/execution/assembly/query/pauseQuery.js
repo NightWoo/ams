@@ -72,25 +72,25 @@ $(document).ready(function(e) {
 						
 						if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
-						$(".prePage a span").html("&times;");
-					} else {
-		    			//$(".prePage").show();
-						$(".prePage a span").html("&lt;");
-					}
-		    		if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
-		    			//$(".nextPage").hide();
-						$(".nextPage a span").html("&times;");
-					} else {
-		    			//$(".nextPage").show();
-						$(".nextPage a span").html("&gt;");
-					}
-					$(".curPage").attr("page", response.data.pager.curPage);
-					$(".curPage a span").html(response.data.pager.curPage);
-					$("#totalText").attr("total", response.data.pager.total);
-					$("#totalText").html("导出全部" + response.data.pager.total + "条记录");
+							$(".prePage a span").html("&times;");
+						} else {
+		    				//$(".prePage").show();
+							$(".prePage a span").html("&lt;");
+						}
+		    			if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
+		    				//$(".nextPage").hide();
+							$(".nextPage a span").html("&times;");
+						} else {
+		    				//$(".nextPage").show();
+							$(".nextPage a span").html("&gt;");
+						}
+						$(".curPage").attr("page", response.data.pager.curPage);
+						$(".curPage a span").html(response.data.pager.curPage);
+						$("#totalText").attr("total", response.data.pager.total);
+						$("#totalText").html("导出全部" + response.data.pager.total + "条记录");
 					
-					$("#tableResult").show();
-					$(".pagination").show();
+						$("#tableResult").show();
+						$(".pagination").show();
 					});
 				}else {
 					alert(response.message);	

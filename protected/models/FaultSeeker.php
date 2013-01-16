@@ -814,17 +814,18 @@ class FaultSeeker
 			$etime = date($format, $e) . ":00:00";
 		} elseif($lastDay < 31) {//day
 			$format = 'Y-m-d';
-			$stime = date($format, $s) . " 00:00:00";
-			$etime = date($format, $e) . " 23:59:59";
-			//$stime = date($format, $s) . " 08:00:00";				//added by haven't test
-			//$etime = date($format, $e + 86400) . " 07:59:59";		//added by haven't test
+			//$stime = date($format, $s) . " 00:00:00";				
+			//$etime = date($format, $e) . " 23:59:59";
+			$stime = date($format, $s) . " 08:00:00";								//added by wujun
+			$eNextD = strtotime('+1 day', $e);		//next day						//added by wujun
+			$etime = date($format, $eNextD) . " 07:59:59";	//befor next workday	//added by wujun
 		} else {//month
 			$format = 'Y-m';
-			$stime = date($format, $s) . "-01 00:00:00";
-			$etime = date('Y-m-t', $e) . " 23:59:59";
-			//$stime = date($format, $s) . "-01 08:00:00";			//added by haven't test
-			//$eNextM = strtotime('+1 month', $e)					//added by haven't test
-			//$etime = date('Y-m', $eNextM) . "-01 07:59:59";		//added by haven't test
+			//$stime = date($format, $s) . "-01 00:00:00";
+			//$etime = date('Y-m-t', $e) . " 23:59:59";
+			$stime = date($format, $s) . "-01 08:00:00";	//firstday				//added by wujun
+			$eNextM = strtotime('+1 month', $e);			//next month			//added by wujun
+			$etime = date('Y-m', $eNextM) . "-01 07:59:59";	//next month firstday	//added by wujun
 		}
 
 

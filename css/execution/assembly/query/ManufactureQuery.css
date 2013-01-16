@@ -8,7 +8,7 @@
 }
 
 #btnQuery {
-	margin-left: 9px;
+	margin-left: 2px;
 }
 
 #tabs {
@@ -19,10 +19,20 @@
 	text-align:right;
 }
 
-#resultTable, #tablePlato, #tableDpu {
+#tableCars, #tablePause, #tablePlan {
 	font-size:12px;	
 }
 
 .checkbox {
-	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#checkboxF0 {
+	margin-left: 4px;
+}
+
+
+.divider {
+	vertical-align: middle;
+	padding-top: 7px;
 }
