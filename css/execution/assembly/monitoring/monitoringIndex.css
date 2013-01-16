@@ -17,7 +17,8 @@
 	z-index: 100; 
 	overflow: hidden;
 }
-#detecthouse {
+/*#detecthouse*/
+ #background {
 	position: relative;
 	/*background-image:url('../../../../img/detecthouse.png');*/
 	/*background-image:url('../../../../img/detecthouse_w721h400.png');*/
@@ -311,3 +312,7 @@ font-size: 16px;}
 
 .border-purple{border-color:  #9963FF;color: #9963FF;}
 .stock-amount{position: absolute;left: 397px;top: 115px;font-size: 16px;color: #9963FF;}
+
+#generalInfo {
+	clear:left;
+}

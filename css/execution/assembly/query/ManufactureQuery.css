@@ -8,7 +8,10 @@
 }
 
 #btnQuery {
-	margin-left: 2px;
+	/*margin-left: 2px;*/
+	/*margin-right: 7px;*/
+	padding-right: 5px;
+	padding-left: 0;
 }
 
 #tabs {
@@ -35,4 +38,12 @@
 .divider {
 	vertical-align: middle;
 	padding-top: 7px;
+}
+
+td label {
+	margin-bottom: 0;
+}
+
+#selectNode {
+	width:100px;
 }
