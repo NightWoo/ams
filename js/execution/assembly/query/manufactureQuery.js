@@ -15,51 +15,28 @@ $(document).ready(function () {
 		$("#startTime").val(currentDate8());
 		$("#endTime").val(currentDate16());
 
-		$("#carDetail, #statistics, .withNode").hide();
-		$("#pauseDetail, #pauseDistribution, #useRate, #planDetail, #completion, .dividerLi, .withSection").show();
 		resetAll();
 	}
-
-	$("#selectNode").change(function () {
-		var nV = this.value;
-		if (nV === "PBS" || nV === "T0" || nV === "CHECK_IN" || nV === "CHECK_OUT") {
-			$("#carDetail, #statistics, .withNode").show();
-			$("#pauseDetail, #pauseDistribution, #useRate, #planDetail, #completion, .dividerLi, .withSection").hide();
-			if(!$("#carDetail").hasClass("active") && !$("#statistics").hasClass("active")){
-				$("#carDetail, #dataList").addClass("active").siblings().removeClass("active");
-			}
-		} else {
-			$("#carDetail, #statistics, .withNode").hide();
-			$("#pauseDetail, #pauseDistribution, #useRate, #planDetail, #completion, .dividerLi, .withSection").show();
-			if($("#carDetail").hasClass("active") || $("#statistics").hasClass("active")){
-				$("#pauseDetail, #dataPauseDetail").addClass("active").siblings().removeClass("active");
-			}
-		}
-	});
 
 	$("#btnQuery").bind("click",toQuery);
 	function toQuery() {
 		//clear last
-		$("#tableCars tbody").text("");
+		$("#tableCars tbody").html("");
+		$("#tablePause tbody").html("");
 
 		//if validate passed
 		var index = $("#tabs li").index($('#tabs .active'));
 		console.log(index);
 		if (index === 1)
 			ajaxStatistics();
-		else if (index === 2)
-			ajaxQueryPause();
+		else if (index === 3)
+			ajaxQueryPause(1);
+		else if (index === 7)
+			ajaxQueryPlan(1);
 		else if (index === 0)
 			ajaxQuery(1);
 		return false;
 	}
-
-	$("#btnExport").click(
-		function () {
-			ajaxExport();
-			return false;
-		}
-	);
 
 	function currentDate8 (argument) {
 		var now = new Date();
@@ -121,12 +98,13 @@ $(document).ready(function () {
 		}
 	}
 
+	//car pagination
 	$("#preCars").click(
 		function (){
 			if(parseInt($("#curCars").attr("page")) > 1){
-			$("#tableCars tbody").html("");
-			ajaxQuery(parseInt($("#curCars").attr("page")) - 1);
-		}
+				$("#tableCars tbody").html("");
+				ajaxQuery(parseInt($("#curCars").attr("page")) - 1);
+			}
 		}
 	);
 
@@ -139,11 +117,134 @@ $(document).ready(function () {
 		}
 	);
 
+	$("#firstCars").click(
+		function () {
+			if(parseInt($("#curCars").attr("page")) > 1){
+				$("#tableCars tbody").html("");
+				ajaxQuery(parseInt(1));
+			}
+		}
+	);
+
+	$("#lastCars").click(
+		function () {
+			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
+				$("#tableCars tbody").html("");
+				totalPage = parseInt($("#totalCars").attr("total"))%20 === 0 ? parseInt($("#totalCars").attr("total"))/20 : parseInt($("#totalCars").attr("total"))/20 + 1;
+				ajaxQuery(parseInt(totalPage));
+			}
+		}
+	)
+
+	$("#exportCars").click(
+		function () {
+			ajaxExport();
+			return false;
+		}
+	);
+
+	//pause pagination
+	$("#prePause").click(
+		function (){
+			if(parseInt($("#curPause").attr("page")) > 1){
+				$("#tablePause tbody").html("");
+				ajaxQueryPause(parseInt($("#curPause").attr("page")) - 1);
+			}
+		}
+	);
+
+	$("#nextPause").click(
+		function (){
+			if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
+			$("#tablePause tbody").html("");
+			ajaxQueryPause(parseInt($("#curPause").attr("page")) + 1);
+		}
+		}
+	);
+
+	$("#firstPause").click(
+		function () {
+			if(parseInt($("#curPause").attr("page")) > 1){
+				$("#tablePause tbody").html("");
+				ajaxQueryPause(parseInt(1));
+			}
+		}
+	);
+
+	$("#lastPause").click(
+		function () {
+			if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
+				$("#tablePause tbody").html("");
+				totalPage = parseInt($("#totalPause").attr("total"))%10 === 0 ? parseInt($("#totalPause").attr("total"))/10 : parseInt($("#totalPause").attr("total"))/10 + 1;
+				ajaxQueryPause(parseInt(totalPage));
+			}
+		}
+	)
+
+	// $("#exportPause").click(
+	// 	function () {
+	// 		ajaxExport();
+	// 		return false;
+	// 	}
+	// );
+
+	//plan pagination
+	$("#prePlan").click(
+		function (){
+			if(parseInt($("#curPlan").attr("page")) > 1){
+				$("#tablePlan tbody").html("");
+				ajaxQueryPlan(parseInt($("#curPlan").attr("page")) - 1);
+			}
+		}
+	);
+
+	$("#nextPlan").click(
+		function (){
+			if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
+			$("#tablePlan tbody").html("");
+			ajaxQueryPlan(parseInt($("#curPlan").attr("page")) + 1);
+		}
+		}
+	);
+
+	$("#firstPlan").click(
+		function () {
+			if(parseInt($("#curPlan").attr("page")) > 1){
+				$("#tablePlan tbody").html("");
+				ajaxQueryPlan(parseInt(1));
+			}
+		}
+	);
+
+	$("#lastPlan").click(
+		function () {
+			if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
+				$("#tablePlan tbody").html("");
+				totalPage = parseInt($("#totalPlan").attr("total"))%10 === 0 ? parseInt($("#totalPlan").attr("total"))/10 : parseInt($("#totalPlan").attr("total"))/10 + 1;
+				ajaxQueryPlan(parseInt(totalPage));
+			}
+		}
+	)
+
+	// $("#exportPlan").click(
+	// 	function () {
+	// 		ajaxExport();
+	// 		return false;
+	// 	}
+	// );
+
+
+
+
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
 		if (index == 1)
 			ajaxStatistics();
+		if (index == 3)
+			ajaxQueryPause(1);
+		else if (index === 7)
+			ajaxQueryPlan(1);
 		else if (index === 0)
 			ajaxQuery(1);
 	});
@@ -181,6 +282,7 @@ $(document).ready(function () {
 					"curPage":targetPage || 1},
 		    success:function (response) {
 		    	if(response.success){
+		    		$("#tableCars tbody").html("");
 		    		$.each(response.data.data,function (index,value) {
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
@@ -194,24 +296,27 @@ $(document).ready(function () {
 		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
 		    				faultStatusTd + nodeNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
 		    			$("#tableCars tbody").append(tr);
-						$("#tableCars").show();
+						//$("#tableCars").show();
 		    		});
-		    		//deal with pager
-		    		
 
+		    		//deal with pager	
 		    		if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
 							$("#preCars a span").html("&times;");
+							$("#firstCars a span").html("&times;");
 						} else {
 		    				//$(".prePage").show();
 							$("#preCars a span").html("&lt;");
+							$("#firstCars a span").html("&lt;&lt;");
 						}
 		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
 		    				//$(".nextPage").hide();
 							$("#nextCars a span").html("&times;");
+							$("#lastCars a span").html("&times;");
 						} else {
 		    				//$(".nextPage").show();
 							$("#nextCars a span").html("&gt;");
+							$("#lastCars a span").html("&gt;&gt;");
 						}
 						$("#curCars").attr("page", response.data.pager.curPage);
 						$("#curCars a span").html(response.data.pager.curPage);
@@ -376,6 +481,168 @@ $(document).ready(function () {
 			"&etime=" + $("#endTime").val()
 		);
 	}
+
+	function ajaxQueryPause(targetPage) {
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: QUERY_PAUSE_RECORD,
+			data: {
+				"startTime": $("#startTime").val(),
+				"endTime": $("#endTime").val(),
+				"pauseType": $("#pauseType").val(),
+				"dutyDepartment": $("#dutyDepartment").val(),
+				"section": $("#section").val(),	
+				"perPage": 10,
+				"curPage": targetPage || 1
+			},
+			success: function(response) {
+				if(response.success) {
+					$("#tablePause>tbody").html("");
+					$.each(response.data.data, function(index, value) {
+						var tr = $("<tr />");
+						$("<td />").html(value.id).appendTo(tr);
+						$("<td />").html(value.pause_type).appendTo(tr);
+						$("<td />").html(value.node_name).appendTo(tr);
+						$("<td />").html(value.duty_department).appendTo(tr);
+						$("<td />").html(value.remark).appendTo(tr);
+						$("<td />").addClass("alignRight").html(value.howlong).appendTo(tr);
+						$("<td />").html(value.pause_time.substr(0,16)).appendTo(tr);
+						if(value.recover_time === "0000-00-00 00:00:00"){
+							$("<td />").html("未恢复").appendTo(tr);
+						}else{
+							$("<td />").html(value.recover_time.substring(0,16)).appendTo(tr);
+						}
+						$("<td />").html(value.editor_name).appendTo(tr);
+						
+						tr.data("id",value.id);
+						
+						$("#tablePause tbody").append(tr);
+						
+						if(response.data.pager.curPage == 1) {
+		    			//$(".prePage").hide();
+							$("#prePause a span").html("&times;");
+							$("#firstPause a span").html("&times;")
+						} else {
+		    				//$(".prePage").show();
+							$("#prePause a span").html("&lt;");
+							$("#firstPause a span").html("&lt;&lt;");
+						}
+		    			if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
+		    				//$(".nextPage").hide();
+							$("#nextPause a span").html("&times;");
+							$("#lastPause a span").html("&times;");
+						} else {
+		    				//$(".nextPage").show();
+							$("#nextPause a span").html("&gt;");
+							$("#lastPause a span").html("&gt;&gt;");
+						}
+						$("#curPause").attr("page", response.data.pager.curPage);
+						$("#curPause a span").html(response.data.pager.curPage);
+						$("#totalPause").attr("total", response.data.pager.total);
+						$("#totalPause").html("导出全部" + response.data.pager.total + "条记录");
+					
+						$("#tablePause").show();
+						$("#paginationPause").show();
+					});
+				}else {
+					alert(response.message);	
+				}
+			},
+			error: function() {
+				alertError();
+			}	
+		})
+	}
+
+	function ajaxQueryPlan(targetPage) {
+		// //get series for query
+		var series = "";
+		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+		if((f0Checked + m6Checked)%2 === 0)
+			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
+		else if(f0Checked)
+			series += $("#checkboxF0").val();
+		else
+			series += $("#checkboxM6").val();
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: QUERY_PLAN,
+			data: {
+				"stime": $("#startTime").val(),
+				"etime": $("#endTime").val(),
+				"line": "A",
+				"series":series,
+				"perPage": 10,
+				"curPage": targetPage || 1,
+			},
+			success: function (response) {
+				if(response.success) {
+					$("#tablePlan>tbody").html("");
+					length = response.data.length;
+					$.each(response.data.data,function (index,value) {
+		    			var tr = $("<tr />");
+						//$("<td />").html(value.id).appendTo(tr);
+						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
+		    			$("<td />").html(value.car_series).appendTo(tr);
+		    			$("<td />").html(value.plan_date).appendTo(tr);
+		    			$("<td />").html(value.total).appendTo(tr);
+		    			$("<td />").html(value.ready).appendTo(tr);
+		    			$("<td />").html(value.config_name).appendTo(tr);
+		    			$("<td />").html(value.car_type).appendTo(tr);		//added by wujun
+		    			$("<td />").html(value.color).appendTo(tr);
+		    			
+		    			if (value.cold_resistant == "1") {
+		    				$("<td />").html("耐寒").appendTo(tr);
+		    			} else {
+		    				$("<td />").html("非耐寒").appendTo(tr);
+		    			}
+		    			
+		    			$("<td />").html(value.car_year).appendTo(tr);
+		    			$("<td />").html(value.order_type).appendTo(tr);
+		    			$("<td />").html(value.remark).appendTo(tr);
+
+		    			$("#tablePlan tbody").append(tr);
+					});
+					$("#tablePlan").show();
+
+					//deal with pager	
+		    		if(response.data.pager.curPage == 1) {
+		    			//$(".prePage").hide();
+						$("#prePlan a span").html("&times;");
+						$("#firstPlan a span").html("&times;");
+					} else {
+		    			//$(".prePage").show();
+						$("#prePlan a span").html("&lt;");
+						$("#firstPlan a span").html("&lt;&lt;");
+					}
+		    		if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+		    			//$(".nextPage").hide();
+						$("#nextPlan a span").html("&times;");
+						$("#lastPlan a span").html("&times;");
+					} else {
+		    			//$(".nextPage").show();
+						$("#nextPlan a span").html("&gt;");
+						$("#lastPlan a span").html("&gt;&gt;");
+					}
+					$("#curPlan").attr("page", response.data.pager.curPage);
+					$("#curPlan a span").html(response.data.pager.curPage);
+					$("#totalPlan").attr("total", response.data.pager.total);
+					$("#totalPlan").html("导出全部" + response.data.pager.total + "条记录");
+					
+					$("#paginationPlan").show();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function () {
+				alertError();
+			}
+		});
+	}
+
 //-------------------END ajax query -----------------------
 
 });

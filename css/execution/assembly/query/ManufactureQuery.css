@@ -36,8 +36,8 @@
 
 
 .divider {
-	vertical-align: middle;
-	padding-top: 7px;
+	padding-bottom: 7px;
+    padding-top: 7px;
 }
 
 td label {

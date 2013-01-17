@@ -12,16 +12,32 @@ class ManagementSystemController extends BmsBaseController
 
 	/**
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $this->render('ManagementSystemHome');
     }
 
     /**
 	 */
-	public function actionHome()
-	{
+	public function actionHome() {
 		$this->render('ManagementSystemHome');
+	}
+
+	public function actionQuality() {
+		$view = $this->validateStringVal('view', '');
+		$this->render($view);
+	}
+
+	public function actionScene() {
+		$this->render('MSScene');
+	}
+
+	public function actionManpower() {
+		$view = $this->validateStringVal('view', '');
+		$this->render($view);
+	}
+
+	public function actionStandardForm() {
+		$this->render('MSStandardForm');
 	}
 
     

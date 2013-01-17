@@ -96,43 +96,78 @@
 		            			
 		            	</div>
 		            </div>
-		            <div id="detecthouse" class="tab-pane ">
-				    	<div class="A01 stockyard">A01</div>
-				    	<div class="A02 stockyard">A02</div>
-				    	<div class="A03 stockyard">A03</div>
-				    	<div class="A04 stockyard">A04</div>
-				    	<div class="A05 stockyard">A05</div>
-				    	<div class="A06 stockyard">A06</div>
-				    	<div class="A07 stockyard">A07</div>
-				    	<div class="A08 stockyard">A08</div>
-				    	<div class="A09 stockyard">A09</div>
-				    	<div class="A10 stockyard">A10</div>
-				    	<div class="A11 stockyard">A11</div>
-				    	<div class="A12 stockyard">A12</div>
-				    	<div class="A13 stockyard">A13</div>
-				    	<div class="A14 stockyard">A14</div>
-				    	<div class="A15 stockyard">A15</div>
-				    	<div class="A16 stockyard">A16</div>
-				    	<div class="B01">B01</div>
-				    	<div class="B02">B02</div>
-				    	<div class="outware node"></div>
-				    	<div class="inware node"></div>
-				    	<div class="vq3 node"></div>
-				    	<div class="leak node"></div>
-				    	<div class="road node"></div>
-				    	<div class="check node"></div>
-				    	<div class="vq3-balance">36</div>
-				    	<div class="vq2-road">84</div>
-				    	<div class="vq2-leak"></div>
-				    	<div class="vq2-check"></div>
-				    	<div class="stock-amount">36</div>
-				    </div>
-		            <div id="warehouse" class="tab-pane ">
-		            	
-		            </div>
-
+		            <div id="detecthouse" class="tab-pane ">		            	
+		            	<div id="background" class="pull-left">
+				    		<div class="A01 stockyard">A01</div>
+				  		  	<div class="A02 stockyard">A02</div>
+				    		<div class="A03 stockyard">A03</div>
+				    		<div class="A04 stockyard">A04</div>
+				    		<div class="A05 stockyard">A05</div>
+				    		<div class="A06 stockyard">A06</div>
+				    		<div class="A07 stockyard">A07</div>
+				    		<div class="A08 stockyard">A08</div>
+				    		<div class="A09 stockyard">A09</div>
+				    		<div class="A10 stockyard">A10</div>
+				    		<div class="A11 stockyard">A11</div>
+				    		<div class="A12 stockyard">A12</div>
+				    		<div class="A13 stockyard">A13</div>
+				    		<div class="A14 stockyard">A14</div>
+				    		<div class="A15 stockyard">A15</div>
+				    		<div class="A16 stockyard">A16</div>
+				    		<div class="B01">B01</div>
+				    		<div class="B02">B02</div>
+				    		<div class="outware node"></div>
+				    		<div class="inware node"></div>
+				    		<div class="vq3 node"></div>
+				    		<div class="leak node"></div>
+				    		<div class="road node"></div>
+				    		<div class="check node"></div>
+				    		<div class="vq3-balance">36</div>
+				    		<div class="vq2-road">84</div>
+				    		<div class="vq2-leak"></div>
+				    		<div class="vq2-check"></div>
+				    		<div class="stock-amount">36</div>
+				    	</div>
+				    	<div class="span4" style="margin-top:12px;">
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A111</p>
+                  				<div class="progress" style="margin-bottom:0;">
+                    				<div class="bar" style="width: 60%;">6 / 10</div>
+                  				</div>
+                			</a>
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A112</p>
+                    			<div class="progress" style="margin-bottom:0;">
+                      				<div class="bar" style="width: 30%;">3 / 10</div>
+                    			</div>
+                			</a>
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A113</p>
+                    			<div class="progress" style="margin-bottom:0;">
+                      				<div class="bar" style="width: 70%;">7 / 10</div>
+                    			</div>
+                			</a>
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A114</p>
+                  				<div class="progress progress-success" style="margin-bottom:0;">
+                    					<div class="bar" style="width: 100%;">10 / 10</div>
+                  				</div>
+                			</a>
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A115</p>
+                    			<div class="progress" style="margin-bottom:0;">
+                      				<div class="bar" style="width: 40%;">4 / 10</div>
+                    			</div>
+                			</a>
+                			<a class="thumbnail" href="" style="margin:10px 0;">
+                  				<p class="pull-left" style="margin:0 10px;">A116</p>
+                    			<div class="progress" style="margin-bottom:0;">
+                      				<div class="bar" style="width: 60%;">6 / 10</div>
+                    			</div>
+                			</a>
+              			</div>
 		         </div>
-		         <form class="bs-docs-example form-search" >
+		         <form class="bs-docs-example form-search" id="generalInfo">
 		            <!-- <i class="icon-hand-right" style="margin: 8px 10px 0 32px;"></i>
 		            <div style="display:inline-block;" id="radioInfo">
 			            <label class="radio inline">

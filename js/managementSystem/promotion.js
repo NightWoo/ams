@@ -7,12 +7,4 @@ function initPage(){
 		$("#leftOverviewLi").addClass("active");
 	}
 
-
-$("#downOverview").click(function(){
-	
-})
-
-$("#toOverview").click(function(){
-})
-
 })

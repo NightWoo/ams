@@ -1,22 +1,23 @@
 <div id="divLeft">
-<div id="bodyleft" class="span2" style="width:170px;"><!-- 侧边栏 -->
+<div id="bodyleft" class="span2"><!-- 侧边栏 -->
 	<ul class="nav nav-list affix">
 		<li></li>
-		<li class="nav-header">管理手册</li>
-			<li id="leftoverviewLi"><a><i id="downOverview" class="icon-download-alt"></i><p id="toOverview">概述</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">方针与愿景</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">管理目标</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">八大原则</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">组织结构与职责</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">管理过程</p></a></li>
+		<li class="nav-header" id="leftManualLi">管理手册</li>
+			<li id="leftOverviewLi"><a href="/bms/ManagementSystem">概述</a></li>
+			<li id=""><a href="">方针与愿景</a></li>
+			<li id=""><a href="">管理目标</a></li>
+			<li id=""><a href="">八大原则</a></li>
+			<li id=""><a href="">组织结构与职责</a></li>
+			<li id=""><a href="">管理过程</a></li>
 		<li class="nav-header">要素/方法/指南</li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">安全与现场</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">人力资源</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">质量</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">生产力</p></a></li>
-			<li id=""><a href=""><i id="downOverview" class="icon-download-alt"></i><p id="">设备、资产与成本</p></a></li>
+			<li id=""><a href="/bms/ManagementSystem/scene">安全与现场</a></li>
+			<li id="leftManpowerLi"><a href="/bms/ManagementSystem/manpower?view=MSManpower">人力资源</a></li>
+			<li id="leftQualityLi"><a href="/bms/ManagementSystem/quality?view=MSQuality">质量</a></li>
+			<li id=""><a href="">生产力</a></li>
+			<li id=""><a href="">设备、资产与成本</a></li>
 		<li class="nav-header">标准表单</li>
-	   <!--  <li class="divider"></li>      
+			<li id="leftStandarFormLi"><a href="/bms/ManagementSystem/standardForm">表单下载</a></li>
+	   <!-- <li class="divider"></li>      
 			<li><a href="#">帮助</a></li>     -->
 	</ul>        
 </div><!-- end 侧边栏 -->

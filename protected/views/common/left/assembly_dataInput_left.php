@@ -12,7 +12,7 @@
 			<li id="leftNodeQueryLi"><a href="/bms/execution/query?type=NodeQuery">节点查询</a></li>
 			<li id="leftFaultQueryLi"><a href="/bms/execution/query?type=FaultQuery">故障查询</a></li>
 			<li id="leftManufactureQueryLi"><a href="/bms/execution/query?type=ManufactureQuery">生产查询</a></li>
-			<li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li>
+			<!-- <li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li> -->
 		<!-- <li class="nav-header">异常操作</li>
 			<li><a href="#">配置单补打印</a></li>
 			<li><a href="#">检验跟单补打印</a></li>

@@ -142,6 +142,7 @@ var DELETE_PLAN = "/bms/plan/remove";
 var INC_PRI_PLAN = "/bms/plan/inc";
 var TOP_PRI_PLAN = "/bms/plan/top";
 var REDUCE_PRI_PLAN = "/bms/plan/reduce";		//added by wujun
+var QUERY_PLAN = "/bms/plan/query";
 
 var QUERY_SECTION = "/bms/monitor/querySection";
 var SHOW_SECTION_PANEL = "/bms/monitor/showSectionPanel";

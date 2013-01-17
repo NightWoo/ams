@@ -471,83 +471,54 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $s = strtotime('2012-12-11');
-        $e = strtotime('2013-2-21');
-                    //added by haven't test
-        $eNextD = strtotime('+1 day', $s);
-        $stime = date('Y-m-d', $eNextD) . " 07:59:59";
-        echo $stime;
-        echo '<br>';
-                 //added by haven't test
-        $eNextM = strtotime('+1 month', $e);                   //added by haven't test
-        $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        echo $etime;
-        echo '<br>';
+        $arraySeries = array('F0', 'M6');
+        $sqls=array();
+        foreach($arraySeries as $series) {
+            $sqls[] = "SELECT * FROM plan_assembly WHERE  car_series='$series'";
+        }
+        $sql = join(' UNION ', $sqls);
 
-        $stime = date('Y-m', $s) . "-01 08:00:00";
-        $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        echo $stime;
-        echo '<br>';
-        echo $etime;
-        echo '<br>';
+        $limit = 10;
+        $offset = 0;
 
-        // $name = '';
-        // $code = '222';
-        // $sql = "SELECT id AS provider_id, code AS provider_code, name AS provider_name, display_name FROM provider";
+        $sql .= " ORDER BY plan_date, batch_number ASC LIMIT $offset, $limit";
+        $datas = Yii::app()->db->createCommand($sql)->queryAll();
+        print_r($datas);
+        // echo dirname(__FILE__);
+        // $dir='/home/work/bms/web/bms/doc/browse/managementSystem/manpower/promotion/';  
+        // $handle=opendir($dir);  
+        // $i=0;  
+        // while(false!==($file=readdir($handle))){  
+        //     if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+        //         //var_dump($file);  
+        //         $i++;  
+        //     }  
+        // }  
+        // closedir($handle);
+        // echo '<br>'; 
+        // echo $i;
+
+
+        // $s = strtotime('2012-12-11');
+        // $e = strtotime('2013-2-21');
+        //             //added by haven't test
+        // $eNextD = strtotime('+1 day', $s);
+        // $stime = date('Y-m-d', $eNextD) . " 07:59:59";
+        // echo $stime;
+        // echo '<br>';
+        //          //added by haven't test
+        // $eNextM = strtotime('+1 month', $e);                   //added by haven't test
+        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
+        // echo $etime;
+        // echo '<br>';
+
+        // $stime = date('Y-m', $s) . "-01 08:00:00";
+        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
+        // echo $stime;
+        // echo '<br>';
+        // echo $etime;
+        // echo '<br>';
+
         
-
-        // $conditionsName = array();      
-        // if(!empty($name)){
-        //     $conditions = array();
-        //     $conditions[] = $conditionsName[][] = "name LIKE '%$name%'";
-        //     $conditions[] = $conditionsName[][] = "display_name LIKE '%$name%'";
-        // }
-
-        // if(!empty($code)) {
-        //     $conditions = array();
-        //     if(!empty($conditionsName)){
-        //         foreach($conditionsName as $condition){
-        //             $condition[] = "code LIKE '%$code%'";
-        //             $conditions[] = join(' AND ', $condition);
-        //         }                        
-        //     } else {
-        //         $conditions[] = "code LIKE '%$code%'";
-        //     }           
-        // }
-
-        // $sqls = array();
-        // if(!empty($conditions)){
-        //     foreach($conditions as $condition){
-        //         $sqls[] = $sql . ' WHERE ' . $condition;
-        //     }
-        // } else {
-        //     $sqls[] = $sql;
-        // }
-
-        // $sql = join(' UNION ', $sqls);
-
-        // print_r($sql);
-        //$seeker = new MonitorSeeker();
-        //echo $seeker->getRestTime(date("Y-m-d H:i:s"));
-        // $lastDate = DateUtil::getLastDate();
-        // print_r($lastDate);
-        // $plans = PlanAR::model()->findAll("plan_date=? ORDER BY priority ASC", array($lastDate));
-        // $count = PlanAR::model()->count("plan_date=? ORDER BY priority ASC", array($lastDate));
-        // $data = array();
-        // foreach($plans as $plan){
-        //     $data[] = $plan->getAttributes();
-        // }
-        // print_r($data);
-        // echo '<br>';
-        // print_r($count);
-
-        // echo '<br>';
-        // $curYear = date('Y');
-        // $year = CarYear::getYearCode($curYear);
-        // echo $year;
-
-        // $vin = "4C0127057";
-        // $car = CarAR::model()->find("vin like ?", array("%$vin"));
-        //    echo $car->vin;
     }
 }

@@ -94,7 +94,7 @@
 							<li class="title"><i class="icon-download"></i>&nbsp;浏览器下载</li>
 							<li>
 								<ul>
-									<li class="text-info"><a href="/bms/download/browser/firefox.zip">firefox浏览器</a></li>
+									<li class="text-info"><a href="/bms/download/browser/firefox.rar">firefox浏览器</a></li>
 								</ul>
 							</li>
                         </ul>   

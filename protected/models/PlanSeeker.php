@@ -57,5 +57,63 @@ class PlanSeeker
 		return $ret;
 		
 	}
+
+	//added by wujun
+	public function query($stime, $etime, $series, $line, $curPage, $perPage) {
+		if(empty($stime) || empty($etime)){
+			throw new Exception("起始时间和结束时间均不可为空", 1);
+		} else {
+			$s = strtotime($stime);
+			$e = strtotime($etime);
+			$sdate = date('Y-m-d', $s);
+			$edate = date('Y-m-d', $e);
+		}
+
+		if($sdate > $edate) {
+			throw new Exception("起始时间不能大于结束时间！", 1);
+		} else {
+			$condition = "plan_date>='$sdate' AND plan_date<='$edate'";
+		}
+
+		$values = array($sdate, $edate);
+
+		$arraySeries = $this->parseSeries($series);
+
+		if(!empty($line)) {
+            $condition .= " AND assembly_line='$line'";
+			$values[] = $line;
+        }
+
+        $sqls=array();
+        foreach($arraySeries as $series) {
+        	$sqls[] = "SELECT * FROM plan_assembly WHERE $condition AND car_series='$series'";
+        }
+        $sql = join(' UNION ', $sqls);
+
+        $limit = $perPage;
+		$offset = ($curPage - 1) * $perPage;
+
+        $sql .= " ORDER BY plan_date, batch_number ASC LIMIT $offset, $limit";
+        $datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $countSql = "SELECT count(*) FROM plan_assembly WHERE $condition";
+		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		$seeker = new ConfigSeeker();
+		foreach($datas as &$data) {
+			$data['config_name'] = $seeker->getName($data['config_id']);
+		}
+
+        return array($total,  $datas); 
+	}
+
+	private function parseSeries($series) {
+		if(empty($series) || $series === 'all') {
+            $series = array('F0', 'M6');
+        } else {
+            $series = explode(',', $series);
+        }
+		return $series;
+	}
 		
 }

@@ -40,6 +40,9 @@ $(function () {
 		window.location.href='#'
 	})
 	
+	$("#managementSystem").click(function(){
+		window.location.href='/bms/ManagementSystem'
+	})
 	
 	$("#safety").click(function(){
 		window.location.href='#'
