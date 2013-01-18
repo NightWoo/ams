@@ -74,15 +74,15 @@ function ajaxRefreshSeats () {
 	    		$.each(response.data.sectionStatus, function (index, value) {
 	    			hideFacadeList.push(value.section);
 	    			switchCalledSection(value.section, false);
-	    			if (value.section === "VQ1") {
-	    				seatController.animateVQ1(value.background_text);
+	    			if (value.section === "QG") {
+	    				seatController.animateQG(value.background_text);
 	    				VQ1FlashFlag = true;
 	    			}
 	    			
 	    		});
 	    		if (!VQ1FlashFlag) {
-	    			$("#VQ1").css("background", "#00FF00");
-					$("#VQ1Div").css("color", "black").html("QG");
+	    			$("#QG").css("background", "#00FF00");
+					$("#QGDiv").css("color", "black").html("QG");
 	    		}
 	    		var sectionList = ["T1", "T2", "T3", "C1", "C2", "F1", "F2"];
 	    		$(sectionList).each(function (index, value) {
@@ -171,8 +171,11 @@ function ajaxRefreshSeats () {
 			
 		},
 		dealWithFlash : function () {
+			// console.log(this.rawList);
+			// console.log(this.rawList.length);
 			if (this.rawList.length == 0) {
 				$(seatController.flashingList).each(function (i, v) {
+					seatController.flashingList.splice(i, 1);
 					seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
 				});
 			}
@@ -194,19 +197,21 @@ function ajaxRefreshSeats () {
 					}
 				});
 				if(flag == 0) {
+					// console.log("here");
 					seatController.toFlashList.push({"seatNumber" : value.seatNumber, "type" : value.type});
 				}
 				flag= 0;
 			});
 			// console.log(this.flashingList);
 			// console.log(this.rawList);
+			// console.log(seatController.toFlashList);
 			// console.log(this.stopList);
 			this.stopUngoingFlashes();
 			// this.flashingList = this.toFlashList;
 			// console.log("===deal flash");
-			// console.log(this.toFlashList);
-		     $.each(this.toFlashList, function (index, value){
-		     	
+			// console.log(seatController.toFlashList);
+		     $.each(seatController.toFlashList, function (index, value){
+		     	// console.log("toFlashList item:" + value.type);
 		     	if (value.type === "yellow") {
 
 					$("#" + value.seatNumber).css("background", "yellow");
@@ -222,6 +227,7 @@ function ajaxRefreshSeats () {
 						"type" : value.type,
 						"intervalId" : intervalId});
 				} else if (value.type === "red_flash") {
+					// console.log("red_flash:" + value.seatNumber);
 					var intervalId = setInterval(seatController.red_flash, 1000, value.seatNumber);
 					seatController.flashingList.push({"seatNumber" : value.seatNumber,
 						"type" : value.type,
@@ -229,9 +235,9 @@ function ajaxRefreshSeats () {
 				}
 		     });
 
-		     this.rawList = [];
-		     this.toFlashList = [];
-		     this.stopList = [];
+		     seatController.rawList = [];
+		     seatController.toFlashList = [];
+		     seatController.stopList = [];
 
 			
 		},
@@ -285,17 +291,17 @@ function ajaxRefreshSeats () {
 		// VQ1Flash : function () {
 		// 	if ()
 		// },
-		animateVQ1 : function (backgroundText) {
+		animateQG : function (backgroundText) {
 			// $("#VQ1").css("background-color", VQ1color);
 			__sto(function (bT) {
-				$("#VQ1").css("background", "black");
-				$("#VQ1Div").css("color", "yellow").html(bT);
+				$("#QG").css("background", "black");
+				$("#QGDiv").css("color", "yellow").html(bT);
 				// $("#seat" + sN).removeClass("seat_call").addClass("seat_call_oppo").html(oT);
 			},1000, backgroundText);
 
 			__sto(function () {
-				$("#VQ1").css("background", "yellow");
-				$("#VQ1Div").css("color", "black").html("VQ1");
+				$("#QG").css("background", "yellow");
+				$("#QGDiv").css("color", "black").html("QG");
 				// $("#seat" + sN).removeClass("seat_call").addClass("seat_call_oppo").html(oT);
 			},2000);
 		},

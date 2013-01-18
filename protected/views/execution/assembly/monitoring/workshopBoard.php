@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="block"  style="width:52px">
-                    <div class="self" id="VQ1"  style="width:52px"><div style="float: left;width:52px;" id="VQ1Div">QG</div></div>
+                    <div class="self" id="QG"  style="width:52px"><div style="float: left;width:52px;" id="QGDiv">QG</div></div>
                 </div>
                 
             </div>
