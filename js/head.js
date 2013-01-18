@@ -135,7 +135,7 @@ $("#toggle-top").toggle(
 				
 				//$("#bodyright").removeClass("offset2");
 				//$("#bodyright").addClass("marginleft");	
-				$("#bodyright").animate({"margin-left":"20px"});
+				//$("#bodyright").animate({"margin-left":"20px"});
 				$("#bodyleft").hide(300);
 				timeoutChevonRight = setTimeout(function(){
 					$("#icon-left").addClass("icon-chevron-right");

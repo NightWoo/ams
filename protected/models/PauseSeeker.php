@@ -8,7 +8,7 @@ class PauseSeeker
 	public function __construct(){
 	}
 	
-	public function query($startTime, $endTime, $section, $pauseType, $dutyDepartment, $curPage, $perPage, $orderBy) {
+	public function query($startTime, $endTime, $section, $causeType, $dutyDepartment, $curPage, $perPage, $orderBy) {
 		$conditions = array();
 		if(!empty($startTime)){
 			$conditions[] = "pause_time >=	'$startTime'";
@@ -25,8 +25,8 @@ class PauseSeeker
 			$nodeIdStr = join(',', $nodeIds);
 			$conditions[] = "node_id IN ($nodeIdStr)";
 		}
-		if(!empty($pauseType)){
-			$conditions[] = "pause_type = '$pauseType'";
+		if(!empty($causeType)){
+			$conditions[] = "cause_type = '$causeType'";
 		}
 		if(!empty($dutyDepartment)){
 			$conditions[] = "duty_department = '$dutyDepartment'";

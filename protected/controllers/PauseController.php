@@ -2,6 +2,7 @@
 Yii::import('application.models.PauseSeeker');
 Yii::import('application.models.DepartmentSeeker');
 Yii::import('application.models.AR.monitor.LinePauseAR');
+Yii::import('application.models.AR.DutyDepartmentAR');
 
 
 class PauseController extends BmsBaseController 
@@ -20,7 +21,7 @@ class PauseController extends BmsBaseController
 		$startTime = $this->validateStringVal('startTime', '');
 		$endTime = $this->validateStringVal('endTime', '');
 		$section = $this->validateStringVal('section', '');
-		$pauseType = $this->validateStringVal('pauseType', '');
+		$causeType = $this->validateStringVal('causeType', '');
 		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
 		$perPage = $this->validateIntVal('perPage', 10);
 		$curPage = $this->validateIntVal('curPage', 1);
@@ -28,7 +29,7 @@ class PauseController extends BmsBaseController
 		try{
 			$orderBy = empty($orderBy) ? 'ASC' : 'DESC';
 			$seeker = new PauseSeeker();
-			list($total, $data) = $seeker->query($startTime, $endTime, $section, $pauseType, $dutyDepartment, $curPage, $perPage, $orderBy);
+			list($total, $data) = $seeker->query($startTime, $endTime, $section, $causeType, $dutyDepartment, $curPage, $perPage, $orderBy);
 			$ret = array(
 				'pager' => array(
 					'curPage' => $curPage,
@@ -49,6 +50,10 @@ class PauseController extends BmsBaseController
 		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
 		$remark = $this->validateStringVal('remark', '');
 		try{
+			$department = DutyDepartmentAR::model()->find("type=? AND display_name=?", array('停线',$dutyDepartment));
+			if(empty($department)){
+				throw new Exception("责任部门需使用标准化名称", 1);
+			}
 			if(!empty($id)){
 				$pause = LinePauseAR::model()->findByPk($id);
 				$pause->duty_department = $dutyDepartment;

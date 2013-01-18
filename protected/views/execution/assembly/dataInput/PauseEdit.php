@@ -47,12 +47,13 @@
 						</tr>
 						<tr>
 							<td>
-								<select name="" id="pauseType" class="input-medium">
+								<select name="" id="causeType" class="input-medium">
 									<option value="" selected>全部</option>
-									<option value="工位求助">工位求助</option>
-									<option value="紧急停止">紧急停止</option>
+									<option value="生产组织">生产组织</option>
+									<option value="品质异常">品质异常</option>
 									<option value="设备故障">设备故障</option>
-									<option value="计划停线">计划停线</option>
+									<option value="物料供给">物料供给</option>
+									<!-- <option value="计划停线">计划停线</option> -->
 								</select>
 							</td>
 							<td>
@@ -123,7 +124,7 @@
   	<div class="modal-body">
   		<form id="editModal" class="form-horizontal">
 			<div class="control-group">
-				<label class="control-label" for="">停线类型</label>
+				<label class="control-label" for="">触发类型</label>
 				<div class="controls">
 					<p id="editPauseType" class="text-info"></p>
 				</div>
@@ -135,6 +136,18 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label" for="">停线类型</label>
+				<div class="controls">
+					<select name="" id="editCauseType" class="input-medium">
+						<option value="" selected>请选择停线类型</option>
+						<option value="生产组织">生产组织</option>
+						<option value="品质异常">品质异常</option>
+						<option value="设备故障">设备故障</option>
+						<option value="物料供给">物料供给</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label" for="">责任部门</label>
 				<div class="controls">
 					<input type="text" class="input-large" id="editDutyDepartment">
@@ -142,7 +155,7 @@
 				</div>
 			</div>
   			<div class="control-group">
-				<label class="control-label" for="">备注</label>
+				<label class="control-label" for="">停线原因</label>
 				<div class="controls">
 					<textarea class="input-xlarge" id="editRemark" rows="2"></textarea>
 				</div>

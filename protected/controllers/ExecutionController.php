@@ -474,7 +474,7 @@ class ExecutionController extends BmsBaseController
         $arraySeries = array('F0', 'M6');
         $sqls=array();
         foreach($arraySeries as $series) {
-            $sqls[] = "SELECT * FROM plan_assembly WHERE  car_series='$series'";
+            $sqls[] = "SELECT * FROM plan_assembly WHERE  car_series='$series' ";
         }
         $sql = join(' UNION ', $sqls);
 

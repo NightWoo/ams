@@ -801,8 +801,8 @@ class FaultSeeker
 		$sd = date('Ymd', $s);
 		$ed = date('Ymd', $e);
 		
-		$sm = date('n', $s);
-		$em = date('n', $e);
+		$sm = date('m', $s);
+		$em = date('m', $e);
 
 		$lastHour = ($e - $s) / 3600;
 		$lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days

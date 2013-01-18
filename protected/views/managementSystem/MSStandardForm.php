@@ -21,7 +21,7 @@
 			<?php
               require_once(dirname(__FILE__)."/../common/left/management_system_left.php");
       ?>
-			<div id="bodyright" class="offset2"><!-- Main -->				
+			<div id="bodyright" class="offset2" style="margin-left: 0px;"><!-- Main -->				
 				<!-- <div>
 					<ul class="breadcrumb">
 						<li>

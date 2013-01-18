@@ -33,10 +33,20 @@ $(document).ready(function () {
 			ajaxQueryPause(1);
 		else if (index === 7)
 			ajaxQueryPlan(1);
+		else if (index === 8)
+			ajaxCompletionRate();
 		else if (index === 0)
 			ajaxQuery(1);
 		return false;
 	}
+
+	$("#dutyDepartment").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_PAUSE_DUTY_DEPARTMENT_LIST, {"departmentName":input}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	});
 
 	function currentDate8 (argument) {
 		var now = new Date();
@@ -245,6 +255,8 @@ $(document).ready(function () {
 			ajaxQueryPause(1);
 		else if (index === 7)
 			ajaxQueryPlan(1);
+		else if (index === 8)
+			ajaxCompletionRate();
 		else if (index === 0)
 			ajaxQuery(1);
 	});
@@ -490,7 +502,7 @@ $(document).ready(function () {
 			data: {
 				"startTime": $("#startTime").val(),
 				"endTime": $("#endTime").val(),
-				"pauseType": $("#pauseType").val(),
+				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
 				"section": $("#section").val(),	
 				"perPage": 10,
@@ -502,7 +514,7 @@ $(document).ready(function () {
 					$.each(response.data.data, function(index, value) {
 						var tr = $("<tr />");
 						$("<td />").html(value.id).appendTo(tr);
-						$("<td />").html(value.pause_type).appendTo(tr);
+						$("<td />").html(value.cause_type).appendTo(tr);
 						$("<td />").html(value.node_name).appendTo(tr);
 						$("<td />").html(value.duty_department).appendTo(tr);
 						$("<td />").html(value.remark).appendTo(tr);
@@ -641,6 +653,145 @@ $(document).ready(function () {
 				alertError();
 			}
 		});
+	}
+
+	function ajaxCompletionRate() {
+		var series = "";
+		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+		if((f0Checked + m6Checked)%2 === 0)
+			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
+		else if(f0Checked)
+			series += $("#checkboxF0").val();
+		else
+			series += $("#checkboxM6").val();
+
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: PLAN_QUERY_COMPLETION,
+			data: {
+				"line" : 'A',
+				"series":series,
+				"stime":$("#startTime").val(),
+				"etime":$("#endTime").val(),
+			},
+			success: function(response) {
+				if(response.success){
+					drawCompletionRate(response.data);
+					changeCompletionRateTable(response.data);
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		});
+	}
+
+
+
+	function drawCompletionRate(data) {
+		lineSeries = [];
+		carSeries = data.carSeries;
+		lineData = data.series;
+		$.each(carSeries, function (index, series) {
+			lineSeries[index] = {name: series + '_完成率', data: prepare(lineData.y[series])};
+		});
+		var chart;
+		chart = new Highcharts.Chart({
+			chart: {
+				renderTo: 'completionRateContainer',
+				type: 'line',
+				marginBottom: 60
+			},
+			title: {
+				text: '',
+				x: -20 //center
+			},
+			credits: {
+				//href: 'http://www.bydauto.com.cn',
+                text: ''
+			},
+			xAxis: {
+				categories: lineData.x,
+				labels: {
+					rotation: -45,
+					align: 'right'
+				}
+			},
+			yAxis: {
+				labels: {
+					formatter: function() {
+						return (this.value * 100) + '%';
+					}
+				},
+				title: {
+					text: '完成率'
+				},
+				plotLines: [{
+					value: 0,
+					width: 1,
+					color: '#808080'
+				}],
+				min: 0,
+				max: 1
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>' + this.series.name + '</b><br/>' +
+					this.x + ': ' + this.y;
+				}
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0
+			},
+			series: lineSeries
+		});
+	}
+
+	function changeCompletionRateTable (data) {
+		carSeries = data.carSeries;
+		detail = data.detail;
+		total = data.total;
+		$("#tablecompletionRate thead").html("<tr />");
+		$("#tablecompletionRate tbody").html("");
+		$.each(carSeries, function (index, value) {
+			$("<tr /><tr /><tr />").appendTo($("#tablecompletionRate tbody"));
+		});
+
+		//get tr
+        //first column descriptions
+        $.each(carSeries, function (index,value) {
+            $("<td />").html(value + "_完成率").appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(value + "_完成数").appendTo($("#tablecompletionRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(value + "_计划数").appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
+
+        });
+
+        var thTr = $("#tablecompletionRate tr:eq(0)");
+        $("<td />").html("日期").appendTo(thTr);
+
+        //合计
+        $("<td />").html("合计").appendTo(thTr);
+        $.each(total, function (index, value) {
+        	$("<td />").html(value.completionTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
+        	$("<td />").html(value.readyTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+2) +")"));
+        	$("<td />").html(value.totalTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
+        });
+
+        $.each(detail, function (index, value) {
+        	$("<td />").html(value.time).appendTo(thTr);
+        	$.each(carSeries, function (index, series) {
+        		$("<td />").html(value[series].completion).appendTo($("#tablecompletionRate tr:eq(" + (index*3+1) +")"));
+        		$("<td />").html(value[series].readySum).appendTo($("#tablecompletionRate tr:eq(" + (index*3+2) +")"));
+        		$("<td />").html(value[series].totalSum).appendTo($("#tablecompletionRate tr:eq(" + (index*3+3) +")"));
+        	});
+        });
 	}
 
 //-------------------END ajax query -----------------------

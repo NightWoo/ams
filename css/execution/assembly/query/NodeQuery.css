@@ -8,7 +8,7 @@
 }
 
 #btnQuery {
-	margin-left: 9px;
+	margin-left: 1px;
 }
 
 #tabs {
@@ -24,5 +24,6 @@
 }
 
 .checkbox {
-	margin-left: 10px;
+	margin-right: 6px;
+	margin-left: 4px;
 }

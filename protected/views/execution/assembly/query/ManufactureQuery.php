@@ -56,14 +56,15 @@
 								<select name="" id="selectNode" class="input-small">
                                     <option value="" selected>全部工段</option>
                                     <option value="PBS">PBS/入库</option>
-                                    <option value="T0">PBS/T0</option>
+                                    <option value="T0">PBS/上线</option>
                                     <option value="T1">T1/T11</option>
                                     <option value="T2">T2/T21</option>
                                     <option value="T3">T3/T32</option>
                                     <option value="C1">C1/C10</option>
                                     <option value="C2">C2/C21</option>
                                     <option value="F1">F1/F10</option>
-                                    <option value="F2">F2/VQ1</option>
+                                    <option value="F2">F2/F20</option>
+                                    <option value="VQ1">VQ1/下线</option>
                                     <option value="CHECK_IN">WH/入库</option>
                                     <option value="CHECK_OUT">WH/出库</option>
 								</select>
@@ -76,12 +77,12 @@
                                 <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                             </td>
                             <td  class="withSection">
-                                <select name="" id="pauseType" class="input-small">
+                                <select name="" id="causeType" class="input-small">
                                     <option value="" selected>全部</option>
-                                    <option value="工位求助">求助</option>
-                                    <option value="紧急停止">急停</option>
-                                    <option value="设备故障">设备</option>
-                                    <option value="计划停线">计划</option>
+                                    <option value="生产组织">生产组织</option>
+                                    <option value="品质异常">品质异常</option>
+                                    <option value="设备故障">设备故障</option>
+                                    <option value="物料供给">物料供给</option>
                                 </select>
                             </td>
                             <td class="withSection">
@@ -115,7 +116,7 @@
                             <li id="useRate"><a href="#" data-toggle="tab">生产利用率</a></li>
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
-                            <li id="completion"><a href="#" data-toggle="tab">计划完成率</a></li>
+                            <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
@@ -225,6 +226,14 @@
                                     <li id="lastPlan"><a href="#"><span>&gt;&gt;</span></a></li>
                                 </ul>
                             </div>
+                        </div>
+
+                        <div class="tab-pane" id="planCompletionRate">
+                            <div id="completionRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <table id="tablecompletionRate" class="table table-condensed">
+                                <thead />
+                                <tbody />
+                            </table>
                         </div>
                     </div>
                 </div>

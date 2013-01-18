@@ -6,8 +6,7 @@ $(document).ready(function(e) {
 	})
 	
 	$("#btnEditConfirm").click(function() {
-		ajaxEdit();	
-		$("#editModal").modal("hide");	
+		ajaxEdit();		
 	})
 	
 	$("#tableResult").live("click", function(e) {
@@ -17,7 +16,8 @@ $(document).ready(function(e) {
 			$("#editDutyDepartment").val(siblings[3].innerHTML);
 			$("#editRemark").val(siblings[4].innerHTML);
 			$("#editModal").data("id", thisTr.data("id"));
-			$("#editPauseType").html(siblings[1].innerHTML + " , " + siblings[2].innerHTML);
+			$("#editCauseType").val(siblings[1].innerHTML);
+			$("#editPauseType").html(thisTr.data("pause_type") + " , " + siblings[2].innerHTML);
 			$("#editPauseTime").html(siblings[6].innerHTML + " ~ " + siblings[7].innerHTML);
 			$("#standardName").html("");
 			
@@ -61,7 +61,7 @@ $(document).ready(function(e) {
 			data: {
 				"startTime": $("#startTime").val(),
 				"endTime": $("#endTime").val(),
-				"pauseType": $("#pauseType").val(),
+				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
 				"section": $("#section").val(),	
 				"perPage": 10,
@@ -74,7 +74,8 @@ $(document).ready(function(e) {
 					$.each(response.data.data, function(index, value) {
 						var tr = $("<tr />");
 						$("<td />").html(value.id).appendTo(tr);
-						$("<td />").html(value.pause_type).appendTo(tr);
+						//$("<td />").html(value.pause_type).appendTo(tr);
+						$("<td />").html(value.cause_type).appendTo(tr);
 						$("<td />").html(value.node_name).appendTo(tr);
 						$("<td />").html(value.duty_department).appendTo(tr);
 						$("<td />").html(value.remark).appendTo(tr);
@@ -90,6 +91,7 @@ $(document).ready(function(e) {
 						editTd.appendTo(tr);
 						
 						tr.data("id",value.id);
+						tr.data("pause_type", value.pause_type);
 						
 						$("#tableResult tbody").append(tr);
 						
@@ -135,10 +137,14 @@ $(document).ready(function(e) {
 				"dutyDepartment": $("#editDutyDepartment").val() === '' ? '待定' : $("#editDutyDepartment").val(),
 				"remark": $("#editRemark").val(),
 			},
-			success: function() {
-				ajaxQuery();
-				emptyEditModal();
-				$("#editModal").modal("hide");	
+			success: function(response) {
+				if(response.success){
+					ajaxQuery();
+					emptyEditModal();
+					$("#editModal").modal("hide");	
+				} else {
+					alert(response.message);
+				}
 			},
 			error: function() {
 				alertError();
@@ -235,5 +241,13 @@ $(document).ready(function(e) {
 
 			return item;
     	}
+	});
+
+	$("#dutyDepartment").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_PAUSE_DUTY_DEPARTMENT_LIST, {"departmentName":input}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
 	});
 });

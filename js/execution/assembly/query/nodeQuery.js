@@ -97,10 +97,12 @@ $(document).ready(function () {
 		if (index === 1)
 			ajaxPlato();
 		else if (index === 2)
-			ajaxDpu();
+			ajaxFautlDistribute();
 		else if (index === 3)
-			ajaxPassRate();
+			ajaxDpu();
 		else if (index === 4)
+			ajaxPassRate();
+		else if (index === 5)
 			ajaxStatistics();
 		else if (index === 0)
 			ajaxQuery(1);
@@ -134,15 +136,23 @@ $(document).ready(function () {
 		if (index == 1)
 			ajaxPlato();
 		else if (index === 2)
-			ajaxDpu();
+			ajaxFautlDistribute();
 		else if (index === 3)
-			ajaxPassRate();
+			ajaxDpu();
 		else if (index === 4)
+			ajaxPassRate();
+		else if (index === 5)
 			ajaxStatistics();
 		else if (index === 0)
 			setTimeout(toQuery, 0);
 	});
 
+	$('#divRadio :radio').change(function () {
+		$('#pieContainer').text('');
+		var type = $(this).val();
+		byd.pie.drawPie(type);
+		byd.pie.updatePieTable(type);
+	});
 //-------------------END event bindings -----------------------
 
 
@@ -169,6 +179,8 @@ $(document).ready(function () {
 		    url: FAULT_QUERY,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
+		    		'component': $('#componentText').val(),
+					'mode': $('#faultModeText').val(),
 					"series":series,
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
@@ -383,6 +395,8 @@ $(document).ready(function () {
 	function ajaxExport () {
 		window.open(FAULT_EXPORT + "?vin=" + $('#vinText').val() + 
 			"&node=" + $("#selectNode").val() + 
+			'&component=' + $('#componentText').val() +
+			'&mode=' + $('#faultModeText').val() +
 			"&series=" + ($("#checkboxF0").val() + "," + $("#checkboxM6").val()) +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
@@ -628,7 +642,8 @@ $(document).ready(function () {
                     width: 1,
                     color: '#808080'
                 }],
-                min : 0
+                min: 0,
+            	max: 1
             },
             tooltip: {
                 formatter: function() {
@@ -650,7 +665,7 @@ $(document).ready(function () {
 		detail = data.detail;
 		total = data.total;
 		$("#tablePassRate thead").html("<tr />");
-		$("#tablePassRate tbody").html("<tr />");
+		$("#tablePassRate tbody").html("");
         $.each(carSeries, function (index,value) {
             $("<tr /><tr /><tr />").appendTo($("#tablePassRate tbody"));
         });
@@ -812,6 +827,154 @@ $(document).ready(function () {
 			});
 		});
 	}
+
+	function ajaxFautlDistribute (targetPage) {
+		var ajaxData = { 
+				'vin': $('#vinText').val(), 
+			    'node': $('#selectNode').val(),
+				'component': $('#componentText').val(),
+				'mode': $('#faultModeText').val(),
+				'series': byd.getFormSeries(),
+				'stime': $('#startTime').val(),
+				'etime': $('#endTime').val()
+			};
+			$.ajax({
+				type: 'get',//使用get方法访问后台
+			    dataType: 'json',//返回json格式的数据
+			    url: FAULT_QUERY_DISTRIBUTE,//ref:  /bms/js/service.js
+			    data: ajaxData,
+			    success: function (response) {
+	    			if (response.success) {
+	    				$('#pieContainer').text('');
+	    				byd.pie.pieAjaxData = response.data;
+	    				byd.pie.drawPie('component_chart_data');
+	    				byd.pie.updatePieTable('component_chart_data');
+	    			} else {
+	    				alert(response.message);
+	    			}
+	   			 },
+			    error:function(){alertError();}
+			});
+	}
 //-------------------END ajax query -----------------------
+
+});
+
+
+!$(function () {
+	window.byd = window.byd || {};
+
+	window.byd.Validator = {
+		validateComponentAndFaultMode : function () {
+			/*if (byd.StringUtil.isBlank($('#componentText').val()) && 
+				byd.StringUtil.isBlank($('#faultModeText').val())) {
+				return false;
+			}*/
+			return true;
+		}
+	};
+	window.byd.getFormSeries = function () {
+		var series = '';
+		var f0Checked = $('#checkboxF0').attr('checked') === 'checked';
+		var m6Checked = $('#checkboxM6').attr('checked') === 'checked';
+		if((f0Checked + m6Checked)%2 === 0)
+			series += $('#checkboxF0').val() + ',' + $('#checkboxM6').val();
+		else if(f0Checked)
+			series += $('#checkboxF0').val();
+		else
+			series += $('#checkboxM6').val();
+		return series;
+	}
+
+	window.byd.ajaxSender = {
+
+		// ajaxExport : function () {
+		// 	window.open(FAULT_EXPORT + '?vin=' + $('#vinText').val() + 
+		// 		'&node=' + $('#selectNode').val() + 
+		// 		'&component=' + $('#componentText').val() +
+		// 		'&mode=' + $('#faultModeText').val() +
+		// 		'&series=' + ($('#checkboxF0').val() + ',' + $('#checkboxM6').val()) +
+		// 		'&stime=' + $('#startTime').val() +
+		// 		'&etime=' + $('#endTime').val()
+		// 	);
+		// }
+
+	}
+	window.byd.handler = {
+	};
+
+	window.byd.pie = {
+
+		pieAjaxData : {},
+
+		pieData : {
+            chart: {
+                renderTo: 'pieContainer',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                href: '',
+                text: ''
+            },
+            tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+            	percentageDecimals: 1
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(1) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '故障分布',
+                data: []
+            }]
+        },
+
+        drawPie : function (type) {
+        	this.pieData.series[0].data = this.pieAjaxData[type].series;
+        	var chart;
+        	// console.log(this.pieData);
+			chart = new Highcharts.Chart(this.pieData);
+        },
+
+		updatePieTable : function  (type) {
+			$('#tableFaultDistribute thead').html('<tr />');
+			$('#tableFaultDistribute tbody').html('<tr /><tr />');
+			var thTr = $('#tableFaultDistribute tr:eq(0)');
+			var dataTr = $('#tableFaultDistribute tr:eq(1)');
+			var percentageTr = $('#tableFaultDistribute tr:eq(2)');
+			if(type === 'component_chart_data')
+				$('<td />').html('零部件').appendTo(thTr);
+			else if(type === 'fault_mode_chart_data')
+				$('<td />').html('故障模式').appendTo(thTr);
+			else if(type === 'series_chart_data')
+				$('<td />').html('车系').appendTo(thTr);
+			else if(type === 'node_chart_data')
+				$('<td />').html('节点').appendTo(thTr);
+			$('<td />').html('数量').appendTo(dataTr);
+			$('<td />').html('百分比').appendTo(percentageTr);
+			$.each(this.pieAjaxData[type].detail, function (index,value) {
+				$('<td />').html(value.name).appendTo(thTr);
+				$('<td />').html(value.count).appendTo(dataTr);
+				$('<td />').html(value.percentage).appendTo(percentageTr);
+			});
+		}
+	};
 
 });

@@ -107,6 +107,92 @@ class PlanSeeker
         return array($total,  $datas); 
 	}
 
+	public function queryCompletion($stime, $etime, $series, $line) {
+		$arraySeries = $this->parseSeries($series);
+		$queryTimes = $this->parseQueryTime($stime, $etime);
+		$detail = array();
+		$dataSeriesX = array();
+		$dataSeriesY = array();
+
+		foreach($queryTimes as $queryTime) {
+			$ss = $queryTime['stime'];
+			$ee = $queryTime['etime'];
+			$cc = array("assembly_line='$line'");
+			if(!empty($ss)) {
+				$cc[] = "plan_date>='$ss'";
+			}
+			if(!empty($ee)) {
+				$cc[] = "plan_date<'$ee'";
+			}
+			$con = join(' AND ', $cc);
+			if(!empty($con)) {
+				$con = 'WHERE ' . $con;
+			}
+			$temp = array();
+			foreach($arraySeries as $series) {
+				//$total = 0;
+				$condition = $con . " AND car_series='$series'";
+				$sql = "SELECT SUM(total) FROM plan_assembly $condition";
+				$totalSum = Yii::app()->db->createCommand($sql)->queryScalar();
+
+				$sql = "SELECT SUM(ready) FROM plan_assembly $condition";
+				$readySum = Yii::app()->db->createCommand($sql)->queryScalar();
+
+				$rate = empty($totalSum) ? 0 : round($readySum/$totalSum , 2);
+				$temp[$series] = array(
+					'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
+					'readySum' => empty($readySum) ? 0 : $readySum,
+					'totalSum' => empty($totalSum) ? 0 : $totalSum,
+				);
+				$dataSeriesY[$series][] = $rate;
+			}
+			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
+			$dataSeriesX[] = $queryTime['point'];
+		}
+
+		//计算合计
+		$retTotal = array();
+		list($stT, $etT) = $this->reviseSETime($stime, $etime);
+		$ccT = array("assembly_line='$line'");
+		if(!empty($stT)) {
+			$ccT[] = "plan_date>='$stT'"; 
+		}
+		if(!empty($etT)){
+			$ccT[] = "plan_date<='$etT'";
+		}
+		$conT = join(' AND ', $ccT);
+		if(!empty($conT)) {
+			$conT = 'WHERE ' . $conT;
+		}
+
+		foreach($arraySeries as $series) {
+			$condition = $conT . " AND car_series='$series'";
+			$sql = "SELECT SUM(total) FROM plan_assembly $condition";
+			$totalT = Yii::app()->db->createCommand($sql)->queryScalar();
+
+			$sql = "SELECT SUM(ready) FROM plan_assembly $condition";
+			$readyT = Yii::app()->db->createCommand($sql)->queryScalar();
+
+			$rateT = empty($totalT) ? '-' : round($readyT/$totalT , 2);
+			$retTotal[] = array(
+				'series' => $series,
+				'completionTotal' => empty($totalT) ? '-' : $rate * 100 ."%", 
+				'readyTotal' => $readyT,
+				'totalTotal' => $totalT,
+			);
+		}
+
+		return  array(
+					'carSeries' => $arraySeries,
+					'detail' => $detail,
+					'total' => $retTotal,
+					'series' => array(
+									'x' => $dataSeriesX,
+									'y' => $dataSeriesY,
+								)
+				);
+	}
+
 	private function parseSeries($series) {
 		if(empty($series) || $series === 'all') {
             $series = array('F0', 'M6');
@@ -115,5 +201,70 @@ class PlanSeeker
         }
 		return $series;
 	}
+
+	private function parseQueryTime($stime,$etime) {
+
+		$format = 'Y-m-d';
+		$stime = date($format, strtotime($stime));
+		$etime = date($format, strtotime($etime));
+
+		$s = strtotime($stime);
+		$e = strtotime($etime);
+
+		$lastDay = (strtotime($etime) - strtotime($stime)) / 86400;//days
+
+		$ret = array();
+		if($lastDay < 31) {
+			$pointFormat = 'm-d';
+		} else {	
+			$format = 'Y-m';
+			$stime = date($format, $s);
+			$etime = date($format, $e);
+			$pointFormat = 'Y-m';
+		}
 		
+		$t = $s;
+		while($t <= $e) {
+			
+			$point = date($pointFormat, $t);
+
+			if($pointFormat === 'm-d'){
+				$nextD = strtotime('+1 day', $t);
+				$ret[] = array(
+					'stime' => date($format, $t),
+					'etime' => date($format, $nextD),
+					'point' => $point,
+				);
+				$t = $nextD;	
+			} else {
+				$nextM = strtotime('+1 month', $t);
+				$ret[] = array(
+					'stime' => date($format, $t),
+					'etime' => date($format, $nextM),
+					'point' => $point,
+				);
+				$t = $nextM;
+			}		
+		}
+
+		return $ret;
+	}
+
+	private function reviseSETime($stime, $etime) {
+		$format = 'Y-m-d';
+		$stime = date($format, strtotime($stime));
+		$etime = date($format, strtotime($etime));
+
+		$s = strtotime($stime);
+		$e = strtotime($etime);
+
+		$lastDay = (strtotime($etime) - strtotime($stime)) / 86400;//days
+
+		if($lastDay >= 31) {
+			$stime = date('Y-m', $s) . '-01';
+			$etime = date('Y-m-t', $e);
+		}
+
+		return array($stime, $etime);
+	}		
 }

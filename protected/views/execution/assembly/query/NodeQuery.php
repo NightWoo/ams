@@ -42,43 +42,50 @@
                     <!-- <legend>节点查询</legend> -->
 					<table>
 						<tr>
-							<td class="alignRight"><label>节点&nbsp;&nbsp;</label></td>
-							<td>
-								<select name="" id="selectNode" class="span3">
-									<option value="PBS">PBS</option>
-									<option value="T0">T0</option>
-									<option value="VQ1" selected="true">VQ1静态</option>
-									<option value="CHECK_LINE">VQ2动态.检测线</option>
-									<option value="ROAD_TEST_FINISH">VQ2动态.路试结束</option>
-									<option value="VQ2">VQ2动态.淋雨</option>
-									<option value="VQ3">VQ3外观</option>
-									<option value="CHECK_IN">入成品库</option>
-									<option value="CHECK_OUT">出成品库</option>
-								</select>
-                                
-							</td>
-                            <td colspan="2">
-                                <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
-                                <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input>
-                            </td>
-						</tr>
-						<tr>
 							<td class="alignRight"><label>起止时间&nbsp;&nbsp;</label></td>
-							<td>
-								<input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
-							</td>
+                            <td>
+                                <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                            </td>
                             <td>
                                 -
                             </td>
                             <td>
                                 <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                             </td>
+							<td>
+								<select name="" id="selectNode" class="input-medium">
+                                    <option value="">所有节点</option>
+									<!-- <option value="PBS">PBS</option>
+									<option value="T0">T0</option> -->
+									<option value="VQ1" selected="true">VQ1静态</option>
+									<option value="CHECK_LINE">VQ2动态.检测线</option>
+									<option value="ROAD_TEST_FINISH">VQ2动态.路试结束</option>
+									<option value="VQ2">VQ2动态.淋雨</option>
+									<option value="VQ3">VQ3外观</option>
+									<!-- <option value="CHECK_IN">入成品库</option>
+									<option value="CHECK_OUT">出成品库</option> -->
+								</select>
+							</td>
+                            <td colspan="2">
+                                <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
+                                <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="alignRight"><label>零部件-模式&nbsp;&nbsp;</label></td>
+                            <td>
+                                <input type="text" class="span3" placeholder="零部件..." id="componentText" />
+                            </td>
+                            <td>-</td>
+                            <td>
+                                <input type="text" class="span3" placeholder="故障模式..." id="faultModeText" />
+                            </td>
                             <td>
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6" disabled>M6</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
                             </td>
-						</tr>
+                        </tr>
 					</table> 
                 </form>      
                 </div>
@@ -90,9 +97,10 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li  class="active"><a href="#dataList" data-toggle="tab"> 详细报表 </a></li>
                             <li id="platoTab"><a href="#plato" data-toggle="tab">柏拉图</a></li>
+                            <li><a href="#faultDistribute" data-toggle="tab">故障分布</a></li>
                             <li id="dpuTab"><a href="#dpu" data-toggle="tab">DPU趋势</a></li>
                             <li id="passRateTab"><a href="#passRate" data-toggle="tab">合格率趋势</a></li>
-                            <li><a href="#statistic" data-toggle="tab">车辆统计</a></li>
+                            <!-- <li><a href="#statistic" data-toggle="tab">车辆统计</a></li> -->
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
@@ -128,6 +136,39 @@
                             <table id="tablePlato" class="table table-condensed">
                                 <thead />
                                 <tbody />
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="faultDistribute">
+                            <div id="divRadio">   
+                                <!--<span>分布条件:</span>-->
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="component_chart_data" checked>
+                                  零部件
+                                </label>
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="fault_mode_chart_data">
+                                  故障模式
+                                </label>
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios3" value="series_chart_data">
+                                  车系
+                                </label>
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios4" value="node_chart_data">
+                                  节点
+                                </label>
+                            </div>
+                            <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                            
+                            <table id="tableFaultDistribute" class="table table-condensed">
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                <tbody>
+                                    <tr></tr>
+                                    <tr></tr>
+                                </tbody>
                             </table>
                         </div>
 

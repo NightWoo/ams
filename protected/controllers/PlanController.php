@@ -247,4 +247,18 @@ class PlanController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
+
+	public function actionQueryCompletion() {
+		$stime = $this->validateStringVal('stime', '');
+		$etime = $this->validateStringVal('etime', '');
+		$series = $this->validateStringVal('series', '');
+		$line = $this->validateStringVal('line', 'A');
+		try{
+			$seeker = new PlanSeeker();
+			$data = $seeker->queryCompletion($stime, $etime, $series, $line);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
 }
