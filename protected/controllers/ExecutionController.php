@@ -9,6 +9,13 @@ class ExecutionController extends BmsBaseController
 		'T11','T21','T32','C10','C21','F10',
 	);
 	public static $MERGED_VIEW = "T11-F10";
+
+	public static $QUERY_PRIVILAGE = array(
+		'CarQuery' => array('READ_ONLY', 'CAR_QUERY', 'CAR_QUERY_ASSEMBLY'),
+		'ManufactureQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+		'ComponentQuery' => array('READ_ONLY', 'COMPONENT_TRACE_QUERY'),
+		'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+	);
 	/**
 	 * Declares class-based actions.
 	 */
@@ -37,7 +44,14 @@ class ExecutionController extends BmsBaseController
     public function actionQuery()
     {
         $queryPanel = $this->validateStringVal('type','CarQuery');
-        $this->render('assembly/query/' . $queryPanel,array(''));
+		try{
+			Yii::app()->permitManager->check(self::$QUERY_PRIVILAGE[$queryPanel]);
+			$this->render('assembly/query/' . $queryPanel,array(''));
+		} catch(Exception $e) {
+			header("content-type:text/html; charset=utf-8");
+			print( "<div style='color:red;align:center'>" . $e->getMessage() . "</div>");
+			echo "<div><input   type=button   value=返回   onclick= 'window.history.back() '> </div>";
+		}
     }
 	
 	public function actionChild() {

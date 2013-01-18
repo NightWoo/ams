@@ -163,7 +163,6 @@ class CarController extends BmsBaseController
 		$vin = $this->validateStringVal('vin', '');
 		$node = $this->validateStringVal('node', '');
         try{
-			Yii::app()->permitManager->check(array('CAR_QUERY', 'READ_ONLY'));
             $car = Car::create($vin);
             $data = $car->getAllTrace($node);
             $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' => $car->car->status));
@@ -176,7 +175,6 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         $node = $this->validateStringVal('node', '');
         try{
-			Yii::app()->permitManager->check(array('CAR_QUERY', 'READ_ONLY'));
             $car = Car::create($vin);
             $datas = $car->getAllTrace($node);
 			

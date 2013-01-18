@@ -212,7 +212,6 @@ class FaultController extends BmsBaseController
 		$perPage = $this->validateIntVal('perPage', 20);
 		$curPage = $this->validateIntVal('curPage', 1);
 		try{
-			Yii::app()->permitManager->check(array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'));
             $fault = Fault::createSeeker();
             list($total, $data) = $fault->query($component, $mode, $series, $stime, $etime, $node,$curPage, $perPage);
 			$ret = array(
