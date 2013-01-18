@@ -12,7 +12,7 @@ $(document).ready(function () {
 	qtipMe(".pbs", "0", "purple");
 	qtipMe(".vq1", "0", "purple");
 
-	$("#block").hide().text("");
+	// $("#block").hide().text("");
 
 
 	$(".vq2-road,.vq2-check,.vq2-leak").hover(
@@ -453,9 +453,9 @@ function ajaxStockyard (blockName) {
 	    			var a = $("<a />").addClass("thumbnail");
 	    			var p = $("<p />").addClass("pull-left").text(value.row);
 	    			var progress = $("<div />").addClass("progress");
-	    			var bar = $("<div />").attr("style", "width:" + (value.quality / value.capacity * 100) + "%").text(value.quality + "/" + value.capacity);
+	    			var bar = $("<div />").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
 	    			a.append(p);
-	    			p.append(progress);
+	    			a.append(progress);
 	    			progress.append(bar);
 	    			$("#block").append(a);
 	    		});
