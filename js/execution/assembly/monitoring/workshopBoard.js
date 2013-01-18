@@ -84,7 +84,7 @@ function ajaxRefreshSeats () {
 	    			$("#QG").css("background", "#00FF00");
 					$("#QGDiv").css("color", "black").html("QG");
 	    		}
-	    		var sectionList = ["T1", "T2", "T3", "C1", "C2", "F1", "F2"];
+	    		var sectionList = ["T1", "T2", "T3", "C1", "C2", "F1", "F2", "VQ1"];
 	    		$(sectionList).each(function (index, value) {
 	    			if ( $.inArray(  value ,hideFacadeList) < 0) {
 	    				switchCalledSection(value, true);
@@ -179,6 +179,22 @@ function ajaxRefreshSeats () {
 					seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
 				});
 			}
+
+			// $(seatController.flashingList).each(function (i, v) {
+			// 	var flag = 0;
+			// 	$(this.rawList).each(function (index, value) {
+			// 		if(v.seatNumber == value.seatNumber){
+			// 			flag = 1;
+			// 		}
+			// 	});
+			// 	console.log(flag);
+			// 	console.log(v);
+			// 	if (flag == 0) {
+			// 		seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
+			// 	}
+			// 	flag= 0;
+			// });
+
 			//value --new             v-----old
 			$(this.rawList).each(function (index, value) {
 				var flag = 0;
@@ -202,6 +218,7 @@ function ajaxRefreshSeats () {
 				}
 				flag= 0;
 			});
+
 			// console.log(this.flashingList);
 			// console.log(this.rawList);
 			// console.log(seatController.toFlashList);
