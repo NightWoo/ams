@@ -35,8 +35,8 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=bms',
 			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
+			'username' => 'bms_w',
+			'password' => '123',
 			'charset' => 'utf8',
 		),
 		'errorHandler'=>array(
