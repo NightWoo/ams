@@ -128,10 +128,10 @@
 				    		<div class="vq2-check"></div>
 				    		<div class="stock-amount">36</div>
 				    	</div>
-				    	<div class="span4" style="margin-top:12px;">
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A111</p>
-                  				<div class="progress" style="margin-bottom:0;">
+				    	<div class="span4" style="margin-top:12px;" id="block">
+                			<a class="thumbnail" href="">
+                  				<p class="pull-left">A111</p>
+                  				<div class="progress">
                     				<div class="bar" style="width: 60%;">6 / 10</div>
                   				</div>
                 			</a>
@@ -318,6 +318,8 @@
 		  	</div>
 		</div>
 
+		
+
 		<!-- stockyard record -->
 		<div class="modal" id="stockyardModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
 		  	<div class="modal-header">
@@ -326,6 +328,30 @@
 		  	</div>
 		  	<div class="modal-body">
 		  		<table class="table table-bordered" id="stockyardTable">
+            		<thead>
+            			<th>车系</th>
+            			<th>VIN号</th>
+            			<th>车型/车身</th>
+            			<th>颜色</th>
+            			<th>进入时间</th>
+
+            		</thead>
+            		<tbody></tbody>
+	            </table>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
+
+		<!-- modal -->
+		<div class="modal" id="modal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h3 id="modalTitle"></h3>
+		  	</div>
+		  	<div class="modal-body">
+		  		<table class="table table-bordered" id="modalTable">
             		<thead>
             			<th>车系</th>
             			<th>VIN号</th>
