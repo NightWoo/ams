@@ -460,7 +460,7 @@ function ajaxStockyard (blockName) {
 	    			$("#block").append(a);
 	    		});
 
-				$("#block").modal("show");
+				$("#block").show();
 	    	} else {
 	    		alert(response.message);
 	    	}
