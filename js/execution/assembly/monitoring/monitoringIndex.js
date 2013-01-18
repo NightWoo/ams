@@ -12,7 +12,7 @@ $(document).ready(function () {
 	qtipMe(".pbs", "0", "purple");
 	qtipMe(".vq1", "0", "purple");
 
-	// $("#block").hide().text("");
+	
 
 
 	$(".vq2-road,.vq2-check,.vq2-leak").hover(
@@ -26,7 +26,7 @@ $(document).ready(function () {
 	  }
 	);
 
-
+	$("#block").hide().text("");
 	$("#stockyardModal").modal("hide");
 	//block click handler
 	$(".stockyard,.B01,.B02").live("click", function () {
@@ -34,7 +34,10 @@ $(document).ready(function () {
 		// $("#modalTitle").html($(this).html() + "结存明细");
 		// $("#modal").modal("show");
 	});
-
+	$(".thumbnail").live("click", function () {
+		// console.log();
+		ajaxRow($(this).children("p").html());
+	});
 
 	window.markMap = {"T0":209,"T1":220,"T2":224,"T3":228,"T4":232,"T5":236,"T6":240,"T7":244,"T8":248,"T9":252,"T10":256,
 	"T11":271,"T12":282,"T13":286,"T14":290,"T15":294,"T16":298,"T17":302,"T18":306,"T19":310,"T20":311,
@@ -453,7 +456,7 @@ function ajaxStockyard (blockName) {
 	    			var a = $("<a />").addClass("thumbnail");
 	    			var p = $("<p />").addClass("pull-left").text(value.row);
 	    			var progress = $("<div />").addClass("progress");
-	    			var bar = $("<div />").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
+	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
 	    			a.append(p);
 	    			a.append(progress);
 	    			progress.append(bar);
@@ -473,7 +476,7 @@ function ajaxRow (rowName) {
 		type: "get",//使用get方法访问后台
 	    dataType: "json",//返回json格式的数据
 	    url: SHOW_BALANCE_DETAIL,//ref:  /bms/js/service.js
-	    data: {"block" : rowName},
+	    data: {"row" : rowName},
 	    success:function (response) {
 	    	if (response.success){
 	    		//change title
