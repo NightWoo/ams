@@ -70,11 +70,7 @@ class MonitorSeeker
 		$sql = "SELECT row,capacity, quantity FROM warehouse WHERE block='$block'";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-		$ret = array();
-		foreach($rows as $row) {
-			$ret[$row['row']] = $row;
-		}
-		return $ret;
+		return $rows;
 	}
 
 	public function queryWarehouseBalanceDetail($suffix, $type = 'block') {
