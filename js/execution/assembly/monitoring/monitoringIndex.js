@@ -475,7 +475,7 @@ function ajaxRow (rowName) {
 	$.ajax({
 		type: "get",//使用get方法访问后台
 	    dataType: "json",//返回json格式的数据
-	    url: SHOW_BALANCE_DETAIL,//ref:  /bms/js/service.js
+	    url: MONITOR_ROW_BALANCE_DETAIL,//ref:  /bms/js/service.js
 	    data: {"row" : rowName},
 	    success:function (response) {
 	    	if (response.success){
