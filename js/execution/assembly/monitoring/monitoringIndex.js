@@ -12,6 +12,9 @@ $(document).ready(function () {
 	qtipMe(".pbs", "0", "purple");
 	qtipMe(".vq1", "0", "purple");
 
+	$("#block").hide().text("");
+
+
 	$(".vq2-road,.vq2-check,.vq2-leak").hover(
 	  function () {
 	    $(".vq2-road").addClass("border-purple");
@@ -25,9 +28,11 @@ $(document).ready(function () {
 
 
 	$("#stockyardModal").modal("hide");
+	//block click handler
 	$(".stockyard,.B01,.B02").live("click", function () {
-		$("#stockyardTitle").html($(this).html() + "结存明细");
-		$("#stockyardModal").modal("show");
+		ajaxStockyard($(this).html());
+		// $("#modalTitle").html($(this).html() + "结存明细");
+		// $("#modal").modal("show");
 	});
 
 
@@ -434,6 +439,66 @@ function ajaxBalance (node) {
 	});
 }
 
+function ajaxStockyard (blockName) {
+	$.ajax({
+		type: "get",//使用get方法访问后台
+	    dataType: "json",//返回json格式的数据
+	    url: MONITOR_BLOCK_INFO,//ref:  /bms/js/service.js
+	    data: {"block" : blockName},
+	    success:function (response) {
+	    	if (response.success){
+	    		//clear Text
+	    		$("#block").text("");
+	    		$.each(response.data, function (index, value) {
+	    			var a = $("<a />").addClass("thumbnail");
+	    			var p = $("<p />").addClass("pull-left").text(value.text);
+	    			var progress = $("<div />").addClass("progress");
+	    			var bar = $("<div />").attr("style", "width:" + "60%;").text("");
+	    			a.append(p);
+	    			p.append(progress);
+	    			progress.append(bar);
+	    			$("#block").append(a);
+	    		});
+
+				$("#block").modal("show");
+	    	} else {
+	    		alert(response.message);
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
+}
+function ajaxRow (rowName) {
+	$.ajax({
+		type: "get",//使用get方法访问后台
+	    dataType: "json",//返回json格式的数据
+	    url: SHOW_BALANCE_DETAIL,//ref:  /bms/js/service.js
+	    data: {"block" : rowName},
+	    success:function (response) {
+	    	if (response.success){
+	    		//change title
+	    		$("#modalTitle").text(rowName + "结存明细");
+	    		//clear Text
+	    		$("#modalTable tbody").text("");
+	    		$.each(response.data, function (index, value) {
+	    			var tr = $("<tr />");
+	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(value.vin).appendTo(tr);
+	    			$("<td />").html(value.type).appendTo(tr);
+	    			$("<td />").html(value.color).appendTo(tr);
+	    			$("<td />").html(value.time).appendTo(tr);
+	    			
+	    			$("#modalTable tbody").append(tr);
+	    		});
+
+				$("#modal").modal("show");
+	    	} else {
+	    		alert(response.message);
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
+}
 // balance
 function ajaxVq1ExceptionBalance () {
 	$.ajax({
