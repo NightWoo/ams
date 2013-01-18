@@ -66,6 +66,16 @@ class MonitorSeeker
 		);
 	}
 
+	public function queryWarehouseBalanceDetail($block) {
+		$prefix = "成品库_";
+		$sql = "SELECT concat('$prefix', row) as status FROM warehouse WHERE block='$block'";
+
+		$states = Yii::app()->db->createCommand($sql)->queryColumn();
+
+
+		return $this->queryBalanceDetail($states);
+	}
+
 	public function queryBalanceDetail($node) {
 		if($node === 'PBS') {
 			$states = array('彩车身库');
@@ -77,6 +87,10 @@ class MonitorSeeker
 			$states = array('VQ2异常.路试','VQ2异常.漏雨');
 		} elseif($node === 'VQ3') {
 			$states = array('VQ3异常');
+		} elseif(!is_array($node)) {
+			$states = array($node);
+		} else {
+			$states = $node;
 		}
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
@@ -84,19 +98,50 @@ class MonitorSeeker
 	}
 
 	public function queryStateCars($states,$stime = null, $etime = null) {
-		$conditions = array();
+		$condition = '';
 		if(!empty($stime)) {
-			$conditions[] = "modify_time >= '$stime'";
+			$condition .= "modify_time >= '$stime'";
 		}
 		if(!empty($etime)) {
-            $conditions[] = "modify_time <= '$etime'";
+            $condition .= "modify_time <= '$etime'";
         }   
-        $condition = join(' AND ', $conditions);
 
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT count(*) FROM car WHERE status IN ($str) $condition";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
+
+	public function queryWareHourseCars($state, $stime = null, $etime = null) {
+		$condition = '';
+        if(!empty($stime)) {
+            $condition .= " AND modify_time >= '$stime'";
+        }
+        if(!empty($etime)) {
+            $condition .= " AND modify_time <= '$etime'";
+        }
+
+        $sql = "SELECT count(*) FROM car WHERE status LIKE '$state%' $condition";
+        return Yii::app()->db->createCommand($sql)->queryScalar();
+	}
+
+	public function queryWareHoursePassCars($stime = null, $etime = null) {
+        $condition = '';
+        if(!empty($stime)) {
+            $condition .= " AND pass_time >= '$stime'";
+        }
+        if(!empty($etime)) {
+            $condition .= " AND pass_time <= '$etime'";
+        }
+
+        $sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
+        $in = Yii::app()->db->createCommand($sql)->queryScalar();
+
+		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
+        $out = Yii::app()->db->createCommand($sql)->queryScalar();
+
+
+		return array('warehourse_in' => $in, 'warehourse_out' => $out);
+    }
 
 	public function queryPlanCars($date) {
 		$seeker = new PlanSeeker();

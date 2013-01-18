@@ -86,6 +86,7 @@ class MonitorController extends BmsBaseController
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
 
+		$vq1Balance = $seeker->queryBalanceDetail('VQ1');
 		$vq2Balance = $seeker->queryBalanceDetail('VQ2');
 		$vq3Balance = $seeker->queryBalanceDetail('VQ3');
 
@@ -101,13 +102,12 @@ class MonitorController extends BmsBaseController
             'line_urate' =>  $seeker->queryLineURate($stime, $etime),
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
 			'balance' => array(
+				'VQ1' => count($vq1Balance),
 				'VQ2' => count($vq2Balance),
 				'VQ3' => count($vq3Balance),
+				'warehourse_cars' => $seeker->queryWareHourseCars('成品库', $stime, $etime),
 			),
-			'pass_car' => array(
-				'warehourse_in' => 0,
-				'warehourse_out' => 0,
-			),
+			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
 			'drr' => $drrs,
 		);
 
@@ -122,6 +122,15 @@ class MonitorController extends BmsBaseController
 
         $this->renderJsonBms(true, 'OK', $data);
 	}
+
+	public function actionShowWarehouseBalanceDetail() {
+        $block = $this->validateStringVal('block', 'A01');
+        $seeker = new MonitorSeeker();
+
+        $data = $seeker->queryWarehouseBalanceDetail($block);
+
+        $this->renderJsonBms(true, 'OK', $data);
+    }
 
 	public function actionQuerySection() {
 		$section = $this->validateStringVal('section','');
