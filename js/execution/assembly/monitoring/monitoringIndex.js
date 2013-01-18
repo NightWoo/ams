@@ -26,7 +26,7 @@ $(document).ready(function () {
 	  }
 	);
 
-	$("#block").hide().text("");
+	// $("#block").hide().text("");
 	$("#stockyardModal").modal("hide");
 	//block click handler
 	$(".stockyard,.B01,.B02").live("click", function () {
@@ -457,6 +457,12 @@ function ajaxStockyard (blockName) {
 	    			var p = $("<p />").addClass("pull-left").text(value.row);
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
+	    			if (value.quantity == value.capacity) {
+	    				bar.removeClass().addClass("progress-success");
+	    			} else if (value.quantity == "0"){
+	    				bar.css("color", "black");
+	    			}
+	    				
 	    			a.append(p);
 	    			a.append(progress);
 	    			progress.append(bar);

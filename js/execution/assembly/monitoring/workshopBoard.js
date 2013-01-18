@@ -21,6 +21,7 @@ function initPage (argument) {
 	$("#sectionC2").hide();
 	$("#sectionF1").hide();
 	$("#sectionF2").hide();
+	$("#sectionVQ1").hide();
 }
 
 function ajaxRefresh (planId) {
@@ -81,7 +82,7 @@ function ajaxRefreshSeats () {
 	    		});
 	    		if (!VQ1FlashFlag) {
 	    			$("#VQ1").css("background", "#00FF00");
-					$("#VQ1Div").css("color", "black").html("VQ1");
+					$("#VQ1Div").css("color", "black").html("QG");
 	    		}
 	    		var sectionList = ["T1", "T2", "T3", "C1", "C2", "F1", "F2"];
 	    		$(sectionList).each(function (index, value) {
@@ -170,23 +171,28 @@ function ajaxRefreshSeats () {
 			
 		},
 		dealWithFlash : function () {
+			if (this.rawList.length == 0) {
+				$(seatController.flashingList).each(function (i, v) {
+					seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
+				});
+			}
 			//value --new             v-----old
 			$(this.rawList).each(function (index, value) {
-					var flag = 0;
-					$(seatController.flashingList).each(function (i, v) {
-						if (v.seatNumber === value.seatNumber && v.type === value.type) {
-							//do nothing
-							// stopList.push({"seatNumber", v.seatNumber, "type" : v.type});
-							// toFlashList.push({"seatNumber", value.seatNumber, "type" : value.type});
-							flag =1;
-						} else if (v.seatNumber === value.seatNumber && v.type !== value.type){
-							//stop origin and flash new
-							seatController.flashingList.splice(i, 1);
-							seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
-							seatController.toFlashList.push({"seatNumber" : value.seatNumber, "type" : value.type});
-							flag = 1;
-						}
-					});
+				var flag = 0;
+				$(seatController.flashingList).each(function (i, v) {
+					if (v.seatNumber === value.seatNumber && v.type === value.type) {
+						//do nothing
+						// stopList.push({"seatNumber", v.seatNumber, "type" : v.type});
+						// toFlashList.push({"seatNumber", value.seatNumber, "type" : value.type});
+						flag =1;
+					} else if (v.seatNumber === value.seatNumber && v.type !== value.type){
+						//stop origin and flash new
+						seatController.flashingList.splice(i, 1);
+						seatController.stopList.push({"seatNumber" : v.seatNumber, "type" : v.type, "intervalId": v.intervalId});
+						seatController.toFlashList.push({"seatNumber" : value.seatNumber, "type" : value.type});
+						flag = 1;
+					}
+				});
 				if(flag == 0) {
 					seatController.toFlashList.push({"seatNumber" : value.seatNumber, "type" : value.type});
 				}

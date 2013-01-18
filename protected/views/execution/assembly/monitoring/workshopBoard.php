@@ -153,10 +153,19 @@
                         <div class="section" id=""><span class="normal_seat"></span></div>
                     </div>
                 </div>
-                <div class="block">
-                    <div class="self" id="VQ1"><div style="float: left;width:110px;" id="VQ1Div">VQ1</div></div>
+                <div class="block"  style="width:52px">
+                    <div class="self" id="facadeVQ1"  style="width:52px"><div style="float: left;width:52px;">VQ1</div></div>
+                    <div id="sectionVQ1">
+                        <div class="section" id="F21"><span class="normal_seat">2 1</span></div>
+                        <div class="section" id="F22"><span class="normal_seat">2 2</span></div>
+                        <div class="section" id="F23"><span class="normal_seat">2 3</span></div>
+                        <div class="section" id="F24"><span class="normal_seat">2 4</span></div>
+                        <div class="section" id="F25"><span class="normal_seat">2 5</span></div>
+                    </div>
                 </div>
-                
+                <div class="block"  style="width:52px">
+                    <div class="self" id="VQ1"  style="width:52px"><div style="float: left;width:52px;" id="VQ1Div">QG</div></div>
+                </div>
                 
             </div>
 
