@@ -66,12 +66,26 @@ class MonitorSeeker
 		);
 	}
 
-	public function queryWarehouseBalanceDetail($block) {
+	public function queryWarehouseBlockBalance($block) {
+		$sql = "SELECT row,capacity, quantity FROM warehouse WHERE block='$block'";
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$ret = array();
+		foreach($rows as $row) {
+			$ret[$row['row']] = $row;
+		}
+		return $ret;
+	}
+
+	public function queryWarehouseBalanceDetail($suffix, $type = 'block') {
 		$prefix = "成品库_";
-		$sql = "SELECT concat('$prefix', row) as status FROM warehouse WHERE block='$block'";
+		if($type == 'block') {
+			$sql = "SELECT concat('$prefix', row) as status FROM warehouse WHERE block='$suffix'";
 
-		$states = Yii::app()->db->createCommand($sql)->queryColumn();
-
+			$states = Yii::app()->db->createCommand($sql)->queryColumn();
+		} else {
+			$states = $suffix;	
+		}
 
 		return $this->queryBalanceDetail($states);
 	}
@@ -428,7 +442,7 @@ class MonitorSeeker
 		return $dpu;
 	}
 
-	public function queryQualified($stime, $etime, $node = "VQ1") {
+	public function queryQualified($stime, $etime, $node = "VQ1" , $roundBit = 3) {
 		$cars = 0;
         $faults = 0;
         $nodeIdStr = $this->parseNodeId($node);
@@ -463,7 +477,7 @@ class MonitorSeeker
 			$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time <= '$etime' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 			$cars += Yii::app()->db->createCommand($sql)->queryScalar();
 		}  
-		$rate = empty($cars) ? 0 : round(($cars - $faults) / $cars, 3);
+		$rate = empty($cars) ? 0 : round(($cars - $faults) / $cars, $roundBit);
 		$rate = empty($cars) ? '-' : $rate * 100 . "%";
 
 

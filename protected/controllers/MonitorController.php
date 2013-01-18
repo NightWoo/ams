@@ -91,9 +91,9 @@ class MonitorController extends BmsBaseController
 		$vq3Balance = $seeker->queryBalanceDetail('VQ3');
 
 		$drrs = array(
-            'VQ2_LEAK' => $seeker->queryQualified($stime, $etime, 'VQ2'),
-            'VQ2_ROAD' => $seeker->queryQualified($stime, $etime, 'ROAD_TEST_FINISH'),
-            'VQ3' => $seeker->queryQualified($stime, $etime, 'VQ3'),
+            'VQ2_LEAK' => $seeker->queryQualified($stime, $etime, 'VQ2', 2),
+            'VQ2_ROAD' => $seeker->queryQualified($stime, $etime, 'ROAD_TEST_FINISH', 2),
+            'VQ3' => $seeker->queryQualified($stime, $etime, 'VQ3', 2),
             );
 
         $data = array(
@@ -123,11 +123,21 @@ class MonitorController extends BmsBaseController
         $this->renderJsonBms(true, 'OK', $data);
 	}
 
-	public function actionShowWarehouseBalanceDetail() {
+	public function actionShowWarehouseBlockBalance() {
         $block = $this->validateStringVal('block', 'A01');
         $seeker = new MonitorSeeker();
 
-        $data = $seeker->queryWarehouseBalanceDetail($block);
+        $data = $seeker->queryWarehouseBlockBalance($block);
+
+        $this->renderJsonBms(true, 'OK', $data);
+    }
+	
+	public function actionShowWarehouseBalanceDetail() {
+        $suffix = $this->validateStringVal('row', 'A011');
+        $type = $this->validateStringVal('type', 'row');
+        $seeker = new MonitorSeeker();
+
+        $data = $seeker->queryWarehouseBalanceDetail($suffix, $type);
 
         $this->renderJsonBms(true, 'OK', $data);
     }
