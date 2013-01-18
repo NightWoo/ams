@@ -540,7 +540,7 @@ class MonitorSeeker
                         'seat' => $seat,
                         'full_seat' => $fullSeat,
 						'section' => $otherSection,
-                        'background_text' => 'VQ1',
+                        'background_text' => 'QG',
                         'background_font_color' => 'red',
                         'foreground_text' => $seat,
                         'foreground_font_color' => 'black',
@@ -550,12 +550,12 @@ class MonitorSeeker
                         );
 
 
-				$sectionStatus['VQ1'] = array(
-					'section' => 'VQ1',
+				$sectionStatus['QG'] = array(
+					'section' => 'QG',
                     'type' => 'flash',
                     'background_text' => $otherSection,
 					'background_font_color' => 'red',
-					'foreground_text' => 'Q1',
+					'foreground_text' => 'QG',
 					'foreground_font_color' => 'black',
 					'foreground_color' => 'yellow',
                 );
@@ -651,7 +651,7 @@ class MonitorSeeker
 			}
 		}
 
-		return array('seatStatus' => $retSeats, 'sectionStatus' => $sectionStatus, 'lineStatus' => $runStatus);
+		return array('seatStatus' => $retSeats, 'sectionStatus' => $sectionStatus, 'lineStatus' => $runStatus , $curDay);
 	}
 
 	protected function mapSection($nodeId) {
