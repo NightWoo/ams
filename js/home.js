@@ -48,6 +48,10 @@ $(function () {
 		window.location.href='#'
 	})
 
+	$("#summary").click(function(){
+		window.location.href='/bms/managementSystem/workSummaryAPD'
+	})
+
 	function initPage() {
 		refresh();	
 	}

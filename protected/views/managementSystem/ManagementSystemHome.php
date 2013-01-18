@@ -36,22 +36,83 @@
 					    <div id="Carouse" class="carousel slide">
     						<!-- Carousel items -->
     						<div class="carousel-inner">
-    							<div class="active item">
-    								<img src="/bms/img/AMS_1.jpg" alt="">
-                   	<div class="carousel-caption">
-                      <h4>AMS</h4>
-                      <p>总装长沙工厂生产管理模式</p>
-                    </div>
-    							</div>
-    							<div class="item">
-    								<img src="/bms/img/AMS_2.jpg" alt="">
-                   	<div class="carousel-caption">
-                      <h4>什么是AMS</h4>
-                      <p>Assembly Manufacture System</p>
-                    </div>
-    							</div>
-    						</div>
-   						 <!-- Carousel nav -->
+    							<?php
+                    //1_overview
+                    $dir1='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Overview';  
+                    $handle=opendir($dir1);  
+                    $i=0;  
+                    while(false!==($file=readdir($handle))){  
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                        //var_dump($file);  
+                        $i++;  
+                      }  
+                    }  
+                    closedir($handle);
+                    
+                    for($n=1;$n<=$i;$n++){
+                      if($n===1){
+                        echo '<div class="item active">';
+                      } else {
+                         echo '<div class="item">';
+                      }
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Overview/'. $n .'.JPG" alt="">';
+                      echo '<div class="carousel-caption">';
+                      echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_1_Overview.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      echo '<h4>概述</h4>';
+                      echo '<p></p>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
+
+                    //3_management_goal
+                    $dir2='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Goal';  
+                    $handle=opendir($dir2);  
+                    $i=0;  
+                    while(false!==($file=readdir($handle))){  
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                        //var_dump($file);  
+                        $i++;  
+                      }  
+                    }  
+                    closedir($handle);
+                    
+                    for($n=1;$n<=$i;$n++){
+                      echo '<div class="item">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Goal/'. $n .'.JPG" alt="">';
+                      echo '<div class="carousel-caption">';
+                      echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_3_ManagementGoal.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      echo '<h4>管理目标</h4>';
+                      echo '<p></p>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
+
+                    //5_structure_and_duty
+                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Structure';  
+                    $handle=opendir($dir3);  
+                    $i=0;  
+                    while(false!==($file=readdir($handle))){  
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                        //var_dump($file);  
+                        $i++;  
+                      }  
+                    }  
+                    closedir($handle);
+                    
+                    for($n=1;$n<=$i;$n++){
+                      echo '<div class="item">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Structure/'. $n .'.JPG" alt="">';
+                      echo '<div class="carousel-caption">';
+                      echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_5_StructureAndDuty.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      echo '<h4>组织结构及职责</h4>';
+                      echo '<p></p>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
+
+                  ?>
+                </div>
+                <!-- Carousel nav -->
     						<a class="carousel-control left" href="#Carouse" data-slide="prev">&lsaquo;</a>
     						<a class="carousel-control right" href="#Carouse" data-slide="next">&rsaquo;</a>
     					</div>

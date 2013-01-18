@@ -51,6 +51,24 @@
                   </div>
                 </div>
               </li>
+
+              <li class="span3">
+                <div class="">
+                  <a href="/bms/ManagementSystem/manpower?view=performanceManagement" class="thumbnail">
+                    <img src="/bms/doc/browse/managementSystem/manpower/performanceManagement/thumb.JPG" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/performanceManagement.pptx">下载</a>
+                    <h4>绩效管理</h4>
+                    </div>
+                    <div class="description">
+                      <p>通过制定有效、客观的考核标准，科学、动态地衡量员工的工作状态和效果</p>
+                      <p>将公司/部门战略目标传导给每一位员工，以进一步激发员工的积极性和创造性</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
 				</div><!-- end 内容主体 -->

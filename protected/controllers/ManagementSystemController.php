@@ -40,5 +40,8 @@ class ManagementSystemController extends BmsBaseController
 		$this->render('MSStandardForm');
 	}
 
+	public function actionWorkSummaryAPD() {
+		$this->render('WorkSummaryAPD');
+	}
     
 }
