@@ -32,6 +32,8 @@ class ComponentController extends BmsBaseController
 		$perPage = $this->validateIntVal('perPage', 20);
 		$curPage = $this->validateIntVal('curPage', 1);
 		try{
+			Yii::app()->permitManager->check(array('READ_ONLY', 'COMPONENT_TRACE_QUERY'));			
+
             $seeker = ComponentTrace::createSeeker();
 			list($total, $data) = $seeker->query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, $curPage, $perPage);
 			$ret = array(

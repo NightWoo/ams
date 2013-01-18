@@ -28,6 +28,9 @@ return array(
 			'allowAutoLogin'=>true,
 			'stateKeyPrefix' => 'bms',
 		),
+		'permitManager' => array(
+			'class' => 'application.models.Privilage.PermitManager',
+		),
 		// uncomment the following to use a MySQL database
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=bms',
