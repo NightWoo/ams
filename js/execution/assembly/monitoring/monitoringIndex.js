@@ -55,35 +55,20 @@ $(document).ready(function () {
 
 
 	$("#stopMark").hide();
-	// var vvv = markMap.T01;
-	// $(".main").qtip({
-	// 	content: "hehe",
-	// 	position: {
-	// 		my: 'bottom center', 
-	// 		at: 'top left',
-	// 			adjust: {  
-	//             x: vvv  ,y:70
-	//         }  
-	// 	},
-	// 	show: {
-	// 				event: false, // Don't specify a show event...
-	// 				ready: true // ... but show the tooltip when ready
-	// 			},
-	// 			hide: false, // Don't specify a hide event either!
-	// 	style: {
-	// 		tip: true,
-	// 		classes: 'ui-tooltip-red'
-	// 	}
-         
- //    });
+
 	$("#pauseTimeArea").toggle();
 	$("#togglePauseTime").change(function () {
-		console.log("ge");
 		$("#pauseTimeArea").toggle();
 	});
 
 
-
+	$("#modal").modal("hide");
+	$(".vq2-road,.vq2-check,.vq2-leak").live("click", function () {
+		ajaxBalance("VQ2");
+	});
+	$(".vq3-balance").live("click", function () {
+		ajaxBalance("VQ3");
+	});
 
 	$("#pbsBalanceModal").modal("hide");
 	$("#pbsBalance").live("click", function () {
@@ -409,6 +394,38 @@ function ajaxVq1Balance () {
 
 	    		// hideAllTips();
 				$("#vq1BalanceModal").modal("show");
+	    	} else {
+	    		alert(response.message);
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
+}
+
+// balance
+function ajaxBalance (node) {
+	$.ajax({
+		type: "get",//使用get方法访问后台
+	    dataType: "json",//返回json格式的数据
+	    url: SHOW_BALANCE_DETAIL,//ref:  /bms/js/service.js
+	    data: {"node" : node},
+	    success:function (response) {
+	    	if (response.success){
+	    		//change title
+	    		$("#modalTitle").text(node + "结存明细");
+	    		$("#modalTable tbody").text("");
+	    		$.each(response.data, function (index, value) {
+	    			var tr = $("<tr />");
+	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(value.vin).appendTo(tr);
+	    			$("<td />").html(value.type).appendTo(tr);
+	    			$("<td />").html(value.color).appendTo(tr);
+	    			$("<td />").html(value.time).appendTo(tr);
+	    			
+	    			$("#modalTable tbody").append(tr);
+	    		});
+
+				$("#modal").modal("show");
 	    	} else {
 	    		alert(response.message);
 	    	}
