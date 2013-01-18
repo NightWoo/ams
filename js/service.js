@@ -156,6 +156,7 @@ var SHOW_MONITOR_LABEL = "/bms/monitor/showLabel";
 var SHOW_BALANCE_DETAIL = "/bms/monitor/showBalanceDetail";
 var MONITOR_PRODUCT_INFO = "/bms/monitor/showProductInfo";
 var MONITOR_BLOCK_INFO = "/bms/monitor/ShowWarehouseBlockBalance";
+var MONITOR_ROW_BALANCE_DETAIL = "/bms/monitor/showWarehouseBalanceDetail";
 
 var GET_YEAR_CODE = "/bms/plan/getYearCode";
 
