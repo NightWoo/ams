@@ -80,7 +80,7 @@ class MonitorSeeker
 
 			$states = Yii::app()->db->createCommand($sql)->queryColumn();
 		} else {
-			$states = $suffix;	
+			$states = $prefix . $suffix;	
 		}
 
 		return $this->queryBalanceDetail($states);
