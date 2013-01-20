@@ -30,9 +30,14 @@ $(document).ready(function () {
 	$("#stockyardModal").modal("hide");
 	//block click handler
 	$(".stockyard,.B01,.B02").live("click", function () {
-		ajaxStockyard($(this).html());
-		// $("#modalTitle").html($(this).html() + "结存明细");
-		// $("#modal").modal("show");
+		var blockNumber = $(this).html();
+		if (blockNumber == $("#block").data("currentBlock")) {
+			$("#block").hide();
+			$("#block").data("currentBlock", "");
+		} else {
+			$("#block").data("currentBlock", blockNumber);
+			ajaxStockyard(blockNumber);
+		}
 	});
 	$(".thumbnail").live("click", function () {
 		// console.log();
@@ -458,7 +463,7 @@ function ajaxStockyard (blockName) {
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
 	    			if (value.quantity == value.capacity) {
-	    				bar.removeClass().addClass("progress-success");
+	    				bar.removeClass().addClass("progress").addClass("progress-success");
 	    			} else if (value.quantity == "0"){
 	    				bar.css("color", "black");
 	    			}

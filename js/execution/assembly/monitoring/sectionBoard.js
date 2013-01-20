@@ -120,78 +120,75 @@ function ajaxRefreshSeats () {
 	    data: {"section" : $("#section").val()},
 	    success:function (response) {
 	    	if (response.success){
-	    		var showList = [];
-	    		var showDouble =[];
-	    		var efList = [];
-
-	    		$.each(response.data.seatStatus, function (index,value) {
-	    			if (value.seat != "00") {
-	    				showList.push(value.seat);
-		    			if (value.multi) {
-		    				$("#double" + value.seat).addClass("double_show");
-		    				showDouble.push("double" + value.seat);
-		    			}else{
-		    				console.log(value.multi);
-		    			}
-		    			seatController.animateAndonCall(value.seat, value.foreground_text, value.foreground_font_color, value.foreground_color
-	    				, value.background_text, value.background_font_color);
-	    			}
-	    			
-	    			else {
-	    				seatController.animateEF(value.full_seat, value.foreground_text, value.foreground_font_color, value.foreground_color
-	    				, value.background_text, value.background_font_color);
-	    				efList.push(value.full_seat);
-	    			}
-	    			
-	    		});
-
-
-	    		
-	    		$("#seatDiv div").each(function (index, value) {
-	    			if ( $.inArray(  $(value).data("seatNumber") ,showList) < 0) {
-	    				$(value).removeClass().removeAttr("style").addClass("seat").html($(value).data("seatNumber"));
-	    			}
-	    		});
-
-	    		$("#multiCallDiv div").each(function (index, value) {
-	    			if ( $.inArray(  $(value).attr("id") , showDouble) < 0) {
-	    				$(value).removeClass("double_show");
-	    			}
-	    		});
-
-	    		$("#divSection div").each(function (index, value) {
-	    			if ( $.inArray(  $(value).attr("id") , efList) < 0) {
-	    				$(value).css("color", "#000").css("background", "#00ff00").html($(value).attr("id"));
-	    			}
-	    		});
-	    		
-	    		// var showSectionList = [];
-	    		// //pause
-	    		// $.each(response.data.sectionStatus, function (index,value) {
-	    		// 	showSectionList.push(value.section);
-	    		// 	seatController.animatePause(value.section, value.foreground_text, value.foreground_font_color, value.foreground_color
-	    		// 		, value.background_text, value.background_font_color, value.flash);
-	    		// });
-
-
-	    		// $("#divSection div").each(function (index, value) {
-	    		// 	if ( $.inArray(  $(value).attr("id") ,showSectionList) < 0) {
-	    		// 		$(value).removeClass().removeAttr("style").addClass("section").html( $(value).attr("id"));
-	    		// 		if($("#section").val() === $(value).attr("id"))
-	    		// 			$("#" + $("#section").val()).addClass("current_section");
-	    		// 	}
-	    		// });
+	    		//deal with status
 				
-
-				//deal with status
-				if(response.data.lineStatus === "play") {
-					$("#symbol").removeClass().addClass("symbol");
-				} else if(response.data.lineStatus === "white-pause") {
+				if (response.data.lineStatus === "white-pause") {
 					$("#symbol").removeClass().addClass("symbol_white_pause");
-				} else if(response.data.lineStatus === "red-pause") {
-					$("#symbol").removeClass().addClass("symbol_red_pause");
-				} else{
-					$("#symbol").removeClass().addClass("symbol_halt");
+					//deal with plan pause
+					$("#seatDiv div").each(function (index, value) {
+    					$(value).removeClass().removeAttr("style").addClass("seat").html($(value).data("seatNumber")).css("backgroundColor", "#B1B1B1");
+		    		});
+
+		    		$("#multiCallDiv div").each(function (index, value) {
+		    			$(value).removeClass("double_show");
+		    		});
+
+		    		$("#divSection div").each(function (index, value) {
+	    				$(value).css("color", "#000").css("background", "#00ff00").html($(value).attr("id")).css("backgroundColor", "#B1B1B1");
+		    		});
+				} else {
+					if(response.data.lineStatus === "play") {
+						$("#symbol").removeClass().addClass("symbol");
+					} else if(response.data.lineStatus === "red-pause") {
+						$("#symbol").removeClass().addClass("symbol_red_pause");
+					} else{
+						$("#symbol").removeClass().addClass("symbol_halt");
+					}
+
+					var showList = [];
+		    		var showDouble =[];
+		    		var efList = [];
+
+		    		$.each(response.data.seatStatus, function (index,value) {
+		    			if (value.seat != "00") {
+		    				showList.push(value.seat);
+			    			if (value.multi) {
+			    				$("#double" + value.seat).addClass("double_show");
+			    				showDouble.push("double" + value.seat);
+			    			}else{
+			    				console.log(value.multi);
+			    			}
+			    			seatController.animateAndonCall(value.seat, value.foreground_text, value.foreground_font_color, value.foreground_color
+		    				, value.background_text, value.background_font_color);
+		    			}
+		    			
+		    			else {
+		    				seatController.animateEF(value.full_seat, value.foreground_text, value.foreground_font_color, value.foreground_color
+		    				, value.background_text, value.background_font_color);
+		    				efList.push(value.full_seat);
+		    			}
+		    			
+		    		});
+
+
+		    		
+		    		$("#seatDiv div").each(function (index, value) {
+		    			if ( $.inArray(  $(value).data("seatNumber") ,showList) < 0) {
+		    				$(value).removeClass().removeAttr("style").addClass("seat").html($(value).data("seatNumber"));
+		    			}
+		    		});
+
+		    		$("#multiCallDiv div").each(function (index, value) {
+		    			if ( $.inArray(  $(value).attr("id") , showDouble) < 0) {
+		    				$(value).removeClass("double_show");
+		    			}
+		    		});
+
+		    		$("#divSection div").each(function (index, value) {
+		    			if ( $.inArray(  $(value).attr("id") , efList) < 0) {
+		    				$(value).css("color", "#000").css("background", "#00ff00").html($(value).attr("id"));
+		    			}
+		    		});
 				}
 	    	} else {
 	    		alert(response.message);

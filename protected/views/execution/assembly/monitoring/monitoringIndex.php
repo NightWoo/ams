@@ -74,8 +74,9 @@
 		            	<div class="optNode ef3">EF3</div>
 		            	<div class="optNode main_chain">主链</div>
 		            	<div class="pbs" id="pbsBalance"></div>
-		            	<div class="vq1" id="vq1Balance"></div>
-		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div>
+		            	<!-- <div class="vq1" id="vq1Balance"></div>
+		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div> -->
+		            	<div class="vq1" id="vq1ExceptionBalance"></div>
 		            	<div class="andon_bord" id="andon_board"></div>
 		            	<div class="node_pbs"></div>
 		            	<div class="node_t0"></div>
@@ -129,42 +130,6 @@
 				    		<div class="stock-amount">36</div>
 				    	</div>
 				    	<div class="span4" style="margin-top:12px;" id="block">
-                			<a class="thumbnail" href="">
-                  				<p class="pull-left">A111</p>
-                  				<div class="progress">
-                    				<div class="bar" style="width: 60%;">6 / 10</div>
-                  				</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A112</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 30%;">3 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A113</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 70%;">7 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A114</p>
-                  				<div class="progress progress-success" style="margin-bottom:0;">
-                    					<div class="bar" style="width: 100%;">10 / 10</div>
-                  				</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A115</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 40%;">4 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A116</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 60%;">6 / 10</div>
-                    			</div>
-                			</a>
               			</div>
 		         </div>
 		         <form class="bs-docs-example form-search" id="generalInfo">
