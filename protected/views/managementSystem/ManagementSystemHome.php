@@ -18,9 +18,33 @@
         	require_once(dirname(__FILE__)."/../common/head.php");
         ?>
 		<div class="offhead">
-			<?php
-              require_once(dirname(__FILE__)."/../common/left/management_system_left.php");
-      ?>
+<div id="divLeft">
+<div id="bodyleft" class="span2"><!-- 侧边栏 -->
+  <ul class="nav nav-list affix">
+    <li id="holder" chapter=<?php echo $chapter ?>></li>
+    <li class="nav-header" id="leftManualLi">管理手册</li>
+      <li id="leftOverviewLi"><a href="#">概述</a></li>
+      <li id=""><a>方针与愿景</a></li>
+      <li id="leftGoalLi"><a href="#">管理目标</a></li>
+      <li id=""><a>八大原则</a></li>
+      <li id="leftStructureLi"><a href="#">组织结构与职责</a></li>
+      <li id="leftProcessLi"><a href="#">管理过程</a></li>
+    <li class="nav-header">要素/方法/指南</li>
+      <li id=""><a href="/bms/ManagementSystem/scene">安全与现场</a></li>
+      <li id="leftManpowerLi"><a href="/bms/ManagementSystem/manpower?view=MSManpower">人力资源</a></li>
+      <li id="leftQualityLi"><a href="/bms/ManagementSystem/quality?view=MSQuality">质量</a></li>
+      <li id=""><a href="">生产力</a></li>
+      <li id=""><a href="">设备、资产与成本</a></li>
+    <li class="nav-header">标准表单</li>
+      <li id="leftStandarFormLi"><a href="/bms/ManagementSystem/standardForm">表单下载</a></li>
+     <!-- <li class="divider"></li>      
+      <li><a href="#">帮助</a></li>     -->
+  </ul>        
+</div><!-- end 侧边栏 -->
+<div id="toggle-left" href="">
+  <i id="icon-left" class="icon-chevron-left"></i>
+</div>
+</div>
 			<div id="bodyright" class="offset2"><!-- Main -->				
 				<!-- <div>
 					<ul class="breadcrumb">
@@ -33,7 +57,7 @@
 					</ul>
 				</div>-->		
 				<div class="main"><!-- 内容主体 -->
-					    <div id="Carouse" class="carousel slide">
+					    <div id="Carousel" class="carousel slide" data-interval=false>
     						<!-- Carousel items -->
     						<div class="carousel-inner">
     							<?php
@@ -109,12 +133,35 @@
                       echo '</div>';
                       echo '</div>';
                     }
+					
+					//6_process
+                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Process';  
+                    $handle=opendir($dir3);  
+                    $i=0;  
+                    while(false!==($file=readdir($handle))){  
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                        //var_dump($file);  
+                        $i++;  
+                      }  
+                    }  
+                    closedir($handle);
+                    
+                    for($n=1;$n<=$i;$n++){
+                      echo '<div class="item">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Process/'. $n .'.JPG" alt="">';
+                      echo '<div class="carousel-caption">';
+                      echo '<p class="pull-right"><a href="#"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      echo '<h4>管理过程</h4>';
+                      echo '<p></p>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
 
                   ?>
                 </div>
                 <!-- Carousel nav -->
-    						<a class="carousel-control left" href="#Carouse" data-slide="prev">&lsaquo;</a>
-    						<a class="carousel-control right" href="#Carouse" data-slide="next">&rsaquo;</a>
+    						<a class="carousel-control left" href="#Carousel" data-slide="prev">&lsaquo;</a>
+    						<a class="carousel-control right" href="#Carousel" data-slide="next">&rsaquo;</a>
     					</div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->

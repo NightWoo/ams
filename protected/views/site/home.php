@@ -81,7 +81,7 @@
 			<div class="title">
 				<h3>成本</h3>
 				<div class="mainData pull-left">
-				<h2 id="">￥6.50</h2>
+				<h2 id="">￥3.45</h2>
 			</div>
 			<div class="subData pull-right">
 				<p id=""></p>
@@ -129,7 +129,7 @@
 			<div class="title">
 				<h3>人力资源</h3>
 				<div class="mainData pull-left">
-				<h2 id="">5%</h2>
+				<h2 id="">9.8%</h2>
 			</div>
 			<div class="subData pull-right">
 				<p id=""></p>
