@@ -2,16 +2,16 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>员工发展与晋升</title>
+        <title>WorkSummaryManpower</title>
 		<!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <link href="/bms/css/managementSystem/promotion.css" rel="stylesheet">
+        <link href="/bms/css/managementSystem/ManagementSystemHome.css" rel="stylesheet">
 		    <link href="/bms/css/common.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
 		    <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/bms/js/managementSystem/promotion.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/managementSystem/managementSystemHome.js"></script> -->
     </head>
     <body>
         <?php
@@ -37,11 +37,11 @@
     						<!-- Carousel items -->
     						<div class="carousel-inner">
                   <?php 
-                    $dir='/home/work/bms/web/bms/doc/browse/managementSystem/manpower/promotion/';  
+                    $dir='/home/work/bms/web/bms/doc/browse/managementSystem/WorkSummaryManpower/';  
                     $handle=opendir($dir);  
                     $i=0;  
                     while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                      if($file!='.' && $file!='..' && $file!='thumb.JPG'){  
                         //var_dump($file);  
                         $i++;  
                       }  
@@ -54,12 +54,12 @@
                       } else {
                          echo '<div class="item">';
                       }
-                      echo '<img src="/bms/doc/browse/managementSystem/manpower/promotion/'. $n .'.JPG" alt="">';
-                      echo '<div class="carousel-caption">';
-                      echo '<p class="pull-right"><a href="/bms/doc/ppt/promotion.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
-                      echo '<h4>员工发展与晋升</h4>';
-                      echo '<p></p>';
-                      echo '</div>';
+                      echo '<img src="/bms/doc/browse/managementSystem/WorkSummaryManpower/'. $n .'.JPG" alt="">';
+                      // echo '<div class="carousel-caption">';
+                      // echo '<p class="pull-right"><a href="/bms/doc/ppt/PerformanceManagement.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      // echo '<h4>绩效管理</h4>';
+                      // echo '<p></p>';
+                      // echo '</div>';
                       echo '</div>';
                     }
                   ?>

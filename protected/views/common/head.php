@@ -7,7 +7,7 @@
 				<ul class="nav">
 					<li ><a href="/bms/site">首页</a></li>
 					<li class="dropdown" id="headManagementSystemLi">
-						<a href="/bms/ManagementSystem" class="dropdown-toggle" >管理体系</a>
+						<a href="/bms/ManagementSystem/home?chapter=0" class="dropdown-toggle" >管理体系</a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="">体系概况</a></li>
 							<li><a href="zz_nodeselect.php">管理考核与评价</a></li>

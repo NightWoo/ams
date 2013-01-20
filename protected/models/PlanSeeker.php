@@ -214,7 +214,7 @@ class PlanSeeker
 		$lastDay = (strtotime($etime) - strtotime($stime)) / 86400;//days
 
 		$ret = array();
-		if($lastDay < 31) {
+		if($lastDay <= 31) {
 			$pointFormat = 'm-d';
 		} else {	
 			$format = 'Y-m';
@@ -260,7 +260,7 @@ class PlanSeeker
 
 		$lastDay = (strtotime($etime) - strtotime($stime)) / 86400;//days
 
-		if($lastDay >= 31) {
+		if($lastDay > 31) {
 			$stime = date('Y-m', $s) . '-01';
 			$etime = date('Y-m-t', $e);
 		}

@@ -19,7 +19,8 @@ class ManagementSystemController extends BmsBaseController
     /**
 	 */
 	public function actionHome() {
-		$this->render('ManagementSystemHome');
+		$chapter = $this->validateIntVal('chapter' , 0);
+		$this->render('ManagementSystemHome', array('chapter'=>$chapter));
 	}
 
 	public function actionQuality() {
@@ -42,6 +43,14 @@ class ManagementSystemController extends BmsBaseController
 
 	public function actionWorkSummaryAPD() {
 		$this->render('WorkSummaryAPD');
+	}
+	
+	public function actionWorkSummaryCost() {
+		$this->render('WorkSummaryCost');
+	}
+	
+	public function actionWorkSummaryManpower() {
+		$this->render('WorkSummaryManpower');
 	}
     
 }
