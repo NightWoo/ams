@@ -68,7 +68,7 @@ $(document).ready(function () {
 		flashing : [],
 		facade : [],
 		resetAll : function () {
-			$(".chain").css("background", "#00ff00").css("color", "black");
+			// $(".chain").css("background", "#00ff00").css("color", "black");
 			$("div[id^=section]").hide();
 			$("div[id^=facade]").css("background", "#00ff00").show();
 			// this.flashing = [];
@@ -159,7 +159,6 @@ $(document).ready(function () {
 						} else if (value.flash_type === "fast") {
 							gap = 1000;
 						} else if (value.flash_type === "red") {
-
 						}
 		    			_this.flash($("#" + value.full_seat), ft, ftc, fc
 	    				, bt, bfc, obg, gap/2);
