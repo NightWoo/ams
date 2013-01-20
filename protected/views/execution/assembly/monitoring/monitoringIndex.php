@@ -129,42 +129,6 @@
 				    		<div class="stock-amount">36</div>
 				    	</div>
 				    	<div class="span4" style="margin-top:12px;" id="block">
-                			<a class="thumbnail" href="">
-                  				<p class="pull-left">A111</p>
-                  				<div class="progress">
-                    				<div class="bar" style="width: 60%;">6 / 10</div>
-                  				</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A112</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 30%;">3 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A113</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 70%;">7 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A114</p>
-                  				<div class="progress progress-success" style="margin-bottom:0;">
-                    					<div class="bar" style="width: 100%;">10 / 10</div>
-                  				</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A115</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 40%;">4 / 10</div>
-                    			</div>
-                			</a>
-                			<a class="thumbnail" href="" style="margin:10px 0;">
-                  				<p class="pull-left" style="margin:0 10px;">A116</p>
-                    			<div class="progress" style="margin-bottom:0;">
-                      				<div class="bar" style="width: 60%;">6 / 10</div>
-                    			</div>
-                			</a>
               			</div>
 		         </div>
 		         <form class="bs-docs-example form-search" id="generalInfo">
