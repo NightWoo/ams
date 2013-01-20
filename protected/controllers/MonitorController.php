@@ -48,6 +48,13 @@ class MonitorController extends BmsBaseController
             }
         }
         $drrs['total'] .= "%";	//modified wujun
+
+
+		$balances = array(
+			'VQ1' => $seeker->queryBalanceCount('VQ1'),
+			'VQ2' => $seeker->queryBalanceCount('VQ2'),
+			'VQ3' => $seeker->queryBalanceCount('VQ3'),
+		);
 		
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
@@ -58,6 +65,7 @@ class MonitorController extends BmsBaseController
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
 			'DPU' => $dpus,
 			'DRR' => $drrs,
+			'balance' => $balances,
 			'pause_seat' => $seeker->queryPauseSeat($stime, $etime),
 		);
 
