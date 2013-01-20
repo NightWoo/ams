@@ -74,8 +74,9 @@
 		            	<div class="optNode ef3">EF3</div>
 		            	<div class="optNode main_chain">主链</div>
 		            	<div class="pbs" id="pbsBalance"></div>
-		            	<div class="vq1" id="vq1Balance"></div>
-		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div>
+		            	<!-- <div class="vq1" id="vq1Balance"></div>
+		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div> -->
+		            	<div class="vq1" id="vq1ExceptionBalance"></div>
 		            	<div class="andon_bord" id="andon_board"></div>
 		            	<div class="node_pbs"></div>
 		            	<div class="node_t0"></div>
