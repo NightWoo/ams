@@ -137,7 +137,7 @@ class FaultSeeker
 			} else {
 				$curCondition = "WHERE n.node_id=$nodeId"; 
 			}
-			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition)";
+			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition ORDER BY n.pass_time DESC)";
 			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition";
 		}
 
@@ -149,9 +149,16 @@ class FaultSeeker
 		$cars = array();
 		foreach($datas as &$data) {
 			$carId = $data['car_id'];
+			if(empty($data['fault_mode'])) {
+                $data['fault_status'] = '合格';
+                $data['fault_mode'] = '';
+                $data['component_name'] = '';
+                $data['create_time'] = $data['pass_time'];
+                $data['modify_time'] = '';
+            }
 			if(empty($cars[$carId])) {
-				$cars[$carId] = CarAR::model()->findByPk($carId);
-			}
+                $cars[$carId] = CarAR::model()->findByPk($carId);
+            }
 			$data['vin'] = $cars[$carId]->vin;
 			$data['series'] = $cars[$carId]->series;
 			if(!empty($data['updator'])) {
@@ -160,14 +167,6 @@ class FaultSeeker
 				$data['user_name'] = $userInfos[$data['user_id']];
 			}
 			$data['node_name'] = $nodeInfos[$data['node_id']];
-
-			if(empty($data['fault_mode'])) {
-				$data['fault_status'] = '合格';
-				$data['fault_mode'] = '';
-				$data['component_name'] = '';
-				$data['create_time'] = $data['pass_time'];
-				$data['modify_time'] = '';
-			}
 		}
 
 		$total = 0;
