@@ -8,7 +8,7 @@ class PauseSeeker
 	public function __construct(){
 	}
 	
-	public function query($startTime, $endTime, $section, $causeType, $dutyDepartment, $curPage, $perPage, $orderBy) {
+	public function query($startTime, $endTime, $section, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy) {
 		$conditions = array();
 		if(!empty($startTime)){
 			$conditions[] = "pause_time >=	'$startTime'";
@@ -30,6 +30,9 @@ class PauseSeeker
 		}
 		if(!empty($dutyDepartment)){
 			$conditions[] = "duty_department = '$dutyDepartment'";
+		}
+		if(!empty($pauseReason)){
+			$conditions[] = "remark LIKE '%$pauseReason%'";
 		}
 		
 		$condition = join(' AND ', $conditions);
@@ -73,4 +76,94 @@ class PauseSeeker
 		
 		return array($total, $datas);
 	}
+
+	public function queryDistribute($stime, $etime, $section, $causeType, $dutyDepartment, $pauseReason){
+		$conditions = array();
+		if(!empty($startTime)){
+			$conditions[] = "pause_time >=	'$startTime'";
+		}
+		if(!empty($endTime)){
+			$conditions[] = "pause_time <=	'$endTime'";
+		}
+		if(!empty($section)){
+			$sql = "SELECT id FROM node WHERE section='$section'";
+			$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
+			if(empty($nodeIds)) {
+				return 0;	
+			}
+			$nodeIdStr = join(',', $nodeIds);
+			$conditions[] = "node_id IN ($nodeIdStr)";
+		}
+		if(!empty($causeType)){
+			$conditions[] = "cause_type = '$causeType'";
+		}
+		if(!empty($dutyDepartment)){
+			$conditions[] = "duty_department = '$dutyDepartment'";
+		}
+		if(!empty($pauseReason)){
+			$conditions[] = "remark LIKE '%$pauseReason%'";
+		}
+		
+		$condition = join(' AND ', $conditions);
+
+		$dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
+
+		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+		foreach($datas as &$data) {
+			// $node = NodeAR::model()->findByPk($data['node_id']);
+			// if(!empty($node)){
+			// 	$data['section'] = $node->section; 
+			// }
+			
+			if(($data['recover_time'] == 0)){
+				$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
+			}else {
+				//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
+				//$data['howlong'] = intval($howlong);
+				$data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+			}
+		}
+
+		$causeTypeChartData = array();
+		$dutyDepartmentChartData = array();
+
+		foreach($datas as &$data) {
+			if(empty($causeTypeChartData[$data['cause_type']])) {
+				$causeTypeChartData[$data['cause_type']] = array(
+					'causeType' => $data['cause_type'],
+					'howlong' => 0,
+				);
+			}
+
+			if(empty($dutyDepartmentChartData[$data['duty_department']])) {
+				$dutyDepartmentChartData[$data['duty_department']] = array(
+					'dutyDepartment' => $data['duty_department'],
+					'howlong' => 0,
+				);
+			}
+
+			$causeTypeChartData[$data['cause_type']]['howlong'] += $data['howlong'];
+			$dutyDepartmentChartData[$data['duty_department']]['howlong'] += $data['howlong'];
+
+			$cSeries = array();
+			foreach ($causeTypeChartData as &$chartData) {
+				$percentage = round($chartData['howlong'], 3);
+				$chartData['percentage'] = $percentage * 100 . "%";
+				$cSeries[] = array($chartData['causeType'], $percentage);
+			}
+
+			$dSeries = array();
+			foreach ($dutyDepartmentChartData as &$chartData) {
+				$percentage = round($chartData['howlong'] / $sum, 3);
+				$chartData['percentage'] = $percentage * 100 . "%";
+				$cSeries[] = array($chartData['causeType'], $percentage);
+			}
+
+			return array(
+				'cause_type_chart_data' => array('detail' => array_values($causeTypeChartData), 'series' => $cSeries),
+				'duty_department_chart_data' => array('detail' => array_values($dutyDepartmentChartData), 'series' => $dSeries),
+			);
+		}
+	}
+
 }

@@ -767,7 +767,7 @@ class FaultSeeker
 			$pointFormat = 'H';
 			$format = 'Y-m-d H:i:s';
 			$slice = 3600;
-		} elseif($lastDay < 31) {//day
+		} elseif($lastDay <= 31) {//day
 			$pointFormat = 'm-d';
 			$format = 'Y-m-d';
 			$slice = 86400;
@@ -819,7 +819,7 @@ class FaultSeeker
 			$format = 'Y-m-d H';
 			$stime = date($format, $s) . ":00:00";
 			$etime = date($format, $e) . ":00:00";
-		} elseif($lastDay < 31) {//day
+		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
 			//$stime = date($format, $s) . " 00:00:00";				
 			//$etime = date($format, $e) . " 23:59:59";

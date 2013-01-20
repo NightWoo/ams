@@ -23,13 +23,14 @@ class PauseController extends BmsBaseController
 		$section = $this->validateStringVal('section', '');
 		$causeType = $this->validateStringVal('causeType', '');
 		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
+		$pauseReason = $this->validateStringVal('pauseReason', '');
 		$perPage = $this->validateIntVal('perPage', 10);
 		$curPage = $this->validateIntVal('curPage', 1);
 		$orderBy = $this->validateStringVal('orderBy', '');
 		try{
 			$orderBy = empty($orderBy) ? 'ASC' : 'DESC';
 			$seeker = new PauseSeeker();
-			list($total, $data) = $seeker->query($startTime, $endTime, $section, $causeType, $dutyDepartment, $curPage, $perPage, $orderBy);
+			list($total, $data) = $seeker->query($startTime, $endTime, $section, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy);
 			$ret = array(
 				'pager' => array(
 					'curPage' => $curPage,
@@ -40,6 +41,22 @@ class PauseController extends BmsBaseController
 			);
 			$this->renderJsonBms(true, 'OK', $ret);
 			
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}	
+	}
+
+	public function actionQueryDistribute() {
+		$stime = $this->validateStringVal('startTime', '');
+		$etime = $this->validateStringVal('endTime', '');
+		$section = $this->validateStringVal('section', '');
+		$causeType = $this->validateStringVal('causeType', '');
+		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
+		$pauseReason = $this->validateStringVal('pauseReason', '');
+		try{
+			$seeker = new PauseSeeker();
+			$data = $seeker->queryDistribute($stime, $etime, $section, $causeType, $dutyDepartment, $pauseReason);
+			$this->renderJsonBms(true, 'OK', $data);
 		}catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	
 		}	

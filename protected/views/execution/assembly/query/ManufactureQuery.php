@@ -45,11 +45,12 @@
                             <td>工段 / 节点</td>
                             <td>开始时间</td>
                             <td>结束时间</td>
+                            <td></td>
                             <td class="withSection">停线类型</td>
                             <td class="withSection">责任部门</td>
                             <td class="withSection">原因</td>
-                            <td class="withNode"></td>
                             <td></td>
+                            <td class="withNode"></td>
                         </tr>
 						<tr>
 							<td>
@@ -76,6 +77,7 @@
                             <td>
                                 <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                             </td>
+                            <td>&nbsp;&nbsp;</td>
                             <td  class="withSection">
                                 <select name="" id="causeType" class="input-small">
                                     <option value="" selected>全部</option>
@@ -91,6 +93,7 @@
                             <td class="withSection">
                                 <input type="text" class="span2" placeholder="停线原因..." id="pauseReason"/>
                             </td>
+                            <td>&nbsp;&nbsp;</td>
                             <td class="withNode">
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6" disabled>M6</input></label>
@@ -112,7 +115,7 @@
                             <li id="statistics"><a href="#statistic" data-toggle="tab">车辆统计</a></li>
                             <li><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="pauseDetail"><a href="#dataPauseDetail" data-toggle="tab">停线明细</a></li>
-                            <li id="pauseDistribution"><a href="#" data-toggle="tab">停线分布</a></li>
+                            <li id="pauseDistribution"><a href="#" data-toggle="tab">停线分析</a></li>
                             <li id="useRate"><a href="#" data-toggle="tab">生产利用率</a></li>
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
@@ -192,6 +195,26 @@
                                     <li id="lastPause"><a href="#"><span>&gt;&gt;</span></a></li>
                                 </ul>
                             </div>
+                        </div>
+
+                        <div class="tab-pane" id="pauseDistribute">
+                            <div id="radioPauseDistribute">   
+                                <!--<span>分布条件:</span>-->
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked>
+                                  停线类型
+                                </label>
+                                <label class="radio inline">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="duty_department_chart_data">
+                                  责任部门
+                                </label>
+                            </div>
+                            <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                            
+                            <table id="tablePauseDistribute" class="table table-condensed">
+                                <thead />
+                                <tbody />
+                            </table>
                         </div>
 
                         <div class="tab-pane" id="dataPlanDetail">

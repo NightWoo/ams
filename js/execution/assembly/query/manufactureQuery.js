@@ -505,6 +505,7 @@ $(document).ready(function () {
 				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
 				"section": $("#section").val(),	
+				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
 				"curPage": targetPage || 1
 			},
