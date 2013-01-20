@@ -551,6 +551,7 @@ class MonitorSeeker
 			$callType = $this->mapCallType($call->call_type);
 			if($call->call_type === '质量关卡') {
 				$multi = !empty($seatStatus[$call->node_id]);
+				if(!empty($section)) {
 				$seatStatus[$call->node_id] = array(
                         'node_id' => $call->node_id,
                         'seat' => $seat,
@@ -564,8 +565,7 @@ class MonitorSeeker
                         'multi' => $multi,
                         'flash_type' => $multi ? 'fast' : 'normal',
                         );
-
-
+				}
 				$sectionStatus['QG'] = array(
 					'section' => 'QG',
                     'type' => 'flash',

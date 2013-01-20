@@ -101,22 +101,27 @@ class FaultSeeker
 		$conditions = array();
 		$validConditions = array();
 		if(!empty($component)) {
-			$conditions[] = "component_name LIKE '%$component%'";
+			$conditions[] = "c.component_name LIKE '%$component%'";
 		}
 		if(!empty($mode)) {
-            $conditions[] = "fault_mode LIKE '%$mode%'";
+            $conditions[] = "c.fault_mode LIKE '%$mode%'";
         }
+
 		if(!empty($stime)) {
-			$conditions[] = "create_time >= '$stime'";
-			$validConditions[] = "pass_time >= '$stime'";
+			$conditions[] = "c.create_time >= '$stime'";
+			$validConditions[] = "n.pass_time >= '$stime'";
 		}
  	    if(!empty($etime)) {
-            $conditions[] = "create_time <= '$etime'";
-			$validConditions[] = "pass_time <= '$etime'";
+            $conditions[] = "c.create_time <= '$etime'";
+			$validConditions[] = "n.pass_time <= '$etime'";
         }
 		$condition = join(' AND ', $conditions);
+		$validCondition = join( ' AND ', $validConditions);
 		if(!empty($condition)) {
-			$condition = 'WHERE ' . $condition;
+			$condition = 'WHERE (' . $condition . ')';
+		}
+		if(!empty($validCondition)) {
+			$condition .= ' OR (' . $validCondition ;
 		}
 		
 		$limit = "";
@@ -127,23 +132,14 @@ class FaultSeeker
 		$dataSqls = array();
 		$countSqls = array();
 		foreach($tables as $table=>$nodeId) {
-			$dataSqls[] = "(SELECT car_id, create_time, modify_time, updator, component_name, fault_mode, status as fault_status, '$nodeId' as 'node_id' FROM $table $condition)";
-			$countSqls[] = "SELECT count(*) FROM $table $condition";
+			if(!empty($condition)) {
+				$curCondition = $condition . " AND n.node_id=$nodeId)";
+			} else {
+				$curCondition = "WHERE n.node_id=$nodeId"; 
+			}
+			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition)";
+			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition";
 		}
-
-		//
-		$nodeId = $this->parseNodeId($nodeName);
-		if(empty($nodeName)) {
-			$nodeId = "10,13,15,16,17";
-		}
-		$validConditions[] = " node_id IN ($nodeId)";
-		$condition = join(' AND ', $validConditions);
-        if(!empty($condition)) {
-            $condition = 'WHERE ' . $condition;
-        }
-
-		
-		$dataSqls[] = $sql = "(SELECT car_id, pass_time as create_time, '-' as modify_time, node_trace.user_id as updator, '-' as component_name, '-' as fault_mode, '合格' as fault_status, node_id FROM node_trace $condition)";
 
 		$dataSql = join(' UNION ALL ', $dataSqls);
 		$dataSql .= " $limit";
@@ -158,8 +154,20 @@ class FaultSeeker
 			}
 			$data['vin'] = $cars[$carId]->vin;
 			$data['series'] = $cars[$carId]->series;
-			$data['user_name'] = $userInfos[$data['updator']];
+			if(!empty($data['updator'])) {
+				$data['user_name'] = $userInfos[$data['updator']];
+			} else {
+				$data['user_name'] = $userInfos[$data['user_id']];
+			}
 			$data['node_name'] = $nodeInfos[$data['node_id']];
+
+			if(empty($data['fault_mode'])) {
+				$data['fault_status'] = '合格';
+				$data['fault_mode'] = '';
+				$data['component_name'] = '';
+				$data['create_time'] = $data['pass_time'];
+				$data['modify_time'] = '';
+			}
 		}
 
 		$total = 0;
