@@ -32,16 +32,16 @@ $(function () {
 	
 	
 	$("#cost").click(function(){
-		window.location.href='#'
+		window.location.href='/bms/managementSystem/workSummaryCost'
 	})
 	
 	
 	$("#manpower").click(function(){
-		window.location.href='#'
+		window.location.href='/bms/managementSystem/workSummaryManpower'
 	})
 	
 	$("#managementSystem").click(function(){
-		window.location.href='/bms/ManagementSystem'
+		window.location.href='/bms/ManagementSystem/home?chapter=0'
 	})
 	
 	$("#safety").click(function(){

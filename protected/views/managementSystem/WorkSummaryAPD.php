@@ -33,7 +33,7 @@
 					</ul>
 				</div>-->		
 				<div class="main"><!-- 内容主体 -->
-					    <div id="Carouse" class="carousel slide">
+					    <div id="Carouse" class="carousel slide" data-interval="">
     						<!-- Carousel items -->
     						<div class="carousel-inner">
                   <?php 
