@@ -54,7 +54,6 @@
                         <div class="section" id="T19"><span class="normal_seat">1 9</span></div>
                         <div class="section" id="T20"><span class="normal_seat">2 0</span></div>
                         <div class="section" id="T21"><span class="normal_seat">2 1</span></div>
-                        <div class="section" id=""><span class="normal_seat"></span></div>
                     </div>
                 </div>
                 <div class="block">
@@ -93,7 +92,6 @@
                         <div class="section" id="C8"><span class="normal_seat">0 8</span></div>
                         <div class="section" id="C9"><span class="normal_seat">0 9</span></div>
                         <div class="section" id="C10"><span class="normal_seat">1 0</span></div>
-                        <div class="section" id=""><span class="normal_seat"></span></div>
                     </div>
                 </div>
                 <div class="block">
@@ -134,7 +132,6 @@
                         <div class="section" id="F8"><span class="normal_seat">0 8</span></div>
                         <div class="section" id="F9"><span class="normal_seat">0 9</span></div>
                         <div class="section" id="F10"><span class="normal_seat">1 0</span></div>
-                        <div class="section" id=""><span class="normal_seat"></span></div>
                     </div>
                 </div>
                 <div class="block">
@@ -150,7 +147,6 @@
                         <div class="section" id="F18"><span class="normal_seat">1 8</span></div>
                         <div class="section" id="F19"><span class="normal_seat">1 9</span></div>
                         <div class="section" id="F20"><span class="normal_seat">2 0</span></div>
-                        <div class="section" id=""><span class="normal_seat"></span></div>
                     </div>
                 </div>
                 <div class="block"  style="width:52px">

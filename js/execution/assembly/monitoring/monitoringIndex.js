@@ -277,6 +277,9 @@ function ajaxRefresh () {
 	    		$("#pauseTimeF1").text(response.data.pause_time.F1);
 	    		$("#pauseTimeF2").text(response.data.pause_time.F2);
 
+	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
+	    			parseInt(response.data.balance.VQ3));
+	    		
 	    		if(response.data.pause_seat !== "") {
 	    			$("#stopMark").show().text(response.data.pause_seat);
 	    			$("#stopMark").css("left", window.markMap[response.data.pause_seat] + "px");
@@ -463,7 +466,7 @@ function ajaxStockyard (blockName) {
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
 	    			if (value.quantity == value.capacity) {
-	    				bar.removeClass().addClass("progress").addClass("progress-success");
+	    				progress.removeClass().addClass("progress").addClass("progress-success");
 	    			} else if (value.quantity == "0"){
 	    				bar.css("color", "black");
 	    			}
