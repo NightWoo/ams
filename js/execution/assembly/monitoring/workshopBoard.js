@@ -173,7 +173,7 @@ $(document).ready(function () {
     		//reset 
     		$.each(["L1", "EF1", "EF2", "EF3"],function (index, value) {
 				if ($.inArray(value, toShowList) < 0) {
-					_this.clear(value);
+					_this.clear(value, "chain");
 				}
 			});
 		},
@@ -191,15 +191,18 @@ $(document).ready(function () {
 				// $("#seat" + sN).removeClass("seat_call").addClass("seat_call_oppo").html(oT);
 			},gap, $(element), frontText, frontColor, frontBg);
 		},
-		clear : function (name) {
+		clear : function (name, type) {
 			var _this = this;
 
 			// console.log(this.flashing);
-			$.each(this.flashing, function (index, value) {
+			$(this.flashing).each(function (index, value) {
 				if (name == value.name) {
 					clearInterval(value.interval);
 					__sto(function () {
 						$("#" + name).css("color", "#00ff00").css("background", "#00ff00");
+						if (type == "chain") {
+							$("#" + name).css("color", "black");
+						}
 					}, 2000);
 					_this.flashing.splice(index, 1);
 					return true;
