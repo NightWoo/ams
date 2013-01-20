@@ -3,6 +3,14 @@ Yii::import('application.models.AR.monitor.*');
 
 class MonitorSeeker
 {
+	private static $NODE_BALANCE_STATE = array(
+		'PBS' => array('彩车身库'),
+		'VQ1' => array('VQ1异常'),
+		'VQ1-EXCEPTION' => array('VQ1异常'),
+		'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨'),
+		'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常')
+	);
+
 	public function __construct(){
 	}
 
@@ -61,8 +69,8 @@ class MonitorSeeker
 
 	public function queryBalanceLabel($stime,$etime) {
 		return array(
-			'PBS' => $this->queryStateCars(array('彩车身库')),
-			'VQ1' => $this->queryStateCars(array('VQ1异常','整车下线','出生产车间','检测线缓冲')),
+			'PBS' => $this->queryStateCars(self::$NODE_BALANCE_STATE['PBS']),
+			'VQ1' => $this->queryStateCars(self::$NODE_BALANCE_STATE['VQ1']),
 		);
 	}
 
@@ -87,18 +95,12 @@ class MonitorSeeker
 	}
 
 	public function queryBalanceDetail($node) {
-		if($node === 'PBS') {
-			$states = array('彩车身库');
-		} elseif($node === 'VQ1') {
-			$states = array('VQ1异常','整车下线','出生产车间','检测线缓冲');
-		} elseif($node === 'VQ1-EXCEPTION') {
-			$states = array('VQ1异常');
-		} elseif($node === 'VQ2') {
-			$states = array('VQ2异常.路试','VQ2异常.漏雨');
-		} elseif($node === 'VQ3') {
-			$states = array('VQ3异常');
-		} elseif(!is_array($node)) {
-			$states = array($node);
+		if(!is_array($node)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$node])) {
+				$states = self::$NODE_BALANCE_STATE[$node];
+			} else {
+				$states = array($node);
+			}
 		} else {
 			$states = $node;
 		}
@@ -106,6 +108,20 @@ class MonitorSeeker
 		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
         return Yii::app()->db->createCommand($sql)->queryAll();
 	}
+
+	public function queryBalanceCount($node) {
+        if(!is_array($node)) {
+            if(!empty(self::$NODE_BALANCE_STATE[$node])) {
+                $states = self::$NODE_BALANCE_STATE[$node];
+            } else {
+                $states = array($node);
+            }
+        } else {
+            $states = $node;
+        }
+
+		return $this->queryStateCars($states);
+    }
 
 	public function queryStateCars($states,$stime = null, $etime = null) {
 		$condition = '';

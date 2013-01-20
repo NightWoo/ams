@@ -15,6 +15,12 @@ class ComponentTrace
 	
 	public function query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, $curPage, $perPage) {
 		$conditions = array();
+
+		if(!empty($series)) {
+            $series = explode(',', $series);
+        } else {
+            $series = array('f0', 'm6');
+        }
 		if(!empty($vin)) {
 			$car = Car::create($vin);
 			$series = array($car->car->series);
@@ -40,11 +46,6 @@ class ComponentTrace
         }
         if($component) {
             $conditions[] = "component_name LIKE '%$component%'";
-        }
-        if(!empty($series)) {
-            $series = explode(',', $series);
-        } else {
-            $series = array('f0', 'm6');
         }
 
 		$condition = '';

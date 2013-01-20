@@ -86,9 +86,9 @@ class MonitorController extends BmsBaseController
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
 
-		$vq1Balance = $seeker->queryBalanceDetail('VQ1');
-		$vq2Balance = $seeker->queryBalanceDetail('VQ2');
-		$vq3Balance = $seeker->queryBalanceDetail('VQ3');
+		$vq1Balance = $seeker->queryBalanceCount('VQ1');
+		$vq2Balance = $seeker->queryBalanceCount('VQ2');
+		$vq3Balance = $seeker->queryBalanceCount('VQ3');
 
 		$drrs = array(
             'VQ2_LEAK' => $seeker->queryQualified($stime, $etime, 'VQ2', 2),
@@ -102,10 +102,10 @@ class MonitorController extends BmsBaseController
             'line_urate' =>  $seeker->queryLineURate($stime, $etime),
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
 			'balance' => array(
-				'VQ1' => count($vq1Balance),
-				'VQ2' => count($vq2Balance),
-				'VQ3' => count($vq3Balance),
-				'warehourse_cars' => $seeker->queryWareHourseCars('成品库', $stime, $etime),
+				'VQ1' => $vq1Balance,
+				'VQ2' => $vq2Balance,
+				'VQ3' => $vq3Balance,
+				'warehourse_cars' => $seeker->queryWareHourseCars('成品库',null, null),
 			),
 			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
 			'drr' => $drrs,
