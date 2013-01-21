@@ -461,7 +461,7 @@ function ajaxStockyard (blockName) {
 	    		//clear Text
 	    		$("#block").text("");
 	    		$.each(response.data, function (index, value) {
-	    			var a = $("<a />").addClass("thumbnail");
+	    			var a = $("<a />").addClass("thumbnail").attr("href", "#");
 	    			var p = $("<p />").addClass("pull-left").text(value.row);
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);

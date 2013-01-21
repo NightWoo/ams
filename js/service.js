@@ -111,6 +111,8 @@ var NODE_QUERY_CAR = "/bms/fault/queryCars";
 var NODE_EXPORT = "/bms/fault/export";
 var COMPONENT_QUERY = "/bms/component/query";
 var COMPONENT_EXPORT = "/bms/component/export";
+var QUERY_NODE_TRACE = "/bms/execution/queryNodeTrace";
+var EXPORT_NODE_TRACE = "/bms/execution/exportNodeTrace";
 
 
 var SHOW_USER = "/bms/user/show";
@@ -189,6 +191,7 @@ var GET_PROVIDER_NAME_LIST = "/bms/provider/getNameList";
 //added by wujun
 //pause edit
 var QUERY_PAUSE_RECORD = "/bms/pause/query";
+var QUERY_PAUSE_DISTRIBUTE = "/bms/pause/queryDistribute"
 var PAUSE_EDIT_SAVE = "/bms/pause/editSave";
 var GET_PAUSE_DUTY_DEPARTMENT_LIST = "/bms/pause/getDutyDepartment";
 

@@ -420,6 +420,59 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionQueryNodeTrace() {
+        $series = $this->validateStringVal('series', '');
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $node = $this->validateStringVal('node', '');
+        $perPage = $this->validateIntVal('perPage', 20);
+        $curPage = $this->validateIntVal('curPage', 1);
+        try{
+            $seeker = new NodeSeeker();
+            list($total, $data) = $seeker->queryTrace($stime, $etime, $series, $node, $curPage, $perPage);
+            $ret = array(
+                        'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
+                        'data' => $data,
+                    );
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionExportNodeTrace() {
+        $series = $this->validateStringVal('series', '');
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $node = $this->validateStringVal('node', '');
+        try{
+            $seeker = new NodeSeeker();
+            list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
+            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,录入人员,录入时间\n";
+            foreach($datas as $data) {
+                $content .= "{$data['car_id']},";
+                $content .= "{$data['vin']},";
+                $content .= "{$data['series']},";
+                $content .= "{$data['serial_number']},";
+                $content .= "{$data['type']},";
+                $content .= "{$data['color']},";
+                $content .= "{$data['cold_resistant']},";
+                $content .= "{$data['config_name']},";
+                $content .= "{$data['status']},";
+                $content .= "{$data['special_order']},";
+                $data['remark'] = str_replace(",", "，",$data['remark']);
+                $content .= "{$data['remark']},";
+                $content .= "{$data['node_name']},";
+                $content .= "{$data['user_name']},";
+                $content .= "{$data['pass_time']}\n";
+            }
+            $export = new Export('生产车辆明细_' .date('YmdHi'), $content);
+            $export->toCSV();
+        } catch(Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function actionMonitoringIndex() {
 		
         $this->render('assembly/monitoring/monitoringIndex');
@@ -485,19 +538,57 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $arraySeries = array('F0', 'M6');
-        $sqls=array();
-        foreach($arraySeries as $series) {
-            $sqls[] = "SELECT * FROM plan_assembly WHERE  car_series='$series' ";
+        $stime = '2012-10-01 08:00';
+        $etime = '2013-01-21 16:00';
+        $conditions = array();
+        if(!empty($stime)){
+            $conditions[] = "pause_time >=  '$stime'";
         }
-        $sql = join(' UNION ', $sqls);
+        if(!empty($etime)){
+            $conditions[] = "pause_time <=  '$etime'";
+        }
+        if(!empty($section)){
+            $sql = "SELECT id FROM node WHERE section='$section'";
+            $nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
+            if(empty($nodeIds)) {
+                return 0;   
+            }
+            $nodeIdStr = join(',', $nodeIds);
+            $conditions[] = "node_id IN ($nodeIdStr)";
+        }
+        if(!empty($causeType)){
+            $conditions[] = "cause_type = '$causeType'";
+        }
+        if(!empty($dutyDepartment)){
+            $conditions[] = "duty_department = '$dutyDepartment'";
+        }
+        if(!empty($pauseReason)){
+            $conditions[] = "remark LIKE '%$pauseReason%'";
+        }
+        
+        $condition = join(' AND ', $conditions);
 
-        $limit = 10;
-        $offset = 0;
+        $dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
 
-        $sql .= " ORDER BY plan_date, batch_number ASC LIMIT $offset, $limit";
-        $datas = Yii::app()->db->createCommand($sql)->queryAll();
-        print_r($datas);
+        $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+        $sum = 0;
+        foreach($datas as &$data) {
+            // $node = NodeAR::model()->findByPk($data['node_id']);
+            // if(!empty($node)){
+            //  $data['section'] = $node->section; 
+            // }
+            
+            if(($data['recover_time'] == 0)){
+                $data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
+            }else {
+                //$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
+                //$data['howlong'] = intval($howlong);
+                $data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+            }
+            $sum += $data['howlong'];
+        }
+
+        print_r($sum);
         // echo dirname(__FILE__);
         // $dir='/home/work/bms/web/bms/doc/browse/managementSystem/manpower/promotion/';  
         // $handle=opendir($dir);  

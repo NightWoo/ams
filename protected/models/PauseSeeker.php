@@ -79,11 +79,11 @@ class PauseSeeker
 
 	public function queryDistribute($stime, $etime, $section, $causeType, $dutyDepartment, $pauseReason){
 		$conditions = array();
-		if(!empty($startTime)){
-			$conditions[] = "pause_time >=	'$startTime'";
+		if(!empty($stime)){
+			$conditions[] = "pause_time >=	'$stime'";
 		}
-		if(!empty($endTime)){
-			$conditions[] = "pause_time <=	'$endTime'";
+		if(!empty($etime)){
+			$conditions[] = "pause_time <=	'$etime'";
 		}
 		if(!empty($section)){
 			$sql = "SELECT id FROM node WHERE section='$section'";
@@ -109,6 +109,7 @@ class PauseSeeker
 		$dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
 
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+		$sum = 0;
 		foreach($datas as &$data) {
 			// $node = NodeAR::model()->findByPk($data['node_id']);
 			// if(!empty($node)){
@@ -122,48 +123,56 @@ class PauseSeeker
 				//$data['howlong'] = intval($howlong);
 				$data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
 			}
+			$sum += $data['howlong'];
 		}
 
 		$causeTypeChartData = array();
 		$dutyDepartmentChartData = array();
+		
 
 		foreach($datas as &$data) {
 			if(empty($causeTypeChartData[$data['cause_type']])) {
 				$causeTypeChartData[$data['cause_type']] = array(
-					'causeType' => $data['cause_type'],
+					'name' => $data['cause_type'],
 					'howlong' => 0,
 				);
 			}
 
 			if(empty($dutyDepartmentChartData[$data['duty_department']])) {
 				$dutyDepartmentChartData[$data['duty_department']] = array(
-					'dutyDepartment' => $data['duty_department'],
+					'name' => $data['duty_department'],
 					'howlong' => 0,
 				);
 			}
-
 			$causeTypeChartData[$data['cause_type']]['howlong'] += $data['howlong'];
 			$dutyDepartmentChartData[$data['duty_department']]['howlong'] += $data['howlong'];
-
-			$cSeries = array();
-			foreach ($causeTypeChartData as &$chartData) {
-				$percentage = round($chartData['howlong'], 3);
-				$chartData['percentage'] = $percentage * 100 . "%";
-				$cSeries[] = array($chartData['causeType'], $percentage);
-			}
-
-			$dSeries = array();
-			foreach ($dutyDepartmentChartData as &$chartData) {
-				$percentage = round($chartData['howlong'] / $sum, 3);
-				$chartData['percentage'] = $percentage * 100 . "%";
-				$cSeries[] = array($chartData['causeType'], $percentage);
-			}
-
-			return array(
-				'cause_type_chart_data' => array('detail' => array_values($causeTypeChartData), 'series' => $cSeries),
-				'duty_department_chart_data' => array('detail' => array_values($dutyDepartmentChartData), 'series' => $dSeries),
-			);
 		}
+		$cSeries = array();
+		foreach ($causeTypeChartData as &$chartData) {
+			$percentage = round($chartData['howlong'] / $sum, 3);
+			$chartData['percentage'] = $percentage * 100 . "%";
+			$cSeries[] = array($chartData['name'], $percentage);
+			$howlong = $chartData['howlong'] ;
+			$howlongMM = intval($howlong / 60);
+			$howlongSS = intval($howlong % 60);
+			$chartData['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
+		}
+
+		$dSeries = array();
+		foreach ($dutyDepartmentChartData as &$chartData) {
+			$percentage = round($chartData['howlong'] / $sum, 3);
+			$chartData['percentage'] = $percentage * 100 . "%";
+			$dSeries[] = array($chartData['name'], $percentage);
+			$howlong = $chartData['howlong'] ;
+			$howlongMM = intval($howlong / 60);
+			$howlongSS = intval($howlong % 60);
+			$chartData['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
+		}
+
+	return array(
+			'cause_type_chart_data' => array('detail' => array_values($causeTypeChartData), 'series' => $cSeries),
+			'duty_department_chart_data' => array('detail' => array_values($dutyDepartmentChartData), 'series' => $dSeries),
+		);
 	}
 
 }

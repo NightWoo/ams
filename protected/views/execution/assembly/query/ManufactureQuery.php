@@ -115,11 +115,23 @@
                             <li id="statistics"><a href="#statistic" data-toggle="tab">车辆统计</a></li>
                             <li><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="pauseDetail"><a href="#dataPauseDetail" data-toggle="tab">停线明细</a></li>
-                            <li id="pauseDistribution"><a href="#" data-toggle="tab">停线分析</a></li>
+                            <li id="pauseDistribution"><a href="#pauseDistribute" data-toggle="tab">停线分析</a></li>
                             <li id="useRate"><a href="#" data-toggle="tab">生产利用率</a></li>
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
                             <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
+                            <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
+                                <ul>
+                                    <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
+                                </ul>
+                                <ul>
+                                    <li id="firstCars"><a href="#">&laquo;</a></li>
+                                    <li id="preCars" class="prePage"><a href="#">&lt;</a></li>
+                                    <li id="curCars" class="active curPage" page="1"><a href="#">1</a></li>
+                                    <li id="nextCars" class="nextPage"><a href="#">&gt;</a></li>
+                                    <li id="lastCars"><a href="#">&raquo;</a></li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
@@ -127,33 +139,22 @@
                             <table id="tableCars" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>车系</th>
                                         <th>VIN号</th>
-                                        <th>故障零部件</th>
-                                        <th>故障模式</th>
-                                        <th>故障状态</th>
-                                        <th>节点</th>
-                                        <th>录入人员</th>
-                                        <th>录入时间</th>
-                                        <th>确认时间</th>
+                                        <th>车系</th>
+                                        <th>流水号</th>
+                                        <th>车型</th>
+                                        <th>配置</th>
+                                        <th>颜色</th>
+                                        <th>耐寒性</th>
+                                        <th>状态</th>
+                                        <th>备注</th>
+                                        <th>时间</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                    
                                 </tbody>
                             </table>
-                            <div id="paginationCars" class="pagination" style="display: none;">
-                                <ul>
-                                    <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
-                                </ul>
-                                <ul>
-                                    <li id="firstCars"><a href="#"><span>&lt;&lt;</span></a></li>
-                                    <li id="preCars" class="prePage"><a href="#"><span>&lt;</span></a></li>
-                                    <li id="curCars" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
-                                    <li id="nextCars" class="nextPage"><a href="#"><span>&gt;</span></a></li>
-                                    <li id="lastCars"><a href="#"><span>&gt;&gt;</span></a></li>
-                                </ul>
-                            </div>
                         </div>
 
                         <div class="tab-pane" id="statistic">
@@ -209,8 +210,8 @@
                                   责任部门
                                 </label>
                             </div>
-                            <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-                            
+                            <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto">
+                            </div>
                             <table id="tablePauseDistribute" class="table table-condensed">
                                 <thead />
                                 <tbody />

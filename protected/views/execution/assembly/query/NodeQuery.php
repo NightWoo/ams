@@ -66,10 +66,10 @@
 									<option value="CHECK_OUT">出成品库</option> -->
 								</select>
 							</td>
-                            <td colspan="2">
+                            <!-- <td colspan="2">
                                 <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
                                 <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input>
-                            </td>
+                            </td> -->
                         </tr>
                         <tr>
                             <td class="alignRight"><label>零部件-模式&nbsp;&nbsp;</label></td>
@@ -95,12 +95,24 @@
                 <div id="divDetail">
                     <div>
                         <ul id="tabs" class="nav nav-pills">
-                            <li  class="active"><a href="#dataList" data-toggle="tab"> 详细报表 </a></li>
+                            <li id="carsDetail"><a href="#dataList" data-toggle="tab"> 详细报表 </a></li>
                             <li id="platoTab"><a href="#plato" data-toggle="tab">柏拉图</a></li>
                             <li><a href="#faultDistribute" data-toggle="tab">故障分布</a></li>
                             <li id="dpuTab"><a href="#dpu" data-toggle="tab">DPU趋势</a></li>
                             <li id="passRateTab"><a href="#passRate" data-toggle="tab">合格率趋势</a></li>
                             <!-- <li><a href="#statistic" data-toggle="tab">车辆统计</a></li> -->
+                            <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
+                                <ul>
+                                    <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
+                                </ul>
+                                <ul>
+                                    <li id="firstCars"><a href="#">&lt;&lt;</a></li>
+                                    <li id="preCars" class="prePage"><a href="#">&lt;</a></li>
+                                    <li id="curCars" class="active curPage" page="1"><a href="#">1</a></li>
+                                    <li id="nextCars" class="nextPage"><a href="#">&gt;</a></li>
+                                    <li id="lastCars"><a href="#">&gt;&gt;</a></li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
@@ -124,11 +136,6 @@
                                    
                                 </tbody>
                             </table>
-                            <ul class="pager">
-                                <li class="prePage"><a>上一页</a></li>
-                                <li class="curPage" page="1"> 第1页</li>
-                                <li class="nextPage"><a>下一页</a></li>
-                            </ul>
                         </div>
 
                         <div class="tab-pane" id="plato">

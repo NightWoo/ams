@@ -1,3 +1,74 @@
+!$(function () {
+	window.pause = window.pause || {};
+	window.pause.pie = {
+		pieAjaxData: {},
+
+		pieData: {
+			chart: {
+				renderTo: 'pieContainerPauseDistribute',
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+				percentageDecimals: 1
+			},
+			plotOptions: {
+				 pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(1) +' %';
+                        }
+                    }
+                }
+			},
+			series: [{
+				type: 'pie',
+				name: '停线分析',
+				data: []
+			}]
+		},
+
+		drawPausePie: function(type) {
+			this.pieData.series[0].data = this.pieAjaxData[type].series;
+			var chart;
+			chart = new Highcharts.Chart(this.pieData);
+		},
+
+		updatePausePieTable: function (type) {
+			$("#tablePauseDistribute thead").html('<tr />');
+			$("#tablePauseDistribute tbody").html('<tr />');
+			var thTr = $("#tablePauseDistribute tr:eq(0)");
+			var dataTr = $("#tablePauseDistribute tr:eq(1)");
+			var percentageTr = $("#tablePauseDistribute tr:eq(2)");
+			if(type === 'cause_type_chart_data')
+				$('<td />').html('停线类型').appendTo(thTr);
+			else if(type === 'duty_department_chart_data')
+				$('<td />').html('责任部门').appendTo(thTr);
+			$('<td />').html('百分比').appendTo(percentageTr);
+			$('<td />').html('停线时间').appendTo(dataTr);
+			$.each(this.pieAjaxData[type].detail, function (index,value) {
+				$('<td />').html(value.name).appendTo(thTr);
+				$('<td />').html(value.percentage).appendTo(percentageTr);
+				$('<td />').html(value.howlong).appendTo(dataTr);
+			});
+		}
+	};
+});
+
 $(document).ready(function () {
 	initPage();
 //------------------- common functions -----------------------	
@@ -31,6 +102,8 @@ $(document).ready(function () {
 			ajaxStatistics();
 		else if (index === 3)
 			ajaxQueryPause(1);
+		else if (index == 4)
+			ajaxPauseDistribute();
 		else if (index === 7)
 			ajaxQueryPlan(1);
 		else if (index === 8)
@@ -148,7 +221,7 @@ $(document).ready(function () {
 
 	$("#exportCars").click(
 		function () {
-			ajaxExport();
+			ajaxExportNodeTrace ();
 			return false;
 		}
 	);
@@ -249,10 +322,14 @@ $(document).ready(function () {
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
+		if(index<9)
+			$(".pagination").hide();
 		if (index == 1)
 			ajaxStatistics();
-		if (index == 3)
+		else if (index == 3)
 			ajaxQueryPause(1);
+		else if (index == 4)
+			ajaxPauseDistribute();
 		else if (index === 7)
 			ajaxQueryPlan(1);
 		else if (index === 8)
@@ -284,7 +361,7 @@ $(document).ready(function () {
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: FAULT_QUERY,//ref:  /bms/js/service.js
+		    url: QUERY_NODE_TRACE,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
 					"series":series,
@@ -296,46 +373,57 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		$("#tableCars tbody").html("");
 		    		$.each(response.data.data,function (index,value) {
-		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
-		    			var componentTd = "<td>" + value.component_name + "</td>";
-						var faultTd = "<td>" + value.fault_mode + "</td>";
-						var faultStatusTd = "<td>" + value.fault_status + "</td>";
-		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
-		    			var createTimeTd = "<td>" + value.create_time + "</td>";
-		    			var userNameTd = "<td>" + value.user_name + "</td>";
-		    			var memoTd = "<td>" + value.modify_time + "</td>";
-		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
-		    				faultStatusTd + nodeNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
+		    			var seriesTd = "<td>" + value.series + "</td>";
+		    			var serialTd = "<td>" + value.serial_number + "</td>";
+		    			var carTypeTd = "<td>" + value.type + "</td>";
+		    			var configTd = "<td>" + value.config_name + "</td>";
+		    			var colorTd = "<td>" + value.color + "</td>";
+		    			var coldTd = "<td>" + value.cold_resistant + "</td>";
+		    			var statusTd = "<td>" + value.status + "</td>";
+		    			var remarkTd = "<td>" + value.remark + "</td>";
+		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
+		    			var tr = "<tr>"
+		    				+ vinTd 
+		    				+ seriesTd 
+		    				+ serialTd 
+		    				+ carTypeTd
+		    				+ configTd
+		    				+ colorTd
+		    				+ coldTd 
+		    				+ statusTd 
+		    				+ remarkTd 
+		    				+ pTimeTd 
+		    				+ "</tr>";
+
 		    			$("#tableCars tbody").append(tr);
-						//$("#tableCars").show();
+						$("#tableCars").show();
 		    		});
 
 		    		//deal with pager	
 		    		if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
-							$("#preCars a span").html("&times;");
-							$("#firstCars a span").html("&times;");
+							$("#preCars, #firstCars").addClass("disabled");
+							$("#preCars a, #firstCars a").removeAttr("href");
 						} else {
 		    				//$(".prePage").show();
-							$("#preCars a span").html("&lt;");
-							$("#firstCars a span").html("&lt;&lt;");
+							$("#preCars, #firstCars").removeClass("disabled");
+							$("#preCars a, #firstCars a").attr("href","#");
 						}
 		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
 		    				//$(".nextPage").hide();
-							$("#nextCars a span").html("&times;");
-							$("#lastCars a span").html("&times;");
+							$("#nextCars, #lastCars").addClass("disabled");
+							$("#nextCars a, #lastCars a").removeAttr("href");
 						} else {
 		    				//$(".nextPage").show();
-							$("#nextCars a span").html("&gt;");
-							$("#lastCars a span").html("&gt;&gt;");
+							$("#nextCars, #lastCars").removeClass("disabled");
+							$("#nextCars a, #lastCars a").attr("href","#");
 						}
 						$("#curCars").attr("page", response.data.pager.curPage);
-						$("#curCars a span").html(response.data.pager.curPage);
+						$("#curCars a").html(response.data.pager.curPage);
 						$("#totalCars").attr("total", response.data.pager.total);
 						$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
 					
-						$("#tableCars").show();
 						$("#paginationCars").show();
 		    	}else
 		    		alert(response.message);
@@ -485,9 +573,9 @@ $(document).ready(function () {
              
     }
 
-	function ajaxExport () {
-		window.open(FAULT_EXPORT + "?vin=" + $('#vinText').val() + 
-			"&node=" + $("#selectNode").val() + 
+	function ajaxExportNodeTrace () {
+		window.open(EXPORT_NODE_TRACE + 
+			"?&node=" + $("#selectNode").val() + 
 			"&series=" + ($("#checkboxF0").val() + "," + $("#checkboxM6").val()) +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
@@ -534,21 +622,21 @@ $(document).ready(function () {
 						
 						if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
-							$("#prePause a span").html("&times;");
-							$("#firstPause a span").html("&times;")
+							$("#prePause, #firstPause").addClass("disabled");
+							$("#prePause a, #firstPause a").removeAttr("href");
 						} else {
 		    				//$(".prePage").show();
-							$("#prePause a span").html("&lt;");
-							$("#firstPause a span").html("&lt;&lt;");
+							$("#prePause, #firstPause").removeClass("disabled");
+							$("#prePause a, #firstPause a").attr("href","#");
 						}
-		    			if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
+		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
 		    				//$(".nextPage").hide();
-							$("#nextPause a span").html("&times;");
-							$("#lastPause a span").html("&times;");
+							$("#nextPause, #lastPause").addClass("disabled");
+							$("#nextPause a, #lastPause a").removeAttr("href");
 						} else {
 		    				//$(".nextPage").show();
-							$("#nextPause a span").html("&gt;");
-							$("#lastPause a span").html("&gt;&gt;");
+							$("#nextPause, #lastPause").removeClass("disabled");
+							$("#nextPause a, #lastPause a").attr("href","#");
 						}
 						$("#curPause").attr("page", response.data.pager.curPage);
 						$("#curPause a span").html(response.data.pager.curPage);
@@ -567,6 +655,43 @@ $(document).ready(function () {
 			}	
 		})
 	}
+
+	function ajaxPauseDistribute() {
+		var ajaxData ={
+				"startTime": $("#startTime").val(),
+				"endTime": $("#endTime").val(),
+				"causeType": $("#causeType").val(),
+				"dutyDepartment": $("#dutyDepartment").val(),
+				"section": $("#section").val(),	
+				"pauseReason": $("#pauseReason").val(),
+			}
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: QUERY_PAUSE_DISTRIBUTE,
+			data: ajaxData,
+			success: function(response) {
+				if(response.success) {
+					$("#pieContainerPauseDistribute").html("");
+					pause.pie.pieAjaxData = response.data;
+					pause.pie.drawPausePie('cause_type_chart_data');
+					pause.pie.updatePausePieTable('cause_type_chart_data');
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
+
+	$('#radioPauseDistribute :radio').change(function () {
+		$('#pieContainerPauseDistribute').html('');
+		var type = $(this).val();
+		pause.pie.drawPausePie(type);
+		pause.pie.updatePausePieTable(type);
+	});
 
 	function ajaxQueryPlan(targetPage) {
 		// //get series for query

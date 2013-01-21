@@ -763,7 +763,7 @@ class FaultSeeker
 		$lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
 
 		$ret = array();
-		if($lastHour < 24) {//hour
+		if($lastHour <= 24) {//hour
 			$pointFormat = 'H';
 			$format = 'Y-m-d H:i:s';
 			$slice = 3600;
@@ -815,7 +815,7 @@ class FaultSeeker
 		$lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
 
 		$ret = array();
-		if($lastHour < 24) {//hour
+		if($lastHour <= 24) {//hour
 			$format = 'Y-m-d H';
 			$stime = date($format, $s) . ":00:00";
 			$etime = date($format, $e) . ":00:00";

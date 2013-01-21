@@ -116,23 +116,56 @@ $(document).ready(function () {
 		}
 	);
 
-	$(".prePage").click(
+	//car pagination
+	$("#preCars").click(
 		function (){
-			$("#resultTable tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) - 1);
+			if(parseInt($("#curCars").attr("page")) > 1){
+				$("#tableCars tbody").html("");
+				ajaxQuery(parseInt($("#curCars").attr("page")) - 1);
+			}
 		}
 	);
 
-	$(".nextPage").click(
+	$("#nextCars").click(
 		function (){
-			$("#resultTable tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
+			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
+			$("#tableCars tbody").html("");
+			ajaxQuery(parseInt($("#curCars").attr("page")) + 1);
+		}
+		}
+	);
+
+	$("#firstCars").click(
+		function () {
+			if(parseInt($("#curCars").attr("page")) > 1){
+				$("#tableCars tbody").html("");
+				ajaxQuery(parseInt(1));
+			}
+		}
+	);
+
+	$("#lastCars").click(
+		function () {
+			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
+				$("#tableCars tbody").html("");
+				totalPage = parseInt($("#totalCars").attr("total"))%20 === 0 ? parseInt($("#totalCars").attr("total"))/20 : parseInt($("#totalCars").attr("total"))/20 + 1;
+				ajaxQuery(parseInt(totalPage));
+			}
+		}
+	)
+
+	$("#exportCars").click(
+		function () {
+			ajaxExport();
+			return false;
 		}
 	);
 
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
+		if(index<5)
+			$("#paginationCars").hide();
 		if (index == 1)
 			ajaxPlato();
 		else if (index === 2)
@@ -141,8 +174,8 @@ $(document).ready(function () {
 			ajaxDpu();
 		else if (index === 4)
 			ajaxPassRate();
-		else if (index === 5)
-			ajaxStatistics();
+		// else if (index === 5)
+		// 	ajaxStatistics();
 		else if (index === 0)
 			setTimeout(toQuery, 0);
 	});
@@ -188,6 +221,7 @@ $(document).ready(function () {
 					"curPage":targetPage || 1},
 		    success:function (response) {
 		    	if(response.success){
+		    		$("#resultTable tbody").html("");
 		    		$.each(response.data.data,function (index,value) {
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
@@ -204,18 +238,30 @@ $(document).ready(function () {
 						$("#resultTable").show();
 		    		});
 		    		//deal with pager
-		    		$(".pager").show();
-		    		if(response.data.pager.curPage == 1)
-		    			$(".prePage").hide();
-		    		else
-		    			$(".prePage").show();
-		    		if(response.data.pager.curPage * 20 >= response.data.pager.total )
-		    			$(".nextPage").hide();
-		    		else
-		    			$(".nextPage").show();
-		    		$(".curPage").attr("page", response.data.pager.curPage);
-		    		$(".curPage").html("第" + response.data.pager.curPage + "页");
-		    		$("#totalText").html("共" + response.data.pager.total + "条记录");
+		    		if(response.data.pager.curPage == 1) {
+		    			//$(".prePage").hide();
+							$("#preCars, #firstCars").addClass("disabled");
+							$("#preCars a, #firstCars a").removeAttr("href");
+						} else {
+		    				//$(".prePage").show();
+							$("#preCars, #firstCars").removeClass("disabled");
+							$("#preCars a, #firstCars a").attr("href","#");
+						}
+		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+		    				//$(".nextPage").hide();
+							$("#nextCars, #lastCars").addClass("disabled");
+							$("#nextCars a, #lastCars a").removeAttr("href");
+						} else {
+		    				//$(".nextPage").show();
+							$("#nextCars, #lastCars").removeClass("disabled");
+							$("#nextCars a, #lastCars a").attr("href","#");
+						}
+						$("#curCars").attr("page", response.data.pager.curPage);
+						$("#curCars a").html(response.data.pager.curPage);
+						$("#totalCars").attr("total", response.data.pager.total);
+						$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
+					
+						$("#paginationCars").show();
 
 		    	}else
 		    		alert(response.message);

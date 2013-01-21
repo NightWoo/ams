@@ -5778,20 +5778,3 @@ a.badge:hover {
   position: fixed;
 }
 
-/*below added by wujun*/
-.icon-white{margin-top:4px;}
-[class^="icon-"],[class*=" icon-"]{margin-top:4px;}
-.dropdown-menu{margin:0;}
-label{vertical-align:middle;}
-.offhead{margin-top:60px;}
-.leftside{position: fixed;}
-body{padding-bottom:20px;}
-
-/*alert margin*/
-#messageAlert{
-  margin-top: 10px;
-}
-/*pager style*/
-.pager li{
-    cursor: pointer;
-}
