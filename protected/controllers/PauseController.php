@@ -64,15 +64,20 @@ class PauseController extends BmsBaseController
 	
 	public function actionEditSave() {
 		$id = $this->validateIntVal('id', 0);
+		$causeType = $this->validateStringVal('causeType', '');
 		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
 		$remark = $this->validateStringVal('remark', '');
 		try{
 			$department = DutyDepartmentAR::model()->find("type=? AND display_name=?", array('停线',$dutyDepartment));
+			if(empty($causeType)){
+				throw new Exception("停线类型不可为空");
+			}
 			if(empty($department)){
 				throw new Exception("责任部门需使用标准化名称", 1);
 			}
 			if(!empty($id)){
 				$pause = LinePauseAR::model()->findByPk($id);
+				$pause->cause_type = $causeType;
 				$pause->duty_department = $dutyDepartment;
 				$pause->remark = $remark;
 				$pause->editor = Yii::app()->user->id;

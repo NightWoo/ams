@@ -134,6 +134,7 @@ $(document).ready(function(e) {
 			url: PAUSE_EDIT_SAVE,
 			data: {
 				"id": $("#editModal").data("id"),
+				"causeType": $("#editCauseType").val(),
 				"dutyDepartment": $("#editDutyDepartment").val() === '' ? '待定' : $("#editDutyDepartment").val(),
 				"remark": $("#editRemark").val(),
 			},
