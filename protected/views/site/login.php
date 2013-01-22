@@ -84,10 +84,9 @@
                             <li class="title"><i class="icon-envelope"></i>&nbsp;联系我们</li>
                             <li>
                                 <ul id="contect">
-                                    <li class="text-info"><a href="wu.jun9@byd.com">账号申请</a></li>
+                                    <li class="text-info">账号申请：<a href="liu.wenlu@byd.com">liu.wenlu@byd.com</a></li>
+                                    <li class="text-info">系统维护：<a href="liu.wenlu@byd.com">liu.wenlu@byd.com</a></li>
                                     <li class="text-info">系统管理：<a href="wu.jun9@byd.com">wu.jun9@byd.com</a></li>
-                                    <li class="text-info">长沙维护：<a href="cai.yanfang@byd.com">cai.yanfang@byd.com</a></li>
-                                    <li class="text-info">深圳维护：<a href="yun.chenlu@byd.com">yun.chenlu@byd.com</a></li>
                                     <li class="text-info">联系电话：0755-89888888-69550</li>
                                 </ul> 
                             </li>           
