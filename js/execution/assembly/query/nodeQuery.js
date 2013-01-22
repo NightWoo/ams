@@ -439,11 +439,19 @@ $(document).ready(function () {
              
         }
 	function ajaxExport () {
-		window.open(FAULT_EXPORT + "?vin=" + $('#vinText').val() + 
-			"&node=" + $("#selectNode").val() + 
+		var series = "";
+		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+		if((f0Checked + m6Checked)%2 === 0)
+			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
+		else if(f0Checked)
+			series += $("#checkboxF0").val();
+		else
+			series += $("#checkboxM6").val();
+		window.open(FAULT_EXPORT + "?&node=" + $("#selectNode").val() + 
 			'&component=' + $('#componentText').val() +
 			'&mode=' + $('#faultModeText').val() +
-			"&series=" + ($("#checkboxF0").val() + "," + $("#checkboxM6").val()) +
+			"&series=" + series +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
 		);
