@@ -137,8 +137,8 @@ class FaultSeeker
 			} else {
 				$curCondition = "WHERE n.node_id=$nodeId"; 
 			}
-			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition ORDER BY n.pass_time DESC)";
-			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id $curCondition";
+			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition ORDER BY n.pass_time DESC)";
+			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition";
 		}
 
 		$dataSql = join(' UNION ALL ', $dataSqls);
