@@ -538,91 +538,92 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $stime = '2012-10-01 08:00';
-        $etime = '2013-01-21 16:00';
-        $conditions = array();
-        if(!empty($stime)){
-            $conditions[] = "pause_time >=  '$stime'";
+        $stime = '2013-01-01 08:00';
+        $etime = '2013-01-23 16:00';
+        $s = strtotime($stime);
+        $e = strtotime($etime);
+    
+        $sd = date('Ymd', $s);
+        $ed = date('Ymd', $e);
+        
+        $sm = date('m', $s);
+        $em = date('m', $e);
+
+        $lastHour = ($e - $s) / 3600;
+        $lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
+
+        $ret = array();
+        if($lastHour <= 24) {//hour
+            $format = 'Y-m-d H';
+            $stime = date($format, $s) . ":00:00";
+            $etime = date($format, $e) . ":00:00";
+        } elseif($lastDay <= 31) {//day
+            $format = 'Y-m-d';
+            //$stime = date($format, $s) . " 00:00:00";             
+            //$etime = date($format, $e) . " 23:59:59";
+            $stime = date($format, $s) . " 08:00:00";                               //added by wujun
+            $eNextD = strtotime('+1 day', $e);      //next day                      //added by wujun
+            $etime = date($format, $eNextD) . " 07:59:59";  //befor next workday    //added by wujun
+        } else {//month
+            $format = 'Y-m';
+            //$stime = date($format, $s) . "-01 00:00:00";
+            //$etime = date('Y-m-t', $e) . " 23:59:59";
+            $stime = date($format, $s) . "-01 08:00:00";    //firstday              //added by wujun
+            $eNextM = strtotime('+1 month', $e);            //next month            //added by wujun
+            $etime = date('Y-m', $eNextM) . "-01 07:59:59"; //next month firstday   //added by wujun
         }
-        if(!empty($etime)){
-            $conditions[] = "pause_time <=  '$etime'";
-        }
-        if(!empty($section)){
-            $sql = "SELECT id FROM node WHERE section='$section'";
-            $nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
-            if(empty($nodeIds)) {
-                return 0;   
-            }
-            $nodeIdStr = join(',', $nodeIds);
-            $conditions[] = "node_id IN ($nodeIdStr)";
-        }
-        if(!empty($causeType)){
-            $conditions[] = "cause_type = '$causeType'";
-        }
-        if(!empty($dutyDepartment)){
-            $conditions[] = "duty_department = '$dutyDepartment'";
-        }
-        if(!empty($pauseReason)){
-            $conditions[] = "remark LIKE '%$pauseReason%'";
+
+         echo $stime;
+         echo '<br>';
+         echo $etime;
+         echo '<br>';
+
+         $s = strtotime($stime);
+        $e = strtotime($etime);
+    
+        $sd = date('Ymd', $s);
+        $ed = date('Ymd', $e);
+        
+        $lastHour = ($e - $s) / 3600;
+        $lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
+
+        $ret = array();
+        if($lastHour <= 24) {//hour
+            $pointFormat = 'H';
+            $format = 'Y-m-d H:i:s';
+            $slice = 3600;
+        } elseif($lastDay <= 31) {//day
+            $pointFormat = 'm-d';
+            $format = 'Y-m-d H';
+            $slice = 86400;
+        } else {//month
+            $pointFormat = 'Y-m';
+            $format = 'Y-m';
+            //$slice = 86400 * 31;      //deleted by wujun
         }
         
-        $condition = join(' AND ', $conditions);
-
-        $dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
-
-        $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
-        $sum = 0;
-        foreach($datas as &$data) {
-            // $node = NodeAR::model()->findByPk($data['node_id']);
-            // if(!empty($node)){
-            //  $data['section'] = $node->section; 
-            // }
-            
-            if(($data['recover_time'] == 0)){
-                $data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
-            }else {
-                //$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
-                //$data['howlong'] = intval($howlong);
-                $data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+        $t = $s;
+        while($t < $e) {
+            if($pointFormat === 'H') {
+                $point = date($pointFormat, $t) . '～' . date($pointFormat, $t + $slice) . '点';
+            } else {
+                $point = date($pointFormat, $t);
             }
-            $sum += $data['howlong'];
+
+            //added by wujun
+            if($pointFormat === 'Y-m') {
+                $slice = 86400 * intval(date('t' ,$t));
+            }
+
+            $ret[] = array(
+                'stime' => date($format, $t),
+                'etime' => date($format, $t + $slice),
+                'point' => $point,
+            );  
+            $t += $slice;           
         }
 
-        print_r($sum);
-        // echo dirname(__FILE__);
-        // $dir='/home/work/bms/web/bms/doc/browse/managementSystem/manpower/promotion/';  
-        // $handle=opendir($dir);  
-        // $i=0;  
-        // while(false!==($file=readdir($handle))){  
-        //     if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-        //         //var_dump($file);  
-        //         $i++;  
-        //     }  
-        // }  
-        // closedir($handle);
-        // echo '<br>'; 
-        // echo $i;
-
-
-        // $s = strtotime('2012-12-11');
-        // $e = strtotime('2013-2-21');
-        //             //added by haven't test
-        // $eNextD = strtotime('+1 day', $s);
-        // $stime = date('Y-m-d', $eNextD) . " 07:59:59";
-        // echo $stime;
-        // echo '<br>';
-        //          //added by haven't test
-        // $eNextM = strtotime('+1 month', $e);                   //added by haven't test
-        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        // echo $etime;
-        // echo '<br>';
-
-        // $stime = date('Y-m', $s) . "-01 08:00:00";
-        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        // echo $stime;
-        // echo '<br>';
-        // echo $etime;
-        // echo '<br>';
+        print_r($ret);
 
         
     }

@@ -138,7 +138,7 @@ class PlanSeeker
 				$sql = "SELECT SUM(ready) FROM plan_assembly $condition";
 				$readySum = Yii::app()->db->createCommand($sql)->queryScalar();
 
-				$rate = empty($totalSum) ? 0 : round($readySum/$totalSum , 2);
+				$rate = empty($totalSum) ? null : round($readySum/$totalSum , 2);
 				$temp[$series] = array(
 					'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
 					'readySum' => empty($readySum) ? 0 : $readySum,

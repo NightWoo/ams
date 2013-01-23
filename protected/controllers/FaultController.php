@@ -298,6 +298,10 @@ class FaultController extends BmsBaseController
             $etime = $this->validateStringVal('etime', '');
             $node = $this->validateStringVal('node', '');
 
+            if(empty($node)){
+                throw new Exception("车辆统计必须选择节点", 1);
+            }
+
             $fault = Fault::createSeeker();
             $data = $fault->queryCars($series, $stime, $etime, $node);
             $this->renderJsonBms(true, 'OK', $data);

@@ -96,7 +96,7 @@
                             <td>&nbsp;&nbsp;</td>
                             <td class="withNode">
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6" disabled>M6</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
                             </td>
                             <!-- <td>
@@ -116,7 +116,7 @@
                             <li><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="pauseDetail"><a href="#dataPauseDetail" data-toggle="tab">停线明细</a></li>
                             <li id="pauseDistribution"><a href="#pauseDistribute" data-toggle="tab">停线分析</a></li>
-                            <li id="useRate"><a href="#" data-toggle="tab">生产利用率</a></li>
+                            <li id="useRate"><a href="#paneUseRate" data-toggle="tab">生产利用率</a></li>
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
                             <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
@@ -213,6 +213,14 @@
                             <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto">
                             </div>
                             <table id="tablePauseDistribute" class="table table-condensed">
+                                <thead />
+                                <tbody />
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="paneUseRate">
+                            <div id="useRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <table id="tableUseRate" class="table table-condensed">
                                 <thead />
                                 <tbody />
                             </table>

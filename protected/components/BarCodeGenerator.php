@@ -40,7 +40,8 @@ class BarCodeGenerator
 	public function generate($text, $filename) {
 		$drawException = null;
 		$dpi = 72;
-		$scale = 2;
+		// $scale = 2;
+		$scale = 1;
 		try {
 			$color_black = new BCGColor(0, 0, 0);
 			$color_white = new BCGColor(255, 255, 255);

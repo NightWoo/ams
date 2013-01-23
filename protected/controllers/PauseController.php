@@ -104,7 +104,20 @@ class PauseController extends BmsBaseController
 			}
 			$this->renderJsonBms(true, 'OK', $nameList);
 		} catch(Exception $e) {
-			$thi->renderJsonBms(false, $e->getMessage());
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionQueryUseRate() {
+		$stime = $this->validateStringVal('startTime', '');
+		$etime = $this->validateStringVal('endTime', '');
+		$line = $this->validateStringVal('line', 'A');
+		try{
+			$seeker = new PauseSeeker();
+			$data = $seeker->queryUseRate($stime, $etime, $line);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
 }
