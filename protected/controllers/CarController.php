@@ -148,10 +148,11 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->leftNode($leftNode->name);
-
+            $configName = $car->config->name;
 			$data = array(
 				'car' => $car->car,
 				'components' => $car->getConfigDetail($nodeName),
+                'config' => $configName,
 			);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

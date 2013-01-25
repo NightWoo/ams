@@ -20,6 +20,7 @@ class Car
 			throw new Exception('vin ' . $this->vin . ' 对应的整车不存在');
 		}
 		$this->carYear = CarYear::getCarYear($vin);
+		$this->config = CarConfigAR::model()->findByPk($this->car->config_id);
 	}
 
 	public static function create($vin) {

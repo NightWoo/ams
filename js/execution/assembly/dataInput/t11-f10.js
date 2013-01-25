@@ -30,6 +30,12 @@ $("document").ready(function() {
 					$('#serialNumber').html(car.serial_number);
 					$('#series').html(car.series);
 					$('#type').html(car.type);
+					$('#config').html(response.data.config);
+					if(car.cold_resistant == "1") {
+							$('#cold').html("耐寒")
+						} else {
+							$('#cold').html("非耐寒")
+						}
 					$('#color').html(car.color);
 					if(car.status && car.status !== "0")
 				    	$('#statusInfo').html(car.status);
