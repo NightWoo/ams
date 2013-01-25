@@ -27,7 +27,7 @@ $(document).ready(function  () {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					$("#btnSubmit, #driver").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -148,13 +148,13 @@ $(document).ready(function  () {
 	function resetPage () {
 		//empty vinText
 		$("#vinText").removeAttr("disabled");
-		$("#vinText").attr("value","");
+		$("#vinText, #driver").attr("value","");
 		//聚焦到vin输入框上
 		$("#vinText").focus();
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
-		$("#btnSubmit").attr("disabled","disabled");
+		$("#btnSubmit, #driver").attr("disabled","disabled");
 		$("#divDetail").hide();
 		//init all
 
@@ -237,6 +237,7 @@ $(document).ready(function  () {
 		var sendData = {};
 		sendData.vin = $('#vinText').val();
 		sendData.bag = $("#inputBag").val();
+		sendData.driver = $("#driver").val();
 		sendData.fault = [];
 		console.log($("#tabContent tr").length);
 		var selects = $("#tabContent tr select option:selected");

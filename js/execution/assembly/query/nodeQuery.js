@@ -229,11 +229,12 @@ $(document).ready(function () {
 						var faultTd = "<td>" + value.fault_mode + "</td>";
 						var faultStatusTd = "<td>" + value.fault_status + "</td>";
 		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
+		    			var driverNameTd = "<td>" + value.driver_name + "</td>";
 		    			var createTimeTd = "<td>" + value.create_time + "</td>";
 		    			var userNameTd = "<td>" + value.user_name + "</td>";
 		    			var memoTd = "<td>" + value.modify_time + "</td>";
 		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
-		    				faultStatusTd + nodeNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
+		    				faultStatusTd + nodeNameTd + driverNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();
 		    		});

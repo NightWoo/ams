@@ -137,7 +137,7 @@ class FaultSeeker
 			} else {
 				$curCondition = "WHERE n.node_id=$nodeId"; 
 			}
-			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition ORDER BY n.pass_time DESC)";
+			$dataSqls[] = "(SELECT n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition ORDER BY n.pass_time DESC)";
 			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition";
 		}
 
@@ -165,6 +165,11 @@ class FaultSeeker
 				$data['user_name'] = $userInfos[$data['updator']];
 			} else {
 				$data['user_name'] = $userInfos[$data['user_id']];
+			}
+			if(!empty($data['driver_id'])) {
+				$data['driver_name'] = $userInfos[$data['driver_id']];
+			} else {
+				$data['driver_name'] = $data['user_name'];
 			}
 			$data['node_name'] = $nodeInfos[$data['node_id']];
 		}

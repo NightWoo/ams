@@ -235,10 +235,11 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
+            $driverId = $this->validateStringVal('driver', 0);
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_START');
 			$car->passNode('VQ3');
-            $car->enterNode('ROAD_TEST_FINISH');
+            $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
 			$fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('在线');
@@ -258,11 +259,12 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
+            $driverId = $this->validateStringVal('driver', 0);
 
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_FINISH');
 			$car->passNode('VQ3');
-            $car->enterNode('VQ2');
+            $car->enterNode('VQ2', $driverId);
 
 
 			$fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
@@ -448,7 +450,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,录入人员,录入时间\n";
+            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,驾驶员,录入人员,录入时间\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['vin']},";
@@ -463,6 +465,7 @@ class ExecutionController extends BmsBaseController
                 $data['remark'] = str_replace(",", "，",$data['remark']);
                 $content .= "{$data['remark']},";
                 $content .= "{$data['node_name']},";
+                $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
                 $content .= "{$data['pass_time']}\n";
             }
