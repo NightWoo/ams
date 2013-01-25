@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>节点查询.总装</title>
+		<title>质量查询</title>
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/NodeQuery.css" rel="stylesheet">
@@ -35,7 +35,7 @@
                         <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
                         <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
                         <li><a href="#">数据查询</a><span class="divider">&gt;</span></li>
-                        <li class="active">节点查询</li>                
+                        <li class="active">质量查询</li>                
                 </ul></div><!-- end 面包屑 -->
                 <div>
                 <form id="form" class="well form-inline">

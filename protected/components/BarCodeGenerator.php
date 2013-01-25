@@ -42,15 +42,20 @@ class BarCodeGenerator
 		$dpi = 72;
 		// $scale = 2;
 		$scale = 1;
+		$height = 15;
 		try {
 			$color_black = new BCGColor(0, 0, 0);
 			$color_white = new BCGColor(255, 255, 255);
+			$font = new BCGFontFile('/home/work/bms/web/bms/barcode/font/Arial.ttf', 8);
 
 			$code_generated = new $this->className();
 
 			$code_generated->setScale(max(1, min(4, $scale)));
 			$code_generated->setBackgroundColor($color_white);
 			$code_generated->setForegroundColor($color_black);
+
+			$code_generated->setThickness(15);
+			$code_generated->setFont($font);
 
 			$code_generated->parse($text);
 		} catch(Exception $exception) {
