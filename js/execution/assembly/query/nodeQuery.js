@@ -885,9 +885,10 @@ $(document).ready(function () {
 			    success: function (response) {
 	    			if (response.success) {
 	    				$('#pieContainer').text('');
+	    				var type = $("#divRadio input:radio[name='optionsRadios']:checked").val();
 	    				byd.pie.pieAjaxData = response.data;
-	    				byd.pie.drawPie('component_chart_data');
-	    				byd.pie.updatePieTable('component_chart_data');
+	    				byd.pie.drawPie(type);
+	    				byd.pie.updatePieTable(type);
 	    			} else {
 	    				alert(response.message);
 	    			}

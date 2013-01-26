@@ -91,6 +91,11 @@ class NodeSeeker
         	} else {
         		$data['user_name'] = '-';
         	}
+        	if(!empty($data['driver_id'])) {
+				$data['driver_name'] = $userInfos[$data['driver_id']];
+			} else {
+				$data['driver_name'] = $data['user_name'];
+			}
 
         	if(!empty($data['config_id'])){
         		$data['config_name'] = $configInfos[$data['config_id']];

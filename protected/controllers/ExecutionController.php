@@ -236,6 +236,11 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
             $driverId = $this->validateStringVal('driver', 0);
+
+            if(empty($driverId)) {
+                throw new Exception('必须选择驾驶员');
+            }
+
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_START');
 			$car->passNode('VQ3');
@@ -260,6 +265,10 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
             $driverId = $this->validateStringVal('driver', 0);
+
+            if(empty($driverId)) {
+                throw new Exception('必须选择驾驶员');
+            }
 
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_FINISH');

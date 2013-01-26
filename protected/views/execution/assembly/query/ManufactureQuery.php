@@ -202,7 +202,7 @@
                             <div id="radioPauseDistribute">   
                                 <!--<span>分布条件:</span>-->
                                 <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked>
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked="checked">
                                   停线类型
                                 </label>
                                 <label class="radio inline">

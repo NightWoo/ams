@@ -528,7 +528,8 @@ $(document).ready(function () {
 				"section": $("#section").val(),	
 				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
-				"curPage": targetPage || 1
+				"curPage": targetPage || 1,
+				"orderBy": 'DESC'
 			},
 			success: function(response) {
 				if(response.success) {
@@ -606,9 +607,10 @@ $(document).ready(function () {
 			success: function(response) {
 				if(response.success) {
 					$("#pieContainerPauseDistribute").html("");
+					var type = $('#radioPauseDistribute input:radio[name="optionsRadios"]:checked').val();
 					mQuery.pie.pieAjaxData = response.data;
-					mQuery.pie.drawPausePie('cause_type_chart_data');
-					mQuery.pie.updatePausePieTable('cause_type_chart_data');
+					mQuery.pie.drawPausePie(type);
+					mQuery.pie.updatePausePieTable(type);
 				} else {
 					alert(response.message);
 				}
