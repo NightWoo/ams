@@ -17,7 +17,7 @@ $(document).ready(function  () {
 			    	$("#vinText").val(response.data.vin)	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit, #driver").removeAttr("disabled");
+					$("#driver").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -197,6 +197,14 @@ $(document).ready(function  () {
 		    return false;
 		}
 	});
+
+	$('#driver').change(function(){
+		if($('#driver').val() === ''){
+			$('#btnSubmit').attr('disabled', 'disabled');
+		} else {
+			$('#btnSubmit').removeAttr('disabled');
+		}
+	})
 
 	//提交
 	//构造提交的json，包括以下 vin 和fault，fault如下
