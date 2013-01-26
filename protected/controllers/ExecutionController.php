@@ -550,93 +550,39 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $stime = '2013-01-01 08:00';
-        $etime = '2013-01-23 16:00';
-        $s = strtotime($stime);
-        $e = strtotime($etime);
-    
-        $sd = date('Ymd', $s);
-        $ed = date('Ymd', $e);
         
-        $sm = date('m', $s);
-        $em = date('m', $e);
+        $date = date('Y-m-d');
 
-        $lastHour = ($e - $s) / 3600;
-        $lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
-
-        $ret = array();
-        if($lastHour <= 24) {//hour
-            $format = 'Y-m-d H';
-            $stime = date($format, $s) . ":00:00";
-            $etime = date($format, $e) . ":00:00";
-        } elseif($lastDay <= 31) {//day
-            $format = 'Y-m-d';
-            //$stime = date($format, $s) . " 00:00:00";             
-            //$etime = date($format, $e) . " 23:59:59";
-            $stime = date($format, $s) . " 08:00:00";                               //added by wujun
-            $eNextD = strtotime('+1 day', $e);      //next day                      //added by wujun
-            $etime = date($format, $eNextD) . " 07:59:59";  //befor next workday    //added by wujun
-        } else {//month
-            $format = 'Y-m';
-            //$stime = date($format, $s) . "-01 00:00:00";
-            //$etime = date('Y-m-t', $e) . " 23:59:59";
-            $stime = date($format, $s) . "-01 08:00:00";    //firstday              //added by wujun
-            $eNextM = strtotime('+1 month', $e);            //next month            //added by wujun
-            $etime = date('Y-m', $eNextM) . "-01 07:59:59"; //next month firstday   //added by wujun
-        }
-
-         echo $stime;
-         echo '<br>';
-         echo $etime;
-         echo '<br>';
-
-         $s = strtotime($stime);
-        $e = strtotime($etime);
-    
-        $sd = date('Ymd', $s);
-        $ed = date('Ymd', $e);
         
-        $lastHour = ($e - $s) / 3600;
-        $lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
-
-        $ret = array();
-        if($lastHour <= 24) {//hour
-            $pointFormat = 'H';
-            $format = 'Y-m-d H:i:s';
-            $slice = 3600;
-        } elseif($lastDay <= 31) {//day
-            $pointFormat = 'm-d';
-            $format = 'Y-m-d H';
-            $slice = 86400;
-        } else {//month
-            $pointFormat = 'Y-m';
-            $format = 'Y-m';
-            //$slice = 86400 * 31;      //deleted by wujun
-        }
+            $condition = "plan_date='$date'";
         
-        $t = $s;
-        while($t < $e) {
-            if($pointFormat === 'H') {
-                $point = date($pointFormat, $t) . '～' . date($pointFormat, $t + $slice) . '点';
-            } else {
-                $point = date($pointFormat, $t);
+        $values = array($date);
+        
+         $condition .= " AND car_series='F0'";
+        
+        //modifed by wujun
+        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
+
+        $datas = array();
+        $seeker = new ConfigSeeker();
+        foreach ($plans as $plan) {
+            $temp = $plan->getAttributes();
+            $temp['config_name'] = $seeker->getName($temp['config_id']);
+            
+            $length = strlen($temp['car_type']);
+            $typeName = '';
+            $i = 0;
+            while($i < $length){
+                if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
+                    break;
+                else {
+
+                    $typeName .= $temp['car_type'][$i];
+                    $i++;
+                    echo $typeName;
+                    echo '<br>';
+                }
             }
-
-            //added by wujun
-            if($pointFormat === 'Y-m') {
-                $slice = 86400 * intval(date('t' ,$t));
-            }
-
-            $ret[] = array(
-                'stime' => date($format, $t),
-                'etime' => date($format, $t + $slice),
-                'point' => $point,
-            );  
-            $t += $slice;           
         }
-
-        print_r($ret);
-
-        
     }
 }

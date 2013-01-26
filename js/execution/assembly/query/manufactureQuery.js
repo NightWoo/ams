@@ -685,13 +685,12 @@ $(document).ready(function () {
 		    			var tr = $("<tr />");
 						//$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
-		    			$("<td />").html(value.car_series).appendTo(tr);
 		    			$("<td />").html(value.plan_date).appendTo(tr);
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
-		    			$("<td />").html(value.config_name).appendTo(tr);
+		    			$("<td />").html(value.car_series).appendTo(tr);
 		    			$("<td />").html(value.car_type).appendTo(tr);		//added by wujun
-		    			$("<td />").html(value.color).appendTo(tr);
+		    			$("<td />").html(value.config_name).appendTo(tr);
 		    			
 		    			if (value.cold_resistant == "1") {
 		    				$("<td />").html("耐寒").appendTo(tr);
@@ -699,8 +698,10 @@ $(document).ready(function () {
 		    				$("<td />").html("非耐寒").appendTo(tr);
 		    			}
 		    			
+		    			$("<td />").html(value.color).appendTo(tr);
 		    			$("<td />").html(value.car_year).appendTo(tr);
 		    			$("<td />").html(value.order_type).appendTo(tr);
+		    			$("<td />").html(value.special_order).appendTo(tr);
 		    			$("<td />").html(value.remark).appendTo(tr);
 
 		    			$("#tablePlan tbody").append(tr);
@@ -717,7 +718,7 @@ $(document).ready(function () {
 						$("#prePlan a span").html("&lt;");
 						$("#firstPlan a span").html("&lt;&lt;");
 					}
-		    		if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+		    		if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
 		    			//$(".nextPage").hide();
 						$("#nextPlan a span").html("&times;");
 						$("#lastPlan a span").html("&times;");

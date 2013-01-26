@@ -33,6 +33,7 @@ class PlanSeeker
         foreach ($plans as $plan) {
             $temp = $plan->getAttributes();
             $temp['config_name'] = $seeker->getName($temp['config_id']);
+            $temp['car_type'] = $this->cutCarType($temp['car_type']);
             $datas[] = $temp;
         }
 
@@ -102,6 +103,7 @@ class PlanSeeker
 		$seeker = new ConfigSeeker();
 		foreach($datas as &$data) {
 			$data['config_name'] = $seeker->getName($data['config_id']);
+			$data['car_type'] = $this->cutCarType($data['car_type']);
 		}
 
         return array($total,  $datas); 
@@ -266,5 +268,24 @@ class PlanSeeker
 		}
 
 		return array($stime, $etime);
+	}
+
+	private function cutCarType($type) {
+		$length = strlen($type);
+        $typeName = '';
+		$i = 0;
+        while($i < $length){
+            if($type[$i] === '(' || $i === stripos($type, '（')){
+            	break;
+            } else {	
+            	$typeName .= $type[$i];
+            	$i++;
+            }
+        }
+        if(empty($typeName)){
+        	$typeName = $type;
+        }
+
+        return $typeName;
 	}		
 }

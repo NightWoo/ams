@@ -75,10 +75,10 @@
 												<th class="">待上线</th>
 												<th class="">车系</th>
 												<th class="">车型</th>
-												<th class="">颜色</th>
-												<th class="">年份</th>
 												<th class="">配置</th>
 												<th class="">耐寒性</th>
+												<th class="">颜色</th>
+												<th class="">年份</th>
 												<!-- <th class="T_dingdanleixing_width">订单类型</th> -->
 												<th class="">特殊单号</th>
 												<th class="">备注</th>
@@ -105,10 +105,10 @@
 												<th class="">待上线</th>
 												<th class="">车系</th>
 												<th class="">车型</th>
-												<th class="">颜色</th>
-												<th class="">年份</th>
 												<th class="">配置</th>
 												<th class="">耐寒性</th>
+												<th class="">颜色</th>
+												<th class="">年份</th>
 												<!-- <th class="T_dingdanleixing_width">订单类型</th> -->
 												<th class="">特殊单号</th>
 												<th class="">备注</th>

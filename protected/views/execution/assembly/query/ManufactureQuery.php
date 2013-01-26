@@ -230,16 +230,17 @@
                             <table id="tablePlan" class="table table-condensed table-hover" style="display: none;">
                                 <thead>
                                     <th>批次号</th>
-                                    <th>车系</th>
                                     <th>计划日期</th>
                                     <th>数量</th>
                                     <th>完成</th>
-                                    <th>配置</th>
+                                    <th>车系</th>
                                     <th>车型</th>
-                                    <th>颜色</th>
+                                    <th>配置</th>
                                     <th>耐寒性</th>
+                                    <th>颜色</th>
                                     <th>年份</th>
                                     <th>订单类型</th>
+                                    <th>特殊单号</th>
                                     <th>备注</th>
                                 </thead>
                                 <tbody>

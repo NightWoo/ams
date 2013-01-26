@@ -16,7 +16,7 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					$("#btnSubmit").removeAttr("disabled").focus();
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
