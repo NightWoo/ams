@@ -1279,7 +1279,7 @@ $(document).ready(function () {
 					type: 'pie',
 					name: '停线类型',
 					data: [],
-					center: [1000,100],
+					center: [1100,80],
 					size: 150,
 					showInLegend: false,
 					dataLabels: {
@@ -1291,7 +1291,7 @@ $(document).ready(function () {
 						},
 						distance: -30,
             			formatter: function() {
-                			return this.point.name +':<br/>'+ (this.y * 100).toFixed(1) + '%';
+                			return this.point.name +'<br/>'+ (this.y * 100).toFixed(1) + '%';
             				},
             			y: -10,
             			color: 'white',
