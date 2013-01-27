@@ -1,15 +1,16 @@
 $(document).ready(function () {
 	var sessionData = {};
 	sessionData[$("#sessionName").val()] = $("#sessionId").val();
-	
+	sessionData['id'] = 1;
 	$('#file_upload').uploadify({
 			'swf'      : '/bms/js/uploadify/uploadify.swf',
-			'uploader' : 'uploadify.php',
+			'uploader' : '/bms/config/upload',
 			'buttonText' : '本地文件',
 			'auto'     : false,
 			'queueID' : 'queue1',
 		    'width'    : 86,
 		    'uploadLimit' : 1,
+			'fileObjName' : 'frontImage',//backImage
 		    'removeTimeout' : 0,
 		    'formData' : sessionData,
 		    'onSelect' : function(file) {
