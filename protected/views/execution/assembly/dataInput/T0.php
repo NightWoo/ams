@@ -4,10 +4,15 @@
 		<meta charset="utf-8">
 		<title><?php echo $nodeDisplayName;?></title>
     	<!-- Le styles -->
+    	<link href="/bms/css/common.css" rel="stylesheet">
     	<link rel="stylesheet" type="text/css" href="/bms/css/bootstrap.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="/bms/css/execution/assembly/dataInput/T0.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
-		<link href="/bms/css/common.css" rel="stylesheet">
+		<style type="text/css" media="screen">
+		.printable{
+			display: none;
+		}
+	</style>
     	<!-- <link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/dataInput/T0.css" rel="stylesheet"> -->
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
@@ -125,8 +130,44 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="display:none;">
-			print it
+		<div class="printable" style="width:793pt;height:1213pt;">
+			<table class="" style="width:100%">
+				<tr>
+					<td rowspan="2" width="33%"><img src="" class="printBarCode"></td>
+					<td width="54%" class="printType"></td>
+					<td style="text-align:right;" width="13%" class="printSeries"></td>
+				</tr>
+				<tr>
+					<td class="printConfig"></td>
+					<td style="text-align:right;" class="printSerialNumber"></td>
+				</tr>
+			</table>
+			<img src="" width="793" height="1048" class="printFrontImage">
+			<table style="width:100%">
+				<tr>
+					<td class="printRemark"></td>
+					<td align="right" style="text-align:right;">1/2</td>
+				</tr>
+			</table>
+
+			<table class="" style="width:100%">
+				<tr>
+					<td rowspan="2" width="33%"><img src="" class="printBarCode"></td>
+					<td width="54%" class="printType"></td>
+					<td style="text-align:right;" width="13%" class="printSeries"></td>
+				</tr>
+				<tr>
+					<td class="printConfig"></td>
+					<td style="text-align:right;" class="printSerialNumber"></td>
+				</tr>
+			</table>
+			<img src="" width="793" height="1048" class="printBackImage">
+			<table style="width:100%">
+				<tr>
+					<td class="printRemark"></td>
+					<td align="right" style="text-align:right;">2/2</td>
+				</tr>
+			</table>
 		</div>
 	</body>
 </html>

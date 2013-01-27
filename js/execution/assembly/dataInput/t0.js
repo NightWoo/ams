@@ -159,7 +159,16 @@ $("document").ready(function() {
 				if(response.success){
 				  	fadeMessageAlert(response.message,"alert-success");
 				  	$("#vinHint").html(response.data[0] + "整车编号" + response.data[1]);	//added by wujun
-				resetPage();
+					resetPage();
+					//fill data to print
+					$(".printBarCode").attr("src", response.data.vinBarCode);
+					$(".printFrontImage").attr("src", response.data.frontImage);
+					$(".printBackImage").attr("src", response.data.backImage);
+					$(".printType").html(response.data.type);
+					$(".printSeries").html(response.data.series);
+					$(".printConfig").html(response.data.config);
+					$(".printSerialNumber").html(response.data.serialNumber);
+					$(".printRemark").html("备注：" + response.data.remark);
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
@@ -185,6 +194,10 @@ $("document").ready(function() {
 		    success: function(){},
 		    error:function(){}
        });
+	}
+
+	function ajaxConfig () {
+		
 	}
 //-------------------END ajax -----------------------	
 
