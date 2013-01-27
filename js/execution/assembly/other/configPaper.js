@@ -1,4 +1,5 @@
 $(document).ready(function () {
+	$("#configContainer").hide();
 	var fileObjNameMap = ["front","back"];
 	$(".config-item").live("click", function (event) {
 		if ($(event.target).is("button")) {
@@ -13,7 +14,8 @@ $(document).ready(function () {
 	});
 
 	$(".btnDelect").live("click",function () {
-		$("#file_upload").uploadify("cancel");
+		var index = $(".config-item").index($(this).parent("div"));
+		$(".uploadify").eq(index).uploadify("cancel");
 	});
 
 	$('.file_upload').uploadify({
@@ -42,9 +44,18 @@ $(document).ready(function () {
 	});
 
 	$("#config").change(function () {
-		ajaxGetConfigDetail($(this).val());
+		resetConfigItem();
+		ajaxSender.ajaxGetConfigDetail($(this).val());
+		$("#configContainer").show();
 	});
 
+	function resetConfigItem () {
+		$(".config-item button").removeClass().addClass("btn btn-primary");
+		$(".config-item input[type=text]").removeAttr("disabled");
+		$(".config-item .btnDelect").hide();
+		$(".config-item .notyet").show();
+		// $('.uploadify').uploadify('disable', false);
+	}
 
 	var ajaxSender = {
 		ajaxGetCarType : function (series) {
@@ -57,6 +68,7 @@ $(document).ready(function () {
 					if(response.success){
 						$("#carType").text("");
 						$("#config").text("");
+						$("<option />").attr("value", "").html("").appendTo($("#carType"));
 					  	$(response.data).each(function () {
 					  		$("<option />").attr("value", this.id).html(this.name).appendTo($("#carType"));
 					  	});
@@ -76,6 +88,7 @@ $(document).ready(function () {
 				success: function(response){
 					if(response.success){
 						$("#config").text("");
+						$("<option />").attr("value", "").html("").appendTo($("#config"));
 					  	$(response.data).each(function () {
 					  		$("<option />").attr("value", this.id).html(this.name).appendTo($("#config"));
 					  	});
@@ -94,6 +107,23 @@ $(document).ready(function () {
 				data:  {"id": id},
 				success: function(response){
 					if(response.success){
+						var index = 0;//handle front
+						if (response.data.front != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled");
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
+
+						index = 1;//handle back
+						if (response.data.back != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled");
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
 					}
 					else{
 					}

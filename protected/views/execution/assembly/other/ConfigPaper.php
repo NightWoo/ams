@@ -89,9 +89,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<label style="">主配置单正面</label>
 						<input type="file" name="file_upload" id="file_upload" class="file_upload"/>
 						<input class="span7" id="testInput" type="text" disabled>
-						<button class="btn btn-primary">上传</button>
+						<button class="btn btn-primary disabled">上传</button>
 						<span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline"><p class="text-success">尚未上传配置单</p></span>
+						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
 					</div>
 					<div class="config-item">
 						<label style="">主配置单反面</label>
