@@ -231,7 +231,7 @@ class ConfigController extends BmsBaseController
 					if(!file_exists($path . '/' . $name)) {
 						$name = '';	
 					}
-					$ret[$image . 'Image'] = $name;
+					$ret[$image] = $name;
                 }
             }
             $this->renderJsonBms(true, 'OK', $ret);
