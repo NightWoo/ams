@@ -16,7 +16,8 @@
 	<link rel="stylesheet" type="text/css" href="/bms/js/uploadify/uploadify.css">
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/configPaper.js"></script>
 	<style type="text/css">
-		.queue{display: inline-block;min-width: 400px;background-color: #FFF;height: 30px;
+	label{margin-bottom: 0}
+		.queue{display: inline-block;min-width: 350px;background-color: #FFF;height: 50px;padding: 5px 10px;
 border-radius: 3px;
 box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 		.uploadify{display: inline-block;}
@@ -79,12 +80,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						</tr>
 					</table>
 				</form>
-				
+				<input type="hidden" id='sessionName' value='<?php echo session_name();?>'></input>
+				<input type="hidden" id='sessionId' value='<?php echo session_id();?>'></input>
 				<div class="well form-inline">
 					<div>
+						<label>主配置单正面</label>
 						<input type="file" name="file_upload" id="file_upload" />
-						<div class="queue" id="queue1"></div>
-						<button id="confirm" class="btn">upload</button>
+						<input class="span7" id="testInput" type="text">
+						<button id="confirm" class="btn btn-primary">上传</button>
 					</div>
 
 

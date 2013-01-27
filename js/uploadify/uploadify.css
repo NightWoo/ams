@@ -65,6 +65,8 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	font: 11px Verdana, Geneva, sans-serif;
 	max-width: 350px;
 	padding: 10px;
+	width: 330px;
+	display: inline-block;
 }
 .uploadify-error {
 	background-color: #FDE5DD !important;
