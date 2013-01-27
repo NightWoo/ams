@@ -12,7 +12,15 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
-	<!--<script type="text/javascript" src="/bms/js/execution/assembly/other/configList.js"></script>-->
+	<script type="text/javascript" src="/bms/js/uploadify/jquery.uploadify-3.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/bms/js/uploadify/uploadify.css">
+	<script type="text/javascript" src="/bms/js/execution/assembly/other/configPaper.js"></script>
+	<style type="text/css">
+		.queue{display: inline-block;min-width: 400px;background-color: #FFF;height: 30px;
+border-radius: 3px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
+		.uploadify{display: inline-block;}
+	</style>
 </head>
 <body>
 	<?php
@@ -73,13 +81,32 @@
 				</form>
 				
 				<div class="well form-inline">
+					<div>
+						<input type="file" name="file_upload" id="file_upload" />
+						<div class="queue" id="queue1"></div>
+						<button id="confirm" class="btn">upload</button>
+					</div>
+
+
+					
 					<table id="tableUpload">
 						<tr>
 							<td class="alignRight"><label>主配置单正面</label></td>
 							<td>
 								<div class="input-prepend">
-									<button class="btn disabled" disabled type="button" id="selectMasterFront">本地文件</button>
-									<input class="span7 disabled" disabled id="localMasterFront" type="text">
+									<form method="post" action="UploadFile.php" id="myForm"
+enctype="multipart/form-data" >
+    <fieldset>
+        <legend>Form Post Test</legend>
+        <input name="uploadedfile" multiple="true" type="file" id="uploader"
+        dojoType="dojox.form.Uploader" label="Select Some Files" >
+        <input type="text" name="album" value="Summer Vacation" />
+        <input type="text" name="year" value="2011" />
+        <input type="submit" label="Submit" dojoType="dijit.form.Button" />
+        <div id="files" dojoType="dojox.form.uploader.FileList"
+        uploaderId="uploader"></div>
+    </fieldset>
+</form>
 								</div>
 							</td>
 							<td>

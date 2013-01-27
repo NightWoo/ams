@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>My Uploadify Implementation</title>
+	<link rel="stylesheet" type="text/css" href="uploadify.css">
+	<style type="text/css">.btn{color: red;background-color: #ccc}
+.queue{display: inline-block;width: 1000px;}
+.uploadify{display: inline-block;}
+	</style>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="jquery.uploadify-3.1.min.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$('#file_upload').uploadify({
+			'swf'      : 'uploadify.swf',
+			'uploader' : 'uploadify.php',
+			'buttonText' : '浏览...',
+			'buttonClass' : 'btn',
+			 'auto'     : false,
+			 'queueID' : 'queue1',
+			  'width'    : 100,
+			  'uploadLimit' : 1,
+			  'removeTimeout' : 0
+
+			// Your options here
+		});
+		$('#file_upload2').uploadify({
+			'swf'      : 'uploadify.swf',
+			'uploader' : 'uploadify.php',
+			'buttonText' : '浏览...',
+			'buttonClass' : 'btn',
+			 'auto'     : false,
+			 'queueID' : 'queue2',
+			  'width'    : 100,
+			  'uploadLimit' : 1,
+			  'removeTimeout' : 0
+
+			// Your options here
+		});
+	});
+	</script>
+</head>
+<body>
+	<div>
+<input type="file" name="file_upload" id="file_upload" />
+<div class="queue" id="queue1"></div>
+<a href="">upload</a>
+</div>
+<div>
+<input type="file" name="file_upload2" id="file_upload2" />
+<div class="queue" id="queue2"></div>
+<a href="">upload</a>
+</div>
+</body>
+</html>
