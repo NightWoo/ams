@@ -4,17 +4,21 @@ Yii::import('application.models.ConfigSeeker');
 Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.CarConfigListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
+Yii::import('application.models.FileUpload.FileUpload');
 
 class ConfigController extends BmsBaseController 
 {
-	/**
-	 * Declares class-based actions.
-	 */
-	public function actions()
+	public function accessRules()
 	{
 		return array(
+			array('allow',
+				  'actions' => array('upload'),
+				  'users' => array('*'),
+			),
 		);
 	}
+
+	
 	
 	//added by wujun
 	public function actionSearch() {
@@ -210,6 +214,79 @@ class ConfigController extends BmsBaseController
 		} catch(Exception $e) {
 			$transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionShowImages() {
+		$id = $this->validateIntVal('id', 0);
+        try{
+            $config = CarConfigAR::model()->findByPk($id);
+			$ret = $config->attributes;
+            if(!empty($config)) {
+                $images = array('front', 'back');
+                $path = "/home/work/bms/web/bms/configImage/" . $config->id;
+                foreach($images as $image) {
+                    $name = $image . '.jpg';
+					if(!file_exists($path . '/' . $name)) {
+						$name = '';	
+					}
+					$ret[$image . 'Image'] = $name;
+                }
+            }
+            $this->renderJsonBms(true, 'OK', $ret);
+		}catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+
+	}
+
+	public function actionDeleteImage() {
+        $id = $this->validateIntVal('id', 0);
+		$type = $this->validateStringVal('type', '');
+        try{
+            $config = CarConfigAR::model()->findByPk($id);
+            if(!empty($config)) {
+                $images = $type;
+                $path = "/home/work/bms/web/bms/configImage/" . $config->id;
+				$name = $type . '.jpg';
+				$fileName = $path . '/' . $name;
+				if(file_exists($fileName)) {
+					@system("rm $fileName");
+				}
+            }
+            $this->renderJsonBms(true, 'OK', '');
+        }catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+	}
+
+	public function actionUpload() {
+		$id = $this->validateIntVal('id', 0);
+        try{
+            $config = CarConfigAR::model()->findByPk($id);
+            if(!empty($config)) {
+				$images = array('front', 'back');
+				$path = "/home/work/bms/web/bms/configImage/" . $config->id;
+				foreach($images as $image) {
+					$namePrefix = $image; 
+					$infos = FileUpload::uploadImage($image, $path, $namePrefix);
+				}
+            }
+            $this->renderJsonBms(true, 'OK', '');
+        }catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+	}
+
+	protected function reloadSession() {
+		$session_name = session_name();
+
+		if (!isset($_POST[$session_name])) {
+			exit;
+		} else {
+			session_destroy();
+			session_id($_POST[$session_name]);
+			session_start();
 		}
 	}
 }
