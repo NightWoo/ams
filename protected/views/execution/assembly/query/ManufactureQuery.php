@@ -96,7 +96,7 @@
                             <td>&nbsp;&nbsp;</td>
                             <td class="withNode">
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6" disabled>M6</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
                             </td>
                             <!-- <td>
@@ -116,7 +116,7 @@
                             <li><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="pauseDetail"><a href="#dataPauseDetail" data-toggle="tab">停线明细</a></li>
                             <li id="pauseDistribution"><a href="#pauseDistribute" data-toggle="tab">停线分析</a></li>
-                            <li id="useRate"><a href="#" data-toggle="tab">生产利用率</a></li>
+                            <li id="useRate"><a href="#paneUseRate" data-toggle="tab">生产利用率</a></li>
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
                             <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
@@ -199,20 +199,27 @@
                         </div>
 
                         <div class="tab-pane" id="pauseDistribute">
-                            <div id="radioPauseDistribute">   
-                                <!--<span>分布条件:</span>-->
+                            <!-- <div id="radioPauseDistribute">   
                                 <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked>
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked="checked">
                                   停线类型
                                 </label>
                                 <label class="radio inline">
                                   <input type="radio" name="optionsRadios" id="optionsRadios2" value="duty_department_chart_data">
                                   责任部门
                                 </label>
+                            </div> -->
+                            <div id="pauseAnalysisContainer" style="min-width: 400px; height: 500px; margin: 0 auto">
                             </div>
-                            <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto">
-                            </div>
-                            <table id="tablePauseDistribute" class="table table-condensed">
+                            <table id="tablePauseAnalysis" class="table table-condensed">
+                                <thead />
+                                <tbody />
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="paneUseRate">
+                            <div id="useRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <table id="tableUseRate" class="table table-condensed">
                                 <thead />
                                 <tbody />
                             </table>
@@ -222,16 +229,17 @@
                             <table id="tablePlan" class="table table-condensed table-hover" style="display: none;">
                                 <thead>
                                     <th>批次号</th>
-                                    <th>车系</th>
                                     <th>计划日期</th>
                                     <th>数量</th>
                                     <th>完成</th>
-                                    <th>配置</th>
+                                    <th>车系</th>
                                     <th>车型</th>
-                                    <th>颜色</th>
+                                    <th>配置</th>
                                     <th>耐寒性</th>
+                                    <th>颜色</th>
                                     <th>年份</th>
                                     <th>订单类型</th>
+                                    <th>特殊单号</th>
                                     <th>备注</th>
                                 </thead>
                                 <tbody>

@@ -37,6 +37,32 @@
 							<div>
 								<label>VIN</label>
 								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
+								<select name="" id="driver" class="input-small" disalbled='disabled'>
+									<option value="" selected>驾驶员</option>
+									<option value="149">陈亚军</option>
+									<option value="112">樊后来</option>
+									<option value="152">凡鹏飞</option>
+									<option value="142">方祥</option>
+									<option value="135">郭胜军</option>
+									<option value="145">郭振华</option>
+									<option value="146">何征兵</option>
+									<option value="148">胡亚南</option>
+									<option value="140">黄彬</option>
+									<option value="156">黄水江</option>
+									<option value="143">刘泮胜</option>
+									<option value="137">毛保林</option>
+									<option value="141">糜芳</option>
+									<option value="153">石仕全</option>
+									<option value="151">孙昌伍</option>
+									<option value="136">滕向军</option>
+									<option value="138">田佳岸</option>
+									<option value="155">王志刚</option>
+									<option value="139">肖志虎</option>
+									<option value="147">杨思强</option>
+									<option value="144">杨自西</option>
+									<option value="150">曾海龙</option>
+									<option value="154">赵松</option>
+								</select>
 								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
 								<button id="reset" type="reset" class="btn">清空</button>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>

@@ -1,74 +1,3 @@
-!$(function () {
-	window.pause = window.pause || {};
-	window.pause.pie = {
-		pieAjaxData: {},
-
-		pieData: {
-			chart: {
-				renderTo: 'pieContainerPauseDistribute',
-				plotBackgroundColor: null,
-				plotBorderWidth: null,
-				plotShadow: false
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				href: '',
-				text: ''
-			},
-			tooltip: {
-				pointFormat: '{series.name}: <b>{point.percentage}%</b>',
-				percentageDecimals: 1
-			},
-			plotOptions: {
-				 pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(1) +' %';
-                        }
-                    }
-                }
-			},
-			series: [{
-				type: 'pie',
-				name: '停线分析',
-				data: []
-			}]
-		},
-
-		drawPausePie: function(type) {
-			this.pieData.series[0].data = this.pieAjaxData[type].series;
-			var chart;
-			chart = new Highcharts.Chart(this.pieData);
-		},
-
-		updatePausePieTable: function (type) {
-			$("#tablePauseDistribute thead").html('<tr />');
-			$("#tablePauseDistribute tbody").html('<tr />');
-			var thTr = $("#tablePauseDistribute tr:eq(0)");
-			var dataTr = $("#tablePauseDistribute tr:eq(1)");
-			var percentageTr = $("#tablePauseDistribute tr:eq(2)");
-			if(type === 'cause_type_chart_data')
-				$('<td />').html('停线类型').appendTo(thTr);
-			else if(type === 'duty_department_chart_data')
-				$('<td />').html('责任部门').appendTo(thTr);
-			$('<td />').html('百分比').appendTo(percentageTr);
-			$('<td />').html('停线时间').appendTo(dataTr);
-			$.each(this.pieAjaxData[type].detail, function (index,value) {
-				$('<td />').html(value.name).appendTo(thTr);
-				$('<td />').html(value.percentage).appendTo(percentageTr);
-				$('<td />').html(value.howlong).appendTo(dataTr);
-			});
-		}
-	};
-});
-
 $(document).ready(function () {
 	initPage();
 //------------------- common functions -----------------------	
@@ -104,6 +33,8 @@ $(document).ready(function () {
 			ajaxQueryPause(1);
 		else if (index == 4)
 			ajaxPauseDistribute();
+		else if (index == 5)
+			ajaxQueryUseRate();
 		else if (index === 7)
 			ajaxQueryPlan(1);
 		else if (index === 8)
@@ -330,6 +261,8 @@ $(document).ready(function () {
 			ajaxQueryPause(1);
 		else if (index == 4)
 			ajaxPauseDistribute();
+		else if (index == 5)
+			ajaxQueryUseRate();
 		else if (index === 7)
 			ajaxQueryPlan(1);
 		else if (index === 8)
@@ -477,7 +410,7 @@ $(document).ready(function () {
         carSeries = data.carSeries;
         lineData = data.series;
         $.each(carSeries, function (index,series) {
-            lineSeries[index] = {name : series + "车辆统计", data: prepare(lineData.y[series])};
+            lineSeries[index] = {name : series, data: prepare(lineData.y[series])};
         });
 
 		var chart;
@@ -504,6 +437,11 @@ $(document).ready(function () {
                 }
             },
             yAxis: {
+            	labels: {
+                    formatter: function() {
+                        return Math.round(this.value);
+                    }
+                },
                 title: {
                     text: '车辆数'
                 },
@@ -542,15 +480,10 @@ $(document).ready(function () {
 		
 		var thTr = $("#tableStatistic tr:eq(0)");
         $("<td />").html("日期").appendTo(thTr);    
-        
-		$.each(carSeries, function (index,value) {
-            $("<td />").html(value + ".车辆数").appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
-        });
-
-         //合计,added by wujun
-		$("<td />").html("合计").appendTo(thTr);
-        $.each(total, function (index, value) {
-        	$("<td />").html(value.carTotal).appendTo($("#tableStatistic tr:eq(" + (index*1+1) + ")"));
+        $("<td />").html("合计").appendTo(thTr);
+		$.each(carSeries, function (index, series) {
+            $("<td />").html(series + "_车辆数").appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
+            $("<td />").html(total[series]).appendTo($("#tableStatistic tr:eq(" + (index*1+1) + ")"));
         });
 
 		$.each(detail, function (index,value) {
@@ -595,7 +528,8 @@ $(document).ready(function () {
 				"section": $("#section").val(),	
 				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
-				"curPage": targetPage || 1
+				"curPage": targetPage || 1,
+				"orderBy": 'DESC'
 			},
 			success: function(response) {
 				if(response.success) {
@@ -673,9 +607,12 @@ $(document).ready(function () {
 			success: function(response) {
 				if(response.success) {
 					$("#pieContainerPauseDistribute").html("");
-					pause.pie.pieAjaxData = response.data;
-					pause.pie.drawPausePie('cause_type_chart_data');
-					pause.pie.updatePausePieTable('cause_type_chart_data');
+					var type = $('#radioPauseDistribute input:radio[name="optionsRadios"]:checked').val();
+					// mQuery.pie.pieAjaxData = response.data;
+					// mQuery.pie.drawPausePie(type);
+					// mQuery.pie.updatePausePieTable(type);
+					mQuery.pauseAnalysis.pauseAjaxData = response.data;
+					mQuery.pauseAnalysis.drawAnalysis();
 				} else {
 					alert(response.message);
 				}
@@ -689,9 +626,35 @@ $(document).ready(function () {
 	$('#radioPauseDistribute :radio').change(function () {
 		$('#pieContainerPauseDistribute').html('');
 		var type = $(this).val();
-		pause.pie.drawPausePie(type);
-		pause.pie.updatePausePieTable(type);
+		mQuery.pie.drawPausePie(type);
+		mQuery.pie.updatePausePieTable(type);
 	});
+
+	function ajaxQueryUseRate() {
+		var ajaxData ={
+				"startTime": $("#startTime").val(),
+				"endTime": $("#endTime").val(),
+			}
+			$.ajax({
+			type: "get",
+			dataType: "json",
+			url: QUERY_USE_RATE,
+			data: ajaxData,
+			success: function(response) {
+				if(response.success) {
+					$("#useRateContainer").html("");
+					mQuery.useRate.useRateAjaxData = response.data;
+					mQuery.useRate.drawUseRate();
+					mQuery.useRate.updateUseRateTable();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
 
 	function ajaxQueryPlan(targetPage) {
 		// //get series for query
@@ -724,13 +687,12 @@ $(document).ready(function () {
 		    			var tr = $("<tr />");
 						//$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
-		    			$("<td />").html(value.car_series).appendTo(tr);
 		    			$("<td />").html(value.plan_date).appendTo(tr);
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
-		    			$("<td />").html(value.config_name).appendTo(tr);
+		    			$("<td />").html(value.car_series).appendTo(tr);
 		    			$("<td />").html(value.car_type).appendTo(tr);		//added by wujun
-		    			$("<td />").html(value.color).appendTo(tr);
+		    			$("<td />").html(value.config_name).appendTo(tr);
 		    			
 		    			if (value.cold_resistant == "1") {
 		    				$("<td />").html("耐寒").appendTo(tr);
@@ -738,8 +700,10 @@ $(document).ready(function () {
 		    				$("<td />").html("非耐寒").appendTo(tr);
 		    			}
 		    			
+		    			$("<td />").html(value.color).appendTo(tr);
 		    			$("<td />").html(value.car_year).appendTo(tr);
 		    			$("<td />").html(value.order_type).appendTo(tr);
+		    			$("<td />").html(value.special_order).appendTo(tr);
 		    			$("<td />").html(value.remark).appendTo(tr);
 
 		    			$("#tablePlan tbody").append(tr);
@@ -756,7 +720,7 @@ $(document).ready(function () {
 						$("#prePlan a span").html("&lt;");
 						$("#firstPlan a span").html("&lt;&lt;");
 					}
-		    		if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+		    		if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
 		    			//$(".nextPage").hide();
 						$("#nextPlan a span").html("&times;");
 						$("#lastPlan a span").html("&times;");
@@ -823,7 +787,7 @@ $(document).ready(function () {
 		carSeries = data.carSeries;
 		lineData = data.series;
 		$.each(carSeries, function (index, series) {
-			lineSeries[index] = {name: series + '_完成率', data: prepare(lineData.y[series])};
+			lineSeries[index] = {name: series, data: prepare(lineData.y[series])};
 		});
 		var chart;
 		chart = new Highcharts.Chart({
@@ -850,7 +814,7 @@ $(document).ready(function () {
 			yAxis: {
 				labels: {
 					formatter: function() {
-						return (this.value * 100) + '%';
+						return Math.round(this.value * 100) + '%';
 					}
 				},
 				title: {
@@ -867,7 +831,7 @@ $(document).ready(function () {
 			tooltip: {
 				formatter: function() {
 					return '<b>' + this.series.name + '</b><br/>' +
-					this.x + ': ' + this.y;
+					this.x + ': ' + (this.y * 100).toFixed(0) + '%';
 				}
 			},
 			legend: {
@@ -923,3 +887,432 @@ $(document).ready(function () {
 //-------------------END ajax query -----------------------
 
 });
+
+!$(function () {
+	window.mQuery = window.mQuery || {};
+	window.mQuery.pie = {
+		pieAjaxData: {},
+
+		pieData: {
+			chart: {
+				renderTo: 'pieContainerPauseDistribute',
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+				percentageDecimals: 1
+			},
+			plotOptions: {
+				 pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(1) +' %';
+                        }
+                    }
+                }
+			},
+			series: [{
+				type: 'pie',
+				name: '停线分析',
+				data: []
+			}]
+		},
+
+		drawPausePie: function(type) {
+			this.pieData.series[0].data = this.pieAjaxData[type].series;
+			var chart;
+			chart = new Highcharts.Chart(this.pieData);
+		},
+
+		updatePausePieTable: function (type) {
+			$("#tablePauseDistribute thead").html('<tr />');
+			$("#tablePauseDistribute tbody").html('<tr />');
+			var thTr = $("#tablePauseDistribute tr:eq(0)");
+			var dataTr = $("#tablePauseDistribute tr:eq(1)");
+			var percentageTr = $("#tablePauseDistribute tr:eq(2)");
+			if(type === 'cause_type_chart_data')
+				$('<td />').html('停线类型').appendTo(thTr);
+			else if(type === 'duty_department_chart_data')
+				$('<td />').html('责任部门').appendTo(thTr);
+			$('<td />').html('百分比').appendTo(percentageTr);
+			$('<td />').html('停线时间').appendTo(dataTr);
+			$.each(this.pieAjaxData[type].detail, function (index,value) {
+				$('<td />').html(value.name).appendTo(thTr);
+				$('<td />').html(value.percentage).appendTo(percentageTr);
+				$('<td />').html(value.howlong).appendTo(dataTr);
+			});
+		}
+	};
+
+	window.mQuery.useRate = {
+
+		useRateAjaxData : {},
+
+		useRateChartData: {
+			chart: {
+				renderTo: 'useRateContainer',
+			},
+
+			title: {
+				text: '',
+				x: -20	//center
+			},
+
+			credits: {
+				href: '',
+				text: ''
+			},
+
+			xAxis: {
+				categories: {},
+                labels: {
+                    rotation: -45,
+                    align: 'right'
+                }
+			},
+
+			yAxis: {
+				labels: {
+                    formatter: function() {
+                        return Math.round(this.value * 100) + '%';
+                    }
+                },
+                title: {
+                    text: '生产利用率'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                min: 0,
+            	max: 1
+			},
+
+			tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ Math.round(this.y * 100) + '%';
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            plotOptions:{
+                line:{
+                    dataLabels: { 
+                        enabled: true,
+                        formatter: function() {
+                            if(!this.point.show)
+                                return '';
+                            return Math.round(this.y * 100) + '%';
+                        }
+                    }
+                },
+                series: {
+            		cursor: 'pointer',
+            		point: {
+		                events: {
+		                    click: function() {
+		                        // console.log(this.series.name);
+		                        console.log(this.series.name);
+                        		console.log("len:" + this.series.chart.series.length);
+		                        console.log(this.x + ":" + this.y);
+		                        mQuery.useRate.toggleClickPointData(this.x, this.y, this.series.index);
+		                        var chart;
+								chart = new Highcharts.Chart(mQuery.useRate.useRateChartData);
+		                    }
+		                }
+		            }
+            	}
+            },
+            series: []
+
+		},
+	
+		drawUseRate: function() {
+			var lineSeries = [];
+			shift = this.useRateAjaxData.shift;
+			lineData = this.useRateAjaxData.series;
+			$.each(shift, function (index, shift) {
+				lineSeries[index] = {name:shift, data:mQuery.useRate.prepare(lineData.y[shift])};
+			});
+
+			this.useRateChartData.series = lineSeries;
+			this.useRateChartData.xAxis.categories = lineData.x;
+			var chart;
+			chart = new Highcharts.Chart(this.useRateChartData);
+		},
+	
+		updateUseRateTable: function() {
+			var shift = this.useRateAjaxData.shift;
+			var detail = this.useRateAjaxData.detail;
+			var total = this.useRateAjaxData.total;
+
+			$("#tableUseRate thead").html('<tr />');
+			$("#tableUseRate tbody").html('');
+			$.each(shift, function (index,value) {
+				$('<tr /><tr /><tr />').appendTo($('#tableUseRate tbody'));
+			});
+			//get tr
+			var thTr = $('#tableUseRate tr:eq(0)');
+			//first column descriptions
+			$('<td />').html('班次').appendTo(thTr);
+			$.each(shift, function (index, value) {
+				$('<td rowspan=3 />').html(value).appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
+			});
+
+			$("<td />").html("合计").appendTo(thTr);
+			$.each(total, function (index, value) {
+        		$("<td />").html(value.rateTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+1) + ")"));
+        		$("<td />").html(value.productionTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+2) + ")"));
+        		$("<td />").html(value.capacityTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+3) + ")"));
+        	});
+
+			$('<td />').html('日期').appendTo(thTr);
+        	$.each(shift, function (index, value) {
+				$('<td />').html('利用率').appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
+				$('<td />').html('产量').appendTo($('#tableUseRate tr:eq('+(index*3+2)+')'));
+				$('<td />').html('能力').appendTo($('#tableUseRate tr:eq('+(index*3+3)+')'));
+			});
+
+			$.each(detail, function (index,value) {
+				$('<td />').html(value.time).appendTo(thTr);
+				$.each(shift, function (index,shift) {
+					$('<td />').html(value[shift].rate).appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
+					$('<td />').html(value[shift].production).appendTo($('#tableUseRate tr:eq('+(index*3+2)+')'));
+					$('<td />').html(value[shift].capacity).appendTo($('#tableUseRate tr:eq('+(index*3+3)+')'));
+				});
+			});
+
+		},
+
+		toggleClickPointData : function (x, y, index) {
+			// console.log(this.dpuChartData);
+			$(this.useRateChartData.series[index].data).each(function (index, value) {
+				if(value.y == y && value.x == x) {
+					value.show = !value.show;
+					return false;
+				}
+			})
+		},
+
+		prepare : function  (dataArray) {
+            return $(dataArray).map(function (index, item) {                
+                return { x: index, y: item, show: false};
+            });  
+        }
+	};
+
+	window.mQuery.pauseAnalysis = {
+		pauseAjaxData: {},
+
+		analysisData: {
+			chart: {
+				renderTo: 'pauseAnalysisContainer',
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				formatter: function() {
+                    var s;
+                    if (this.point.name) { // the pie chart
+                        s = ''+
+                            this.point.name +': '+ (this.y * 100).toFixed(1) + '%';
+                    } else if(this.y > 0 && this.y < 1){	//percentage
+                    	s =	''+
+                    		this.x  +': '+ (this.y * 100).toFixed(1) + '%';
+                    }else{		//column
+                        s = ''+
+                            this.x  +': '+ parseInt(this.y / 60)+ '分' + (this.y % 60) + '秒';
+                    }
+                    return s;
+                }
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
+			xAxis: {
+				categories: [],
+				labels: {
+					rotation: -45,
+					align: 'right',
+					style: {
+						fontSize: '12px',	
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					} 
+				}
+			},
+			yAxis: [
+				{		// Primary yAxis
+					labels: {
+						style: {
+							color: Highcharts.getOptions().colors[4],
+						}
+					},
+					title: {
+						text: '停线时长(分钟)',
+						style: {
+							color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						formatter: function() {
+							return parseInt(this.value/60)
+						}
+					},
+					min: 0
+				},{		// Secondary yAxis
+					title: {
+						text: '累计百分率',
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						formatter: function() {
+							return Math.round(this.value * 100) + '%'
+						},
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					max: 1,
+					min: 0,
+					opposite: true
+				},
+
+			],
+
+			series: [
+				{
+					type: 'column',
+					color: Highcharts.getOptions().colors[4],
+					name: '停线时长',
+					data: [],
+					dataLabels: {
+						enabled:true,
+						style: {
+							// color: Highcharts.getOptions().colors[4],
+							fontSize: '14px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						align: 'center',
+                    	y: 30,
+            			color: 'white',
+            			formatter: function() {
+            				mm = parseInt(this.y / 60);
+            				ss = (this.y % 60);
+
+            				mm = mm<10 ? '0'+mm : mm;
+            				ss = ss<10 ? '0'+ss : ss;
+
+            				return mm + '\'' + ss + '\"';
+            			}
+					}
+				}, {
+					type: 'line',
+					yAxis: 1,
+					showInLegend: false,
+					color: Highcharts.getOptions().colors[4],
+					name: '百分率',
+					data: [],
+					dataLabels:{
+						enabled: true,
+						style: {
+							fontSize: '14px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						align: 'center',
+                    	y: 30,
+            			color: 'white',
+            			formatter: function() {
+            				return (this.y * 100).toFixed(1) + '%';
+            			}
+					},
+					marker: {
+						lineWidth: 2,
+						lineColor: Highcharts.getOptions().colors[4],
+						fillColor: 'white'
+					},
+					lineWidth: 0
+				}, {
+					typs: 'spline',
+					color: Highcharts.getOptions().colors[5],
+					name: '累计百分率',
+					data: [],
+					yAxis: 1,
+					marker: {
+						lineWidth: 2,
+						lineColor: Highcharts.getOptions().colors[5],
+						fillColor: 'white'
+					}
+				}, {
+					type: 'pie',
+					name: '停线类型',
+					data: [],
+					center: [1100,80],
+					size: 150,
+					showInLegend: false,
+					dataLabels: {
+						enabled:true,
+						style: {
+							// color: Highcharts.getOptions().colors[4],
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						distance: -30,
+            			formatter: function() {
+                			return this.point.name +'<br/>'+ (this.y * 100).toFixed(1) + '%';
+            				},
+            			y: -10,
+            			color: 'white',
+					}
+				}
+			]
+		},
+
+		drawAnalysis: function(){
+			this.analysisData.series[0].data = this.pauseAjaxData.series.column;
+			this.analysisData.series[1].data = this.pauseAjaxData.series.p;
+			this.analysisData.series[2].data = this.pauseAjaxData.series.y;
+			this.analysisData.series[3].data = this.pauseAjaxData.series.cSeries;
+			this.analysisData.xAxis.categories = this.pauseAjaxData.series.x;
+			var chart;
+			chart = new Highcharts.Chart(this.analysisData);
+		},
+
+		updatePauseAnalysisTable: function() {
+
+		}
+	}
+});
+

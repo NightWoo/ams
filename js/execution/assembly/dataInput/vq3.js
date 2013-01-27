@@ -82,14 +82,17 @@ $(document).ready(function  () {
 					});
 					var optBodyTd = "<td>" + '<select name="faultSelect"><option value="">-请选择故障-</option>' + optBody + "</td>";
 
-					var checkTd = '<td><input type="checkbox" value=""></td>';
+					// var checkTd = '<td><input type="checkbox" value=""></td>';
 
 					var hiddenAssembly = "<input type='hidden' value='assembly' name='category' />";
-					$("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + checkTd + "</tr>");
+					// $("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + checkTd + "</tr>");
+					$("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + "</tr>");
 					var hiddenPaint = "<input type='hidden' value='paint' name='category' />";
-					$("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + checkTd + "</tr>");
+					// $("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + checkTd + "</tr>");
+					$("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + "</tr>");
 					var hiddenWelding = "<input type='hidden' value='welding' name='category' />";
-					$("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + checkTd + "</tr>");
+					// $("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + checkTd + "</tr>");
+					$("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + "</tr>");
 
 					
 					
@@ -105,10 +108,11 @@ $(document).ready(function  () {
 					var mixName = "<td>" + '<select name="compSelect"><option value="">-请选择故障-</option>' + nameOptions + "</select></td>";
 					
 					var mixOption = "<td>" + '<select name="faultSelect"><option value="">-请选择故障-</option>' +  "</select></td>";
-					var mixCheck = '<td><input type="checkbox" value=""></td>';
+					// var mixCheck = '<td><input type="checkbox" value=""></td>';
 					var mixResp = '<td><div class="btn-group responsibility" data-toggle="buttons-radio"><button class="btn" type="button" value="assembly">总装</button><button class="btn" type="button" value="paint">涂装</button><button class="btn" type="button" value="welding">焊装</button></div></td>';
 
-					$("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + mixCheck + mixResp + "</tr>");
+					// $("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + mixCheck + mixResp + "</tr>");
+					$("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + mixResp + "</tr>");
 				};
 				$("#tableMix tbody").find("select[name='faultSelect']").attr("disabled","disabled");
 				$("#tableMix tbody").find("select[name='compSelect']").change(function (){

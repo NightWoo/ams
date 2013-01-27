@@ -164,20 +164,20 @@
                 <label class="control-label" for="">*&nbsp;配置</label>
                 <div class="controls">
                     <!--<input type="text" class="input-medium"  id="newConfig"/>-->
-                    <select name="" id="newConfig" class="input-medium">
-                        <option value="" selected>请选择</option>
-                        <option value="F0实用QA-4">F0实用QA-4</option>
-                        <option value="F0实用QA-5">F0实用QA-5</option>
-                        <option value="F0舒适QA-4">F0舒适QA-4</option>
-                        <option value="F0舒适QA-5">F0舒适QA-5</option>
-                        <option value="F0尊贵QA-4">F0尊贵QA-4</option>
-                        <option value="F0尊贵QA-5">F0尊贵QA-5</option>
-                        <option value="F0实用QA-4北京">F0实用QA-4北京</option>
-                        <option value="F0实用QA-5北京">F0实用QA-5北京</option>
-                        <option value="F0舒适QA-4北京">F0舒适QA-4北京</option>
-                        <option value="F0舒适QA-5北京">F0舒适QA-5北京</option>
-                        <option value="F0实用助力QA-4">F0实用助力QA-4</option>
-                        <option value="F0实用助力QA-5">F0实用助力QA-5</option>
+                    <select name="" id="newConfig" class="input-large">
+                        <option value="" selected>请选择配置</option>
+                        <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
+                        <option value="1.0L实用/QA-4/北京">1.0L实用/QA-4/北京</option>
+                        <option value="1.0L实用/QA-4/助力">1.0L实用/QA-4/助力</option>
+                        <option value="1.0L实用/QA-5">1.0L实用/QA-5</option>
+                        <option value="1.0L实用/QA-5/北京">1.0L实用/QA-5/北京</option>
+                        <option value="1.0L实用/QA-5/助力">1.0L实用/QA-5/助力</option>
+                        <option value="1.0L舒适/QA-4">1.0L舒适/QA-4</option>
+                        <option value="1.0L舒适/QA-4/北京">1.0L舒适/QA-4/北京</option>
+                        <option value="1.0L舒适/QA-5">1.0L舒适/QA-5</option>
+                        <option value="1.0L舒适/QA-5/北京">1.0L舒适/QA-5/北京</option>
+                        <option value="1.0L尊贵/QA-4">1.0L尊贵/QA-4</option>
+                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option>
                     </select>
                 </div>
             </div>
@@ -203,7 +203,7 @@
                         <option value="德兰黑">德兰黑</option>
 						<option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
-                        <option value="伊甸紫">巴西黄</option>
+                        <option value="巴西黄">巴西黄</option>
                         <option value="麦加金">麦加金</option>
                         <option value="雅典银">雅典银</option>  
                     </select> 
@@ -328,20 +328,20 @@
                 <label class="control-label" for="">*&nbsp;配置</label>
                 <div class="controls">
                     <!--<input type="text" class="input-medium" id="editConfig"/>-->
-                    <select name="" id="editConfig" class="input-medium">
+                    <select name="" id="editConfig" class="input-large">
                         <option value="" selected>请选择配置</option>
-                        <option value="F0实用QA-4">F0实用QA-4</option>
-                        <option value="F0实用QA-5">F0实用QA-5</option>
-                        <option value="F0舒适QA-4">F0舒适QA-4</option>
-                        <option value="F0舒适QA-5">F0舒适QA-5</option>
-                        <option value="F0尊贵QA-4">F0尊贵QA-4</option>
-                        <option value="F0尊贵QA-5">F0尊贵QA-5</option>
-                        <option value="F0实用QA-4北京">F0实用QA-4北京</option>
-                        <option value="F0实用QA-5北京">F0实用QA-5北京</option>
-                        <option value="F0舒适QA-4北京">F0舒适QA-4北京</option>
-                        <option value="F0舒适QA-5北京">F0舒适QA-5北京</option>
-                        <option value="F0实用助力QA-4">F0实用助力QA-4</option>
-                        <option value="F0实用助力QA-5">F0实用助力QA-5</option>
+                        <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
+                        <option value="1.0L实用/QA-4/北京">1.0L实用/QA-4/北京</option>
+                        <option value="1.0L实用/QA-4/助力">1.0L实用/QA-4/助力</option>
+                        <option value="1.0L实用/QA-5">1.0L实用/QA-5</option>
+                        <option value="1.0L实用/QA-5/北京">1.0L实用/QA-5/北京</option>
+                        <option value="1.0L实用/QA-5/助力">1.0L实用/QA-5/助力</option>
+                        <option value="1.0L舒适/QA-4">1.0L舒适/QA-4</option>
+                        <option value="1.0L舒适/QA-4/北京">1.0L舒适/QA-4/北京</option>
+                        <option value="1.0L舒适/QA-5">1.0L舒适/QA-5</option>
+                        <option value="1.0L舒适/QA-5/北京">1.0L舒适/QA-5/北京</option>
+                        <option value="1.0L尊贵/QA-4">1.0L尊贵/QA-4</option>
+                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option>
                     </select>
                 </div>
             </div>
@@ -367,7 +367,7 @@
                         <option value="德兰黑">德兰黑</option>
 						<option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
-                        <option value="伊甸紫">巴西黄</option>
+                        <option value="巴西黄">巴西黄</option>
                         <option value="麦加金">麦加金</option>
                         <option value="雅典银">雅典银</option> 
                     </select>

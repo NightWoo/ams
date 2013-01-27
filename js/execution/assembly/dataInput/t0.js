@@ -25,19 +25,19 @@ $("document").ready(function() {
 						leftAll = totalAll - readyAll;
 						var car_series = "<td>" + plans[i].car_series + "</td>";
 						var car_type = "<td>" + plans[i].car_type + "</td>";
-						var color = "<td>" + plans[i].color + "</td>";
-						var car_year = "<td>" + plans[i].car_year + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {
 							var cold_resistant = "<td>耐寒</td>";
 						} else {
 							var cold_resistant = "<td>非耐寒</td>";
 						}
+						var color = "<td>" + plans[i].color + "</td>";
+						var car_year = "<td>" + plans[i].car_year + "</td>";
 						// var order_type = "<td>" + plans[i].order_type + "</td>";
 						var special_order = "<td>" + plans[i].special_order + "</td>";
 						var remark = "<td>" + plans[i].remark + "</td>";
 						//modified by wujun
-						$("#planTable tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + color + car_year + config_name + cold_resistant + /*order_type +*/ special_order + remark + "</tr>");
+						$("#planTable tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + config_name + cold_resistant + color + car_year + /*order_type +*/ special_order + remark + "</tr>");
 					});
 					$("#planDiv").show();
 					$("#infoCount").html(leftAll +" = " + totalAll + " - " + readyAll );
@@ -69,19 +69,19 @@ $("document").ready(function() {
 						var left = "<td>" + (plans[i].total - plans[i].ready) + "</td>";
 						var car_series = "<td>" + plans[i].car_series + "</td>";
 						var car_type = "<td>" + plans[i].car_type + "</td>";
-						var color = "<td>" + plans[i].color + "</td>";
-						var car_year = "<td>" + plans[i].car_year + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {
 							var cold_resistant = "<td>耐寒</td>";
 						} else {
 							var cold_resistant = "<td>非耐寒</td>";
 						}
+						var color = "<td>" + plans[i].color + "</td>";
+						var car_year = "<td>" + plans[i].car_year + "</td>";
 						// var order_type = "<td>" + plans[i].order_type + "</td>";
 						var special_order = "<td>" + plans[i].special_order + "</td>";
 						var remark = "<td>" + plans[i].remark + "</td>";
 						//modified by wujun
-						$("#planTomorrow tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + color + car_year + config_name + cold_resistant + /*order_type +*/ special_order + remark + "</tr>");						
+						$("#planTomorrow tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + config_name + cold_resistant + color + car_year + /*order_type +*/ special_order + remark + "</tr>");						
 					});
 					$("#planDiv").show();
 				}

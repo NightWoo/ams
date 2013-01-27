@@ -62,7 +62,11 @@ body{padding-bottom:20px;}
 .pager li{
     cursor: pointer;
 }
-/*below added by wujun modify bootstrap.css finished*/
+
+.table th, .table td {
+  vertical-align: middle;
+}
+/*added by wujun modify bootstrap.css finished*/
 
 /*bootstrap 2.2.2 add*/
 .pagination {

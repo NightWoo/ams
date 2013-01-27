@@ -66,13 +66,13 @@
                             </div>
                             <div id="tabContent" class="tab-content">
                             	<div class="tab-pane" id="assembly">
-                            		<table id="tableAssembly" class="table">
+                            		<table id="tableAssembly" class="table table-hover table-condensed">
                             			<thead>
                             				<tr>
                             					<td class="span1">序号</td>
-                            					<td class="span3">故障零部件</td>
+                            					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<td class="span2">在线修复</td>
+                            					<!-- <td class="span2">在线修复</td> -->
                                                 <td></td>
                             				</tr>
                             			</thead>
@@ -82,13 +82,13 @@
                             		</table>
                             	</div>
                                 <div class="tab-pane" id="paint">
-                                	<table id="tablePaint" class="table">
+                                	<table id="tablePaint" class="table table-hover table-condensed">
                             			<thead>
                             				<tr>
                             					<td class="span1">序号</td>
-                            					<td class="span3">故障零部件</td>
+                            					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<td class="span2">在线修复</td>
+                            					<!-- <td class="span2">在线修复</td> -->
                                                 <td></td>
                             				</tr>
                             			</thead>
@@ -98,13 +98,13 @@
                             		</table>
                                 </div>
                                 <div class="tab-pane" id="body">
-                                	<table id="tableBody" class="table">
+                                	<table id="tableBody" class="table table-hover table-condensed">
                             			<thead>
                             				<tr>
                             					<td class="span1">序号</td>
-                            					<td class="span3">故障零部件</td>
+                            					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<td class="span2">在线修复</td>
+                            					<!-- <td class="span2">在线修复</td> -->
                                                 <td></td>
                             				</tr>
                             			</thead>
@@ -115,13 +115,13 @@
                                 </div>
                                 
                                 <div class="tab-pane active" id="mix">
-                                	<table id="tableMix" class="table">
+                                	<table id="tableMix" class="table table-hover table-condensed">
                             			<thead>
                             				<tr>
                             					<td class="span1">序号</td>
                             					<td class="span3">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<td class="span2">在线修复</td>
+                            					<!-- <td class="span2">在线修复</td> -->
                                                 <td>责任部门</td>
                             				</tr>
                             			</thead>

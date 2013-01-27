@@ -235,10 +235,16 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
+            $driverId = $this->validateStringVal('driver', 0);
+
+            if(empty($driverId)) {
+                throw new Exception('必须选择驾驶员');
+            }
+
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_START');
 			$car->passNode('VQ3');
-            $car->enterNode('ROAD_TEST_FINISH');
+            $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
 			$fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('在线');
@@ -258,11 +264,16 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
+            $driverId = $this->validateStringVal('driver', 0);
+
+            if(empty($driverId)) {
+                throw new Exception('必须选择驾驶员');
+            }
 
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_FINISH');
 			$car->passNode('VQ3');
-            $car->enterNode('VQ2');
+            $car->enterNode('VQ2', $driverId);
 
 
 			$fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
@@ -448,7 +459,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,录入人员,录入时间\n";
+            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,驾驶员,录入人员,录入时间\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['vin']},";
@@ -463,6 +474,7 @@ class ExecutionController extends BmsBaseController
                 $data['remark'] = str_replace(",", "，",$data['remark']);
                 $content .= "{$data['remark']},";
                 $content .= "{$data['node_name']},";
+                $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
                 $content .= "{$data['pass_time']}\n";
             }
@@ -538,92 +550,39 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $stime = '2012-10-01 08:00';
-        $etime = '2013-01-21 16:00';
-        $conditions = array();
-        if(!empty($stime)){
-            $conditions[] = "pause_time >=  '$stime'";
-        }
-        if(!empty($etime)){
-            $conditions[] = "pause_time <=  '$etime'";
-        }
-        if(!empty($section)){
-            $sql = "SELECT id FROM node WHERE section='$section'";
-            $nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
-            if(empty($nodeIds)) {
-                return 0;   
-            }
-            $nodeIdStr = join(',', $nodeIds);
-            $conditions[] = "node_id IN ($nodeIdStr)";
-        }
-        if(!empty($causeType)){
-            $conditions[] = "cause_type = '$causeType'";
-        }
-        if(!empty($dutyDepartment)){
-            $conditions[] = "duty_department = '$dutyDepartment'";
-        }
-        if(!empty($pauseReason)){
-            $conditions[] = "remark LIKE '%$pauseReason%'";
-        }
         
-        $condition = join(' AND ', $conditions);
+        $date = date('Y-m-d');
 
-        $dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
+        
+            $condition = "plan_date='$date'";
+        
+        $values = array($date);
+        
+         $condition .= " AND car_series='F0'";
+        
+        //modifed by wujun
+        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
 
-        $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
-        $sum = 0;
-        foreach($datas as &$data) {
-            // $node = NodeAR::model()->findByPk($data['node_id']);
-            // if(!empty($node)){
-            //  $data['section'] = $node->section; 
-            // }
+        $datas = array();
+        $seeker = new ConfigSeeker();
+        foreach ($plans as $plan) {
+            $temp = $plan->getAttributes();
+            $temp['config_name'] = $seeker->getName($temp['config_id']);
             
-            if(($data['recover_time'] == 0)){
-                $data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
-            }else {
-                //$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
-                //$data['howlong'] = intval($howlong);
-                $data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+            $length = strlen($temp['car_type']);
+            $typeName = '';
+            $i = 0;
+            while($i < $length){
+                if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
+                    break;
+                else {
+
+                    $typeName .= $temp['car_type'][$i];
+                    $i++;
+                    echo $typeName;
+                    echo '<br>';
+                }
             }
-            $sum += $data['howlong'];
         }
-
-        print_r($sum);
-        // echo dirname(__FILE__);
-        // $dir='/home/work/bms/web/bms/doc/browse/managementSystem/manpower/promotion/';  
-        // $handle=opendir($dir);  
-        // $i=0;  
-        // while(false!==($file=readdir($handle))){  
-        //     if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-        //         //var_dump($file);  
-        //         $i++;  
-        //     }  
-        // }  
-        // closedir($handle);
-        // echo '<br>'; 
-        // echo $i;
-
-
-        // $s = strtotime('2012-12-11');
-        // $e = strtotime('2013-2-21');
-        //             //added by haven't test
-        // $eNextD = strtotime('+1 day', $s);
-        // $stime = date('Y-m-d', $eNextD) . " 07:59:59";
-        // echo $stime;
-        // echo '<br>';
-        //          //added by haven't test
-        // $eNextM = strtotime('+1 month', $e);                   //added by haven't test
-        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        // echo $etime;
-        // echo '<br>';
-
-        // $stime = date('Y-m', $s) . "-01 08:00:00";
-        // $etime = date('Y-m', $eNextM) . "-01 07:59:59";
-        // echo $stime;
-        // echo '<br>';
-        // echo $etime;
-        // echo '<br>';
-
-        
     }
 }

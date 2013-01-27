@@ -46,6 +46,8 @@
 											<span class="label label-info" rel="tooltip" title="车系" id="series"></span>
 											<!--<span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>-->
 											<span class="label label-info" rel="tooltip" title="车型" id="type"></span>
+											<span class="label label-info" rel="tooltip" title="配置" id="config"></span>
+											<span class="label label-info" rel="tooltip" title="耐寒性" id="cold"></span>
 											<span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
 											<span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
 										</div>
@@ -67,7 +69,10 @@
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 -->
 						
-							<div id="ComponentInfo">	
+							
+						</form>
+
+						<div id="ComponentInfo">	
 								<table class="table table-striped table-condensed" id="componentTable">
 									<thead>
 									  <tr>
@@ -80,7 +85,6 @@
 									</tbody>
 								</table>
 							</div>
-						</form>
 						
 					</div>
 									

@@ -16,7 +16,7 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					$("#btnSubmit").removeAttr("disabled").focus();
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -53,7 +53,7 @@ $("document").ready(function() {
 					var data = response.data;
 					$("#printSerialNumber").html(data.serialNumber);
 					$("#printDate").html(data.date);
-					$("#printCarSeries").html(data.type);
+					$("#printCarType").html(data.type);
 					$("#printColor").html(data.color);
 					$("#printMemo").html(data.remark);
 					$("#vinBarcode").attr("src",data.vinBarCode);

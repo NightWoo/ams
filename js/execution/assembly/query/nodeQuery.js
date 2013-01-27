@@ -229,11 +229,12 @@ $(document).ready(function () {
 						var faultTd = "<td>" + value.fault_mode + "</td>";
 						var faultStatusTd = "<td>" + value.fault_status + "</td>";
 		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
+		    			var driverNameTd = "<td>" + value.driver_name + "</td>";
 		    			var createTimeTd = "<td>" + value.create_time + "</td>";
 		    			var userNameTd = "<td>" + value.user_name + "</td>";
 		    			var memoTd = "<td>" + value.modify_time + "</td>";
 		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
-		    				faultStatusTd + nodeNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
+		    				faultStatusTd + nodeNameTd + driverNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();
 		    		});
@@ -327,21 +328,18 @@ $(document).ready(function () {
         var timeTr = $("#tableDpu tr:eq(0)");
         //first column descriptions
         $("<td />").html("日期").appendTo(timeTr);
-        $.each(carSeries, function (index,value) {
-            $("<td />").html(value + ".DPU").appendTo($("#tableDpu tr:eq("+(index*3+1)+")"));
-            $("<td />").html(value + ".故障数").appendTo($("#tableDpu tr:eq("+(index*3+2)+")"));
-            $("<td />").html(value + ".车辆数").appendTo($("#tableDpu tr:eq("+(index*3+3)+")"));
-
-        });
-
-        //合计,added by wujun
 		$("<td />").html("合计").appendTo(timeTr);
-        $.each(total, function (index, value) {
-        	$("<td />").html(value.dpuTotal).appendTo($("#tableDpu tr:eq(" + (index*3+1) + ")"));
-        	$("<td />").html(value.faultTotal).appendTo($("#tableDpu tr:eq(" + (index*3+2) + ")"));
-        	$("<td />").html(value.carTotal).appendTo($("#tableDpu tr:eq(" + (index*3+3) + ")"));
-        });
 
+        $.each(carSeries, function (index,series) {
+            $("<td />").html(series + "_DPU").appendTo($("#tableDpu tr:eq("+(index*3+1)+")"));
+            $("<td />").html(series + "_故障数").appendTo($("#tableDpu tr:eq("+(index*3+2)+")"));
+            $("<td />").html(series + "_车辆数").appendTo($("#tableDpu tr:eq("+(index*3+3)+")"));
+
+            $("<td />").html(total[series]['dpuTotal']).appendTo($("#tableDpu tr:eq("+(index*3+1)+")"));
+            $("<td />").html(total[series]['faultTotal']).appendTo($("#tableDpu tr:eq("+(index*3+2)+")"));
+            $("<td />").html(total[series]['carTotal']).appendTo($("#tableDpu tr:eq("+(index*3+3)+")"));
+
+        });
 
 		$.each(detail, function (index,value) {
             $("<td />").html(value.time).appendTo(timeTr);
@@ -361,7 +359,7 @@ $(document).ready(function () {
         carSeries = data.carSeries;
         lineData = data.series;
         $.each(carSeries, function (index,series) {
-            lineSeries[index] = {name : series + ".DPU", data: prepare(lineData.y[series])};
+            lineSeries[index] = {name : series, data: prepare(lineData.y[series])};
         });
 		var chart;
 		chart = new Highcharts.Chart({
@@ -376,7 +374,7 @@ $(document).ready(function () {
                 x: -20 //center
             },
             credits: {
-                href: 'http://www.bydauto.com.cn',
+                href: '',
                 text: ''
             },
             // subtitle: {
@@ -414,22 +412,12 @@ $(document).ready(function () {
                 borderWidth: 0
             },
             plotOptions:{
-                line:{
-                    dataLabels: { 
-                        enabled: true,
-                        formatter: function() {
-                            if(!this.point.show)
-                                return "";
-                            return this.y;
-                        }
-                    }
-                }
+            
             },
             series: lineSeries	
         });
 	}
-	var distinctLabel = [
-            ];
+	var distinctLabel = [];
 	function prepare (dataArray) {
             return $(dataArray).map(function (index, item) {
                 if ($.inArray(index, distinctLabel) !== -1)
@@ -505,7 +493,7 @@ $(document).ready(function () {
                 text: ''
             },
             credits: {
-                href: 'http://www.bydauto.com.cn',
+                href: '',
                 text: ''
             },
             xAxis: {
@@ -542,7 +530,7 @@ $(document).ready(function () {
                 },
                 labels: {
                     formatter: function() {
-                        return this.value * 100;
+                        return Math.round(this.value * 100) + '%';
                     },
                     style: {
                         color: '#AA4643'
@@ -657,7 +645,7 @@ $(document).ready(function () {
         carSeries = data.carSeries;
         lineData = data.series;
         $.each(carSeries, function (index,series) {
-            lineSeries[index] = {name : series + ".合格率", data: prepare(lineData.y[series])};
+            lineSeries[index] = {name : series, data: prepare(lineData.y[series])};
         });
 		var chart;
         chart = new Highcharts.Chart({
@@ -672,7 +660,7 @@ $(document).ready(function () {
                 x: -20 //center
             },
             credits: {
-                href: 'http://www.bydauto.com.cn',
+                href: '',
                 text: ''
             },
             xAxis: {
@@ -685,7 +673,7 @@ $(document).ready(function () {
             yAxis: {
             	labels: {
                     formatter: function() {
-                        return (this.value * 100) + '%';
+                        return Math.round(this.value * 100) + '%';
                     }
                 },
                 title: {
@@ -702,7 +690,7 @@ $(document).ready(function () {
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y;
+                        this.x +': '+ (this.y * 100).toFixed(1) + '%';
                 }
             },
             legend: {
@@ -724,24 +712,21 @@ $(document).ready(function () {
             $("<tr /><tr /><tr />").appendTo($("#tablePassRate tbody"));
         });
         //get tr
-        //first column descriptions
-        $.each(carSeries, function (index,value) {
-            $("<td />").html(value + ".合格率").appendTo($("#tablePassRate tr:eq("+(index*3+1)+")"));
-            $("<td />").html(value + ".合格数").appendTo($("#tablePassRate tr:eq("+(index*3+2)+")"));
-            $("<td />").html(value + ".车辆数").appendTo($("#tablePassRate tr:eq("+(index*3+3)+")"));
+        var thTr = $("#tablePassRate tr:eq(0)");
+		$("<td />").html("日期").appendTo(thTr);
+		$("<td />").html("合计").appendTo(thTr);
+
+        $.each(carSeries, function (index, series) {
+        	//first column descriptions
+            $("<td />").html(series + "_合格率").appendTo($("#tablePassRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(series + "_合格数").appendTo($("#tablePassRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(series + "_车辆数").appendTo($("#tablePassRate tr:eq("+(index*3+3)+")"));
+
+            $("<td />").html(total[series]['rateTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(total[series]['qualifiedTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(total[series]['carTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+3)+")"));
 
         });        
-
-		var thTr = $("#tablePassRate tr:eq(0)");
-		$("<td />").html("日期").appendTo(thTr);
-
-		//合计,added by wujun
-		$("<td />").html("合计").appendTo(thTr);
-        $.each(total, function (index, value) {
-        	$("<td />").html(value.rateTotal).appendTo($("#tablePassRate tr:eq(" + (index*3+1) + ")"));
-        	$("<td />").html(value.qualifiedTotal).appendTo($("#tablePassRate tr:eq(" + (index*3+2) + ")"));
-        	$("<td />").html(value.carTotal).appendTo($("#tablePassRate tr:eq(" + (index*3+3) + ")"));
-        });
 
 		$.each(detail, function (index,value) {
 			$("<td />").html(value.time).appendTo(thTr);
@@ -864,7 +849,7 @@ $(document).ready(function () {
         $("<td />").html("日期").appendTo(thTr);    
         
 		$.each(carSeries, function (index,value) {
-            $("<td />").html(value + ".车辆数").appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
+            $("<td />").html(value + "_车辆数").appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
         });
 
          //合计,added by wujun
@@ -900,9 +885,10 @@ $(document).ready(function () {
 			    success: function (response) {
 	    			if (response.success) {
 	    				$('#pieContainer').text('');
+	    				var type = $("#divRadio input:radio[name='optionsRadios']:checked").val();
 	    				byd.pie.pieAjaxData = response.data;
-	    				byd.pie.drawPie('component_chart_data');
-	    				byd.pie.updatePieTable('component_chart_data');
+	    				byd.pie.drawPie(type);
+	    				byd.pie.updatePieTable(type);
 	    			} else {
 	    				alert(response.message);
 	    			}

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>节点查询.总装</title>
+		<title>质量查询</title>
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/NodeQuery.css" rel="stylesheet">
@@ -35,7 +35,7 @@
                         <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
                         <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
                         <li><a href="#">数据查询</a><span class="divider">&gt;</span></li>
-                        <li class="active">节点查询</li>                
+                        <li class="active">质量查询</li>                
                 </ul></div><!-- end 面包屑 -->
                 <div>
                 <form id="form" class="well form-inline">
@@ -59,7 +59,7 @@
 									<option value="T0">T0</option> -->
 									<option value="VQ1" selected="true">VQ1静态</option>
 									<option value="CHECK_LINE">VQ2动态.检测线</option>
-									<option value="ROAD_TEST_FINISH">VQ2动态.路试结束</option>
+									<option value="ROAD_TEST_FINISH">VQ2动态.路试</option>
 									<option value="VQ2">VQ2动态.淋雨</option>
 									<option value="VQ3">VQ3外观</option>
 									<!-- <option value="CHECK_IN">入成品库</option>
@@ -82,7 +82,7 @@
                             </td>
                             <td>
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6" disabled>M6</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
                             </td>
                         </tr>
@@ -127,6 +127,7 @@
                                         <th>故障模式</th>
                                         <th>故障状态</th>
                                         <th>节点</th>
+                                        <th>驾驶员</th>
                                         <th>录入人员</th>
                                         <th>录入时间</th>
                                         <th>确认时间</th>

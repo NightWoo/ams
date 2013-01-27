@@ -137,7 +137,7 @@ class FaultSeeker
 			} else {
 				$curCondition = "WHERE n.node_id=$nodeId"; 
 			}
-			$dataSqls[] = "(SELECT n.car_id, n.user_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition ORDER BY n.pass_time DESC)";
+			$dataSqls[] = "(SELECT n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition ORDER BY n.pass_time DESC)";
 			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId $curCondition";
 		}
 
@@ -151,8 +151,8 @@ class FaultSeeker
 			$carId = $data['car_id'];
 			if(empty($data['fault_mode'])) {
                 $data['fault_status'] = '合格';
-                $data['fault_mode'] = '';
-                $data['component_name'] = '';
+                $data['fault_mode'] = '-';
+                $data['component_name'] = '-';
                 $data['create_time'] = $data['pass_time'];
                 $data['modify_time'] = '';
             }
@@ -165,6 +165,11 @@ class FaultSeeker
 				$data['user_name'] = $userInfos[$data['updator']];
 			} else {
 				$data['user_name'] = $userInfos[$data['user_id']];
+			}
+			if(!empty($data['driver_id'])) {
+				$data['driver_name'] = $userInfos[$data['driver_id']];
+			} else {
+				$data['driver_name'] = $data['user_name'];
 			}
 			$data['node_name'] = $nodeInfos[$data['node_id']];
 		}
@@ -388,8 +393,18 @@ class FaultSeeker
 		$ret = array();
 		$dataSeriesX = array();
 		$dataSeriesY = array();
+		$retTotal = array();
 
 		$arraySeries = $this->parseSeries($series);
+		
+		foreach($arraySeries as $series){
+			$retTotal[$series] = array(
+									'faultTotal' => 0,
+        							'carTotal' => 0,
+        							'dpuTotal' => 0,
+								);
+		}
+
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
 			$ee = $queryTime['etime'];
@@ -423,28 +438,16 @@ class FaultSeeker
 						);
 				if(empty($dataSeriesY[$series])) $dataSeriesY[$series] = array();
 				$dataSeriesY[$series][] = empty($cars) ? 0 : round($total / $cars, 2);
+				$retTotal[$series]['faultTotal'] += $total;
+				$retTotal[$series]['carTotal'] += $cars;
+
 			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
 
-        //added by wujun，计算“合计”
-        $retTotal = array();
         foreach($arraySeries as $series) {
-        	list($stT, $etT) = $this->reviseSETime($stime, $etime);
-        	$faultTotal = 0;
-        	foreach($tables as $table=>$nodeName) {
-        		$countSql = "SELECT COUNT(*) FROM $table WHERE create_time >= '$stT' AND create_time <= '$etT'";
-        		$faultTotal += Yii::app()->db->createCommand($countSql)->queryScalar();
-        	}        	
-        	$sql = "SELECT COUNT(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stT' AND pass_time <= '$etT' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
-        	$carTotal = Yii::app()->db->createCommand($sql)->queryScalar();
-        	$retTotal[] = array(
-        		'series' => $series, 
-        		'faultTotal' => $faultTotal,
-        		'carTotal' => $carTotal,
-        		'dpuTotal' => empty($carTotal) ? 0 : round($faultTotal / $carTotal, 2),
-        	);
+        	$retTotal[$series]['dpuTotal'] = empty($retTotal[$series]['carTotal']) ? '-' : round($retTotal[$series]['faultTotal'] / $retTotal[$series]['carTotal'], 2);
         }
 
 		return array('carSeries' => $arraySeries, 'detail' => $ret, 'total' => $retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
@@ -565,6 +568,16 @@ class FaultSeeker
 		$detail = array();
 		$dataSeriesX = array();
 		$dataSeriesY = array();
+		$retTotal = array();
+
+		foreach($arraySeries as $series){
+			$retTotal[$series] = array(
+									'qualifiedTotal' => 0,
+        							'carTotal' => 0,
+        							'rateTotal' => 0,
+								);
+		}
+
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
 			$ee = $queryTime['etime'];
@@ -602,36 +615,16 @@ class FaultSeeker
 					'rate' => empty($cars) ? '-' : $rate * 100 . "%",
 				);
 				$dataSeriesY[$series][] = $rate;
+				$retTotal[$series]['qualifiedTotal'] += $temp[$series]['qualified'];
+				$retTotal[$series]['carTotal'] += $cars;
 			}	
 			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
+
         }
 
-        //added by wujun，计算“合计”
-        $retTotal = array();
         foreach($arraySeries as $series) {
-        	list($stT, $etT) = $this->reviseSETime($stime, $etime);
-
-			$dataSqls = array();
-			$tables = $this->parseTables($node, $series);
-			foreach($tables as $table=>$nodeName) {
-				$dataSqls[] = "(SELECT car_id FROM $table WHERE status != '在线修复' AND create_time >= '$stT' AND create_time <= '$etT')";
-			}
-			$sql = join(' UNION ALL ', $dataSqls);			
-			$datas = Yii::app()->db->createCommand($sql)->queryColumn();
-			$datas = array_unique($datas);
-			$faults = count($datas);
-
-        	$sql = "SELECT COUNT(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stT' AND pass_time <= '$etT' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
-        	$carTotal = Yii::app()->db->createCommand($sql)->queryScalar();
-        	$rate = empty($carTotal) ? 0 : round(($carTotal - $faults) / $carTotal, 3);
-
-        	$retTotal[] = array(
-        		'series' => $series, 
-        		'qualifiedTotal' => $carTotal - $faults,
-        		'carTotal' => $carTotal,
-        		'rateTotal' => empty($carTotal) ? '-' : $rate * 100 . "%",
-        	);
+        	$retTotal[$series]['rateTotal'] = empty($retTotal[$series]['carTotal']) ? '-' : round($retTotal[$series]['qualifiedTotal'] / $retTotal[$series]['carTotal'], 3) * 100 . '%';
         }
 
 		return array('carSeries' => $arraySeries, 'detail'=> $detail, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
@@ -646,6 +639,10 @@ class FaultSeeker
 		$ret = array();
 		$dataSeriesX = array();
 		$dataSeriesY = array();
+		$retTotal = array();
+		foreach($arraySeries as $series){
+			$retTotal[$series] = 0;
+		}
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
 			$ee = $queryTime['etime'];
@@ -657,23 +654,12 @@ class FaultSeeker
 				
 				$temp[$series] = $cars;
 				$dataSeriesY[$series][] = intval($cars);
+				$retTotal[$series] += intval($cars);
 			}	
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
-        //added by wujun，计算“合计”
-        $retTotal = array();
-        foreach($arraySeries as $series) {
-        	list($stT, $etT) = $this->reviseSETime($stime, $etime);
-
-        	$sql = "SELECT COUNT(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stT' AND pass_time <= '$etT' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
-        	$carTotal = Yii::app()->db->createCommand($sql)->queryScalar();
-
-        	$retTotal[] = array(
-        		'series' => $series, 
-        		'carTotal' => $carTotal,
-        	);
-        }
+        
 		return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
@@ -769,7 +755,7 @@ class FaultSeeker
 			$slice = 3600;
 		} elseif($lastDay <= 31) {//day
 			$pointFormat = 'm-d';
-			$format = 'Y-m-d';
+			$format = 'Y-m-d H';
 			$slice = 86400;
 		} else {//month
 			$pointFormat = 'Y-m';
