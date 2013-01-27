@@ -199,8 +199,7 @@
                         </div>
 
                         <div class="tab-pane" id="pauseDistribute">
-                            <div id="radioPauseDistribute">   
-                                <!--<span>分布条件:</span>-->
+                            <!-- <div id="radioPauseDistribute">   
                                 <label class="radio inline">
                                   <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked="checked">
                                   停线类型
@@ -209,10 +208,10 @@
                                   <input type="radio" name="optionsRadios" id="optionsRadios2" value="duty_department_chart_data">
                                   责任部门
                                 </label>
+                            </div> -->
+                            <div id="pauseAnalysisContainer" style="min-width: 400px; height: 500px; margin: 0 auto">
                             </div>
-                            <div id="pieContainerPauseDistribute" style="min-width: 400px; height: 400px; margin: 0 auto">
-                            </div>
-                            <table id="tablePauseDistribute" class="table table-condensed">
+                            <table id="tablePauseAnalysis" class="table table-condensed">
                                 <thead />
                                 <tbody />
                             </table>

@@ -608,9 +608,11 @@ $(document).ready(function () {
 				if(response.success) {
 					$("#pieContainerPauseDistribute").html("");
 					var type = $('#radioPauseDistribute input:radio[name="optionsRadios"]:checked').val();
-					mQuery.pie.pieAjaxData = response.data;
-					mQuery.pie.drawPausePie(type);
-					mQuery.pie.updatePausePieTable(type);
+					// mQuery.pie.pieAjaxData = response.data;
+					// mQuery.pie.drawPausePie(type);
+					// mQuery.pie.updatePausePieTable(type);
+					mQuery.pauseAnalysis.pauseAjaxData = response.data;
+					mQuery.pauseAnalysis.drawAnalysis();
 				} else {
 					alert(response.message);
 				}
@@ -887,7 +889,7 @@ $(document).ready(function () {
 });
 
 !$(function () {
-	window.mQuery = window.pause || {};
+	window.mQuery = window.mQuery || {};
 	window.mQuery.pie = {
 		pieAjaxData: {},
 
@@ -1117,6 +1119,200 @@ $(document).ready(function () {
                 return { x: index, y: item, show: false};
             });  
         }
+	};
+
+	window.mQuery.pauseAnalysis = {
+		pauseAjaxData: {},
+
+		analysisData: {
+			chart: {
+				renderTo: 'pauseAnalysisContainer',
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				formatter: function() {
+                    var s;
+                    if (this.point.name) { // the pie chart
+                        s = ''+
+                            this.point.name +': '+ (this.y * 100).toFixed(1) + '%';
+                    } else if(this.y > 0 && this.y < 1){	//percentage
+                    	s =	''+
+                    		this.x  +': '+ (this.y * 100).toFixed(1) + '%';
+                    }else{		//column
+                        s = ''+
+                            this.x  +': '+ parseInt(this.y / 60)+ '分' + (this.y % 60) + '秒';
+                    }
+                    return s;
+                }
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
+			xAxis: {
+				categories: [],
+				labels: {
+					rotation: -45,
+					align: 'right',
+					style: {
+						fontSize: '12px',	
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					} 
+				}
+			},
+			yAxis: [
+				{		// Primary yAxis
+					labels: {
+						style: {
+							color: Highcharts.getOptions().colors[4],
+						}
+					},
+					title: {
+						text: '停线时长(分钟)',
+						style: {
+							color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						formatter: function() {
+							return parseInt(this.value/60)
+						}
+					},
+					min: 0
+				},{		// Secondary yAxis
+					title: {
+						text: '累计百分率',
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						formatter: function() {
+							return Math.round(this.value * 100) + '%'
+						},
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					max: 1,
+					min: 0,
+					opposite: true
+				},
+
+			],
+
+			series: [
+				{
+					type: 'column',
+					color: Highcharts.getOptions().colors[4],
+					name: '停线时长',
+					data: [],
+					dataLabels: {
+						enabled:true,
+						style: {
+							// color: Highcharts.getOptions().colors[4],
+							fontSize: '14px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						align: 'center',
+                    	y: 30,
+            			color: 'white',
+            			formatter: function() {
+            				mm = parseInt(this.y / 60);
+            				ss = (this.y % 60);
+
+            				mm = mm<10 ? '0'+mm : mm;
+            				ss = ss<10 ? '0'+ss : ss;
+
+            				return mm + '\'' + ss + '\"';
+            			}
+					}
+				}, {
+					type: 'line',
+					yAxis: 1,
+					showInLegend: false,
+					color: Highcharts.getOptions().colors[4],
+					name: '百分率',
+					data: [],
+					dataLabels:{
+						enabled: true,
+						style: {
+							fontSize: '14px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						align: 'center',
+                    	y: 30,
+            			color: 'white',
+            			formatter: function() {
+            				return (this.y * 100).toFixed(1) + '%';
+            			}
+					},
+					marker: {
+						lineWidth: 2,
+						lineColor: Highcharts.getOptions().colors[4],
+						fillColor: 'white'
+					},
+					lineWidth: 0
+				}, {
+					typs: 'spline',
+					color: Highcharts.getOptions().colors[5],
+					name: '累计百分率',
+					data: [],
+					yAxis: 1,
+					marker: {
+						lineWidth: 2,
+						lineColor: Highcharts.getOptions().colors[5],
+						fillColor: 'white'
+					}
+				}, {
+					type: 'pie',
+					name: '停线类型',
+					data: [],
+					center: [1000,100],
+					size: 150,
+					showInLegend: false,
+					dataLabels: {
+						enabled:true,
+						style: {
+							// color: Highcharts.getOptions().colors[4],
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						},
+						distance: -30,
+            			formatter: function() {
+                			return this.point.name +':<br/>'+ (this.y * 100).toFixed(1) + '%';
+            				},
+            			y: -10,
+            			color: 'white',
+					}
+				}
+			]
+		},
+
+		drawAnalysis: function(){
+			this.analysisData.series[0].data = this.pauseAjaxData.series.column;
+			this.analysisData.series[1].data = this.pauseAjaxData.series.p;
+			this.analysisData.series[2].data = this.pauseAjaxData.series.y;
+			this.analysisData.series[3].data = this.pauseAjaxData.series.cSeries;
+			this.analysisData.xAxis.categories = this.pauseAjaxData.series.x;
+			var chart;
+			chart = new Highcharts.Chart(this.analysisData);
+		},
+
+		updatePauseAnalysisTable: function() {
+
+		}
 	}
 });
 
