@@ -575,6 +575,26 @@ class Car
         $this->car->save();
     }
 
+	public function generateConfigData() {
+        $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+		$config = CarConfigAR::model()->findByPk($this->car->config_id);
+        $ret = array(
+            'vinBarCode' => "/bms/" .$vinBarCodePath,
+            'type' => $this->car->type,
+            'serialNumber' => $this->car->serial_number,
+            'date' => date('Y-m-d'),
+            'color' => $this->car->color,
+			'config' => $config->name,
+            'remark'  => $this->car->remark,
+            'vinCode' => $this->car->vin,
+			'frontImage' => '/bms/configImage/' .$config->id . '/front.jpg',
+			'backImage' => '/bms/configImage/' .$config->id . '/back.jpg',
+		);
+		return $ret;
+	}
+
 
 	public function generateCheckTraceData() {
 		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
