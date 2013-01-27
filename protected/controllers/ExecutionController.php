@@ -93,7 +93,12 @@ class ExecutionController extends BmsBaseController
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
 			$transaction->commit();
-            $this->renderJsonBms(true, $vin . '成功录入T0', array($vin, $serial_number));   //modifed by wujun
+
+			
+			$data = $car->generateConfigData();
+
+
+            $this->renderJsonBms(true, $vin . '成功录入T0', $data);   //modifed by wujun
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
