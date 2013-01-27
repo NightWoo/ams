@@ -208,6 +208,10 @@ var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
 var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
 
+var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
+var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';
+var CONFIG_DELETE_IMAGE = '/bms/config/deleteImage';
+
 function alertError (message) {
 	message = 'ajax error'
 	//alert(message);
