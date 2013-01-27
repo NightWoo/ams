@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
-	<script type="text/javascript" src="/bms/js/uploadify/jquery.uploadify-3.1.min.js"></script>
+	<script type="text/javascript" src="/bms/js/uploadify/jquery.uploadify-3.1.js"></script>
 	<link rel="stylesheet" type="text/css" href="/bms/js/uploadify/uploadify.css">
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/configPaper.js"></script>
 	<style type="text/css">
@@ -21,6 +21,8 @@
 border-radius: 3px;
 box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 		.uploadify{display: inline-block;}
+		.config-item label{width: 90px;text-align: right;}
+		.config-item{margin-bottom: 10px;}
 	</style>
 </head>
 <body>
@@ -58,8 +60,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<tr>
 							<td>
 								<select name="" id="series" class="input-small">
-									<option value=""></option>
-									<option value="F0" selected>F0</option>
+									<option value="" selected></option>
+									<option value="F0" >F0</option>
 									<option value="M6">M6</option>
 								</select>
 							</td>
@@ -82,56 +84,30 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 				</form>
 				<input type="hidden" id='sessionName' value='<?php echo session_name();?>'></input>
 				<input type="hidden" id='sessionId' value='<?php echo session_id();?>'></input>
-				<div class="well form-inline">
-					<div>
-						<label>主配置单正面</label>
-						<input type="file" name="file_upload" id="file_upload" />
-						<input class="span7" id="testInput" type="text">
-						<button id="confirm" class="btn btn-primary">上传</button>
+				<div class="well form-inline" id="configContainer">
+					<div class="config-item">
+						<label style="">主配置单正面</label>
+						<input type="file" name="file_upload" id="file_upload" class="file_upload"/>
+						<input class="span7" id="testInput" type="text" disabled>
+						<button class="btn btn-primary">上传</button>
+						<span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
+						<span class="help-inline"><p class="text-success">尚未上传配置单</p></span>
 					</div>
-
+					<div class="config-item">
+						<label style="">主配置单反面</label>
+						<input type="file" name="file_upload" id="file_upload2" class="file_upload"/>
+						<input class="span7" id="testInput" type="text">
+						<button class="btn btn-primary">上传</button>
+						<span class="help-inline btnDelect"><p class="text-error">删除本配置单</p></span>
+						<span class="help-inline"><p class="text-success">尚未上传配置单</p></span>
+					</div>
 
 					
 					<table id="tableUpload">
+						
+						
 						<tr>
-							<td class="alignRight"><label>主配置单正面</label></td>
-							<td>
-								<div class="input-prepend">
-									<form method="post" action="UploadFile.php" id="myForm"
-enctype="multipart/form-data" >
-    <fieldset>
-        <legend>Form Post Test</legend>
-        <input name="uploadedfile" multiple="true" type="file" id="uploader"
-        dojoType="dojox.form.Uploader" label="Select Some Files" >
-        <input type="text" name="album" value="Summer Vacation" />
-        <input type="text" name="year" value="2011" />
-        <input type="submit" label="Submit" dojoType="dijit.form.Button" />
-        <div id="files" dojoType="dojox.form.uploader.FileList"
-        uploaderId="uploader"></div>
-    </fieldset>
-</form>
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary disabled" disabled type="button" id="uploadMasterFront">上传</button>
-								<span class="help-inline btnDelect"><p class="text-error">删除本配置单</p></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="alignRight"><label>主配置单反面</label></td>
-							<td>
-								<div class="input-prepend">
-									<button class="btn" type="button" id="selectMasterBack">本地文件</button>
-									<input class="span7" id="localMasterBack" type="text">
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary" type="button" id="uploadMasterBack">上传</button>
-								<span class="help-inline"><p class="text-success">尚未上传配置单</p></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="alignRight"><label>仪表分装</label></td>
+							<td class="alignRight" width="90"><label>仪表分装</label></td>
 							<td>
 								<div class="input-prepend">
 									<button class="btn disabled" type="button" id="">本地文件</button>
