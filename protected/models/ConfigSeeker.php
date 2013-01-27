@@ -43,8 +43,16 @@ class ConfigSeeker
 		$configs = CarConfigAR::model()->findAll($condition . ' ORDER BY id ASC', $values);
 		$datas = array();
 		foreach($configs as $config){
-			if(in_array($column, array('car_type', 'name'))) {
-				$data = $config->{$column};
+			if($column === 'car_type') {
+				$data = array(
+						'id' => $config->{$column},
+						'name' => $config->{$column},
+					);
+			} elseif($column === 'name') {
+				$data = array(
+                        'id' => $config->id,
+                        'name' => $config->{$column},
+                    );
 			} else {
 				$data = array();
 				$user = User::model()->findByPk($config->user_id);
@@ -59,8 +67,10 @@ class ConfigSeeker
 				$data['user_id']= $config->user_id;
 				$data['remark']= $config->remark;
 			}
+			if(!in_array($data, $datas)) {
 				$datas[]=$data;	
 			}
+		}
 		
 		return $datas;
 	}
