@@ -51,7 +51,7 @@ $(document).ready(function () {
 
 	function resetConfigItem () {
 		$(".config-item button").removeClass().addClass("btn btn-primary");
-		$(".config-item input[type=text]").removeAttr("disabled");
+		$(".config-item input[type=text]").removeAttr("disabled").html("");
 		$(".config-item .btnDelect").hide();
 		$(".config-item .notyet").show();
 		// $('.uploadify').uploadify('disable', false);
@@ -110,7 +110,7 @@ $(document).ready(function () {
 						var index = 0;//handle front
 						if (response.data.front != "") {
 							$(".config-item button").eq(index).addClass("disabled");
-							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.front);
 							$(".config-item .btnDelect").eq(index).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
@@ -119,7 +119,7 @@ $(document).ready(function () {
 						index = 1;//handle back
 						if (response.data.back != "") {
 							$(".config-item button").eq(index).addClass("disabled");
-							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.back);
 							$(".config-item .btnDelect").eq(index).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
