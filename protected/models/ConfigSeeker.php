@@ -28,7 +28,7 @@ class ConfigSeeker
 	}
 
 	//added by wujun
-	public function search($series, $type, $configName) {
+	public function search($series, $type, $configName, $column = '') {
 		$condition = "car_series=?";
 		$values = array($series);
 		if(!empty($type)) {
@@ -43,19 +43,24 @@ class ConfigSeeker
 		$configs = CarConfigAR::model()->findAll($condition . ' ORDER BY id ASC', $values);
 		$datas = array();
 		foreach($configs as $config){
-			$user = User::model()->findByPk($config->user_id);
-			$user_name = $user->display_name;
-			$data['user_name']= $user_name;
-			$data['id']= $config->id;
-			$data['name']= $config->name;
-			$data['car_series']= $config->car_series;
-			$data['car_type']= $config->car_type;
-			$data['modify_time']= $config->modify_time;
-			$data['create_time']= $config->create_time;
-			$data['user_id']= $config->user_id;
-			$data['remark']= $config->remark;
-			$datas[]=$data;	
-		}
+			if(in_array($column, array('car_type', 'name'))) {
+				$data = $config->{$column};
+			} else {
+				$data = array();
+				$user = User::model()->findByPk($config->user_id);
+				$user_name = empty($user) ? '' : $user->display_name;
+				$data['user_name']= $user_name;
+				$data['id']= $config->id;
+				$data['name']= $config->name;
+				$data['car_series']= $config->car_series;
+				$data['car_type']= $config->car_type;
+				$data['modify_time']= $config->modify_time;
+				$data['create_time']= $config->create_time;
+				$data['user_id']= $config->user_id;
+				$data['remark']= $config->remark;
+			}
+				$datas[]=$data;	
+			}
 		
 		return $datas;
 	}

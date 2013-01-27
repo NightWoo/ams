@@ -25,9 +25,10 @@ class ConfigController extends BmsBaseController
 		$configName = $this->validateStringVal('config_name','');
 		$series = $this->validateStringVal('car_series','');
 		$type = $this->validateStringVal('car_type','');
+		$column = $this->validateStringVal('column','');
 		try{
 			$config = new ConfigSeeker();
-			$data = $config->search($series, $type, $configName);
+			$data = $config->search($series, $type, $configName, $column);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this-> renderJsonBms(false , $e->getMessage());

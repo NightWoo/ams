@@ -95,4 +95,7 @@ class Config
 			throw new Exception('there is no detail in this car_config');
 		}			
 	}
+
+	public function addMainConfigPage($file) {
+	}
 }
