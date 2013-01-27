@@ -10,6 +10,7 @@ $(document).ready(function () {
 			sessionData['id'] = $("#config").val();
 			$(".uploadify").eq(index).uploadify('settings','formData', sessionData);
 			$(".uploadify").eq(index).uploadify('upload','*');
+console.log($(".uploadify").eq(index));
 		}
 	});
 
@@ -28,7 +29,7 @@ $(document).ready(function () {
 		    'uploadLimit' : 1,
 			'fileObjName' : 'frontImage',//backImage
 		    'removeTimeout' : 0,
-		    'formData' : "",
+		    'formData' : {},
 		    'onSelect' : function(file) {
 	    		$('#' + this.settings.button_placeholder_id).siblings("input[type=text]").val(file.name);
 	        }

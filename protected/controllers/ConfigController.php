@@ -11,10 +11,6 @@ class ConfigController extends BmsBaseController
 	public function accessRules()
 	{
 		return array(
-			array('allow',
-				  'actions' => array('upload'),
-				  'users' => array('*'),
-			),
 		);
 	}
 
@@ -264,6 +260,7 @@ class ConfigController extends BmsBaseController
 	public function actionUpload() {
 		$id = $this->validateIntVal('id', 0);
         try{
+			Yii::log($id, 'info', 'bms');
             $config = CarConfigAR::model()->findByPk($id);
             if(!empty($config)) {
 				$images = array('front', 'back');
