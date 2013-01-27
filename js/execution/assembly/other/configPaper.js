@@ -7,7 +7,7 @@ $(document).ready(function () {
 			$(".uploadify").eq(index).uploadify('settings','fileObjName', fileObjNameMap[index]);
 			var sessionData = {};
 			sessionData[$("#sessionName").val()] = $("#sessionId").val();
-			sessionData['id'] = 1;
+			sessionData['id'] = $("#config").val();
 			$(".uploadify").eq(index).uploadify('settings','formData', sessionData);
 			$(".uploadify").eq(index).uploadify('upload','*');
 		}
