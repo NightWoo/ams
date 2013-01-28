@@ -66,12 +66,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 								</select>
 							</td>
 							<td>
-								<select name="" id="carType" class="input-medium">
+								<select name="" id="carType" class="input-xlarge">
 									<option value="" selected></option>
 								</select>
 							</td>
 							<td>
-								<select name="" id="config" class="input-medium">
+								<select name="" id="config" class="input-large">
 									<option value=""></option>
 								</select>
 							</td>
@@ -103,7 +103,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					</div>
 
 					
-					<table id="tableUpload">
+					<!-- <table id="tableUpload">
 						
 						
 						<tr>
@@ -158,7 +158,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 								<span class="help-inline"><p class="text-muted">尚未实施</p></span>
 							</td>
 						</tr>
-					</table>
+					</table> -->
 				</div>					
 		  	</div><!-- end of 主体 -->
         </div><!-- end of 页体 -->

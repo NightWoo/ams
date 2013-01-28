@@ -38,6 +38,7 @@ console.log($(".uploadify").eq(index));
 
 	$("#series").change(function () {
 		ajaxSender.ajaxGetCarType($(this).val());
+		ajaxSender.ajaxGetConfigList($("#series").val());
 	});
 
 	$("#carType").change(function () {

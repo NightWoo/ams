@@ -158,7 +158,7 @@ $("document").ready(function() {
 			success: function(response) {
 				if(response.success){
 				  	fadeMessageAlert(response.message,"alert-success");
-				  	$("#vinHint").html(response.data[0] + "整车编号" + response.data[1]);	//added by wujun
+				  	$("#vinHint").html(response.data.vinCode + "整车编号" + response.data.serialNumber);	//added by wujun
 					resetPage();
 					//fill data to print
 					$(".printBarCode").attr("src", response.data.vinBarCode);
