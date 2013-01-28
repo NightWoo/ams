@@ -17,7 +17,7 @@ table label {
 	margin-right: 10px;
 }
 
-td p {
+td p, span p {
 	margin: 0;	
 }
 

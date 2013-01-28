@@ -581,6 +581,21 @@ class Car
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
 		$config = CarConfigAR::model()->findByPk($this->car->config_id);
+
+		$types = array('front','back');
+		$images = array();
+		if(!empty($config)) {
+			$path = "/home/work/bms/web/bms/configImage/" . $config->id;
+			foreach($types as $type) {
+				$name = $type . '.jpg';
+				$fileName = $path . '/' . $name;
+				$images[$type] = '';
+				if(file_exists($fileName)) {
+					$images[$type] = '/bms/configImage/' .$config->id . '/' . $name;
+				}
+			}
+		}
+
         $ret = array(
             'vinBarCode' => "/bms/" .$vinBarCodePath,
             'type' => $this->car->type,
@@ -590,11 +605,12 @@ class Car
 			'config' => $config->name,
             'remark'  => $this->car->remark,
             'vinCode' => $this->car->vin,
-			'frontImage' => '/bms/configImage/' .$config->id . '/front.jpg',
-			'backImage' => '/bms/configImage/' .$config->id . '/back.jpg',
+			'frontImage' => $images['front'],
+			'backImage' => $images['back'],
 		);
 		return $ret;
 	}
+
 
 
 	public function generateCheckTraceData() {
