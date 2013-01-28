@@ -10,13 +10,13 @@ $(document).ready(function () {
 			sessionData['id'] = $("#config").val();
 			$(".uploadify").eq(index).uploadify('settings','formData', sessionData);
 			$(".uploadify").eq(index).uploadify('upload','*');
-console.log($(".uploadify").eq(index));
 		}
 	});
 
 	$(".btnDelect").live("click",function () {
 		var index = $(".config-item").index($(this).parent("div"));
 		$(".uploadify").eq(index).uploadify("cancel");
+		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
 	});
 
 	$('.file_upload').uploadify({
@@ -131,7 +131,28 @@ console.log($(".uploadify").eq(index));
 				},
 				error:function(){alertError();}
 			});
+		},
+		ajaxDeleteConfig : function (id, type, index) {
+			$.ajax({
+				type: "get",//使用get方法访问后台
+	        	dataType: "json",//返回json格式的数据
+				url: CONFIG_DELETE_IMAGE,//ref:  /bms/js/service.js
+				data:  {"id": id, "type" : type},
+				success: function(response){
+					if(response.success){
+						$(".config-item button").eq(index).addClass("disabled");
+						$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.front);
+						$(".config-item .btnDelect").eq(index).show();
+						$(".config-item .notyet").eq(index).hide();
+					}
+					else{
+
+					}
+				},
+				error:function(){alertError();}
+			});
 		}
+		
 	};
 	
 });

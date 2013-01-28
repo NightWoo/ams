@@ -157,7 +157,6 @@ $("document").ready(function() {
 			data: {"vin": $('#vinText').attr("value"),"planId":planId},
 			success: function(response) {
 				if(response.success){
-				  	fadeMessageAlert(response.message,"alert-success");
 				  	$("#vinHint").html(response.data[0] + "整车编号" + response.data[1]);	//added by wujun
 					resetPage();
 					//fill data to print
@@ -169,6 +168,13 @@ $("document").ready(function() {
 					$(".printConfig").html(response.data.config);
 					$(".printSerialNumber").html(response.data.serialNumber);
 					$(".printRemark").html("备注：" + response.data.remark);
+					
+					if (response.data.frontImage == "" || response.data.backImage == "") {
+						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-error");
+					} else {
+						setTimeout(function (){window.print();},500);
+						fadeMessageAlert(response.message,"alert-success");
+					}
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
