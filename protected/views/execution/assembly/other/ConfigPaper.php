@@ -99,7 +99,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<input class="span7" id="testInput" type="text">
 						<button class="btn btn-primary">上传</button>
 						<span class="help-inline btnDelect"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline"><p class="text-success">尚未上传配置单</p></span>
+						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
 					</div>
 
 					

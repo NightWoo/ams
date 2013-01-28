@@ -32,6 +32,14 @@ $(document).ready(function () {
 		    'formData' : {},
 		    'onSelect' : function(file) {
 	    		$('#' + this.settings.button_placeholder_id).siblings("input[type=text]").val(file.name);
+	        },
+	        'onUploadSuccess' : function () {
+	        	
+	        	$('#' + this.settings.button_placeholder_id).siblings("button").addClass("disabled");
+				$('#' + this.settings.button_placeholder_id).siblings("input[type=text]").attr("disabled", "disabled");
+				$('#' + this.settings.button_placeholder_id).siblings(".btnDelect").show();
+				$('#' + this.settings.button_placeholder_id).siblings(".notyet").hide();
+
 	        }
 			// Your options here
 	});
@@ -52,7 +60,7 @@ $(document).ready(function () {
 
 	function resetConfigItem () {
 		$(".config-item button").removeClass().addClass("btn btn-primary");
-		$(".config-item input[type=text]").removeAttr("disabled").html("");
+		$(".config-item input[type=text]").removeAttr("disabled").val("");
 		$(".config-item .btnDelect").hide();
 		$(".config-item .notyet").show();
 		// $('.uploadify').uploadify('disable', false);
@@ -111,7 +119,7 @@ $(document).ready(function () {
 						var index = 0;//handle front
 						if (response.data.front != "") {
 							$(".config-item button").eq(index).addClass("disabled");
-							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.front);
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.front);
 							$(".config-item .btnDelect").eq(index).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
@@ -120,7 +128,7 @@ $(document).ready(function () {
 						index = 1;//handle back
 						if (response.data.back != "") {
 							$(".config-item button").eq(index).addClass("disabled");
-							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.back);
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.back);
 							$(".config-item .btnDelect").eq(index).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
@@ -140,10 +148,10 @@ $(document).ready(function () {
 				data:  {"id": id, "type" : type},
 				success: function(response){
 					if(response.success){
-						$(".config-item button").eq(index).addClass("disabled");
-						$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").html(response.data.front);
-						$(".config-item .btnDelect").eq(index).show();
-						$(".config-item .notyet").eq(index).hide();
+						$(".config-item button").eq(index).removeClass().addClass("btn btn-primary");
+						$(".config-item input[type=text]").eq(index).removeAttr("disabled").val("");
+						$(".config-item .btnDelect").eq(index).hide();
+						$(".config-item .notyet").eq(index).show();
 					}
 					else{
 
