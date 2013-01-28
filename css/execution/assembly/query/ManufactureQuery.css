@@ -47,3 +47,11 @@ td label {
 #selectNode {
 	width:100px;
 }
+
+th {
+	min-width: 30px;
+}
+
+th.wideTh {
+	min-width: 65px;
+}

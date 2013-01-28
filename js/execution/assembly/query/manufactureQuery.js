@@ -479,10 +479,10 @@ $(document).ready(function () {
         });
 		
 		var thTr = $("#tableStatistic tr:eq(0)");
-        $("<td />").html("日期").appendTo(thTr);    
-        $("<td />").html("合计").appendTo(thTr);
+        $("<th />").html("日期").appendTo(thTr);    
+        $("<th />").html("合计").appendTo(thTr);
 		$.each(carSeries, function (index, series) {
-            $("<td />").html(series + "_车辆数").appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
+            $("<td />").html(series).appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
             $("<td />").html(total[series]).appendTo($("#tableStatistic tr:eq(" + (index*1+1) + ")"));
         });
 
@@ -804,6 +804,11 @@ $(document).ready(function () {
 				//href: 'http://www.bydauto.com.cn',
                 text: ''
 			},
+			plotOptions: {
+            	series: {
+                	connectNulls: true
+            	}
+        	},
 			xAxis: {
 				categories: lineData.x,
 				labels: {
@@ -864,10 +869,10 @@ $(document).ready(function () {
         });
 
         var thTr = $("#tablecompletionRate tr:eq(0)");
-        $("<td />").html("日期").appendTo(thTr);
+        $("<th />").html("日期").appendTo(thTr).addClass("wideTh");
 
         //合计
-        $("<td />").html("合计").appendTo(thTr);
+        $("<th />").html("合计").appendTo(thTr);
         $.each(total, function (index, value) {
         	$("<td />").html(value.completionTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
         	$("<td />").html(value.readyTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+2) +")"));
@@ -1004,9 +1009,21 @@ $(document).ready(function () {
 			},
 
 			tooltip: {
+				shared: true,
+				crosshairs: true,
+				useHTML: true,
                 formatter: function() {
-                        return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ Math.round(this.y * 100) + '%';
+                	console.log(this);
+                	var s = this.points[0].key +'<table>';
+                
+                	$.each(this.points, function(i, point) {
+                    	s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right"><b>'+ Math.round(point.y * 100)+'%</b></td></tr>';
+                	});
+                	
+                	s += '</table>';
+                	return s;
+                        
                 }
             },
             legend: {
@@ -1074,21 +1091,21 @@ $(document).ready(function () {
 			//get tr
 			var thTr = $('#tableUseRate tr:eq(0)');
 			//first column descriptions
-			$('<td />').html('班次').appendTo(thTr);
+			$('<th />').html('班次').appendTo(thTr);
 			$.each(shift, function (index, value) {
 				$('<td rowspan=3 />').html(value).appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
 			});
 
-			$("<td />").html("合计").appendTo(thTr);
+			$("<th />").html("合计").appendTo(thTr);
 			$.each(total, function (index, value) {
         		$("<td />").html(value.rateTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+1) + ")"));
         		$("<td />").html(value.productionTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+2) + ")"));
         		$("<td />").html(value.capacityTotal).appendTo($("#tableUseRate tr:eq(" + (index*3+3) + ")"));
         	});
 
-			$('<td />').html('日期').appendTo(thTr);
+			$('<th />').html('日期').appendTo(thTr);
         	$.each(shift, function (index, value) {
-				$('<td />').html('利用率').appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
+				$('<td />').html('利用').appendTo($('#tableUseRate tr:eq('+(index*3+1)+')'));
 				$('<td />').html('产量').appendTo($('#tableUseRate tr:eq('+(index*3+2)+')'));
 				$('<td />').html('能力').appendTo($('#tableUseRate tr:eq('+(index*3+3)+')'));
 			});
