@@ -600,6 +600,7 @@ class Car
             'vinBarCode' => "/bms/" .$vinBarCodePath,
             'type' => $this->car->type,
             'serialNumber' => $this->car->serial_number,
+			'series' => $this->car->series,
             'date' => date('Y-m-d'),
             'color' => $this->car->color,
 			'config' => $config->name,

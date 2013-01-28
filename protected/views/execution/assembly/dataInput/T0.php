@@ -13,6 +13,10 @@
 			display: none;
 		}
 	</style>
+	<style type="text/css" media="print">
+td,th{border:none;}
+</style>
+
     	<!-- <link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/dataInput/T0.css" rel="stylesheet"> -->
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
@@ -130,7 +134,7 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="width:793pt;height:1213pt;">
+		<div class="printable" style="width:793px;height:1213px;">
 			<table class="" style="width:100%">
 				<tr>
 					<td rowspan="2" width="33%"><img src="" class="printBarCode"></td>
@@ -143,7 +147,7 @@
 				</tr>
 			</table>
 			<img src="" width="793" height="1048" class="printFrontImage">
-			<table style="width:100%">
+			<table style="width:100%;margin-bottom:50px;">
 				<tr>
 					<td class="printRemark"></td>
 					<td align="right" style="text-align:right;">1/2</td>
