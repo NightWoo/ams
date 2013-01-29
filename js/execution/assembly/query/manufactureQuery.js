@@ -1238,13 +1238,13 @@ $(document).ready(function () {
 					dataLabels: {
 						enabled:true,
 						style: {
-							// color: Highcharts.getOptions().colors[4],
+							
 							fontSize: '14px',
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						},
 						align: 'center',
-                    	y: 30,
-            			color: 'white',
+                    	//y: -30,
+            			color: Highcharts.getOptions().colors[4],
             			formatter: function() {
             				mm = parseInt(this.y / 60);
             				ss = (this.y % 60);
@@ -1263,14 +1263,14 @@ $(document).ready(function () {
 					name: '百分率',
 					data: [],
 					dataLabels:{
-						enabled: true,
+						enabled: false,
 						style: {
 							fontSize: '14px',
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						},
 						align: 'center',
-                    	y: 30,
-            			color: 'white',
+                    	//y: 30,
+            			color: 'black',
             			formatter: function() {
             				return (this.y * 100).toFixed(1) + '%';
             			}
@@ -1296,7 +1296,7 @@ $(document).ready(function () {
 					type: 'pie',
 					name: '停线类型',
 					data: [],
-					center: [1100,80],
+					center: [1000,100],
 					size: 150,
 					showInLegend: false,
 					dataLabels: {
@@ -1306,12 +1306,12 @@ $(document).ready(function () {
 							fontSize: '12px',
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						},
-						distance: -30,
+						distance: 10,
             			formatter: function() {
                 			return this.point.name +'<br/>'+ (this.y * 100).toFixed(1) + '%';
             				},
-            			y: -10,
-            			color: 'white',
+            			//y: -10,
+            			//color: 'white',
 					}
 				}
 			]

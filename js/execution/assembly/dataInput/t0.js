@@ -165,12 +165,16 @@ $("document").ready(function() {
 					$(".printBackImage").attr("src", response.data.backImage);
 					$(".printType").html(response.data.type);
 					$(".printSeries").html(response.data.series);
-					$(".printConfig").html(response.data.config);
+					if(response.data.coldResistant == "1"){
+						$(".printConfig").html(response.data.config +'/'+ '耐寒');							
+					}else{
+						$(".printConfig").html(response.data.config +'/'+ '非耐寒');							
+					}
 					$(".printSerialNumber").html(response.data.serialNumber);
 					$(".printRemark").html("备注：" + response.data.remark);
 					
 					if (response.data.frontImage == "" || response.data.backImage == "") {
-						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-error");
+						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
 						setTimeout(function (){window.print();},500);
 						fadeMessageAlert(response.message,"alert-success");
@@ -178,6 +182,7 @@ $("document").ready(function() {
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
+					resetPage();
 				}
 
 				//added by wujun

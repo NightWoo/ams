@@ -606,6 +606,7 @@ class Car
 			'config' => $config->name,
             'remark'  => $this->car->remark,
             'vinCode' => $this->car->vin,
+            'coldResistant' => $this->car->cold_resistant,
 			'frontImage' => $images['front'],
 			'backImage' => $images['back'],
 		);
