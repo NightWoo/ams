@@ -40,6 +40,9 @@ $(document).ready(function () {
 				$('#' + this.settings.button_placeholder_id).siblings(".btnDelect").show();
 				$('#' + this.settings.button_placeholder_id).siblings(".notyet").hide();
 
+	        },
+	        'onDialogOpen' : function () {
+	        	$('#' + this.settings.button_placeholder_id).uploadify("cancel");
 	        }
 			// Your options here
 	});
