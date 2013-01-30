@@ -46,7 +46,6 @@ $(document).ready(function  () {
 	//校验
 	function ajaxGetComponents (tableId, compType) 
 	{
-		console.log(compType);
 		$.ajax
 		({
 		    type: "get",//使用get方法访问后台

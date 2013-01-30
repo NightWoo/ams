@@ -13,6 +13,10 @@ $(document).ready(function  () {
 		    data: {"vin": $('#vinText').val(),"currentNode":$("#currentNode").attr("value")},
 		    success: function(response){
 			    if(response.success){
+			    	$("#divDetail").data("series", response.data.series);
+			    	//初始化第一栏
+					ajaxGetComponents();
+
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);		//added by wujun
 			    	//disable vinText and open submit button
@@ -48,8 +52,13 @@ $(document).ready(function  () {
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: VQ3_GET_FAULT_PARTS + "?category=VQ3_facade_test",
+		    data: {"series" : $("#divDetail").data("series")},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
+		    	$("#tableAssembly tbody").text("");
+		    	$("#tablePaint tbody").text("");
+		    	$("#tableBody tbody").text("");
+		    	$("#tableMix tbody").text("");
 		    	compArray = response.data;
 		    	var allComps = [];
 				$.each(compArray,function(index,comp){

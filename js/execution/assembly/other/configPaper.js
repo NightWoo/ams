@@ -15,8 +15,13 @@ $(document).ready(function () {
 
 	$(".btnDelect").live("click",function () {
 		var index = $(".config-item").index($(this).parent("div"));
-		$(".uploadify").eq(index).uploadify("cancel");
 		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
+		// console.log($(".uploadify").eq(index));
+		// $(".uploadify").eq(index).uploadify('settings','uploadLimit', 1);
+		$(".uploadify").eq(index).uploadify("cancel", "*");
+		$(".uploadify").eq(index).uploadify("cancel");
+		// $(".uploadify").eq(index).uploadify("destroy");
+		// $(".uploadify").eq(index).uploadify("destroy");
 	});
 
 	$('.file_upload').uploadify({
@@ -42,7 +47,6 @@ $(document).ready(function () {
 
 	        },
 	        'onDialogOpen' : function () {
-	        	console.log('#' + this.settings.button_placeholder_id)
 	        	$('#' + this.settings.button_placeholder_id).uploadify("cancel");
 	        }
 			// Your options here

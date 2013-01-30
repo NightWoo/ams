@@ -11,6 +11,9 @@ $(document).ready(function  () {
 		    data: {"vin": $('#vinText').val(),"currentNode":$("#currentNode").attr("value")},
 		    success: function(response){
 			    if(response.success){
+			    	$("#divDetail").data("series", response.data.series);
+			    	//初始化第一栏
+					ajaxGetComponents("VQ2_road_test");
 			    	//send ajax to decide showing bag or not
 			    	$.ajax({
 			    		type: "get",//使用get方法访问后台
@@ -56,6 +59,7 @@ $(document).ready(function  () {
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: RTF_GET_FAULT_PARTS + "?category=" + compType,
+		    data: {"series" : $("#divDetail").data("series")},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
 		    	$("#tableGeneral tbody").text("");
@@ -159,8 +163,7 @@ $(document).ready(function  () {
 		//init all
 
 		$("#formBag").hide();
-		//初始化第一栏
-		ajaxGetComponents("VQ2_road_test");
+		
 		//初始化  ‘其他’栏
 		$("#tableOther tbody").text("");
 		for (var i = 0; i < 10; i++) {
