@@ -396,7 +396,11 @@ class Car
 
 	//371QA汽油机总成
 	public function checkTraceGasolineEngine() {
-		$componentName = '371QA汽油机总成';
+		$componentNames = array(
+			'F0' => '371QA汽油机总成',
+			'M6' => '488QA发动机总成',
+		);
+		$componentName = $componentNames[$this->car->series];
 		return $this->checkTraceComponentByName($componentName);
 	}
 
