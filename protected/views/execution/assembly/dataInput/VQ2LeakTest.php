@@ -80,7 +80,7 @@
 							<div>
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 -->                   
-							<div>
+							<div id="divDetail">
 								<div id="tabContent" class="tab-content">
 									<div class="tab-pane active" id="general">
 										<table id="tableGeneral" class="table">

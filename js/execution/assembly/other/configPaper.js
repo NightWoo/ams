@@ -16,12 +16,12 @@ $(document).ready(function () {
 	$(".btnDelect").live("click",function () {
 		var index = $(".config-item").index($(this).parent("div"));
 		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
-		// console.log($(".uploadify").eq(index));
-		// $(".uploadify").eq(index).uploadify('settings','uploadLimit', 1);
-		$(".uploadify").eq(index).uploadify("cancel", "*");
-		$(".uploadify").eq(index).uploadify("cancel");
-		// $(".uploadify").eq(index).uploadify("destroy");
-		// $(".uploadify").eq(index).uploadify("destroy");
+		// console.log($(".uploadify").eq(index).attr("id"));
+		// // $(".uploadify").eq(index).uploadify('settings','uploadLimit', 1);
+		// $(".uploadify").eq(index).uploadify("cancel", "*");
+		// $("#" + $(".uploadify").eq(index).attr("id")).uploadify("cancel");
+		// // $(".uploadify").eq(index).uploadify("destroy");
+		// // $(".uploadify").eq(index).uploadify("destroy");
 	});
 
 	$('.file_upload').uploadify({
