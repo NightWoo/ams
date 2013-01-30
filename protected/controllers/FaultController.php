@@ -40,9 +40,10 @@ class FaultController extends BmsBaseController
 
 	public function actionShowLeak() {
         $category = $this->validateStringVal('category', '');
+		$series = $this->validateStringVal('series', 'F0');
         try{
             $fault = Fault::createSeeker();
-            $data = $fault->getAllByCategory($category,'leak');
+            $data = $fault->getAllByCategory($category,'leak', $series);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
