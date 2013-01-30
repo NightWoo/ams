@@ -3,8 +3,10 @@ Yii::import('application.models.Component');
 class FaultComponentSeeker
 {
 	private $name;
-	public function __construct($name){
+	private $series;
+	public function __construct($name, $series){
 		$this->name = $name;
+		$this->series = $series;
 	}
 
 	public function __get($attr) {
@@ -17,6 +19,9 @@ class FaultComponentSeeker
                   FROM component 
                  WHERE display_name='{$this->name}'
 				   AND is_fault=1";
+		if(!empty($this->series)) {
+			$sql .= " AND car_series='$this->series'";
+		}
 		$component = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		//falut mode
@@ -33,6 +38,9 @@ class FaultComponentSeeker
                   FROM component 
                  WHERE upper(display_name) LIKE '%$upperName%'
                    AND is_fault=1";
+		if(!empty($this->series)) {
+            $sql .= " AND car_series='$this->series'";
+        }
         $components = Yii::app()->db->createCommand($sql)->queryColumn();
 		
 		return $components;
