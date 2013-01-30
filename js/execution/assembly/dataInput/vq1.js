@@ -55,6 +55,7 @@ $(document).ready(function  () {
 		    data : {"series" : $("#divDetail").data("series")},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
+		    	$("#" + tableId + " tbody").text("");
 				$.each(response.data,function(index,comp){
 					var indexTd = "<td>" + (index + 1) + "</td>";
 					var nameTd = "<td>" + comp.component_name + "<input type='hidden' value='" + comp.component_id + "' />" + "</td>";

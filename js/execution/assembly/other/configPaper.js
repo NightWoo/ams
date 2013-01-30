@@ -42,6 +42,7 @@ $(document).ready(function () {
 
 	        },
 	        'onDialogOpen' : function () {
+	        	console.log('#' + this.settings.button_placeholder_id)
 	        	$('#' + this.settings.button_placeholder_id).uploadify("cancel");
 	        }
 			// Your options here
