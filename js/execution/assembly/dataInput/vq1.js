@@ -5,7 +5,6 @@ $(document).ready(function  () {
 	//校验
 	function ajaxValidate (argument){
 
-
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -14,6 +13,9 @@ $(document).ready(function  () {
 		    	"currentNode": $('#currentNode').attr("value")},//vin and node
 		    success: function(response){
 			    if(response.success){
+			    	$("#divDetail").data("series", response.data.series);
+					ajaxGetComponents("tableEngine", "engine");
+
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
@@ -42,7 +44,7 @@ $(document).ready(function  () {
 	}
 
 	//校验
-	function ajaxGetComponents (tableId,compType) 
+	function ajaxGetComponents (tableId, compType) 
 	{
 		console.log(compType);
 		$.ajax
@@ -50,6 +52,7 @@ $(document).ready(function  () {
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: VQ1_GET_FAULT_PARTS + "?category=" + compType,
+		    data : {"series" : $("#divDetail").data("series")},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
 				$.each(response.data,function(index,comp){
@@ -165,7 +168,7 @@ $(document).ready(function  () {
 
 	var clicked = [true,false,false,false,false,true];
 	//初始化第一栏
-	ajaxGetComponents("tableEngine","engine");
+	
 	//初始化  ‘其他’栏
 	for (var i = 0; i < 10; i++) {
 		var indexTd = "<td>" + (i + 1) + "</td>";
