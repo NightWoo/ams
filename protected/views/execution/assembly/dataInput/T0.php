@@ -134,42 +134,44 @@ td,th{border:none;}
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="width:793px;height:1213px;">
-			<table class="" style="width:100%">
+		<div class="printable" style="width:840pt;height:1190pt; padding-top:10pt; font-size:18pt">
+			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
-					<td rowspan="2" width="33%"><img src="" class="printBarCode"></td>
-					<td width="54%" class="printType"></td>
-					<td style="text-align:right;" width="13%" class="printSeries"></td>
+					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+					<td width="50%" class="printType" style="font-size:18pt"></td>
+					<td style="text-align:right; font-size:18pt; width=10%; padding-right:10pt" class="printSeries"></td>
 				</tr>
 				<tr>
-					<td class="printConfig"></td>
-					<td style="text-align:right;" class="printSerialNumber"></td>
-				</tr>
-			</table>
-			<img src="" width="793" height="1048" class="printFrontImage">
-			<table style="width:100%;margin-bottom:50px;">
-				<tr>
-					<td class="printRemark"></td>
-					<td align="right" style="text-align:right;">1/2</td>
+					<td class="printConfig" style="font-size:18pt"></td>
+					<td style="text-align:right; font-size:18pt; padding-right:10pt" class="printSerialNumber"></td>
 				</tr>
 			</table>
+			<img src="" width="" height="" class="printFrontImage" style="display: block; margin:0 auto">
+			<table style="width:100%;margin-top:10pt;">
+				<tr>
+					<td class="printRemark" style="font-size:18pt; padding-left:10pt"></td>
+					<td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">1/2</td>
+				</tr>
+			</table>
+		</div>
 
-			<table class="" style="width:100%">
+		<div class="printable" style="width:840pt;height:1190pt; padding-top:10pt; font-size:18pt; page-break-before: always">
+			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
-					<td rowspan="2" width="33%"><img src="" class="printBarCode"></td>
-					<td width="54%" class="printType"></td>
-					<td style="text-align:right;" width="13%" class="printSeries"></td>
+					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+					<td width="50%" class="printType" style="font-size:18pt"></td>
+					<td style="text-align:right; font-size:18pt; width=10%; padding-right:10pt" class="printSeries"></td>
 				</tr>
 				<tr>
-					<td class="printConfig"></td>
-					<td style="text-align:right;" class="printSerialNumber"></td>
+					<td class="printConfig" style="font-size:18pt"></td>
+					<td style="text-align:right; font-size:18pt; padding-right:10pt" class="printSerialNumber"></td>
 				</tr>
 			</table>
-			<img src="" width="793" height="1048" class="printBackImage">
-			<table style="width:100%">
+			<img src="" width="" height="" class="printBackImage" style="display: block; margin:0 auto">
+			<table style="width:100%;margin-top:10pt;">
 				<tr>
-					<td class="printRemark"></td>
-					<td align="right" style="text-align:right;">2/2</td>
+					<td class="printRemark" style="font-size:18pt; padding-left:10pt"></td>
+					<td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">2/2</td>
 				</tr>
 			</table>
 		</div>
