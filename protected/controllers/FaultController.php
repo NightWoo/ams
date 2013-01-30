@@ -27,9 +27,10 @@ class FaultController extends BmsBaseController
 	public function actionShow() {
 		$category = $this->validateStringVal('category', '');
 		$mode = $this->validateStringVal('mode', '');
+		$series = $this->validateStringVal('series', 'F0');
 		try{
 			$fault = Fault::createSeeker();
-			$data = $fault->getAllByCategory($category,$mode);
+			$data = $fault->getAllByCategory($category,$mode, $series);
 			
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -39,9 +40,10 @@ class FaultController extends BmsBaseController
 
 	public function actionShowLeak() {
         $category = $this->validateStringVal('category', '');
+		$series = $this->validateStringVal('series', 'F0');
         try{
             $fault = Fault::createSeeker();
-            $data = $fault->getAllByCategory($category,'leak');
+            $data = $fault->getAllByCategory($category,'leak', $series);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -52,11 +54,12 @@ class FaultController extends BmsBaseController
 
 	public function actionSearch() {
 		$name = $this->validateStringVal('component', '');
+		$series = $this->validateStringVal('series', 'F0');
 		try{
 			if(empty($name)) {
 				throw new Exception('component cannot be null');
 			}	
-            $fault = Fault::createSeekerByComponent($name);
+            $fault = Fault::createSeekerByComponent($name, $series);
             $data = $fault->getAll();
 
             $this->renderJsonBms(true, 'OK', $data);
@@ -81,11 +84,12 @@ class FaultController extends BmsBaseController
 
 	public function actionView() {
         $name = $this->validateStringVal('component', '');
+		$series = $this->validateStringVal('series', '');
         try{
             if(empty($name)) {
                 throw new Exception('component cannot be null');
             }
-            $fault = Fault::createSeekerByComponent($name);
+            $fault = Fault::createSeekerByComponent($name, $series);
             $data = $fault->getComponent();
 
             $this->renderJsonBms(true, 'OK', $data);

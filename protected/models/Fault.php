@@ -23,8 +23,8 @@ class Fault
         return new FaultBaseSeeker();
     }
 
-	public static function createSeekerByComponent($component) {
-		return new FaultComponentSeeker($component);
+	public static function createSeekerByComponent($component, $series) {
+		return new FaultComponentSeeker($component, $series);
 	}
 
 	public static function create($tablePrefix, $vin, $faults) {

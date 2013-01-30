@@ -5,8 +5,11 @@ class FaultSeeker
 	public function __construct(){
 	}
 
-	public function getAllByCategory($faultCategory, $mode = '') {
+	public function getAllByCategory($faultCategory, $mode = '', $series = '') {
 		$sql = "SELECT * FROM fault_component_category WHERE category_key='{$faultCategory}'";
+		if(!empty($series)) {
+			$sql .= " AND series='$series'";
+		}
 		$components = Yii::app()->db->createCommand($sql)->queryAll();
 		$kindMaps = array(
 			'all' => "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
