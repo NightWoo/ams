@@ -33,7 +33,7 @@ class PlanSeeker
         foreach ($plans as $plan) {
             $temp = $plan->getAttributes();
             $temp['config_name'] = $seeker->getName($temp['config_id']);
-            $temp['car_type'] = $this->cutCarType($temp['car_type']);
+            $temp['car_type_name'] = $this->cutCarType($temp['car_type']);
             $datas[] = $temp;
         }
 
@@ -103,7 +103,7 @@ class PlanSeeker
 		$seeker = new ConfigSeeker();
 		foreach($datas as &$data) {
 			$data['config_name'] = $seeker->getName($data['config_id']);
-			$data['car_type'] = $this->cutCarType($data['car_type']);
+			$data['car_type_name'] = $this->cutCarType($data['car_type']);
 		}
 
         return array($total,  $datas); 

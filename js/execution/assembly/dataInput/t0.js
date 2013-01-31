@@ -24,7 +24,7 @@ $("document").ready(function() {
 						totalAll += parseInt(plans[i].total);
 						leftAll = totalAll - readyAll;
 						var car_series = "<td>" + plans[i].car_series + "</td>";
-						var car_type = "<td>" + plans[i].car_type + "</td>";
+						var car_type = "<td>" + plans[i].car_type_name + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {
 							var cold_resistant = "<td>耐寒</td>";
@@ -68,7 +68,7 @@ $("document").ready(function() {
 						var num = "<td>" + (i + 1) + "</td>";
 						var left = "<td>" + (plans[i].total - plans[i].ready) + "</td>";
 						var car_series = "<td>" + plans[i].car_series + "</td>";
-						var car_type = "<td>" + plans[i].car_type + "</td>";
+						var car_type = "<td>" + plans[i].car_type_name + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {
 							var cold_resistant = "<td>耐寒</td>";

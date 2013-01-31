@@ -69,7 +69,7 @@ var RTF_SHOW_EXCEPTION = "/bms/fault/showVQ2Road";
 var RTF_SUBMIT_EXCEPTION = "/bms/fault/saveVQ2Road";
 
 
-var LEAK_VALIDATE = "/bms/car/validateNode";
+var LEAK_VALIDATE = "/bms/car/validateVQ2Leak";
 var LEAK_GET_FAULT_PARTS = "/bms/fault/showLeak";
 var LEAK_SUBMIT = "/bms/execution/enterVQ2Leak";
 

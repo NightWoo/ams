@@ -114,7 +114,26 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionValidateVQ2Leak() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            $car = Car::create($vin);
 
+            $car->leftNode('VQ1');
+
+            $fault = Fault::createSeeker();
+            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+            //$car->passNode('VQ3');
+            $data = $car->car;
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
 
 	public function actionMatchPlan() {
 		$vin = $this->validateStringVal('vin', '');

@@ -691,7 +691,7 @@ $(document).ready(function () {
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
 		    			$("<td />").html(value.car_series).appendTo(tr);
-		    			$("<td />").html(value.car_type).appendTo(tr);		//added by wujun
+		    			$("<td />").html(value.car_type_name).appendTo(tr);		//added by wujun
 		    			$("<td />").html(value.config_name).appendTo(tr);
 		    			
 		    			if (value.cold_resistant == "1") {
