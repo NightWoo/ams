@@ -60,6 +60,9 @@
 								<label class="checkbox">
 									<input type="checkbox" id="checkboxM6" value="M6">M6</input>
 								</label>
+								<label class="checkbox">
+									<input type="checkbox" id="checkbox6B" value="6B">思锐</input>
+								</label>
 							</td>
 						</tr>
 						<tr>

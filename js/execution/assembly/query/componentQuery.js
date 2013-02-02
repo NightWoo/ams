@@ -71,12 +71,15 @@ $(document).ready(function () {
 		var series = "";
 		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
 		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
+		
+		var temp = [];
+		if (f0Checked)
+			temp.push($("#checkboxF0").val());
+		if (m6Checked)
+			temp.push($("#checkboxM6").val());
+		if (_6BChecked)
+			temp.push($("#checkbox6B").val());
 		
 		$.ajax({
 			type: "get",//使用get方法访问后台
@@ -87,7 +90,7 @@ $(document).ready(function () {
 		    		"barcode":$("#barText").val(),
 		    		"provider":$("#providerText").val(),
 		    		"component":$("#componentText").val(),
-					"series":series,
+					"series": temp.join(","),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 					"perPage":20,
