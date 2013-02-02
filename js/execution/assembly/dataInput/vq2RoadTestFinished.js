@@ -284,7 +284,7 @@ $(document).ready(function  () {
 	$("#tableOther input[type='text']").typeahead({
 	    source: function (input, process) {
 	    	disableTr(currentOtherFocusIndex);
-	        $.get(VQ1_SEARCH_PART, {"component":input}, function (data) {
+	        $.get(VQ1_SEARCH_PART, {"component":input,"series" : $("#divDetail").data("series")}, function (data) {
 	        	return process(data.data);
 	        },'json');
 	    },
