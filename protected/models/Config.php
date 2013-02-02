@@ -37,8 +37,9 @@ class Config
         if(!$node->exist()) {
             throw new Exception('node ' . $nodeName . ' is not exit');
         }
-
-		$ctClass = ucFirst($car->series) . "ComponentTraceAR";
+		$series = strtoupper($car->series);
+		$ctClass = "ComponentTrace{$series}AR";
+		Yii::import('application.models.AR.' .$ctClass);
 		if(empty($node)) {
             $configLists = CarConfigListAR::model()->findAll('config_id=? AND istrace!=0', array($this->configAR->id));
 			$traceComponents = $ctClass::model()->findAll('car_id=?',array($car->id));

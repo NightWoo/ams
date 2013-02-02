@@ -19,7 +19,7 @@ class ComponentTrace
 		if(!empty($series)) {
             $series = explode(',', $series);
         } else {
-            $series = array('f0', 'm6');
+            $series = array('f0', 'm6', '6b');
         }
 		if(!empty($vin)) {
 			$car = Car::create($vin);
@@ -100,7 +100,7 @@ class ComponentTrace
 		if(!empty($series)) {
 			$series = explode(',', $series);
 		} else {
-			$series = array('f0', 'm6');
+			$series = array('f0', 'm6', '6b');
 		}
 
 		$condition = "";

@@ -197,7 +197,7 @@ class PlanSeeker
 
 	private function parseSeries($series) {
 		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6');
+            $series = array('F0', 'M6', '6B');
         } else {
             $series = explode(',', $series);
         }

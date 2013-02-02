@@ -91,7 +91,7 @@ class Car
 
 	public function generateSerialNumber() {
 		$series = $this->car->series;
-		$snClass = "SerialNumber" . $series . "AR";
+		$snClass = "SerialNumber" . strtoupper($series) . "AR";
 		
 		$curYear = date('Y');
 		$logYear = CurrentYearAR::model()->find('series=? AND cur_year=?', array($series, $curYear));
@@ -283,8 +283,8 @@ class Car
 			return;
 		}
 		$nodeId = $node->id;
-		$series = $this->car->series;
-		$ctClass = $series . "ComponentTraceAR";
+		$series = strtoupper($this->car->series);
+		$ctClass = "ComponentTrace{$series}AR";
 		Yii::import('application.models.AR.' .$ctClass);
 		$messages = array();
 		foreach($codeList as $componentId=>$code) {
@@ -378,10 +378,11 @@ class Car
 		$allSeries = array(
 			'F0',
 			'M6',
+			'6B',
 		);
 
 		foreach($allSeries as $series) {
-			$ctClass = $series . "ComponentTraceAR";
+			$ctClass = "ComponentTrace{$series}AR";
         	Yii::import('application.models.AR.' .$ctClass);
 
 			$exist = $ctClass::model()->find('bar_code = ?', array($code));
@@ -429,8 +430,8 @@ class Car
 		if(empty($componentIds)) {
 			throw new Exception($this->vin . ' 没有零部件 ' . $componentName . ' !');
 		}
-		$series = $this->car->series;
-        $ctClass = $series . "ComponentTraceAR";
+		$series = strtoupper($this->car->series);
+        $ctClass = "ComponentTrace{$series}AR";
         Yii::import('application.models.AR.' .$ctClass);
 		$componentIdText = join(',', $componentIds);
 		$exist = $ctClass::model()->find("car_id=? AND component_id IN ($componentIdText) ", array($this->car->id));

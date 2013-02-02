@@ -162,6 +162,9 @@ class FaultSeeker
 			if(empty($cars[$carId])) {
                 $cars[$carId] = CarAR::model()->findByPk($carId);
             }
+			if(empty($cars[$carId])) {
+				continue;
+			}
 			$data['vin'] = $cars[$carId]->vin;
 			$data['series'] = $cars[$carId]->series;
 			if(!empty($data['updator'])) {
@@ -694,7 +697,7 @@ class FaultSeeker
 
 		$tables = array();
 		if(empty($series) || $series === 'all') {
-			$series = array('F0', 'M6');
+			$series = array('F0', 'M6', '6B');
 		} else {
 			$series = explode(',', $series);
 		}
@@ -731,7 +734,7 @@ class FaultSeeker
 
 	private function parseSeries($series) {
 		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6');
+            $series = array('F0', 'M6', '6B');
         } else {
             $series = explode(',', $series);
         }
