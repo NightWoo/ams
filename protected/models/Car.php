@@ -394,14 +394,24 @@ class Car
 		}
 	}
 
-	//371QA汽油机总成
+	//汽油机
 	public function checkTraceGasolineEngine() {
-		$componentNames = array(
-			'F0' => '371QA汽油机总成',
-			'M6' => '488QA发动机总成',
-		);
-		$componentName = $componentNames[$this->car->series];
-		return $this->checkTraceComponentByName($componentName);
+		$sql = "SELECT engine_component_id FROM car_engine WHERE car_series='{$this->car->series}'";
+
+		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
+		
+		$str = join(',', $componentIds);
+
+		$sql = "SELECT c.id,c.name FROM car_config_list l, component c WHERE c.id=l.component_id AND l.config_id={$this->car->config_id} AND c.id IN ($str) AND l.istrace=1";
+
+		$component = Yii::app()->db->createCommand($sql)->queryRow();
+
+
+		if(empty($component)) {
+			throw new Exception('该车配置不存在可追溯的汽油机');
+		}
+			
+		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
 	}
 
 	//变速箱总成
@@ -412,6 +422,10 @@ class Car
 
 	public function checkTraceComponentByName($componentName) {
 		$componentIds = $this->getComponentIds($componentName);
+		return $this->checkTraceComponentByIds($componentIds, $componentName);
+	}
+
+	public function checkTraceComponentByIds($componentIds, $componentName = '') {
 		if(empty($componentIds)) {
 			throw new Exception($this->vin . ' 没有零部件 ' . $componentName . ' !');
 		}
@@ -422,7 +436,7 @@ class Car
 		$exist = $ctClass::model()->find("car_id=? AND component_id IN ($componentIdText) ", array($this->car->id));
 		
 		if(empty($exist)) {
-			throw new Exception($this->vin . ' 还没有追溯零部件 ' . $componentName . ' !');
+			throw new Exception($this->vin . ' 还没有追溯零部件 ' .$componentName.  '!');
 		}
 		return $exist;
 	}
