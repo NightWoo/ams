@@ -189,23 +189,27 @@ $(document).ready(function () {
 //-------------------END event bindings -----------------------
 
 
+
+function getSeriesChecked () {
+	var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+	var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+	var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
+	
+	var temp = [];
+	if (f0Checked)
+		temp.push($("#checkboxF0").val());
+	if (m6Checked)
+		temp.push($("#checkboxM6").val());
+	if (_6BChecked)
+		temp.push($("#checkbox6B").val());
+	return temp.join(",");
+}
 /*
  * ----------------------------------------------------------------
  * Ajax query
  * ----------------------------------------------------------------
  */
 	function ajaxQuery (targetPage) {
-		//get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
-		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -214,7 +218,7 @@ $(document).ready(function () {
 		    		"node":$("#selectNode").val(),
 		    		'component': $('#componentText').val(),
 					'mode': $('#faultModeText').val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 					"perPage":20,
@@ -273,16 +277,7 @@ $(document).ready(function () {
 	
 	function ajaxDpu (targetPage) {
 		distinctLabel = [];
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -291,7 +286,7 @@ $(document).ready(function () {
 		    		"node":$("#selectNode").val(),
 					"component":$("#componentText").val(),
 					"mode":$("#faultModeText").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val()
 				},
@@ -427,19 +422,11 @@ $(document).ready(function () {
              
         }
 	function ajaxExport () {
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		
 		window.open(FAULT_EXPORT + "?&node=" + $("#selectNode").val() + 
 			'&component=' + $('#componentText').val() +
 			'&mode=' + $('#faultModeText').val() +
-			"&series=" + series +
+			"&series=" + getSeriesChecked() +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
 		);
@@ -447,23 +434,14 @@ $(document).ready(function () {
 
 
 	function ajaxPlato () {
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_PLATON,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 				},
@@ -602,23 +580,14 @@ $(document).ready(function () {
 
 
 	function ajaxPassRate () {
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_QUALIFIED,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 				},
@@ -740,23 +709,14 @@ $(document).ready(function () {
 	}
 
 	function ajaxStatistics () {
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
+		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_CAR,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 				},
@@ -873,7 +833,7 @@ $(document).ready(function () {
 			    'node': $('#selectNode').val(),
 				'component': $('#componentText').val(),
 				'mode': $('#faultModeText').val(),
-				'series': byd.getFormSeries(),
+				'series': getSeriesChecked(),
 				'stime': $('#startTime').val(),
 				'etime': $('#endTime').val()
 			};

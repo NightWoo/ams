@@ -67,8 +67,7 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  */
 	function ajaxQuery (targetPage) {
-		//get series for query
-		var series = "";
+
 		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
 		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
 		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
@@ -80,7 +79,7 @@ $(document).ready(function () {
 			temp.push($("#checkboxM6").val());
 		if (_6BChecked)
 			temp.push($("#checkbox6B").val());
-		
+
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据

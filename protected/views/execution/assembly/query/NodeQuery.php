@@ -83,7 +83,7 @@
                             <td>
                                 <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
                             </td>
                         </tr>
 					</table> 
