@@ -62,6 +62,7 @@
 								<select id="selectCarSeries" class="span1">
 									<option value="F0" selected>F0</option>
 									<option value="M6">M6</option>
+									<option value="6B">思锐</option>
 								</select>
 							</td>
 							<td>
@@ -162,6 +163,7 @@
 			      	<select id="newSeries" class="span2">
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
+						<option value="6B">思锐</option>
 					</select>
 			    </div>
 			</div>
@@ -244,6 +246,8 @@
 			      	<select id="inputSeries" class="span2" disabled="disabled">
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
+									<option value="6B">思锐</option>
+						
 					</select>
 			    </div>
 			</div>
