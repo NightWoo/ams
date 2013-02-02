@@ -63,6 +63,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 									<option value="" selected></option>
 									<option value="F0" >F0</option>
 									<option value="M6">M6</option>
+                                    <option value="6B" disabled>思锐</option>
 								</select>
 							</td>
 							<td>
