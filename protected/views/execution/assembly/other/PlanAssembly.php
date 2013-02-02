@@ -50,6 +50,7 @@
                                 <select name="" id="carSeries" class="input-small">
                                     <option value="F0" selected>F0</option>
                                     <option value="M6" disabled>M6</option>
+                                    <option value="6B" disabled>思锐</option>
                                 </select>
                             </td>
                             <td>
@@ -137,6 +138,8 @@
                     <select id="newSeries" class="input-small">
                         <option value="F0" selected>F0</option>
                         <option value="M6" disabled>M6</option>
+                                    <option value="6B" disabled>思锐</option>
+
                     </select>
                 </div>
             </div>
@@ -302,6 +305,8 @@
                     <select id="editSeries" class="input-small">
                         <option value="F0" selected>F0</option>
                         <option value="M6" disabled>M6</option>
+                                    <option value="6B" disabled>思锐</option>
+                        
                     </select>
                 </div>
             </div>
