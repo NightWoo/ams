@@ -114,7 +114,7 @@ $(document).ready(function  () {
 		$("#otherTable input[type='text']").typeahead({
 		    source: function (input, process) {
 		    	disableTr(currentOtherFocusIndex);
-		        $.get(VQ1_SEARCH_PART, {"component":input}, function (data) {
+		        $.get(VQ1_SEARCH_PART, {"component":input,"series":$("#divDetail").data("series")}, function (data) {
 		        	return process(data.data);
 		        },'json');
 		    },
@@ -138,7 +138,10 @@ $(document).ready(function  () {
 				type: "get",//使用get方法访问后台
 	        	dataType: "json",//返回json格式的数据
 				url: VQ1_VIEW_PART,
-				data: {"component":text},
+				data: {
+					"component":text,
+					"series" : $("#divDetail").data("series")
+				},
 				success: function(response) 
 				{
 					if(response.success){
@@ -181,7 +184,7 @@ $(document).ready(function  () {
 	$("#otherTable input[type='text']").typeahead({
 	    source: function (input, process) {
 	    	disableTr(currentOtherFocusIndex);
-	        $.get(VQ1_SEARCH_PART, {"component":input}, function (data) {
+	        $.get(VQ1_SEARCH_PART, {"component":input,"series":$("#divDetail").data("series")}, function (data) {
 	        	return process(data.data);
 	        },'json');
 	    },
