@@ -11,6 +11,8 @@
         <script type="text/javascript" src="/bms/js/service.js"></script>
 		    <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery.event.move.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery.event.swipe.js"></script>
         <script type="text/javascript" src="/bms/js/managementSystem/managementSystemHome.js"></script>
     </head>
     <body>
@@ -57,7 +59,7 @@
 					</ul>
 				</div>-->		
 				<div class="main"><!-- 内容主体 -->
-					    <div id="Carousel" class="carousel slide" data-interval=false>
+					    <div id="Carousel" class="carousel slide">
     						<!-- Carousel items -->
     						<div class="carousel-inner">
     							<?php
@@ -79,7 +81,8 @@
                       } else {
                          echo '<div class="item">';
                       }
-                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Overview/'. $n .'.JPG" alt="">';
+                      echo '<img class="slideImg" src="/bms/doc/browse/managementSystem/managementManual/AMS_Overview/'. $n .'.JPG">';
+                      echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_1_Overview.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
                       echo '<h4>概述</h4>';
@@ -103,6 +106,7 @@
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Goal/'. $n .'.JPG" alt="">';
+                      echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_3_ManagementGoal.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
                       echo '<h4>管理目标</h4>';
@@ -126,6 +130,7 @@
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Structure/'. $n .'.JPG" alt="">';
+                      echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_5_StructureAndDuty.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
                       echo '<h4>组织结构及职责</h4>';
@@ -149,6 +154,7 @@
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Process/'. $n .'.JPG" alt="">';
+                      echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="#"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
                       echo '<h4>管理过程</h4>';
