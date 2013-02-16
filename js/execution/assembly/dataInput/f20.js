@@ -51,13 +51,14 @@ $("document").ready(function() {
 				resetPage();
 				if(response.success){
 					var data = response.data;
-					$("#printSerialNumber").html(data.serialNumber);
-					$("#printDate").html(data.date);
-					$("#printCarType").html(data.type);
-					$("#printColor").html(data.color);
-					$("#printMemo").html(data.remark);
-					$("#vinBarcode").attr("src",data.vinBarCode);
-					$("#engineBarcode").attr("src",data.engineBarCode);
+					var series = data.series;
+					$("#printSerialNumber,.printSerialNumber").html(data.serialNumber);
+					$("#printDate,.printDate").html(data.date);
+					$("#printCarType,.printCarType").html(data.type);
+					$("#printColor,.printColor").html(data.color);
+					$("#printMemo,.printMemo").html(data.remark);
+					$("#vinBarcode,.vinBarcode").attr("src",data.vinBarCode);
+					$("#engineBarcode,.engineBarcode").attr("src",data.engineBarCode);
 					//$("#vinBarcode").html(data.vinCode);
 					//$("#engineBarcode").html(data.engineCode);
 
@@ -68,6 +69,7 @@ $("document").ready(function() {
 				 	//while(!($("#vinBarcode").readyState==="complete" && $("#engineBarcode").readyState==="complete")) {
 					//	;
 					//}
+					$("#print" + series).addClass("toPrint");
 					setTimeout(function (){window.print();},500);
 				  	fadeMessageAlert(response.message,"alert-success");
 				}
@@ -110,7 +112,8 @@ $("document").ready(function() {
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
-		$("#btnSubmit").attr("disabled","disabled")
+		$("#btnSubmit").attr("disabled","disabled");
+		$(".printable").removeClass("toPrint");
 	}
 
 	//toggle 车辆信息和提示信息

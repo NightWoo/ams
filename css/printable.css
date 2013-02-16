@@ -8,8 +8,13 @@ td{border:1px solid black;font-size: 8px;font-family: "宋体"}
 	display: none;
 }
 .printable{
-	display: block;
+	/*display: block;*/
+	display: none;
 	margin: 0;
+}
+
+.toPrint{
+	display: block;
 }
 
 body{

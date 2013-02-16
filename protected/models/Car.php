@@ -653,6 +653,7 @@ class Car
 			'remark'  => $this->car->remark,
 			'vinCode' => $this->car->vin,
 			'engineCode' => $engineTrace->bar_code,
+			'series' => $this->car->series,
 		);
 
 		return $ret;
