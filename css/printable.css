@@ -32,14 +32,14 @@ table {
 	border:none;
 }
 
-#logo {
+.logo {
 	height: 28px;
 	width: 142px;
 	position: absolute;
 	top: 15pt;
 }
 
-#tableHead td{
+.tableHead td{
 	text-align: center;
 }
 

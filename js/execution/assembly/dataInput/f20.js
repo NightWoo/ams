@@ -52,13 +52,13 @@ $("document").ready(function() {
 				if(response.success){
 					var data = response.data;
 					var series = data.series;
-					$("#printSerialNumber,.printSerialNumber").html(data.serialNumber);
-					$("#printDate,.printDate").html(data.date);
-					$("#printCarType,.printCarType").html(data.type);
-					$("#printColor,.printColor").html(data.color);
-					$("#printMemo,.printMemo").html(data.remark);
-					$("#vinBarcode,.vinBarcode").attr("src",data.vinBarCode);
-					$("#engineBarcode,.engineBarcode").attr("src",data.engineBarCode);
+					$(".printSerialNumber").html(data.serialNumber);
+					$(".printDate").html(data.date);
+					$(".printCarType").html(data.type);
+					$(".printColor").html(data.color);
+					$(".printMemo").html(data.remark);
+					$(".vinBarcode").attr("src",data.vinBarCode);
+					$(".engineBarcode").attr("src",data.engineBarCode);
 					//$("#vinBarcode").html(data.vinCode);
 					//$("#engineBarcode").html(data.engineCode);
 

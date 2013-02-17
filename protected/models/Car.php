@@ -637,6 +637,10 @@ class Car
 		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+        $config = CarConfigAR::model()->findByPk($this->car->config_id);
+        $configName = $config->name;
+        $typeName = $this->cutCarType($this->car->type);
+        $coldResistant = $this->car->cold_resistant==1? '耐寒' : '非耐寒';
 
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
@@ -646,7 +650,7 @@ class Car
 		$ret = array(
 			'vinBarCode' => "/bms/" .$vinBarCodePath,
 			'engineBarCode' => "/bms/" .$engineBarCodePath,
-			'type' => $this->car->type,
+			'type' => $typeName . '/' . $configName . '/' . $coldResistant,
 			'serialNumber' => $this->car->serial_number,
 			'date' => date('Y-m-d'),
 			'color' => $this->car->color,
@@ -687,6 +691,25 @@ class Car
         }
 
         return array($success, $data);
+	}
+
+	private function cutCarType($type) {
+		$length = strlen($type);
+        $typeName = '';
+		$i = 0;
+        while($i < $length){
+            if($type[$i] === '(' || $i === stripos($type, '（')){
+            	break;
+            } else {	
+            	$typeName .= $type[$i];
+            	$i++;
+            }
+        }
+        if(empty($typeName)){
+        	$typeName = $type;
+        }
+
+        return $typeName;
 	}
 
 }
