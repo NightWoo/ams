@@ -186,8 +186,13 @@ $("document").ready(function() {
 				providerCode = compCode.substring(0,5);
 			}
 		}else if(compCode.length == 18){//零部件代码为 7-9位
-			simpleCode = compCode.substring(6,9);
-			providerCode = compCode.substring(0,6);
+			//len 18 may be an DongAN gearbox
+			if(compCode.substring(0,5) == 'F4A4B'){
+				simpleCode = compCode.substring(0,5)
+			}else{
+				simpleCode = compCode.substring(6,9);
+				providerCode = compCode.substring(0,6);
+			}
 		}else{//特殊零部件
 			if(compCode.length == 16)
 				simpleCode = compCode.substring(0,7);
@@ -195,6 +200,8 @@ $("document").ready(function() {
 				simpleCode = compCode.substring(0,3);
 			else if(compCode.length == 3)
 				simpleCode = compCode;
+			else if(compCode.length == 14)	//4G69 engine
+				simpleCode = compCode.substring(0,4);
 		}
 
 		console.log("simpleCode:" + simpleCode);

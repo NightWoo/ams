@@ -8,8 +8,13 @@ td{border:1px solid black;font-size: 8px;font-family: "宋体"}
 	display: none;
 }
 .printable{
-	display: block;
+	/*display: block;*/
+	display: none;
 	margin: 0;
+}
+
+.toPrint{
+	display: block;
 }
 
 body{
@@ -27,14 +32,14 @@ table {
 	border:none;
 }
 
-#logo {
+.logo {
 	height: 28px;
 	width: 142px;
 	position: absolute;
 	top: 15pt;
 }
 
-#tableHead td{
+.tableHead td{
 	text-align: center;
 }
 

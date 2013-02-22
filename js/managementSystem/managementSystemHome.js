@@ -39,9 +39,8 @@ $(document).ready(function() {
 
 	$("#Carousel").carousel("pause");
 
-	//it doesn't work, why????
 	// $("#Carousel").carousel({
-	// 	interval: false
+	//  	interval: false
 	// })
 
 	$("#Carousel").on("slid",function() {
@@ -55,6 +54,14 @@ $(document).ready(function() {
 		}else if(activePage.index() === 16){
 			$("#leftProcessLi").addClass("active").siblings().removeClass("active");
 		}
+	});
+
+	var slides = $('.item');
+
+	slides.on('swipeleft', function(e) {
+  		$("#Carousel").carousel('next');
+	}).on('swiperight', function(e) {
+  		$("#Carousel").carousel('prev');
 	});
 
 })

@@ -193,6 +193,7 @@
                         <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
+                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
                     </select> 
                 </div>
             </div>
@@ -359,6 +360,7 @@
                         <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
+                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
                     </select> 
                 </div>
             </div>

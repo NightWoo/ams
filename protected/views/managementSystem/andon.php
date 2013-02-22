@@ -11,6 +11,8 @@
         <script type="text/javascript" src="/bms/js/service.js"></script>
 		    <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery.event.move.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery.event.swipe.js"></script>
         <script type="text/javascript" src="/bms/js/managementSystem/andon.js"></script>
     </head>
     <body>
@@ -33,7 +35,7 @@
 					</ul>
 				</div>-->		
 				<div class="main"><!-- 内容主体 -->
-					    <div id="Carouse" class="carousel slide" data-interval="">
+					    <div id="Carousel" class="carousel slide">
     						<!-- Carousel items -->
     						<div class="carousel-inner">
                   <?php 
@@ -55,6 +57,7 @@
                          echo '<div class="item">';
                       }
                       echo '<img src="/bms/doc/browse/managementSystem/quality/andon/'. $n .'.JPG" alt="">';
+                      echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/andon.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
                       echo '<h4>暗灯系统</h4>';
@@ -65,8 +68,8 @@
                   ?>
     						</div>
                 <!-- Carousel nav -->
-    						<a class="carousel-control left" href="#Carouse" data-slide="prev">&lsaquo;</a>
-    						<a class="carousel-control right" href="#Carouse" data-slide="next">&rsaquo;</a>
+    						<a class="carousel-control left" href="#Carousel" data-slide="prev">&lsaquo;</a>
+    						<a class="carousel-control right" href="#Carousel" data-slide="next">&rsaquo;</a>
     					</div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->

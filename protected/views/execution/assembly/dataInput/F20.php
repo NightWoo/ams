@@ -61,37 +61,37 @@
 			</div><!-- end main体 -->
 		</div><!-- end offhead -->
     	</div>
-    	<div class="printable" style="height:595pt;width:841pt;">
-            <div id="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
-        <table id="tableHead">
+    	<div id="printF0" class="printable" style="height:595pt;width:841pt;">
+            <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
+        <table class="tableHead">
             <thead>
                 <tr style="height:14pt;">
                     <td colspan="14" class="docCode" style="text-align:right; border:none;">M-MSP-18-D11F01-004-01A&nbsp;&nbsp;&nbsp;&nbsp;★一般★</td>
                 </tr>
                 <tr style="height:28pt">
                     <th></th>
-                    <th id="title" style="width:209pt; vertical-align:top;">F0整车检验单</th>
-                    <td id="shift" style="width:42pt">白班&nbsp;&nbsp;□<br>夜班&nbsp;&nbsp;□</td>
+                    <th style="width:209pt; vertical-align:top;">F0整车检验单</th>
+                    <td style="width:42pt">白班&nbsp;&nbsp;□<br>夜班&nbsp;&nbsp;□</td>
                     <td style="width:42pt">整车编号</td>
-                    <td id="printSerialNumber" colspan="2" style="width:84pt"></td>
-                    <td id="" style="width:42pt">日期</td>
-                    <td id="printDate" colspan="3" style="width:126pt"></td>
-                    <td id="" style="width:42pt">确认</td>
-                    <td id="" colspan="2" style="width:84pt"></td>
+                    <td class="printSerialNumber" colspan="2" style="width:84pt"></td>
+                    <td style="width:42pt">日期</td>
+                    <td class="printDate" colspan="3" style="width:126pt"></td>
+                    <td style="width:42pt">确认</td>
+                    <td colspan="2" style="width:84pt"></td>
                 </tr>
             </thead>     
             <tbody>
                 <tr class="trInfo">
                     <td rowspan="2">VIN</td>
-                    <td rowspan="2" class="barcode"><img id="vinBarcode" alt=""></td>
+                    <td rowspan="2" class="barcode"><img class="vinBarcode" alt=""></td>
                     <td>发动机舱</td>
                     <td>性能检验</td>
                     <td style="font-size:7pt">左门+后座+整车灯</td>
                     <td style="font-size:7pt">右门+副驾+行李舱</td>
                     <td>四门两盖间隙面差</td>
                     <td><b>静态合格</b></td>
-                    <td>车型</td>
-                    <td colspan="4" width="126pt" id="printCarType">QCJ7100L（1.0排量舒适型)</td>
+                    <td>车型 / 配置</td>
+                    <td colspan="4" width="126pt" class="printCarType"></td>
                 </tr heitght="20pt">
                 <tr class="trInfo">
                     <td></td>
@@ -101,13 +101,13 @@
                     <td></td>
                     <td></td>
                     <td>颜色</td>
-                    <td id="printColor"></td>
+                    <td class="printColor"></td>
                     <td>备注</td>
-                    <td colspan="2" id="printMemo"></td>
+                    <td colspan="2" class="printMemo"></td>
                 </tr>
                 <tr class="trInfo">
                     <td rowspan="2">发动机<br>编号</td>
-                    <td rowspan="2" class="barcode"><img id="engineBarcode" alt=""></td>
+                    <td rowspan="2" class="barcode"><img class="engineBarcode" alt=""></td>
                     <td>前束+灯光+侧滑</td>
                     <td>制动+速度+排放</td>
                     <td>底盘检查</td>
@@ -517,6 +517,497 @@
             <tr>
             <tr class="trList">
                 <td class="tdList">左前/后门扶手装饰盖松动</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+
+            <tr>
+                <td colspan="6" class="docCode" style="border:none; vertical-align:bottom; padding-top:3pt;">措施：不良···X；返修···R；更换···G；确认···<img src="/bms/img/confirm-x.png" style="position:relative; top:3pt;">； 未录AMS系统···△</td>
+                <td colspan="6" class="docCode" style="text-align:right; border:none;">保存部门：总装长沙工厂  保存期限：15年</td>
+            <tr>
+
+        </table>
+    </div>
+
+    <div id="printM6" class="printable" style="height:595pt;width:841pt;">
+            <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
+        <table class="tableHead">
+            <thead>
+                <tr style="height:14pt;">
+                    <td colspan="14" class="docCode" style="text-align:right; border:none;">M-MSP-18-D11F01-004-01A&nbsp;&nbsp;&nbsp;&nbsp;★一般★</td>
+                </tr>
+                <tr style="height:28pt">
+                    <th></th>
+                    <th style="width:209pt; vertical-align:top;">M6整车检验单</th>
+                    <td style="width:42pt">白班&nbsp;&nbsp;□<br>夜班&nbsp;&nbsp;□</td>
+                    <td style="width:42pt">整车编号</td>
+                    <td class="printSerialNumber" colspan="2" style="width:84pt"></td>
+                    <td style="width:42pt">日期</td>
+                    <td class="printDate" colspan="3" style="width:126pt"></td>
+                    <td style="width:42pt">确认</td>
+                    <td colspan="2" style="width:84pt"></td>
+                </tr>
+            </thead>     
+            <tbody>
+                <tr class="trInfo">
+                    <td rowspan="2">VIN</td>
+                    <td rowspan="2" class="barcode"><img class="vinBarcode" alt=""></td>
+                    <td>发动机舱</td>
+                    <td>性能检验</td>
+                    <td style="font-size:7pt">左门+后座+整车灯</td>
+                    <td style="font-size:7pt">右门+副驾+行李舱</td>
+                    <td>四门两盖间隙面差</td>
+                    <td><b>静态合格</b></td>
+                    <td>车型 / 配置</td>
+                    <td colspan="4" width="126pt" class="printCarType"></td>
+                </tr heitght="20pt">
+                <tr class="trInfo">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>颜色</td>
+                    <td class="printColor"></td>
+                    <td>备注</td>
+                    <td colspan="2" class="printMemo"></td>
+                </tr>
+                <tr class="trInfo">
+                    <td rowspan="2">发动机<br>编号</td>
+                    <td rowspan="2" class="barcode"><img class="engineBarcode" alt=""></td>
+                    <td>前束+灯光+侧滑</td>
+                    <td>制动+速度+排放</td>
+                    <td>底盘检查</td>
+                    <td>解码合格</td>
+                    <td>淋雨</td>
+                    <td>路试</td>
+                    <td>性能修复</td>
+                    <td><b>动态合格</b></td>
+                    <td><b>关联检验</b></td>
+                    <td><b>外观合格</b></td>
+                    <td>入库合格</td>
+                </tr>
+                <tr class="trInfo">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tr class="trList">
+                <td class="tdList alignCenter" style="width:215pt;">【下线静态性能】</td>
+                <td class="tdCheck alignCenter">确认</td>
+                <td class="tdCheck alignCenter">返修</td>
+                <td class="tdCheck alignCenter">措施</td>
+                <td class="tdList alignCenter">【下线静态性能】</td>
+                <td class="tdCheck alignCenter">确认</td>
+                <td class="tdCheck alignCenter">返修</td>
+                <td class="tdCheck alignCenter">措施</td>
+                <td class="tdList alignCenter">【检测线动态性能】</td>
+                <td class="tdCheck alignCenter">确认</td>
+                <td class="tdCheck alignCenter">返修</td>
+                <td class="tdCheck alignCenter">措施</td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList alignCenter">发动机舱</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">右侧门+副座椅+行李舱</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">前束+灯光+侧滑</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">制动+速度+排放</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">底盘检查</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList alignCenter">性能检验</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">四门两盖</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">路试</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">【关联检验】-动态</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList alignCenter">左侧门+后座椅+整车灯</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">【性能修复】</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList alignCenter">【关联检验】-修正</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            <tr>
+            <tr class="trList">
+                <td class="tdList"></td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
