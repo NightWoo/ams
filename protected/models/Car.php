@@ -632,7 +632,39 @@ class Car
 		return $ret;
 	}
 
+	
+	public function generateSubConfigData($type='subInstrument', $ = false) {
+        $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+		$config = CarConfigAR::model()->findByPk($this->car->config_id);
 
+		$images = array();
+		if(!empty($config)) {
+			$path = "/home/work/bms/web/bms/configImage/" . $config->id;
+			$name = $type . '.jpg';
+			$fileName = $path . '/' . $name;
+			$image = '';
+			if(file_exists($fileName)) {
+				$image = '/bms/configImage/' .$config->id . '/' . $name;
+			}
+		}
+
+        $ret = array(
+            'vinBarCode' => "/bms/" .$vinBarCodePath,
+            'type' => $this->car->type,
+            'serialNumber' => $this->car->serial_number,
+			'series' => $this->car->series,
+            'date' => date('Y-m-d'),
+            'color' => $this->car->color,
+			'config' => $config->name,
+            'remark'  => $this->car->remark,
+            'vinCode' => $this->car->vin,
+            'coldResistant' => $this->car->cold_resistant,
+			'image' => $image,
+		);
+		return $ret;
+	}
 
 	public function generateCheckTraceData() {
 		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");

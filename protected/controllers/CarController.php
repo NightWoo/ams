@@ -1,6 +1,7 @@
 <?php
 Yii::import('application.models.Car');
 Yii::import('application.models.VinManager');
+Yii::import('application.models.SubConfigSeeker');
 class CarController extends BmsBaseController
 {
 	/**
@@ -328,6 +329,30 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
+
+	public function actionSearchSubConfigQueue() {
+		$type = $this->validateStringVal('type', 'subInstrument');
+		$stime = $this->validateStringVal('stime');
+		$etime = $this->validateStringVal('etime');
+		$status = $this->validateIntVal('status', 0);
+		
+		$seeker = new SubConfigSeeker($type);
+		$datas = $seeker->queryAll($status, $stime, $etime);
+		$this->renderJsonBms(true, 'OK', $datas);
+	}
+
+	public function actionPrintSubConfig() {
+		try{
+            $vin = $this->validateStringVal('vin', '');
+			$type = $this->validateStringVal('type', 'subInstrument');
+            $car = Car::create($vin);
+			$datas = $car->generateSubConfigData($type);
+            $this->renderJsonBms(true, 'OK', $datas);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+
+	}
 
 	public function actionTest()  {
 		$vin = $this->validateStringVal('vin', '');

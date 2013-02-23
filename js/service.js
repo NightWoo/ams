@@ -211,6 +211,8 @@ var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';
 var CONFIG_DELETE_IMAGE = '/bms/config/deleteImage';
+var SUB_CONFIG_SEARCH = "/bms/car/searchSubConfigQueue";
+var SUB_CONFIG_PRINT = "/bms/car/printSubConfig";
 
 function alertError (message) {
 	message = 'ajax error'
