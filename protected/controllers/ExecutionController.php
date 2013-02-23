@@ -533,6 +533,11 @@ class ExecutionController extends BmsBaseController
 		$this->render('assembly/other/OrderMaintain');	
 	}
 
+    //added by ccx
+    public function actionSubQueueMaintain() {
+        $this->render('assembly/other/SubQueueMaintain');  
+    }
+
     //added by wujun
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  

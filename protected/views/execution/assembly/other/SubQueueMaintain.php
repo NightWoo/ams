@@ -114,7 +114,7 @@
             <div class="control-group">
                 <label class="control-label" for="queueTime">排队时间</label>
                 <div class="controls">
-                    <input id="queueTime" type="text" class="input-small" placeholder="请输入排队时间..." onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                    <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                 </div>
             </div>
            
