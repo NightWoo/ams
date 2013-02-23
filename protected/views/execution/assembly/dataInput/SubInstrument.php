@@ -55,7 +55,7 @@
                                         <span class="label label-info" rel="tooltip" title="车系" id="infoSeries">x</span>
                                         <span class="label label-info" rel="tooltip" title="车型" id="infoType">x</span>
                                         <span class="label label-info" rel="tooltip" title="颜色" id="infoColor">x</span>
-                                        <span class="label label-info" rel="tooltip" title="耐寒性" id="infoColdResistant">x</span>
+                                        <!-- <span class="label label-info" rel="tooltip" title="耐寒性" id="infoColdResistant">x</span> -->
                                         <span class="label label-info" rel="tooltip" title="车辆区域" id="infoStatus">x</span>
                                     </div>
                                 </div>

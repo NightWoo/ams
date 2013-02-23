@@ -20,13 +20,13 @@ $("document").ready(function() {
 			    	toggleVinHint(false);
 			    	//render car info data,include series,type and color
 		    		var data = response.data;
-		    	 	$('#series').html(data.series);
-				    $('#type').html(data.type);
-				    $('#color').html(data.color);
+		    	 	$('#infoSeries').html(data.series);
+				    $('#infoType').html(data.type);
+				    $('#infoColor').html(data.color);
 				    if(data.status && data.status !== "0")
-				    	$('#statusInfo').html(data.status);
+				    	$('#infoStatus').html(data.status);
 				    else
-				    	$('#statusInfo').text("");
+				    	$('#infoStatus').text("");
 			    }
 			    else{
 			    	resetPage();
