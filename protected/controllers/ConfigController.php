@@ -220,7 +220,7 @@ class ConfigController extends BmsBaseController
             $config = CarConfigAR::model()->findByPk($id);
 			$ret = $config->attributes;
             if(!empty($config)) {
-                $images = array('front', 'back');
+                $images = array('front', 'back', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
                 $path = "/home/work/bms/web/bms/configImage/" . $config->id;
                 foreach($images as $image) {
                     $name = $image . '.jpg';
@@ -263,7 +263,7 @@ class ConfigController extends BmsBaseController
 			Yii::log($id, 'info', 'bms');
             $config = CarConfigAR::model()->findByPk($id);
             if(!empty($config)) {
-				$images = array('front', 'back');
+				$images = array('front', 'back', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
 				$path = "/home/work/bms/web/bms/configImage/" . $config->id;
 				foreach($images as $image) {
 					$namePrefix = $image; 
@@ -275,6 +275,23 @@ class ConfigController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
 	}
+
+	public function actionSaveSub() {
+        $id = $this->validateIntVal('id', 0);
+		$status = $this->validateIntVal('status', 0);
+		$queueTime = $this->validateIntVal('queueTime', date('Y-m-d H:i:s'));
+        try{
+            $config = SubConfigCarQueueAR::model()->findByPk($id);
+            if(!empty($config)) {
+				$config->status = $status;
+				$config->queue_time = $queueTime;
+				$config->save();
+            }
+            $this->renderJsonBms(true, 'OK', '');
+        }catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
 
 	protected function reloadSession() {
 		$session_name = session_name();
