@@ -5,6 +5,7 @@ Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.CarConfigListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.FileUpload.FileUpload');
+Yii::import('application.models.AR.SubConfigCarQueueAR');
 
 class ConfigController extends BmsBaseController 
 {
@@ -279,7 +280,7 @@ class ConfigController extends BmsBaseController
 	public function actionSaveSub() {
         $id = $this->validateIntVal('id', 0);
 		$status = $this->validateIntVal('status', 0);
-		$queueTime = $this->validateIntVal('queueTime', date('Y-m-d H:i:s'));
+		$queueTime = $this->validateStringVal('queueTime', date('Y-m-d H:i:s'));
         try{
             $config = SubConfigCarQueueAR::model()->findByPk($id);
             if(!empty($config)) {
