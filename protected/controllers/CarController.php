@@ -347,6 +347,7 @@ class CarController extends BmsBaseController
 			$type = $this->validateStringVal('type', 'subInstrument');
             $car = Car::create($vin);
 			$datas = $car->generateSubConfigData($type);
+			
             $this->renderJsonBms(true, 'OK', $datas);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -359,10 +360,10 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $type = $this->validateStringVal('type', 'subInstrument');
 			
-			$data = VinManager::getCar($vin);
-
 			$seeker = new SubConfigSeeker($type);
 			$seeker->validate($vin);
+
+			$data = VinManager::getCar($vin);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

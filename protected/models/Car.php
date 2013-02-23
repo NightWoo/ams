@@ -631,9 +631,27 @@ class Car
 		);
 		return $ret;
 	}
-
 	
-	public function generateSubConfigData($type='subInstrument', $ = false) {
+	public function addSubConfig() {
+		$types = array('subInstrument','subEngine');
+
+		foreach($types as $type) {
+			$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
+
+			if(empty($subConfig)) {
+				$subConfig = new SubConfigCarQueueAR();
+
+				$subConfig->car_id = $this->car->id;
+				$subConfig->vin = $this->car->vin;
+				$subConfig->type = $type;
+				$subConfig->status = 0;
+				$subConfig->queue_time = date('Y-m-d H:i:s'); 
+				$subConfig->save();
+			}
+		}
+	}
+	
+	public function generateSubConfigData($type='subInstrument') {
         $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
@@ -663,6 +681,14 @@ class Car
             'coldResistant' => $this->car->cold_resistant,
 			'image' => $image,
 		);
+		
+
+		$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
+		if(!empty($subConfig)) {
+			$subConfig->status = 1;
+			$subConfig->save();
+		}
+
 		return $ret;
 	}
 

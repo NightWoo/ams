@@ -57,11 +57,13 @@ class ExecutionController extends BmsBaseController
 	public function actionChild() {
 		$nodeName = $this->validateStringVal('node','NodeSelect');
 		$view = $this->validateStringVal('view','NodeSelect');
+		$type = $this->validateStringVal('type','subInstrument');
 		if(in_array($nodeName, self::$NODE_MAP)) {
 			$view = self::$MERGED_VIEW;
 		}
+		
 		$node = Node::createByName($nodeName); 
-		$this->render('assembly/dataInput/' . $view ,array('node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName));	
+		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName));	
 	}
 
 	//进入彩车身库
@@ -92,6 +94,9 @@ class ExecutionController extends BmsBaseController
 			$car->generateSerialNumber();
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
+
+			$car->addSubConfig();
+
 			$transaction->commit();
 
 			

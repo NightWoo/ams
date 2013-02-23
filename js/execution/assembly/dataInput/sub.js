@@ -9,7 +9,7 @@ $("document").ready(function() {
     	    dataType: "json",//返回json格式的数据
 		    url: SUB_CONFIG_VALIDATE,//ref:  /bms/js/service.js
 		    data: {"vin" : $('#vinText').attr("value"),
-		    	"type" : $("#currentNode").val()},//vin and node
+		    	"type" : $("#subType").val()},//vin and node
 		    success: function(response){
 			    if (response.success){
 			    	$("#vinText").val(response.data.vin);	//added by wujun
@@ -44,7 +44,7 @@ $("document").ready(function() {
         	dataType: "json",//返回json格式的数据
 			url: SUB_CONFIG_PRINT,//ref:  /bms/js/service.js
 			data: {"vin": $('#vinText').attr("value"),
-				"type": $("#currentNode").val()},
+				"type": $("#subType").val()},
 			success: function(response){
 				resetPage();
 				//fill data to print
@@ -80,7 +80,7 @@ $("document").ready(function() {
     	    dataType: "json",//返回json格式的数据
 		    url: SUB_CONFIG_SEARCH,//ref:  /bms/js/service.js
 		    data: {
-		    	"type": $("#currentNode").val(),
+		    	"type": $("#subType").val(),
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val()
 		    },//vin
