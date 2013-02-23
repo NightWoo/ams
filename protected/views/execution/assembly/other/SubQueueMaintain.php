@@ -85,7 +85,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                         <tr>
+                         <!-- <tr>
                                     <td>C12356</td>
                                     <td>F0</td>
                                     <td>LGXC16DG4C1234564</td>
@@ -96,7 +96,7 @@
                                     <td>-</td>
                                     <td>北京，耐寒型，QA-5</td>  
                                     <td><button class="btn-link">编辑</button></td>                                  
-                                </tr>                          
+                                </tr>      -->                     
                     </tbody>
                 </table>
             </div><!-- end of 主体
@@ -114,7 +114,7 @@
             <div class="control-group">
                 <label class="control-label" for="queueTime">排队时间</label>
                 <div class="controls">
-                    <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                    <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'queueTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                 </div>
             </div>
            
