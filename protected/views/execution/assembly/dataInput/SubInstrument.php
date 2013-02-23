@@ -69,7 +69,7 @@
                             </form>                       
                         </div>
                         
-                        <div id="info" class="alert alert-success">LGXC16DGXC1234666仪表分装配置单已打印，请输入下一辆车VIN</div>
+                        <div id="messageAlert" class="alert alert-success">LGXC16DGXC1234666仪表分装配置单已打印，请输入下一辆车VIN</div>
 
         				<table id="tableList" class="table table-condensed">
                             <thead>
@@ -81,13 +81,12 @@
                                     <th class="">耐寒性</th>
                                     <th class="">颜色</th>
                                     <th class="">年份</th>
-                                    <th>订单类型</th>
                                     <th class="">特殊单号</th>
                                     <th class="">备注</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="row0" class="info">
+                               <!--  <tr id="row0" class="info">
                                     <td>C12356</td>
                                     <td>F0</td>
                                     <td>LGXC16DG4C1234564</td>
@@ -95,7 +94,6 @@
                                     <td>德兰黑</td>
                                     <td>2012</td>
                                     <td>1.0舒适标准</td>
-                                    <td>国内订单</td>
                                     <td>-</td>
                                     <td>北京，耐寒型，QA-5</td>                                    
                                 </tr>
@@ -107,10 +105,9 @@
                                     <td>德兰黑</td>
                                     <td>2012</td>
                                     <td>1.0舒适标准</td>
-                                    <td>国内订单</td>
                                     <td>-</td>
                                     <td>QA-5</td>                                   
-                                </tr>                                               
+                                </tr>          -->                                      
                             </tbody>
                         </table>
         		  	</div><!-- end of 主体 -->
