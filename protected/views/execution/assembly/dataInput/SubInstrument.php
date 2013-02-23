@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>BMS.Ver0.1</title>
 	<!-- Le styles -->
-	<link href="/bms/css/bootstrap.min.css" rel="stylesheet"  media="screen">
+	<link href="/bms/css/bootstrap.css" rel="stylesheet"  media="screen">
     <link href="/bms/css/common.css" rel="stylesheet"  media="screen">
     <link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
     <style type="text/css" media="screen">
@@ -35,8 +35,8 @@
                     <div><!-- breadcrumb -->
                     	<ul class="breadcrumb">
                     		<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                        	<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-                            <li><a href="#">数据录入</a><span class="divider">&gt;</span></li>
+                            <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
+                            <li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
                         	<li class="active">仪表分装</li>                
                     	</ul>
                     </div><!-- end of breadcrumb -->
@@ -46,7 +46,7 @@
                    	  		<form id="formVIN" class="well form-search">
                                 <div>
                        	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
-                                    <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="LGXC16DG4C1234564">
+                                    <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
                                     <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button>
                                      
                                     <button id="btnClear" type="reset" class="btn btn-danger"><i class="icon-repeat icon-white"></i>&nbsp;清空</button>
