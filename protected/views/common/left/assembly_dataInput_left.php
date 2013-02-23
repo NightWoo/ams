@@ -21,6 +21,7 @@
 			<li id="leftConfigLi"><a href="/bms/execution/configPlan">日执行计划</a></li>
 			<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
 			<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">订单维护</a></li>
+			<li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li>
 			<!-- <li><a href="#">操作手册.总装</a></li>    -->
 	   <!--  <li class="divider"></li>      
 			<li><a href="#">帮助</a></li>     -->
