@@ -46,6 +46,8 @@
                    	  		<form id="formVIN" class="well form-search">
                                 <div>
                                     <input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
+									<input type="hidden" id='subType' name='subType' value='<?php echo $type;?>'></input>
+
                        	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
                                     <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
                                     <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button>

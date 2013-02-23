@@ -214,6 +214,7 @@ var CONFIG_DELETE_IMAGE = '/bms/config/deleteImage';
 var SUB_CONFIG_SEARCH = "/bms/car/searchSubConfigQueue";
 var SUB_CONFIG_PRINT = "/bms/car/printSubConfig";
 var SUB_CONFIG_VALIDATE = "/bms/car/validateSubConfig";
+var SUB_CONFIG_SAVE = "/bms/config/saveSub";
 
 function alertError (message) {
 	message = 'ajax error'

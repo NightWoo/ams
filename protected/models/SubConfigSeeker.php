@@ -11,7 +11,7 @@ class SubConfigSeeker
 	public function queryAll($status = 0, $stime = NULL, $etime = NULL) {
 		$conditions = array("q.type='{$this->type}'");
 		if($status != -1) {
-			$condtions[] = "q.status = $status";
+			$conditions[] = "q.status = $status";
 		}
 		if(!empty($stime)) {
 			$conditions[] = "q.queue_time >= '$stime'";
