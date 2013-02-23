@@ -99,10 +99,10 @@
 					<div class="node-rgl node-CK" onclick="window.location.href='/bms/execution/child?node=CHECK_OUT&view=WarehouseExit'">
 						出库
 					</div>
-					<div class="node-fz0 node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=SubInstrument'">仪表分装</div>
-					<div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=SubRearAxle'">后桥分装</div>
-					<div class="node-fz0 node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=SubFrontAxle'">前桥分装</div>
-					<div class="node-fz1 node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=SubEngine'">发动机分装</div>
+					<div class="node-fz0 node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&node=subInstrument'">仪表分装</div>
+					<div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&node=subRearAxle'">后桥分装</div>
+					<div class="node-fz0 node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&node=subFrontAxle'">前桥分装</div>
+					<div class="node-fz1 node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&node=subEngine'">发动机分装</div>
 					<div class="node-VQ1YC" onclick="window.location.href='/bms/execution/child?node=VQ1异常&view=VQ1Exception'">VQ1异常</div>
 					<!-- <div class="node-HJ">备件库9月20以后</div> -->
 					<div class="node-vq3yc node-VQ3YC1" onclick="window.location.href='/bms/execution/child?node=VQ3异常&view=VQ3Exception'">
