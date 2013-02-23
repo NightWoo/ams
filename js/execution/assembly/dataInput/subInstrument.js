@@ -85,7 +85,7 @@ $("document").ready(function() {
 				"etime":$("#endTime").val()
 		    },//vin
 		    success: function(response){
-		    	$("#tableList body").text("");
+		    	$("#tableList tbody").text("");
 		    	$(response.data).each(function (index, value) {
 		    		var tr = $("<tr />");
 		    		if (index == 0) {
@@ -103,9 +103,9 @@ $("document").ready(function() {
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.year).appendTo(tr);
 		    		// $("<td />").html(value.order_type).appendTo(tr);
-		    		$("<td />").html(value.specail_order).appendTo(tr);
+		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
-		    		tr.appendTo($("#tableList body"));
+		    		tr.appendTo($("#tableList tbody"));
 
 		    		//after fetch,set the 1st car to the print place
 		    		
