@@ -651,7 +651,22 @@ class Car
 		}
 	}
 	
-	public function generateSubConfigData($type='subInstrument') {
+	//force : true force to print
+	public function generateSubConfigData($type='subInstrument', $force = false) {
+		$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
+		if(empty($subConfig)) {//suit for those cars has passed t0 
+			//$this->addSubConfig();
+			//$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
+			throw new Exception("不存在分装配置");
+		}
+
+		if(!$force) {
+			if($subConfig->status != 0) {//forbid print or has printed
+				$info = array(1=>"已经",2=>"禁止");
+				throw new Exception("该分装配置{$info[$subConfig->status]}打印");
+			}
+		}		
+
         $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
@@ -683,7 +698,6 @@ class Car
 		);
 		
 
-		$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
 		if(!empty($subConfig)) {
 			$subConfig->status = 1;
 			$subConfig->save();

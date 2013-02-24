@@ -35,13 +35,17 @@ class SubConfigSeeker
 	}
 
 	public function validate($vin) {
-		$sql = "SELECT count(*) FROM sub_config_car_queue WHERE vin='$vin' AND status=0 AND type='$this->type'";
+		$sql = "SELECT status FROM sub_config_car_queue WHERE vin='$vin' AND type='$this->type'";
 
 
 		$exist = Yii::app()->db->createCommand($sql)->queryScalar();
-
-		if($exist == 0) {
-			throw new Exception("$vin 不存在或者已经被打印" );
+		if(!is_bool($exist) && $exist == 0) {
+			return;
 		}
+		if($exist != false) {
+			$info = array(1=> "已经被",2=>"禁止");
+			throw new Exception("$vin 配置{$info[$exist]}打印" );
+		}
+		throw new Exception("$vin 不存在待打印配置");
 	}
 }
