@@ -98,6 +98,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success) {
 					ajaxQuery();
+					$('#editModal').modal("toggle");
 				} else {
 					alert(response.message);
 				}

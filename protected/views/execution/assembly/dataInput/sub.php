@@ -6,7 +6,7 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet"  media="screen">
     <link href="/bms/css/common.css" rel="stylesheet"  media="screen">
-    <link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
+    <link rel="stylesheet" type="text/css" href="/bms/css/subPrintable.css" media="print">
     <style type="text/css" media="screen">
         .printable{
             display: none;

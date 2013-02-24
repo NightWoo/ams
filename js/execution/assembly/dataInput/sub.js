@@ -29,7 +29,7 @@ $("document").ready(function() {
 				    	$('#infoStatus').text("");
 			    }
 			    else{
-			    	resetPage();
+			    	ajaxGetPrintList();
 					fadeMessageAlert(response.message,"alert-error");
 				}
 		    },
@@ -66,6 +66,7 @@ $("document").ready(function() {
 				} else {
 					setTimeout(function (){window.print();},500);
 					fadeMessageAlert(response.message,"alert-success");
+					ajaxGetPrintList();
 				}
 			},
 			error:function(){alertError();}
@@ -244,6 +245,7 @@ $("document").ready(function() {
 		$("#btnSubmit").attr("disabled","disabled");
 		$("#vinText").removeAttr("disabled");
 		$("#vinText").attr("value","");
+		$("#tableList tr:eq(1)").removeClass("info");
 		return false;
 	});
 //-------------------END event bindings -----------------------
