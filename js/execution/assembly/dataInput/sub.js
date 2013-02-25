@@ -49,8 +49,8 @@ $("document").ready(function() {
 				resetPage();
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
-				$(".printFrontImage").attr("src", response.data.frontImage);
-				$(".printBackImage").attr("src", response.data.backImage);
+				$(".printFrontImage").attr("src", response.data.image);
+				$(".printBackImage").attr("src", response.data.image);
 				$(".printType").html(response.data.type);
 				$(".printSeries").html(response.data.series);
 				if(response.data.coldResistant == "1"){

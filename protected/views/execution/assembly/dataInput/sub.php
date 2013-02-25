@@ -12,6 +12,9 @@
             display: none;
         }
     </style>
+    <style type="text/css" media="print">
+        td,th{border:none;}
+    </style>
     <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
@@ -118,7 +121,7 @@
             </div>
        	</div><!-- offhead -->
 
-	    <div class="printable" style="width:840pt;height:594pt; padding-top:10pt; font-size:18pt">
+	    <div class="printable" style="width:840pt;height:570pt; padding-top:10pt; font-size:18pt">
             <table class="" style="width:100%; margin-top:10pt;">
                 <tr>
                     <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
@@ -134,7 +137,7 @@
             <table style="width:100%;margin-top:10pt;">
                 <tr>
                     <td class="printRemark" style="font-size:18pt; padding-left:10pt"></td>
-                    <td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">1/2</td>
+                    <!-- <td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">1/2</td> -->
                 </tr>
             </table>
         </div>

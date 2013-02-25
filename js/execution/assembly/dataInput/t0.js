@@ -158,7 +158,6 @@ $("document").ready(function() {
 			success: function(response) {
 				if(response.success){
 				  	$("#vinHint").html(response.data.vinCode + "整车编号" + response.data.serialNumber);	//added by wujun
-					resetPage();
 					//fill data to print
 					$(".printBarCode").attr("src", response.data.vinBarCode);
 					$(".printFrontImage").attr("src", response.data.frontImage);
@@ -176,9 +175,11 @@ $("document").ready(function() {
 					if (response.data.frontImage == "" || response.data.backImage == "") {
 						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
+						$(".printable").addClass("toPrint");
 						setTimeout(function (){window.print();},500);
 						fadeMessageAlert(response.message,"alert-success");
 					}
+					resetPage();
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
@@ -248,7 +249,8 @@ $("document").ready(function() {
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled")
 		ajaxGetPlan();
-		ajaxPlanTomorrow();		
+		ajaxPlanTomorrow();
+		//$(".printable").removeClass("toPrint");		
 	}
 
 	//toggle 车辆信息和提示信息
