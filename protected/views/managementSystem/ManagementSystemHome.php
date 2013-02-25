@@ -26,17 +26,17 @@
     <li id="holder" chapter=<?php echo $chapter ?>></li>
     <li class="nav-header" id="leftManualLi">管理手册</li>
       <li id="leftOverviewLi"><a href="#">概述</a></li>
-      <li id=""><a>方针与愿景</a></li>
+      <li id="leftPolicyLi"><a href="#">方针与愿景</a></li>
       <li id="leftGoalLi"><a href="#">管理目标</a></li>
       <li id=""><a>八大原则</a></li>
       <li id="leftStructureLi"><a href="#">组织结构与职责</a></li>
       <li id="leftProcessLi"><a href="#">管理过程</a></li>
     <li class="nav-header">要素/方法/指南</li>
-      <li id=""><a href="/bms/ManagementSystem/scene">安全与现场</a></li>
+      <li id=""><a>安全与现场</a></li>
       <li id="leftManpowerLi"><a href="/bms/ManagementSystem/manpower?view=MSManpower">人力资源</a></li>
       <li id="leftQualityLi"><a href="/bms/ManagementSystem/quality?view=MSQuality">质量</a></li>
-      <li id=""><a href="">生产力</a></li>
-      <li id=""><a href="">设备、资产与成本</a></li>
+      <li id=""><a>生产力</a></li>
+      <li id=""><a>设备/资产与成本</a></li>
     <li class="nav-header">标准表单</li>
       <li id="leftStandarFormLi"><a href="/bms/ManagementSystem/standardForm">表单下载</a></li>
      <!-- <li class="divider"></li>      
@@ -64,7 +64,7 @@
     						<div class="carousel-inner">
     							<?php
                     //1_overview
-                    $dir1='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Overview';  
+                    $dir1='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_1_Overview';  
                     $handle=opendir($dir1);  
                     $i=0;  
                     while(false!==($file=readdir($handle))){  
@@ -81,7 +81,7 @@
                       } else {
                          echo '<div class="item">';
                       }
-                      echo '<img class="slideImg" src="/bms/doc/browse/managementSystem/managementManual/AMS_Overview/'. $n .'.JPG">';
+                      echo '<img class="slideImg" src="/bms/doc/browse/managementSystem/managementManual/AMS_1_Overview/'. $n .'.JPG">';
                       echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_1_Overview.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
@@ -91,8 +91,8 @@
                       echo '</div>';
                     }
 
-                    //3_management_goal
-                    $dir2='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Goal';  
+                    //2_policy_and_vision
+                    $dir2='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_2_PolicyAndVision';  
                     $handle=opendir($dir2);  
                     $i=0;  
                     while(false!==($file=readdir($handle))){  
@@ -105,7 +105,31 @@
                     
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
-                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Goal/'. $n .'.JPG" alt="">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_2_PolicyAndVision/'. $n .'.JPG" alt="">';
+                      echo '<div class="marsking"></div>';
+                      echo '<div class="carousel-caption">';
+                      echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_2_PolicyAndVision.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
+                      echo '<h4>管理目标</h4>';
+                      echo '<p></p>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
+
+                    //3_management_goal
+                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_3_ManagementGoal';  
+                    $handle=opendir($dir3);  
+                    $i=0;  
+                    while(false!==($file=readdir($handle))){  
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
+                        //var_dump($file);  
+                        $i++;  
+                      }  
+                    }  
+                    closedir($handle);
+                    
+                    for($n=1;$n<=$i;$n++){
+                      echo '<div class="item">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_3_ManagementGoal/'. $n .'.JPG" alt="">';
                       echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_3_ManagementGoal.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
@@ -116,8 +140,8 @@
                     }
 
                     //5_structure_and_duty
-                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Structure';  
-                    $handle=opendir($dir3);  
+                    $dir5='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_5_StructureAndDuty';  
+                    $handle=opendir($dir5);  
                     $i=0;  
                     while(false!==($file=readdir($handle))){  
                       if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
@@ -129,7 +153,7 @@
                     
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
-                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Structure/'. $n .'.JPG" alt="">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_5_StructureAndDuty/'. $n .'.JPG" alt="">';
                       echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="/bms/doc/ppt/AMS_5_StructureAndDuty.pptx"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';
@@ -140,8 +164,8 @@
                     }
 					
 					//6_process
-                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_Process';  
-                    $handle=opendir($dir3);  
+                    $dir6='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_6_Process';  
+                    $handle=opendir($dir6);  
                     $i=0;  
                     while(false!==($file=readdir($handle))){  
                       if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
@@ -153,7 +177,7 @@
                     
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
-                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_Process/'. $n .'.JPG" alt="">';
+                      echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_6_Process/'. $n .'.JPG" alt="">';
                       echo '<div class="marsking"></div>';
                       echo '<div class="carousel-caption">';
                       echo '<p class="pull-right"><a href="#"><i class="icon-download-alt icon-white"></i>下载该文档</a></p>';

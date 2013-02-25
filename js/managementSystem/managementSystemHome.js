@@ -9,10 +9,12 @@ $(document).ready(function() {
 		if(page === 0)
 			$("#leftOverviewLi").addClass("active");
 		else if (page === 10)
+			$("#leftPolicyLi").addClass("active");
+		else if (page === 13)
 			$("#leftGoalLi").addClass("active");
-		else if (page === 15)
+		else if (page === 21)
 			$("#leftStructureLi").addClass("active");
-		else if (page === 16)
+		else if (page === 22)
 			$("#leftProcessLi").addClass("active");
 	}
 
@@ -21,18 +23,23 @@ $(document).ready(function() {
 		$("#leftOverviewLi").addClass("active").siblings().removeClass("active");
 	});
 
-	$("#leftGoalLi").click(function(){
+	$("#leftPolicyLi").click(function(){
 		$("#Carousel").carousel(10);
+		$("#leftPolicyLi").addClass("active").siblings().removeClass("active");
+	});
+
+	$("#leftGoalLi").click(function(){
+		$("#Carousel").carousel(13);
 		$("#leftGoalLi").addClass("active").siblings().removeClass("active");
 	});
 
 	$("#leftStructureLi").click(function(){
-		$("#Carousel").carousel(15);
+		$("#Carousel").carousel(21);
 		$("#leftStructureLi").addClass("active").siblings().removeClass("active");
 	});
 
 	$("#leftProcessLi").click(function(){	
-		$("#Carousel").carousel(16);
+		$("#Carousel").carousel(22);
 		$("#leftProcessLi").addClass("active").siblings().removeClass("active");
 	
 	});
@@ -47,11 +54,13 @@ $(document).ready(function() {
 		activePage = $(".carousel-inner .active")
 		if(activePage.index() === 0 || activePage.index() === 9){
 			$("#leftOverviewLi").addClass("active").siblings().removeClass("active");
-		}else if(activePage.index() === 10 || activePage.index() === 14){
+		}else if(activePage.index() === 10 || activePage.index() === 12){
+			$("#leftPolicyLi").addClass("active").siblings().removeClass("active");
+		}else if(activePage.index() === 13 || activePage.index() === 20){
 			$("#leftGoalLi").addClass("active").siblings().removeClass("active");
-		}else if(activePage.index() === 15){
+		}else if(activePage.index() === 21){
 			$("#leftStructureLi").addClass("active").siblings().removeClass("active");
-		}else if(activePage.index() === 16){
+		}else if(activePage.index() === 22){
 			$("#leftProcessLi").addClass("active").siblings().removeClass("active");
 		}
 	});

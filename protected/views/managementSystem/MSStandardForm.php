@@ -117,6 +117,22 @@
                   </div>
                 </div>
               </li>
+              <li>
+                <div class="">
+                  <a href="#formViewModalJXCFJY" class="thumbnail" data-toggle="modal">
+                    <img src="/bms/doc/browse/managementSystem/standardFrom/JiXiaoChuFaJianYi_thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/excel/JiXiaoChuFaJianYi_20130123.xlsx">下载</a>
+                    <h4>员工绩效考核/处罚建议</h4>
+                    </div>
+                    <div class="description">
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
 				</div><!-- end 内容主体 -->
@@ -192,5 +208,20 @@
         <a class="btn btn-primary" href="/bms/doc/excel/GangWeiMingXi_CheXiWuGuan_20121220.xlsx">下载</a>
       </div>
     </div>
+
+    <div id="formViewModalJXCFJY" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="">岗位明细_车系无关班组</h3>
+        </div>
+      <div class="modal-body">
+        <img src="/bms/doc/browse/managementSystem/standardFrom/JiXiaoChuFaJianYi_view.jpg" alt="">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <a class="btn btn-primary" href="/bms/doc/excel/JiXiaoChuFaJianYi_20130123.xlsx">下载</a>
+      </div>
+    </div>
+    
     </body>
 </html>
