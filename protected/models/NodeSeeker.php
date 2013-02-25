@@ -80,7 +80,7 @@ class NodeSeeker
 
         $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
         foreach($datas as &$data){
-        	if($data['cold_resistant'] === 1){
+        	if($data['cold_resistant'] == 1){
         		$data['cold_resistant'] = '耐寒';
         	} else {
         		$data['cold_resistant'] = '非耐寒';

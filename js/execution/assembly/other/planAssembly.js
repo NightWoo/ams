@@ -62,6 +62,28 @@ $(document).ready(function () {
 	// 	batchNumber();
 	// });
 
+	$("#newSeries").change(function () {
+		if(!($(this).val()==="")){
+			fillType($(this).val(),"new");
+			fillColor($(this).val(),"new");
+			fillConfig($(this).val(),"","new");
+		} else {
+			$("#newCarType,#editCarType").html('<option value="">请先选择车系</option>');
+		}		
+	})
+
+	$("#editSeries").change(function () {
+		if(!($(this).val()==="")){
+			fillType($(this).val(),"edit");
+			fillColor($(this).val(),"edit");
+			fillConfig($(this).val(),"","edit");
+		} else {
+			$("#newCarType,#editCarType").html('<option value="">请先选择车系</option>');
+		}		
+	})
+
+	
+
 	$("#tablePlanAssembly").live("click", function (e) {
 		if ($(e.target).is("i")) {
 			if ($(e.target).hasClass("icon-thumbs-up")) {
@@ -74,6 +96,11 @@ $(document).ready(function () {
 		} else if ($(e.target).is("button")) {
 			if ($(e.target).html() === "编辑") {
 				var siblings = $(e.target).parent("td").siblings();
+
+				fillType($(e.target).parent("td").parent("tr").data("car_series"),"edit");
+				fillColor($(e.target).parent("td").parent("tr").data("car_series"),"edit");
+				fillConfig($(e.target).parent("td").parent("tr").data("car_series"),"","edit");
+				
 				$("#editPlanDate").val($(e.target).parent("td").parent("tr").data("plan_date"));
 				//$("#editPlanId").val($(e.target).parent("td").parent("tr").data("id"));		//added by wujun
 				//$("#editBatchNumber").val(siblings[3].innerHTML);
@@ -491,5 +518,85 @@ $(document).ready(function () {
 	// 		error: function() {alertError();}	
 	// 	})
 	// }
+
+	function fillConfig(carSeries, carType, modPre){
+		$.ajax({
+			url: FILL_CONFIG,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries,
+				"carType" : carType,	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#" + modPre + "Config").html("");
+					var option = '<option value="" selected>请选择</option>';	
+					$.each(response.data, function(index,value){
+						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+						option +='<option value="' + value.config_name +'">'+ value.config_name +'</option>';	
+					});
+				 	$("#" + modPre + "Config").html(option);
+				 
+						
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+	}
+	
+	function fillType(carSeries, modPre) {
+		$.ajax({
+			url: FILL_CAR_TYPE,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#"+ modPre +"CarType").html("");
+					var option = '<option value="" selected>请选择</option>'
+					$.each(response.data, function(index, value){
+						option += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+					});
+					$("#"+ modPre +"CarType").html(option);
+					$("#"+ modPre +"CarBody").html(option);
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+	}
+
+	function fillColor(carSeries, modPre) {
+		$.ajax({
+			url: FILL_CAR_COLOR,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#"+ modPre +"Color").html("");
+					var option = '<option value="" selected>请选择</option>'
+					$.each(response.data, function(index, value){
+						option += '<option value="'+ value.color +'">'+ value.color +'</option>';
+					});
+					$("#"+ modPre +"Color").html(option);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
 	
 });

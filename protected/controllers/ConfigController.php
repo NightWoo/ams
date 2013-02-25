@@ -2,6 +2,7 @@
 Yii::import('application.models.Config');
 Yii::import('application.models.ConfigSeeker');
 Yii::import('application.models.AR.CarConfigAR');
+Yii::import('application.models.AR.CarColorMapAR');
 Yii::import('application.models.AR.CarConfigListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.FileUpload.FileUpload');
@@ -109,6 +110,19 @@ class ConfigController extends BmsBaseController
 			$params = array($carSeries);
 			$carType = CarTypeMapAR::model()->findAll($condition, $params);
 			$data = $carType;
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}	
+	}
+
+	public function actionGetCarColor() {
+		$carSeries = $this->validateStringVal('carSeries','');
+		try {
+			$condition = "series=?";
+			$params = array($carSeries);
+			$carColor = CarColorMapAR::model()->findAll($condition, $params);
+			$data = $carColor;
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	

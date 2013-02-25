@@ -53,7 +53,7 @@
 								<select name="" id="carSeries" class="input-small">
 									<option value=""></option>
 									<option value="F0" selected>F0</option>
-									<option value="M6" disabled>M6</option>
+									<option value="M6">M6</option>
                                     <option value="6B" disabled>思锐</option>
 								</select>
 							</td>
@@ -117,7 +117,7 @@
 			      	<select id="newCarSeries" class="input-medium">
 						<option value="" selected>请选择车系</option>
 						<option value="F0" selected>F0</option>
-						<option value="M6" disabled>M6</option>
+						<option value="M6">M6</option>
                         <option value="6B" disabled>思锐</option>
 					</select>
 			    </div>
@@ -170,7 +170,7 @@
 			      	<select id="editCarSeries" class="input-medium">
 						<option value="" selected>请选择车系</option>
 						<option value="F0">F0</option>
-						<option value="M6" disabled>M6</option>
+						<option value="M6">M6</option>
                         <option value="6B" disabled>思锐</option>
 					</select>
 			    </div>

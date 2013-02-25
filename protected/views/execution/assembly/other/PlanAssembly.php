@@ -49,7 +49,7 @@
                             <td>
                                 <select name="" id="carSeries" class="input-small">
                                     <option value="F0" selected>F0</option>
-                                    <option value="M6" disabled>M6</option>
+                                    <option value="M6">M6</option>
                                     <option value="6B" disabled>思锐</option>
                                 </select>
                             </td>
@@ -136,9 +136,10 @@
                 <label class="control-label" for="newCarSeries">*&nbsp;车系</label>
                 <div class="controls">
                     <select id="newSeries" class="input-small">
-                        <option value="F0" selected>F0</option>
-                        <option value="M6" disabled>M6</option>
-                                    <option value="6B" disabled>思锐</option>
+                        <option value="" selected>请选择</option>
+                        <option value="F0">F0</option>
+                        <option value="M6">M6</option>
+                        <option value="6B" disabled>思锐</option>
 
                     </select>
                 </div>
@@ -149,7 +150,7 @@
                     <!--<input type="text" class="input-medium"  id="newCarType"/>-->
                     <select name="" id="newCarType" class="input-large">
                         <option value="" selected>请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
                         <option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
@@ -158,7 +159,7 @@
                         <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
 						<option value="QCJ7100L(1.0排量实用型（出口）)">QCJ7100L(1.0排量实用型（出口）)</option>
                         <option value="QCJ7100L(1.0排量舒适型（出口）)">QCJ7100L(1.0排量舒适型（出口）)</option>
-                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option>
+                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option> -->
                     </select> 
                 </div>
             </div>
@@ -169,7 +170,7 @@
                     <!--<input type="text" class="input-medium"  id="newConfig"/>-->
                     <select name="" id="newConfig" class="input-large">
                         <option value="" selected>请选择配置</option>
-                        <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
+                        <!-- <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
                         <option value="1.0L实用/QA-4/北京">1.0L实用/QA-4/北京</option>
                         <option value="1.0L实用/QA-4/助力">1.0L实用/QA-4/助力</option>
                         <option value="1.0L实用/QA-5">1.0L实用/QA-5</option>
@@ -180,7 +181,7 @@
                         <option value="1.0L舒适/QA-5">1.0L舒适/QA-5</option>
                         <option value="1.0L舒适/QA-5/北京">1.0L舒适/QA-5/北京</option>
                         <option value="1.0L尊贵/QA-4">1.0L尊贵/QA-4</option>
-                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option>
+                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option> -->
                     </select>
                 </div>
             </div>
@@ -190,10 +191,10 @@
                     <!--<input type="text" class="input-medium"  id="newCarType"/>-->
                     <select name="" id="newCarBody" class="input-large">
                         <option value="" selected>请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
-                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
+                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option> -->
                     </select> 
                 </div>
             </div>
@@ -203,13 +204,13 @@
                     <!--<input type="text" class="input-medium"  id="newColor"/>-->
                     <select name="" id="newColor" class="input-small">
                         <option value="" selected>请选择</option>
-                        <option value="冰岛蓝">冰岛蓝</option>
+                        <!-- <option value="冰岛蓝">冰岛蓝</option>
                         <option value="德兰黑">德兰黑</option>
 						<option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
                         <option value="巴西黄">巴西黄</option>
                         <option value="麦加金">麦加金</option>
-                        <option value="雅典银">雅典银</option>  
+                        <option value="雅典银">雅典银</option>   -->
                     </select> 
                 </div>
             </div>
@@ -223,8 +224,8 @@
                 <label class="control-label" for="">*&nbsp;年份</label>
                 <div class="controls">
                     <select name="" id="newCarYear" class="input-small">
-                        <option value="2012" selected>2012</option>
-                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2013" selected>2013</option>
                         <option value="2014">2014</option>
                     </select>
                 </div>
@@ -304,9 +305,10 @@
                 <label class="control-label" for="editSeries">*&nbsp;车系</label>
                 <div class="controls">
                     <select id="editSeries" class="input-small">
-                        <option value="F0" selected>F0</option>
-                        <option value="M6" disabled>M6</option>
-                                    <option value="6B" disabled>思锐</option>
+                        <option value=""></option>
+                        <option value="F0">F0</option>
+                        <option value="M6">M6</option>
+                        <option value="6B" disabled>思锐</option>
                         
                     </select>
                 </div>
@@ -317,7 +319,7 @@
                     <!--<input type="text" class="input-medium" id="editCarType"/>-->
                     <select name="" id="editCarType" class="input-large">
                         <option value="" selected>请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
                         <option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
@@ -326,7 +328,7 @@
                         <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
 						<option value="QCJ7100L(1.0排量实用型（出口）)">QCJ7100L(1.0排量实用型（出口）)</option>
                         <option value="QCJ7100L(1.0排量舒适型（出口）)">QCJ7100L(1.0排量舒适型（出口）)</option>
-                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option>
+                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option> -->
                     </select>
                 </div>
             </div>
@@ -336,7 +338,7 @@
                     <!--<input type="text" class="input-medium" id="editConfig"/>-->
                     <select name="" id="editConfig" class="input-large">
                         <option value="" selected>请选择配置</option>
-                        <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
+                        <!-- <option value="1.0L实用/QA-4">1.0L实用/QA-4</option>
                         <option value="1.0L实用/QA-4/北京">1.0L实用/QA-4/北京</option>
                         <option value="1.0L实用/QA-4/助力">1.0L实用/QA-4/助力</option>
                         <option value="1.0L实用/QA-5">1.0L实用/QA-5</option>
@@ -347,7 +349,7 @@
                         <option value="1.0L舒适/QA-5">1.0L舒适/QA-5</option>
                         <option value="1.0L舒适/QA-5/北京">1.0L舒适/QA-5/北京</option>
                         <option value="1.0L尊贵/QA-4">1.0L尊贵/QA-4</option>
-                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option>
+                        <option value="1.0L尊贵/QA-5">1.0L尊贵/QA-5</option> -->
                     </select>
                 </div>
             </div>
@@ -357,10 +359,10 @@
                     <!--<input type="text" class="input-medium"  id="newCarType"/>-->
                     <select name="" id="editCarBody" class="input-large">
                         <option value="" selected>请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
-                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
+                        <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option> -->
                     </select> 
                 </div>
             </div>
@@ -370,13 +372,13 @@
                     <!-- <input type="text" class="input-medium" id="editColor"/> -->
                     <select name="" id="editColor" class="input-small">
                         <option value="" selected>请选择</option>
-                        <option value="冰岛蓝">冰岛蓝</option>
+                       <!--  <option value="冰岛蓝">冰岛蓝</option>
                         <option value="德兰黑">德兰黑</option>
 						<option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
                         <option value="巴西黄">巴西黄</option>
                         <option value="麦加金">麦加金</option>
-                        <option value="雅典银">雅典银</option> 
+                        <option value="雅典银">雅典银</option>  -->
                     </select>
                 </div>
             </div>
@@ -390,8 +392,8 @@
                 <label class="control-label" for="">*&nbsp;年份</label>
                 <div class="controls">
                     <select name="" id="editCarYear" class="input-small">
-                        <option value="2012" selected>2012</option>
-                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2013" selected>2013</option>
                         <option value="2014">2014</option>
                     </select>
                 </div>

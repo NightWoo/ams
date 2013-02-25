@@ -52,7 +52,7 @@
 								<select name="" id="carSeries" class="input-small">
 									<option value="" selected></option>
 									<option value="F0">F0</option>
-									<option value="M6" disabled>M6</option>
+									<option value="M6">M6</option>
 								</select>
 							</td>
 							<td>
