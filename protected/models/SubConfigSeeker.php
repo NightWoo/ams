@@ -31,6 +31,11 @@ class SubConfigSeeker
 
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
+		//added by wujun
+		foreach($datas as &$data){
+			$data['type_name'] = $this->cutCarType($data['type']);
+		}
+
 		return $datas;
 	}
 
@@ -47,5 +52,25 @@ class SubConfigSeeker
 			throw new Exception("$vin 配置{$info[$exist]}打印" );
 		}
 		throw new Exception("$vin 不存在待打印配置");
+	}
+
+	//added by wujun
+	private function cutCarType($type) {
+		$length = strlen($type);
+        $typeName = '';
+		$i = 0;
+        while($i < $length){
+            if($type[$i] === '(' || $i === stripos($type, '（')){
+            	break;
+            } else {	
+            	$typeName .= $type[$i];
+            	$i++;
+            }
+        }
+        if(empty($typeName)){
+        	$typeName = $type;
+        }
+
+        return $typeName;
 	}
 }

@@ -6,7 +6,7 @@
         <!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet">
         <link href="/bms/css/common.css" rel="stylesheet">
-		<link href="/bms/css/execution/assembly/other/OrderMaintain.css" rel="stylesheet">
+		<link href="/bms/css/execution/assembly/other/subQueueMaintain.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
@@ -39,28 +39,38 @@
                 <form id="form" class="well form-search">
                     <table>
                         <tr>
-                            <td>
-                                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label><input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
+                            <td class="alignRight">
+                                <label>VIN&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <label>&nbsp;&nbsp;&nbsp;&nbsp;分装</label>
-                                <select id="selectSub" class="input">
+                                <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="" class="input-medium">
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                <!-- <label>分装</label> -->
+                                <select id="selectSub" class="select-medium">
                                     <option value="subInstrument">仪表分装</option>
                                     <option value="subEngine">发动机分装</option>
-                                    <option value="subFrontAxle">前桥分装</option>
-                                    <option value="subEndAxle">后桥分装</option>
+                                    <option value="subFrontAxle" disabled>前桥分装</option>
+                                    <option value="subEndAxle" disabled>后桥分装</option>
                                 </select>
                             </td>
                             
                         </tr>
                         <tr>
                             <td>
-                                 <label>列队时间</label>
-                                <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00:00'});"/>
+                                <label>列队时间&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</span>
-                                <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00:00'});"/>
+                                <input type="text" class="input-medium" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                <input type="text" class="input-medium" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                             </td>
                             <td>
                                 <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
@@ -72,31 +82,21 @@
                <table id="tableList" class="table table-condensed">
                     <thead>
                         <tr class="active">
-                            <th class="">整车编号</th>
-                            <th class="">VIN号</th>
-                            <th class="">车系</th>
-                            <th class="">车型/配置</th>
-                            <th class="">耐寒性</th>
-                            <th class="">颜色</th>
-                            <th class="">年份</th>
-                            <th class="">特殊单号</th>
-                            <th class="">备注</th>
+                            <th class="" style="width:60px">整车编号</th>
+                            <th class="" style="width:120px">列队时间</th>
+                            <th class="" style="width:150px">VIN号</th>
+                            <th class="" style="width:30px">车系</th>
+                            <th class="" style="width:230px">车型/配置</th>
+                            <th class="" style="width:50px">耐寒性</th>
+                            <th class="" style="width:50px">颜色</th>
+                            <!-- <th class="" style="width:50px">年份</th>
+                            <th class="" style="width:100px">特殊单号</th> -->
+                            <th class="" style="">备注</th>
                             <!-- <th> 操作</th> -->
                         </tr>
                     </thead>
                     <tbody>
-                         <!-- <tr>
-                                    <td>C12356</td>
-                                    <td>F0</td>
-                                    <td>LGXC16DG4C1234564</td>
-                                    <td>QCJ7100L（1.0排量尊舒适型）</td>
-                                    <td>德兰黑</td>
-                                    <td>2012</td>
-                                    <td>1.0舒适标准</td>
-                                    <td>-</td>
-                                    <td>北京，耐寒型，QA-5</td>  
-                                    <td><button class="btn-link">编辑</button></td>                                  
-                                </tr>      -->                     
+               
                     </tbody>
                 </table>
             </div><!-- end of 主体

@@ -95,7 +95,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.serial_number).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.series).appendTo(tr);
-		    		$("<td />").html(value.type + value.config_name).appendTo(tr);
+		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
 		    		if(value.coldResistant == "1"){
 						$("<td />").html('耐寒').appendTo(tr);						
 					}else{

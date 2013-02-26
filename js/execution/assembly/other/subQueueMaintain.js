@@ -50,18 +50,19 @@ $(document).ready(function() {
 			    		var tr = $("<tr />").data("id", value.id).data("status", value.status).data("queueTime", value.queueTime);
 
 			    		$("<td />").html(value.serial_number).appendTo(tr);
+			    		$("<td />").html(value.queueTime.substring(0,16)).appendTo(tr);
 			    		$("<td />").html(value.vin).appendTo(tr);
 			    		$("<td />").html(value.series).appendTo(tr);
-			    		$("<td />").html(value.type + value.config_name).appendTo(tr);
+			    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
 			    		if(value.coldResistant == "1"){
 							$("<td />").html('耐寒').appendTo(tr);						
 						}else{
 							$("<td />").html('非耐寒').appendTo(tr);						
 						}
 			    		$("<td />").html(value.color).appendTo(tr);
-			    		$("<td />").html(value.year).appendTo(tr);
+			    		// $("<td />").html(value.year).appendTo(tr);
 			    		// $("<td />").html(value.order_type).appendTo(tr);
-			    		$("<td />").html(value.special_order).appendTo(tr);
+			    		// $("<td />").html(value.special_order).appendTo(tr);
 			    		$("<td />").html(value.remark).appendTo(tr);
 
 			    		var opTd = $("<td />");
