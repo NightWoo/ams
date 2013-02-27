@@ -8,6 +8,7 @@
 		<link href="/bms/css/execution/assembly/dataInput/T11-F10.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
 		<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	    <script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/head.js"></script>
 		<script type="text/javascript" src="/bms/js/execution/assembly/dataInput/t11-f10.js"></script>
@@ -66,12 +67,12 @@
 								</tr>
 							</table>
 							<div>
-								<div id="messageAlert" class="alert"></div>    
-							</div> <!-- end 提示信息 -->
-						
-							
+								<div id="messageAlert" class="alert"></div>
+							</div> <!-- end 提示信息 -->							
 						</form>
-
+						<div id="checkAlert">
+							
+						</div>
 						<div id="ComponentInfo">	
 								<table class="table table-striped table-condensed" id="componentTable">
 									<thead>

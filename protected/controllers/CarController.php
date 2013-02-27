@@ -180,6 +180,20 @@ class CarController extends BmsBaseController
         }
 	}
 
+    //added by wujun
+    public function actionValidateBarCode(){
+        $vin = $this->validateStringVal('vin', '');
+        $componentId = $this->validateIntVal('componentId', '');
+        $barCode = $this->validateStringVal('barCode');
+        try{
+            $car = Car::create($vin);
+            $car->checkBarCode($componentId, $barCode);
+            $this->renderJsonBms(true, 'OK' , $barCode);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
 	public function actionShowTrace() {
 		$vin = $this->validateStringVal('vin', '');
 		$node = $this->validateStringVal('node', '');

@@ -23,6 +23,8 @@ var T0_ENTER_AND_PRINT = "/bms/execution/enterT0";
 var T11_F10_GET_PARTS = "/bms/car/viewComponents";
 //T11,T21,T32,C10,C21,F10  根据零部件条码，确认零部件
 var T11_F10_VALIDATE_PART = "";
+//T11,T21,T32,C10,C21,F10 校验条码
+var T11_F10_VALIDATE_BAR_CODE = "/bms/car/validateBarCode";
 //T11  提交已填写的条码
 var T11_F10_SUBMIT_PARTS = "/bms/execution/enterNode";
 

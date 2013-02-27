@@ -62,6 +62,27 @@ $("document").ready(function() {
 		});
 	}
 
+	function ajaxValidateBarCode (compIndex, barCode) {
+		$.ajax({
+			url: T11_F10_VALIDATE_BAR_CODE,
+			type: "get",
+			dataType: "json",
+			data: {
+				"vin" : $('#vinText').attr("value"),
+				"componentId" : compArray[compIndex].id,
+				"barCode" : barCode,
+			},
+			success: function (response) {
+				if(response.success){
+					$("#comp"+compIndex).html(barCode);	//modified by wujun
+					recordArray.push(compIndex);
+				}else{
+					addCheckMessage(response.message);
+				}
+			}
+		})
+	}
+
 	//进入
 	function ajaxEnter() {
 		var obj = {};
@@ -166,7 +187,7 @@ $("document").ready(function() {
 		$("#messageAlert").show(500,function () {
 			setTimeout(function() {
 				$("#messageAlert").hide(1000);
-			},5000);
+			},10000);
 		});
 	}
 
@@ -300,15 +321,32 @@ $("document").ready(function() {
 			console.log($('#compCodeText').val());
 			var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
 			if(index != -1){
-				// $("#comp"+index).html(compArray[index].simple_code);
-				//not simple_code above,just things inputed
-				$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun
-				recordArray.push(index);
+				if(!compArray[index].bar_code){
+					barCode = jQuery.trim($(this).val());
+					ajaxValidateBarCode(index, barCode);
+
+					//$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun
+					//recordArray.push(index);
+				}else{
+					message = "此车辆已记录" + compArray[index].name + "条码：" + compArray[index].bar_code
+					addCheckMessage(message);
+				}
 			}
 			$(this).val("");
 			return false;
 		}
 	});
+
+	function addCheckMessage (message) {
+
+		checkMessage  = "<div class='alert alert-error'>";
+		checkMessage += "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+		checkMessage += "<strong>注意！</strong>";
+		checkMessage += message;
+		checkMessage += "</div>";
+
+		$("#checkAlert").prepend(checkMessage);
+	}
 //-------------------END event bindings -----------------------
 
 });

@@ -45,7 +45,11 @@ class Config
 			$traceComponents = $ctClass::model()->findAll('car_id=?',array($car->id));
         } else {
         	$configLists = CarConfigListAR::model()->findAll('config_id=? AND node_id=? AND istrace!=0', array($this->configAR->id, $node->id));
-			$traceComponents = $ctClass::model()->findAll('car_id=? AND node_id=?',array($car->id,$node->id));
+			//$traceComponents = $ctClass::model()->findAll('car_id=? AND node_id=?',array($car->id,$node->id));
+			// modify by wujun
+			// 检查某辆车某是否有某零部件的条码的记录，与当时条码在那个node扫描记录无关，
+			// 比如，某零部件条码原来在T11工位已经进行记录，后来该零部件会被调到T21工位进行扫描记录，应还是认为该零部件已经进行过记录。
+			$traceComponents = $ctClass::model()->findAll('car_id=?',array($car->id));
 		}
 			
 		$datas = array();
