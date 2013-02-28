@@ -72,6 +72,7 @@ $("document").ready(function() {
 				"componentId" : compArray[compIndex].id,
 				"barCode" : barCode,
 			},
+			async:false,
 			success: function (response) {
 				if(response.success){
 					$("#comp"+compIndex).html(barCode);	//modified by wujun
@@ -248,6 +249,17 @@ $("document").ready(function() {
 		};
 		return false;
 	}
+
+	function addCheckMessage (message) {
+
+		checkMessage  = "<div class='alert alert-error fade in'>";
+		checkMessage += "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+		checkMessage += "<strong>注意！</strong>";
+		checkMessage += message;
+		checkMessage += "</div>";
+
+		$("#checkAlert").prepend(checkMessage);
+	}
 //-------------------END common functions -----------------------
 
 //------------------- event bindings -----------------------
@@ -277,7 +289,7 @@ $("document").ready(function() {
 		if(!($("#btnSubmit").hasClass("disabled"))){
 			$("#btnSubmit").attr("disabled","disabled");
 			//if scan less than need to,prompt alert
-			if(compArray.length == 0 || (compArray.length != 0 && compArray.length == compArray.length)){
+			if(compArray.length == 0 || (compArray.length != 0 && compArray.length == recordArray.length)){
 				ajaxEnter();
 				return false;
 			}
@@ -285,12 +297,13 @@ $("document").ready(function() {
 				var unRecordComp = "";
 				for (var i = 0; i < compArray.length; i++) {
 					if(!ifExistInRecordArray(i,recordArray)){
-						unRecordComp += compArray[i].display_name + "\n";
+						unRecordComp += "-" + compArray[i].display_name + "-\n";
 					}
 				};
-				var confirmResult = confirm("已扫描描零部件" + recordArray.length + "个" +
-					"\n需扫描零部件" + compArray.length + "个\n未扫零部件有:\n" + 
-						unRecordComp + "请确认是否提交");
+
+				var confirmResult = confirm("还有" + (compArray.length - recordArray.length) + "个零部件未扫描:\n\n" + 
+						unRecordComp + "\n请确认是否提交");
+
 				if (confirmResult) {
 				    ajaxEnter();
 				}else{
@@ -321,32 +334,29 @@ $("document").ready(function() {
 			console.log($('#compCodeText').val());
 			var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
 			if(index != -1){
-				if(!compArray[index].bar_code){
+				// if(!compArray[index].bar_code){
+				if(!$("#comp"+index).html()){
 					barCode = jQuery.trim($(this).val());
 					ajaxValidateBarCode(index, barCode);
 
 					//$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun
 					//recordArray.push(index);
 				}else{
-					message = "此车辆已记录" + compArray[index].name + "条码：" + compArray[index].bar_code
+					message = "此车辆已记录" + compArray[index].name + "条码：" + $("#comp"+index).html()
 					addCheckMessage(message);
 				}
 			}
 			$(this).val("");
+			console.log(compArray.length);
+			console.log(recordArray.length);
+			if(compArray.length == recordArray.length){
+				$("#btnSubmit").focus();
+			}
 			return false;
 		}
 	});
 
-	function addCheckMessage (message) {
-
-		checkMessage  = "<div class='alert alert-error'>";
-		checkMessage += "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
-		checkMessage += "<strong>注意！</strong>";
-		checkMessage += message;
-		checkMessage += "</div>";
-
-		$("#checkAlert").prepend(checkMessage);
-	}
+	
 //-------------------END event bindings -----------------------
 
 });
