@@ -37,10 +37,16 @@ class PauseSeeker
 		
 		$condition = join(' AND ', $conditions);
 		
-		$limit = $perPage;
-		$offset = ($curPage - 1) * $perPage;
+		// $limit = $perPage;
+		// $offset = ($curPage - 1) * $perPage;
+
+		$limit = "";
+        if(!empty($perPage)) {
+            $offset = ($curPage - 1) * $perPage;
+            $limit = "LIMIT $offset, $perPage";
+        }
 		
-		$sql = "SELECT * FROM pause WHERE $condition ORDER BY pause_time $orderBy LIMIT $offset,$limit";
+		$sql = "SELECT * FROM pause WHERE $condition ORDER BY pause_time $orderBy $limit";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$countSql = "SELECT count(*) FROM pause WHERE $condition";
@@ -50,10 +56,14 @@ class PauseSeeker
 			$editor = User::model()->findByPk($data['editor']);
 			if(!empty($editor)){
 				$data['editor_name'] =	$editor->display_name;
+			}else{
+				$data['editor_name'] =	'-';
 			}
 			$node = NodeAR::model()->findByPk($data['node_id']);
 			if(!empty($node)){
 				$data['node_name'] = $node->display_name; 
+			}else{
+				$data['node_name'] = '-'; 
 			}
 			
 			if(($data['recover_time'] == 0)){

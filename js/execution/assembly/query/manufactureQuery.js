@@ -195,12 +195,12 @@ $(document).ready(function () {
 		}
 	)
 
-	// $("#exportPause").click(
-	// 	function () {
-	// 		ajaxExport();
-	// 		return false;
-	// 	}
-	// );
+	$("#exportPause").click(
+		function () {
+			ajaxExportPauseRecord();
+			return false;
+		}
+	);
 
 	//plan pagination
 	$("#prePlan").click(
@@ -515,6 +515,17 @@ $(document).ready(function () {
 		);
 	}
 
+	function ajaxExportPauseRecord () {
+		window.open(EXPORT_PAUSE_RECORD +
+			"?&startTime=" + $("#startTime").val() +
+			"&endTime=" + $("#endTime").val() +
+			"&causeType=" + $("#causeType").val() +
+			"&dutyDepartment=" + $("#dutyDepartment").val() +
+			"&section=" + $("#selectNode").val() +
+			"&pauseReason=" + $("#pauseReason").val()
+		);
+	}
+
 	function ajaxQueryPause(targetPage) {
 		$.ajax({
 			type: "get",
@@ -525,7 +536,7 @@ $(document).ready(function () {
 				"endTime": $("#endTime").val(),
 				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
-				"section": $("#section").val(),	
+				"section": $("#selectNode").val(),	
 				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
 				"curPage": targetPage || 1,

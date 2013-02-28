@@ -132,6 +132,18 @@
                                     <li id="lastCars"><a href="#">&raquo;</a></li>
                                 </ul>
                             </div>
+                            <div id="paginationPause" class="pagination pagination-small pagination-right" style="display: none;">
+                                <ul>
+                                    <li id="exportPause"><a href=""><span id="totalPause"></span></a></li>
+                                </ul>
+                                <ul>
+                                    <li id="firstPause"><a href="#"><span>&lt;&lt;</span></a></li>
+                                    <li id="prePause" class="prePage"><a href="#"><span>&lt;</span></a></li>
+                                    <li id="curPause" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
+                                    <li id="nextPause" class="nextPage"><a href="#"><span>&gt;</span></a></li>
+                                    <li id="lastPause"><a href="#"><span>&gt;&gt;</span></a></li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
@@ -184,7 +196,7 @@
                         
                                 </tbody>
                             </table>
-                            <div id="paginationPause" class="pagination" style="display: none;">
+                            <!-- <div id="paginationPause" class="pagination" style="display: none;">
                                 <ul>
                                     <li id="exportPause"><a href=""><span id="totalPause"></span></a></li>
                                 </ul>
@@ -195,7 +207,7 @@
                                     <li id="nextPause" class="nextPage"><a href="#"><span>&gt;</span></a></li>
                                     <li id="lastPause"><a href="#"><span>&gt;&gt;</span></a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="tab-pane" id="pauseDistribute">

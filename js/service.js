@@ -195,6 +195,7 @@ var GET_PROVIDER_NAME_LIST = "/bms/provider/getNameList";
 //pause edit
 var QUERY_PAUSE_RECORD = "/bms/pause/query";
 var QUERY_PAUSE_DISTRIBUTE = "/bms/pause/queryDistribute";
+var EXPORT_PAUSE_RECORD = "/bms/pause/exportRecord";
 var QUERY_USE_RATE = "/bms/pause/queryUseRate";
 var PAUSE_EDIT_SAVE = "/bms/pause/editSave";
 var GET_PAUSE_DUTY_DEPARTMENT_LIST = "/bms/pause/getDutyDepartment";

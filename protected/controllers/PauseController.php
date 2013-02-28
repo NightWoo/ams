@@ -120,4 +120,36 @@ class PauseController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
+
+	public function actionExportRecord() {
+		$startTime = $this->validateStringVal('startTime', '');
+		$endTime = $this->validateStringVal('endTime', '');
+		$section = $this->validateStringVal('section', '');
+		$causeType = $this->validateStringVal('causeType', '');
+		$dutyDepartment = $this->validateStringVal('dutyDepartment', '');
+		$pauseReason = $this->validateStringVal('pauseReason', '');
+		$orderBy = $this->validateStringVal('orderBy', '');
+
+		try{
+			$orderBy = empty($orderBy) ? 'ASC' : 'DESC';
+			$seeker = new PauseSeeker();
+			list($total, $datas) = $seeker->query($startTime, $endTime, $section, $causeType, $dutyDepartment, $pauseReason, 0, 0, $orderBy);
+			$content = "recordID,停线类型,工位,责任部门,原因,时长,停线时刻,恢复时刻,编辑人\n";
+			foreach($datas as $data) {
+				$content .= "{$data['id']},";
+				$content .= "{$data['cause_type']},";
+				$content .= "{$data['node_name']},";
+				$content .= "{$data['duty_department']},";
+				$content .= "{$data['remark']},";
+				$content .= "{$data['howlong']},";
+				$content .= "{$data['pause_time']},";
+				$content .= "{$data['recover_time']},";
+				$content .= "{$data['editor_name']}\n";
+			}
+			$export = new Export('停线明细_' . date('YmdHi'), $content);
+			$export->toCSV();
+		} catch(Exception $e) {
+			echo $e->getMessage();	
+		}
+	}
 }
