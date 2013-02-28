@@ -47,7 +47,10 @@ class SubConfigSeeker
 		if(!is_bool($exist) && $exist == 0) {
 			return;
 		}
-		if($exist != false) {
+		if($exist == 1) {
+			return;
+		}
+		if($exist == 2) {
 			$info = array(1=> "已经被",2=>"禁止");
 			throw new Exception("$vin 配置{$info[$exist]}打印" );
 		}

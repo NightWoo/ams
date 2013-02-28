@@ -661,7 +661,7 @@ class Car
 		}
 
 		if(!$force) {
-			if($subConfig->status != 0) {//forbid print or has printed
+			if($subConfig->status == 2) {//forbid print
 				$info = array(1=>"已经",2=>"禁止");
 				throw new Exception("该分装配置{$info[$subConfig->status]}打印");
 			}
