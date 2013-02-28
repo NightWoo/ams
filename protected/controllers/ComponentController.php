@@ -179,13 +179,14 @@ class ComponentController extends BmsBaseController
 
 
 	public function actionSearch() {
+        $series = $this->validateStringVal('series', '');
         $name = $this->validateStringVal('component', '');
         try{
             if(empty($name)) {
                 throw new Exception('component cannot be null');
             }
             $seeker = Component::createSeeker();
-            $data = $seeker->getAll($name);
+            $data = $seeker->getAll($name, $series);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -196,13 +197,14 @@ class ComponentController extends BmsBaseController
 	
 	//added by wujun
 	public function actionGetCode() {
+		$series = $this->validateStringVal('series', '');
 		$name =$this->validateStringVal('componentName', '');
 		try{
 			if(empty($name)){
 				throw new Exception('component cannot be null');	
 			}
 			$seeker = new ComponentSeeker;
-			$data = $seeker->getComponentCode($name);
+			$data = $seeker->getComponentCode($name, $series);
 			
 			$this->renderJsonBms(true, 'OK', $data);
 		}catch(Exception $e) {

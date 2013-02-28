@@ -13,6 +13,11 @@ $(document).ready(function() {
 	})
 	
 	$("#carSeries").change(function () {
+		emptyNewModal();
+		emptyEditModal();
+		$("#btnAdd").attr("disabled", "disabled");
+		$("#btnCopy").attr("disabled", "disabled");
+
 		if(!($(this).val()==="")){
 			fillType($("#carSeries").val());
 			fillConfig($("#carSeries").val());
@@ -419,6 +424,7 @@ $(document).ready(function() {
 			async: false, 
 			dataType: "json",
 			data: {
+				"series" : $("#carSeries").val(),
 				"componentName": componentName	
 			},
 			success: function(response) {
@@ -494,7 +500,7 @@ $(document).ready(function() {
 	//零部件的自动补全
 	$("#newComponentName").typeahead({
 	    source: function (input, process) {
-	        $.get(GET_COMPONENT_NAME_LIST, {"component":input}, function (data) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
 	        	return process(data.data);
 	        },'json');
 	    },
@@ -508,7 +514,7 @@ $(document).ready(function() {
 	
 	$("#editComponentName").typeahead({
 	    source: function (input, process) {
-	        $.get(GET_COMPONENT_NAME_LIST, {"component":input}, function (data) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val() }, function (data) {
 	        	return process(data.data);
 	        },'json');
 	    },

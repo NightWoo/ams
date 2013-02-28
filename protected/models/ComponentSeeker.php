@@ -7,8 +7,8 @@ class ComponentSeeker
 	public function __construct(){
 	}
 
-	public function getAll($token) {
-		$sql = "SELECT display_name FROM component WHERE display_name LIKE '%$token%'";
+	public function getAll($token, $series) {
+		$sql = "SELECT display_name FROM component WHERE display_name LIKE '%$token%' AND car_series='$series'";
 		return Yii::app()->db->createCommand($sql)->queryColumn();
 	}	
 	
@@ -60,8 +60,8 @@ class ComponentSeeker
 	}
 	
 	//added by wujun
-	public function getComponentCode($componentName) {
-		$sql = "SELECT id AS component_id, code AS component_code, display_name AS component_name, name, simple_code FROM component WHERE display_name = '$componentName'";
+	public function getComponentCode($componentName, $series) {
+		$sql = "SELECT id AS component_id, code AS component_code, display_name AS component_name, name, simple_code FROM component WHERE display_name = '$componentName' AND car_series='$series'";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		return $datas;
 	}
