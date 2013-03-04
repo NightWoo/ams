@@ -1,56 +1,61 @@
 $(document).ready(function () {
-	$("#configContainer").hide();
-	var fileObjNameMap = ["front","back"];
-	$(".config-item").live("click", function (event) {
-		if ($(event.target).is("button")) {
-			var index = $(".config-item").index($(event.target).parent("div"));
-			$(".uploadify").eq(index).uploadify('settings','fileObjName', fileObjNameMap[index]);
-			var sessionData = {};
-			sessionData[$("#sessionName").val()] = $("#sessionId").val();
-			sessionData['id'] = $("#config").val();
-			$(".uploadify").eq(index).uploadify('settings','formData', sessionData);
-			$(".uploadify").eq(index).uploadify('upload','*');
-		}
-	});
 
-	$(".btnDelect").live("click",function () {
-		var index = $(".config-item").index($(this).parent("div"));
-		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
-		// console.log($(".uploadify").eq(index).attr("id"));
-		// // $(".uploadify").eq(index).uploadify('settings','uploadLimit', 1);
-		// $(".uploadify").eq(index).uploadify("cancel", "*");
-		// $("#" + $(".uploadify").eq(index).attr("id")).uploadify("cancel");
-		// // $(".uploadify").eq(index).uploadify("destroy");
-		// // $(".uploadify").eq(index).uploadify("destroy");
-	});
+	// $("#btnUpload").click(function () {
+	// 	$("#demoForm").submit({"id": $("#config").val()});
+	// });
 
-	$('.file_upload').uploadify({
-			'swf'      : '/bms/js/uploadify/uploadify.swf',
-			'uploader' : '/bms/config/upload',
-			'buttonText' : '本地文件',
-			'auto'     : false,
-			'queueID' : 'queue1',
-		    'width'    : 86,
-		    'uploadLimit' : 1,
-			'fileObjName' : 'frontImage',//backImage
-		    'removeTimeout' : 0,
-		    'formData' : {},
-		    'onSelect' : function(file) {
-	    		$('#' + this.settings.button_placeholder_id).siblings("input[type=text]").val(file.name);
-	        },
-	        'onUploadSuccess' : function () {
-	        	
-	        	$('#' + this.settings.button_placeholder_id).siblings("button").addClass("disabled");
-				$('#' + this.settings.button_placeholder_id).siblings("input[type=text]").attr("disabled", "disabled");
-				$('#' + this.settings.button_placeholder_id).siblings(".btnDelect").show();
-				$('#' + this.settings.button_placeholder_id).siblings(".notyet").hide();
+	// variable to hold request
+var request;
+// bind to the submit event of our form
+$("#demoForm").submit(function(event){
+    // abort any pending request
+    if (request) {
+        request.abort();
+    }
+    // setup some local variables
+    var $form = $(this);
+    // let's select and cache all the fields
+    var $inputs = $form.find("input, select, button, textarea");
+    // serialize the data in the form
+    var serializedData = $form.serialize();
+    console.log( $("#config").val())
+    serializedData.id = $("#config").val();
 
-	        },
-	        'onDialogOpen' : function () {
-	        	$('#' + this.settings.button_placeholder_id).uploadify("cancel");
-	        }
-			// Your options here
-	});
+    // let's disable the inputs for the duration of the ajax request
+    $inputs.prop("disabled", true);
+
+    // fire off the request to /form.php
+    var request = $.ajax({
+        url: "/bms/config/upload",
+        type: "post",
+        data: serializedData
+    });
+
+    // callback handler that will be called on success
+    request.done(function (response, textStatus, jqXHR){
+        // log a message to the console
+        console.log("Hooray, it worked!");
+    });
+
+    // callback handler that will be called on failure
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        // log the error to the console
+        console.error(
+            "The following error occured: "+
+            textStatus, errorThrown
+        );
+    });
+
+    // callback handler that will be called regardless
+    // if the request failed or succeeded
+    request.always(function () {
+        // reenable the inputs
+        $inputs.prop("disabled", false);
+    });
+
+    // prevent default posting of form
+    event.preventDefault();
+});
 
 	$("#series").change(function () {
 		ajaxSender.ajaxGetCarType($(this).val());

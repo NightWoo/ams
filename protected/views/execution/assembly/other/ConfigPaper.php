@@ -87,10 +87,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 				<input type="hidden" id='sessionId' value='<?php echo session_id();?>'></input>
 				<div class="well form-inline" id="configContainer">
 					<div class="config-item">
+						<form name="front" id="demoForm" method="post" enctype="multipart/form-data" 
+						action="/bms/config/upload"
+						 > 
+						 <p>Upload File: <input type="file" name="file" /></p> 
+						 <p><input type="submit" value="Submit" /></p> 
+						 <button class="btn btn-primary" id="btnUpload">上传</button>
+						</form> 
 						<label style="">主配置单正面</label>
 						<input type="file" name="file_upload" id="file_upload" class="file_upload"/>
 						<input class="span7" id="testInput" type="text" disabled>
-						<button class="btn btn-primary disabled">上传</button>
+						
 						<span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
 					</div>
@@ -102,64 +109,6 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<span class="help-inline btnDelect"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
 					</div>
-
-					
-					<!-- <table id="tableUpload">
-						
-						
-						<tr>
-							<td class="alignRight" width="90"><label>仪表分装</label></td>
-							<td>
-								<div class="input-prepend">
-									<button class="btn disabled" type="button" id="">本地文件</button>
-									<input class="span7" id="" type="text" disabled>
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary disabled" type="button" id="">上传</button>
-								<span class="help-inline"><p class="text-muted">尚未实施</p></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="alignRight"><label>发动机分装</label></td>
-							<td>
-								<div class="input-prepend">
-									<button class="btn disabled" type="button" id="">本地文件</button>
-									<input class="span7" id="" type="text" disabled>
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary disabled" type="button" id="">上传</button>
-								<span class="help-inline"><p class="text-muted">尚未实施</p></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="alignRight"><label>前桥分装</label></td>
-							<td>
-								<div class="input-prepend">
-									<button class="btn disabled" type="button" id="">本地文件</button>
-									<input class="span7" id="" type="text" disabled>
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary disabled" type="button" id="">上传</button>
-								<span class="help-inline"><p class="text-muted">尚未实施</p></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="alignRight"><label>后桥分装</label></td>
-							<td>
-								<div class="input-prepend">
-									<button class="btn disabled" type="button" id="">本地文件</button>
-									<input class="span7" id="" type="text" disabled>
-								</div>
-							</td>
-							<td>
-								<button class="btn btn-primary disabled" type="button" id="">上传</button>
-								<span class="help-inline"><p class="text-muted">尚未实施</p></span>
-							</td>
-						</tr>
-					</table> -->
 				</div>					
 		  	</div><!-- end of 主体 -->
         </div><!-- end of 页体 -->
