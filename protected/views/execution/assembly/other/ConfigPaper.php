@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="/bms/js/uploadify/jquery.uploadify-3.1.js"></script>
 	<link rel="stylesheet" type="text/css" href="/bms/js/uploadify/uploadify.css">
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/configPaper.js"></script>
+	<script type="text/javascript" src="/bms/js/jquery.form.js"></script>
 	<style type="text/css">
 	label{margin-bottom: 0}
 		.queue{display: inline-block;min-width: 350px;background-color: #FFF;height: 50px;padding: 5px 10px;
@@ -87,27 +88,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 				<input type="hidden" id='sessionId' value='<?php echo session_id();?>'></input>
 				<div class="well form-inline" id="configContainer">
 					<div class="config-item">
-						<form name="front" id="demoForm" method="post" enctype="multipart/form-data" 
+						<form name="front" id="frontForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
-						 <p>Upload File: <input type="file" name="file" /></p> 
-						 <p><input type="submit" value="Submit" /></p> 
-						 <button class="btn btn-primary" id="btnUpload">上传</button>
-						</form> 
-						<label style="">主配置单正面</label>
-						<input type="file" name="file_upload" id="file_upload" class="file_upload"/>
-						<input class="span7" id="testInput" type="text" disabled>
-						
-						<span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
+						 主配置单正面 <input type="file" name="front" />
+						 <input type="submit" value="上传" class="btn btn-primary"/>
+						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						</form> 
+						
+						
+						
 					</div>
 					<div class="config-item">
-						<label style="">主配置单反面</label>
-						<input type="file" name="file_upload" id="file_upload2" class="file_upload"/>
-						<input class="span7" id="testInput" type="text">
-						<button class="btn btn-primary">上传</button>
-						<span class="help-inline btnDelect"><p class="text-error">删除本配置单</p></span>
+						<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
+						action="/bms/config/upload"
+						 > 
+						主配置单反面 <input type="file" name="back" />
+						 <input type="submit" value="上传" class="btn btn-primary"/>
+						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						</form> 
+
 					</div>
 				</div>					
 		  	</div><!-- end of 主体 -->
