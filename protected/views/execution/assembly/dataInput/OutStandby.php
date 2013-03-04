@@ -16,6 +16,11 @@
 
 		<script type="text/javascript" src="/bms/js/bootstrap-collapse.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/dataInput/outStandby.js"></script>
+    	<style type="text/css" media="screen">
+			.printable{
+				display: none;
+			}
+		</style>
 	</head>
 
 
@@ -64,7 +69,7 @@
 	                	<div class="accordion-group">
 	                		<div class="accordion-heading">
 	               				<a id="viewToggleOrder" class="accordion-toggle" data-toggle="collapse" data-parent="#accordionOder" href="#collapseOrder">
-	               					<span id="today"></span>_计划预览
+	               					<span class="today"></span>_计划预览
 	               				</a>
 	               			</div>
 	                		<div id="collapseOrder" class="accordion-body collapse">
@@ -101,8 +106,16 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="display:none;">
-			print it
+		<div class="printable toPrint" style="width:168pt;height:70pt; padding-top:10pt;">
+			<div style="text-align:center;font-size:24pt">
+				<p id="rowPrint" style="margin: 0 0 5pt;">A016</p>
+			</div>
+			<div style="text-align:center;font-size:14pt">
+				<p id="vinPrint" style="margin: 0 0 10pt;">LGXC14AA9C1104982</p>
+			</div>
+			<div style="text-align:right;font-size:10pt">
+				<p class="today" style="margin: 0 5pt 5pt;"></p>
+			</div>
 		</div>
 	</body>
 </html>

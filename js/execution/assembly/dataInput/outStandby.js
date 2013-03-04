@@ -88,8 +88,8 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success) {
 					var data = response.data;
-					$("#rowInfo").html(data.row);
-					$("#vinInfo").html(data.vin);
+					$("#rowInfo,#rowPrint").html(data.row);
+					$("#vinInfo,#vinPrint").html(data.vin);
 					$("#seriesInfo").html(data.series);
 					$("#typeInfo").html(data.type);
 					$("#colorInfo").html(data.color);
@@ -97,6 +97,7 @@ $(document).ready(function() {
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
+					setTimeout(function (){window.print();},500);
 					ajaxGetOrder();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");
@@ -109,7 +110,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
-		$("#today").html(workDate());
+		$(".today").html(workDate());
 		toggleHint(true);
 		ajaxGetOrder();
 		$("#messageAlert").hide();
