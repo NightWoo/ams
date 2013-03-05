@@ -1,5 +1,7 @@
 <?php
 Yii::import('application.models.AR.*');
+Yii::import('application.models.User');
+
 class Role
 {
 	private $_ar;
@@ -32,5 +34,26 @@ class Role
 		}
 
 		return $point;
+	}
+
+	public static function addToUser($roleIds, $userId) {
+		$user = User::model()->findByPk($userId);
+		if(empty($user)) {	
+			throw new Exception("userId $userId not exist!!");
+		}
+		$sql = "SELECT role_id FROM user_role WHERE user_id=$userId";
+		$hasRoles = Yii::app()->db->createCommand($sql)->queryColumn();
+		$toAdd = array_diff($roleIds, $hasRoles);
+		$toDel = array_diff($hasRoles, $roleIds);
+		foreach($toAdd as $roleId) {
+			$sql = "INSERT INTO user_role(user_id,role_id) VALUES($userId, $roleId)";
+			Yii::app()->db->createCommand($sql)->execute();
+		}
+
+		foreach($toDel as $role) {
+			$sql = "DELETE FROM user_role WHERE user_id=$userId AND role_id=$roleId";
+			Yii::app()->db->createCommand($sql)->execute();
+		}
+		
 	}
 }
