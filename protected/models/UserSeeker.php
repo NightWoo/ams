@@ -11,7 +11,7 @@ class UserSeeker
 		if(empty($this->department)) {
 		}
 		$userList = Yii::app()->db->createCommand($sql)->queryAll();
-
+		$userList = $this->fillRoles($userList);
 		return $userList;
 	}
 
@@ -38,11 +38,19 @@ class UserSeeker
 		$offset = ($curPage - 1) * $perPage;
         $sql = "SELECT id,username,display_name,email,card_number,telephone,cellphone as cell FROM user WHERE $condition LIMIT $offset,$limit";
         $userList = Yii::app()->db->createCommand($sql)->queryAll();
-	
+		$userList = $this->fillRoles($userList);
 		$sql = "SELECT count(*) FROM user WHERE $condition LIMIT $offset,$limit";
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 		
 
         return array($total, $userList);
     }
+	
+	private function fillRoles($userList) {
+		foreach($userList as &$user)	{
+			$sql = "SELECT role_id FROM user_role WHERE user_id={$user['id']}";
+			$user['roleIds'] = Yii::app()->db->createCommand($sql)->queryColumn();
+		}
+		return $userList;
+	}
 }

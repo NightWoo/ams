@@ -20,7 +20,7 @@ class RoleController extends BmsBaseController
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
-			$this->renderJsonBms(false, 'ERROR', $e->getMessage());
+			$this->renderJsonBms(false,  $e->getMessage());
 		}
 	}
 }
