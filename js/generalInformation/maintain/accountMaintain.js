@@ -3,6 +3,11 @@ $(document).ready(function () {
 	initPage();
 	ajaxQuery();
 
+	// var list = [];
+	// 	$("#rightControls input:checked").each(function () {
+	// 		list.push($(this).val());
+	// 	});
+	// 	console.log(list);
 	$("#modifySelf").live("click", function () {
 		$("#emailModal").modal("show");
 		$("#inputEmailChange").val($("#userInfoTr").data("email"));
@@ -25,6 +30,10 @@ $(document).ready(function () {
 			"show" : false
 		});
 		$('#editModal').modal({
+			"show" : false
+		});
+
+		$('#rightModal').modal({
 			"show" : false
 		});
 	}
@@ -111,6 +120,17 @@ $(document).ready(function () {
 		$('#editModal').data("userId",tr.data("userId"));
 		$('#editModal').modal("show");
 	}
+
+	$(".optRight").live("click", function () {
+		var tr = $(this).closest("tr");
+		$('#rightModal').data("userId",tr.data("userId"));
+		$("#rightControls input:checked").removeAttr("checked");
+
+		$(tr.data("roleIds")).each(function (index, value) {
+			$("#rightControls input[value=" + value + "]").attr("checked", "checked");
+		});
+		$('#rightModal').modal("show");
+	});
 
 	function ajaxUserChangeEmail () {
 		$.ajax({
@@ -223,11 +243,17 @@ $(document).ready(function () {
 			    				"class" : "btn btn-primary optModify",
 			    				'value' : "编辑"
 			    			}).appendTo(optionTd);
+			    			$("<input />", {
+			    				'type' : 'button',
+			    				"class" : "btn btn-primary optRight",
+			    				'value' : "编辑权限"
+			    			}).appendTo(optionTd);
 			    			optionTd.appendTo(tr);
 			    			tr.data("userId", value.id);
 			    			tr.data("cardNumber", value.card_number);
 			    			tr.data("cellphone", value.cell);
 			    			tr.data("telephone", value.telephone);
+			    			tr.data("roleIds", value.roleIds);
 			    			$("#resultTable tbody").append(tr);
 			    		});
 			    		$(".optDelete").bind("click", optDelete);
@@ -245,6 +271,8 @@ $(document).ready(function () {
 			    			$(".nextPage").show();
 			    		$(".curPage").attr("page", response.data.pager.curPage);
 			    		$(".curPage").html("第" + response.data.pager.curPage + "页");
+
+			    		ajaxGetRights();
 		    		} else {
 		    			$("#adminThing").hide();
 		    		}
@@ -348,6 +376,59 @@ $(document).ready(function () {
 		    error:function(){alertError();}
 		});
 	}
+
+	function ajaxGetRights () {
+		$.ajax({
+			type: "get",//使用get方法访问后台
+    	    dataType: "json",//返回json格式的数据
+		    url: ROLE_SHOW_ALL,//ref:  /bms/js/service.js
+		    data: {},
+		    success:function (response) {
+		    	if(response.success){
+		    		$(response.data).each(function (index, value) {
+		    			var label = $("<label />").addClass("checkbox").addClass("inline");
+		    			var checkHtml = '<input type="checkbox" value="' + value.id + '">' + value.name;
+		    			label.html(checkHtml);
+		    			// $("<input/>" , {'type' : 'checkbox'}).attr("value", ).html().appendTo(label);
+		    			label.appendTo($("#rightControls"));
+		    		});
+		    	}else{
+		    		// $("#vinText").val("");
+		    		alert(response.message);
+		    	}
+		    },
+		    error:function(){alertError();}
+		});
+	}
+
+	$("#btnRight").click(function () {
+		ajaxEditRight();
+	});
+
+	function ajaxEditRight () {
+		var list = [];
+		$("#rightControls input:checked").each(function () {
+			list.push($(this).val());
+		});
+		console.log(list);
+		$.ajax({
+			type: "get",//使用get方法访问后台
+    	    dataType: "json",//返回json格式的数据
+		    url: ROLE_ADD_TO_USER,//ref:  /bms/js/service.js
+		    data: {"userId" : $('#rightModal').data("userId"),
+			"roleIds" : list},
+		    success:function (response) {
+		    	if(response.success){
+		    		
+		    	}else{
+		    		// $("#vinText").val("");
+		    		alert(response.message);
+		    	}
+		    },
+		    error:function(){alertError();}
+		});
+	}
+
 
 	function ajaxExport () {
 		window.open(TRACE_EXPORT + "?vin=" + $('#vinText').val() + 

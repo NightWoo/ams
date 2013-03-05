@@ -293,5 +293,43 @@
 	    <button class="btn btn-primary" id="btnEdit">确认修改</button>
   	</div>
 </div>
+
+
+<div class="modal" id="rightModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h3>编辑权限</h3>
+  	</div>
+  	<div class="modal-body">
+  		<form class="form-horizontal">
+		  <div class="control-group" id="rightControls">
+		    <!-- <label class="control-label" for="editCardNumber">工号</label> -->
+		      	<!-- <label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox1" value="option1"> 1123123123
+				</label>
+				<label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox2" value="option2" checked> 2sdsddssd
+				</label>
+				<label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox3" value="option3"> 32sdsddssd2sdsddssd2sdsddssd2sdsddssd
+				</label>
+				<label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+				</label>
+				<label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
+				</label>
+				<label class="checkbox inline">
+				  <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
+				</label> -->
+		  </div>
+		  
+		</form>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" id="btnRight">确认修改</button>
+  	</div>
+</div>
 </body>
 </html>
