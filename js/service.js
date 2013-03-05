@@ -220,6 +220,9 @@ var SUB_CONFIG_PRINT = "/bms/car/printSubConfig";
 var SUB_CONFIG_VALIDATE = "/bms/car/validateSubConfig";
 var SUB_CONFIG_SAVE = "/bms/config/saveSub";
 
+var ROLE_SHOW_ALL = "/bms/role/showAll";
+var ROLE_ADD_TO_USER = "/bms/role/addToUser";
+
 function alertError (message) {
 	message = 'ajax error'
 	//alert(message);
