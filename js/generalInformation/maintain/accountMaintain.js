@@ -410,7 +410,6 @@ $(document).ready(function () {
 		$("#rightControls input:checked").each(function () {
 			list.push($(this).val());
 		});
-		console.log(list);
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -427,6 +426,7 @@ $(document).ready(function () {
 		    },
 		    error:function(){alertError();}
 		});
+		$('#rightModal').modal("toggle");
 	}
 
 
