@@ -79,37 +79,13 @@ class FaultBaseSeeker
 
 		$code = trim($component->code);
 
-		$length = strlen($code);
-		
 		$ret = strtoupper($series);
 
-		$i  = 0;
-		$flag = false;
-		$subStr = '';
-		while($i < $length) {
-			$curLen = 0;
-			$subStr = '';
-			while($curLen < 7 && $i < $length) {
-				if($code[$i] >= '0' && $code[$i] <= '9') {
-					$subStr .= $code[$i];
-					++ $curLen;
-					++ $i;
-				} else {
-					break;
-				}
-				if($curLen == 7) {
-					$flag = true;
-					break;
-				}
-			}
-		
-			if($flag) {
-				break;
-			}
-			++ $i;
+		$codes = explode('-', $code);
+		if(count($codes) >= 2) {
+			$ret .= substr($codes[1], 0, 7);
 		}
 
-		$ret .= $subStr;
 		
 		$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
 
