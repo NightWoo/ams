@@ -100,11 +100,37 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						
 						
 					</div>
+
 					<div class="config-item">
 						<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
 						主配置单反面 <input type="file" name="back" />
+						 <input type="submit" value="上传" class="btn btn-primary"/>
+						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
+						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						</form> 
+
+					</div>
+
+					
+					<div class="config-item">
+						<form name="front" id="subInstrumentForm" method="post" enctype="multipart/form-data" 
+						action="/bms/config/upload"
+						 > 
+						 仪表分装   <input type="file" name="subInstrument" />
+						 <input type="submit" value="上传" class="btn btn-primary"/>
+						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
+						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						</form> 
+
+					</div>
+
+					<div class="config-item">
+						<form name="front" id="subEngineForm" method="post" enctype="multipart/form-data" 
+						action="/bms/config/upload"
+						 > 
+						发动机分装 <input type="file" name="subEngine" />
 						 <input type="submit" value="上传" class="btn btn-primary"/>
 						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>

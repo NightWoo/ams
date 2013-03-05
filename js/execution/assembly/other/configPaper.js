@@ -27,7 +27,33 @@ $("#backForm").submit(function () {
 	return false;
 });
 
-var fileObjNameMap = ["front", "back"];
+$("#subInstrumentForm").submit(function () {
+	
+	$("#subInstrumentForm").ajaxSubmit({
+		type: "post",
+		url : "/bms/config/upload",
+		data : {id: $('#config').val()},
+		success : function () {
+			alert("success");
+		}
+	});
+	return false;
+});
+
+$("#subEngineForm").submit(function () {
+	
+	$("#subEngineForm").ajaxSubmit({
+		type: "post",
+		url : "/bms/config/upload",
+		data : {id: $('#config').val()},
+		success : function () {
+			alert("success");
+		}
+	});
+	return false;
+});
+
+var fileObjNameMap = ["front", "back", "subInstrument", "subEngine"];
 $(".btnDelect").live("click",function () {
 		var index = $(".config-item").index($(this).parent().parent("div"));
 		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
