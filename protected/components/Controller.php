@@ -32,5 +32,15 @@ class Controller extends CController
 		$paramsVal = empty($_REQUEST[$paramName]) ? $default : intval($_REQUEST[$paramName]);
 		return $paramsVal;
 	}
+
+	public function validateArrayVal($paramName, $default = array()) {
+		$paramsVal = empty($_REQUEST[$paramName]) ? $default : $_REQUEST[$paramName];
+
+		if(!is_array($paramsVal)) {
+			$paramsVal = array($paramsVal);
+		}
+
+		return $paramsVal;
+	}
 	
 }

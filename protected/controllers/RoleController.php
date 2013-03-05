@@ -10,6 +10,17 @@ class RoleController extends BmsBaseController
 
 	//add role to user
 	public function actionAddToUser()  {
+		try {
+			Yii::app()->permitManager->check(array('BASE_DATA_EDIT'));
+		
+			$userId = $this->validateIntVal('userId');
+			$roleIds = $this->validateArrayVal('roleIds');
 
+			$data = Role::addToUser($roleIds, $userId);
+
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, 'ERROR', $e->getMessage());
+		}
 	}
 }
