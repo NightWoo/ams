@@ -108,10 +108,10 @@
 		</div>
 		<div class="printable toPrint" style="width:168pt;height:70pt; padding-top:10pt;">
 			<div style="text-align:center;font-size:24pt">
-				<p id="rowPrint" style="margin: 0 0 5pt;">A016</p>
+				<p id="rowPrint" style="margin: 0 0 5pt;">A000</p>
 			</div>
 			<div style="text-align:center;font-size:14pt">
-				<p id="vinPrint" style="margin: 0 0 10pt;">LGXC14AA9C1104982</p>
+				<p id="vinPrint" style="margin: 0 0 10pt;">LC0C14AA0d0000000</p>
 			</div>
 			<div style="text-align:right;font-size:10pt">
 				<p class="today" style="margin: 0 5pt 5pt;"></p>
