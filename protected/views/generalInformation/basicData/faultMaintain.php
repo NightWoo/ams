@@ -352,10 +352,10 @@ hehhe
 
   	<div class="modal-footer">
   		<form name="front" id="imageUploadForm" method="post" enctype="multipart/form-data" 
-						action="/bms/fault/uploadFaultStandardImage"> 
+						action="/bms/fault/uploadImage"> 
 			上传故障图片 <input type="file" name="image" />
 			 <input type="submit" value="上传" class="btn btn-primary"/>
-			
+			<input type="reset" value="清空" class="btn">
 		</form>
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 	    <button class="btn btn-danger" id="btnDeletePicture"> 删除该图片</button>

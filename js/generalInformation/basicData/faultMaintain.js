@@ -68,22 +68,11 @@ $(document).ready( function () {
 		$('#newModal').modal({
 			"show" : false
 		});
+
+		$('#picModal').modal({
+			"show" : false
+		});
 		$(".pagination").hide();
-
-
-		// $("#selectCategoryF0").val(2);
-		// var tr = $("<tr />");
-		    		
-		//     			var editTd = $("<td />").html(" ¦ ");
-		//     			$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-		//     			$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
-		//     			editTd.appendTo(tr);
-		//     			//详细
-		//     			var detailTd = $("<td />").html(" ¦ ");
-		//     			$("<button />").attr("title", "ccx").addClass("btn-link").html("描述").prependTo(detailTd);
-		//     			$("<button />").addClass("btn-link").html("图片").appendTo(detailTd);
-		//     			detailTd.appendTo(tr);
-		//     			$("#tableFaultStandard tbody").append(tr);
 	}
 
 	$(window).bind('keydown', enterHandler);
@@ -142,13 +131,13 @@ $(document).ready( function () {
 		    			$("<td />").html(value.mode).appendTo(tr);
 		    			
 		    			//详细
-		    			var detailTd = $("<td />").html(" ¦ ");
-		    			var descBtn = $("<button />");
-		    			descBtn.attr("title", value.description).addClass("btn-link").html("描述").prependTo(detailTd);
-		    			if(!(value.description && value.description !== "")){
-							descBtn.css("color", "#000");
-		    			}
-		    			$("<button />").addClass("btn-link").html("图片").appendTo(detailTd);
+		    			var detailTd = $("<td />");
+		    	// 		var descBtn = $("<button />");
+		    	// 		descBtn.attr("title", value.description).addClass("btn-link").html("描述").prependTo(detailTd);
+		    	// 		if(!(value.description && value.description !== "")){
+							// descBtn.css("color", "#000");
+		    	// 		}
+		    			$("<button />").addClass("btn-link").html("图片及描述").appendTo(detailTd);
 		    			detailTd.appendTo(tr);
 
 		    			//严重度，故障类别，状态
@@ -170,6 +159,7 @@ $(document).ready( function () {
 		    			tr.data("faultId", value.id);
 		    			tr.data("kindId", value.kind_id);
 		    			tr.data("carSeries", value.car_series);
+		    			tr.data("description", value.description);
 		    			$("#tableFaultStandard tbody").append(tr);
 		    		});
 
@@ -220,6 +210,12 @@ $(document).ready( function () {
 				// $("#editModal").data("componentId");//get the component id 
 			} else if($(e.target).html() === "删除"){
 				ajaxDelete($(e.target).parent("td").parent("tr").data("faultId"));
+			} else if($(e.target).html() === "图片及描述"){
+				var siblings = $(e.target).parent("td").siblings();
+				$("#picMoadlHeader").html(siblings[1].innerHTML + '-' + siblings[2].innerHTML);
+				$("#picModalDesc").html($(e.target).parent("td").parent("tr").data("description"));
+				$("#picModal").data("faultId", $(e.target).parent("td").parent("tr").data("faultId"));
+				ajaxPicture($(e.target).parent("td").parent("tr").data("faultId"));
 			} else {
 				return false;
 			}
@@ -249,6 +245,75 @@ $(document).ready( function () {
 		}
 		ajaxNew();
 	});
+
+	$("#imageUploadForm").submit(function () {
+		// console.log($("#picModal").data("faultId"));
+		$("#imageUploadForm").ajaxSubmit({
+			type: "post",
+			url : UPLOAD_FAULT_STANDARD_IMAGE,
+			data : {id: $("#picModal").data("faultId")},
+			dataType: "json",
+			success : function (response) {
+				console.log(response);
+				var div = $("<div />").addClass("item");
+				if ($("#carouselInner .item").length == 0) {
+					div.addClass("active");
+				}
+				$("<img />").attr("src", response.data[0].image).data("picId", response.data[0].id).appendTo(div);
+				div.appendTo($("#carouselInner"));
+			}
+		});
+		return false;
+	});
+
+	$("#btnDeletePicture").click(function () {
+		ajaxDeletePicture();
+	});
+
+	function ajaxPicture (compId) {
+		$.ajax({
+			url : SHOW_FAULT_STANDARD_IMAGE,
+			type : "GET",
+			dataType: "json",
+			data : {"id" : compId
+				},
+			success : function (response) {
+				$("#carouselInner").empty();
+				$.each(response.data, function (index) {
+					var div = $("<div />").addClass("item");
+					if (index == 0) {
+						div.addClass("active");
+					}
+					$("<img />").attr("src", this.image).data("picId", this.id).appendTo(div);
+					div.appendTo($("#carouselInner"));
+				});
+				$("#picModal").modal("toggle");
+			},
+			error : function (response) {
+				alert(response.message);
+			}
+		});
+	}
+
+	function ajaxDeletePicture () {
+		console.log($("#carouselInner .active img").data("picId"));
+		$.ajax({
+			url : DELETE_FAULT_STANDARD_IMAGE,
+			type : "GET",
+			dataType: "json",
+			data : {"id" : $("#carouselInner .active img").data("picId")
+				},
+			success : function (response) {
+				var $siblings = $("#carouselInner .active").siblings();
+				$("#carouselInner .active").remove();
+				$siblings.first().addClass("active");
+			},
+			error : function (response) {
+				alert(response.message);
+			}
+		});
+	}
+
 
 	function ajaxEdit (compId) {
 
