@@ -484,7 +484,7 @@ class FaultController extends BmsBaseController
             BmsLogger::info("update image fault_standard @ " .$id);
             $standard = FaultStandardAR::model()->findByPk($id);
             if(!empty($standard)) {
-				$newPaths = FileUpload::uploadImages('image', self::FAULT_IMAGE, $standard->id, true);
+				$newPaths = FileUpload::uploadImages('image', self::IMAGE_PATH, $standard->id, true);
 				foreach($newPaths as $path) {
 					$imageAR = new FaultStandardImageAR();
 					$imageAR->fault_id = $standard->id;
