@@ -483,6 +483,7 @@ class FaultController extends BmsBaseController
             }
             BmsLogger::info("update image fault_standard @ " .$id);
             $standard = FaultStandardAR::model()->findByPk($id);
+			$data = array();
             if(!empty($standard)) {
 				$newPaths = FileUpload::uploadImages('image', self::IMAGE_PATH, $standard->id, true);
 				foreach($newPaths as $path) {
@@ -491,10 +492,11 @@ class FaultController extends BmsBaseController
 					$imageAR->path = $path;
 					$imageAR->user_id = $opUserId;
 					$imageAR->save();
+					$data[] = array('id' => $imageAR->id, 'path' => $path);
 				}
             }
 			
-            $this->renderJsonBms(true, 'OK', '');
+            $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }
