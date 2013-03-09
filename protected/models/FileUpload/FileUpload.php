@@ -9,7 +9,7 @@ class FileUpload
 		}
 	}
 
-	private static function generateFileName($namePrefix, $rand) {
+	private static function generateFileName($namePrefix, $rand, $ext) {
 		if(empty($namePrefix)) {
 			$namePrefix = 'temp';
 		}
