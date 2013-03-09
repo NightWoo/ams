@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
+    <script type="text/javascript" src="/bms/js/jquery.form.js"></script>
 	<script type="text/javascript" src="/bms/js/generalInformation/basicData/faultMaintain.js"></script>
 </head>
 <body>
@@ -317,17 +318,17 @@
   	</div>
 </div>
 
-<!-- pic record -->
-<div class="modal" id="picModal" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- picModal -->
+<div class="modal" id="picModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   	 	<h3>编辑</h3>
+   	 	<h3 id="picMoadlHeader">编辑</h3>
   	</div>
   	<div class="modal-body" style="max-height:435px;">
   		<div id="myCarousel" class="carousel slide">
 			  
 			  <!-- Carousel items -->
-			  <div class="carousel-inner">
+			  <div class="carousel-inner" id="carouselInner">
 			    <div class="active item">
 			    	<img src="/bms/img/test01.jpg">
 			    </div>
@@ -342,17 +343,22 @@
 			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
 			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 			</div>
+			<p id="picModalDesc">
+this is description
+hehhe
+
+  		</p>
   		</div>
-  		
+
   	<div class="modal-footer">
-  		<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
-						action="/bms/config/upload"> 
-						上传故障图片 <input type="file" name="back" />
-						 <input type="submit" value="上传" class="btn btn-primary"/>
-						
-						</form>
+  		<form name="front" id="imageUploadForm" method="post" enctype="multipart/form-data" 
+						action="/bms/fault/uploadFaultStandardImage"> 
+			上传故障图片 <input type="file" name="image" />
+			 <input type="submit" value="上传" class="btn btn-primary"/>
+			
+		</form>
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-danger" id="btnEditConfirm"> 删除该图片</button>
+	    <button class="btn btn-danger" id="btnDeletePicture"> 删除该图片</button>
   	</div>
 </div>
 

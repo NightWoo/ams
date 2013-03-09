@@ -60,7 +60,8 @@
 									<option value="VQ1" selected="true">VQ1静态</option>
 									<option value="CHECK_LINE">VQ2动态.检测线</option>
 									<option value="ROAD_TEST_FINISH">VQ2动态.路试</option>
-									<option value="VQ2">VQ2动态.淋雨</option>
+                                    <option value="VQ2">VQ2动态.淋雨</option>
+									<option value="VQ2_ALL">VQ2动态检验</option>
 									<option value="VQ3">VQ3外观</option>
 									<!-- <option value="CHECK_IN">入成品库</option>
 									<option value="CHECK_OUT">出成品库</option> -->
