@@ -6,8 +6,8 @@ Yii::import('application.models.FileUpload.*');
 
 class FaultController extends BmsBaseController
 {
-	private const IMAGE_PATH = "/home/work/bms/web/bms/faultImage/";
-	private const IMAGE_HTTP = "/bms/faultImage/";
+	const IMAGE_PATH = "/home/work/bms/web/bms/faultImage/";
+	const IMAGE_HTTP = "/bms/faultImage/";
 	/**
 	 * Declares class-based actions.
 	 */
