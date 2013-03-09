@@ -106,15 +106,19 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable toPrint" style="width:168pt;height:70pt; padding-top:10pt;">
-			<div style="text-align:center;font-size:24pt">
-				<p id="rowPrint" style="margin: 0 0 5pt;">A000</p>
+		<div class="printable toPrint" style="width:168pt;height:70pt; margin:8pt 0; font-family: Microsoft YaHei;">
+			<div style="text-align:center;font-size:24pt;text-align: center;">
+				<p id="rowPrint" style="margin: 0 5pt 0 0;">A000</p>
 			</div>
-			<div style="text-align:center;font-size:14pt">
-				<p id="vinPrint" style="margin: 0 0 10pt;">LC0C14AA0d0000000</p>
+			<div style="text-align:center;font-size:14pt;margin: 0 5pt;">
+				<p id="vinPrint" style="margin:0 5pt 5pt 0;">LC0C14AA0d0000000</p>
 			</div>
-			<div style="text-align:right;font-size:10pt">
-				<p class="today" style="margin: 0 5pt 5pt;"></p>
+			<div style="font-size:10pt;">
+				<span id="driver" style="margin-left:10pt">
+					张三三
+				</span>
+				<span class="nowTime" style="float:right; margin-right:15pt">
+				</span>
 			</div>
 		</div>
 	</body>

@@ -110,7 +110,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
-		$(".today").html(workDate());
+		$(".nowTime").html(nowTime());
 		toggleHint(true);
 		ajaxGetOrder();
 		$("#messageAlert").hide();
@@ -153,6 +153,31 @@ $(document).ready(function() {
 			//clock += "08:00";
 
 			return(clock); 
+	}
+
+	function nowTime () {
+		var now = new Date();
+		var year = now.getFullYear();
+		var month = now.getMonth();
+		var day = now.getDate();
+		var hh = now.getHours();
+		var mm = now.getMinutes();
+
+		var clock = year + '-';
+
+		if(month < 10) clock += '0';
+		clock += month + '-';
+
+		if(day < 10) clock += '0';
+		clock += day + ' ';
+
+		if(hh < 10) clock += '0';
+		clock += hh + ':';
+
+		if(mm < 10) clock += '0';
+		clock += mm;
+
+		return(clock);
 	}
 
 	function yesterday () {
