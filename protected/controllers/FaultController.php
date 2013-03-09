@@ -492,7 +492,7 @@ class FaultController extends BmsBaseController
 					$imageAR->path = $path;
 					$imageAR->user_id = $opUserId;
 					$imageAR->save();
-					$data[] = array('id' => $imageAR->id, 'path' => $path);
+					$data[] = array('id' => $imageAR->id, 'image' => self::IMAGE_HTTP . $path);
 				}
             }
 			
