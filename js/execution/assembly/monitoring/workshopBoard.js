@@ -71,6 +71,7 @@ $(document).ready(function () {
 			// $(".chain").css("background", "#00ff00").css("color", "black");
 			$("div[id^=section]").hide();
 			$("div[id^=facade]").css("background", "#00ff00").show();
+			$(".chain").css("background", "#00ff00");
 			// this.flashing = [];
 		},
 		dealSectionStatus : function (sectionStatus) {
