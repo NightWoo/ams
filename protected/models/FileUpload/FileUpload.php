@@ -1,5 +1,5 @@
 <?php
-Yii:import('application.models.UUID');
+Yii::import('application.models.UUID');
 class FileUpload
 {
 	public static function createFolder($path) {
