@@ -500,7 +500,7 @@ class FaultController extends BmsBaseController
         }
 	}
 
-	public function actionShowFaultStandardImage() {
+	public function actionShowImage() {
         try{
             $id = $this->validateIntVal('id', 0);
             $standard = FaultStandardAR::model()->findByPk($id);
@@ -520,7 +520,7 @@ class FaultController extends BmsBaseController
         }
 	}
 
-	public function actionDeleteFaultStandardImage() {
+	public function actionDeleteImage() {
         try{
             $id = $this->validateIntVal('id', 0);
 			$opUserId = Yii::app()->user->id;

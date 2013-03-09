@@ -135,9 +135,9 @@ var QUERY_FAULT_BASE = "/bms/fault/queryBase";
 var SAVE_FAULT_STANDARD  = "/bms/fault/saveFaultStandard";
 var REMOVE_FAULT_STANDARD = "/bms/fault/removeFaultStandard";
 var GENERATE_FAULT_CODE = "/bms/fault/generateFaultCode";
-var UPLOAD_FAULT_STANDARD_IMAGE = "/bms/fault/uploadFaultStandardImage";
-var DELETE_FAULT_STANDARD_IMAGE = "/bms/fault/deleteFaultStandardImage";
-var SHOW_FAULT_STANDARD_IMAGE = "/bms/fault/showFaultStandardImage";
+var UPLOAD_FAULT_STANDARD_IMAGE = "/bms/fault/uploadImage";
+var DELETE_FAULT_STANDARD_IMAGE = "/bms/fault/deleteImage";
+var SHOW_FAULT_STANDARD_IMAGE = "/bms/fault/showImage";
 
 var SEARCH_PROVIDER = "/bms/provider/search";
 var SAVE_PROVIDER = "/bms/provider/save";
