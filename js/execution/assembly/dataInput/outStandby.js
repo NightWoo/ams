@@ -110,6 +110,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
+		$(".today").html(workDate())
 		$(".nowTime").html(nowTime());
 		toggleHint(true);
 		ajaxGetOrder();
