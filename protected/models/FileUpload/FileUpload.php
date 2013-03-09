@@ -1,4 +1,5 @@
 <?php
+Yii:import('application.models.UUID');
 class FileUpload
 {
 	public static function createFolder($path) {
@@ -7,31 +8,52 @@ class FileUpload
 			mkdir($path,0777);
 		}
 	}
+
+	private static function generateFileName($namePrefix, $rand) {
+		if(empty($namePrefix)) {
+			$namePrefix = 'temp';
+		}
+		if($rand) {
+			$uuid = UUID::generate();
+			$filename = $namePrefix . "_" . $uuid . "." . $ext;
+		} else {
+			$filename = $namePrefix . "." . $ext;
+		}
+
+		return $filename;
+	}
 	
-	public static function uploadImages($name, $savePath='uploadfile/', $namePrefix = 'temp', $resizeArray = array(), $quality=80) {
+	public static function uploadImages($name, $savePath='uploadfile/', $namePrefix = 'temp', $rand = false, $resizeArray = array(), $quality=80) {
+		$paths = array();
 		$uploadImages = CUploadedFile::getInstancesByName($name);
 		foreach($uploadImages as $uploadImage) {
 			$ext = $uploadImage->extensionName; //上传文件的扩展名
 			if(strtolower($ext) !== 'jpg') {
 				continue;
 			}
-			$filename = $namePrefix . '.' . $ext;
+			$filename = self::generateFileName($namePrefix, $rand, $ext);
             self::createFolder($savePath);
 			$saveFileName = $savePath . '/' . $filename; //数据库文件名
 			self::saveImage($uploadImage,$saveFileName);
+
+			$paths[] = $filename;
 		}
+
+		return $paths;
 	}
 
-	public static function uploadImage($name, $savePath='uploadfile/', $namePrefix = 'temp' ,  $resizeArray = array(), $quality=80) {
+	public static function uploadImage($name, $savePath='uploadfile/', $namePrefix = 'temp' ,  $rand = false, $resizeArray = array(), $quality=80) {
         $uploadImage = CUploadedFile::getInstanceByName($name);
 		if(empty($uploadImage)) {
 			return;
 		}
 		$ext = $uploadImage->extensionName; //上传文件的扩展名
-		$filename = $namePrefix . '.' . $ext;
+		$filename = self::generateFileName($namePrefix, $rand, $ext);
 		self::createFolder($savePath);
 		$saveFileName = $savePath . '/' . $filename; //数据库文件名
 		self::saveImage($uploadImage,$saveFileName);
+		
+		return $filename;
     }
 
 	public static function saveImage($uploadImage, $saveFileName='uploadfile/1.tmp', $resizeArray = array(), $quality=80) {

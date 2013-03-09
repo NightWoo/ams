@@ -2,8 +2,12 @@
 Yii::import('application.models.Car');
 Yii::import('application.models.Fault');
 Yii::import('application.models.AR.*');
+Yii::import('application.models.FileUpload.*');
+
 class FaultController extends BmsBaseController
 {
+	private const IMAGE_PATH = "/home/work/bms/web/bms/faultImage/";
+	private const IMAGE_HTTP = "/bms/faultImage/";
 	/**
 	 * Declares class-based actions.
 	 */
@@ -467,4 +471,74 @@ class FaultController extends BmsBaseController
         }
 
 	}
+
+	public function actionUploadImage() {
+		try{
+            $opUserId = Yii::app()->user->id;
+            $user = User::model()->findByPk($opUserId);
+            $id = $this->validateIntVal('id', 0);
+            if(!$user->admin) {
+                BmsLogger::warning($opUserId . " try to upload fault_standard @ " .$id);
+                throw new Exception ('不要做坏事，有记录的！！');
+            }
+            BmsLogger::info("update image fault_standard @ " .$id);
+            $standard = FaultStandardAR::model()->findByPk($id);
+            if(!empty($standard)) {
+				$newPaths = FileUpload::uploadImages('image', self::FAULT_IMAGE, $standard->id, true);
+				foreach($newPaths as $path) {
+					$imageAR = new FaultStandardImageAR();
+					$imageAR->fault_id = $standard->id;
+					$imageAR->path = $path;
+					$imageAR->user_id = $opUserId;
+					$imageAR->save();
+				}
+            }
+			
+            $this->renderJsonBms(true, 'OK', '');
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+	}
+
+	public function actionShowFaultStandardImage() {
+        try{
+            $id = $this->validateIntVal('id', 0);
+            $standard = FaultStandardAR::model()->findByPk($id);
+			$data = array();
+            if(!empty($standard)) {
+				$images = FaultStandardImageAR::model()->findAll('fault_id=?',array($standard->id));
+				foreach($images as $image) {
+					$data[] = array(
+						'id' => $image->id,
+						'image' => self::IMAGE_HTTP . $image->path,
+					);
+				}
+            }
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+	}
+
+	public function actionDeleteFaultStandardImage() {
+        try{
+            $id = $this->validateIntVal('id', 0);
+			$opUserId = Yii::app()->user->id;
+            $user = User::model()->findByPk($opUserId);
+            if(!$user->admin) {
+                BmsLogger::warning($opUserId . " try to remove fault_standard_image @ " .$id);
+                throw new Exception ('不要做坏事，有记录的！！');
+            }
+            BmsLogger::info("delete image fault_standard_image @ " .$id);
+
+			$image = FaultStandardImageAR::model()->findByPk($id);
+			if(!empty($image)) {
+				@unlink(self::IMAGE_PATH . $image->path);
+				$image->delete();
+			}
+            $this->renderJsonBms(true, 'OK', '');
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
 }
