@@ -27,6 +27,10 @@ table {
 	margin-bottom: 7pt;
 }
 
+.tableHead {
+	margin-left: 1pt;
+}
+
 .docCode {
 	height: 20px;
 	border:none;
@@ -65,7 +69,7 @@ th {
 }
 
 td.barcode {
-	width: 297pt;
+	width: 280pt;
 }
 
 tr.trList {
@@ -74,13 +78,20 @@ tr.trList {
 }
 
 td.tdList {
-	width: 168pt;
+	width: 210pt;
 }
 
 td.tdCheck {
-	width: 28pt;
+	width: 30pt;
+	text-align: center;
 }
 
 .alignCenter {
 	text-align: center;
+	font-weight: bold;
+}
+
+.alignRight {
+	text-align: right;
+	font-weight: bold;
 }

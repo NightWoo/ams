@@ -50,7 +50,7 @@ class Role
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 
-		foreach($toDel as $role) {
+		foreach($toDel as $roleId) {
 			$sql = "DELETE FROM user_role WHERE user_id=$userId AND role_id=$roleId";
 			Yii::app()->db->createCommand($sql)->execute();
 		}
