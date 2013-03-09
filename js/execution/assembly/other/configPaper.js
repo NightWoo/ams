@@ -10,6 +10,9 @@ $("#frontForm").submit(function () {
 		data : {id: $('#config').val()},
 		success : function () {
 			alert("success");
+			var index =0;
+			$(".config-item .btnDelect").eq(index).show();
+			$(".config-item .notyet").eq(index).hide();
 		}
 	});
 	return false;
@@ -21,6 +24,9 @@ $("#backForm").submit(function () {
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
 		success : function () {
+			var index =1;
+			$(".config-item .btnDelect").eq(index).show();
+			$(".config-item .notyet").eq(index).hide();
 			alert("success");
 		}
 	});
@@ -34,7 +40,9 @@ $("#subInstrumentForm").submit(function () {
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
 		success : function () {
-			alert("success");
+			var index = 2;
+			$(".config-item .btnDelect").eq(index).show();
+			$(".config-item .notyet").eq(index).hide();
 		}
 	});
 	return false;
@@ -48,6 +56,9 @@ $("#subEngineForm").submit(function () {
 		data : {id: $('#config').val()},
 		success : function () {
 			alert("success");
+			var index = 3;
+			$(".config-item .btnDelect").eq(index).show();
+			$(".config-item .notyet").eq(index).hide();
 		}
 	});
 	return false;
@@ -144,6 +155,24 @@ $(".btnDelect").live("click",function () {
 						if (response.data.back != "") {
 							$(".config-item button").eq(index).addClass("disabled");
 							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.back);
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
+
+						index = 2;//handle subInstrument
+						if (response.data.subInstrument != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.subInstrument);
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
+
+						index = 3;//handle subEngine
+						if (response.data.subEngine != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.subEngine);
 							$(".config-item .btnDelect").eq(index).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
