@@ -317,5 +317,45 @@
   	</div>
 </div>
 
+<!-- pic record -->
+<div class="modal" id="picModal" tabindex="-1" role="dialog" aria-hidden="true">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h3>编辑</h3>
+  	</div>
+  	<div class="modal-body" style="max-height:435px;">
+  		<div id="myCarousel" class="carousel slide">
+			  
+			  <!-- Carousel items -->
+			  <div class="carousel-inner">
+			    <div class="active item">
+			    	<img src="/bms/img/test01.jpg">
+			    </div>
+			    <div class="item">
+			    	<img src="/bms/img/test02.jpg">
+			    </div>
+			    <div class="item">
+			    	<img src="/bms/img/test03.jpg">
+			    </div>
+			  </div>
+			  <!-- Carousel nav -->
+			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			</div>
+  		</div>
+  		
+  	<div class="modal-footer">
+  		<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
+						action="/bms/config/upload"> 
+						上传故障图片 <input type="file" name="back" />
+						 <input type="submit" value="上传" class="btn btn-primary"/>
+						
+						</form>
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-danger" id="btnEditConfirm"> 删除该图片</button>
+  	</div>
+</div>
+
+
 </body>
 </html>

@@ -1,4 +1,6 @@
 $(document).ready( function () {
+
+	$(".carousel").carousel('pause');
 	$("#tabs").live("click", function () {
 		var kindHtml = '';
 		if ($("#liAssembly").hasClass("active")) {
@@ -299,6 +301,7 @@ $(document).ready( function () {
 					$("#newCode").attr("value", "");
 					$("#newName").attr("value", "");
 					$("#newMode").attr("value", "");
+					$("#newDescription").attr("value", "");
 					queryPage(1);
 					$('#newModal').modal("hide");
 				}
