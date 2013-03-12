@@ -28,9 +28,6 @@ class FileUpload
 		$uploadImages = CUploadedFile::getInstancesByName($name);
 		foreach($uploadImages as $uploadImage) {
 			$ext = $uploadImage->extensionName; //上传文件的扩展名
-			if(strtolower($ext) !== 'jpg') {
-				continue;
-			}
 			$filename = self::generateFileName($namePrefix, $rand, $ext);
             self::createFolder($savePath);
 			$saveFileName = $savePath . '/' . $filename; //数据库文件名
