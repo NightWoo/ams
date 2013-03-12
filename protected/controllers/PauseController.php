@@ -140,7 +140,8 @@ class PauseController extends BmsBaseController
 				$content .= "{$data['cause_type']},";
 				$content .= "{$data['node_name']},";
 				$content .= "{$data['duty_department']},";
-				$content .= "{$data['remark']},";
+				// $content .= "{$data['remark']},";
+				$data['remark'] = str_replace(",", "，",$data['remark']);
 				$content .= "{$data['howlong']},";
 				$content .= "{$data['pause_time']},";
 				$content .= "{$data['recover_time']},";
