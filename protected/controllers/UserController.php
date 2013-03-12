@@ -191,4 +191,19 @@ class UserController extends BmsBaseController
 		$mailer = new BmsMailer();
         $mailer->sendMail('init password', 'test for smtp', 'bmsadmin@163.com:admin');
 	}
+
+	public function actionCheckCardNumber() {
+		$number = $this->validateStringVal('cardNumber', '');
+		try{
+			$seeker = User::createSeeker();
+			$data = $seeker->checkCardNumber($number);
+			if(!empty($data)){
+				$this->renderJsonBms(true, 'OK', $data);
+			} else {
+				$this->renderJsonBms(false, '司机不存在' , '');
+			}
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
 }

@@ -8,9 +8,29 @@ $(document).ready(function() {
 	});
 
 	//清空
-	$("#refresh").click(function() {
+	// $("#refresh").click(function() {
+	// 	resetPage();
+	// 	refresh();
+	// 	return false;
+	// });
+
+	$("#reset").click(function() {
+		$("#carInfo").attr("orderId", ""); 
 		resetPage();
-		return false;
+		refresh();
+	})
+
+	$("#cardNumber").bind('keydown', function(event) {
+		//if vinText disable,stop propogation
+		if($(this).attr("disabled") == "disabled")
+			return false;
+		if (event.keyCode == "13"){
+			//remove blanks 
+		    if(jQuery.trim($('#cardNumber').val()) != ""){
+		        ajaxCardNumber();
+	        }   
+		    return false;
+		}
 	});
 
 
@@ -77,6 +97,35 @@ $(document).ready(function() {
 		})
 	}
 
+	function ajaxCardNumber() {
+		$.ajax({
+			url: CHECK_CARD_NUMBER,
+			type:"get",
+			dataType: "json",
+			data: {
+				"cardNumber": $("#cardNumber").val(),
+			},
+			success: function(response) {
+				if(response.success){
+					driver = response.data
+					$("#btnSubmit").removeAttr("disabled").focus();
+					$("#cardNumber").attr("value", driver.car_number);
+					$("#cardNumber").attr("disabled","disabled");
+					$("#driver").html(driver.name);
+				} else {
+					$("#carInfo").attr("orderId", "");
+					resetPage();
+					refresh();
+					fadeMessageAlert(response.message, "alert-error");
+				}
+			},
+			error: function() {
+				alertError();
+			}
+
+		})
+	}
+
 	function ajaxGetStandbyCar() {
 		$.ajax({
 			url: ORDER_GET_CAR_STANDBY,
@@ -98,7 +147,7 @@ $(document).ready(function() {
 					$("#carInfo").hide();
 					toggleHint(false);
 					setTimeout(function (){window.print();},500);
-					ajaxGetOrder();
+					resetPage();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");
 				}
@@ -113,13 +162,21 @@ $(document).ready(function() {
 		$(".today").html(workDate())
 		$(".nowTime").html(nowTime());
 		toggleHint(true);
-		ajaxGetOrder();
+		resetPage();
 		$("#messageAlert").hide();
 	}
 
 	function refresh() {
 		ajaxGetOrder();
 		toggleHint(true);
+	}
+
+	function resetPage() {
+		$("#cardNumber").removeAttr("disabled");
+		$("#cardNumber").attr("value","");
+		$("#cardNumber").focus();
+		$("#btnSubmit").attr("disabled","disabled");
+		ajaxGetOrder();
 	}
 
 	function toggleHint (showVinHint) {
@@ -220,7 +277,7 @@ $(document).ready(function() {
 		$("#messageAlert").show(500,function () {
 			setTimeout(function() {
 				$("#messageAlert").hide(1000);
-			},60000);
+			},5000);
 		});
 	}
 })

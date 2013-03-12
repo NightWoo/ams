@@ -74,4 +74,22 @@ class OrderSeeker
 		return $order;
 	}
 
+	public function getNameList ($carSeries, $carType) {
+		$condition = "car_series=?";
+		$values = array($carSeries);
+		if(!empty($carType)) {
+			$condition .= " AND car_type=?";
+			$values[] = $carType;
+		}
+		$configs = OrderConfigAR::model()->findAll($condition . ' ORDER BY id ASC', $values);
+		
+		$datas = array();
+		foreach($configs as $config) {
+			$data['config_id'] = $config->id;
+			$data['config_name']= $config->name;
+			$datas[]=$data;
+		}
+		return $datas;
+	}
+
 }

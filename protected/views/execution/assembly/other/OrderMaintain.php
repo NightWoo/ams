@@ -121,36 +121,13 @@
                 <div class="controls">
                     <select id="newLane"  name=""class="input-small">
                         <option value="" selected>未选择</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30">30</option>
+                        <?php 
+                            for($i=1;$i<51;$i++){
+                                $num = sprintf("%02d", $i);
+                                $ret = "<option value=". $num .">$num</option>";
+                                echo $ret;
+                            }
+                        ?>
                     </select>
                 </div>
             </div>
@@ -190,8 +167,10 @@
                 <label class="control-label" for="">*&nbsp;车系</label>
                 <div class="controls">
                     <select id="newSeries" class="input-small">
+                        <option value="" selected>请选择</option>
                         <option value="F0">F0</option>
-                        <option value="M6" disabled>M6</option>
+                        <option value="M6">M6</option>
+                        <option value="6B" disabled>思锐</option>
                     </select>
                 </div>
             </div>
@@ -201,7 +180,7 @@
                     <!--<input type="text" class="input-medium"  id="newCarType"/>-->
                     <select id="newCarType" name="" class="input-large">
                         <option value="">请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
                         <option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
@@ -210,7 +189,7 @@
                         <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
 						<option value="QCJ7100L(1.0排量实用型（出口）)">QCJ7100L(1.0排量实用型（出口）)</option>
                         <option value="QCJ7100L(1.0排量舒适型（出口）)">QCJ7100L(1.0排量舒适型（出口）)</option>
-                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option>
+                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option> -->
                     </select> 
                 </div>
             </div>
@@ -220,12 +199,12 @@
                     <!--<input type="text" class="input-medium"  id="newConfig"/>-->
                     <select id="newOrderConfig" name=""class="input-medium">
                         <option value="">请选择</option>
-                        <option value="1">F0实用</option>
+                        <!-- <option value="1">F0实用</option>
                         <option value="2">F0舒适</option>
                         <option value="3">F0尊贵</option>
                         <option value="4">F0实用</option>
                         <option value="5">F0舒适</option>
-                        <option value="6">F0实用助力</option>
+                        <option value="6">F0实用助力</option> -->
                     </select>
                 </div>
             </div>
@@ -235,13 +214,13 @@
                     <!--<input type="text" class="input-medium"  id="newColor"/>-->
                     <select id="newColor" name=""class="input-small">
                         <option value="">请选择</option>
-                        <option value="冰岛蓝">冰岛蓝</option>
+                        <!-- <option value="冰岛蓝">冰岛蓝</option>
                         <option value="德兰黑">德兰黑</option>
 						<option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
                         <option value="伊甸紫">巴西黄</option>
                         <option value="麦加金">麦加金</option>
-                        <option value="雅典银">雅典银</option>  
+                        <option value="雅典银">雅典银</option>   -->
                     </select> 
                 </div>
             </div>
@@ -265,8 +244,8 @@
                 <label class="control-label" for="">*&nbsp;订单类型</label>
                 <div class="controls">
                     <select name="" id="newOrderType" class="input-medium">
-                        <option value="普通订单">三方订单</option>
-                        <option value="三方订单">普通订单</option>
+                        <option value="普通订单">普通订单</option>
+                        <option value="三方订单">三方订单</option>
                         <option value="其他">其他</option>
                     </select>
                 </div>
@@ -311,36 +290,13 @@
                 <div class="controls">
                     <select id="editLane"  name=""class="input-small">
                         <option value="" selected>未选择</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30">30</option>
+                        <?php 
+                            for($i=1;$i<51;$i++){
+                                $num = sprintf("%02d", $i);
+                                $ret = "<option value=". $num .">$num</option>";
+                                echo $ret;
+                            }
+                        ?>
                     </select>
                 </div>
             </div>
@@ -380,8 +336,10 @@
                 <label class="control-label" for="editSeries">*&nbsp;车系</label>
                 <div class="controls">
                     <select id="editSeries" class="input-small">
+                        <option value="" selected>请选择</option>
                         <option value="F0">F0</option>
-                        <option value="M6" disabled>M6</option>
+                        <option value="M6">M6</option>
+                        <option value="6B" disabled>思锐</option>
                     </select>
                 </div>
             </div>
@@ -390,7 +348,7 @@
                 <div class="controls">
                     <select id="editCarType" name="" class="input-large">
                         <option value="">请选择</option>
-                        <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+                        <!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
                         <option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
                         <option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
@@ -399,7 +357,7 @@
                         <option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option>
                         <option value="QCJ7100L(1.0排量实用型（出口）)">QCJ7100L(1.0排量实用型（出口）)</option>
                         <option value="QCJ7100L(1.0排量舒适型（出口）)">QCJ7100L(1.0排量舒适型（出口）)</option>
-                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option>
+                        <option value="QCJ7100L(1.0排量尊贵型（出口）)">QCJ7100L(1.0排量尊贵型（出口）)</option> -->
                     </select> 
                 </div>
             </div>
@@ -408,12 +366,12 @@
                 <div class="controls">
                     <select id="editOrderConfig" name=""class="input-medium">
                         <option value="">请选择</option>
-                        <option value="1">F0实用</option>
+                        <!-- <option value="1">F0实用</option>
                         <option value="2">F0舒适</option>
                         <option value="3">F0尊贵</option>
                         <option value="4">F0实用北京</option>
                         <option value="5">F0舒适北京</option>
-                        <option value="6">F0实用助力</option>
+                        <option value="6">F0实用助力</option> -->
                     </select>
                 </div>
             </div>
@@ -422,13 +380,13 @@
                 <div class="controls">
                     <select id="editColor" name=""class="input-small">
                         <option value="">请选择</option>
-                        <option value="冰岛蓝">冰岛蓝</option>
+                        <!-- <option value="冰岛蓝">冰岛蓝</option>
                         <option value="德兰黑">德兰黑</option>
                         <option value="天山白">天山白</option>
                         <option value="法兰红">法兰红</option>
                         <option value="伊甸紫">巴西黄</option>
                         <option value="麦加金">麦加金</option>
-                        <option value="雅典银">雅典银</option>  
+                        <option value="雅典银">雅典银</option> -->  
                     </select> 
                 </div>
             </div>
@@ -452,8 +410,8 @@
                 <label class="control-label" for="editOrderType">*&nbsp;订单类型</label>
                 <div class="controls">
                     <select id="editOrderType" class="input-medium">
-                        <option value="普通订单">三方订单</option>
-                        <option value="三方订单">普通订单</option>
+                        <option value="普通订单">普通订单</option>
+                        <option value="三方订单">三方订单</option>
                         <option value="其他">其他</option>
                     </select>
                 </div>

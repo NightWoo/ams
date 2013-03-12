@@ -21,6 +21,10 @@ $(document).ready(function() {
 				ajaxUp($(e.target).closest("tr").data("id"));
 			} else if($(e.target).hasClass("icon-edit")) {
 				var siblings = $(e.target).closest("td").siblings();
+				var carSeries = siblings[7].innerHTML;
+				fillType(carSeries,"edit");
+				fillColor(carSeries,"edit");
+				fillOrderConfig(carSeries,"","edit");
 
 				$("#editStandbyDate").val($(e.target).closest("tr").data("standbyDate"));
 				if(siblings[1].innerHTML === '激活') {
@@ -74,6 +78,18 @@ $(document).ready(function() {
 		ajaxEdit();
 		$("#editModal").modal("hide");
 		emptyEditModal();
+	})
+
+	$("#newSeries").change(function () {
+			fillType($(this).val(),"new");
+			fillColor($(this).val(),"new");
+			fillOrderConfig($(this).val(),"","new");		
+	})
+
+	$("#editSeries").change(function () {
+			fillType($(this).val(),"edit");
+			fillColor($(this).val(),"edit");
+			fillOrderConfig($(this).val(),"","edit");		
 	})
 
 	function initPage() {
@@ -453,6 +469,86 @@ $(document).ready(function() {
 			return item;
     	}
 	});
+
+	function fillOrderConfig(carSeries, carType, modPre){
+		$.ajax({
+			url: FILL_ORDER_CONFIG,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries,
+				"carType" : carType,	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#" + modPre + "OrderConfig").html("");
+					var option = '<option value="" selected>请选择</option>';	
+					$.each(response.data, function(index,value){
+						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+						option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+					});
+				 	$("#" + modPre + "OrderConfig").html(option);
+				 
+						
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+	}
+	
+	function fillType(carSeries, modPre) {
+		$.ajax({
+			url: FILL_CAR_TYPE,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#"+ modPre +"CarType").html("");
+					var option = '<option value="" selected>请选择</option>'
+					$.each(response.data, function(index, value){
+						option += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+					});
+					$("#"+ modPre +"CarType").html(option);
+					$("#"+ modPre +"CarBody").html(option);
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+	}
+
+	function fillColor(carSeries, modPre) {
+		$.ajax({
+			url: FILL_CAR_COLOR,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$("#"+ modPre +"Color").html("");
+					var option = '<option value="" selected>请选择</option>'
+					$.each(response.data, function(index, value){
+						option += '<option value="'+ value.color +'">'+ value.color +'</option>';
+					});
+					$("#"+ modPre +"Color").html(option);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
 
 
 });

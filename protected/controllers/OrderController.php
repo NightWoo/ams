@@ -269,4 +269,16 @@ class OrderController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}
+
+	public function actionGetOrderConfig() {
+		$carSeries = $this->validateStringVal('carSeries', '');
+		$carType = $this->validateStringVal('carType', '');
+		try {
+			$config = new OrderSeeker();
+			$data = $config->getNameList($carSeries, $carType);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}		
+	}
 }

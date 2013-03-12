@@ -45,8 +45,11 @@
 					</div><!-- end 面包屑 -->
 					<div><!-- 内容主体 -->
 						<form id="form" class="well form-search">
-							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车'></input>
-							<span><a href="" id="refresh"><i class="icon-refresh" style="margin-top:6px"></i></a></span>
+							<label>卡号</label>
+							<input type="text" id="cardNumber" class="span3" placeholder="请刷卡...">
+							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车' disabled="disabled">
+							<input type="button" class="btn" id ="reset" value ="清空">
+							<!-- <span><a href="" id="refresh"><i class="icon-refresh" style="margin-top:6px"></i></a></span> -->
 							<span class="help-inline" id="hint">未获得任何可备车辆</span>
 							<div class="help-inline" id="carInfo">
 								<span class="label label-info" rel="tooltip" title="车列" id="rowInfo"></span>
@@ -115,7 +118,7 @@
 			</div>
 			<div style="font-size:10pt;">
 				<span id="driver" style="margin-left:10pt">
-					张三三
+					司机
 				</span>
 				<span class="nowTime" style="float:right; margin-right:15pt">
 				</span>

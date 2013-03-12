@@ -124,7 +124,7 @@ var ADD_USER = "/bms/user/save";
 var EDIT_USER = "/bms/user/save";
 var DISABLE_USER = "/bms/user/disable";
 var UPDATE_USER = "/bms/user/update";
-
+var CHECK_CARD_NUMBER ="/bms/user/checkCardNumber";
 
 var QUERY_COMPONENT_LIST = "/bms/component/showList";
 var SAVE_COMPONENT  = "/bms/component/save";
@@ -212,6 +212,7 @@ var ORDER_INC_PRI = "/bms/order/inc";
 var ORDER_DELETE = "/bms/order/delete";
 var ORDER_GET_CAR_STANDBY = "/bms/order/getCarStandby";
 var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
+var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig"
 var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
 
