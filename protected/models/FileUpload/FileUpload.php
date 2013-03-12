@@ -28,6 +28,9 @@ class FileUpload
 		$uploadImages = CUploadedFile::getInstancesByName($name);
 		foreach($uploadImages as $uploadImage) {
 			$ext = $uploadImage->extensionName; //上传文件的扩展名
+			if(strtolower($ext) !== 'jpg' ) {
+				throw new Exception("图片只支持jpg格式");
+			}
 			$filename = self::generateFileName($namePrefix, $rand, $ext);
             self::createFolder($savePath);
 			$saveFileName = $savePath . '/' . $filename; //数据库文件名
@@ -45,6 +48,10 @@ class FileUpload
 			return;
 		}
 		$ext = $uploadImage->extensionName; //上传文件的扩展名
+		if(strtolower($ext) !== 'jpg' ) {
+			throw new Exception("图片只支持jpg格式");
+		}
+
 		$filename = self::generateFileName($namePrefix, $rand, $ext);
 		self::createFolder($savePath);
 		$saveFileName = $savePath . '/' . $filename; //数据库文件名
