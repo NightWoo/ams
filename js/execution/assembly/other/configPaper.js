@@ -8,11 +8,17 @@ $("#frontForm").submit(function () {
 		type: "post",
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
-		success : function () {
-			alert("success");
-			var index =0;
-			$(".config-item .btnDelect").eq(index).show();
-			$(".config-item .notyet").eq(index).hide();
+		dataType : "json",
+		success : function (response) {
+			if (response.success) {
+				alert("success");
+				var index =0;
+				$(".config-item .btnDelect").eq(index).show();
+				$(".config-item .notyet").eq(index).hide();
+			} else {
+				alert(response.message);
+			}
+			
 		}
 	});
 	return false;
@@ -23,11 +29,16 @@ $("#backForm").submit(function () {
 		type: "post",
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
-		success : function () {
-			var index =1;
-			$(".config-item .btnDelect").eq(index).show();
-			$(".config-item .notyet").eq(index).hide();
-			alert("success");
+		dataType : "json",
+		success : function (response) {
+			if (response.success) {
+				alert("success");
+				var index = 1;
+				$(".config-item .btnDelect").eq(index).show();
+				$(".config-item .notyet").eq(index).hide();
+			} else {
+				alert(response.message);
+			}
 		}
 	});
 	return false;
@@ -39,10 +50,16 @@ $("#subInstrumentForm").submit(function () {
 		type: "post",
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
-		success : function () {
-			var index = 2;
-			$(".config-item .btnDelect").eq(index).show();
-			$(".config-item .notyet").eq(index).hide();
+		dataType : "json",
+		success : function (response) {
+			if (response.success) {
+				alert("success");
+				var index = 2;
+				$(".config-item .btnDelect").eq(index).show();
+				$(".config-item .notyet").eq(index).hide();
+			} else {
+				alert(response.message);
+			}
 		}
 	});
 	return false;
@@ -54,11 +71,16 @@ $("#subEngineForm").submit(function () {
 		type: "post",
 		url : "/bms/config/upload",
 		data : {id: $('#config').val()},
-		success : function () {
-			alert("success");
-			var index = 3;
-			$(".config-item .btnDelect").eq(index).show();
-			$(".config-item .notyet").eq(index).hide();
+		dataType : "json",
+		success : function (response) {
+			if (response.success) {
+				alert("success");
+				var index = 3;
+				$(".config-item .btnDelect").eq(index).show();
+				$(".config-item .notyet").eq(index).hide();
+			} else {
+				alert(response.message);
+			}
 		}
 	});
 	return false;

@@ -254,13 +254,18 @@ $(document).ready( function () {
 			data : {id: $("#picModal").data("faultId")},
 			dataType: "json",
 			success : function (response) {
-				console.log(response);
-				var div = $("<div />").addClass("item");
-				if ($("#carouselInner .item").length == 0) {
-					div.addClass("active");
+				if (response.success) {
+					console.log(response);
+					var div = $("<div />").addClass("item");
+					if ($("#carouselInner .item").length == 0) {
+						div.addClass("active");
+					}
+					$("<img />").attr("src", response.data[0].image).data("picId", response.data[0].id).appendTo(div);
+					div.appendTo($("#carouselInner"));
+				} else {
+					alert(response.message);
 				}
-				$("<img />").attr("src", response.data[0].image).data("picId", response.data[0].id).appendTo(div);
-				div.appendTo($("#carouselInner"));
+				
 			}
 		});
 		return false;
