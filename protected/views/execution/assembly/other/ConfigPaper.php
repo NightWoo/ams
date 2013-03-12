@@ -91,7 +91,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<form name="front" id="frontForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
-						 主配置单正面 <input type="file" name="front" />
+						 主正面 <input type="file" name="front" />
 						 <input type="submit" value="上传" class="btn btn-primary"/>
 						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
@@ -105,7 +105,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
-						主配置单反面 <input type="file" name="back" />
+						主反面 <input type="file" name="back" />
 						 <input type="submit" value="上传" class="btn btn-primary"/>
 						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
@@ -118,7 +118,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<form name="front" id="subInstrumentForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
-						 仪表分装   <input type="file" name="subInstrument" />
+						 仪表台   <input type="file" name="subInstrument" />
 						 <input type="submit" value="上传" class="btn btn-primary"/>
 						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
@@ -130,7 +130,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						<form name="front" id="subEngineForm" method="post" enctype="multipart/form-data" 
 						action="/bms/config/upload"
 						 > 
-						发动机分装 <input type="file" name="subEngine" />
+						发动机 <input type="file" name="subEngine" />
 						 <input type="submit" value="上传" class="btn btn-primary"/>
 						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
 						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
