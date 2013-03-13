@@ -62,6 +62,15 @@ class NodeSeeker
             $conditions[] = "pass_time <= '$etime'";
         }
 
+        if(!empty($series)){
+	        $arraySeries = $this->parseSeries($series);
+	        $cTmp = array(); 
+	        foreach($arraySeries as $series){
+	        	$cTmp[] = "car_series='$series'";
+	        }
+	        $conditions[] = "(" . join(' OR ', $cTmp) . ")";
+        };
+
         $condition = join(' AND ', $conditions);
 
         $limit = "";
@@ -147,5 +156,14 @@ class NodeSeeker
 
 
 		return array($stime, $etime);
+	}
+
+	private function parseSeries($series) {
+		if(empty($series) || $series === 'all') {
+            $series = array('F0', 'M6', '6B');
+        } else {
+            $series = explode(',', $series);
+        }
+		return $series;
 	}
 }

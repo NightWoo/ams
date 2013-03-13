@@ -120,7 +120,7 @@
 				<span id="driver" style="margin-left:10pt">
 					司机
 				</span>
-				<span class="nowTime" style="float:right; margin-right:15pt">
+				<span class="nowTime" style="float:right; margin-right:14pt">
 				</span>
 			</div>
 		</div>

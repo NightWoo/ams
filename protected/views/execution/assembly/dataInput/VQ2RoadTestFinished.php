@@ -54,7 +54,7 @@
 									<option value="151">孙昌伍</option>
 									<option value="136">滕向军</option>
 									<option value="138">田佳岸</option>
-									<option value="155">王志刚</option>
+									<option value="167">王泽鹏</option>
 									<option value="139">肖志虎</option>
 									<option value="147">杨思强</option>
 									<option value="144">杨自西</option>
