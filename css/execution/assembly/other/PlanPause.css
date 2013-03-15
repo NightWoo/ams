@@ -1,0 +1,46 @@
+/* CSS Document */
+#tableResult {
+	font-size: 12px;
+}
+
+.btn-primary {
+	margin-left: 2px;
+}
+
+.controls p {
+	line-height: 30px;
+	margin: 0;
+}
+
+#tableResult .alignRight{
+	text-align: right;
+	padding-right: 15px;
+}
+
+#thType {
+	width:80px;
+}
+
+#thSeat {
+	width:80px;
+}
+
+#thDuty {
+	min-width:100px;
+}
+
+#thReason {
+	min-width:200px;
+}
+
+#thHowlong {
+	width:80px;
+}
+
+#thPauseTime, #thRecoverTime {
+	width: 120px;
+}
+
+#thEditor {
+	width:120px;
+}

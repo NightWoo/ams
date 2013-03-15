@@ -202,6 +202,8 @@ var EXPORT_PAUSE_RECORD = "/bms/pause/exportRecord";
 var QUERY_USE_RATE = "/bms/pause/queryUseRate";
 var PAUSE_EDIT_SAVE = "/bms/pause/editSave";
 var GET_PAUSE_DUTY_DEPARTMENT_LIST = "/bms/pause/getDutyDepartment";
+var PLAN_PAUSE_SAVE = "/bms/pause/planPauseSave";
+var PAUSE_DELETE = "/bms/pause/delete";
 
 //added by wujun
 //order maintain
