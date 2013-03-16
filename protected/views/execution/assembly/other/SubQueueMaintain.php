@@ -52,9 +52,9 @@
                                 <!-- <label>分装</label> -->
                                 <select id="selectSub" class="select-medium">
                                     <option value="subInstrument">仪表分装</option>
-                                    <option value="subEngine">发动机分装</option>
-                                    <option value="subFrontAxle" disabled>前桥分装</option>
-                                    <option value="subEndAxle" disabled>后桥分装</option>
+                                    <option value="subEngine" selected>发动机分装</option>
+                                    <option value="subFrontAxle">前桥分装</option>
+                                    <option value="subRearAxle" disabled>后桥分装</option>
                                 </select>
                             </td>
                             
@@ -64,13 +64,13 @@
                                 <label>列队时间&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input type="text" class="input-medium" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <input type="text" class="input-medium" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
                             </td>
                             <td>
                                 -
                             </td>
                             <td>
-                                <input type="text" class="input-medium" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <input type="text" class="input-medium" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
                             </td>
                             <td>
                                 <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   

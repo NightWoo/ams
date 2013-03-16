@@ -634,7 +634,7 @@ class Car
 	}
 	
 	public function addSubConfig() {
-		$types = array('subInstrument','subEngine');
+		$types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
 
 		foreach($types as $type) {
 			$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));

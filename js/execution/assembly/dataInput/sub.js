@@ -93,6 +93,7 @@ $("document").ready(function() {
 		    			tr.addClass("info");
 		    		}
 		    		$("<td />").html(value.serial_number).appendTo(tr);
+		    		$("<td />").html(value.queueTime).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.series).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
@@ -102,7 +103,7 @@ $("document").ready(function() {
 						$("<td />").html('非耐寒').appendTo(tr);						
 					}
 		    		$("<td />").html(value.color).appendTo(tr);
-		    		$("<td />").html(value.year).appendTo(tr);
+		    		// $("<td />").html(value.year).appendTo(tr);
 		    		// $("<td />").html(value.order_type).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
@@ -137,7 +138,8 @@ $("document").ready(function() {
 
 		$("#tableList tbody").text("");
 		//set default queue time and get queue
-		$("#startTime").val(window.byd.DateUtil.todayBeginTime);
+		// $("#startTime").val(window.byd.DateUtil.todayBeginTime);
+		$("#startTime").val('2013-03-01 08:00');
 		$("#endTime").val(window.byd.DateUtil.todayEndTime);
 		ajaxGetPrintList();
 
@@ -148,7 +150,7 @@ $("document").ready(function() {
 		if ($("#tableList tr").length > 1) {
 			$("#vinText").attr("disabled", "disabled");
 			//获取第一行的VIN号
-			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(1)").text());
+			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(2)").text());
 			$("#btnSubmit").removeAttr("disabled");
 		} else {
 			$("#vinText").removeAttr("disabled");

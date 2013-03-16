@@ -56,7 +56,7 @@
                                     <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button>
                                      
                                     <button id="btnClear" type="reset" class="btn btn-danger"><i class="icon-repeat icon-white"></i>&nbsp;清空</button>
-                              		<span class="help-inline" id="vinHint">C123456 如需打印指定车辆配置单，请清空</span>
+                              		<span class="help-inline" id="vinHint">如需打印指定车辆配置单，请清空</span>
                                     <div class="help-inline" id="carInfo">
                                         <span class="label label-info" rel="tooltip" title="车系" id="infoSeries">x</span>
                                         <span class="label label-info" rel="tooltip" title="车型" id="infoType">x</span>
@@ -67,9 +67,9 @@
                                 </div>
                                 <div style="margin-top:10px;">
                                     <label>列队时间</label>
-                                    <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                    <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                                     <span>-</span>
-                                    <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                    <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                                     <button id="btnRefresh" type="button" class="btn btn-success"><i class="icon-refresh icon-white"></i>&nbsp;刷新</button>
                                 </div>
                             </form>                       
@@ -81,12 +81,13 @@
                             <thead>
                                 <tr class="active">
                                     <th class="">整车编号</th>
+                                    <th class="">列队时间</th>
                                     <th class="">VIN号</th>
                                     <th class="">车系</th>
                                     <th class="">车型/配置</th>
                                     <th class="">耐寒性</th>
                                     <th class="">颜色</th>
-                                    <th class="">年份</th>
+                                    <!-- <th class="">年份</th> -->
                                     <th class="">特殊单号</th>
                                     <th class="">备注</th>
                                 </tr>
