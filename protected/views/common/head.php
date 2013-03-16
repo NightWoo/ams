@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/bms/css/font-awesome.min.css">
 <div id="divHead" style="z-index:0">
 <div class="navbar navbar-fixed-top" id="bmsHead">
 	<div class="navbar-inner">
@@ -75,11 +76,14 @@
         		<ul class="nav pull-right">
           			<!-- <li><a href="#"><i class="icon-envelope"></i>&nbsp;0</a></li> -->
           			<li class="dropdown">
-            			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?><b class="caret"></b></a>
-            			<ul class="dropdown-menu">
+            			<a href="/bms/generalInformation/accountMaintain" class="dropdown-toggle"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
+            			<!-- <ul class="dropdown-menu">
               				<li><a href="/bms/generalInformation/accountMaintain">个人中心</a></li>
               				<li><a href="/bms/site/logout">注销</a></li>
-            			</ul>
+            			</ul> -->
+         			 </li>
+         			 <li>
+            			<a href="/bms/site/logout"><i class="icon-signout"></i>注销</a>
          			 </li>
         		</ul>			
 			</div>
