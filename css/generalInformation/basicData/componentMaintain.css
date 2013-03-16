@@ -18,14 +18,14 @@
 	margin-bottom: 5px;
 }
 
-#btnQueryF0,#btnQueryM6 {
+#btnQueryF0,#btnQueryM6,#btnQuery6B {
 	margin-left: 10px;
 }
 
-#btnAddF0,#btnAddM6 {
+#btnAddF0,#btnAddM6,#btnAdd6B {
 	margin-right: 10px;
 }
 
-#formF0, #formM6 {
+#formF0, #formM6, #form6B {
 	margin-bottom: 0;
 }

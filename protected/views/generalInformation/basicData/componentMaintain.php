@@ -42,6 +42,7 @@
                     	<ul id="tabs" class="nav nav-pills">
                             <li class="active" id="liF0"><a href="#F0" data-toggle="tab">F0</a></li>
                             <li id="liM6"><a href="#M6" data-toggle="tab">M6</a></li>
+                            <li id="li6B"><a href="#6B" data-toggle="tab">思锐</a></li>
                         </ul>
                     </div>
 
@@ -100,7 +101,7 @@
 											</tr>
 											<tr>
 												<td>
-													<select id="selectCategoryM6" class="span2">
+													<select id="selectCategoryM6" class="input-small">
 														<option value="0" selected>全部</option>
 														<option value="1">车身</option>
 														<option value="2">动力</option>
@@ -120,6 +121,46 @@
 												<td>
 													<label class="checkbox">
 														<input type="checkbox" id="isFaultM6" value="1" checked>故障件
+													</label>
+												</td>
+											</tr>
+										</table>
+                				</form>
+							</div>
+
+							<div id="6B" class="tab-pane">
+								<form id="form6B">
+										<table>
+											<tr>
+												<td><label>类别</label></td>
+												<td><label>零部件名称</label></td>
+												<td><label>编号</label></td>
+												<td><label></label></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>
+													<select id="selectCategory6B" class="input-small">
+														<option value="0" selected>全部</option>
+														<option value="1">车身</option>
+														<option value="2">动力</option>
+														<option value="3">底盘</option>
+														<option value="4">电器</option>
+														<option value="5">内外饰</option>
+														<option value="6">附件</option>
+														<option value="7">其他</option>
+													</select>
+												</td>
+												<td><input id="inputName6B" type="text" class="span3" placeholder="零部件名称"></td>
+												<td><input id="inputCode6B" type="text" class="span2" placeholder="零部件编号"></td>
+												<td>
+													<button id="btnQuery6B" type="reset" class="btn btn-primary">查询</button>                       	
+													<button id="btnAdd6B" type="reset" class="btn">新增</button>
+												</td>
+												<td>
+													<label class="checkbox">
+														<input type="checkbox" id="isFault6B" value="1" checked>故障件
 													</label>
 												</td>
 											</tr>
