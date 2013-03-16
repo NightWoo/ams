@@ -48,9 +48,8 @@ class ExecutionController extends BmsBaseController
 			Yii::app()->permitManager->check(self::$QUERY_PRIVILAGE[$queryPanel]);
 			$this->render('assembly/query/' . $queryPanel,array(''));
 		} catch(Exception $e) {
-			header("content-type:text/html; charset=utf-8");
-			print( "<div style='color:red;align:center'>" . $e->getMessage() . "</div>");
-			echo "<div><input   type=button   value=返回   onclick= 'window.history.back() '> </div>";
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
 		}
     }
 	
@@ -516,22 +515,46 @@ class ExecutionController extends BmsBaseController
     }
 
     public function actionConfigPlan() {
-        $this->render('assembly/other/PlanAssembly');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/PlanAssembly');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 	
 	//added by wujun
 	public function actionConfigMaintain() {
-		$this->render('assembly/other/ConfigMaintain');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+    		$this->render('assembly/other/ConfigMaintain');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
 	public function actionConfigList() {
-		$this->render('assembly/other/ConfigList');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/ConfigList');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
 	public function actionConfigPaper() {
-		$this->render('assembly/other/ConfigPaper');	
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/ConfigPaper');	
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
@@ -541,17 +564,35 @@ class ExecutionController extends BmsBaseController
 	
 	//added by wujun
 	public function actionOrderMaintain() {
-		$this->render('assembly/other/OrderMaintain');	
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/OrderMaintain');	
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 
     //added by wujun
     public function actionPlanPause() {
-        $this->render('assembly/other/PlanPause');  
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/PlanPause');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 
     //added by ccx
     public function actionSubQueueMaintain() {
-        $this->render('assembly/other/SubQueueMaintain');  
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/SubQueueMaintain');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 
     //added by wujun
@@ -576,39 +617,39 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        
-        $date = date('Y-m-d');
+        $this->render('../site/permissionDenied');
+        // $date = date('Y-m-d');
 
         
-            $condition = "plan_date='$date'";
+        //     $condition = "plan_date='$date'";
         
-        $values = array($date);
+        // $values = array($date);
         
-         $condition .= " AND car_series='F0'";
+        //  $condition .= " AND car_series='F0'";
         
-        //modifed by wujun
-        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
+        // //modifed by wujun
+        // $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
 
-        $datas = array();
-        $seeker = new ConfigSeeker();
-        foreach ($plans as $plan) {
-            $temp = $plan->getAttributes();
-            $temp['config_name'] = $seeker->getName($temp['config_id']);
+        // $datas = array();
+        // $seeker = new ConfigSeeker();
+        // foreach ($plans as $plan) {
+        //     $temp = $plan->getAttributes();
+        //     $temp['config_name'] = $seeker->getName($temp['config_id']);
             
-            $length = strlen($temp['car_type']);
-            $typeName = '';
-            $i = 0;
-            while($i < $length){
-                if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
-                    break;
-                else {
+        //     $length = strlen($temp['car_type']);
+        //     $typeName = '';
+        //     $i = 0;
+        //     while($i < $length){
+        //         if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
+        //             break;
+        //         else {
 
-                    $typeName .= $temp['car_type'][$i];
-                    $i++;
-                    echo $typeName;
-                    echo '<br>';
-                }
-            }
-        }
+        //             $typeName .= $temp['car_type'][$i];
+        //             $i++;
+        //             echo $typeName;
+        //             echo '<br>';
+        //         }
+        //     }
+        // }
     }
 }

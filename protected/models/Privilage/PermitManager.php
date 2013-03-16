@@ -27,7 +27,7 @@ class PermitManager
 		}
 
 		if(!$permit) {
-			throw new Exception('对不起你没有操作权限');
+			throw new Exception('permission denied');
 		}
 	}
 
