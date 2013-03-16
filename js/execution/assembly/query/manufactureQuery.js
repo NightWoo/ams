@@ -13,7 +13,8 @@ $(document).ready(function () {
 		$("#leftManufactureQueryLi").addClass("active");
 
 		$("#startTime").val(currentDate8());
-		$("#endTime").val(currentDate16());
+		// $("#endTime").val(currentDate16());
+		$("#endTime").val(window.byd.DateUtil.currentTime);
 
 		resetAll();
 	}

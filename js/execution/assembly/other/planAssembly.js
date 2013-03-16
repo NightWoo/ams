@@ -424,7 +424,7 @@ $(document).ready(function () {
 		$("#newConfig").val("");
 		$("#newCarBody").val(""),		//added by wujun
 		$("#newColor").val("");
-		$("#newCarYear").val("");
+		$("#newCarYear").val("2013");
 		$("#newOrderType").val("");
 		$("#newSpecialOrder").val("");
 		$("#newRemark").val("");

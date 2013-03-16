@@ -200,7 +200,7 @@ class UserController extends BmsBaseController
 			if(!empty($data)){
 				$this->renderJsonBms(true, 'OK', $data);
 			} else {
-				$this->renderJsonBms(false, '司机不存在' , '');
+				$this->renderJsonBms(false, '用户不存在' , '');
 			}
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
