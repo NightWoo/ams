@@ -383,6 +383,7 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $vin = $this->validateStringVal('vin', '');
+            $driverId = $this->validateIntVal('driverId', 0);
             //$date = date('Y-m-d');
             $date = DateUtil::getCurDate();
 
@@ -397,7 +398,8 @@ class ExecutionController extends BmsBaseController
 
             $car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
-            $car->enterNode('CHECK_IN');
+            $onlyOnce = true;
+            $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             //$message = $vin . '未匹配订单';
             //$data = array();
             list($matched, $data) = $car->matchOrder($date);
@@ -423,15 +425,19 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $vin = $this->validateStringVal('vin', '');
-            $date = date('Y-m-d');
+            $driverId = $this->validateIntVal('driverId', 0);
+            // $date = date('Y-m-d');
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
-            $car->enterNode('CHECK_OUT');
+            $onlyOnce = true;
+            $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
-            $warehouse = new Warehouse;
-            $data = $warehouse->checkout($vin);
-            $message = $vin . '已成功出库，请开往车道' . $data['lane'];
+            $data = '';
+            //$warehouse = new Warehouse;
+            //$data = $warehouse->checkout($vin);
+            //$message = $vin . '已成功出库，请开往车道' . $data['lane'];
+            $message = $vin . '已成功出库';
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
