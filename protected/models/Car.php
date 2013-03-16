@@ -287,20 +287,21 @@ class Car
 		$ctClass = "ComponentTrace{$series}AR";
 		Yii::import('application.models.AR.' .$ctClass);
 		$messages = array();
-		foreach($codeList as $componentId=>$code) {
-            if(empty($code)) {
-                continue;
-            }
-			try {
-            	$this->checkBarCode($componentId, $code);
-			} catch(Exception $e) {
-				$messages[] = $e->getMessage();
-			}
-		}
-		if(!empty($messages)) {
-			$message = join("<br>", $messages);
-			throw new Exception($message);
-		}
+		//deleted by wujun debug
+		// foreach($codeList as $componentId=>$code) {
+  //           if(empty($code)) {
+  //               continue;
+  //           }
+		// 	try {
+  //           	$this->checkBarCode($componentId, $code);
+		// 	} catch(Exception $e) {
+		// 		$messages[] = $e->getMessage();
+		// 	}
+		// }
+		// if(!empty($messages)) {
+		// 	$message = join("<br>", $messages);
+		// 	throw new Exception($message);
+		// }
 		foreach($codeList as $componentId=>$code) {
 			if(empty($code)) {
 				continue;
