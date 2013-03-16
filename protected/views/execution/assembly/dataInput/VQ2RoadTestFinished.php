@@ -33,7 +33,7 @@
 					<div>
 						<form id="formFailure" class="well form-search">
 							<div>
-								<label>VIN</label>
+								<label>&nbsp;VIN</label>
 								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
 								<select name="" id="driver" class="input-small" disalbled='disabled'>
 									<option value="" selected>驾驶员</option>
@@ -77,8 +77,13 @@
 							</div>
 							<div>
 								<div id="messageAlert" class="alert"></div>    
-							</div> <!-- end 提示信息 -->                   
-							<div id="divDetail">
+							</div> <!-- end 提示信息 --> 
+							</form>                 
+							<form id="formBag" class="well form-search">
+								<label>气囊</label>
+								<input id="inputBag" type="text" class="span3" placeholder="请扫描/输入主驾气囊条码...">
+							</form>
+							<form id="divDetail" class="well form-search">
 								<div>
 									<ul id="tabs" class="nav nav-pills">
 										<li class="active"><a href="#general" data-toggle="tab">常见</a></li>
@@ -116,13 +121,10 @@
 										</table>
 									</div>
 								</div>
-							</div>                   	
+							                   	
 						</form>                                          
 					</div>
-					<form id="formBag" class="well form-inline">
-						<label>气囊：</label>
-						<input id="inputBag" type="text" class="span3" placeholder="请扫描/输入主驾气囊条码...">
-					</form>
+					
 				</div><!-- end of 内容主体 -->
 			</div><!-- end main体 -->
 		</div><!-- offhead -->	
