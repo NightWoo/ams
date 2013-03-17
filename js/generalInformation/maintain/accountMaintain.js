@@ -86,10 +86,9 @@ $(document).ready(function () {
 	);
 
 
-	$("#vinText").bind("keydown", function (event) {
+	$("#queryUsername, #queryDisplayName, #queryEmail").bind("keydown", function (event) {
 		if(event.keyCode == '13'){
-			if($.trim($("#vinText").val()) != ""){
-				$("#resultTable tbody").text("");
+			if($.trim($(this).val()) != ""){
 				ajaxQuery();
 			}
 			return false;
@@ -98,22 +97,31 @@ $(document).ready(function () {
 
 	function optDelete () {
 		console.log($(this).closest("tr").data("userId"));
-		ajaxDelete($(this).closest("tr").data("userId"));
+		if(confirm("是否删除账号" + $(this).closest("tr").data("userName") +"?")){
+			ajaxDelete($(this).closest("tr").data("userId"));
+		}
 	}
 
 	function optReset () {
 		// $('#initPasswordModal').modal("toggle");
-		ajaxReset($(this).closest("tr").data("userId"));
+		if(confirm("是否初始化账号" + $(this).closest("tr").data("userName") +"密码为工号？")){
+			ajaxReset($(this).closest("tr").data("userId"));
+		}
 	}
 
 
 	function optModify (e) {
-		var siblings = $(e.target).parent("td").siblings();
-		$("#editUsername").val(siblings[0].innerHTML);
-		$("#editDisplayName").val(siblings[1].innerHTML);
-		$("#editEmail").val(siblings[2].innerHTML);
+		var siblings = $(e.target).closest("td").siblings();
 		var tr = $(this).closest("tr");
+		$("#editUsername").val(tr.data("userName"));
+		$("#editDisplayName").val(siblings[2].innerHTML);
+		$("#editEmail").val(tr.data("email"));
 		$("#editCardNumber").val(tr.data("cardNumber"));
+		if(tr.data("card8H10D") == 0){
+			$("#editCard8H10D").val("");
+		} else {
+			$("#editCard8H10D").val(tr.data("card8H10D"));
+		}
 		$("#editCellPhone").val(tr.data("cellphone"));
 		$("#editTelephone").val(tr.data("telephone"));
 
@@ -172,9 +180,10 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: RESET_PASSWORD,//ref:  /bms/js/service.js
-		    data: {"oldPassword" : $("#inputPasswordOld").val(),
-		   			"newPassword" : $("#inputPasswordNew").val(),
-		    		"comfirmPassword" : $("#inputPasswordConfirm").val()
+		    data: {
+		    	"oldPassword" : $("#inputPasswordOld").val(),
+		   		"newPassword" : $("#inputPasswordNew").val(),
+	    		"comfirmPassword" : $("#inputPasswordConfirm").val()
 		},
 
 		    success:function (response) {
@@ -200,10 +209,11 @@ $(document).ready(function () {
 			type : "get",//使用get方法访问后台
     	    dataType : "json",//返回json格式的数据
 		    url : SHOW_USER,//ref:  /bms/js/service.js
-		    data : {"username" : $("#queryUsername").val(),
+		    data : {
+		    	"username" : $("#queryUsername").val(),
 		    	"display_name" : $("#queryDisplayName").val(),
 		    	"email" : $("#queryEmail").val(),
-		    	"perPage":20,
+		    	"perPage":5,
 				"curPage": argument || 1
 				},
 
@@ -214,6 +224,8 @@ $(document).ready(function () {
 		    		$("#userId").html(user.username);
 		    		$("#userName").html(user.display_name);
 		    		$("#userEmail").html(user.email);
+		    		$("#userCell").html(user.cellphone);
+		    		$("#userTel").html(user.telephone);
 		    		$("#userInfoTr").data("email", user.email);
 		    		$("#userInfoTr").data("cell", user.cellphone);
 		    		$("#userInfoTr").data("tel", user.telephone);
@@ -224,33 +236,45 @@ $(document).ready(function () {
 		    			$("#adminThing").show();
 		    			$.each(userList,function (index,value) {
 			    			var tr = $("<tr />");
+			    			$("<td />").html(value.id).appendTo(tr);
 			    			$("<td />").html(value.username).appendTo(tr);
 			    			$("<td />").html(value.display_name).appendTo(tr);
-			    			$("<td />").html(value.email).appendTo(tr);
+			    			emailTd = $("<td><a href='Mailto:" + value.email + "'>"+ value.email +"</a></td>");
+			    			emailTd.appendTo(tr);
+			    			// $("<td />").html(value.email).appendTo(tr);
 			    			var optionTd = $("<td />");
+			    			var groupDiv = $("<div />", {
+			    				'class' : 'btn-group'
+			    			})
 			    			$("<input />", {
 			    				'type' : 'button',
-			    				"class" : "btn btn-danger optDelete",
-			    				'value' : "删除账户"
-			    			}).appendTo(optionTd);
-			    			$("<input />", {
-			    				'type' : 'button',
-			    				"class" : "btn btn-primary optReset",
+			    				"class" : "btn btn-primary btn-small optReset",
 			    				'value' : "初始化密码"
-			    			}).appendTo(optionTd);
+			    			}).appendTo(groupDiv);
 			    			$("<input />", {
 			    				'type' : 'button',
-			    				"class" : "btn btn-primary optModify",
-			    				'value' : "编辑"
-			    			}).appendTo(optionTd);
+			    				"class" : "btn btn-small optModify",
+			    				'value' : "用户信息"
+			    			}).appendTo(groupDiv);
 			    			$("<input />", {
 			    				'type' : 'button',
-			    				"class" : "btn btn-primary optRight",
-			    				'value' : "编辑权限"
-			    			}).appendTo(optionTd);
+			    				"class" : "btn btn-danger btn-small optRight",
+			    				'value' : "权限编辑"
+			    			}).appendTo(groupDiv);
+			    			$("<input />", {
+			    				'type' : 'button',
+			    				"class" : "btn btn-danger btn-small optDelete",
+			    				'value' : "账号删除"
+			    			}).appendTo(groupDiv);
+
+			    			groupDiv.appendTo(optionTd);
 			    			optionTd.appendTo(tr);
+
 			    			tr.data("userId", value.id);
+			    			tr.data("userName", value.username);
 			    			tr.data("cardNumber", value.card_number);
+			    			tr.data("card8H10D", value.card_8H10D);
+			    			tr.data("email", value.email);
 			    			tr.data("cellphone", value.cell);
 			    			tr.data("telephone", value.telephone);
 			    			tr.data("roleIds", value.roleIds);
@@ -265,7 +289,7 @@ $(document).ready(function () {
 			    			$(".prePage").hide();
 			    		else
 			    			$(".prePage").show();
-			    		if(response.data.pager.curPage * 20 >= response.data.pager.total )
+			    		if(response.data.pager.curPage * 5 >= response.data.pager.total )
 			    			$(".nextPage").hide();
 			    		else
 			    			$(".nextPage").show();
@@ -294,7 +318,9 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: ADD_USER,//ref:  /bms/js/service.js
-		    data: {"card_number" : $("#inputCardNumber").val(),
+		    data: {
+		    	"card_number" : $("#inputCardNumber").val(),
+		    	"card_8H10D" : $.trim($("#inputCard8H10D").val()),
 		    	"username" : $("#inputUsername").val(),
 				"display_name" : $("#inputDisplayName").val(),
 				"email" : $("#inputEmail").val(),
@@ -303,7 +329,9 @@ $(document).ready(function () {
 			},
 		    success:function (response) {
 		    	if (response.success) {
-		    		alert("yep");
+		    		alert("用户添加成功！");
+		    		$("#newModal").modal('hide');
+		    		ajaxQuery ($(".curPage").attr("page"));
 		    	} else {
 		    		// $("#vinText").val("");
 		    		alert(response.message);
@@ -315,14 +343,17 @@ $(document).ready(function () {
 
 	$("#btnEdit").click(function () {
 		ajaxEdit();
+		
 	})
 	function ajaxEdit (argument) {
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: EDIT_USER,//ref:  /bms/js/service.js
-		    data: {"id" : $('#editModal').data("userId"),
+		    data: {
+		    	"id" : $('#editModal').data("userId"),
 		    	"card_number" : $("#editCardNumber").val(),
+		    	"card_8H10D" : $.trim($("#editCard8H10D").val()),
 		    	"username" : $("#editUsername").val(),
 				"display_name" : $("#editDisplayName").val(),
 				"email" : $("#editEmail").val(),
@@ -331,7 +362,10 @@ $(document).ready(function () {
 			},
 		    success:function (response) {
 		    	if (response.success) {
-		    		alert("yep");
+		    		alert("修改成功");
+		    		$("#editModal").modal('hide');
+		    		ajaxQuery ($(".curPage").attr("page"));
+
 		    	} else {
 		    		// $("#vinText").val("");
 		    		alert(response.message);
@@ -349,10 +383,10 @@ $(document).ready(function () {
 		    data: {"id" : userId},
 		    success:function (response) {
 		    	if(response.success){
-		    		alert("yep");
+		    		alert("删除成功");
 		    	}else{
-		    		// $("#vinText").val("");
 		    		alert(response.message);
+		    		ajaxQuery ($(".curPage").attr("page"));
 		    	}
 		    },
 		    error:function(){alertError();}
@@ -386,7 +420,7 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		$(response.data).each(function (index, value) {
-		    			var label = $("<label />").addClass("checkbox").addClass("inline");
+		    			var label = $("<label />").addClass("checkbox");
 		    			var checkHtml = '<input type="checkbox" value="' + value.id + '">' + value.name;
 		    			label.html(checkHtml);
 		    			// $("<input/>" , {'type' : 'checkbox'}).attr("value", ).html().appendTo(label);
@@ -429,10 +463,4 @@ $(document).ready(function () {
 		$('#rightModal').modal("toggle");
 	}
 
-
-	function ajaxExport () {
-		window.open(TRACE_EXPORT + "?vin=" + $('#vinText').val() + 
-			"&node=" + $("#selectNode").val()
-		);
-	}
 });

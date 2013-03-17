@@ -23,47 +23,48 @@
         	<!-- Main体 -->	
     		
             <div id="bodyright" class="offset2">
-                <div ><ul class="breadcrumb"><!-- 面包屑 -->
+                <!--<div ><ul class="breadcrumb">
                         <li><a href="#">综合信息</a><span class="divider">&gt;</span></li>
                         <li><a href="#"> 维护与帮助</a><span class="divider">&gt;</span></li>
                         <li class="active">账户管理</li>                
-                </ul></div><!-- end 面包屑 -->
-
-                <table class='table'>
+                </ul></div>-->
+                <legend>个人中心</legend>
+                <form class="well form-horizontal">
+                <table class='table table-condense' style="margin-bottom:0;">
                 	<thead>
                             <tr>
-                            	<th>账号</th>
-                              	<th>姓名</th>
-                              	<th>邮箱</th>
-                              	<th>操作</th>
+                            	<th style="width:80px">账号</th>
+                              	<th style="width:80px">用户名</th>
+                              	<th style="width:180px">邮箱</th>
+                              	<th style="width:120px">手机</th>
+                              	<th style="width:120px">座机</th>
+                              	<th></th>
                             </tr>
                         </thead>
                         <tbody>
                         	<tr id="userInfoTr">
                             	<td id="userId">账号</td>
-                              	<td id="userName">姓名</td>
+                              	<td id="userName">用户名</td>
                               	<td id="userEmail">邮箱</td>
+                              	<td id="userCell">手机</td>
+                              	<td id="userTel">座机</td>
                               	<td>
 				                    <div class="btn-group">
-						                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">修改 <span class="caret"></span></button>
-						                <ul class="dropdown-menu">
-
-						                  <li>
-						                  	<a href="#emailModal" id="modifySelf">修改个人信息</a>
-						                  </li>
-						                  <li><a href="#passwordModal" data-toggle="modal">修改密码</a></li>
-						                </ul>
+					                	<a class='btn btn-small' href="#emailModal" id="modifySelf">个人信息</a>
+										<a class='btn btn-primary btn-small' href="#passwordModal" data-toggle="modal">修改密码</a>
 						            </div>
                               	</td>
                             </tr>
                         </tbody>
                 </table>
+            	</form>
+                <legend>账号管理</legend>
                 <div id='adminThing'>
 	                <form class="well form-horizontal">
 	                    <table>
 							<tr>
 								<td><label>账号</label></td>
-								<td><label>姓名</label></td>
+								<td><label>用户名</label></td>
 								<td><label>邮箱</label></td>
 								<td></td>
 							</tr>
@@ -72,22 +73,22 @@
 								<td><input id="queryDisplayName" type="text" class="span2" placeholder="姓名"></td>
 								<td><input id="queryEmail" type="text" class="span3" placeholder="邮箱"></td>
 								<td>
-									<input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input>
-	            					<a href="#myModal" role="button" class="btn btn-success" data-toggle="modal">增加</a>
+									<input type="button" class="btn btn-primary" id ="btnQuery" value ="查询" style="margin-left:2px"></input>
+	            					<a href="#newModal" role="button" class="btn btn-success" data-toggle="modal">增加</a>
 								</td>
 							</tr>
 						</table>
 	                </form>
-	                <div>
+	                <!-- <div>
                     <h5 class='pull-left'>用户列表:<span id='totalText'></span></h5>  
-
-                </div>
-                   	<table id="resultTable" class="table table-bordered">
+                	</div> -->
+                   	<table id="resultTable" class="table table-hover table-condensed">
                         <thead>
                             <tr>
-                            	<th>账号</th>
-                              	<th>姓名</th>
-                              	<th>邮箱</th>
+                            	<th style="width:50px">#</th>
+                            	<th style="width:80px">账号</th>
+                              	<th style="width:80px">用户名</th>
+                              	<th style="width:180px">邮箱</th>
                               	<th>操作</th>
                             </tr>
                         </thead>
@@ -114,7 +115,7 @@
   	<div class="modal-body">
   		<form class="form-horizontal">
 		  <div class="control-group">
-		    <label class="control-label" for="inputEmail"> 新的邮箱地址</label>
+		    <label class="control-label" for="inputEmail"> 邮箱</label>
 		    <div class="controls">
 		      <input type="text" id="inputEmailChange" placeholder="新的邮箱地址">
 		    </div>
@@ -192,17 +193,35 @@
 </div>
 
 
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+<div class="modal" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true" style="display:none;">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   	 	<h3 id="myModalLabel"> 添加新用户</h3>
+   	 	<h3 id="newModalLabel"> 添加新用户</h3>
   	</div>
   	<div class="modal-body">
   		<form class="form-horizontal">
   			<div class="control-group">
-		    <label class="control-label" for="inputCardNumber">工号</label>
+		    <label class="control-label" for="inputCardNumber">*工号</label>
 		    <div class="controls">
 		      <input type="text" id="inputCardNumber" placeholder="CardNumber">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="inputUsername">*账号</label>
+		    <div class="controls">
+		      <input type="text" id="inputUsername" placeholder="Username">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="inputDisplayName">*用户名</label>
+		    <div class="controls">
+		      <input type="text" id="inputDisplayName" placeholder="DisplayName">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="inputCard8H10D">厂牌</label>
+		    <div class="controls">
+		      <input type="text" id="inputCard8H10D" placeholder="Card8H10D">
 		    </div>
 		  </div>
 		  <div class="control-group">
@@ -212,25 +231,13 @@
 		    </div>
 		  </div>
 		  <div class="control-group">
-		    <label class="control-label" for="inputUsername">账号</label>
-		    <div class="controls">
-		      <input type="text" id="inputUsername" placeholder="Username">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <label class="control-label" for="inputDisplayName">姓名</label>
-		    <div class="controls">
-		      <input type="text" id="inputDisplayName" placeholder="DisplayName">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <label class="control-label" for="inputCellPhone">手机号</label>
+		    <label class="control-label" for="inputCellPhone">手机</label>
 		    <div class="controls">
 		      <input type="text" id="inputCellPhone" placeholder="CellPhone">
 		    </div>
 		  </div>
 		  <div class="control-group">
-		    <label class="control-label" for="inputTelephone">电话号码</label>
+		    <label class="control-label" for="inputTelephone">座机</label>
 		    <div class="controls">
 		      <input type="text" id="inputTelephone" placeholder="Telephone">
 		    </div>
@@ -251,9 +258,27 @@
   	<div class="modal-body">
   		<form class="form-horizontal">
 		  <div class="control-group">
-		    <label class="control-label" for="editCardNumber">工号</label>
+		    <label class="control-label" for="editCardNumber">*工号</label>
 		    <div class="controls">
 		      <input type="text" id="editCardNumber" placeholder="CardNumber">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="editUsername">*账号</label>
+		    <div class="controls">
+		      <input type="text" id="editUsername" placeholder="Username">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="editDisplayName">*用户名</label>
+		    <div class="controls">
+		      <input type="text" id="editDisplayName" placeholder="DisplayName">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="editCard8H10D">厂牌</label>
+		    <div class="controls">
+		      <input type="text" id="editCard8H10D" placeholder="8H10D">
 		    </div>
 		  </div>
 		  <div class="control-group">
@@ -263,25 +288,13 @@
 		    </div>
 		  </div>
 		  <div class="control-group">
-		    <label class="control-label" for="editUsername">账号</label>
-		    <div class="controls">
-		      <input type="text" id="editUsername" placeholder="Username">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <label class="control-label" for="editDisplayName">姓名</label>
-		    <div class="controls">
-		      <input type="text" id="editDisplayName" placeholder="DisplayName">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <label class="control-label" for="editCellPhone">手机号</label>
+		    <label class="control-label" for="editCellPhone">手机</label>
 		    <div class="controls">
 		      <input type="text" id="editCellPhone" placeholder="CellPhone">
 		    </div>
 		  </div>
 		  <div class="control-group">
-		    <label class="control-label" for="editTelephone">电话号码</label>
+		    <label class="control-label" for="editTelephone">座机</label>
 		    <div class="controls">
 		      <input type="text" id="editTelephone" placeholder="Telephone">
 		    </div>

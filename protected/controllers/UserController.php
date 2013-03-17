@@ -122,12 +122,20 @@ class UserController extends BmsBaseController
 			$cell = $this->validateStringVal('cell');
 			$tele = $this->validateStringVal('telephone');
 			$card = $this->validateStringVal('card_number');
+			$card8H10D = $this->validateStringVal('card_8H10D');
+
+			if(empty($username)) {
+				throw new Exception("账号不能为空");
+			}
 			$exist = User::model()->find('username = ? AND id!=?', array($username,$id));
 			if(!empty($exist)) {
-				throw new Exception("$username 用户已存在");
+				throw new Exception("$username 账号已存在");
 			}
 			if(empty($card)) {
 				throw new Exception("工号不能为空");
+			}
+			if(empty($username)){
+				throw new Exception("账号不可为空");
 			}
 			$exist = User::model()->find('card_number = ? AND id!=?', array($card,$id));
 			if(!empty($exist)) {
@@ -144,6 +152,7 @@ class UserController extends BmsBaseController
 			$user->cellphone = $cell;
 			$user->telephone = $tele;
 			$user->card_number = $card;
+			$user->card_8H10D = $card8H10D;
 			if(empty($id)) {
 				$password = $user->initPassword($card);
             	$mailer = new BmsMailer();
