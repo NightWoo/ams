@@ -38,6 +38,14 @@ $(document).ready( function () {
 		return false;
 	});
 
+	$("#btnQuery6B").click(function () {
+		var isFault = Number($("#isFault6B").attr("checked") === "checked");
+		ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
+			isFault);
+		return false;
+	});
+
+
 
 	function ajaxQuery (series, name, code, cate, isFault, pageNumber) {
 
