@@ -820,7 +820,8 @@ class FaultSeeker
 		if($lastHour <= 24) {//hour
 			$format = 'Y-m-d H';
 			$stime = date($format, $s) . ":00:00";
-			$etime = date($format, $e) . ":00:00";
+			$eNextH = strtotime('+1 hour', $e);
+			$etime = date($format, $eNextH) . ":00:00";
 		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
 			//$stime = date($format, $s) . " 00:00:00";				

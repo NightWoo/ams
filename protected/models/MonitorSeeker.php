@@ -303,17 +303,17 @@ class MonitorSeeker
 		$etimeHM = date("H:i", strtotime($etime));
 
 		$restTime = 0;
-		if($etimeHM >= "08:00" && $etimeHM < "11:40"){
+		if($etimeHM >= "08:00" && $etimeHM < "11:30"){
 
 		}
-		if($etimeHM >= "11:40" && $etimeHM < "12:40"){
-			$restTime = strtotime($etime) - strtotime($thisDate . " 11:40:00");
+		if($etimeHM >= "11:30" && $etimeHM < "12:30"){
+			$restTime = strtotime($etime) - strtotime($thisDate . " 11:30:00");
 		}
-		if($etimeHM >= "12:40" && $etimeHM < "17:00"){
+		if($etimeHM >= "12:30" && $etimeHM < "17:00"){
 			$restTime = 3600;
 		}
 		if($etimeHM >= "17:00" && $etimeHM < "18:00"){
-			$restTime = 3600 + (strtotime($etime) - strtotime($thisDate . " 18:00:00"));
+			$restTime = 3600 + (strtotime($etime) - strtotime($thisDate . " 17:00:00"));
 		}
 		if($etimeHM >= "18:00" && $etimeHM < "23:30"){
 			$restTime = 7200;

@@ -133,7 +133,7 @@ class PauseSeeker
 
 		$sum = 0;
 		foreach($datas as &$data) {
-			if(empty($data['recover_time'])){
+			if(($data['recover_time']) == '0000-00-00 00:00:00'){
 				$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
 			}else {
 				//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
