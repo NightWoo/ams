@@ -5,8 +5,8 @@
 		<title><?php echo $nodeDisplayName;?></title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
-	<link href="/bms/css/execution/assembly/dataInput/WarehouseEntry.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<link href="/bms/css/execution/assembly/dataInput/WarehouseEntry.css" rel="stylesheet">
     <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
@@ -36,7 +36,7 @@
 								<tr>
 									<td>
 										<div class="input-prepend">
-											<span class="add-on">V</span>
+											<span class="add-on" id="vinLable">VIN</span>
 											<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 										</div>
 										<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="入库">
