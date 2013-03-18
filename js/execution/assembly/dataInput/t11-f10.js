@@ -211,14 +211,16 @@ $("document").ready(function() {
 			//len 18 may be an DongAN gearbox
 			if(compCode.substring(0,5) == 'F4A4B'){
 				simpleCode = compCode.substring(0,5)
-			}else{
+			} else if(compCode.substring(0,9) == 'BYD476ZQA'){ //len 18 may be an 475ZQA engine
+				simpleCode = compCode.substring(0,9)
+			} else{
 				simpleCode = compCode.substring(6,9);
 				providerCode = compCode.substring(0,6);
 			}
 		}else{//特殊零部件
 			if(compCode.length == 16)
 				simpleCode = compCode.substring(0,7);
-			else if(compCode.length == 15)
+			else if(compCode.length == 15)	//liandian ECU
 				simpleCode = compCode.substring(0,3);
 			else if(compCode.length == 3)
 				simpleCode = compCode;
