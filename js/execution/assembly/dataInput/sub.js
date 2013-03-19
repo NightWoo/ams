@@ -15,7 +15,7 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					$("#btnSubmit, #btnTopOut").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include series,type and color
@@ -38,7 +38,7 @@ $("document").ready(function() {
 	}
 
 	//进入
-	function ajaxEnter(){
+	function ajaxEnter(toPrint=true){
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
@@ -60,14 +60,17 @@ $("document").ready(function() {
 				}
 				$(".printSerialNumber").html(response.data.serialNumber);
 				$(".printRemark").html("备注：" + response.data.remark);
-				
-				if (response.data.frontImage == "" || response.data.backImage == "") {
-					fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+				if(toPrint){
+					if (response.data.frontImage == "" || response.data.backImage == "") {
+						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+					} else {
+						setTimeout(function (){window.print();},500);
+						fadeMessageAlert(response.message,"alert-success");
+					}
 				} else {
-					setTimeout(function (){window.print();},500);
 					fadeMessageAlert(response.message,"alert-success");
-					ajaxGetPrintList();
 				}
+				ajaxGetPrintList();
 			},
 			error:function(){alertError();}
 		});
@@ -151,11 +154,11 @@ $("document").ready(function() {
 			$("#vinText").attr("disabled", "disabled");
 			//获取第一行的VIN号
 			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(2)").text());
-			$("#btnSubmit").removeAttr("disabled");
+			$("#btnSubmit, #btnTopOut").removeAttr("disabled");
 		} else {
 			$("#vinText").removeAttr("disabled");
 			$("#vinText").attr("value","");
-			$("#btnSubmit").attr("disabled", "disabled");
+			$("#btnSubmit, #btnTopOut").attr("disabled", "disabled");
 		}
 		
 	}
@@ -232,9 +235,17 @@ $("document").ready(function() {
 
 	//进入彩车身库事件，发ajax，根据响应做提示
 	$("#btnSubmit").click(function() {
-		if(!($("#btnSubmit").hasClass("disabled"))){
-			$("#btnSubmit").attr("disabled","disabled");
+		if(!($("#btnSubmit, #btnTopOut").hasClass("disabled"))){
+			$("#btnSubmit, #btnTopOut").attr("disabled","disabled");
 			ajaxEnter();
+		}
+		return false;
+	});
+
+	$("#btnTopOut").click(function() {
+		if(!($("#btnTopOut, #btnSubmit").hasClass("disabled"))){
+			$("#btnTopOut, #btnSubmit").attr("disabled","disabled");
+			ajaxEnter(false);
 		}
 		return false;
 	});
@@ -244,7 +255,7 @@ $("document").ready(function() {
 	});
 	//清空
 	$("#btnClear").click(function() {
-		$("#btnSubmit").attr("disabled","disabled");
+		$("#btnSubmit, #btnTopOut").attr("disabled","disabled");
 		$("#vinText").removeAttr("disabled");
 		$("#vinText").attr("value","");
 		$("#tableList tr:eq(1)").removeClass("info");

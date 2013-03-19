@@ -54,6 +54,7 @@
                        	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
                                     <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
                                     <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button>
+                                    <button id="btnTopOut" type="submit" class="btn btn-info"><i class="icon-tag"></i>&nbsp;顶出</button>
                                      
                                     <button id="btnClear" type="reset" class="btn btn-danger"><i class="icon-repeat icon-white"></i>&nbsp;清空</button>
                               		<span class="help-inline" id="vinHint">如需打印指定车辆配置单，请清空</span>
