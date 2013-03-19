@@ -36,7 +36,7 @@
 								<tr>
 									<td>
 										<div class="input-prepend">
-											<span class="add-on" id="vinLable">VIN</span>
+											<span class="add-on" id="vinLabel">VIN</span>
 											<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 										</div>
 										<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="入库">
