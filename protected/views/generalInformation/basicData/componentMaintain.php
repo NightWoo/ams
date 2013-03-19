@@ -221,6 +221,7 @@
 			      	<select id="newSeries" class="span2" disabled>
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
+						<option value="6B">思锐</option>
 					</select>
 			    </div>
 			</div>
@@ -236,6 +237,7 @@
 						<option value="5">内外饰</option>
 						<option value="6">附件</option>
 						<option value="7">其他</option>
+						<option value="8">门系统</option>
 					</select>
 			    </div>
 			</div>
@@ -297,6 +299,7 @@
 			      	<select id="inputSeries" class="span2" disabled>
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
+						<option value="6B">思锐</option>
 					</select>
 			    </div>
 			</div>
@@ -312,6 +315,7 @@
 						<option value="5">内外饰</option>
 						<option value="6">附件</option>
 						<option value="7">其他</option>
+						<option value="8">门系统</option>
 					</select>
 			    </div>
 			</div>

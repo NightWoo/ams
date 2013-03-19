@@ -38,7 +38,8 @@ $("document").ready(function() {
 	}
 
 	//进入
-	function ajaxEnter(toPrint=true){
+	function ajaxEnter(){
+		toPrint = arguments[0] ? arguments[0] : true;
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据

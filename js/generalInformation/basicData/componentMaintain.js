@@ -152,6 +152,11 @@ $(document).ready( function () {
 		$('#newModal').modal("toggle");
 	});
 
+	$("#btnAdd6B").click(function () {
+		$('#newSeries').attr("value", "6B");
+		$('#newModal').modal("toggle");
+	});
+
 	$("#btnEditConfirm").click(function () {
 		ajaxEdit();
 	});
@@ -271,9 +276,13 @@ $(document).ready( function () {
 				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
 					isFault ,parseInt($(".curPage").attr("page")));
-			} else {
+			} else if($("#liM6").hasClass("active")) {
 				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")));
+			} else if($("#li6B").hasClass("active")){
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")));
 			}
 			return false;
@@ -283,10 +292,16 @@ $(document).ready( function () {
 	$(".prePage").click(
 		function (){
 			if ($("#liF0").hasClass("active")) {
+				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val()
 					,parseInt($(".curPage").attr("page")) - 1);
-			} else {
+			} else if($("#liM6").hasClass("active")){
+				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")) - 1);
+			} else if(($("#li6B").hasClass("active"))) {
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")) - 1);
 			}
 		}
@@ -298,9 +313,13 @@ $(document).ready( function () {
 				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
 					isFault ,parseInt($(".curPage").attr("page")) + 1);
-			} else {
+			} else if($("#liM6").hasClass("active")){
 				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")) + 1);
+			} else if(($("#li6B").hasClass("active"))) {
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")) + 1);
 			}
 		}
