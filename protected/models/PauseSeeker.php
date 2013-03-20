@@ -57,6 +57,7 @@ class PauseSeeker
 		$countSql = "SELECT count(*) FROM pause WHERE $condition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
 		
+		
 		foreach($datas as &$data) {
 			$editor = User::model()->findByPk($data['editor']);
 			if(!empty($editor)){

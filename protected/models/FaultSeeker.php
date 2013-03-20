@@ -85,6 +85,8 @@ class FaultSeeker
 		if(empty($tables)) {//
 			return $this->queryNodeTrace($series, $stime, $etime, $nodeName,$curPage, $perPage);
 		}
+		$name = $this->seriesName();
+
 		$sql = "SELECT * FROM node";
 		$nodes = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -188,6 +190,8 @@ class FaultSeeker
 				$data['duty_department'] = '涂装';
 			else if($data['duty_department'] === 'welding')
 				$data['duty_department'] = '焊装';
+
+				$data['series'] = $name[$data['series']];
 		}
 
 		$total = 0;
@@ -265,6 +269,7 @@ class FaultSeeker
 			return array(0, array());
 		}
 
+		$name = $this->seriesName();
 		$sql = "SELECT * FROM node";
         $nodes = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -334,10 +339,10 @@ class FaultSeeker
                 );  
             } 
 
-			if(empty($seriesChartData[$data['series']])) {
-                $seriesChartData[$data['series']] = array(
-                    'id'    => $data['series'],
-                    'name'  => $data['series'],
+			if(empty($seriesChartData[$name[$data['series']]])) {
+                $seriesChartData[$name[$data['series']]] = array(
+                    'id'    => $name[$data['series']],
+                    'name'  => $name[$data['series']],
                     'count' => 0,
                 );
             }
@@ -354,7 +359,7 @@ class FaultSeeker
 			
 			++ $componentChartData[$data['component_id']]['count'];
 			++ $faultModeChartData[$data['fault_mode']]['count'];
-			++ $seriesChartData[$data['series']]['count'];
+			++ $seriesChartData[$name[$data['series']]]['count'];
 			++ $nodeChartData[$data['node_id']]['count'];
 			++ $total;
 		}
@@ -392,7 +397,8 @@ class FaultSeeker
 	}
 
 	public function queryDPU($component, $mode, $series, $stime, $etime, $node) {
-		$tables = $this->parseTables($node,$series);	
+		$tables = $this->parseTables($node,$series);
+		$name = $this->seriesName();	
 		if(empty($tables)) {
 			return array();
 		}
@@ -414,7 +420,7 @@ class FaultSeeker
 		$arraySeries = $this->parseSeries($series);
 		
 		foreach($arraySeries as $series){
-			$retTotal[$series] = array(
+				$retTotal[$name[$series]] = array(
 									'faultTotal' => 0,
         							'carTotal' => 0,
         							'dpuTotal' => 0,
@@ -446,16 +452,17 @@ class FaultSeeker
 				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 				
-				$temp[$series] = array(
-						'series' => $series,
-						'faults' => $total,
-						'cars' => $cars,
-						'dpu' => empty($cars) ? '-' : round($total / $cars, 2),
-						);
-				if(empty($dataSeriesY[$series])) $dataSeriesY[$series] = array();
-				$dataSeriesY[$series][] = empty($cars) ? 0 : round($total / $cars, 2);
-				$retTotal[$series]['faultTotal'] += $total;
-				$retTotal[$series]['carTotal'] += $cars;
+					$temp[$name[$series]] = array(
+							'series' => $name[$series],
+							'faults' => $total,
+							'cars' => $cars,
+							'dpu' => empty($cars) ? '-' : round($total / $cars, 2),
+							);
+					if(empty($dataSeriesY[$name[$series]])) $dataSeriesY[$name[$series]] = array();
+					$dataSeriesY[$name[$series]][] = empty($cars) ? null : round($total / $cars, 2);
+					$retTotal[$name[$series]]['faultTotal'] += $total;
+					$retTotal[$name[$series]]['carTotal'] += $cars;
+				
 
 			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
@@ -463,10 +470,13 @@ class FaultSeeker
         }
 
         foreach($arraySeries as $series) {
-        	$retTotal[$series]['dpuTotal'] = empty($retTotal[$series]['carTotal']) ? '-' : round($retTotal[$series]['faultTotal'] / $retTotal[$series]['carTotal'], 2);
+        	$retTotal[$name[$series]]['dpuTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['faultTotal'] / $retTotal[$name[$series]]['carTotal'], 2);
         }
-
-		return array('carSeries' => $arraySeries, 'detail' => $ret, 'total' => $retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
+        $carSeries = array();
+        foreach ($arraySeries as $series){
+        	$carSeries[] = $name[$series];
+        }
+		return array('carSeries' => $carSeries, 'detail' => $ret, 'total' => $retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
 
@@ -579,6 +589,7 @@ class FaultSeeker
 		}
 		$nodeIdStr = $this->parseNodeId($node);
 		$arraySeries = $this->parseSeries($series);
+		$name = $this->seriesName();
 
 		$queryTimes = $this->parseQueryTime($stime,$etime);
 		$detail = array();
@@ -587,7 +598,7 @@ class FaultSeeker
 		$retTotal = array();
 
 		foreach($arraySeries as $series){
-			$retTotal[$series] = array(
+			$retTotal[$name[$series]] = array(
 									'qualifiedTotal' => 0,
         							'carTotal' => 0,
         							'rateTotal' => 0,
@@ -624,15 +635,15 @@ class FaultSeeker
 				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 			
-				$rate = empty($cars) ? 0 : round(($cars - $faults) / $cars, 3);	
-				$temp[$series] = array(
+				$rate = empty($cars) ? null : round(($cars - $faults) / $cars, 3);	
+				$temp[$name[$series]] = array(
 					'qualified' => $cars - $faults,
 					'total' => $cars,
 					'rate' => empty($cars) ? '-' : $rate * 100 . "%",
 				);
-				$dataSeriesY[$series][] = $rate;
-				$retTotal[$series]['qualifiedTotal'] += $temp[$series]['qualified'];
-				$retTotal[$series]['carTotal'] += $cars;
+				$dataSeriesY[$name[$series]][] = $rate;
+				$retTotal[$name[$series]]['qualifiedTotal'] += $temp[$name[$series]]['qualified'];
+				$retTotal[$name[$series]]['carTotal'] += $cars;
 			}	
 			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
@@ -640,10 +651,13 @@ class FaultSeeker
         }
 
         foreach($arraySeries as $series) {
-        	$retTotal[$series]['rateTotal'] = empty($retTotal[$series]['carTotal']) ? '-' : round($retTotal[$series]['qualifiedTotal'] / $retTotal[$series]['carTotal'], 3) * 100 . '%';
+        	$retTotal[$name[$series]]['rateTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['qualifiedTotal'] / $retTotal[$name[$series]]['carTotal'], 3) * 100 . '%';
         }
 
-		return array('carSeries' => $arraySeries, 'detail'=> $detail, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
+        foreach ($arraySeries as $series){
+        	$carSeries[] = $name[$series];
+        }
+		return array('carSeries' => $carSeries, 'detail'=> $detail, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
 
@@ -657,7 +671,11 @@ class FaultSeeker
 		$dataSeriesY = array();
 		$retTotal = array();
 		foreach($arraySeries as $series){
-			$retTotal[$series] = 0;
+			if($series == '6B'){
+				$retTotal['思锐'] = 0;
+			}else {
+				$retTotal[$series] = 0;
+			}
 		}
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
@@ -668,14 +686,23 @@ class FaultSeeker
 
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 				
-				$temp[$series] = $cars;
-				$dataSeriesY[$series][] = intval($cars);
-				$retTotal[$series] += intval($cars);
+				if($series == '6B'){
+					$temp['思锐'] = $cars;
+					$dataSeriesY['思锐'][] = intval($cars);
+					$retTotal['思锐'] += intval($cars);
+				}else {
+					$temp[$series] = $cars;
+					$dataSeriesY[$series][] = intval($cars);
+					$retTotal[$series] += intval($cars);
+				}
 			}	
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
         
+        foreach($arraySeries as $key => $series){
+        	if($series == '6B') $arraySeries[$key] = '思锐';
+        }
 		return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
@@ -840,5 +867,15 @@ class FaultSeeker
 
 
 		return array($stime, $etime);
+	}
+
+	public function seriesName(){
+		$seriesName = array(
+			'F0' => 'F0',
+			'M6' => 'M6',
+			'6B' => '思锐'
+		);
+
+		return $seriesName;
 	}
 }

@@ -102,6 +102,9 @@ class PlanSeeker
 
 		$seeker = new ConfigSeeker();
 		foreach($datas as &$data) {
+			if($data['car_series'] == '6B'){
+				$data['car_series'] = '思锐';
+			}
 			$data['config_name'] = $seeker->getName($data['config_id']);
 			$data['car_type_name'] = $this->cutCarType($data['car_type']);
 		}
@@ -115,7 +118,24 @@ class PlanSeeker
 		$detail = array();
 		$dataSeriesX = array();
 		$dataSeriesY = array();
-
+		$retTotal = array();
+		foreach($arraySeries as $series){
+			if($series == '6B'){
+				$retTotal['思锐'] = 0;
+				$retTotal['思锐'] = array(
+									'readyTotal' => 0,
+        							'totalTotal' => 0,
+        							'completionTotal' => 0,
+								);
+			}else {
+				$retTotal[$series] = 0;
+				$retTotal[$series] = array(
+									'readyTotal' => 0,
+        							'totalTotal' => 0,
+        							'completionTotal' => 0,
+								);
+			}
+		}
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
 			$ee = $queryTime['etime'];
@@ -132,7 +152,7 @@ class PlanSeeker
 			}
 			$temp = array();
 			foreach($arraySeries as $series) {
-				//$total = 0;
+
 				$condition = $con . " AND car_series='$series'";
 				$sql = "SELECT SUM(total) FROM plan_assembly $condition";
 				$totalSum = Yii::app()->db->createCommand($sql)->queryScalar();
@@ -141,49 +161,41 @@ class PlanSeeker
 				$readySum = Yii::app()->db->createCommand($sql)->queryScalar();
 
 				$rate = empty($totalSum) ? null : round($readySum/$totalSum , 2);
-				$temp[$series] = array(
-					'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
-					'readySum' => empty($readySum) ? 0 : $readySum,
-					'totalSum' => empty($totalSum) ? 0 : $totalSum,
-				);
-				$dataSeriesY[$series][] = $rate;
+				if($series == '6B'){
+					$temp['思锐'] = array(
+						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
+						'readySum' => empty($readySum) ? 0 : $readySum,
+						'totalSum' => empty($totalSum) ? 0 : $totalSum,
+					);
+					$dataSeriesY['思锐'][] = $rate;
+					$retTotal['思锐']['totalTotal'] += $readySum;
+					$retTotal['思锐']['readyTotal'] += $totalSum;
+				}else {
+					$temp[$series] = array(
+						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
+						'readySum' => empty($readySum) ? 0 : $readySum,
+						'totalSum' => empty($totalSum) ? 0 : $totalSum,
+					);
+					$retTotal[$series]['totalTotal'] += $readySum;
+					$retTotal[$series]['readyTotal'] += $totalSum;
+					$dataSeriesY[$series][] = $rate;
+				}
 			}
 			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
 		}
-
-		//计算合计
-		$retTotal = array();
-		list($stT, $etT) = $this->reviseSETime($stime, $etime);
-		$ccT = array("assembly_line='$line'");
-		if(!empty($stT)) {
-			$ccT[] = "plan_date>='$stT'"; 
-		}
-		if(!empty($etT)){
-			$ccT[] = "plan_date<='$etT'";
-		}
-		$conT = join(' AND ', $ccT);
-		if(!empty($conT)) {
-			$conT = 'WHERE ' . $conT;
+		foreach($arraySeries as $series){
+			if($series == '6B'){
+				$retTotal['思锐']['completionTotal'] = empty($retTotal['思锐']['totalTotal']) ? '-' : ($retTotal['思锐']['totalTotal']/$retTotal['思锐']['totalTotal']) * 100 ."%";
+			} else {
+				$retTotal[$series]['completionTotal'] = empty($retTotal[$series]['totalTotal']) ? '-' : ($retTotal[$series]['totalTotal']/$retTotal[$series]['totalTotal']) * 100 ."%";
+			}
 		}
 
-		foreach($arraySeries as $series) {
-			$condition = $conT . " AND car_series='$series'";
-			$sql = "SELECT SUM(total) FROM plan_assembly $condition";
-			$totalT = Yii::app()->db->createCommand($sql)->queryScalar();
-
-			$sql = "SELECT SUM(ready) FROM plan_assembly $condition";
-			$readyT = Yii::app()->db->createCommand($sql)->queryScalar();
-
-			$rateT = empty($totalT) ? '-' : round($readyT/$totalT , 2);
-			$retTotal[] = array(
-				'series' => $series,
-				'completionTotal' => empty($totalT) ? '-' : $rate * 100 ."%", 
-				'readyTotal' => $readyT,
-				'totalTotal' => $totalT,
-			);
-		}
-
+		foreach($arraySeries as $key => $series){
+        	if($series == '6B') $arraySeries[$key] = '思锐';
+        }
+        
 		return  array(
 					'carSeries' => $arraySeries,
 					'detail' => $detail,

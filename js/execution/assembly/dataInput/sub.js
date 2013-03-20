@@ -38,8 +38,8 @@ $("document").ready(function() {
 	}
 
 	//进入
-	function ajaxEnter(){
-		toPrint = arguments[0] ? arguments[0] : true;
+	function ajaxEnter(toPrint){
+		// toPrint = arguments[0] ? arguments[0] : false;
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
@@ -101,7 +101,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.series).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		if(value.coldResistant == "1"){
+		    		if(value.cold_resistant == "1"){
 						$("<td />").html('耐寒').appendTo(tr);						
 					}else{
 						$("<td />").html('非耐寒').appendTo(tr);						
@@ -238,7 +238,7 @@ $("document").ready(function() {
 	$("#btnSubmit").click(function() {
 		if(!($("#btnSubmit, #btnTopOut").hasClass("disabled"))){
 			$("#btnSubmit, #btnTopOut").attr("disabled","disabled");
-			ajaxEnter();
+			ajaxEnter(true);
 		}
 		return false;
 	});

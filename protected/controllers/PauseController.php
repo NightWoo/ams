@@ -41,6 +41,11 @@ class PauseController extends BmsBaseController
 				),
 				'data' => $data,
 			);
+
+			if(empty($data)){
+				throw new Exception("无查询结果", 1);
+			}
+
 			$this->renderJsonBms(true, 'OK', $ret);
 			
 		}catch(Exception $e) {

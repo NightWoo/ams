@@ -100,6 +100,21 @@ $(document).ready(function () {
 		$("#tableCars").hide();
 	}
 
+	function getSeriesChecked () {
+		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
+		
+		var temp = [];
+		if (f0Checked)
+			temp.push($("#checkboxF0").val());
+		if (m6Checked)
+			temp.push($("#checkboxM6").val());
+		if (_6BChecked)
+			temp.push($("#checkbox6B").val());
+		return temp.join(",");
+	}
+
 /*
  * ----------------------------------------------------------------
  * Event bindings
@@ -281,24 +296,13 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  */
 	function ajaxQuery (targetPage) {
-		//get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
-		
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: QUERY_NODE_TRACE,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 					"perPage":20,
@@ -368,23 +372,13 @@ $(document).ready(function () {
 
 
 	function ajaxStatistics () {
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_CAR,//ref:  /bms/js/service.js
 		    data: { "vin": $('#vinText').val(), 
 		    		"node":$("#selectNode").val(),
-					"series":series,
+					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 				},
@@ -510,7 +504,7 @@ $(document).ready(function () {
 	function ajaxExportNodeTrace () {
 		window.open(EXPORT_NODE_TRACE + 
 			"?&node=" + $("#selectNode").val() + 
-			"&series=" + ($("#checkboxF0").val() + "," + $("#checkboxM6").val()) +
+			"&series=" + getSeriesChecked() +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
 		);
@@ -669,16 +663,6 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryPlan(targetPage) {
-		// //get series for query
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
 		$.ajax({
 			type: "get",
 			dataType: "json",
@@ -687,7 +671,7 @@ $(document).ready(function () {
 				"stime": $("#startTime").val(),
 				"etime": $("#endTime").val(),
 				"line": "A",
-				"series":series,
+				"series": getSeriesChecked(),
 				"perPage": 10,
 				"curPage": targetPage || 1,
 			},
@@ -758,23 +742,13 @@ $(document).ready(function () {
 	}
 
 	function ajaxCompletionRate() {
-		var series = "";
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		if((f0Checked + m6Checked)%2 === 0)
-			series += $("#checkboxF0").val() + "," + $("#checkboxM6").val();
-		else if(f0Checked)
-			series += $("#checkboxF0").val();
-		else
-			series += $("#checkboxM6").val();
-
 		$.ajax({
 			type: "get",
 			dataType: "json",
 			url: PLAN_QUERY_COMPLETION,
 			data: {
 				"line" : 'A',
-				"series":series,
+				"series": getSeriesChecked(),
 				"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
 			},
@@ -873,23 +847,18 @@ $(document).ready(function () {
 
 		//get tr
         //first column descriptions
-        $.each(carSeries, function (index,value) {
-            $("<td />").html(value + "_完成率").appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
-            $("<td />").html(value + "_完成数").appendTo($("#tablecompletionRate tr:eq("+(index*3+2)+")"));
-            $("<td />").html(value + "_计划数").appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
+        $.each(carSeries, function (index,series) {
+            $("<td />").html(series + "_完成率").appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(series + "_完成数").appendTo($("#tablecompletionRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(series + "_计划数").appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
 
+            $("<td />").html(total[series]['completionTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(total[series]['readyTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(total[series]['otalTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+3)+")"));
         });
 
         var thTr = $("#tablecompletionRate tr:eq(0)");
         $("<th />").html("日期").appendTo(thTr).addClass("wideTh");
-
-        //合计
-        $("<th />").html("合计").appendTo(thTr);
-        $.each(total, function (index, value) {
-        	$("<td />").html(value.completionTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
-        	$("<td />").html(value.readyTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+2) +")"));
-        	$("<td />").html(value.totalTotal).appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
-        });
 
         $.each(detail, function (index, value) {
         	$("<td />").html(value.time).appendTo(thTr);
@@ -1205,18 +1174,22 @@ $(document).ready(function () {
 						}
 					},
 					title: {
-						text: '停线时长(分钟)',
+						// text: '停线时长(分钟)',
+						text: null,
 						style: {
 							color: Highcharts.getOptions().colors[4],
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						}
 					},
 					labels: {
+						enabled: false,
 						formatter: function() {
 							return parseInt(this.value/60)
 						}
 					},
-					min: 0
+					min: 0,
+					endOnTick: false,
+					gridLineWidth: 0
 				},{		// Secondary yAxis
 					title: {
 						text: '累计百分率',
@@ -1236,7 +1209,7 @@ $(document).ready(function () {
 					},
 					max: 1,
 					min: 0,
-					opposite: true
+					//opposite: true
 				},
 
 			],

@@ -389,10 +389,17 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
 
             $fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复',array('VQ3_FACADE_TEST_'));
+            $exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));
             if(!empty($exist)) {
-                throw new 
-                Exception ($vin .'车辆在VQ3还有未修复的故障');
+                throw new Exception ('VQ3还有未修复故障');
+            }
+            $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
+            }
+            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
 
             $car->leftNode('VQ3');
