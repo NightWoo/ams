@@ -94,7 +94,8 @@ class ExecutionController extends BmsBaseController
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
 
-			$car->addSubConfig();
+            $subTypes = array('subEngine','subFrontAxle');
+            $car->addSubConfig($subTypes);
 
 			$transaction->commit();
 
@@ -124,9 +125,16 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
-			
+			 
+
 			//save component trace
 			$car->addTraceComponents($enterNode, $componentCode);
+
+            // if($enterNode->id == 4){
+            //     $subTypes = array('subEngine','subFrontAxle');
+            //     $car->addSubConfig($subTypes);
+            // }
+
 			$transaction->commit();
             $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vin);
         } catch(Exception $e) {

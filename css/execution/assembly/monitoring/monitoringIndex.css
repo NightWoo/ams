@@ -67,10 +67,10 @@
 }
 
 .c1{
-	left:659px;
+	left:641px;
 }
 .c2{
-	left:731px;
+	left:713px;
 }
 .f1{
 	left:839px;
@@ -149,7 +149,7 @@
 	border-radius: 4px;
 	position: absolute;
 	top: 152px;
-    left: 1104px;
+    left: 1103px;
 	width: 20px;
 	height: 30px;
 	line-height: 26px;
@@ -262,12 +262,53 @@
 
 .pauseTimeArea{
 	position: absolute;
-	top:68px;
-	left:431px;
-	height:50px;
-	width:800px;
-	text-align: left;
+	top:58px;
+	left:360px;
+	text-align: center;
 	font-size: 16px;
+}
+
+.pauseTime {
+	position: absolute;
+	top: 10px;
+}
+
+#pauseTimeT1 {
+	left:65px;
+}
+
+#pauseTimeT2 {
+	left:142px;
+}
+
+#pauseTimeT3 {
+	left:214px;
+}
+
+
+#pauseTimeC1 {
+	left:304px;
+}
+
+#pauseTimeC2 {
+	left:371px;
+}
+
+#pauseTimeF1 {
+	left:496px;
+}
+
+#pauseTimeF2 {
+	left:568px;
+}
+
+#pauseTimeDevice {
+	left:628px;
+}
+
+#totalPauseTime {
+	left:671px;
+	font-size: 20px;
 }
 
 #useRate {
@@ -290,19 +331,27 @@
 	position: absolute;
 	font-size:20px;
 	color: green;
-	top:82px;
-	left:15px;
+	top:78px;
+	left:20px;
 }
 
 .stop_mark{
-	position:  absolute;
-	top : 22px;
-	left:200px;
-	width: 30px;
-	height:45px;
-	background-image:url('../../../../img/stop-mark.png');
-	line-height: 30px;
-color: white;
+	/*background-image:url('../../../../img/stop-mark.png');*/
+	background-color: red;
+    border-color: black;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 2px;
+    color: white;
+    font-size: 16px;
+    height: 18px;
+    left: 410px;
+    line-height: 16px;
+    position: absolute;
+    text-align: center;
+    top: 99px;
+    width: 46px;
+
 }
 
 .tab-pane {

@@ -61,7 +61,7 @@
 			    <div class="tab-content">
 				    
 		            <div id="index" class="tab-pane active main">
-		            	<div class="stop_mark" id="stopMark"></div>
+		            	<div class="stop_mark" id="stopMark">C00</div>
 		            	<div class="t1 range" id="rangeT1"></div>
 		            	<div class="t2 range" id="rangeT2"></div>
 		            	<div class="t3 range" id="rangeT3"></div>
@@ -82,17 +82,15 @@
 		            	<div class="node_t0"></div>
 		            	<div class="node_vq1"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
-		            		<div>
-		            			<span id="pauseTimeT1" style="padding-left:0px">-</span>
-								<span id="pauseTimeT2" style="padding-left:57px">-</span>
-								<span id="pauseTimeT3" style="padding-left:57px">-</span>
-								<span id="pauseTimeC1" style="padding-left:95px">-</span>
-								<span id="pauseTimeC2" style="padding-left:57px">-</span>
-								<span id="pauseTimeF1" style="padding-left:93px">-</span>
-								<span id="pauseTimeF2" style="padding-left:59px">-</span>
-		            			<span id="pauseTimeDevice" style="padding-left:41px">-</span>
-		            			<span id="totalPauseTime" style="padding-left:41px;font-size:20px">-</span>
-		            		</div>
+		            			<div id="pauseTimeT1" class="pauseTime">-</div>
+							<div id="pauseTimeT2" class="pauseTime">-</div>
+							<div id="pauseTimeT3" class="pauseTime">-</div>
+							<div id="pauseTimeC1" class="pauseTime">-</div>
+							<div id="pauseTimeC2" class="pauseTime">-</div>
+							<div id="pauseTimeF1" class="pauseTime">-</div>
+							<div id="pauseTimeF2" class="pauseTime">-</div>
+	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
+	            			<div id="totalPauseTime" class="pauseTime">-</div>
 		            	</div>
 		            	<div id="useRate">
 		            		<span id="line_urate"></span>

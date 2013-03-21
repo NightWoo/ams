@@ -15,7 +15,7 @@ class MonitorSeeker
 	}
 
 	public function querySeats($section) {
-		$sql = "SELECT name FROM node WHERE section='$section' AND type!='device'";
+		$sql = "SELECT display_name FROM node WHERE section='$section' AND type!='device'";
 		$seats = Yii::app()->db->createCommand($sql)->queryColumn();
 		$ret = array();
 		foreach($seats as $seat) {
@@ -390,7 +390,7 @@ class MonitorSeeker
 		$linePause = LinePauseAR::model()->find("status = ? AND pause_time > ?" , array(1,$stime));
 		$seat = '';
 		if(!empty($linePause)) {
-			$sql = "SELECT name FROM node WHERE id=" . $linePause->node_id;
+			$sql = "SELECT display_name FROM node WHERE id=" . $linePause->node_id;
 			$seat = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 
@@ -513,7 +513,7 @@ class MonitorSeeker
 		//	}
 		//}
 		if(!empty($pause) && !in_array($pause->node_id, $nodeIds)) {
-			$sql = "SELECT name FROM node WHERE id={$pause->node_id}" ;
+			$sql = "SELECT display_name FROM node WHERE id={$pause->node_id}" ;
 			$seat = Yii::app()->db->createCommand($sql)->queryScalar();
 			$callStatus = $seat . $pause->pause_type;
 		}
