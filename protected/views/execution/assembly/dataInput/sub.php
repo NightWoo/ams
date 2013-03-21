@@ -2,7 +2,6 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-        <meta http-equiv="cache-control" content="no-cache, must-revalidate"> 
 		<title>BMS.Ver0.1</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet"  media="screen">

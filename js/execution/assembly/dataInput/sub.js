@@ -46,9 +46,8 @@ $("document").ready(function() {
 			url: SUB_CONFIG_PRINT,//ref:  /bms/js/service.js
 			data: {"vin": $('#vinText').attr("value"),
 				"type": $("#subType").val()},
-			async:false,
 			success: function(response){
-				// resetPage();
+				resetPage();
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
 				$(".printFrontImage").attr("src", response.data.image);
@@ -90,7 +89,6 @@ $("document").ready(function() {
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val()
 		    },//vin
-		    async:false,
 		    success: function(response){
 		    	$("#tableList tbody").text("");
 		    	$(response.data).each(function (index, value) {
