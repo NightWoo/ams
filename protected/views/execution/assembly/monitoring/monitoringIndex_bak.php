@@ -69,10 +69,10 @@
 		            	<div class="c2 range" id="rangeC2"></div>
 		            	<div class="f1 range" id="rangeF1"></div>
 		            	<div class="f2 range" id="rangeF2"></div>
-		            	<!-- <div class="optNode ef1">EF1</div>
+		            	<div class="optNode ef1">EF1</div>
 		            	<div class="optNode ef2">EF2</div>
 		            	<div class="optNode ef3">EF3</div>
-		            	<div class="optNode main_chain">主链</div> -->
+		            	<div class="optNode main_chain">主链</div>
 		            	<div class="pbs" id="pbsBalance"></div>
 		            	<!-- <div class="vq1" id="vq1Balance"></div>
 		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div> -->
@@ -83,25 +83,18 @@
 		            	<div class="node_vq1"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
 		            		<div>
-		            			<span id="pauseTimeT1" style="padding-left:0px">-</span>
-								<span id="pauseTimeT2" style="padding-left:57px">-</span>
-								<span id="pauseTimeT3" style="padding-left:57px">-</span>
-								<span id="pauseTimeC1" style="padding-left:95px">-</span>
-								<span id="pauseTimeC2" style="padding-left:57px">-</span>
-								<span id="pauseTimeF1" style="padding-left:93px">-</span>
-								<span id="pauseTimeF2" style="padding-left:59px">-</span>
-		            			<span id="pauseTimeDevice" style="padding-left:41px">-</span>
-		            			<span id="totalPauseTime" style="padding-left:41px;font-size:20px">-</span>
+		            			device: <span id="pauseTimeDevice"></span>
 		            		</div>
-		            	</div>
-		            	<div id="useRate">
-		            		<span id="line_urate"></span>
-		            	</div>
-		            	<div id="recycle">
-		            		<span id="recycleCar"></span>
-		            	</div>
-		            	<div id="speed">
-		            		<span id="line_speed"></span><span style="font-size:14px">&nbsp;秒</span>
+		            		<div>
+		            			<span id="pauseTimeT1" style='padding-left:50px'></span>
+		            			<span id="pauseTimeT2" style='padding-left:50px'></span>
+		            			<span id="pauseTimeT3" style='padding-left:70px'></span>
+		            			<span id="pauseTimeC1" style='padding-left:70px'></span>
+		            			<span id="pauseTimeC2" style='padding-left:40px'></span>
+		            			<span id="pauseTimeF1" style='padding-left:47px'></span>
+		            			<span id="pauseTimeF2" style='padding-left:50px'></span>
+		            		</div>
+		            			
 		            	</div>
 		            </div>
 		            <div id="detecthouse" class="tab-pane ">		            	
@@ -139,7 +132,36 @@
 				    	<div class="span4" style="margin-top:12px;" id="block">
               			</div>
 		         </div>
-
+		         <form class="bs-docs-example form-search" id="generalInfo">
+		            <!-- <i class="icon-hand-right" style="margin: 8px 10px 0 32px;"></i>
+		            <div style="display:inline-block;" id="radioInfo">
+			            <label class="radio inline">
+			              <input type="radio" name="monitoringType" id="monitoringType1" value="productInfo" >
+			              生产
+			            </label>
+			            <label class="radio inline">
+			              <input type="radio" name="monitoringType" id="monitoringType2" value="qualityInfo">
+			              质量
+			            </label>
+			            <label class="radio inline">
+			              <input type="radio" name="monitoringType" id="monitoringType3" value="storeInfo">
+			              结存
+			            </label>
+			            <label class="radio inline">
+			              <input type="radio" name="monitoringType" id="monitoringType4" value="hideInfo" checked="checked">
+			              隐藏
+			            </label>
+		            </div> -->
+		            <div>
+		            <label class="checkbox" style="display:inline-block;padding-top:7px;">
+				      <input type="checkbox" id="togglePauseTime">停线时间
+				    </label> 
+		           		<label style="padding-top:7px; margin-bottom: 0">，合计：&nbsp;&nbsp;<span id="totalPauseTime"></span></label>
+						<label style="padding-top:7px; margin-bottom: 0">。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产利用率：&nbsp;&nbsp;<span id="line_urate"></span></label>
+						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线速：&nbsp;&nbsp;<span id="line_speed"></span></label>
+						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周转车：&nbsp;&nbsp;<span id="recycleCar"></span></label>
+					</div>
+	          	</form>	
 	            <div style="width:756px;margin-left:44px;display:none;">
 	            	<table class="table table-bordered" id="tableInfo">
 	            		
@@ -241,7 +263,7 @@
 		<div class="modal" id="vq1ExceptionBalanceModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
 		  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		   	 	<h3>VQ1结存(异常)明细</h3>
+		   	 	<h3>VQ1异常结存明细</h3>
 		  	</div>
 		  	<div class="modal-body">
 		  		<table class="table table-bordered" id="vq1ExceptionBalanceTable">

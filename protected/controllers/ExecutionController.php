@@ -510,6 +510,7 @@ class ExecutionController extends BmsBaseController
     public function actionMonitoringIndex() {
 		
         $this->render('assembly/monitoring/monitoringIndex');
+        // $this->render('assembly/monitoring/monitoringIndex_2');
     }
 
     public function actionMonitoringSection() {
