@@ -651,8 +651,8 @@ class Car
 		return $ret;
 	}
 	
-	public function addSubConfig() {
-		$types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
+	public function addSubConfig($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle')) {
+		// $types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
 
 		foreach($types as $type) {
 			$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
