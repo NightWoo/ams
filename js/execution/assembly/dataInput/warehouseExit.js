@@ -13,7 +13,7 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 					//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-			    	$("#laneSelect").removeAttr("disabled");
+			    	$("#cardText").removeAttr("disabled").focus();
 					$("#btnSubmit").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
@@ -38,17 +38,44 @@ $("document").ready(function() {
        });
 	}
 
+	function ajaxCheckCard() {
+		$.ajax({
+			url: CHECK_CARD_NUMBER,
+			type: "get",
+			dataType: "json",
+			data: {
+				"cardNumber" : $("#cardText").val()
+			},
+			async: false,
+			success: function (response) {
+				if(response.success){
+					driver = response.data;
+					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.id).attr("disabled", "disabled");
+					ajaxSubmit();
+				}else{
+					resetPage();
+					fadeMessageAlert(response.message, 'alert-error');
+				}
+			},
+			error: function(){alertError();}
+		});
+	}
+
 	//提交
 	function ajaxSubmit (){
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: CHECKOUT_SUBMIT,
-			data: {"vin":$("#vinText").val(),"lane":$("#laneSelect").val()},
+			data: {
+				"vin":$("#vinText").val(),
+				"driverId": $("#cardText").attr("cardId"),
+			},
 			success: function(response){
 				resetPage();
 				if(response.success){
 				  	fadeMessageAlert(response.message,"alert-success");
+				  	fadeMessageLane(response.data.lane,"alert-success");
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
@@ -71,7 +98,7 @@ $("document").ready(function() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
 		resetPage();
-		$("#messageAlert").hide();
+		$("#messageAlert, #messageLane").hide();
 	}
 
 	/*
@@ -85,13 +112,13 @@ $("document").ready(function() {
 		//empty vinText
 		$("#vinText").removeAttr("disabled");
 		$("#vinText").attr("value","");
+		$("#cardText").attr("value", "").attr("cardid", "").attr("disabled", "disabled");
 		//聚焦到vin输入框上
 		$("#vinText").focus();
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
-		$("#laneSelect").attr("disabled","disabled");
 	}
 
 	//toggle 车辆信息和提示信息
@@ -126,6 +153,16 @@ $("document").ready(function() {
 			},60000);
 		});
 	}
+
+	function fadeMessageLane(message,alertClass){
+		$("#messageLane").removeClass("alert-error alert-success").addClass(alertClass);
+		$("#messageLane").html("<b class='text-error'>" + message + "<b>");
+		$("#messageLane").show(500,function () {
+			setTimeout(function() {
+				$("#messageLane").hide(1000);
+			},60000);
+		});
+	}
 //-------------------END common functions -----------------------
 
 //------------------- event bindings -----------------------
@@ -140,6 +177,17 @@ $("document").ready(function() {
 		        ajaxValidate();
 	        }   
 		    return false;
+		}
+	});
+
+	$("#cardText").bind('keydown', function(event) {
+		if($(this).attr("disabled") == "disabled")
+			return false;
+		if(event.keyCode == "13"){
+			if(jQuery.trim($("#cardText").val()) != ""){
+				ajaxCheckCard();
+			}
+			return false;
 		}
 	});
 

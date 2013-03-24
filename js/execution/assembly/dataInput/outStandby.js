@@ -107,9 +107,9 @@ $(document).ready(function() {
 			},
 			success: function(response) {
 				if(response.success){
-					driver = response.data
+					driver = response.data;
 					$("#btnSubmit").removeAttr("disabled").focus();
-					$("#cardNumber").attr("value", driver.car_number);
+					$("#cardNumber").attr("value", driver.card_number);
 					$("#cardNumber").attr("disabled","disabled");
 					$("#driver").html(driver.name);
 				} else {

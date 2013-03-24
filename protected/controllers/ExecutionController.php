@@ -448,10 +448,10 @@ class ExecutionController extends BmsBaseController
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
             $data = '';
-            //$warehouse = new Warehouse;
-            //$data = $warehouse->checkout($vin);
-            //$message = $vin . '已成功出库，请开往车道' . $data['lane'];
-            $message = $vin . '已成功出库';
+            $warehouse = new Warehouse;
+            $data = $warehouse->checkout($vin);
+            $message = $vin . '已成功出库，请开往车道' . $data['lane'];
+            // $message = $vin . '已成功出库';
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
@@ -633,39 +633,33 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $this->render('../site/permissionDenied');
-        // $date = date('Y-m-d');
+        //$this->render('../site/permissionDenied');
+        $sql = "SELECT DATAK2_DGD, DATAK2_DGDW
+                  FROM DATAK2_CLDGD
+                 WHERE DATAK2_DGD = 'ZCDG-20081218847861'";
+    
+        $tdsSever = Yii::app()->params['tbs_HGZ'];
+        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        $tdsPwd = Yii::app()->params['tds_HGZ_password'];
+        
+        //php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+        //use mssql_XXX instead
+   
+        //connect
+        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        if(empty($mssql)) {
+            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        }
+        mssql_select_db($tdsDB ,$mssql);
+        
+        //query
+        $result = mssql_query($sql);
+        $auto =  mssql_fetch_row($result);
+        
+        //disconnect
+        mssql_close($mssql);
 
-        
-        //     $condition = "plan_date='$date'";
-        
-        // $values = array($date);
-        
-        //  $condition .= " AND car_series='F0'";
-        
-        // //modifed by wujun
-        // $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
-
-        // $datas = array();
-        // $seeker = new ConfigSeeker();
-        // foreach ($plans as $plan) {
-        //     $temp = $plan->getAttributes();
-        //     $temp['config_name'] = $seeker->getName($temp['config_id']);
-            
-        //     $length = strlen($temp['car_type']);
-        //     $typeName = '';
-        //     $i = 0;
-        //     while($i < $length){
-        //         if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
-        //             break;
-        //         else {
-
-        //             $typeName .= $temp['car_type'][$i];
-        //             $i++;
-        //             echo $typeName;
-        //             echo '<br>';
-        //         }
-        //     }
-        // }
+        print_r($auto);
     }
 }

@@ -3,13 +3,13 @@
 	margin-bottom: 10px;
 }
 
-#vinText {
+#vinText,#cardText {
 	height: 50px;
 	width: 450px;
 	font-size: 40px;
 }
 
-#vinLabel {
+#vinLabel,#cardLabel {
 	font-size: 26px;
     height: 50px;
     line-height: 50px;
@@ -40,4 +40,10 @@
 	padding: 15px;
     font-size: 26px;
     margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#messageRow {
+	padding: 15px;
+    font-size: 40px;
 }
