@@ -37,6 +37,14 @@ return array(
 	'tds_password' => 'VINLABEL',
 	'tds_dbname' => 'VINM_AUTO',
 
+	//HGZ
+	'tbs_HGZ' => 'HGZ',
+	'tds_HGZ_username' => 'test',
+	'tds_HGZ_password' => 'byd123456',
+	'tds_dbname_BYDDATABASE' => 'BYDDATABASE',
+	'tds_dbname_HGZ_DATABASE' => 'HGZ_DATABASE',
+
+
 
 	//vinm web service soap wsdl 
 	//'vinm_wsdl' => "http://192.168.1.25/carInfo/carInfo.asmx?wsdl",
