@@ -91,6 +91,6 @@
 	</div>
 </div>
 <div id="toggle-top" href="">
-	<i id="icon-top" class="icon-chevron-up"></i>	
+	<!-- <i id="icon-top" class="icon-chevron-up"></i>	 -->
 </div>
 </div>

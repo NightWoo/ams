@@ -29,6 +29,8 @@
 	</ul>        
 </div><!-- end 侧边栏 -->
 <div id="toggle-left" href="">
-	<i id="icon-left" class="icon-chevron-left"></i>
+	<div id="leftHandle">
+	</div>
+	<i id="icon-left" class="icon-caret-right icon-large"></i>
 </div>
 </div>

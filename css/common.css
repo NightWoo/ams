@@ -5,10 +5,23 @@
 	width:20px;
 }
 
+#leftHandle {
+  position: absolute;
+  width:10px;
+  height: 150px;
+  background-color: gray;
+  top: 100px;
+  opacity: 0.2;
+  border-radius: 0 6px 6px 0;
+}
+
 #icon-left {
-	position: relative;
-	top: 35px;
-	opacity: 0.5;
+  opacity: 0.6;
+  position: absolute;
+	top: 162px;
+  color: gray;
+	opacity: 1;
+  margin-left: 2px;
 }
 
 .marginleft {
