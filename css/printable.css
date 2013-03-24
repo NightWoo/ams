@@ -18,11 +18,12 @@ td{border:1px solid black;font-size: 8px;font-family: "宋体"}
 }
 
 body{
-	margin:0;
-	margin-left: 5pt;
+	margin: 5pt 0 0 5pt;
+	/*margin-left: 5pt;*/
 }
 
 table {
+	margin: 0 auto;
 	border-collapse: collapse;
 	margin-bottom: 7pt;
 }
