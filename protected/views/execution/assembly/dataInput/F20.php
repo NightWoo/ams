@@ -61,7 +61,7 @@
 			</div><!-- end main体 -->
 		</div><!-- end offhead -->
     	</div>
-    	<div id="printF0" class="printable" style="height:580pt;width:840pt;">
+    	<div id="printF0" class="printable" style="height:560pt;width:832pt;">
             <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
         <table class="tableHead">
             <thead>
@@ -429,7 +429,7 @@
         </table>
     </div>
 
-    <div id="printM6" class="printable" style="height:580pt;width:840pt;">
+    <div id="printM6" class="printable" style="height:560pt;width:832pt;">
             <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
         <table class="tableHead">
             <thead>
@@ -797,7 +797,7 @@
         </table>
     </div>
 
-    <div id="print6B" class="printable" style="height:580pt;width:840pt;">
+    <div id="print6B" class="printable" style="height:560pt;width:832pt;">
             <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
         <table class="tableHead">
             <thead>

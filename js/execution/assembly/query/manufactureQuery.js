@@ -269,6 +269,7 @@ $(document).ready(function () {
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
+		$("#endTime").val(window.byd.DateUtil.currentTime);
 		if(index<9)
 			$(".pagination").hide();
 		if (index == 1)

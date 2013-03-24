@@ -274,7 +274,7 @@
 }
 
 #pauseTimeT1 {
-	left:64px;
+	left:69px;
 }
 
 #pauseTimeT2 {
@@ -291,15 +291,15 @@
 }
 
 #pauseTimeC2 {
-	left:371px;
+	left:376px;
 }
 
 #pauseTimeF1 {
-	left:496px;
+	left:501px;
 }
 
 #pauseTimeF2 {
-	left:568px;
+	left:573px;
 }
 
 #pauseTimeDevice {
@@ -307,7 +307,7 @@
 }
 
 #totalPauseTime {
-	left:671px;
+	left:682px;
 	font-size: 20px;
 }
 

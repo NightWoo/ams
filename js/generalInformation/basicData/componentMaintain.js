@@ -63,7 +63,11 @@ $(document).ready( function () {
 					$("#tableComponent>tbody").text("");
 					$.each(response.data.list,function (index,value) {
 		    			var tr = $("<tr />");
-		    			$("<td />").html(value.car_series).appendTo(tr);
+		    			if(value.car_series == '6B'){
+			    			$("<td />").html('思锐').appendTo(tr);
+		    			}else{
+			    			$("<td />").html(value.car_series).appendTo(tr);
+		    			}
 		    			$("<td />").html(value.category).appendTo(tr);
 		    			$("<td />").html(value.code).appendTo(tr);
 		    			$("<td />").html(value.display_name).appendTo(tr);		//modifid by wujun
