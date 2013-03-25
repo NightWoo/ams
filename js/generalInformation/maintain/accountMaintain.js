@@ -419,6 +419,7 @@ $(document).ready(function () {
 		    data: {},
 		    success:function (response) {
 		    	if(response.success){
+		    		$("#rightControls").html("");
 		    		$(response.data).each(function (index, value) {
 		    			var label = $("<label />").addClass("checkbox");
 		    			var checkHtml = '<input type="checkbox" value="' + value.id + '">' + value.name;

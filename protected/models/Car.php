@@ -544,7 +544,11 @@ class Car
 				$trace['node_name'] = $name;
 				$trace['fault'] = '-';
 				$trace['fault_status'] = '-';
-				$trace['user_name'] = $userInfos[$trace['user_id']];
+				if(!empty($trace['driver_id'])){
+					$trace['user_name'] = $userInfos[$trace['driver_id']];
+				} else {
+					$trace['user_name'] = $userInfos[$trace['user_id']];
+				}
 				$trace['modify_time'] = '-';
 				$datas[] = $trace;
 			} else {

@@ -155,6 +155,7 @@ $("document").ready(function() {
         	dataType: "json",//返回json格式的数据
 			url: T0_ENTER_AND_PRINT,//ref:  /bms/js/service.js
 			data: {"vin": $('#vinText').attr("value"),"planId":planId},
+			async: false;
 			success: function(response) {
 				if(response.success){
 				  	$("#vinHint").html(response.data.vinCode + "整车编号" + response.data.serialNumber);	//added by wujun
