@@ -269,15 +269,18 @@ $(document).ready(function () {
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
-		$("#endTime").val(window.byd.DateUtil.currentTime);
 		if(index<9)
 			$(".pagination").hide();
 		if (index == 1)
 			ajaxStatistics();
-		else if (index == 3)
+		else if (index == 3){
+			$("#endTime").val(window.byd.DateUtil.currentTime);
 			ajaxQueryPause(1);
-		else if (index == 4)
+		}
+		else if (index == 4){
+			$("#endTime").val(window.byd.DateUtil.currentTime);
 			ajaxPauseDistribute();
+		}
 		else if (index == 5)
 			ajaxQueryUseRate();
 		else if (index === 7)

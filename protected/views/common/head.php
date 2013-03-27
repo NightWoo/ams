@@ -32,8 +32,8 @@
 							<li><a href="#">现场管理3</a></li>
 						</ul> -->
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">计划<!-- <b class="caret"></b> --></a>
+					<li class="dropdown" id="headPlanLi">
+						<a href="/bms/execution/OutStandbyMaintain" class="dropdown-toggle" data-toggle="dropdown">计划<!-- <b class="caret"></b> --></a>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">质量<!-- <b class="caret"></b> --></a>

@@ -58,6 +58,11 @@
 	margin-left:20px;
 }
 
+legend span {
+  font-size: 14px;
+  padding-top: 4px;
+}
+
 /*below added by wujun modify bootstrap.css*/
 .icon-white{margin-top:4px;}
 [class^="icon-"],[class*=" icon-"]{margin-top:4px;}
@@ -78,6 +83,10 @@ body{padding-bottom:20px;}
 
 .table th, .table td {
   vertical-align: middle;
+}
+
+.modal {
+    margin: -360px 0 0 -280px;
 }
 /*added by wujun modify bootstrap.css finished*/
 

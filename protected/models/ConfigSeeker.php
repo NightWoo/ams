@@ -120,9 +120,11 @@ class ConfigSeeker
 			$detail['user_name'] = User::model()->findByPk($detail['user_id'])->display_name;
 			
 			//component
-			$component = ComponentAR::model()->findByPk($detail['component_id']);			
-			$detail['component_name'] = $component->display_name;
-			$detail['component_code'] = $component->code;
+			$component = ComponentAR::model()->findByPk($detail['component_id']);
+			if(!empty($component)){
+				$detail['component_name'] = $component->display_name;
+				$detail['component_code'] = $component->code;
+			}			
 			
 			//provider
 			$provider = ProviderAR::model()->findByPk($detail['provider_id']);

@@ -85,6 +85,7 @@ $(document).ready( function () {
 		    			editTd.appendTo(tr);
 
 		    			//record id and name
+		    			tr.data("carSeries", value.car_series);
 		    			tr.data("componentId", value.id);
 		    			tr.data("categoryId", value.category_id);
 						tr.data("name",value.name);		//added by wujun
@@ -122,8 +123,9 @@ $(document).ready( function () {
 				$('#editModal').modal("toggle");
 
 				var siblings = $(e.target).parent("td").siblings();
-				$("#inputSeries").val(siblings[0].innerHTML);
-				$("#inputCate").val($(e.target).parent("td").parent("tr").data("categoryId"));
+				var tr = $(e.target).closest("tr");
+				$("#inputSeries").val(tr.data("carSeries"));
+				$("#inputCate").val(tr.data("categoryId"));
 				// $("#inputCate").attr("value",siblings[1].innerHTML);
 				$("#inputCode").attr("value",siblings[2].innerHTML);
 				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		//modified by wujun
@@ -136,11 +138,11 @@ $(document).ready( function () {
 				$("#inputComment").attr("value",siblings[6].innerHTML);
 
 				// console.log($(e.target).parent("td").parent("tr").data("componentId"));
-				$("#editModal").data("componentId", $(e.target).parent("td").parent("tr").data("componentId"));
-				$("#inputName").attr("value", $(e.target).parent("td").parent("tr").data("name"));	//added by wujun
+				$("#editModal").data("componentId", tr.data("componentId"));
+				$("#inputName").attr("value", tr.data("name"));	//added by wujun
 				// $("#editModal").data("componentId");//get the component id 
 			} else {
-				ajaxDelete($(e.target).parent("td").parent("tr").data("componentId"));
+				ajaxDelete(tr.data("componentId"));
 			}
 			
 		}

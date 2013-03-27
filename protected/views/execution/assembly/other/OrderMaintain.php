@@ -28,12 +28,20 @@
             <!-- Main体 -->  
             
             <div id="bodyright" class="offset2">
-                <div ><ul class="breadcrumb"><!-- 面包屑 -->
+                <!-- <div ><ul class="breadcrumb">
                         <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
                         <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
                         <li><a href="#">维护与帮助</a><span class="divider">&gt;</span></li>
                         <li class="active">订单维护</li>                
-                </ul></div><!-- end 面包屑 -->
+                </ul></div> -->
+                <div>
+                    <legend>订单维护
+                        <span class="pull-right">
+                            <i class="icon-link"></i>&nbsp;
+                            <a href="/bms/execution/OutStandbyMaintain">发车道分配</a>
+                        </span>
+                    </legend>
+                </div>
                 <div><!-- 主体 -->
                 <form id="form" class="well form-search">
                     <table>

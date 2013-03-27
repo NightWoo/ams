@@ -39,6 +39,13 @@ return array(
 			'password' => '123',
 			'charset' => 'utf8',
 		),
+		'dbTest'=>array(
+			'connectionString' => 'mysql:host=localhost;dbname=test',
+			'emulatePrepare' => true,
+			'username' => 'bms_w',
+			'password' => '123',
+			'charset' => 'utf8',
+		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
             	'errorAction'=>'site/error',

@@ -328,7 +328,7 @@ class Car
 			
 	}
 
-	private function calProvider($barCode, $componentId) {
+	private function calProvider($barCode, $componentId , $fullname = false) {
 		if(empty($barCode)) {	
 			return '';
 		}
@@ -347,7 +347,11 @@ class Car
 		if(!empty($providerCode)) {
 			$p = ProviderAR::model()->find('code=?' , array($providerCode));
 			if(!empty($p)) {
-				return $p->display_name;
+				if($fullname){
+					return $p->name;
+				} else {
+					return $p->display_name;
+				}
 			}
 		}
 
@@ -418,8 +422,45 @@ class Car
 
 	//变速箱总成
 	public function checkTraceGearBox() {
-		$componentName = '变速箱总成';
-		return $this->checkTraceComponentByName($componentName);
+		// $componentName = '变速箱总成';
+		// return $this->checkTraceComponentByName($componentName);
+		$sql = "SELECT gearbox_component_id FROM car_gearbox WHERE car_series='{$this->car->series}'";
+
+		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
+		
+		$str = join(',', $componentIds);
+
+		$sql = "SELECT c.id,c.name FROM car_config_list l, component c WHERE c.id=l.component_id AND l.config_id={$this->car->config_id} AND c.id IN ($str) AND l.istrace=1";
+
+		$component = Yii::app()->db->createCommand($sql)->queryRow();
+
+
+		if(empty($component)) {
+			return;
+		}
+			
+		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
+	}
+
+	//ABS or ESC
+	public function checkTraceABS() {
+		
+		$sql = "SELECT abs_component_id FROM car_abs WHERE car_series='{$this->car->series}'";
+
+		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
+		
+		$str = join(',', $componentIds);
+
+		$sql = "SELECT c.id,c.name FROM car_config_list l, component c WHERE c.id=l.component_id AND l.config_id={$this->car->config_id} AND c.id IN ($str) AND l.istrace=1";
+
+		$component = Yii::app()->db->createCommand($sql)->queryRow();
+
+
+		if(empty($component)) {
+			return;
+		}
+			
+		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
 	}
 
 	public function checkTraceComponentByName($componentName) {
@@ -786,6 +827,84 @@ class Car
         }
 
         return array($success, $data);
+	}
+
+	public function throwCertifificateData($country='国内', $district='比亚迪长沙', $computerName= '10.23.1.67') {
+		$carId = $this->car->id;
+		$vin = $this->car->vin;
+		if($this->car->series == '6B'){
+			$cseries = iconv('UTF-8', 'GB2312', '思锐');
+		} else {
+			$cseries = iconv('UTF-8', 'GB2312', $this->car->series);
+		}
+		$carType = iconv('UTF-8', 'GB2312', $this->car->type);
+		$config = $this->car->config_id;
+		$color = iconv('UTF-8', 'GB2312', $this->car->color);
+		$coldResistant = $this->car->cold_resistant;
+
+		$district = iconv('UTF-8', 'GB2312', $district);
+		$date = date("Y-m-d h:m:s");
+
+		$sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_stecring, tyre, lane_name
+				FROM view_certificate
+				WHERE car_id = $carId";
+		$cData = Yii::app()->db->createCommand($sql)->queryRow();
+		foreach($cData as $key => $data){
+			$cData[$key] = iconv('UTF-8', 'GB2312', $data);
+		}
+
+		$engineTrace = $this->checkTraceGasolineEngine();
+		$engineCode = $engineTrace->bar_code;
+
+		$gearboxTrace = $this->checkTraceGearBox() ;
+		$gearboxCode = $gearboxTrace->bar_code;
+
+		$absTrace = $this->checkTraceABS();
+		if(!empty($absTrace) && $this->car->series == 'F0'){
+			$barCode = $absTrace->bar_code;
+			// $provider = $this->calProvider($barCode, $componentId , $fullname = true);
+
+			$absType = array(
+						'118627' => 'DBC7',
+						'104029' => 'ABS'
+						);
+
+			$absProvider = array(
+								'118627' => '京西重工（上海）有限公司',
+								'104029' => '博世汽车部件（苏州）有限公司'
+							);
+
+			$providerCode = substr($barCode, 0, 6);
+			$absInfo = '';
+			$absInfo = "ABS系统控制器型号：" . $absType[$providerCode] . "，ABS系统控制器生产企业：" . $absProvider[$providerCode] ."。";
+			$absInfo = iconv('UTF-8', 'GB2312', $absInfo);
+			$cData['certificate_note'] .= $absInfo;
+		}
+
+		$csql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg) 
+                 VALUES('{$cData['order_detail_id']}','{$vin}', '{$cData['car_model']}', '{$color}', '{$engineCode}', '{$cData['certificate_note']}', '{$cData['order_number']}', '{$district}', '{$cData['country']}', '{$cData['order_nature']}', '{$computerName}', '{$gearboxCode}', '{$date}', '{$cData['assisted_stecring']}', '{$carType}', '{$cData['tyre']}')";
+		
+		$tdsSever = Yii::app()->params['tbs_HGZ'];
+        $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
+        $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        $tdsPwd = Yii::app()->params['tds_HGZ_password'];
+        
+        //php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+        //use mssql_XXX instead
+   
+        //connect
+        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        if(empty($mssql)) {
+            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        }
+        mssql_select_db($tdsDB ,$mssql);
+        
+        //query
+        mssql_query($csql);
+        // $auto =  mssql_fetch_row($result);
+        
+        //disconnect
+        mssql_close($mssql);
 	}
 
 	private function cutCarType($type) {

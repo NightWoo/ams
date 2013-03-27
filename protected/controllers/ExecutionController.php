@@ -590,6 +590,17 @@ class ExecutionController extends BmsBaseController
 	}
 
     //added by wujun
+    public function actionOutStandbyMaintain() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/OutStandbyMaintain');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    //added by wujun
     public function actionPlanPause() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
@@ -634,12 +645,32 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
         //$this->render('../site/permissionDenied');
-        $sql = "SELECT DATAK2_DGD, DATAK2_DGDW
-                  FROM DATAK2_CLDGD
-                 WHERE DATAK2_DGD = 'ZCDG-20081218847861'";
+        // $sql = "SELECT DATAK2_DGD, DATAK2_DGDW
+        //           FROM DATAK2_CLDGD
+        //          WHERE DATAK2_DGD = 'ZCDG-20081218847861'";
+        $orderDetailId = 123456;
+        $vin = 'LGXC14AA0D1234567';
+        $carModal = 'QCJ7100L';
+        $color = iconv('UTF-8', 'GB2312', '天山白');
+        $engineCode = 'BYD371QA112019999';
+        $note = iconv('UTF-8', 'GB2312', '选装无钥匙系统、ABS、后雨刮、安全气囊、前雾灯、前转向灯、后转向灯、侧转向灯、排气消声器。');
+        $orderNumber = 'ZCDG-20081218847861';
+        $district = iconv('UTF-8', 'GB2312', '比亚迪长沙');
+        $country = iconv('UTF-8', 'GB2312', '国内');
+        $orderNature = '1';
+        $computerName = 'p10000999999';
+        $gearboxCode = 'BYD5T09112028888';
+        $stecring = iconv('UTF-8', 'GB2312', '液压');
+        $carType = iconv('UTF-8', 'GB2312', 'QCJ7100L(1.0排量舒适型)');
+        $tyre = iconv('UTF-8', 'GB2312', '165/60 R14 75H');
+
+        $date = date("Y-m-d h:m:s");
+
+        $sql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg) 
+                 VALUES('$orderDetailId', '$vin', '$carModal', '$color', '$engineCode', '$note', '$orderNumber', '$district', '$country', '$orderNature', '$computerName', '$gearboxCode','$date', '$stecring', '$carType', '$tyre')";         
     
         $tdsSever = Yii::app()->params['tbs_HGZ'];
-        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
         $tdsUser = Yii::app()->params['tds_HGZ_username'];
         $tdsPwd = Yii::app()->params['tds_HGZ_password'];
         
@@ -655,11 +686,21 @@ class ExecutionController extends BmsBaseController
         
         //query
         $result = mssql_query($sql);
-        $auto =  mssql_fetch_row($result);
+        // $auto =  mssql_fetch_row($result);
         
         //disconnect
         mssql_close($mssql);
 
-        print_r($auto);
+        print_r('success');
+    }
+
+    public function actionDataThrowtest() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $car->throwCertifificateData();
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage());
+        }
     }
 }
