@@ -207,11 +207,15 @@ var PAUSE_DELETE = "/bms/pause/delete";
 
 //added by wujun
 //order maintain
-var ORDER_SEARCH = "/bms/order/searchByDate";
+var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";
+var ORDER_CHECK_DETAIL = "/bms/order/checkDetail";
+var ORDER_GENERATE = "/bms/order/generate";
+var ORDER_QUERY = "/bms/order/query";
 var ORDER_SAVE = "/bms/order/save";
 var ORDER_TOP_PRI = "/bms/order/top";
 var ORDER_INC_PRI = "/bms/order/inc";
 var ORDER_DELETE = "/bms/order/delete";
+var ORDER_SPLIT = "/bms/order/split"
 var ORDER_GET_CAR_STANDBY = "/bms/order/getCarStandby";
 var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
 var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig"
@@ -231,5 +235,5 @@ var ROLE_ADD_TO_USER = "/bms/role/addToUser";
 
 function alertError (message) {
 	message = 'ajax error'
-	//alert(message);
+	// alert(message);
 }

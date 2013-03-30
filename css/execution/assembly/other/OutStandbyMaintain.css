@@ -77,9 +77,10 @@
 	height:12px;
 }
 
-#newGetOrder {
+.appendBtn {
 	border-radius: 0 3px 3px 0;
 	padding: 4px 8px;
+	width:15px;
 }
 
 #newClearOrder {
