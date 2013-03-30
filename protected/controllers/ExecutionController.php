@@ -3,6 +3,7 @@ Yii::import('application.models.Car');
 Yii::import('application.models.Fault');
 Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.OrderAR');
 class ExecutionController extends BmsBaseController
 {
 	public static $NODE_MAP = array(
@@ -644,54 +645,118 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
+        $a="0";
+        $b=explode("," , $a);
+
+        var_dump($a);
+        // if(!empty($a)){
+        //     echo 'not emtpy';
+        // }else{
+        //     echo 'empty';
+        // }
+
+        // $orderNumber = "ZCDG-20130326899854";
+        // $tdsSever = Yii::app()->params['tbs_SELL'];
+        // $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        // $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        // $tdsPwd = Yii::app()->params['tds_HGZ_password'];
+
+        // $sql = "SELECT DATAK40_DGMXID AS order_detail_id, DATAK40_JXSMC AS distributor, DATAK40_DGDH AS order_number, DATAK40_CXMC AS series, DATAK40_CLDM AS car_type_code, DATAK40_CLXH AS sell_car_type, DATAK40_BZCX AS car_model, DATAK40_CXSM AS car_type_description, DATAK40_CLYS AS sell_color, DATAK40_VINMYS AS color, DATAK40_DGSL AS amount, DATAK40_XZPZ AS options, DATAK40_DDXZ AS order_nature, DATAK40_DDLX AS cold_resistant, DATAK40_NOTE AS remark, DATAK40_JZPZ AS additions, DATAK40_SSDW AS production_base, DATAK2_JXSDM AS distributor_code
+        //         FROM DATAK2_CLDGD
+        //         LEFT JOIN DATAK40_CLDCKMX ON DATAK40_DGDH = DATAK2_DGD
+        //         WHERE DATAK40_SSDW = '3' AND DATAK40_DGDH = '$orderNumber'";
+
+        // //php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+        // //use mssql_XXX instead
+   
+        // //connect
+        // $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        // if(empty($mssql)) {
+        //     throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        // }
+        // mssql_select_db($tdsDB ,$mssql);
+        
+        // $result = mssql_query($sql);
+        // $datas = array(); 
+        // while($ret = mssql_fetch_assoc($result)){
+        //     $datas[] = $ret;
+        // }
+        
+        // //disconnect
+        // mssql_close($mssql);
+
+        // foreach($datas as &$data){
+        //     foreach($data as $key => $value){
+        //         $data[$key] = iconv('GB2312','UTF-8', $value);
+        //     }
+        //     $data['car_type'] = $data['car_model']. "(" . $data['car_type_description'] . ")";
+        //     $data['config_description'] = '';
+        //     if(!empty($data['options'])){
+        //         $data['config_description'] .= $data['options'];
+        //         if(!empty($data['additions'])) $data['config_description'] .= $data['additions'];
+        //     }else if(!empty($data['additions'])){
+        //         $data['config_description'] .= $data['additions'];
+        //     }
+
+        //     $data['cold_resistant'] == '耐寒型' ? $data['cold_resistant'] = 1 : $data['cold_resistant'] = 0;
+        // }
+        // print_r($datas);
+
+        // // $sql = "INSERT INTO `order`(order_detail_id,car_type,distributor_name) VALUES({$datas[0]['order_detail_id']},{$datas[0]['car_type']},{$datas[0]['distributor']})";
+        // $order = new OrderAR();
+        // $order->order_detail_id =  $datas[0]['order_detail_id'];  
+        // $order->car_type =  $datas[0]['car_type'];  
+        // $order->distributor_name =  $datas[0]['distributor'];  
+        // $order->save();
+
         //$this->render('../site/permissionDenied');
         // $sql = "SELECT DATAK2_DGD, DATAK2_DGDW
         //           FROM DATAK2_CLDGD
         //          WHERE DATAK2_DGD = 'ZCDG-20081218847861'";
-        $orderDetailId = 123456;
-        $vin = 'LGXC14AA0D1234567';
-        $carModal = 'QCJ7100L';
-        $color = iconv('UTF-8', 'GB2312', '天山白');
-        $engineCode = 'BYD371QA112019999';
-        $note = iconv('UTF-8', 'GB2312', '选装无钥匙系统、ABS、后雨刮、安全气囊、前雾灯、前转向灯、后转向灯、侧转向灯、排气消声器。');
-        $orderNumber = 'ZCDG-20081218847861';
-        $district = iconv('UTF-8', 'GB2312', '比亚迪长沙');
-        $country = iconv('UTF-8', 'GB2312', '国内');
-        $orderNature = '1';
-        $computerName = 'p10000999999';
-        $gearboxCode = 'BYD5T09112028888';
-        $stecring = iconv('UTF-8', 'GB2312', '液压');
-        $carType = iconv('UTF-8', 'GB2312', 'QCJ7100L(1.0排量舒适型)');
-        $tyre = iconv('UTF-8', 'GB2312', '165/60 R14 75H');
+        // $orderDetailId = 123456;
+        // $vin = 'LGXC14AA0D1234567';
+        // $carModal = 'QCJ7100L';
+        // $color = iconv('UTF-8', 'GB2312', '天山白');
+        // $engineCode = 'BYD371QA112019999';
+        // $note = iconv('UTF-8', 'GB2312', '选装无钥匙系统、ABS、后雨刮、安全气囊、前雾灯、前转向灯、后转向灯、侧转向灯、排气消声器。');
+        // $orderNumber = 'ZCDG-20081218847861';
+        // $district = iconv('UTF-8', 'GB2312', '比亚迪长沙');
+        // $country = iconv('UTF-8', 'GB2312', '国内');
+        // $orderNature = '1';
+        // $computerName = 'p10000999999';
+        // $gearboxCode = 'BYD5T09112028888';
+        // $stecring = iconv('UTF-8', 'GB2312', '液压');
+        // $carType = iconv('UTF-8', 'GB2312', 'QCJ7100L(1.0排量舒适型)');
+        // $tyre = iconv('UTF-8', 'GB2312', '165/60 R14 75H');
 
-        $date = date("Y-m-d h:m:s");
+        // $date = date("Y-m-d h:m:s");
 
-        $sql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg) 
-                 VALUES('$orderDetailId', '$vin', '$carModal', '$color', '$engineCode', '$note', '$orderNumber', '$district', '$country', '$orderNature', '$computerName', '$gearboxCode','$date', '$stecring', '$carType', '$tyre')";         
+        // $sql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg) 
+        //          VALUES('$orderDetailId', '$vin', '$carModal', '$color', '$engineCode', '$note', '$orderNumber', '$district', '$country', '$orderNature', '$computerName', '$gearboxCode','$date', '$stecring', '$carType', '$tyre')";         
     
-        $tdsSever = Yii::app()->params['tbs_HGZ'];
-        $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
-        $tdsUser = Yii::app()->params['tds_HGZ_username'];
-        $tdsPwd = Yii::app()->params['tds_HGZ_password'];
+        // $tdsSever = Yii::app()->params['tbs_HGZ'];
+        // $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
+        // $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        // $tdsPwd = Yii::app()->params['tds_HGZ_password'];
         
-        //php 5.4 linux use pdo cannot connet to ms sqlsrv db 
-        //use mssql_XXX instead
+        // //php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+        // //use mssql_XXX instead
    
-        //connect
-        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
-        if(empty($mssql)) {
-            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
-        }
-        mssql_select_db($tdsDB ,$mssql);
+        // //connect
+        // $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        // if(empty($mssql)) {
+        //     throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        // }
+        // mssql_select_db($tdsDB ,$mssql);
         
-        //query
-        $result = mssql_query($sql);
-        // $auto =  mssql_fetch_row($result);
+        // //query
+        // $result = mssql_query($sql);
+        // // $auto =  mssql_fetch_row($result);
         
-        //disconnect
-        mssql_close($mssql);
+        // //disconnect
+        // mssql_close($mssql);
 
-        print_r('success');
+        // print_r('success');
     }
 
     public function actionDataThrowtest() {

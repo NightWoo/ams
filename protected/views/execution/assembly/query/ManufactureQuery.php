@@ -44,8 +44,8 @@
 					<table>
                         <tr>
                             <td>工段 / 节点</td>
-                            <td>开始时间</td>
-                            <td>结束时间</td>
+                            <td>开始时间&nbsp;<a href="#" id="resetST"><i class="icon-undo"></i></a></td>
+                            <td>结束时间&nbsp;<a href="#" id="refreshET"><i class="icon-refresh"></i></a></td>
                             <td></td>
                             <td class="withSection">停线类型</td>
                             <td class="withSection">责任部门</td>

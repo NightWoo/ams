@@ -273,14 +273,10 @@ $(document).ready(function () {
 			$(".pagination").hide();
 		if (index == 1)
 			ajaxStatistics();
-		else if (index == 3){
-			$("#endTime").val(window.byd.DateUtil.currentTime);
+		else if (index == 3)
 			ajaxQueryPause(1);
-		}
-		else if (index == 4){
-			$("#endTime").val(window.byd.DateUtil.currentTime);
+		else if (index == 4)
 			ajaxPauseDistribute();
-		}
 		else if (index == 5)
 			ajaxQueryUseRate();
 		else if (index === 7)
@@ -289,6 +285,14 @@ $(document).ready(function () {
 			ajaxCompletionRate();
 		else if (index === 0)
 			ajaxQuery(1);
+	});
+
+	$("#resetST").click(function() {
+		$("#startTime").val(currentDate8());
+	});
+
+	$("#refreshET").click(function() {
+		$("#endTime").val(window.byd.DateUtil.currentTime);
 	});
 
 //-------------------END event bindings -----------------------

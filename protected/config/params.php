@@ -38,10 +38,15 @@ return array(
 	'tds_dbname' => 'VINM_AUTO',
 
 	//HGZ
-	'tbs_HGZ' => 'HGZ',
-	'tds_HGZ_username' => 'test',
-	'tds_HGZ_password' => 'byd123456',
+	'tbs_SELL' => 'SELL',
+	'tds_SELL_username' => 'vinm',
+	'tds_SELL_password' => 'vinm_2011',
 	'tds_dbname_BYDDATABASE' => 'BYDDATABASE',
+
+	
+	'tbs_HGZ' => 'HGZ',
+	'tds_HGZ_username' => 'vinm',
+	'tds_HGZ_password' => 'vinm_2011',
 	'tds_dbname_HGZ_DATABASE' => 'HGZ_DATABASE',
 
 

@@ -55,7 +55,7 @@
 							<td><input type="text" class="span3" placeholder="请输入..." id="providerText" /></td>
 							<td>
 								<label id="labelF0" class="checkbox">
-									<input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input>
+									<input type="checkbox" id="checkboxF0" value="F0">F0</input>
 								</label>
 								<label class="checkbox">
 									<input type="checkbox" id="checkboxM6" value="M6">M6</input>

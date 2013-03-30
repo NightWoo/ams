@@ -111,7 +111,7 @@ $(document).ready(function () {
 				$("#editConfig").val(siblings[5].innerHTML);
 				$("#editCarBody").val(siblings[6].innerHTML);	//added by wujun
 				$("#editColor").attr("value",siblings[7].innerHTML);
-				if (siblings[7].innerHTML === '耐寒') {
+				if (siblings[8].innerHTML === '耐寒') {
 					$("#checkboxEditColdResistant").attr("checked", "checked");
 				} else {
 					$("#checkboxEditColdResistant").removeAttr("checked");

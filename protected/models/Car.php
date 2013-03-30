@@ -884,7 +884,7 @@ class Car
 		$csql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg) 
                  VALUES('{$cData['order_detail_id']}','{$vin}', '{$cData['car_model']}', '{$color}', '{$engineCode}', '{$cData['certificate_note']}', '{$cData['order_number']}', '{$district}', '{$cData['country']}', '{$cData['order_nature']}', '{$computerName}', '{$gearboxCode}', '{$date}', '{$cData['assisted_stecring']}', '{$carType}', '{$cData['tyre']}')";
 		
-		$tdsSever = Yii::app()->params['tbs_HGZ'];
+		$tdsSever = Yii::app()->params['tbs_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
         $tdsUser = Yii::app()->params['tds_HGZ_username'];
         $tdsPwd = Yii::app()->params['tds_HGZ_password'];
