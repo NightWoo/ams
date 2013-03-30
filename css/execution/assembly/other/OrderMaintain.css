@@ -1,79 +1,123 @@
-label {
-	margin-bottom: 0;
+/* CSS Document */
+.headBadge{
+	line-height: 36px;
+	margin-left: 16px;
 }
 
-#tableResult {
+#accordionLane{
+	margin-left: 0;
+}
+
+
+.block a {
+    margin: 5px 0;
+}
+
+.block p {
+    margin: 0 5px;
+}
+
+.block .progress {
+    margin-bottom: 0;
+}
+
+.laneContainer {
+	width: 220px;
+}
+
+.distribution {
+	padding-right: 0; 
+	padding-left: 10px;
+}
+
+.resetLane{
+	padding-left: 0;
+	padding-right: 0; 
+}
+
+
+.offset4 {
+    margin-left: 320px;
+}
+
+.input-medium {
+    width: 160px;
+}
+
+#newModal{
+	margin: -360px 0 0 -420px;
+	width: 800px;
 	font-size: 12px;
 }
 
-#thReorder {
-	min-width: 80px;
+ #laneModal{
+	margin: -360px 0 0 -480px;
+	width: 950px;
+	font-size: 12px;
 }
 
-#thPriority {
-	min-width: 25px;
+#newModal .control-label{
+	width:60px;
 }
 
-#thStatus {
-	min-width: 25px;
+#newModal .controls{
+    margin-left: 70px;
 }
 
-#thLane {
-	min-width: 25px;
+#laneModal .control-label{
+	width:100px;
 }
 
-#thCarrier {
-	min-width: 50px;
+#laneModal .controls {
+    margin-left: 110px;
 }
 
-#thCity {
-	min-width: 80px;
+#laneModal .input-mini{
+	width: 25px;
+	height:12px;
 }
 
-#thDistributor {
-	min-width: 250px;
+.appendBtn {
+	border-radius: 0 3px 3px 0;
+	padding: 4px 8px;
+	width:15px;
 }
 
-#thOrderNumber {
-	min-width: 100px;
+#newClearOrder {
+	padding: 0 0 0 2px;
+	color: red;
 }
 
-#thAmount {
-	min-width: 25px;
+#newModal legend{
+	margin-bottom: 15px;
 }
 
-#thSeries {
-	min-width: 25px;
+
+#tableNewOrder {
+	margin: 0 auto;
+    width: 780px;
 }
 
-#thCarType {
-	min-width: 200px;
+#tableNewOrder select, #tableNewOrder input {
+	margin-bottom: 0;
+	font-size: 12px;
+	height: 28px;
 }
 
-#thConfig {
-	min-width: 120px;
+#tableNewOrder input, #tableDistribution input, #tableAdjust input {
+	height: 18px;
+	margin: 0;
 }
 
-#thColor {
-	min-width: 40px;
+#tableDistribution .icon-large:before {
+    vertical-align: -8%;
 }
 
-#thColdResistant {
-	min-width: 40px;
+#tableDistribution,#tableAdjust {
+	margin-bottom: 20px;
+	font-size: 11px;
 }
 
-#thCarYear {
-	min-width: 25px;
-}
-
-#thOrderType {
-	min-width: 50px;
-}
-
-#thRemark {
-	min-width: 100px;
-}
-
-#thEdit {
-	min-width: 100px;
+#tableDistribution a, #tableAdjust a{
+	font-size: 11px;
 }
