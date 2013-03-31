@@ -3,6 +3,7 @@ Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.CarConfigAR');
+Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.OrderSeeker');
 
 class Order
@@ -103,11 +104,10 @@ class Order
 	public function match($series, $carType, $configId, $color, $coldResistant, $date) {
 		$success = false;
 		$data = array();
+		$orderConfigId = 0;
 
 		$config = CarConfigAR::model()->findByPk($configId);
-		if(empty($config)){
-			$orderConfigId = 0;
-		} else {
+		if(!empty($config)){
 			$orderConfigId = $config->order_config_id;
 		}
 		
@@ -157,32 +157,40 @@ class Order
 			$warehouse = WarehouseAR::model()->findByPk($matchedCar->warehouse_id);
 			if(!empty($warehouse)){
 				$warehouse->quantity -= 1;
-				$warehouse->status = 0;
+				//$warehouse->status = 0;
 				if($warehouse->quantity == 0) {
 					$warehouse->car_type = '';
 					$warehouse->color = '';
 					$warehouse->order_config_id = 0;
 					$warehouse->cold_resistant = '';
 					//$warehouse->car_year = '';
+
+					$warehouse->free_seat = $warehouse->capacity;
+					$warehouse->status = 0;
 				}
 
 				$matchedOrder->hold += 1;
 				$matchedCar->order_id = $matchedOrder->id;
 				$matchedCar->warehouse_id = 1;		//WDI
-				$matchedCar->status = '成品库WDI';
+				$matchedCar->status = '成品库_WDI';
 				$matchedCar->area = 'WDI';
 
 				$warehouse->save();
 				$matchedCar->save();
 				$matchedOrder->save();
 				
+				$configName = CarConfigAR::model()->findByPk($matchedCar->config_id)->name;
+				$carModel = CarTypeMapAR::model()->find('car_type=?', array($matchedCar->type))->car_model;
+
 				$data['vin'] = $matchedCar->vin;
 				$data['type'] = $matchedCar->type;
+				$data['type_info'] = $carModel. "/" . $configName;
 				$data['series'] = $matchedCar->series;
 				$data['color'] = $matchedCar->color;
 				$data['order_number'] = $matchedOrder->order_number;
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
+				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';
 			}
 		} else {
 			throw new Exception('暂无可备车辆');

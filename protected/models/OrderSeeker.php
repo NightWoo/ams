@@ -19,7 +19,7 @@ class OrderSeeker
                 FROM DATAK40_CLDCKMX
                 WHERE DATAK40_SSDW = '3' AND DATAK40_DGDH = '$orderNumber'";
 		
-		$tdsSever = Yii::app()->params['tbs_SELL'];
+		$tdsSever = Yii::app()->params['tds_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
         $tdsUser = Yii::app()->params['tds_SELL_username'];
         $tdsPwd = Yii::app()->params['tds_SELL_password'];
@@ -117,7 +117,7 @@ class OrderSeeker
 
 		$condition = join(' AND ', $conditions);
 
-		$sql = "SELECT id, standby_date, priority, amount, hold, count, series, car_type, color, car_year, cold_resistant, order_config_id, lane, carrier, order_number
+		$sql = "SELECT id, standby_date, priority, amount, hold, count, series, car_type, color, car_year, cold_resistant, order_config_id, lane_id, carrier, order_number
 				  FROM bms.order
 				 WHERE $condition
 			  ORDER BY priority ASC";

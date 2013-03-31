@@ -256,10 +256,6 @@ class OrderController extends BmsBaseController
 	public function actionGetCarStandby() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			//$standbyDate = $this->validateStringVal('standbyDate', '');
-			//if(empty($standbyDate)) {
-			//	throw new Exception('standby date cannot be null');
-			//}
 			$curDate = DateUtil::getCurDate();
 			$order = new Order;
 			$data = $order->getCarStandby($curDate);
@@ -291,6 +287,8 @@ class OrderController extends BmsBaseController
 					$order->count -= 1;
 				}
 				$car->car->order_id = 0;
+				$car->car->distributor_name='';
+				$car->car->distributor_code='';
 				$car->car->save();
 				$order->save();
 				$message = $vin . '已释放订单' . $order->order_number . '占位';
@@ -306,11 +304,11 @@ class OrderController extends BmsBaseController
 				$data = $warehouse->checkin($vin);
 				$message = $vin . '已成功退库，请开往' . $data['row'];
 
-				$oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
-				if(!empty($oldRow)){
-					$oldRow->quantity -= 1;
-					$oldRow->save();
-			}
+				// $oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
+				// if(!empty($oldRow)){
+				// 	$oldRow->quantity -= 1;
+				// 	$oldRow->save();
+				// }
 			}
 
 			$transaction->commit();

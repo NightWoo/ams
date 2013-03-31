@@ -40,6 +40,7 @@ return array(
 			'charset' => 'utf8',
 		),
 		'dbTest'=>array(
+			'class' => 'CDbConnection',
 			'connectionString' => 'mysql:host=localhost;dbname=test',
 			'emulatePrepare' => true,
 			'username' => 'bms_w',

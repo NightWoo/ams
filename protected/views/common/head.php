@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/bms/css/font-awesome.min.css">
-<div id="divHead" style="z-index:0">
+<div id="divHead">
 <div class="navbar navbar-fixed-top" id="bmsHead">
 	<div class="navbar-inner">
 		<div class="container">

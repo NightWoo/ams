@@ -1,5 +1,8 @@
 <?php
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.AR.LaneAR');
+Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.WarehouseSeeker');
 
 class Warehouse
@@ -11,6 +14,7 @@ class Warehouse
 		$car = CarAR::model()->find('vin=?', array($vin));
 		//$carYear = CarYear::getCarYear($vin);
 		
+		//map the order_config
 		$orderConfigId = 0;
 		$configId = $car->config_id;
 		$config = CarConfigAR::model()->findByPk($configId);
@@ -20,17 +24,24 @@ class Warehouse
 
 		$conditions = array();
 		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=?";
-		$conditions['free'] = "status=?";
+		$conditions['free'] = "status=? AND free_seat>?";
 		$condition = join(' AND ', $conditions);
 		$condition .= ' ORDER BY id ASC';
-		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, 0);
+		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, 0, 0);
 
-		//查找同型车列
-		$row = WarehouseAR::model()->find($condition, $values);
+		if($car->specail_property == 0){//普通车辆查找同型车列
+			$row = WarehouseAR::model()->find($condition, $values);
+		} else if ($car->specail_property == 1){//出口车扔到X区
+			$row = WarehouseAR::model()->find('area=?', array('X'));
+		} else if ($car->specail_property == 2){//降级车扔到Y区
+			$row = WarehouseAR::model()->find('area=?', array('Y'));
+		}
+
 		//如无同型车列		
 		if(empty($row)) {
-			//查找空车列，并生成同型车列
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
+			//在该车系库区区查找空车列，并生成同型车列
+			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
+			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND ORDER BY id ASC', array(0, 0, $car->series));
 			if(!empty($voidRow) && !empty($orderConfigId)) {
 				$row = $voidRow;
 				$row->car_type = $car->type;
@@ -39,20 +50,18 @@ class Warehouse
 				//$row->car_year = $carYear;
 				$row->order_config_id = $orderConfigId;
 			} else {
-				//将F0存于于周转C区
-				if($car->series == 'F0') {
-					$row = WarehouseAR::model()->find('area=?', array('C'));
-				} else {
-					//将非F0车系存于B区
-					$row = WarehouseAR::model()->find('area=? AND series=?', array('B', $car->series));
-				}
+				//如果连空车列都没有就扔到周转区Z
+				$row = WarehouseAR::model()->find('area=?', array('Z'));
 			}
 		} 
 
+		//如明确了进入的车列
 		if(!empty($row)){
-			//进入同型车列
+			//进入车列
 			$row->quantity += 1;
-			if($row->quantity == $row->capacity) {
+			$row->free_seat -= 1;
+			// if($row->quantity == $row->capacity) {
+			if($row->free_seat == 0) {
 				$row->status = 1;
 			}
 
@@ -74,7 +83,7 @@ class Warehouse
 	}
 
 	public function checkout($vin) {
-		$car = CarAr::model()->find('vin=?', array($vin));
+		$car = CarAR::model()->find('vin=?', array($vin));
 		$order = OrderAR::model()->findByPk($car->order_id);
 		$row = WarehouseAR::model()->findByPk($car->warehouse_id);
 		$data = array();
@@ -83,38 +92,34 @@ class Warehouse
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
 			$order->count += 1;
-			if(!empty($row)){
-				$row->quantity -= 1;
-				$row->save();
-			}
-			$lane = $order->lane;
-			$distributorId = $order->distributor_id;
-			$car->lane = $lane;
-			$car->distributor_id = $distributorId;
+			// if(!empty($row)){
+			// 	$row->quantity -= 1;
+			// 	$row->save();
+			// }
 
-			$distributor = '';
-			if(!empty($distributorId)) {
-				$distributor = DistributorAR::model()->findByPk($distributorId);
-				$distributor = '_' . $distributor->display_name; 
-			}
-
+			$lane = LaneAR::model()->findByPk($order->lane_id)->name;
 			$laneName='';
 			if(!empty($lane)) {
 				$laneName = '_' . $lane;
 			}
 
-			$car->status = '公司外' . $laneName . $distributor;
+			$car->status = '公司外' . $laneName;
+			$car->lane_id = $order->lane_id;
+			$car->distributor_name = $order->distributor_name;
+			$car->distributor_code = $order->distributor_code;
+			// $car->order_detail_id = $order->order_detail_id;
 			$car->warehouse_id = 0;
-			$car->area = 'Departure';
+			$car->area = 'out';
 
 			$order->save();
 			$car->save();
 
 			
 			$data['vin'] = $car->vin;				
-			$data['lane'] = $car->lane;
+			$data['lane'] = $lane;
 			$data['order_id'] = $car->order_id;				
 			$data['order_number'] = $order->order_number;
+			$data['distributor_name'] = $order->distributor_name;
 			$data['carrier'] = $order->carrier;				
 		}
 
