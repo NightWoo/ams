@@ -34,15 +34,6 @@
 					require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
-					<!-- <div>
-						<ul class="breadcrumb">
-							<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-							<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-							<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-							<li class="active">出库备车</li>
-							<li class="pull-right"><a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit">出成品库</a></li>                
-						</ul>
-					</div> -->
 					<div>
 		            	<legend>备车
 		            		<span class="pull-right">

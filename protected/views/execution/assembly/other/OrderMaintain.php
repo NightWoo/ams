@@ -30,8 +30,7 @@
             <div>
             	<legend>备车订单
             		<span class="pull-right">
-            			<!-- <i class="icon-link"></i>&nbsp;
-            			<a href="/bms/execution/orderMaintain">订单维护</a> -->
+            			<!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
             		</span>
             	</legend>
             </div>

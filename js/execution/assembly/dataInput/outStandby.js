@@ -70,9 +70,11 @@ $(document).ready(function() {
 			data: {
 				//"standbyDate": workDate(),
 			},
+			async:false,
 			success: function(response) {
 				if(response.success) {
 					var data = response.data;
+					$(".nowTime").html(nowTime());
 					$("#rowInfo,#rowPrint").html(data.row);
 					$("#vinInfo,#vinPrint").html(data.vin);
 					$("#seriesInfo").html(data.series);
@@ -84,7 +86,7 @@ $(document).ready(function() {
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
-					setTimeout(function (){window.print();},500);
+					window.print();
 					resetPage();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");
@@ -98,7 +100,6 @@ $(document).ready(function() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
 		$(".today").html(workDate())
-		$(".nowTime").html(nowTime());
 		toggleHint(true);
 		resetPage();
 		$("#messageAlert").hide();
@@ -115,6 +116,8 @@ $(document).ready(function() {
 		$("#cardNumber").focus();
 		$("#btnSubmit").attr("disabled","disabled");
 		// ajaxGetOrder();
+		$(".nowTime").html(nowTime());
+		$("#driver").html("司机")
 	}
 
 	function toggleHint (showVinHint) {

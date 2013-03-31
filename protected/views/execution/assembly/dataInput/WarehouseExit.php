@@ -22,13 +22,13 @@
 				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- Main -->
-				<div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active"><?php echo $nodeDisplayName;?></li>
-						<li class="pull-right"><a href="/bms/execution/outStandby">备车</a></li>        
-				</ul></div><!-- END 面包屑 -->
+				<div>
+		            	<legend><?php echo $nodeDisplayName;?>
+		            		<span class="pull-right">
+		            			<a href="/bms/execution/warehouseReturn"><i class="icon-link"></i>&nbsp;备车</a>
+		            		</span>
+		            	</legend>
+		            </div>
 				<div ><!-- 内容主体 -->
 					<div >
 						<form id="form" class="well form-search">

@@ -29,11 +29,11 @@ class Warehouse
 		$condition .= ' ORDER BY id ASC';
 		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, 0, 0);
 
-		if($car->specail_property == 0){//普通车辆查找同型车列
+		if($car->special_property == 0){//普通车辆查找同型车列
 			$row = WarehouseAR::model()->find($condition, $values);
-		} else if ($car->specail_property == 1){//出口车扔到X区
+		} else if ($car->special_property == 1){//出口车扔到X区
 			$row = WarehouseAR::model()->find('area=?', array('X'));
-		} else if ($car->specail_property == 2){//降级车扔到Y区
+		} else if ($car->special_property == 2){//降级车扔到Y区
 			$row = WarehouseAR::model()->find('area=?', array('Y'));
 		}
 
@@ -41,7 +41,7 @@ class Warehouse
 		if(empty($row)) {
 			//在该车系库区区查找空车列，并生成同型车列
 			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND ORDER BY id ASC', array(0, 0, $car->series));
+			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? ORDER BY id ASC', array(0, 0, $car->series));
 			if(!empty($voidRow) && !empty($orderConfigId)) {
 				$row = $voidRow;
 				$row->car_type = $car->type;
@@ -76,6 +76,7 @@ class Warehouse
 		}
 
 		$data =array();
+		$data['vin'] = $car->vin;
 		$data['row'] = $row->row;
 		$data['area'] = $row->area;
 

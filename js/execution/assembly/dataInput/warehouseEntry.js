@@ -52,6 +52,7 @@ $("document").ready(function() {
 				if(response.success){
 					driver = response.data;
 					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.id).attr("disabled", "disabled");
+					$("#driver").html(driver.name);
 					ajaxSubmit();
 				}else{
 					resetPage();
@@ -72,11 +73,16 @@ $("document").ready(function() {
 				"vin": $("#vinText").val(),
 				"driverId": $("#cardText").attr("cardId"),
 			},
+			async:false,
 			success: function(response){
-				resetPage();
 				if(response.success){
+					$(".nowTime").html(nowTime());
+					$("#rowPrint").html(response.data.row);
+					$("#vinPrint").html(response.data.vin);
 				  	fadeMessageAlert(response.message,"alert-success");
 				  	fadeMessageRow(response.data.row,"alert-success");
+				  	window.print();
+					resetPage();
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
@@ -120,6 +126,8 @@ $("document").ready(function() {
 		toggleVinHint(true);
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
+		$(".nowTime").html(nowTime());
+		$("#driver").html("司机")
 	}
 
 	//toggle 车辆信息和提示信息
@@ -163,6 +171,31 @@ $("document").ready(function() {
 				$("#messageRow").hide(1000);
 			},60000);
 		});
+	}
+
+	function nowTime () {
+		var now = new Date();
+		var year = now.getFullYear();
+		var month = now.getMonth();
+		var day = now.getDate();
+		var hh = now.getHours();
+		var mm = now.getMinutes();
+
+		var clock = year + '-';
+
+		if(month < 10) clock += '0';
+		clock += month + '-';
+
+		if(day < 10) clock += '0';
+		clock += day + ' ';
+
+		if(hh < 10) clock += '0';
+		clock += hh + ':';
+
+		if(mm < 10) clock += '0';
+		clock += mm;
+
+		return(clock);
 	}
 //-------------------END common functions -----------------------
 
