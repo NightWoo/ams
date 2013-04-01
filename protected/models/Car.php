@@ -174,9 +174,17 @@ class Car
 	}
 
 	public function detectStatus($node = null) {
+		//TODO：可以优化
 		if(empty($node)) {
-			$sql = "SELECT max(node_id) FROM node_trace WHERE car_id={$this->car->id}";
-			$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
+			$sql = "SELECT distinct node_id FROM node_trace WHERE car_id={$this->car->id}";
+			$traceNodes = Yii::app()->db->createCommand($sql)->queryColumn();
+
+			$nodeId = -1;
+			if(!empty($traceNodes)) {
+				$str = join(',', $traceNodes);
+				$sql = "SELECT node_id FROM node WHERE node_id IN ($str) ORDER BY stage DESC";
+				$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
+			}		
 			$node = Node::create($nodeId);
 		}
 		$zone = $node->main_zone;
