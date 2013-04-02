@@ -89,6 +89,13 @@ class Car
 		}
 	}
 
+	public function warehouseTime() {
+		if($this->car->warehouse_time == '0000-00-00 00:00:00') {
+			$this->car->warehouse_time = date('YmdHis');
+			$this->car->save();
+		}
+	}
+
 	public function generateSerialNumber() {
 		$series = $this->car->series;
 		$snClass = "SerialNumber" . strtoupper($series) . "AR";
@@ -126,6 +133,7 @@ class Car
 		$this->car->cold_resistant = $exist->cold_resistant;		//added by wujun
 		$this->car->assembly_line = $exist->assembly_line;			//added by wujun
 		$this->car->remark = $exist->remark;						//added by wujun
+		$this->car->special_property = $exist->special_property;						//added by wujun
 		$this->car->save();
 	
 		$sql = "UPDATE plan_assembly SET ready=ready+1 WHERE id=$planId";
@@ -835,6 +843,56 @@ class Car
         }
 
         return array($success, $data);
+	}
+	
+	
+	public function throwTestlineCarInfo(){
+		$vin = $this->car->vin;
+		$series = $this->car->series;
+		$color = $this->car->color;
+		
+		$carType = $this->car->type;
+		$carType = str_replace("（", "(",$carType);
+		$carType = str_replace("）", ")",$carType);
+		
+		$carModel = CarTypeMapAR::model()->find('car_type=?', array($this->car->type))->car_model;
+		$seriesName = CarSeriesAR::model()->find('series=?', array($this->car->series))->name;
+		
+		$engineTrace = $this->checkTraceGasolineEngine();
+		// $engineCode = $engineTrace->bar_code;
+		$engine = CarEngineAR::model()->find('engine_component_id=?', array($engineTrace->component_id));
+		$engineType = $engine->engine_type;
+		$engineCode = substr($engineTrace->bar_code, -$engine->code_digit);
+		
+		$insertsql = "INSERT INTO testline_car_info
+				SET vin='{$vin}', series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}'";
+		$updatesql = "UPDATE testline_car_info
+						SET series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}' 
+						WHERE vin='{$vin}'";
+		$existsql = "SELECT vin FROM testline_car_info WHERE vin='{$vin}'";				
+		
+		$exist=Yii::app()->db->createCommand($existsql)->execute();
+		if(empty($exist)){
+			Yii::app()->db->createCommand($insertsql)->execute();
+		}else{
+			Yii::app()->db->createCommand($updatesql)->execute();
+		}
+		
+	}
+	
+	public function checkTestLinePassed() {
+		$vin = $this->car->vin;
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		FROM Summary WHERE vin='$vin'";
+			
+		$ret=Yii::app()->dbTest->createCommand($sql)->execute();
+		if(empty($ret)){
+			throw new Exception('此车未经过检测线，请返回检测线进行检验');
+		} else if($ret['Final_Flag'] == 'F') {
+			throw new Exception('此车检测线未合格，请返回检测线进行检验');
+		}
+		
+		return;
 	}
 
 	public function throwInspectionSheetData() {
