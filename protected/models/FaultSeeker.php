@@ -123,7 +123,7 @@ class FaultSeeker
 		$condition = join(' AND ', $conditions);
 		$validCondition = join( ' AND ', $validConditions);
 		if(!empty($condition)) {
-			$condition = 'WHERE (' . $condition . ')';
+			$condition = 'AND (' . $condition . ')';
 		}
 		if(!empty($validCondition)) {
 			$condition .= ' OR (' . $validCondition ;
@@ -137,22 +137,24 @@ class FaultSeeker
 		$dataSqls = array();
 		$countSqls = array();
 		foreach($tables as $table=>$nodeId) {
-			$traceSeriesConditon = array();
-		        foreach($arraySeries as $series) {
-		            $traceSeriesConditon[] = "n.car_series = '$series'";
-		        }
-		    $traceSeriesConditon = "(" . join(' OR ', $traceSeriesConditon) . ")";
+			$traceSeriesConditon = '';
+			foreach($arraySeries as $series) {
+				if(strstr($table , $series) === $series) {
+					$traceSeriesConditon = " AND n.car_series = '$series'";
+					break;
+				}
+			}
 
 			if(!empty($condition)) {
-				$curCondition = $condition . " AND n.node_id=$nodeId AND ". $traceSeriesConditon .")";
+				$curCondition = $condition . " AND n.node_id=$nodeId ". $traceSeriesConditon .")";
 			} else {
-				$curCondition = "WHERE n.node_id=$nodeId AND ". $traceSeriesConditon ; 
+				$curCondition = "AND n.node_id=$nodeId AND ". $traceSeriesConditon ; 
 			}
 			
 			//要求n.pass_time 和 c.create_time都在查询时间条件区间内（实际生产中，同一辆车在不同日期录入多次但不是每次都有故障：比如一辆车今天录其合格，后天录其有故障，如果查询条件为今天则其为合格；如果查询条件为后天，则其为有故障）
 			$timeCondition = "n.pass_time >= '$stime' AND n.pass_time <= '$etime' AND c.create_time >= '$stime' AND c.create_time <= '$etime'";
-			$dataSqls[] = "(SELECT n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
-			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.node_id=$nodeId AND $timeCondition  $curCondition";
+			$dataSqls[] = "(SELECT n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id WHERE n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
+			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id WHERE n.node_id=$nodeId AND $timeCondition  $curCondition";
 		}
 
 		$dataSql = join(' UNION ALL ', $dataSqls);
