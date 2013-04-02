@@ -178,6 +178,7 @@ class ExecutionController extends BmsBaseController
 
 			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
             $fault->save('在线');
+			$car->throwTestlineCarInfo();
 			$transaction->commit();
             $this->renderJsonBms(true, 'OK');
 
@@ -415,7 +416,7 @@ class ExecutionController extends BmsBaseController
             $car->passNode('CHECK_OUT');
             $onlyOnce = true;
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
-
+            
             //do not make the car standby while checkin point temporally
             // list($matched, $data) = $car->matchOrder($date);
             // if($matched) {
@@ -426,6 +427,7 @@ class ExecutionController extends BmsBaseController
                 $message = $vin . '已成功入库，请开往' . $data['row'];
             // }
 
+            $car->warehouseTime();
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -445,6 +447,7 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
+			$car->checkTestLinePassed();
             $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
@@ -650,9 +653,21 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        $a=10;
-        $b=explode("," , $a);
-        echo -$a;
+		$vin = 'LGXC14AA5D0018656';
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		FROM Summary WHERE vin='$vin'";
+			
+		$ret=Yii::app()->dbTest->createCommand($sql)->execute();
+		if(empty($ret)){
+			throw new Exception('此车未经过检测线，请返回检测线进行检验');
+		} else if($ret['Final_Flag'] == 'F') {
+			throw new Exception('此车检测线未合格，请返回检测线进行检验');
+		}
+		
+		print_r($ret['vin']);
+        //$a=10;
+        //$b=explode("," , $a);
+        //echo -$a;
         
     }
 
@@ -660,12 +675,10 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            $outDate = date("Y-m-d h:m:s");
-            $clientIp = $_SERVER["REMOTE_ADDR"];
-            echo $clientIp;
-            $car->throwCertificateData($outDate, $clientIp);
-        } catch(Exception $e){
-            $this->renderJsonBms(false, $e->getMessage());
+			$car->throwTestlineCarInfo();
+            $this->renderJsonBms(true, 'OK');
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
 }

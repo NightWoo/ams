@@ -23,25 +23,25 @@ class Warehouse
 		}
 
 		$conditions = array();
-		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=?";
+		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
 		$conditions['free'] = "status=? AND free_seat>?";
 		$condition = join(' AND ', $conditions);
 		$condition .= ' ORDER BY id ASC';
-		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, 0, 0);
-
-		if($car->special_property == 0){//普通车辆查找同型车列
+		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property, 0, 0);
 			$row = WarehouseAR::model()->find($condition, $values);
-		} else if ($car->special_property == 1){//出口车扔到X区
-			$row = WarehouseAR::model()->find('area=?', array('X'));
-		} else if ($car->special_property == 2){//降级车扔到Y区
-			$row = WarehouseAR::model()->find('area=?', array('Y'));
-		}
+		// if($car->special_property == 0){//普通车辆查找同型车列
+		// 	$row = WarehouseAR::model()->find($condition, $values);
+		// } else if ($car->special_property == 1){//出口车扔到F区
+		// 	$row = WarehouseAR::model()->find('area=?', array('F'));
+		// } else if ($car->special_property == 2){//降级车扔到Y区
+		// 	$row = WarehouseAR::model()->find('area=?', array('Y'));
+		// }
 
 		//如无同型车列		
 		if(empty($row)) {
 			//在该车系库区区查找空车列，并生成同型车列
 			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? ORDER BY id ASC', array(0, 0, $car->series));
+			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND special_property=? ORDER BY id ASC', array(0, 0, $car->series, $car->special_property));
 			if(!empty($voidRow) && !empty($orderConfigId)) {
 				$row = $voidRow;
 				$row->car_type = $car->type;

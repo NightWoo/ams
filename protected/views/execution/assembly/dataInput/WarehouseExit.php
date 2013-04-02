@@ -25,7 +25,7 @@
 				<div>
 		            	<legend><?php echo $nodeDisplayName;?>
 		            		<span class="pull-right">
-		            			<a href="/bms/execution/warehouseReturn"><i class="icon-link"></i>&nbsp;备车</a>
+		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;备车</a>
 		            		</span>
 		            	</legend>
 		            </div>
