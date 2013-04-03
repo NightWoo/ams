@@ -115,6 +115,8 @@ var COMPONENT_QUERY = "/bms/component/query";
 var COMPONENT_EXPORT = "/bms/component/export";
 var QUERY_NODE_TRACE = "/bms/execution/queryNodeTrace";
 var EXPORT_NODE_TRACE = "/bms/execution/exportNodeTrace";
+var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
+var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
 
 
 var SHOW_USER = "/bms/user/show";
