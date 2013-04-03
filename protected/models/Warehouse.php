@@ -51,7 +51,11 @@ class Warehouse
 				$row->order_config_id = $orderConfigId;
 			} else {
 				//如果连空车列都没有就扔到周转区Z
-				$row = WarehouseAR::model()->find('area=?', array('Z'));
+				if($car->special_property == 1){
+					$row = WarehouseAR::model()->find('area=? AND series=?', array('F', ''));
+				} else if ($car->special_property == 0) {
+					$row = WarehouseAR::model()->find('area=?', array('Z'));
+				}
 			}
 		} 
 

@@ -50,11 +50,11 @@ class CarController extends BmsBaseController
 				throw new Exception('node cannot be empty');
 			}
             $enterNode = Node::createByName($nodeName);
-            $leftNode = $enterNode->getParentNode();
-
+			$leftNode = $enterNode->getParentNode();
+            
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
-
+			$car->leftNode($leftNode->name);
+            
             $data = $car->car;
 
             $this->renderJsonBms(true, 'OK', $data);
@@ -100,7 +100,7 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
 
             $car->leftNode('VQ1');
-
+			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -140,7 +140,7 @@ class CarController extends BmsBaseController
 		$vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-			$car->leftNode('PBS');
+			//$car->leftNode('PBS');
 
 			//“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
 			//
@@ -385,6 +385,57 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
 	}
+
+    public function actionQueryBalanceDetail() {
+        try{
+            $state = $this->validateStringVal('state', 'WH');
+            $series = $this->validateStringVal('series', '');
+            $curPage = $this->validateIntVal('curPage', 1);
+            $perPage = $this->validateIntVal('perPage', 20);
+            
+            $seeker = new CarSeeker();
+            list($total, $data) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage);
+            $ret = array(
+                        'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
+                        'data' => $data,
+                    );
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionExportBalanceDetail() {
+        $state = $this->validateStringVal('state', 'WH');
+        $series = $this->validateStringVal('series', '');
+        try{
+            $seeker = new CarSeeker();
+            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0);
+            
+            $title = "车系,VIN,颜色,车型,车型/配置,耐寒性,状态,库区,下线时间,入库时间,备注\n";
+            $content = "";
+            foreach($datas as $data) {
+                $content .= "{$data['series']},";
+                $content .= "{$data['vin']},";
+                $content .= "{$data['color']},";
+                $content .= "{$data['type']},";
+                $content .= "{$data['type_info']},";
+                $content .= "{$data['cold']},";
+                $content .= "{$data['status']},";
+                $content .= "{$data['row']},";
+                $content .= "{$data['finish_time']},";
+                $content .= "{$data['warehouse_time']},";
+                $data['remark'] = str_replace(",", "，",$data['remark']);
+                $content .= "{$data['remark']},";
+                $content .= "\n";
+            }
+            $export = new Export($state . '结存查询_' .date('Ymd'), $title . $content);
+            $export->toCSV();
+
+
+        } catch(Exception $e) {
+        }
+    }
 
 	public function actionTest()  {
 		$vin = $this->validateStringVal('vin', '');

@@ -190,7 +190,7 @@ class Car
 			$nodeId = -1;
 			if(!empty($traceNodes)) {
 				$str = join(',', $traceNodes);
-				$sql = "SELECT node_id FROM node WHERE node_id IN ($str) ORDER BY stage DESC";
+				$sql = "SELECT id FROM node WHERE id IN ($str) ORDER BY stage DESC";
 				$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
 			}		
 			$node = Node::create($nodeId);
@@ -247,13 +247,15 @@ class Car
         if(!$node->exist()){
             throw new Exception('不存在名字为' . $nodeName . '的节点');
         }
+
 		if(YII_DEBUG) {
-			return;
+		 	return;
 		}
+		
         $nodeId = $node->id;
         $exist = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,$nodeId));
         if(empty($exist)){
-            throw new Exception($this->vin .'还没进入' .$node->display_name);
+            throw new Exception($this->vin .'还没录入' .$node->display_name);
         }
 	}
 
@@ -847,6 +849,8 @@ class Car
 	
 	
 	public function throwTestlineCarInfo(){
+
+		//好像有点太过程化了，找时间优化
 		$vin = $this->car->vin;
 		$series = $this->car->series;
 		$color = $this->car->color;
@@ -885,17 +889,18 @@ class Car
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";
 			
-		$ret=Yii::app()->dbTest->createCommand($sql)->execute();
+		$ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
 		if(empty($ret)){
 			throw new Exception('此车未经过检测线，请返回检测线进行检验');
 		} else if($ret['Final_Flag'] == 'F') {
-			throw new Exception('此车检测线未合格，请返回检测线进行检验');
+			throw new Exception ('此车检测线未合格，请返回检测线进行检验');
 		}
 		
 		return;
 	}
 
 	public function throwInspectionSheetData() {
+		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;

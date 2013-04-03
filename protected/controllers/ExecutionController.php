@@ -4,6 +4,7 @@ Yii::import('application.models.Fault');
 Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.WarehouseAR');
 class ExecutionController extends BmsBaseController
 {
 	public static $NODE_MAP = array(
@@ -15,7 +16,8 @@ class ExecutionController extends BmsBaseController
 		'CarQuery' => array('READ_ONLY', 'CAR_QUERY', 'CAR_QUERY_ASSEMBLY'),
 		'ManufactureQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 		'ComponentQuery' => array('READ_ONLY', 'COMPONENT_TRACE_QUERY'),
-		'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+        'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+		'BalanceQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 	);
 	/**
 	 * Declares class-based actions.
@@ -89,7 +91,7 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('the car must fit a plan!!');
 			}
             $car = Car::create($vin);
-            $car->leftNode('PBS');
+            //$car->leftNode('PBS');
 			$car->enterNode('T0', 0 ,true);
 			$car->generateSerialNumber();
 			$car->addToPlan($date, $planId);
@@ -255,13 +257,21 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
             $driverId = $this->validateStringVal('driver', 0);
+            
+            $fault = Fault::createSeeker();
+           
 
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
 
             $car = Car::create($vin);
-            $car->leftNode('ROAD_TEST_START');
+            $car->leftNode('VQ1');
+			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
@@ -411,6 +421,7 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
+			$car->checkTestLinePassed();
 
             $car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
@@ -653,7 +664,25 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-		$vin = 'LGXC14AA5D0018656';
+		 
+		 $vin = 'LGXC14DA4D0017350';
+		 $sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		 FROM Summary WHERE vin='$vin'";
+			
+		 $ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
+		 //echo $ret['vin'];
+		// if(empty($ret)){
+//		 	throw new Exception('此车未经过检测线，请返回检测线进行检验');
+//		 } else if($ret['Final_Flag'] == 'F') {
+//		 	throw new Exception('此车检测线未合格，请返回检测线进行检验');
+//		 }
+		$this->renderJsonBms(true, 'OK', $ret['Final_Flag']);
+        
+    }
+
+    public function actionDataThrowtest() {
+        try{
+             $vin = $this->validateStringVal('vin', '');
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";
 			
@@ -661,22 +690,8 @@ class ExecutionController extends BmsBaseController
 		if(empty($ret)){
 			throw new Exception('此车未经过检测线，请返回检测线进行检验');
 		} else if($ret['Final_Flag'] == 'F') {
-			throw new Exception('此车检测线未合格，请返回检测线进行检验');
+			throw new Exception ('此车检测线未合格，请返回检测线进行检验');
 		}
-		
-		print_r($ret['vin']);
-        //$a=10;
-        //$b=explode("," , $a);
-        //echo -$a;
-        
-    }
-
-    public function actionDataThrowtest() {
-        try{
-            $vin = $this->validateStringVal('vin', '');
-            $car = Car::create($vin);
-			$car->throwTestlineCarInfo();
-            $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

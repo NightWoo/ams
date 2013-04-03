@@ -11,7 +11,7 @@
 			<li id="leftComponentQueryLi"><a href="/bms/execution/query?type=ComponentQuery">零部件查询</a></li>
 			<li id="leftManufactureQueryLi"><a href="/bms/execution/query?type=ManufactureQuery">生产查询</a></li>
 			<li id="leftNodeQueryLi"><a href="/bms/execution/query?type=NodeQuery">质量查询</a></li>
-			<!-- <li id="leftFaultQueryLi"><a href="/bms/execution/query?type=FaultQuery">故障查询</a></li> -->
+			<li id="leftBalanceQueryLi"><a href="/bms/execution/query?type=BalanceQuery">结存查询</a></li>
 			<!-- <li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li> -->
 		<!-- <li class="nav-header">异常操作</li>
 			<li><a href="#">配置单补打印</a></li>
