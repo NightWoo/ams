@@ -421,7 +421,7 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			$car->checkTestLinePassed();
+			//$car->checkTestLinePassed();
 
             $car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
@@ -436,6 +436,9 @@ class ExecutionController extends BmsBaseController
                 $warehouse = new Warehouse;
                 $data = $warehouse->checkin($vin);
                 $message = $vin . '已成功入库，请开往' . $data['row'];
+                $car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->area = $data['area'];
+                $car->car->save();
             // }
 
             $car->warehouseTime();
@@ -466,8 +469,16 @@ class ExecutionController extends BmsBaseController
             $warehouse = new Warehouse;
             $data = $warehouse->checkout($vin);
             $message = $vin . '已成功出库，请开往车道' . $data['lane'];
-            // $message = $vin . '已成功出库';
 
+            $car->car->lane_id = $data['lane_id'];
+            $car->car->distributor_name = $data['distributor_name'];
+            $car->car->distributor_code = $data['distributor_code'];
+            // $car->order_detail_id = $order->order_detail_id;
+            $car->car->warehouse_id = 0;
+            $car->car->area = 'out';
+            $car->car->save();
+            $car->distributeTime();
+            
             $outDate = date("Y-m-d h:m:s");
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $car->throwCertificateData($outDate, $clientIp);

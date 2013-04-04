@@ -68,13 +68,7 @@ class Warehouse
 			if($row->free_seat == 0) {
 				$row->status = 1;
 			}
-
-			$car->warehouse_id = $row->id;
-			$car->area = $row->area;
-			$car->status = '成品库_' . $row->row;
-
 			$row->save();
-			$car->save();
 		} else {
 			throw new Exception('成品库无可用车列');
 		}
@@ -83,6 +77,7 @@ class Warehouse
 		$data['vin'] = $car->vin;
 		$data['row'] = $row->row;
 		$data['area'] = $row->area;
+		$data['warehouse_id'] =  $row->id;
 
 		return $data;
 	}
@@ -97,6 +92,8 @@ class Warehouse
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
 			$order->count += 1;
+
+			//重复了···，备车匹配订单getCarStandby已经减过一次了
 			// if(!empty($row)){
 			// 	$row->quantity -= 1;
 			// 	$row->save();
@@ -108,23 +105,15 @@ class Warehouse
 				$laneName = '_' . $lane;
 			}
 
-			$car->status = '公司外' . $laneName;
-			$car->lane_id = $order->lane_id;
-			$car->distributor_name = $order->distributor_name;
-			$car->distributor_code = $order->distributor_code;
-			// $car->order_detail_id = $order->order_detail_id;
-			$car->warehouse_id = 0;
-			$car->area = 'out';
-
 			$order->save();
-			$car->save();
-
 			
 			$data['vin'] = $car->vin;				
 			$data['lane'] = $lane;
+			$data['lane_id'] = $order->lane_id;
 			$data['order_id'] = $car->order_id;				
 			$data['order_number'] = $order->order_number;
 			$data['distributor_name'] = $order->distributor_name;
+			$data['distributor_code'] = $order->distributor_code;
 			$data['carrier'] = $order->carrier;				
 		}
 

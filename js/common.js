@@ -199,7 +199,7 @@ $(function () {
 	        return(clock); 
 	},
 
-	currentDate16 function () {
+	currentDate16: function () {
 		var now = new Date();
 	        var year = now.getFullYear();       //年
 	        var month = now.getMonth() + 1;     //月
