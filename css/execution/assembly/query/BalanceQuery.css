@@ -2,6 +2,13 @@
 	margin-bottom: 10px;	
 }
 
+.tableContainer {
+	margin-left: 0;
+	padding-top: 10px;
+}
+#tableCarsDistribute {
+	margin-top:5px;
+}
 
 .form-search .checkbox {
 	margin-left: 15px;

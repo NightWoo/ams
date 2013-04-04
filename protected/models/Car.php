@@ -96,6 +96,13 @@ class Car
 		}
 	}
 
+	public function distributeTime() {
+		if($this->car->distribute_time == '0000-00-00 00:00:00') {
+			$this->car->distribute_time = date('YmdHis');
+			$this->car->save();
+		}
+	}
+
 	public function generateSerialNumber() {
 		$series = $this->car->series;
 		$snClass = "SerialNumber" . strtoupper($series) . "AR";

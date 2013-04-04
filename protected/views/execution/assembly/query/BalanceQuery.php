@@ -30,7 +30,7 @@
             require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
-        	 <div id="bodyright" class="offset2">
+        	<div id="bodyright" class="offset2">
                 <div>
                     <legend>结存查询
                         <span class="pull-right">
@@ -60,6 +60,8 @@
                                         <option value="VQ3">VQ3</option>
                                         <option value="VQ2">VQ2</option>
                                         <option value="VQ1">VQ1</option>
+                                        <option value="onLine">I线</option>
+                                        <option value="PBS">PBS</option>
     								</select>
     							</td>
                                 <td>
@@ -122,37 +124,42 @@
                         </div>
 
                         <div class="tab-pane" id="carsDistribute">
-                            <div id="divRadio">   
-                                <!--<span>分布条件:</span>-->
-                                <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="component_chart_data" checked>
-                                  零部件
-                                </label>
-                                <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="fault_mode_chart_data">
-                                  故障模式
-                                </label>
-                                <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios3" value="series_chart_data">
-                                  车系
-                                </label>
-                                <label class="radio inline">
-                                  <input type="radio" name="optionsRadios" id="optionsRadios4" value="node_chart_data">
-                                  节点
-                                </label>
-                            </div>
-                            <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                             
-                            <table id="tableFaultDistribute" class="table table-condensed">
-                                <thead>
-                                    <tr></tr>
-                                </thead>
-                                <tbody>
-                                    <tr></tr>
-                                    <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                <div class="tableContainer span8 pull-left" style="background-color: blue;">
+                                    <div id="divRadio">   
+                                        <label class="checkbox">
+                                          <input type="checkbox" name="optionsRadios" id="checkbox" value="reycle_bar_data">
+                                          将VQ1、VQ2、VQ3结存合并为周转车
+                                        </label>
+                                    </div>                          
+                                    <table id="tableCarsDistribute" class="table table-condensed">
+                                        <thead>
+                                            <tr></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="chartContainer offset8" style="background-color: red; display:none;">
+                                    <div id="divRadio">   
+                                        <label class="radio inline">
+                                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
+                                          车型
+                                        </label>
+                                        <label class="radio inline">
+                                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="color_pie_data">
+                                          颜色
+                                        </label>
+                                    </div>
+                                    <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                                </div>
+                                <div class="chartContainer offset8" style="background-color: yellow;">
+                                    
+                                    <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                                </div>
+                            </div>
 
                         <div class="tab-pane" id="balanceTrend">
 

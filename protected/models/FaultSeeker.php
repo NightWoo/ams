@@ -662,7 +662,7 @@ class FaultSeeker
         foreach($arraySeries as $series) {
         	$retTotal[$name[$series]]['rateTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['qualifiedTotal'] / $retTotal[$name[$series]]['carTotal'], 3) * 100 . '%';
         }
-
+        $carSeries = array();
         foreach ($arraySeries as $series){
         	$carSeries[] = $name[$series];
         }

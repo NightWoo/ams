@@ -405,6 +405,17 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionQueryBalanceAssembly(){
+        try{
+            $state = $this->validateStringVal('state', 'assembly'); 
+            $seeker = new CarSeeker();
+            $data = $seeker-> queryAssemblyBalance($state);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionExportBalanceDetail() {
         $state = $this->validateStringVal('state', 'WH');
         $series = $this->validateStringVal('series', '');

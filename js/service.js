@@ -117,6 +117,7 @@ var QUERY_NODE_TRACE = "/bms/execution/queryNodeTrace";
 var EXPORT_NODE_TRACE = "/bms/execution/exportNodeTrace";
 var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
 var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
+var QUERY_BALANCE_ASSEMBLY = "/bms/car/queryBalanceAssembly";
 
 
 var SHOW_USER = "/bms/user/show";

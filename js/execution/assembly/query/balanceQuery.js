@@ -100,7 +100,8 @@ $(document).ready(function () {
 			$("#paginationCars").hide();
 		if (index == 0)
 			ajaxDetailQuery();
-		// else if (index === 2)
+		else if (index === 1)
+			carsDistribute();
 	});
 
 //-------------------END event bindings -----------------------
@@ -176,6 +177,32 @@ $(document).ready(function () {
 
 	function ajaxExportBalanceDetail(){
 		window.open(BALANCE_Detail_EXPORT + "?state=" + $("#selectState").val() +"&$series="+ $("#selectSeries"));
+	}
+
+	function carsDistribute() {
+		if($("#selectSeries").val() == ""){
+			ajaxQueryBalanceAssembly($("#selectState").val());
+			// ajaxQueryBalanceAssembly('mergeRecyle');
+		} else {
+
+		}
+	}
+
+	function ajaxQueryBalanceAssembly(state) {
+		$.ajax({
+			url: QUERY_BALANCE_ASSEMBLY,
+			type: "get",
+			data: {
+				"state" : state,
+			},
+			dataType: "json",
+			success: function(response) {
+
+			},
+			error: function(){
+				alertError();
+			}
+		})
 	}
 	
 
