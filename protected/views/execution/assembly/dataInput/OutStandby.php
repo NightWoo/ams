@@ -47,7 +47,7 @@
 								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">
 							</div>
-							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车' disabled="disabled">
+							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车'>
 							<input type="button" class="btn" id ="reset" value ="清空">
 							<!-- <span><a href="" id="refresh"><i class="icon-refresh" style="margin-top:6px"></i></a></span> -->
 							<span class="help-inline" id="hint">未获得任何可备车辆</span>
@@ -60,6 +60,7 @@
 								<span class="label label-info" rel="tooltip" title="颜色" id="colorInfo"></span>
 								<span class="label label-info" rel="tooltip" title="订单号" id="orderNumberInfo"></span>
 								<span class="label label-info" rel="tooltip" title="经销商" id="distributorInfo"></span>
+                                <span class="label label-info" rel="tooltip" title="车道号" id="laneInfo"></span>
 							</div> 
 						</form>             
 					</div>

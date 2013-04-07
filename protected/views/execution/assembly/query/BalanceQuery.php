@@ -53,8 +53,8 @@
                                     <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                                 </td>
     							<td>
-    								<select name="" id="selectState" class="input-small">
-                                        <option value="assembly">总装</option>
+    								<select name="" id="selectState" class="input-medium">
+                                        <option value="assembly">总装(除PBS)</option>
                                         <option value="WH">成品库</option>
                                         <option value="recycle">周转车</option>
                                         <option value="VQ3">VQ3</option>
@@ -125,25 +125,24 @@
 
                         <div class="tab-pane" id="carsDistribute">
                             
-                                <div class="tableContainer span8 pull-left" style="background-color: blue;">
-                                    <div id="divRadio">   
+                                <div class="tableContainer span9 pull-left">
+                                    <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
+                                        <thead>
+
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div id="divCheckbox">   
                                         <label class="checkbox">
-                                          <input type="checkbox" name="optionsRadios" id="checkbox" value="reycle_bar_data">
+                                          <input type="checkbox" name="optionsRadios" id="checkboxMerge" value="reycle_bar_data">
                                           将VQ1、VQ2、VQ3结存合并为周转车
                                         </label>
                                     </div>                          
-                                    <table id="tableCarsDistribute" class="table table-condensed">
-                                        <thead>
-                                            <tr></tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </tbody>
-                                    </table>
                                 </div>
-                                <div class="chartContainer offset8" style="background-color: red; display:none;">
-                                    <div id="divRadio">   
+                                <div class="chartContainer offset9">
+                                    <!-- <div id="divRadio">   
                                         <label class="radio inline">
                                           <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
                                           车型
@@ -152,10 +151,10 @@
                                           <input type="radio" name="optionsRadios" id="optionsRadios2" value="color_pie_data">
                                           颜色
                                         </label>
-                                    </div>
-                                    <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                                    </div> -->
+                                    <div id="columnContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                                 </div>
-                                <div class="chartContainer offset8" style="background-color: yellow;">
+                                <div class="chartContainer offset9">
                                     
                                     <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                                 </div>

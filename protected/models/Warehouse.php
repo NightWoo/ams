@@ -41,7 +41,7 @@ class Warehouse
 		if(empty($row)) {
 			//在该车系库区区查找空车列，并生成同型车列
 			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND special_property=? ORDER BY id ASC', array(0, 0, $car->series, $car->special_property));
+			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND special_property=? AND free_seat>0 ORDER BY id ASC', array(0, 0, $car->series, $car->special_property));
 			if(!empty($voidRow) && !empty($orderConfigId)) {
 				$row = $voidRow;
 				$row->car_type = $car->type;
@@ -105,8 +105,6 @@ class Warehouse
 				$laneName = '_' . $lane;
 			}
 
-			$order->save();
-			
 			$data['vin'] = $car->vin;				
 			$data['lane'] = $lane;
 			$data['lane_id'] = $order->lane_id;
@@ -115,6 +113,8 @@ class Warehouse
 			$data['distributor_name'] = $order->distributor_name;
 			$data['distributor_code'] = $order->distributor_code;
 			$data['carrier'] = $order->carrier;				
+
+			$order->save();
 		}
 
 		return $data;

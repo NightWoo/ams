@@ -4,6 +4,7 @@ Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.CarTypeMapAR');
+Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.OrderSeeker');
 
 class Order
@@ -162,7 +163,7 @@ class Order
 					$warehouse->car_type = '';
 					$warehouse->color = '';
 					$warehouse->order_config_id = 0;
-					$warehouse->cold_resistant = '';
+					$warehouse->cold_resistant = 0;
 					//$warehouse->car_year = '';
 
 					$warehouse->free_seat = $warehouse->capacity;
@@ -171,8 +172,9 @@ class Order
 
 				$matchedOrder->hold += 1;
 				$matchedCar->order_id = $matchedOrder->id;
+				// $matchedCar->lane_id = $matchedOrder->lane_id;
 				$matchedCar->warehouse_id = 1;		//WDI
-				$matchedCar->status = '成品库_WDI';
+				$matchedCar->status = '成品库';
 				$matchedCar->area = 'WDI';
 
 				$warehouse->save();
@@ -191,6 +193,7 @@ class Order
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
 				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';
+				$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
 			}
 		} else {
 			throw new Exception('暂无可备车辆');

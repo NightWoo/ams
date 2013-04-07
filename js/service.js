@@ -118,6 +118,7 @@ var EXPORT_NODE_TRACE = "/bms/execution/exportNodeTrace";
 var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
 var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
 var QUERY_BALANCE_ASSEMBLY = "/bms/car/queryBalanceAssembly";
+var QUERY_BALANCE_DISTRIBUTE = "/bms/car/queryBalanceDistribute";
 
 
 var SHOW_USER = "/bms/user/show";
@@ -224,6 +225,7 @@ var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
 var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig"
 var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
+var QUERY_ORDER_CARS = "/bms/order/queryOrderCars";
 
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';

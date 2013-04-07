@@ -238,7 +238,7 @@
                     <select id="editLane"  name=""class="input-small">
                         <option value="0" selected>未选择</option>
                         <?php 
-                            for($i=1;$i<51;$i++){
+                            for($i=1;$i<52;$i++){
                                 $num = sprintf("%02d", $i);
                                 $ret = "<option value=". $i .">$num</option>";
                                 echo $ret;

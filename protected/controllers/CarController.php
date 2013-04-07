@@ -2,6 +2,7 @@
 Yii::import('application.models.Car');
 Yii::import('application.models.VinManager');
 Yii::import('application.models.SubConfigSeeker');
+Yii::import('application.models.AR.WarehouseAR');
 class CarController extends BmsBaseController
 {
 	/**
@@ -56,6 +57,10 @@ class CarController extends BmsBaseController
 			$car->leftNode($leftNode->name);
             
             $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -320,9 +325,20 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
+			if($car->car->warehouse_id > 1){
+				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
+			}
 
 			$car->passNode('CHECK_OUT');
-            $this->renderJsonBms(true, 'OK', $car->car);
+
+            $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
+
+            $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -416,6 +432,18 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionQueryBalanceDistribute() {
+        try{
+            $state = $this->validateStringVal('state', 'assembly');
+            $series = $this->validateStringVal('series', 'F0');
+            $seeker = new CarSeeker();
+            $data = $seeker -> balanceDistribute($state, $series);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionExportBalanceDetail() {
         $state = $this->validateStringVal('state', 'WH');
         $series = $this->validateStringVal('series', '');
@@ -437,6 +465,7 @@ class CarController extends BmsBaseController
                 $content .= "{$data['finish_time']},";
                 $content .= "{$data['warehouse_time']},";
                 $data['remark'] = str_replace(",", "，",$data['remark']);
+                $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
                 $content .= "\n";
             }

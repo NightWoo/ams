@@ -992,7 +992,7 @@ class Car
 			$barCode = $absTrace->bar_code;
 			$abs = $this->getAbsInfo($barCode);
 			$absInfo = '';
-			$absInfo = "ABS系统控制器型号：" . $abs['type'] . "，ABS系统控制器生产企业：" . $abs['provider'] ."。";
+			$absInfo = "ABS系统控制器型号：" . $abs['type'] . "；ABS系统控制器生产企业：" . $abs['provider'];
 			$absInfo = iconv('UTF-8', 'GB2312', $absInfo);
 			$cData['certificate_note'] .= $absInfo;
 		}

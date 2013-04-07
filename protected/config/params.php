@@ -45,8 +45,8 @@ return array(
 
 	
 	'tds_HGZ' => 'HGZ',
-	'tds_HGZ_username' => 'vinm',
-	'tds_HGZ_password' => 'vinm_2011',
+	'tds_HGZ_username' => 'hgz',
+	'tds_HGZ_password' => 'Byd xa_2006',
 	'tds_dbname_HGZ_DATABASE' => 'HGZ_DATABASE',
 
 

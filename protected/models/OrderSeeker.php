@@ -92,13 +92,19 @@ class OrderSeeker
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		foreach($orderList as &$detail) {
-			$detail['order_config_name'] = OrderConfigAR::model()->findByPk($detail['order_config_id'])->name;
+			if(!empty($detail['order_config_id'])){
+				$detail['order_config_name'] = OrderConfigAR::model()->findByPk($detail['order_config_id'])->name;
+			}
 			$detail['car_model'] = CarTypeMapAR::model()->find("car_type=?", array($detail['car_type']))->car_model;
 			
 			$detail['lane_name'] = '';
 			$lane = LaneAR::model()->findByPk($detail['lane_id']);
 			if(!empty($lane)) $detail['lane_name'] = $lane->name;
-			$detail['car_type_config'] = $detail['car_model']. "/" . $detail['order_config_name'];
+			if(!empty($detail['order_config_name'])){
+				$detail['car_type_config'] = $detail['car_model']. "/" . $detail['order_config_name'];
+			}else {
+				$detail['car_type_config'] = $detail['car_model'];
+			}
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
 		}
 

@@ -44,7 +44,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success){
 					driver = response.data;
-					$("#btnSubmit").removeAttr("disabled").focus();
+					// $("#btnSubmit").removeAttr("disabled").focus();
 					$("#cardNumber").attr("value", driver.card_number);
 					$("#cardNumber").attr("disabled","disabled");
 					$("#driver").html(driver.name);
@@ -83,10 +83,11 @@ $(document).ready(function() {
 					$("#colorInfo").html(data.color);
 					$("#orderNumberInfo").html(data.order_number);
 					$("#distributorInfo").html(data.distributor_name);
+					$("#laneInfo").html(data.lane);
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
-					window.print();
+					//window.print();
 					resetPage();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");
@@ -106,7 +107,7 @@ $(document).ready(function() {
 	}
 
 	function refresh() {
-		ajaxGetOrder();
+		// ajaxGetOrder();
 		toggleHint(true);
 	}
 
@@ -114,7 +115,7 @@ $(document).ready(function() {
 		$("#cardNumber").removeAttr("disabled");
 		$("#cardNumber").attr("value","");
 		$("#cardNumber").focus();
-		$("#btnSubmit").attr("disabled","disabled");
+		// $("#btnSubmit").attr("disabled","disabled");
 		// ajaxGetOrder();
 		$(".nowTime").html(nowTime());
 		$("#driver").html("司机")

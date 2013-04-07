@@ -21,6 +21,8 @@ $(document).ready(function () {
 	function resetAll (argument) {
 		$(".pager").hide();
 		$("#resultTable").hide();
+		$("#tableCarsDistribute").hide();
+		$("#divCheckbox").hide();
 	}
 
 /*
@@ -104,6 +106,14 @@ $(document).ready(function () {
 			carsDistribute();
 	});
 
+	$("#checkboxMerge").change(function () {
+		if($(this).attr("checked") == "checked"){
+			ajaxQueryBalanceAssembly('mergeRecyle');
+		} else {
+			ajaxQueryBalanceAssembly();
+		}
+	})
+
 //-------------------END event bindings -----------------------
 
 
@@ -176,15 +186,26 @@ $(document).ready(function () {
 	}
 
 	function ajaxExportBalanceDetail(){
-		window.open(BALANCE_Detail_EXPORT + "?state=" + $("#selectState").val() +"&$series="+ $("#selectSeries"));
+		window.open(BALANCE_Detail_EXPORT + "?state=" + $("#selectState").val() +"&series="+ $("#selectSeries").val());
 	}
 
 	function carsDistribute() {
 		if($("#selectSeries").val() == ""){
-			ajaxQueryBalanceAssembly($("#selectState").val());
-			// ajaxQueryBalanceAssembly('mergeRecyle');
+			if($("#selectState").val() == "assembly"){
+				if($("#checkboxMerge").attr("checked") == "checked"){
+					ajaxQueryBalanceAssembly('mergeRecyle');
+				} else {
+					ajaxQueryBalanceAssembly('assembly');
+				}
+				$("#divCheckbox").show()
+			} else {
+				ajaxQueryBalanceAssembly($("#selectState").val());
+				$("#checkboxMerge").removeAttr("checked");
+				$("#divCheckbox").hide();
+			}
 		} else {
-
+			$("#divCheckbox").hide();
+			ajaxQueryBalanceDistribute();
 		}
 	}
 
@@ -197,10 +218,32 @@ $(document).ready(function () {
 			},
 			dataType: "json",
 			success: function(response) {
-
+				balanceQuery.AssemblyAll.ajaxData = response.data;
+				balanceQuery.AssemblyAll.updateDistributeTable();
+				balanceQuery.AssemblyAll.drawColumn();
+				$("#tableCarsDistribute").show();
+				$("#columnContainer").show();
 			},
 			error: function(){
 				alertError();
+			}
+		})
+	}
+
+	function ajaxQueryBalanceDistribute() {
+		$.ajax({
+			url: QUERY_BALANCE_DISTRIBUTE,
+			type: "get",
+			data: {
+				"state" : $("#selectState").val(),
+				"series" : $("#selectSeries").val(), 
+			},
+			dataType: "json",
+			success: function (response) {
+				balanceQuery.distribute.ajaxData = response.data;
+				balanceQuery.distribute.updateDistributeTable();
+				$("#tableCarsDistribute").show();
+				$("#columnContainer").hide();
 			}
 		})
 	}
@@ -209,3 +252,172 @@ $(document).ready(function () {
 //-------------------END ajax query -----------------------
 
 });
+
+!$(function (){
+	window.balanceQuery = window.balanceQuery || {};
+	window.balanceQuery.AssemblyAll = {
+		ajaxData : {},
+
+		columnData: {
+			chart: {
+                type: 'column',
+                renderTo: 'columnContainer'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: []
+            },
+            credits: {
+                enabled: false
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '结存数量（辆）'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.1,
+                    borderWidth: 0,
+                    pointWidth: 15
+                }
+            },
+            series: [],
+		},
+
+		updateDistributeTable: function() {
+			var series = this.ajaxData.carSeries;
+			var detail = this.ajaxData.detail;
+			var stateTotal = this.ajaxData.stateTotal;
+			var seriesTotal = this.ajaxData.seriesTotal;
+
+			//clear table and initialize it
+			$("#tableCarsDistribute thead").html("<tr />");
+			$("#tableCarsDistribute tbody").html("");
+			$.each(series, function (index, series) {
+				$("<tr />").appendTo($("#tableCarsDistribute tbody"));
+			});
+			stateTotalTr = $("<tr />").appendTo($("#tableCarsDistribute tbody"));
+
+			//first column description
+			var stateTr = $("#tableCarsDistribute tr:eq(0)");
+			$("<td />").html('车系').addClass('alignCenter').appendTo(stateTr);
+			$.each(series, function (index, series){
+				$("<td />").html(series).addClass('alignCenter').appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+			});
+			$("<td />").html('合计').addClass('alignCenter').appendTo(stateTotalTr);
+
+			//detail data
+			$.each(detail, function (index ,value) {
+				$("<td />").html(value.state).appendTo(stateTr);
+				$.each(series, function (index, series){
+					$("<td />").html(value[series]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+				});
+			})
+
+			//series total
+			$("<td />").html('总计').appendTo(stateTr);
+			$.each(series, function (index, series) {
+				$("<td />").html(seriesTotal[series]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+			})
+
+			//state total
+			var totalTotal = 0;
+			$.each(stateTotal, function (index, value) {
+				$("<td />").html(value).appendTo(stateTotalTr);
+				totalTotal += value;
+			})
+			$("<td />").html(totalTotal).appendTo(stateTotalTr);
+
+		},
+
+
+		drawColumn: function() {
+			columnSeries = [];
+			carSeries = this.ajaxData.carSeries;
+			columnSeriesData = this.ajaxData.series;
+			$.each(carSeries, function (index, series) {
+				columnSeries[index] = {
+					name: series,
+					data: columnSeriesData.y[series]
+				}
+			})
+
+            console.log(this);
+			this.columnData.xAxis.categories = columnSeriesData.x;
+			this.columnData.series = columnSeries;
+			var chart;
+			chart = new Highcharts.Chart(this.columnData);
+		}
+	}
+
+	window.balanceQuery.distribute = {
+		ajaxData: {},
+		updateDistributeTable: function() {
+			 var color = this.ajaxData.colorArray;
+			 var configName = this.ajaxData.configNameArray;
+			 var detail = this.ajaxData.detail;
+			 var colorTotal = this.ajaxData.colorTotal;
+			 var configTotal = this.ajaxData.configTotal;
+
+			//clear table and initialize it
+			$("#tableCarsDistribute thead").html("<tr />");
+			$("#tableCarsDistribute tbody").html("");
+			$.each(configName, function (index, configName) {
+				$("<tr />").appendTo($("#tableCarsDistribute tbody"));
+			})
+			colorTotalTr = $("<tr />").appendTo($("#tableCarsDistribute tbody"));
+
+			//first column description
+			var colorTr = $("#tableCarsDistribute tr:eq(0)");
+			$("<td />").html('车型/配置').addClass('alignCenter').appendTo(colorTr);
+			$.each(configName, function (index, configName) {
+				$("<td />").html(configName).addClass('configNameTd').appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+			});
+			$("<td />").html('合计').addClass('alignCenter').appendTo(colorTotalTr);
+
+			//detail data
+			$.each(detail, function (index, value) {
+				$("<td />").html(value.color).appendTo(colorTr);
+				$.each(configName, function (index, configName) {
+					$("<td />").html(value[configName]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+				});
+			});
+
+			//config total
+			$("<td />").html('总计').appendTo(colorTr)
+			$.each(configName, function (index, configName) {
+				$("<td />").html(configTotal[configName]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+			});
+
+			//color total
+			var totalTotal = 0;
+			$.each(colorTotal, function (index, value) {
+				$("<td />").html(value).appendTo(colorTotalTr);
+				totalTotal += value;
+			})
+			$("<td />").html(totalTotal).appendTo(colorTotalTr);
+		}
+	}
+})

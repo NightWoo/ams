@@ -1,16 +1,38 @@
 .well {
 	margin-bottom: 10px;	
 }
+#resultTable {
+	font-size: 12px;
+}
 
 .tableContainer {
 	margin-left: 0;
-	padding-top: 10px;
+	/*padding-top: 10px;*/
 }
 #tableCarsDistribute {
-	margin-top:5px;
+	margin-bottom: 10px;
+	font-size: 12px;
 }
 
-.form-search .checkbox {
+#tableCarsDistribute thead td {
+	text-align: center;
+	width: 60px;
+}
+
+#tableCarsDistribute tbody td {
+	text-align: right;
+	width: 60px;
+}
+
+#tableCarsDistribute  .alignCenter {
+	text-align: center;
+}
+
+#tableCarsDistribute .configNameTd {
+	min-width: 160px;
+	text-align: left;
+}
+/*.form-search .checkbox {
 	margin-left: 15px;
 }
 
@@ -28,7 +50,7 @@
 
 #resultTable, #tablePlato, #tableDpu {
 	font-size:12px;	
-}
+}*/
 
 .checkbox {
 	margin-right: 6px;
