@@ -287,6 +287,7 @@ class OrderController extends BmsBaseController
 					$order->count -= 1;
 				}
 				$car->car->order_id = 0;
+				$car->car->lane_id = 0;
 				$car->car->distributor_name='';
 				$car->car->distributor_code='';
 				$car->car->save();
@@ -304,6 +305,10 @@ class OrderController extends BmsBaseController
 				$data = $warehouse->checkin($vin);
 				$message = $vin . '已成功退库，请开往' . $data['row'];
 
+				$car->warehouse_id = $data['warehouse_id'];
+                $car->area = $data['area'];
+                $car->save();
+
 				// $oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
 				// if(!empty($oldRow)){
 				// 	$oldRow->quantity -= 1;
@@ -315,6 +320,20 @@ class OrderController extends BmsBaseController
 			$this->renderJsonBms(true, $message, $data);
 		} catch(Exception $e) {
 			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionQueryOrderCars() {
+		try{
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$outDate = $this->validateStringVal('standbyDate', '');
+
+			$seeker = new CarSeeker();
+			$data = $seeker-> queryOrderCar($orderNumber, $standbyDate='');
+
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch (Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}

@@ -17,7 +17,8 @@ class ExecutionController extends BmsBaseController
 		'ManufactureQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 		'ComponentQuery' => array('READ_ONLY', 'COMPONENT_TRACE_QUERY'),
         'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
-		'BalanceQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+        'BalanceQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+		'OrderCarQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 	);
 	/**
 	 * Declares class-based actions.
@@ -421,11 +422,15 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			//$car->checkTestLinePassed();
+			$car->checkTestLinePassed();
 
             $car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
-            $onlyOnce = true;
+			if($car->car->warehouse_id > 1){
+				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
+			}
+            $onlyOnce = false;
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             
             //do not make the car standby while checkin point temporally
@@ -468,7 +473,7 @@ class ExecutionController extends BmsBaseController
             $data = '';
             $warehouse = new Warehouse;
             $data = $warehouse->checkout($vin);
-            $message = $vin . '已成功出库，请开往车道' . $data['lane'];
+            $message = $vin . '已成功出库，请开往车道' . $data['lane'] . '['. $data['distributor_name'] .']';
 
             $car->car->lane_id = $data['lane_id'];
             $car->car->distributor_name = $data['distributor_name'];
@@ -520,7 +525,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,驾驶员,录入人员,录入时间\n";
+            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,经销商,节点,驾驶员,录入人员,录入时间\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['vin']},";
@@ -533,7 +538,9 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['status']},";
                 $content .= "{$data['special_order']},";
                 $data['remark'] = str_replace(",", "，",$data['remark']);
+                $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
+                $content .= "{$data['distributor_name']},";
                 $content .= "{$data['node_name']},";
                 $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
@@ -676,18 +683,12 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 
-		 $vin = 'LGXC14DA4D0017350';
-		 $sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
-		 FROM Summary WHERE vin='$vin'";
-			
-		 $ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
-		 //echo $ret['vin'];
-		// if(empty($ret)){
-//		 	throw new Exception('此车未经过检测线，请返回检测线进行检验');
-//		 } else if($ret['Final_Flag'] == 'F') {
-//		 	throw new Exception('此车检测线未合格，请返回检测线进行检验');
-//		 }
-		$this->renderJsonBms(true, 'OK', $ret['Final_Flag']);
+		  $state = 'assembly';
+            $series = 'F0';
+            $color ='德兰黑';
+            $seeker = new CarSeeker();
+            $data = $seeker -> configColdArray($state, $series, $color);
+            $this->renderJsonBms(true, 'OK', $data);
         
     }
 

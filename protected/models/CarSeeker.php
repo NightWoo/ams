@@ -1,6 +1,7 @@
 <?php
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderConfigAR');
+Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.Car');
 
 class CarSeeker
@@ -14,8 +15,10 @@ class CarSeeker
 		'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常'),
 		'recycle' => array('VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常'),
 		'WH' => array('成品库'),
-		'assembly' => array('彩车身库','T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
+		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
 	);
+
+	private static $COLD_RESISTANT = array('耐寒','非耐寒');
 
 	public function __construct(){
 	}
@@ -110,7 +113,7 @@ class CarSeeker
 		$dataSeriesX = array();
 		$dataSeriesY = array();
 		$seriesTotal = array();
-		$stateTotal =array();
+		$stateTotal = array();
 		foreach($seriesArray as $series){
 			$seriesTotal[$seriesName[$series]] = 0;
 		}
@@ -148,7 +151,68 @@ class CarSeeker
 		);	
 	}
 
-	public function countStateCars($state,$series) {
+	public function balanceDistribute($state, $series){
+		
+		$stateName = $this->stateName();
+
+		$colorArray = $this->colorCategories($series);
+		$configColdArray = $this->configColdArray($state, $series);
+
+		$detail = array();
+		$colorTotal = array();
+		foreach($colorArray as $color){
+			$colorTotal[$color] = 0;
+		}
+
+		$configNameArray = array();
+		$configTotal = array();
+		foreach($configColdArray as $configCold){
+			$configNameArray[] = $configCold['name']; 
+			$configTotal[$configCold['name']] = 0;
+		}
+		$dataPie = array();
+
+		foreach($colorArray as $index => $color){
+			$data = array();
+			$temp = array();
+			$colorCount = $this->countStateCars($state, $series, $color);
+			$data['y'] = $colorCount;
+			$colorTotal[$color] += $colorCount;
+
+			//$configColdArray = $this->configColdArray($state, $series, $color);
+			$drilldownCategories = array();
+			$drilldownData = array();
+			foreach($configColdArray as $configCold){
+				$configCount = $this->countStateCars($state,$series, $color, $configCold['order_config_id'], $configCold['cold_resistant']);
+				if(!empty($configCount)){					
+					$drilldownCategories[] = $configCold['name'];
+					$drilldownData[] = $configCount;					
+					$configTotal[$configCold['name']] += $configCount;
+				}
+				$temp[$configCold['name']] = $configCount;
+
+			}
+			$data['drilldown'] = array(
+				'name' => $color,
+				'categories' => $drilldownCategories,
+				'data' => $drilldownData,
+			);
+			$dataPie[] = $data;
+			$detail[] = array_merge(array('color' => $color), $temp);
+		}
+
+		return array(
+			'colorArray' => $colorArray,
+			'configNameArray' =>$configNameArray,
+			'detail' => $detail,
+			'colorTotal'=> $colorTotal,
+			'configTotal'=> $configTotal,
+			'dataPie' => $dataPie,
+		);
+
+	}
+
+	public function queryBalanceCars($state, $series){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -160,14 +224,123 @@ class CarSeeker
 		}
 
 		$str = "'" . join("','", $states) . "'";
-		$condition = " WHERE status IN ($str)";
+		$condition = "status IN ($str)";
 		if(!empty($series)){
 			$condition .= " AND series='$series'";
 		}
 
-		$sql = "SELECT count(DISTINCT id) FROM car $condition";	
+		$sql = "SELECT car_id,, `status`, vin, series, color, type, car_model, config_id, config_name, order_config_name,
+				FROM view_car_info_main
+				WHERE $condition";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($cars as &$car){
+			$car['type_info'] = $car['car_model'] . "/" . $car['order_config_name'];
+			if($car['cold_resistant'] == 1){
+				$car['type_info'] .= "/耐寒型";
+			} else {
+				$car['type_info'] .= "/非耐寒";
+			}
+		}
+		return $cars;
+	}
+
+	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2) {
+		if(!is_array($state)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
+				$states = self::$NODE_BALANCE_STATE[$state];
+			} else {
+				$states = array($state);
+			}
+		} else {
+			$states = $state;
+		}
+
+		$sql = "SELECT id FROM car_config WHERE order_config_id = $orderConfigId";
+        $configId = Yii::app()->db->createCommand($sql)->queryColumn();
+        $configIds = join(',', $configId);
+
+		$str = "'" . join("','", $states) . "'";
+		$condition = " WHERE status IN ($str)";
+		if(!empty($series)){
+			$condition .= " AND series='$series'";
+		}
+		if(!empty($color)){
+			$condition .= " AND color='$color'";
+		}
+		if(!empty($orderConfigId)){
+			$condition .= " AND config_id IN ($configIds)";
+		}
+		if($coldResistant != 2){
+			$condition .= " AND cold_resistant=$coldResistant";
+		}
+
+		$sql = "SELECT count(*) FROM car $condition";	
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $total;
+	}
+
+	public function queryOrderCar($orderNumber, $standbyDate=''){
+		$configNames = $this->configNameList();
+		$orderNumber = '';
+		$distributorName = '';
+		$sql = "SELECT id as order_id, order_number, standby_date, distributor_name FROM `order` WHERE order_number LIKE '%$orderNumber' AND amount = count";
+		if(!empty($standbyDate)){
+			$sql  .= " AND standby_date='$standbyDate'";
+		}
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$sqls = array();
+		foreach($orders as $order){
+			$orderNumber = $order['order_number'];
+			$distributorName = $order['distributor_name'];
+			$orderId= $order['order_id'];
+			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,distributor_name,lane_id,distribute_time,remark
+							FROM car 
+							WHERE order_id = $orderId)";
+		}
+		$dataSql = join(' UNION ALL ', $sqls);
+		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+
+		foreach($datas as &$data){
+			$data['config_name'] = $configNames[$data['config_id']];
+			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
+			$car = $car = Car::create($data['vin']);
+			$engineTrace = $car->checkTraceGasolineEngine();
+			$data['engine_code'] = $engineTrace->bar_code;
+			$data['order_number'] = $orderNumber;
+			if(!empty($data['lane_id'])){
+				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
+			}
+		}
+
+		return array('distributor_name' => $distributorName,
+					'cars' => $datas);
+	}
+
+	public function configColdArray($state, $series){
+		if(!is_array($state)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
+				$states = self::$NODE_BALANCE_STATE[$state];
+			} else {
+				$states = array($state);
+			}
+		} else {
+			$states = $state;
+		}
+
+		$str = "'" . join("','", $states) . "'";
+		$condition = " WHERE status IN ($str) AND series='$series'";
+
+		$sql = "SELECT DISTINCT order_config_id, cold_resistant, order_config_name FROM view_car_info_main $condition";
+		$configColdArray = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($configColdArray as &$configCold){
+			$configCold['name'] = '';
+			if(!empty($configCold['order_config_id'])){
+				$configFullName = $configCold['order_config_name'] . '/' . self::$COLD_RESISTANT[$configCold['cold_resistant']];
+				$configCold['name'] = $configFullName;
+			}
+		}
+		return $configColdArray;
 	}
 
 	private function parseSeries($series) {
@@ -198,8 +371,8 @@ class CarSeeker
 			'VQ3' => array('VQ3'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
 			'WH' => array('WH'),
-			'assembly' => array('PBS','onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
-			'mergeRecyle' => array('PBS','onLine','recycle', 'WH'),
+			'assembly' => array('onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
+			'mergeRecyle' => array('onLine','recycle', 'WH'),
 		);
 		return $stateMap[$state];
 	}
@@ -208,7 +381,7 @@ class CarSeeker
 		$stateName = array(
 			'PBS' => 'PBS',
 			'onLine' => 'I线',
-			'VQ1' => 'VQ1(异常)',
+			'VQ1' => 'VQ1',
 			'VQ1-EXCEPTION' => 'VQ1(异常)',
 			'VQ2' => 'VQ2',
 			'VQ3' => 'VQ3',
@@ -218,6 +391,49 @@ class CarSeeker
 		);
 
 		return $stateName;
+	}
+
+	private function configNameList(){
+		$configName = array();
+		$sql = "SELECT car_config_id, order_config_id , name , car_model FROM view_config_name";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($datas as $data){
+			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
+		}
+		return $configName;
+	}
+
+	private function configIdList(){
+		$configIds = array();
+		$sql = "SELECT car_config_id, order_config_id , name FROM view_config_name";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($data as $data){
+			if(empty($configId[$data['name']])){
+				$configIds[$data['name']] = array();
+			}
+			$configIds[$data['name']][] = $data['car_config_id'];
+		}
+		return $configIds;
+	}
+
+	private function colorCategories($series){
+		$colors = array();
+		$sql = "SELECT color from car_color_map WHERE series='$series'";
+		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
+		// foreach($datas as $data){
+		// 	$colors[] = $data['color'];
+		// }
+		return $datas;
+	}
+
+	private function configCategories($series){
+		$configs = array();
+		$sql = "SELECT id from car_config WHERE series='$series'";
+		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
+		foreach($datas as $data){
+			$configs[] = $data['id'];
+		}
+		return $configs;
 	}
 
 }
