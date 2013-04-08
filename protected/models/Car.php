@@ -806,7 +806,11 @@ class Car
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
         $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
-		$barcodeGenerator->generate($engineTrace->bar_code,'./' . $engineBarCodePath);
+        $engineCode = $engineTrace->bar_code;
+		$barcodeGenerator->generate($engineCode,'./' . $engineBarCodePath);
+
+		$this->car->engine_code = $engineCode;
+		$this->car->save();
 			
 		$ret = array(
 			'vinBarCode' => "/bms/" .$vinBarCodePath,
@@ -843,7 +847,7 @@ class Car
             $warehouse->save();
 
             $this->car->order_id = $data['orderId'];
-            $this->car->status = '成品库_' . $area;
+            $this->car->status = 'WDI';
             $this->car->warehouse_id = $warehouse->id;
             $this->car->save();
 

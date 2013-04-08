@@ -28,7 +28,6 @@ $(document).ready(function () {
 		if($.trim($("#orderNumberText").val()) == "" && $.trim($("#standbyDate").val()) == ""){
 			alert('至少需要一个查询条件')
 		} else {
-			checkCondition();
 			$("#divInfo").hide();
 			$("#resultTable").hide();
 			$("#resultTable tbody").text("");
@@ -43,7 +42,6 @@ $(document).ready(function () {
 				if($.trim($("#orderNumberText").val()) == "" && $.trim($("#standbyDate").val()) == ""){
 					alert('至少需要一个查询条件')
 				} else {
-					checkCondition();
 					$("#divInfo").hide();
 					$("#resultTable").hide();
 					$("#resultTable tbody").text("");
@@ -54,20 +52,14 @@ $(document).ready(function () {
 		}	
 	});
 
-	function checkCondition() {
-		if($.trim($("#orderNumberText").val()) != "" && $.trim($("#standbyDate").val()) != ""){
-			alert('至少需要一个查询条件')
-		}
-	}
-
 	function ajaxQuery (argument) {
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: QUERY_ORDER_CARS ,//ref:  /bms/js/service.js
 		    data: {
-		    	"orderNumber": $('#orderNumberText').val(),
-		    	"standbyDate":$("#standbyDate").val()},
+		    	"orderNumber": $("#orderNumberText").val(),
+		    	"standbyDate":$ ("#standbyDate").val()},
 		    success:function (response) {
 		    	if(response.success){
 		    		var cars = response.data.cars;

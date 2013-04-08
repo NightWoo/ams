@@ -121,7 +121,7 @@ class Order
 			
 			$data['orderId'] = $order->id;
 			$data['orderNumber'] = $order->order_number;
-			//$data['lane'] = $order->lane;
+			// $data['lane_id'] = $order->lane_id;
 			$success = true;
 		}
 
@@ -174,7 +174,7 @@ class Order
 				$matchedCar->order_id = $matchedOrder->id;
 				// $matchedCar->lane_id = $matchedOrder->lane_id;
 				$matchedCar->warehouse_id = 1;		//WDI
-				$matchedCar->status = '成品库';
+				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';
 
 				$warehouse->save();

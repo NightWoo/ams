@@ -76,7 +76,7 @@ $("document").ready(function() {
 			async:false,
 			success: function(response){
 				if(response.success){
-					$(".nowTime").html(nowTime());
+					$(".nowTime").html("入库"+nowTime());
 					$("#rowPrint").html(response.data.row);
 					$("#vinPrint").html(response.data.vin);
 				  	fadeMessageAlert(response.message,"alert-success");
@@ -126,7 +126,7 @@ $("document").ready(function() {
 		toggleVinHint(true);
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
-		$(".nowTime").html(nowTime());
+		$(".nowTime").html("入库"+nowTime());
 		$("#driver").html("司机")
 	}
 

@@ -240,7 +240,11 @@
                         <?php 
                             for($i=1;$i<52;$i++){
                                 $num = sprintf("%02d", $i);
-                                $ret = "<option value=". $i .">$num</option>";
+                                if($i<51){
+	                                $ret = "<option value=". $i .">$num</option>";
+                                } else {
+	                                $ret = "<option value=". $i .">加车道</option>";
+                                }
                                 echo $ret;
                             }
                         ?>

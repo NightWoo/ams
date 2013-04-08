@@ -2,6 +2,7 @@
 Yii::import('application.models.AR.NodeAR');
 Yii::import('application.models.AR.NodeTraceAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.User');
 
 class NodeSeeker
@@ -39,12 +40,31 @@ class NodeSeeker
             $userInfos[$user['id']] = $user['display_name'];
         }
 
-        $sql = "SELECT id,name FROM car_config";
-        $configs = Yii::app()->db->createCommand($sql)->queryAll();
-        $configInfos = array();
-        foreach($configs as $config) {
-            $configInfos[$config['id']] = $config['name'];
-        }
+        // $sql = "SELECT id,name FROM car_config";
+        // $configs = Yii::app()->db->createCommand($sql)->queryAll();
+        // $configInfos = array();
+        // foreach($configs as $config) {
+        //     $configInfos[$config['id']] = $config['name'];
+        // }
+        $sql = "SELECT id, name, order_config_id FROM car_config";
+		$configs = Yii::app()->db->createCommand($sql)->queryAll();
+		$configInfos = array();
+		foreach($configs as $config){
+			$configInfos[$config['id']]['configName'] = $config['name'];
+			$order = OrderConfigAR::model()->findByPk($config['order_config_id']);
+			if(!empty($order)){
+				$configInfos[$config['id']]['orderConfigName'] = $order->name;
+			} else {
+				$configInfos[$config['id']]['orderConfigName'] = $config['name'];
+			}
+		}
+
+		$sql = "SELECT car_type, car_model FROM car_type_map";
+		$carModels = Yii::app()->db->createCommand($sql)->queryAll();
+		$modelInfo = array();
+		foreach($carModels as $carModel){
+			$modelInfo[$carModel['car_type']]= $carModel['car_model'];
+		}
 
         $sql = "SELECT id,display_name FROM node";
         $nodes = Yii::app()->db->createCommand($sql)->queryAll();
@@ -112,6 +132,21 @@ class NodeSeeker
         		$data['config_name'] = $configInfos[$data['config_id']];
         	} else {
         		$data['config_name'] = '-';
+        	}
+
+        	if(!empty($data['type'])){
+	        	$data['car_model'] = $modelInfo[$data['type']];
+        	} else {
+        		$data['car_model'] ='';
+        	}
+        	if(!empty($data['config_id'])){
+        		$data['config_Name'] = $configInfos[$data['config_id']]['configName'];
+	        	$data['order_config_name'] = $configInfos[$data['config_id']]['orderConfigName'];
+	        	$data['type_config'] = $data['car_model'] . '/' . $data['order_config_name'];
+        	}else {
+        		$data['config_Name'] = '';
+	        	$data['order_config_name'] = '';
+	        	$data['type_config'] = $data['type'];
         	}
         	$data['node_name'] = $nodeInfos[$data['node_id']];
         }

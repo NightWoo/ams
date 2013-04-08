@@ -132,6 +132,10 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
+			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2路试还有未修复的故障');
+            }
             //$car->passNode('VQ3');
             $data = $car->car;
 
@@ -326,7 +330,7 @@ class CarController extends BmsBaseController
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
 			if($car->car->warehouse_id > 1){
-				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}
 
@@ -451,22 +455,25 @@ class CarController extends BmsBaseController
             $seeker = new CarSeeker();
             list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0);
             
-            $title = "车系,VIN,颜色,车型,车型/配置,耐寒性,状态,库区,下线时间,入库时间,备注\n";
+            $title = "carID,流水号,VIN,车系,颜色,车型,车型/配置,耐寒性,状态,下线时间,入库时间,特殊订单号,备注,库区\n";
             $content = "";
             foreach($datas as $data) {
-                $content .= "{$data['series']},";
+                $content .= "{$data['car_id']},";
+                $content .= "{$data['serial_number']},";
                 $content .= "{$data['vin']},";
+                $content .= "{$data['series']},";
                 $content .= "{$data['color']},";
                 $content .= "{$data['type']},";
                 $content .= "{$data['type_info']},";
                 $content .= "{$data['cold']},";
                 $content .= "{$data['status']},";
-                $content .= "{$data['row']},";
                 $content .= "{$data['finish_time']},";
                 $content .= "{$data['warehouse_time']},";
+                $content .= "{$data['special_order']},";
                 $data['remark'] = str_replace(",", "，",$data['remark']);
                 $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
+                $content .= "{$data['row']},";
                 $content .= "\n";
             }
             $export = new Export($state . '结存查询_' .date('Ymd'), $title . $content);

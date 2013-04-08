@@ -145,7 +145,7 @@ $("document").ready(function() {
 		$("#tableList tbody").text("");
 		//set default queue time and get queue
 		// $("#startTime").val(window.byd.DateUtil.todayBeginTime);
-		$("#startTime").val('2013-03-01 08:00');
+		$("#startTime").val('2013-04-06 08:00');
 		$("#endTime").val(window.byd.DateUtil.todayEndTime);
 		ajaxGetPrintList();
 

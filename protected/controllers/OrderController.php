@@ -305,9 +305,9 @@ class OrderController extends BmsBaseController
 				$data = $warehouse->checkin($vin);
 				$message = $vin . '已成功退库，请开往' . $data['row'];
 
-				$car->warehouse_id = $data['warehouse_id'];
-                $car->area = $data['area'];
-                $car->save();
+				$car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->area = $data['area'];
+                $car->car->save();
 
 				// $oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
 				// if(!empty($oldRow)){
@@ -327,10 +327,10 @@ class OrderController extends BmsBaseController
 	public function actionQueryOrderCars() {
 		try{
 			$orderNumber = $this->validateStringVal('orderNumber', '');
-			$outDate = $this->validateStringVal('standbyDate', '');
+			$standbyDate = $this->validateStringVal('standbyDate', '');
 
 			$seeker = new CarSeeker();
-			$data = $seeker-> queryOrderCar($orderNumber, $standbyDate='');
+			$data = $seeker-> queryOrderCar($orderNumber, $standbyDate);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch (Exception $e) {

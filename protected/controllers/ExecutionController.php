@@ -296,12 +296,21 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
             $driverId = $this->validateStringVal('driver', 0);
 
+			
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
-
+			
             $car = Car::create($vin);
             $car->leftNode('ROAD_TEST_FINISH');
+			
+			$fault = Fault::createSeeker();
+			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
+            }
+		
+			
 			$car->passNode('VQ3');
             $car->enterNode('VQ2', $driverId);
 
@@ -525,26 +534,27 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,经销商,节点,驾驶员,录入人员,录入时间\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
+                $content .= "{$data['serial_number']},";
                 $content .= "{$data['vin']},";
                 $content .= "{$data['series']},";
-                $content .= "{$data['serial_number']},";
-                $content .= "{$data['type']},";
                 $content .= "{$data['color']},";
+                $content .= "{$data['type']},";
+                $content .= "{$data['type_config']},";
                 $content .= "{$data['cold_resistant']},";
-                $content .= "{$data['config_name']},";
                 $content .= "{$data['status']},";
+                $content .= "{$data['pass_time']},";
+                $content .= "{$data['distributor_name']},";
                 $content .= "{$data['special_order']},";
                 $data['remark'] = str_replace(",", "，",$data['remark']);
                 $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
-                $content .= "{$data['distributor_name']},";
                 $content .= "{$data['node_name']},";
                 $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
-                $content .= "{$data['pass_time']}\n";
+                $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);
             $export->toCSV();

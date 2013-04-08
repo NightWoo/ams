@@ -323,7 +323,7 @@ $(document).ready(function () {
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var serialTd = "<td>" + value.serial_number + "</td>";
 		    			var carTypeTd = "<td>" + value.type + "</td>";
-		    			var configTd = "<td>" + value.config_name + "</td>";
+		    			var configTd = "<td>" + value.type_config + "</td>";
 		    			var colorTd = "<td>" + value.color + "</td>";
 		    			var coldTd = "<td>" + value.cold_resistant + "</td>";
 		    			var statusTd = "<td>" + value.status + "</td>";

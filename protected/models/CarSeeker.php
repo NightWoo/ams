@@ -14,7 +14,8 @@ class CarSeeker
 		'VQ2' => array('整车下线', '出生产车间', '检测线缓冲', 'VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨'),
 		'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常'),
 		'recycle' => array('VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常'),
-		'WH' => array('成品库'),
+		'WH' => array('成品库','WDI'),
+		'WHin' => array('成品库'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
 	);
 
@@ -70,7 +71,7 @@ class CarSeeker
 			$offset = ($curPage - 1) * $perPage;
 			$limit = "LIMIT $offset, $perPage";
 		}
-		$sql = "SELECT series, vin, type, color, cold_resistant, status, config_id, modify_time,warehouse_id, assembly_line, finish_time, warehouse_time, distribute_time, remark FROM car $condition ORDER BY finish_time ASC $limit";
+		$sql = "SELECT id as car_id, series,serial_number, vin, type, color, cold_resistant, status, config_id, modify_time,warehouse_id, assembly_line, finish_time, warehouse_time, distribute_time,special_order, remark FROM car $condition ORDER BY finish_time ASC $limit";
         $cars = Yii::app()->db->createCommand($sql)->queryAll();
         foreach($cars as &$car){
         	if(!empty($car['type'])){
@@ -281,7 +282,6 @@ class CarSeeker
 
 	public function queryOrderCar($orderNumber, $standbyDate=''){
 		$configNames = $this->configNameList();
-		$orderNumber = '';
 		$distributorName = '';
 		$sql = "SELECT id as order_id, order_number, standby_date, distributor_name FROM `order` WHERE order_number LIKE '%$orderNumber' AND amount = count";
 		if(!empty($standbyDate)){
@@ -293,19 +293,23 @@ class CarSeeker
 			$orderNumber = $order['order_number'];
 			$distributorName = $order['distributor_name'];
 			$orderId= $order['order_id'];
-			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,distributor_name,lane_id,distribute_time,remark
+			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,remark
 							FROM car 
 							WHERE order_id = $orderId)";
 		}
 		$dataSql = join(' UNION ALL ', $sqls);
-		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
-
+		if(!empty($sqls)){
+			$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+		}
+		if(empty($datas)){
+			throw new Exception("订单" .$orderNumber. "在该日期条件下无车辆明细数据");
+		}
 		foreach($datas as &$data){
 			$data['config_name'] = $configNames[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
-			$car = $car = Car::create($data['vin']);
-			$engineTrace = $car->checkTraceGasolineEngine();
-			$data['engine_code'] = $engineTrace->bar_code;
+			// $car = $car = Car::create($data['vin']);
+			// $engineTrace = $car->checkTraceGasolineEngine();
+			// $data['engine_code'] = $engineTrace->bar_code;
 			$data['order_number'] = $orderNumber;
 			if(!empty($data['lane_id'])){
 				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
@@ -371,6 +375,7 @@ class CarSeeker
 			'VQ3' => array('VQ3'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
 			'WH' => array('WH'),
+			'WHin' => array('WHin'),
 			'assembly' => array('onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
 			'mergeRecyle' => array('onLine','recycle', 'WH'),
 		);

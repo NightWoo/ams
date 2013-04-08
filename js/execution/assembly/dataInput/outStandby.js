@@ -74,7 +74,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success) {
 					var data = response.data;
-					$(".nowTime").html(nowTime());
+					$(".nowTime").html("备车"+nowTime());
 					$("#rowInfo,#rowPrint").html(data.row);
 					$("#vinInfo,#vinPrint").html(data.vin);
 					$("#seriesInfo").html(data.series);
@@ -117,7 +117,7 @@ $(document).ready(function() {
 		$("#cardNumber").focus();
 		// $("#btnSubmit").attr("disabled","disabled");
 		// ajaxGetOrder();
-		$(".nowTime").html(nowTime());
+		$(".nowTime").html("备车"+nowTime());
 		$("#driver").html("司机")
 	}
 
