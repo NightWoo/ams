@@ -255,9 +255,9 @@ class Car
             throw new Exception('不存在名字为' . $nodeName . '的节点');
         }
 
-		if(YII_DEBUG) {
-		 	return;
-		}
+		//if(YII_DEBUG) {
+		// 	return;
+		//}
 		
         $nodeId = $node->id;
         $exist = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,$nodeId));

@@ -288,16 +288,19 @@ class CarSeeker
 			$sql  .= " AND standby_date='$standbyDate'";
 		}
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$orderNumberArray = array();
 		$sqls = array();
 		foreach($orders as $order){
+			$orderNumberArray[$order['order_id']] = $order['order_number'];
 			$orderNumber = $order['order_number'];
 			$distributorName = $order['distributor_name'];
 			$orderId= $order['order_id'];
-			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,remark
+			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,remark
 							FROM car 
 							WHERE order_id = $orderId)";
 		}
 		$dataSql = join(' UNION ALL ', $sqls);
+		$dataSql .= "ORDER BY order_id, distribute_time ASC";
 		if(!empty($sqls)){
 			$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 		}
@@ -310,7 +313,7 @@ class CarSeeker
 			// $car = $car = Car::create($data['vin']);
 			// $engineTrace = $car->checkTraceGasolineEngine();
 			// $data['engine_code'] = $engineTrace->bar_code;
-			$data['order_number'] = $orderNumber;
+			$data['order_number'] = $orderNumberArray[$data['order_id']];
 			if(!empty($data['lane_id'])){
 				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
 			}
@@ -392,6 +395,7 @@ class CarSeeker
 			'VQ3' => 'VQ3',
 			'recycle' => '周转车',
 			'WH' => '成品库',
+			'WHin' => '成品库(除WDI)',
 			'assembly' => '总装'
 		);
 

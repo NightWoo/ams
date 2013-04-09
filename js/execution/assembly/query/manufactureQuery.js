@@ -322,24 +322,26 @@ $(document).ready(function () {
 		    			var vinTd = "<td>" + value.vin + "</td>";
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var serialTd = "<td>" + value.serial_number + "</td>";
-		    			var carTypeTd = "<td>" + value.type + "</td>";
+		    			// var carTypeTd = "<td>" + value.type + "</td>";
 		    			var configTd = "<td>" + value.type_config + "</td>";
 		    			var colorTd = "<td>" + value.color + "</td>";
 		    			var coldTd = "<td>" + value.cold_resistant + "</td>";
 		    			var statusTd = "<td>" + value.status + "</td>";
 		    			var remarkTd = "<td>" + value.remark + "</td>";
 		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
+		    			// var orderNumberTd = "<td>" + value.order_number + "</td>";
 		    			var tr = "<tr>"
 		    				+ vinTd 
 		    				+ seriesTd 
 		    				+ serialTd 
-		    				+ carTypeTd
+		    				// + carTypeTd
 		    				+ configTd
 		    				+ colorTd
 		    				+ coldTd 
 		    				+ statusTd 
 		    				+ remarkTd 
 		    				+ pTimeTd 
+		    				// + orderNumberTd
 		    				+ "</tr>";
 
 		    			$("#tableCars tbody").append(tr);

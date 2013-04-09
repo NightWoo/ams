@@ -127,7 +127,7 @@ class ExecutionController extends BmsBaseController
 			$leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
+            //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 			 
 
@@ -152,7 +152,7 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            $car->leftNode('F10');
+            //$car->leftNode('F10');
             $car->enterNode('F20');
 
 
@@ -534,7 +534,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员,订单号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -554,6 +554,7 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['node_name']},";
                 $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
+                $content .= "{$data['order_number']},";
                 $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);

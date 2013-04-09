@@ -54,7 +54,7 @@ class CarController extends BmsBaseController
 			$leftNode = $enterNode->getParentNode();
             
             $car = Car::create($vin);
-			$car->leftNode($leftNode->name);
+			//$car->leftNode($leftNode->name);
             
             $data = $car->car;
             if(!empty($data['warehouse_id'])){
@@ -73,7 +73,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-			$car->leftNode('F10');
+			//$car->leftNode('F10');
 			$car->checkTraceGasolineEngine();
 			//$car->checkTraceGearBox();
             $data = $car->car;
@@ -125,7 +125,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-            $car->leftNode('VQ1');
+            $car->leftNode('ROAD_TEST_FINISH');
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -176,7 +176,10 @@ class CarController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
+            //$car->leftNode($leftNode->name);
+			if(empty($car->config->name)){
+				throw new Exception($vin . '无配置');
+			}
             $configName = $car->config->name;
 			$data = array(
 				'car' => $car->car,

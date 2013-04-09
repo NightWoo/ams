@@ -99,7 +99,7 @@ class NodeSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name
+        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id
         		FROM node_trace AS n 
         		LEFT JOIN car AS c
         		ON n.car_id=c.id
@@ -147,6 +147,13 @@ class NodeSeeker
         		$data['config_Name'] = '';
 	        	$data['order_config_name'] = '';
 	        	$data['type_config'] = $data['type'];
+        	}
+        	
+        	$data['order_number']='-';
+        	if(!empty($data['order_id'])){
+        		$sql = "SELECT order_number FROM `order` WHERE id = '{$data['order_id']}'";
+        		$order_number = Yii::app()->db->createCommand($sql)->queryScalar();
+        		$data['order_number']= $order_number;
         	}
         	$data['node_name'] = $nodeInfos[$data['node_id']];
         }

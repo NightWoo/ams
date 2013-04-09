@@ -65,6 +65,7 @@
                             <th>耐寒性</th>
                             <th>颜色</th>
                             <th>发动机号</th>
+                            <th>出库时间</th>
                             <th>备注</th>
                         </tr>
                     </thead>

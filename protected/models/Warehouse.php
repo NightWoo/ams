@@ -92,6 +92,9 @@ class Warehouse
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
 			$order->count += 1;
+			if($order->amount == $order->count){
+				$order->status = 2;
+			}
 
 			//重复了···，备车匹配订单getCarStandby已经减过一次了
 			// if(!empty($row)){

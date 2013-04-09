@@ -155,13 +155,14 @@
                                         <th>VIN号</th>
                                         <th>车系</th>
                                         <th>流水号</th>
-                                        <th>车型</th>
+                                        <!-- <th>车型</th> -->
                                         <th>配置</th>
                                         <th>颜色</th>
                                         <th>耐寒性</th>
                                         <th>状态</th>
                                         <th>备注</th>
                                         <th>时间</th>
+                                        <!-- <th>订单号</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>

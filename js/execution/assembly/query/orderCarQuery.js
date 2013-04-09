@@ -64,7 +64,7 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		var cars = response.data.cars;
 		    		$("#distributorInfo").html(response.data.distributor_name);		    	 	
-		    		$("#divInfo").fadeIn(500);
+		    		//$("#divInfo").fadeIn(500);
 
 		    		$.each(cars ,function (index,value) {
 		    			var laneTd = "<td>" + value.lane + "</td>";
@@ -77,11 +77,12 @@ $(document).ready(function () {
 		    			var coldTd = "<td>" + value.cold + "</td>";
 		    			var colorTd = "<td>" + value.color + "</td>";
 		    			var engineTd = "<td>" + value.engine_code + "</td>";
+						var outDateTd = "<td>" + value.distribute_time.substr(0,16) + "</td>";
 		    			var remarkTd = "<td>" + value.remark + "</td>";
 		    			
 
 		    			var tr = "<tr>"  + orderNumberTd + laneTd + distributorNameTd + 
-		    				vinTd + seriesTd + typeTd + configTd + coldTd + colorTd + engineTd + remarkTd +"</tr>";
+		    				vinTd + seriesTd + typeTd + configTd + coldTd + colorTd + engineTd +  outDateTd + remarkTd +"</tr>";
 		    			$("#resultTable tbody").append(tr);
 		    		});
 					$("#resultTable").fadeIn(500);	//add by wujun
