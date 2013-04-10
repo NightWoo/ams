@@ -99,7 +99,7 @@ class NodeSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id
+        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
         		FROM node_trace AS n 
         		LEFT JOIN car AS c
         		ON n.car_id=c.id

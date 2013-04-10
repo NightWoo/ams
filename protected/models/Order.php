@@ -140,8 +140,8 @@ class Order
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         		$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND series=? AND type=? AND color=? AND cold_resistant=? AND config_id IN $configId ORDER BY warehouse_time ASC";
-				$values = array($order->series, $order->car_type, $order->color, $order->cold_resistant);
+				$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId ORDER BY warehouse_time ASC";
+				$values = array($order->series, $order->color, $order->cold_resistant);
 				$car = CarAR::model()->find($matchCondition, $values);
 				 if(!empty($car)){
 				 	//$carYear = CarYear::getCarYear($car->vin);

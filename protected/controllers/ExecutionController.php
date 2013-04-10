@@ -56,6 +56,16 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
 		}
     }
+
+    public function actionReport(){
+        $reportPanel = $this->validateStringVal('type','WarehouseReport');
+        try{
+            $this->render('assembly/query/' . $reportPanel);
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }        
+    }
 	
 	public function actionChild() {
 		$nodeName = $this->validateStringVal('node','NodeSelect');
@@ -534,13 +544,14 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员,订单号\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员,订单号,发动机号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
                 $content .= "{$data['vin']},";
                 $content .= "{$data['series']},";
                 $content .= "{$data['color']},";
+				$data['type'] = str_replace(",", "，",$data['type']);
                 $content .= "{$data['type']},";
                 $content .= "{$data['type_config']},";
                 $content .= "{$data['cold_resistant']},";
@@ -555,6 +566,7 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
                 $content .= "{$data['order_number']},";
+                $content .= "{$data['engine_code']},";
                 $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);
@@ -693,13 +705,33 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-		 
-		  $state = 'assembly';
-            $series = 'F0';
-            $color ='德兰黑';
-            $seeker = new CarSeeker();
-            $data = $seeker -> configColdArray($state, $series, $color);
-            $this->renderJsonBms(true, 'OK', $data);
+		 $standbyDate = '2013-04-10';
+		$data = array();
+
+		$condition = "standby_date=? AND status=1 AND amount>hold ORDER BY priority ASC";
+		$orders = OrderAR::model()->findAll($condition, array($standbyDate));
+		if(!empty($orders)){
+			foreach($orders as $order) {
+				$sql = "SELECT id FROM car_config WHERE order_config_id = $order->order_config_id";
+        		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
+        		$configId = "(" . join(',', $configId) . ")";
+
+				$matchCondition = "warehouse_id>1 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId ORDER BY warehouse_time ASC";
+				$values = array($order->series, $order->color, $order->cold_resistant);
+				$car = CarAR::model()->find($matchCondition, $values);
+				 if(!empty($car)){
+				 	//$carYear = CarYear::getCarYear($car->vin);
+					//if($carYear == $order->car_year) {
+				 		$matchedOrder = $order;
+				 		$matchedCar = $car;
+				 		break;
+				 	//}
+				 }
+			}
+		}
+		
+		print_r($matchedOrder);
+		print_r($car);
         
     }
 
