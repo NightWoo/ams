@@ -98,6 +98,11 @@ var CHECKOUT_VALIDATE = "/bms/car/validateNode";
 //var CHECKOUT_SUBMIT = "/bms/execution/enterCO";
 var CHECKOUT_SUBMIT = "/bms/execution/warehouseCheckout";
 
+var WAREHOUSE_CHECKIN_QUERY = "/bms/warehouse/checkinDetail";
+var WAREHOUSE_CHECKIN_EXPORT = "/bms/warehouse/exportCheckinDetail";
+var WAREHOUSE_CHECKOUT_QUERY = "/bms/warehouse/checkoutDetail";
+var WAREHOUSE_CHECKOUT_EXPORT = "/bms/warehouse/exportCheckoutDetail";
+
 
 var SHOW_TRACE = "/bms/car/showTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";

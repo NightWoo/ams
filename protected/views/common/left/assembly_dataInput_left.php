@@ -12,12 +12,12 @@
 			<li id="leftManufactureQueryLi"><a href="/bms/execution/query?type=ManufactureQuery">生产查询</a></li>
 			<li id="leftNodeQueryLi"><a href="/bms/execution/query?type=NodeQuery">质量查询</a></li>
 			<li id="leftBalanceQueryLi"><a href="/bms/execution/query?type=BalanceQuery">结存查询</a></li>
-			<li id="leftOrderCarQueryLi"><a href="/bms/execution/query?type=OrderCarQuery">订单车辆查询</a></li>
+			<!-- <li id="leftOrderCarQueryLi"><a href="/bms/execution/query?type=OrderCarQuery">订单车辆查询</a></li> -->
 			<!-- <li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li> -->
-		<!-- <li class="nav-header">异常操作</li>
-			<li><a href="#">配置单补打印</a></li>
-			<li><a href="#">检验跟单补打印</a></li>
-			<li><a href="#">追溯零部件换件</a></li> -->
+		<li class="nav-header">生产报表</li>
+			<li><a href="#">生产日报</a></li>
+			<li><a id="leftWarehouseReportLi" href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li>
+			<!-- <li><a href="#">追溯零部件换件</a></li> -->
 		<li class="nav-header">维护与帮助</li>
 			<li id="leftConfigLi"><a href="/bms/execution/configPlan">日执行计划</a></li>
 			<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>

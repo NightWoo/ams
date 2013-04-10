@@ -1,6 +1,8 @@
 <?php
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderConfigAR');
+Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.Car');
 
@@ -19,9 +21,93 @@ class CarSeeker
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
 	);
 
-	private static $COLD_RESISTANT = array('耐寒','非耐寒');
+	private static $COLD_RESISTANT = array('非耐寒','耐寒');
 
 	public function __construct(){
+	}
+
+
+	public function queryCheckinDetail($startTime, $endTime, $series='', $curPage=0, $perPage=0){
+		if(empty($startTime) || empty($endTime)){
+			throw new Exception ('起止时间不可为空');
+		}
+
+		$configName = $this->configNameList();
+		$condition = "warehouse_time>='$startTime' AND warehouse_time<='$endTime'";
+		if(!empty($series)){
+			$condition .= " AND series='$series'";
+		}
+		$limit = "";
+		if(!empty($perPage)) {
+			$offset = ($curPage - 1) * $perPage;
+			$limit = "LIMIT $offset, $perPage";
+		}
+
+		$dataSql = "SELECT id as car_id,serial_number,warehouse_id,vin,series,type,config_id,cold_resistant,color,engine_code,finish_time,warehouse_time,remark,special_order,assembly_line
+				      FROM car 
+				     WHERE $condition 
+			      ORDER BY distribute_time ASC $limit";
+
+		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+
+		foreach($datas as &$data){
+			$data['config_name'] = $configName[$data['config_id']];
+			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
+
+			$data['row'] = '-';
+			if(!empty($data['warehouse_id'])){
+				$data['row'] = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+			}
+		}
+
+		$countSql = "SELECT count(*) FROM car where $condition";	
+		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		return array($total, $datas);
+	}
+
+	public function queryCheckoutDetail($startTime, $endTime, $series='', $curPage=0, $perPage=0){
+		if(empty($startTime) || empty($endTime)){
+			throw new Exception ('起止时间不可为空');
+		}
+
+		$configName = $this->configNameList();
+		$condition = "distribute_time>='$startTime' AND distribute_time<='$endTime'";
+		if(!empty($series)){
+			$condition .= " AND series='$series'";
+		}
+		$limit = "";
+		if(!empty($perPage)) {
+			$offset = ($curPage - 1) * $perPage;
+			$limit = "LIMIT $offset, $perPage";
+		}
+
+		$dataSql = "SELECT id as car_id,vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,remark,special_order 
+				  FROM car 
+				  WHERE $condition 
+			  ORDER BY distribute_time ASC $limit";
+
+		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+
+		foreach($datas as &$data){
+			$data['config_name'] = $configName[$data['config_id']];
+			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
+			
+			$data['order_number'] = '-';
+			if(!empty($data['order_id'])){
+				$data['order_number'] = OrderAR::model()->findByPk($data['order_id'])->order_number;
+			}
+
+			$data['lane'] = '-';
+			if(!empty($data['lane_id'])){
+				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
+			}
+		}
+
+		$countSql = "SELECT count(*) FROM car where $condition";	
+		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		return array($total, $datas);
 	}
 
 	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0){
