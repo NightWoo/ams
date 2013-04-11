@@ -988,17 +988,21 @@ class Car
 		$engineTrace = $this->checkTraceGasolineEngine();
 		$engineCode = $engineTrace->bar_code;
 
-		$gearboxTrace = $this->checkTraceGearBox() ;
-		$gearboxCode = $gearboxTrace->bar_code;
+		$gearboxCode = '';
+		$absInfo = '';
+		if(($this->car->series != 'M6')){
+			$gearboxTrace = $this->checkTraceGearBox() ;
+			$gearboxCode = $gearboxTrace->bar_code;
 
-		$absTrace = $this->checkTraceABS();
-		if(!empty($absTrace) && ($this->car->series == 'F0')){
-			$barCode = $absTrace->bar_code;
-			$abs = $this->getAbsInfo($barCode);
-			$absInfo = '';
-			$absInfo = "ABS系统控制器型号：" . $abs['type'] . "；ABS系统控制器生产企业：" . $abs['provider'];
-			$absInfo = iconv('UTF-8', 'GB2312', $absInfo);
-			$cData['certificate_note'] .= $absInfo;
+			$absTrace = $this->checkTraceABS();
+			if(!empty($absTrace) && ($this->car->series == 'F0')){
+				$barCode = $absTrace->bar_code;
+				$abs = $this->getAbsInfo($barCode);
+				$absInfo = '';
+				$absInfo = "ABS系统控制器型号：" . $abs['type'] . "；ABS系统控制器生产企业：" . $abs['provider'];
+				$absInfo = iconv('UTF-8', 'GB2312', $absInfo);
+				$cData['certificate_note'] .= $absInfo;
+			}
 		}
 
 		$insertsql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg,WZCLXH) 
@@ -1074,6 +1078,63 @@ class Car
 							);
 
 		return array('type' => $type[$providerCode], 'provider' => $provider[$providerCode]);
+	}
+
+	public function throwVinAssembly($vin, $point, $shift='总装I线-A班'){
+		
+		// $ponit = iconv('UTF-8', 'GB2312', $ponit);
+		// $shift = iconv('UTF-8', 'GB2312', $shift);
+
+		$client = new SoapClient(Yii::app()->params['ams2vin_assembly']);
+		// $client->soap_defencoding = 'utf-8';
+		// $client->decode_utf8 = false;
+		$params = array(
+			'Vincode'=>$vin, 
+			'Work'=>$point, 
+			'Team'=>$shift
+		);
+		
+		$result = $client -> Assembly($params);
+
+		return $result;
+	}
+
+	public function throwVinStorIn($vin, $row, $driverName=''){
+		
+		// $row = iconv('UTF-8', 'GB2312', $row);
+		// $driverName = iconv('UTF-8', 'GB2312', $driverName);
+
+		$client = new SoapClient(Yii::app()->params['ams2vin_store_in']);
+		// $client->soap_defencoding = 'utf-8';
+		// $client->decode_utf8 = false;
+		$params = array(
+			'Vincode'=>$vin, 
+			'Area'=>$row, 
+			'EmpName'=>$driverName
+		);
+		$result = $client -> StoreIn($params);
+
+		return $result;
+	}
+
+	public function throwVinStorOut($vin, $lane, $order, $orderDetailId, $distributorName, $engineCode){
+		
+		// $distributorName = iconv('UTF-8', 'GB2312', $distributorName);
+
+		$client = new SoapClient(Yii::app()->params['ams2vin_store_in']);
+		// $client->soap_defencoding = 'utf-8';
+		// $client->decode_utf8 = false;
+		$params = array(
+			'Vincode'=>$vin, 
+			'Area'=>$lane, 
+			'Order'=>$order,
+			'OrderID'=>$orderDetailId,
+			'VenName'=>$distributorName,
+			'AutoEngine'=>$engineCode
+		);
+		$result = $client -> StoreOut($params);
+
+		return $result;
 	}
 
 	private function cutCarType($type) {

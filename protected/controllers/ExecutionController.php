@@ -139,7 +139,11 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
-			 
+
+            //throw T32 data to vinm
+			if($nodeName == 'T32'){
+                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
+            }
 
 			//save component trace
 			$car->addTraceComponents($enterNode, $componentCode);
@@ -150,7 +154,7 @@ class ExecutionController extends BmsBaseController
             // }
 
 			$transaction->commit();
-            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vin);
+            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName . ', VINM:'. $vinMessage, $vin);
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -165,7 +169,8 @@ class ExecutionController extends BmsBaseController
             //$car->leftNode('F10');
             $car->enterNode('F20');
 
-
+            //$vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
+            
 			//print check trace 
 			$data = $car->generateCheckTraceData();
 			$transaction->commit();
@@ -188,6 +193,9 @@ class ExecutionController extends BmsBaseController
 			$car->passNode('LEFT_WORK_SHOP');
             $car->enterNode('VQ1');
 			$car->finish();
+
+            //throw data to vinm
+            //$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
 
 			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
             $fault->save('在线');
@@ -486,7 +494,7 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
 			$car->checkTestLinePassed();
-            $onlyOnce = false;
+            $onlyOnce = true;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
             $data = '';

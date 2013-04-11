@@ -290,6 +290,7 @@ class OrderController extends BmsBaseController
 				$car->car->lane_id = 0;
 				$car->car->distributor_name='';
 				$car->car->distributor_code='';
+				$car->car->distribute_time = '0000-00-00 00:00:00';
 				$car->car->save();
 				$order->save();
 				$message = $vin . '已释放订单' . $order->order_number . '占位';

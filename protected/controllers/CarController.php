@@ -212,7 +212,15 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
             $data = $car->getAllTrace($node);
-            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' => $car->car->status));
+            $status = $car->car->status;
+            if(!empty($car->car->lane_id)){
+                $status .= '-' . LaneAR::model()->findByPk($car->car->lane_id)->name;
+            }
+            if(!empty($car->car->distributor_name)){
+                $status .= '-' . $car->car->distributor_name;
+            }
+
+            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' =>$status));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }
@@ -466,6 +474,7 @@ class CarController extends BmsBaseController
                 $content .= "{$data['vin']},";
                 $content .= "{$data['series']},";
                 $content .= "{$data['color']},";
+				$data['type'] = str_replace(",", "，",$data['type']);
                 $content .= "{$data['type']},";
                 $content .= "{$data['type_info']},";
                 $content .= "{$data['cold']},";

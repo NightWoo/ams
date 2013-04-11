@@ -54,4 +54,9 @@ return array(
 	//vinm web service soap wsdl 
 	//'vinm_wsdl' => "http://192.168.1.25/carInfo/carInfo.asmx?wsdl",
 	'vinm_wsdl' => "http://10.23.86.220/carInfo/carInfo.asmx?wsdl",
+
+	'ams2vin_assembly' => "http://10.23.11.6/csvinm/WebServices/AMS2Assembly.asmx?wsdl",
+	'ams2vin_store_in' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreIn.asmx?wsdl",
+	'ams2vin_store_out' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreOut.asmx?wsdl",
+
 );

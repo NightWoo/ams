@@ -51,6 +51,7 @@ class CarSeeker
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
 		foreach($datas as &$data){
+			if($data['series'] == '6B') $data['series'] = '思锐';
 			$data['config_name'] = $configName[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
 
@@ -90,6 +91,7 @@ class CarSeeker
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
 		foreach($datas as &$data){
+			if($data['series'] == '6B') $data['series'] = '思锐';
 			$data['config_name'] = $configName[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
 			
@@ -160,6 +162,7 @@ class CarSeeker
 		$sql = "SELECT id as car_id, series,serial_number, vin, type, color, cold_resistant, status, config_id, modify_time,warehouse_id, assembly_line, finish_time, warehouse_time, distribute_time,special_order, remark FROM car $condition ORDER BY finish_time ASC $limit";
         $cars = Yii::app()->db->createCommand($sql)->queryAll();
         foreach($cars as &$car){
+        	if($car['series'] == '6B') $car['series'] = '思锐';
         	if(!empty($car['type'])){
 	        	$car['car_model'] = $modelInfo[$car['type']];
         	} else {

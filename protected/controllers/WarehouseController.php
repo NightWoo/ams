@@ -64,7 +64,7 @@ class WarehouseController extends BmsBaseController
                 $content .= "{$data['finish_time']},";
                 $content .= "\n";
             }
-            $export = new Export('出库明细_' .date('YmdHi'), $content);
+            $export = new Export('入库明细_' .date('YmdHi'), $content);
             $export->toCSV();
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
