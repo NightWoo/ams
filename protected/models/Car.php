@@ -1080,7 +1080,7 @@ class Car
 		return array('type' => $type[$providerCode], 'provider' => $provider[$providerCode]);
 	}
 
-	public function throwVinAssembly($vin, $point, $shift='总装I线-A班'){
+	public function throwVinAssembly($vin, $point, $shift='总装1线A班'){
 		
 		// $ponit = iconv('UTF-8', 'GB2312', $ponit);
 		// $shift = iconv('UTF-8', 'GB2312', $shift);
@@ -1094,12 +1094,12 @@ class Car
 			'Team'=>$shift
 		);
 		
-		$result = $client -> Assembly($params);
+		$result = (array)$client -> Assembly($params);
 
 		return $result;
 	}
 
-	public function throwVinStorIn($vin, $row, $driverName=''){
+	public function throwVinStoreIn($vin, $row, $driverName=''){
 		
 		// $row = iconv('UTF-8', 'GB2312', $row);
 		// $driverName = iconv('UTF-8', 'GB2312', $driverName);
@@ -1117,11 +1117,11 @@ class Car
 		return $result;
 	}
 
-	public function throwVinStorOut($vin, $lane, $order, $orderDetailId, $distributorName, $engineCode){
+	public function throwVinStoreOut($vin, $lane, $order, $orderDetailId, $distributorName, $engineCode){
 		
 		// $distributorName = iconv('UTF-8', 'GB2312', $distributorName);
 
-		$client = new SoapClient(Yii::app()->params['ams2vin_store_in']);
+		$client = new SoapClient(Yii::app()->params['ams2vin_store_out']);
 		// $client->soap_defencoding = 'utf-8';
 		// $client->decode_utf8 = false;
 		$params = array(

@@ -104,7 +104,10 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-            $car->leftNode('VQ1');
+			if($car->car->series != 'M6'){
+				 $car->leftNode('VQ1');
+			}
+
 			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -124,8 +127,10 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-
-            $car->leftNode('ROAD_TEST_FINISH');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('ROAD_TEST_FINISH');
+			}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -295,8 +300,10 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 
             $car = Car::create($vin);
-
-			$car->leftNode('VQ2');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ2');
+			}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
@@ -325,7 +332,9 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
 
-			$car->leftNode('VQ3');
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ3');
+			}
 
 			$fault = Fault::createSeeker();
         	$exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));
@@ -340,9 +349,13 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			if($car->car->warehouse_id > 1){
+			if($car->car->warehouse_id > 0){
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
+			}
+			
+			if($car->car->distribute_time != '0000-00-00 00:00:00'){
+				throw new Exception($vin . '已出库，不可再入库');
 			}
 
 			$car->passNode('CHECK_OUT');

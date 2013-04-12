@@ -3,6 +3,7 @@ Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.UserAR');
 Yii::import('application.models.WarehouseSeeker');
 
 class Warehouse
@@ -28,7 +29,7 @@ class Warehouse
 		$condition = join(' AND ', $conditions);
 		$condition .= ' ORDER BY id ASC';
 		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property, 0, 0);
-			$row = WarehouseAR::model()->find($condition, $values);
+		$row = WarehouseAR::model()->find($condition, $values);
 		// if($car->special_property == 0){//普通车辆查找同型车列
 		// 	$row = WarehouseAR::model()->find($condition, $values);
 		// } else if ($car->special_property == 1){//出口车扔到F区
@@ -49,6 +50,7 @@ class Warehouse
 				$row->cold_resistant = $car->cold_resistant;
 				//$row->car_year = $carYear;
 				$row->order_config_id = $orderConfigId;
+				$row->save();
 			} else {
 				//如果连空车列都没有就扔到周转区Z
 				if($car->special_property == 1){
