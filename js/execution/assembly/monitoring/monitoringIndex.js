@@ -3,8 +3,8 @@ $(document).ready(function () {
 	$(".outware-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road-data").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".leak-data").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".vq1-data").qtip({content: "s",position: {my: 'top center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".leak-data").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".vq1-data").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
 	qtipMe(".node_pbs", "-", "blue");
 	qtipMe(".node_t0", "-", "blue");
@@ -381,9 +381,12 @@ function ajaxGetStock (argument) {
 	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
 	    			parseInt(response.data.balance.VQ3));
 	    		//refresh tips
-	    		$(".outware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
+	    		$(".outware-data").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
+	    		$(".outware-data").data("subData", response.data.balance.warehourse_out);
 	    		
-	    		$(".inware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
+	    		$(".inware-data").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
+	    		$(".inware-data").data("subData", response.data.balance.warehourse_in);
+
 	    		$(".vq3-data").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		$(".vq3-data").data("subData", response.data.drr.VQ3);
     			$(".road-data").qtip('option', 'content.text', response.data.drr.VQ2_ROAD.all);
@@ -393,8 +396,8 @@ function ajaxGetStock (argument) {
     			$(".vq1-data").qtip('option', 'content.text', response.data.drr.VQ1.all);
 	    		$(".vq1-data").data("subData", response.data.drr.VQ1);
     			//refresh stock
-    			$(".vq3-balance").html(response.data.balance.VQ3);
-    			$(".vq2-road").html(response.data.balance.VQ2);
+    			$(".vq3-balance-data").html(response.data.balance.VQ3.all);
+    			$(".vq2-road-data").html(response.data.balance.VQ2.all);
     			$(".stock-amount").html(response.data.balance.warehourse_cars);
 	    	} else {
 	    		alert(response.message);
