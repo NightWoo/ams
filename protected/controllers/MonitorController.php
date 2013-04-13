@@ -96,10 +96,6 @@ class MonitorController extends BmsBaseController
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
 
-		$vq1Balance = $seeker->queryBalanceCount('VQ1');
-		$vq2Balance = $seeker->queryBalanceCount('VQ2');
-		$vq3Balance = $seeker->queryBalanceCount('VQ3');
-
 		$nodes = array('VQ1' => 'VQ1', 'VQ2_LEAK'=> 'VQ2', 'VQ2_ROAD' => 'ROAD_TEST_FINISH', 'VQ3' => 'VQ3');	
 		$seriesArray = SeriesSeeker::findAllCode();
 		$seriesArray[] = 'all';
@@ -110,17 +106,28 @@ class MonitorController extends BmsBaseController
 			}
 		}
 
+		$balance = array();
+
+		$nodes = array('VQ1' => 'VQ1', 'VQ2'=> 'VQ2_ALL', 'VQ3' => 'VQ3');
+		foreach($seriesArray as $series) {
+			foreach($nodes as $key => $node) {
+				$balance[$key][$series] = $seeker->queryBalanceCount($node, $series);
+			}
+		}
+
+		$states = array('warehourse_in' => '成品库', 'warehourse_out' => '公司外');
+		foreach($seriesArray as $series) {
+            foreach($states as $key => $state) {
+				$balance[$key][$series] = $seeker->queryWareHourseCars($state, $series, null, null);
+            }
+        }
+
         $data = array(
             'line_speed' => $lineSpeed,
             'line_run_time' => intval($lineRunTime / 60),
             'line_urate' =>  $seeker->queryLineURate($stime, $etime),
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
-			'balance' => array(
-				'VQ1' => $vq1Balance,
-				'VQ2' => $vq2Balance,
-				'VQ3' => $vq3Balance,
-				'warehourse_cars' => $seeker->queryWareHourseCars('成品库',null, null),
-			),
+			'balance' => $balance,
 			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
 			'drr' => $drrs,
 		);
@@ -139,6 +146,7 @@ class MonitorController extends BmsBaseController
 
 	public function actionShowWarehouseAreaBalance() {
         $area = $this->validateStringVal('area', 'A');
+		$area = strtoupper($area);
         $seeker = new MonitorSeeker();
 
         $data = $seeker->queryWarehouseAreaBalance($area);

@@ -171,7 +171,7 @@ var SHOW_HOME_INFO = "/bms/monitor/showHomeEfficiency";		//added by wujun
 var SHOW_MONITOR_LABEL = "/bms/monitor/showLabel";
 var SHOW_BALANCE_DETAIL = "/bms/monitor/showBalanceDetail";
 var MONITOR_PRODUCT_INFO = "/bms/monitor/showProductInfo";
-var MONITOR_AREA_INFO = "/bms/monitor/ShowWarehouseBlockBalance";
+var MONITOR_AREA_INFO = "/bms/monitor/ShowWarehouseAreaBalance";
 var MONITOR_BLOCK_INFO = "/bms/monitor/ShowWarehouseBlockBalance";
 var MONITOR_ROW_BALANCE_DETAIL = "/bms/monitor/showWarehouseBalanceDetail";
 

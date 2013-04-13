@@ -117,7 +117,7 @@ class MonitorSeeker
 		return Yii::app()->db->createCommand($sql)->queryAll();
 	}
 
-	public function queryBalanceCount($node) {
+	public function queryBalanceCount($node, $series = 'all') {
 		if(!is_array($node)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$node])) {
 				$states = self::$NODE_BALANCE_STATE[$node];
@@ -128,31 +128,46 @@ class MonitorSeeker
 			$states = $node;
 		}
 
-		return $this->queryStateCars($states);
+		return $this->queryStateCars($states, $series);
 	}
 
-	public function queryStateCars($states,$stime = null, $etime = null) {
+	public function queryStateCars($states,$series = 'all' , $stime = null, $etime = null) {
 		$condition = '';
+		$conditions = array();
 		if(!empty($stime)) {
-			$condition .= "modify_time >= '$stime'";
+			$conditions[] = "modify_time >= '$stime'";
 		}
 		if(!empty($etime)) {
-			$condition .= "modify_time <= '$etime'";
+			$conditions[] = "modify_time <= '$etime'";
 		}   
+		if($series !== 'all') {
+			$conditions[] = "series = '$series'";
+		}
+		if(!empty($conditions)) {
+			$condition = ' AND ' . join(' AND ', $conditions);
+		}
 
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT count(*) FROM car WHERE status IN ($str) $condition";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
 
-	public function queryWareHourseCars($state, $stime = null, $etime = null) {
+	public function queryWareHourseCars($state, $series = 'all', $stime = null, $etime = null) {
 		$condition = '';
-		if(!empty($stime)) {
-			$condition .= " AND modify_time >= '$stime'";
-		}
-		if(!empty($etime)) {
-			$condition .= " AND modify_time <= '$etime'";
-		}
+        $conditions = array();
+        if(!empty($stime)) {
+            $conditions[] = "modify_time >= '$stime'";
+        }
+        if(!empty($etime)) {
+            $conditions[] = "modify_time <= '$etime'";
+        }   
+        if($series !== 'all') {
+            $conditions[] = "series = '$series'";
+        }
+        if(!empty($conditions)) {
+            $condition = ' AND ' . join(' AND ', $conditions);
+        }
+		
 
 		$sql = "SELECT count(*) FROM car WHERE status LIKE '$state%' $condition";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
