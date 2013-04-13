@@ -141,12 +141,12 @@
               			</div>
               		</div> -->
               		<div id="detect" class="tab-pane ">	
-	      				<div class="outware-data data-node"></div>
-			    		<div class="inware-data data-node"></div>
-			    		<div class="vq3-data data-node"></div>
-			    		<div class="leak-data data-node"></div>
-			    		<div class="road-data data-node"></div>
-			    		<div class="vq1-data data-node"></div>
+	      				<div class="outware-data data-node sub-flag"></div>
+			    		<div class="inware-data data-node sub-flag"></div>
+			    		<div class="vq3-data data-node sub-flag"></div>
+			    		<div class="leak-data data-node sub-flag"></div>
+			    		<div class="road-data data-node sub-flag"></div>
+			    		<div class="vq1-data data-node sub-flag"></div>
 			    		<div class="vq3-balance-data">36</div>
 				    	<div class="vq2-road-data">84</div>
 				    	<div class="vq2-leak-data"></div>
@@ -154,8 +154,8 @@
 
 	      			</div>
 	      			<div id="warehouse" class="tab-pane ">	
-						<div class="outware-warehouse warehouse-node"></div>
-			    		<div class="inware-warehouse warehouse-node"></div>
+						<div class="outware-warehouse warehouse-node sub-flag"></div>
+			    		<div class="inware-warehouse warehouse-node sub-flag"></div>
 			    		<div class="vq3-warehouse warehouse-node"></div>
 			    		<div class="area-a">a</div>
 			    		<div class="area-b">b</div>

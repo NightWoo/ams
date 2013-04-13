@@ -44,7 +44,7 @@
 	background: url('../../../../img/warehouse.jpg') no-repeat 0 0;
 
 	/*width: 748px;*/
-	height: 500px;
+	min-height: 500px;
 	/*color: #FFF;*/
 	font-weight:bold;
 	font-size:9px;
@@ -58,7 +58,7 @@
 	background: url('../../../../img/detect.jpg') no-repeat 0 0;
 
 	/*width: 870px;*/
-	height: 500px;
+	min-height: 500px;
 	/*color: #FFF;*/
 	font-weight:bold;
 	font-size:9px;
@@ -443,7 +443,8 @@ font-size: 16px;}
     position: absolute;
     width: 45px;
     cursor: pointer;
-    border:2px solid red;}
+    border:2px solid red;
+z-index: 9999;}
 
 .outware-data{left: 492px;
 top: 53px;}
