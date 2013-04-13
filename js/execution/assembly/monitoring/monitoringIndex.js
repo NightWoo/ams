@@ -6,6 +6,11 @@ $(document).ready(function () {
 	$(".leak-data").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".vq1-data").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
+	//warehouse tips
+	$(".inware-warehouse").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".outware-warehouse").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".vq3-warehouse").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+
 	qtipMe(".node_pbs", "-", "blue");
 	qtipMe(".node_t0", "-", "blue");
 	qtipMe(".node_vq1", "-", "red");
@@ -395,6 +400,18 @@ function ajaxGetStock (argument) {
 	    		$(".leak-data").data("subData", response.data.drr.VQ2_LEAK);
     			$(".vq1-data").qtip('option', 'content.text', response.data.drr.VQ1.all);
 	    		$(".vq1-data").data("subData", response.data.drr.VQ1);
+
+
+	    		//warehouse things
+	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
+	    		$(".outware-warehouse").data("subData", response.data.balance.warehourse_out);
+	    		
+	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
+	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
+
+	    		$(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
+	    		$(".vq3-warehouse").data("subData", response.data.drr.VQ3);
+
     			//refresh stock
     			$(".vq3-balance-data").html(response.data.balance.VQ3.all);
     			$(".vq2-road-data").html(response.data.balance.VQ2.all);
@@ -407,6 +424,30 @@ function ajaxGetStock (argument) {
 	});
 }
 
+// function ajaxGetWarehouseStock (argument) {
+// 	$.ajax({
+// 		type: "get",//使用get方法访问后台
+// 	    dataType: "json",//返回json格式的数据
+// 	    url: MONITOR_PRODUCT_INFO,//ref:  /bms/js/service.js
+// 	    data: {},
+// 	    success:function (response) {
+// 	    	if (response.success){
+// 	    		//refresh tips
+// 	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
+// 	    		$(".outware-warehouse").data("subData", response.data.balance.warehourse_out);
+	    		
+// 	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
+// 	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
+
+// 	    		$(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
+// 	    		$(".vq3-warehouse").data("subData", response.data.drr.VQ3);
+// 	    	} else {
+// 	    		alert(response.message);
+// 	    	}
+// 	    },
+// 	    error:function(){alertError();}
+// 	});
+// }
 
 
 // balance

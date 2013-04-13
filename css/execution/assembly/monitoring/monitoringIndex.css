@@ -443,7 +443,7 @@ font-size: 16px;}
     position: absolute;
     width: 45px;
     cursor: pointer;
-    border:2px solid red;
+    border:2px solid transparent;
 z-index: 9999;}
 
 .outware-data{left: 492px;
@@ -518,7 +518,7 @@ line-height: 76px;}
     position: absolute;
     width: 45px;
     cursor: pointer;
-    border:2px solid red;}
+    border:2px solid transparent;}
 
 .outware-warehouse{left: 205px;
 top: 236px;}
@@ -527,46 +527,60 @@ top: 328px;}
 .vq3-warehouse{left: 73px;
 top: 381px;}
 
-#blockDetail{position: absolute;
+#blockDetail{/*position: absolute;*/
 width: 300px;
-left: 735px;
-top: 67px;}
+/*left: 735px;
+top: 67px;*/
+margin-left: 735px;}
 .area-a{position: absolute;
 width: 50px;
 height: 100px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 370px;
-top: 304px;}
+top: 304px;
+cursor: pointer;
+color: transparent;}
 .area-b{position: absolute;
 width: 50px;
 height: 100px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 432px;
-top: 304px;}
+top: 304px;
+cursor: pointer;
+color: transparent;}
 .area-c{position: absolute;
 width: 50px;
 height: 100px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 494px;
-top: 304px;}
+top: 304px;
+cursor: pointer;
+color: transparent;}
 .area-d{position: absolute;
 width: 50px;
 height: 100px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 560px;
-top: 304px;}
+top: 304px;
+cursor: pointer;
+color: transparent;}
 .area-e{position: absolute;
 width: 50px;
 height: 251px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 498px;
-top: 38px;}
+top: 38px;
+cursor: pointer;
+color: transparent;}
 .area-f{position: absolute;
 width: 50px;
 height: 215px;
-border: 1px solid red;
+border: 1px solid transparent;
 left: 561px;
-top: 76px;}
+top: 76px;
+cursor: pointer;
+color: transparent;}
+.area-a:hover,.area-b:hover,.area-c:hover,.area-d:hover,.area-e:hover,.area-f:hover{border-color: orange;}
 #blockDetail p{margin:0 10px;}
 #blockDetail a{margin:10px 0}
 #blockDetail .progress{margin-bottom: 0px;}
