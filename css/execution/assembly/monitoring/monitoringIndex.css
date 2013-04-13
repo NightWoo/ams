@@ -41,19 +41,31 @@
 #warehouse {
 	position: relative;
 	/*background-image:url('../../../../img/warehouse.png');*/
-	background-image:url('../../../../img/warehouse_w724h400.png');
-	background-repeat:no-repeat;
-	/*width:1024px;*/
-	/*height:566px;*/
-	width:724px;
-	height:400px;
+	background: url('../../../../img/warehouse.jpg') no-repeat 0 0;
+
+	/*width: 748px;*/
+	height: 500px;
 	/*color: #FFF;*/
 	font-weight:bold;
 	font-size:9px;
-	text-align:center;	
 	z-index: 100; 
 	overflow: hidden;
 }
+
+#detect {
+	position: relative;
+	/*background-image:url('../../../../img/warehouse.png');*/
+	background: url('../../../../img/detect.jpg') no-repeat 0 0;
+
+	/*width: 870px;*/
+	height: 500px;
+	/*color: #FFF;*/
+	font-weight:bold;
+	font-size:9px;
+	z-index: 100; 
+	overflow: hidden;
+}
+
 .t1{
 	left:408px;
 }	
@@ -413,7 +425,6 @@ font-size: 16px;}
 .vq2-check{color: #9963FF;height: 23px;position: absolute;width: 71px;cursor: pointer;border-width: 2px;border-style: solid none none solid;border-color:  transparent;left: 34px;top: 342px;}
 .vq2-leak{color: #9963FF;height: 23px;position: absolute;width: 71px;cursor: pointer;border-width: 2px;border-style: solid none none solid;border-color:  transparent;left: 107px;top: 342px;}
 
-.border-purple{border-color:  #9963FF;color: #9963FF;}
 .stock-amount{position: absolute;left: 397px;top: 115px;font-size: 16px;color: #9963FF;}
 
 #generalInfo {
@@ -423,3 +434,138 @@ font-size: 16px;}
 #block p{margin:0 10px;}
 #block a{margin:10px 0}
 #block .progress{margin-bottom: 0px;}
+
+
+.data-node{border-radius: 23px;
+	color: white;
+    font-size: 10px;
+    height: 45px;
+    position: absolute;
+    width: 45px;
+    cursor: pointer;
+    border:2px solid red;}
+
+.outware-data{left: 492px;
+top: 53px;}
+.inware-data{left: 595px;
+top: 171px;}
+.road-data{left: 489px;
+top: 250px;}
+.vq3-data{left: 216px;top: 250px;}
+.leak-data{left: 325px;top: 250px;}
+
+.vq1-data{left: 38px;
+top: 422px;}
+
+
+.vq3-balance-data{color: transparent;
+height: 109px;
+position: absolute;
+width: 153px;
+cursor: pointer;
+border: 2px solid transparent;
+left: 153px;
+top: 243px;
+line-height: 117px;
+text-align: center;
+font-size: 16px;}
+.vq3-balance-data:hover{color: #9963FF;border-color:  #9963FF;}
+.vq2-road-data{color: transparent;
+height: 117px;
+position: absolute;
+width: 187px;
+cursor: pointer;
+border-width: 2px;
+border-style: solid none none solid;
+border-color: transparent;
+left: 316px;
+top: 242px;
+font-size: 14px;
+line-height: 117px;
+text-align: center;}
+.vq2-check-data{color: transparent;
+height: 70px;
+position: absolute;
+width: 187px;
+cursor: pointer;
+border-width: 2px;
+border-style: solid none none solid;
+border-color: transparent;
+left: 127px;
+top: 361px;
+font-size: 14px;
+line-height: 76px;}
+.vq2-leak-data{color: transparent;
+height: 70px;
+position: absolute;
+width: 187px;
+cursor: pointer;
+border-width: 2px;
+border-style: solid none none solid;
+border-color: transparent;
+left: 316px;
+top: 361px;
+font-size: 14px;
+line-height: 76px;}
+.border-purple{border-color:  #9963FF;color: #9963FF;}
+
+
+.warehouse-node{border-radius: 23px;
+	color: white;
+    font-size: 10px;
+    height: 45px;
+    position: absolute;
+    width: 45px;
+    cursor: pointer;
+    border:2px solid red;}
+
+.outware-warehouse{left: 205px;
+top: 236px;}
+.inware-warehouse{left: 250px;
+top: 328px;}
+.vq3-warehouse{left: 73px;
+top: 381px;}
+
+#blockDetail{position: absolute;
+width: 300px;
+left: 735px;
+top: 67px;}
+.area-a{position: absolute;
+width: 50px;
+height: 100px;
+border: 1px solid red;
+left: 370px;
+top: 304px;}
+.area-b{position: absolute;
+width: 50px;
+height: 100px;
+border: 1px solid red;
+left: 432px;
+top: 304px;}
+.area-c{position: absolute;
+width: 50px;
+height: 100px;
+border: 1px solid red;
+left: 494px;
+top: 304px;}
+.area-d{position: absolute;
+width: 50px;
+height: 100px;
+border: 1px solid red;
+left: 560px;
+top: 304px;}
+.area-e{position: absolute;
+width: 50px;
+height: 251px;
+border: 1px solid red;
+left: 498px;
+top: 38px;}
+.area-f{position: absolute;
+width: 50px;
+height: 215px;
+border: 1px solid red;
+left: 561px;
+top: 76px;}
+#blockDetail p{margin:0 10px;}
+#blockDetail a{margin:10px 0}
+#blockDetail .progress{margin-bottom: 0px;}
