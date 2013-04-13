@@ -1,10 +1,10 @@
 $(document).ready(function () {
-	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
-	$(".outware").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
-	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	// $(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".inware-data").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".outware-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".vq3-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".road-data").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".leak-data").qtip({content: "s",position: {my: 'bottom center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".vq1-data").qtip({content: "s",position: {my: 'top center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
 	qtipMe(".node_pbs", "-", "blue");
 	qtipMe(".node_t0", "-", "blue");
@@ -12,14 +12,14 @@ $(document).ready(function () {
 	qtipMe(".pbs", "-", "purple");
 	qtipMe(".vq1", "-", "purple");
 
-	$(".vq2-road,.vq2-check,.vq2-leak").hover(
+	$(".vq2-road-data,.vq2-check-data,.vq2-leak-data").hover(
 	  function () {
-	    $(".vq2-road").addClass("border-purple");
-	    $(".vq2-check").addClass("border-purple");
+	    $(".vq2-road-data").addClass("border-purple");
+	    $(".vq2-check-data").addClass("border-purple");
 	  },
 	  function () {
-	    $(".vq2-road").removeClass("border-purple");
-	    $(".vq2-check").removeClass("border-purple");
+	    $(".vq2-road-data").removeClass("border-purple");
+	    $(".vq2-check-data").removeClass("border-purple");
 	  }
 	);
 
@@ -72,10 +72,10 @@ $(document).ready(function () {
 
 
 	$("#modal").modal("hide");
-	$(".vq2-road,.vq2-check,.vq2-leak").live("click", function () {
+	$(".vq2-road-data,.vq2-check-data,.vq2-leak-data").live("click", function () {
 		ajaxBalance("VQ2");
 	});
-	$(".vq3-balance").live("click", function () {
+	$(".vq3-balance-data").live("click", function () {
 		ajaxBalance("VQ3");
 	});
 
@@ -137,10 +137,11 @@ $(document).ready(function () {
 	},5000);
 	
 	var detectHouseRefreshId ;
-	$("#liDetecthouse").live("click", hideAllTips);
-$("#liAssembly").live("click", showAllTips);
+	$("#liAssembly").live("click", showAssemblyTips);
+	$("#liDetect").live("click", showDetectTips);
+	$("#liWarehouse").live("click", showWarehouseTips);
 
-function hideAllTips (argument) {
+function showWarehouseTips (argument) {
 	ajaxGetStock();
 	detectHouseRefreshId = setInterval(function () {
 		ajaxGetStock();
@@ -153,14 +154,45 @@ function hideAllTips (argument) {
 	$('.pbs').qtip('toggle', false);
 	$('.vq1').qtip('toggle', false);
 
-	$('.inware').qtip('toggle', true);
-	$('.outware').qtip('toggle', true);
-	$('.vq3').qtip('toggle', true);
-	$('.road').qtip('toggle', true);
-	$('.check').qtip('toggle', true);
-	$('.leak').qtip('toggle', true);
+	$(".data-node").qtip('toggle', false);
+
+	$(".warehouse-node").qtip('toggle', true);
+
+	// $('.inware-data').qtip('toggle', true);
+	// $('.outware-data').qtip('toggle', true);
+	// $('.vq3-data').qtip('toggle', true);
+	// $('.road-data').qtip('toggle', true);
+	// $('.check-data').qtip('toggle', true);
+	// $('.leak-data').qtip('toggle', true);
+
 }
-function showAllTips (argument) {
+
+function showDetectTips (argument) {
+	ajaxGetStock();
+	detectHouseRefreshId = setInterval(function () {
+		ajaxGetStock();
+	},10000);
+	clearInterval(assemblyHouseIntervalId);
+	clearInterval(assemblyHouseRefreshId);
+	$('.node_pbs').qtip('toggle', false);
+	$('.node_t0').qtip('toggle', false);
+	$('.node_vq1').qtip('toggle', false);
+	$('.pbs').qtip('toggle', false);
+	$('.vq1').qtip('toggle', false);
+
+	$(".data-node").qtip('toggle', true);
+
+	$(".warehouse-node").qtip('toggle', false);
+
+	// $('.inware-data').qtip('toggle', true);
+	// $('.outware-data').qtip('toggle', true);
+	// $('.vq3-data').qtip('toggle', true);
+	// $('.road-data').qtip('toggle', true);
+	// $('.check-data').qtip('toggle', true);
+	// $('.leak-data').qtip('toggle', true);
+
+}
+function showAssemblyTips (argument) {
 	ajaxThreeInfo();
 	assemblyHouseIntervalId = setInterval(function () {
 		ajaxThreeInfo();
@@ -175,12 +207,15 @@ function showAllTips (argument) {
 	$('.pbs').qtip('toggle', true);
 	$('.vq1').qtip('toggle', true);
 
-	$('.inware').qtip('toggle', false);
-	$('.outware').qtip('toggle', false);
-	$('.vq3').qtip('toggle', false);
-	$('.road').qtip('toggle', false);
-	$('.check').qtip('toggle', false);
-	$('.leak').qtip('toggle', false);
+	$(".data-node").qtip('toggle', false);
+
+	$(".warehouse-node").qtip('toggle', false);
+	// $('.inware').qtip('toggle', false);
+	// $('.outware').qtip('toggle', false);
+	// $('.vq3').qtip('toggle', false);
+	// $('.road').qtip('toggle', false);
+	// $('.check').qtip('toggle', false);
+	// $('.leak').qtip('toggle', false);
 }
 });
 
@@ -337,11 +372,12 @@ function ajaxGetStock (argument) {
 	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
 	    			parseInt(response.data.balance.VQ3));
 	    		//refresh tips
-	    		$(".outware").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
-	    		$(".inware").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
-	    		$(".vq3").qtip('option', 'content.text', response.data.drr.VQ3);
-    			$(".road").qtip('option', 'content.text', response.data.drr.VQ2_ROAD);
-    			$(".leak").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
+	    		$(".outware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
+	    		$(".inware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
+	    		$(".vq3-data").qtip('option', 'content.text', response.data.drr.VQ3);
+    			$(".road-data").qtip('option', 'content.text', response.data.drr.VQ2_ROAD);
+    			$(".leak-data").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
+    			$(".vq1-data").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
     			//refresh stock
     			$(".vq3-balance").html(response.data.balance.VQ3);
     			$(".vq2-road").html(response.data.balance.VQ2);
@@ -450,16 +486,27 @@ function ajaxBalance (node) {
 	});
 }
 
-function ajaxStockyard (blockName) {
+//block click handler
+	$(".area-a,.area-b,.area-c,.area-d,.area-e,.area-f").live("click", function () {
+		var blockNumber = $(this).html();
+		if (blockNumber == $("#blockDetail").data("currentBlock")) {
+			$("#blockDetail").hide();
+			$("#blockDetail").data("currentblockDetail", "");
+		} else {
+			$("#blockDetail").data("currentBlock", blockNumber);
+			ajaxStockyard(blockNumber);
+		}
+	});
+function ajaxStockyard (areaName) {
 	$.ajax({
 		type: "get",//使用get方法访问后台
 	    dataType: "json",//返回json格式的数据
-	    url: MONITOR_BLOCK_INFO,//ref:  /bms/js/service.js
-	    data: {"block" : blockName},
+	    url: MONITOR_AREA_INFO,//ref:  /bms/js/service.js
+	    data: {"area" : areaName},
 	    success:function (response) {
 	    	if (response.success){
 	    		//clear Text
-	    		$("#block").text("");
+	    		$("#blockDetail").text("");
 	    		$.each(response.data, function (index, value) {
 	    			var a = $("<a />").addClass("thumbnail").attr("href", "#");
 	    			var p = $("<p />").addClass("pull-left").text(value.row);
@@ -474,10 +521,10 @@ function ajaxStockyard (blockName) {
 	    			a.append(p);
 	    			a.append(progress);
 	    			progress.append(bar);
-	    			$("#block").append(a);
+	    			$("#blockDetail").append(a);
 	    		});
 
-				$("#block").show();
+				$("#blockDetail").show();
 	    	} else {
 	    		alert(response.message);
 	    	}

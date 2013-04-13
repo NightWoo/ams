@@ -54,7 +54,9 @@
 	          	<div id="divTabs">
 			    	<ul id="tabs" class="nav nav-pills">
 			            <li class="active"   id="liAssembly"><a href="#index" data-toggle="tab">总装车间</a></li>
-			            <li class="" id="liDetecthouse"><a href="#detecthouse" data-toggle="tab">检测车间/成品库</a></li>
+			            <!-- <li class="" id="liDetecthouse"><a href="#detecthouse" data-toggle="tab">检测车间/成品库</a></li> -->
+			            <li class="" id="liDetect"><a href="#detect" data-toggle="tab">检测车间</a></li>
+			            <li class="" id="liWarehouse"><a href="#warehouse" data-toggle="tab">成品库</a></li>
 						<!-- <li class="" id="liWarehouse"><a href="#warehouse" data-toggle="tab">成品库</a></li> -->
 			        </ul>
 			    </div>
@@ -102,7 +104,7 @@
 		            		<span id="line_speed"></span><span style="font-size:14px">&nbsp;秒</span>
 		            	</div>
 		            </div>
-		            <div id="detecthouse" class="tab-pane ">		            	
+		            <!-- <div id="detecthouse" class="tab-pane ">		            	
 		            	<div id="background" class="pull-left">
 				    		<div class="A01 stockyard">A01</div>
 				  		  	<div class="A02 stockyard">A02</div>
@@ -135,8 +137,39 @@
 				    		<div class="stock-amount">36</div>
 				    	</div>
 				    	<div class="span4" style="margin-top:12px;" id="block">
+
               			</div>
+              		</div> -->
+              		<div id="detect" class="tab-pane ">	
+	      				<div class="outware-data data-node"></div>
+			    		<div class="inware-data data-node"></div>
+			    		<div class="vq3-data data-node"></div>
+			    		<div class="leak-data data-node"></div>
+			    		<div class="road-data data-node"></div>
+			    		<div class="vq1-data data-node"></div>
+			    		<div class="vq3-balance-data">36</div>
+				    	<div class="vq2-road-data">84</div>
+				    	<div class="vq2-leak-data"></div>
+				    	<div class="vq2-check-data"></div>
+
+	      			</div>
+	      			<div id="warehouse" class="tab-pane ">	
+						<div class="outware-warehouse warehouse-node"></div>
+			    		<div class="inware-warehouse warehouse-node"></div>
+			    		<div class="vq3-warehouse warehouse-node"></div>
+			    		<div class="area-a">a</div>
+			    		<div class="area-b">b</div>
+			    		<div class="area-c">c</div>
+			    		<div class="area-d">d</div>
+			    		<div class="area-e">e</div>
+			    		<div class="area-f">f</div>
+			    		<div class="span4" id="blockDetail">
+
+              			</div>
+	      			</div>
 		         </div>
+
+		         
 
 	            <div style="width:756px;margin-left:44px;display:none;">
 	            	<table class="table table-bordered" id="tableInfo">
