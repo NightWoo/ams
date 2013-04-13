@@ -108,7 +108,7 @@ class MonitorController extends BmsBaseController
 
 		$balance = array();
 
-		$nodes = array('VQ1' => 'VQ1', 'VQ2'=> 'VQ2_ALL', 'VQ3' => 'VQ3');
+		$nodes = array('VQ1' => 'VQ1', 'VQ2'=> 'VQ2', 'VQ3' => 'VQ3');
 		foreach($seriesArray as $series) {
 			foreach($nodes as $key => $node) {
 				$balance[$key][$series] = $seeker->queryBalanceCount($node, $series);
