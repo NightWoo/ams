@@ -3,7 +3,7 @@ $(document).ready(function () {
 	$(".outware-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3-data").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road-data").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	$(".leak-data").qtip({content: "s",position: {my: 'bottom center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
+	$(".leak-data").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".vq1-data").qtip({content: "s",position: {my: 'top center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
 	qtipMe(".node_pbs", "-", "blue");
@@ -356,6 +356,15 @@ function ajaxThreeInfo () {
 	});
 }
 
+$(".sub-flag").live("hover", function () {
+	var tipContent = "";
+	$.each($(this).data("subData"), function (k, v) {
+		if (k != "all") {
+			tipContent += k + ": " + v + ",";
+		}
+	});
+	$(this).qtip('option', 'content.text', tipContent.substr(0, tipContent.length - 1));
+});
 
 function ajaxGetStock (argument) {
 	$.ajax({
@@ -373,11 +382,16 @@ function ajaxGetStock (argument) {
 	    			parseInt(response.data.balance.VQ3));
 	    		//refresh tips
 	    		$(".outware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_out);
+	    		
 	    		$(".inware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_in);
-	    		$(".vq3-data").qtip('option', 'content.text', response.data.drr.VQ3);
-    			$(".road-data").qtip('option', 'content.text', response.data.drr.VQ2_ROAD);
-    			$(".leak-data").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
-    			$(".vq1-data").qtip('option', 'content.text', response.data.drr.VQ2_LEAK);
+	    		$(".vq3-data").qtip('option', 'content.text', response.data.drr.VQ3.all);
+	    		$(".vq3-data").data("subData", response.data.drr.VQ3);
+    			$(".road-data").qtip('option', 'content.text', response.data.drr.VQ2_ROAD.all);
+	    		$(".road-data").data("subData", response.data.drr.VQ2_ROAD);
+    			$(".leak-data").qtip('option', 'content.text', response.data.drr.VQ2_LEAK.all);
+	    		$(".leak-data").data("subData", response.data.drr.VQ2_LEAK);
+    			$(".vq1-data").qtip('option', 'content.text', response.data.drr.VQ1.all);
+	    		$(".vq1-data").data("subData", response.data.drr.VQ1);
     			//refresh stock
     			$(".vq3-balance").html(response.data.balance.VQ3);
     			$(".vq2-road").html(response.data.balance.VQ2);
@@ -491,7 +505,7 @@ function ajaxBalance (node) {
 		var blockNumber = $(this).html();
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();
-			$("#blockDetail").data("currentblockDetail", "");
+			$("#blockDetail").data("currentBlock", "");
 		} else {
 			$("#blockDetail").data("currentBlock", blockNumber);
 			ajaxStockyard(blockNumber);
