@@ -4,12 +4,12 @@ Yii::import('application.models.AR.monitor.*');
 class MonitorSeeker
 {
 	private static $NODE_BALANCE_STATE = array(
-		'PBS' => array('彩车身库'),
-		'VQ1' => array('VQ1异常'),
-		'VQ1-EXCEPTION' => array('VQ1异常'),
-		'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨'),
-		'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常')
-	);
+			'PBS' => array('彩车身库'),
+			'VQ1' => array('VQ1异常'),
+			'VQ1-EXCEPTION' => array('VQ1异常'),
+			'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨'),
+			'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常')
+			);
 
 	public function __construct(){
 	}
@@ -50,12 +50,12 @@ class MonitorSeeker
 		$date = date("Y-m-d", strtotime($stime));
 		$planCars = $this->queryPlanCars($date);
 		return array(
-			'PBS' => $this->queryFinishCars($stime,$etime,'PBS'),
-			//'T0'  => $this->queryFinishCars($stime,$etime, 'T0') . "/$planCars",
-			'T0'  => $this->queryFinishCars($stime,$etime, 'T0'),
-			//'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1') . "/$planCars",
-			'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1'),
-		);
+				'PBS' => $this->queryFinishCars($stime,$etime,'PBS'),
+				//'T0'  => $this->queryFinishCars($stime,$etime, 'T0') . "/$planCars",
+				'T0'  => $this->queryFinishCars($stime,$etime, 'T0'),
+				//'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1') . "/$planCars",
+				'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1'),
+			    );
 	}
 
 	public function queryQualityLabel($stime,$etime) {
@@ -64,14 +64,14 @@ class MonitorSeeker
 		return array(
 				//'VQ1' => "$dpu/$qua",
 				'VQ1' => "$qua",
-			);	
+			    );	
 	}
 
 	public function queryBalanceLabel($stime,$etime) {
 		return array(
-			'PBS' => $this->queryStateCars(self::$NODE_BALANCE_STATE['PBS']),
-			'VQ1' => $this->queryStateCars(self::$NODE_BALANCE_STATE['VQ1']),
-		);
+				'PBS' => $this->queryStateCars(self::$NODE_BALANCE_STATE['PBS']),
+				'VQ1' => $this->queryStateCars(self::$NODE_BALANCE_STATE['VQ1']),
+			    );
 	}
 
 	public function queryWarehouseBlockBalance($block) {
@@ -80,6 +80,14 @@ class MonitorSeeker
 
 		return $rows;
 	}
+
+	public function queryWarehouseAreaBalance($area) {
+        $sql = "SELECT row,capacity, quantity FROM warehouse WHERE area='$area'";
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        return $rows;
+    }
+
 
 	public function queryWarehouseBalanceDetail($suffix, $type = 'block') {
 		$prefix = "成品库_";
@@ -106,22 +114,22 @@ class MonitorSeeker
 		}
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
-        return Yii::app()->db->createCommand($sql)->queryAll();
+		return Yii::app()->db->createCommand($sql)->queryAll();
 	}
 
 	public function queryBalanceCount($node) {
-        if(!is_array($node)) {
-            if(!empty(self::$NODE_BALANCE_STATE[$node])) {
-                $states = self::$NODE_BALANCE_STATE[$node];
-            } else {
-                $states = array($node);
-            }
-        } else {
-            $states = $node;
-        }
+		if(!is_array($node)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$node])) {
+				$states = self::$NODE_BALANCE_STATE[$node];
+			} else {
+				$states = array($node);
+			}
+		} else {
+			$states = $node;
+		}
 
 		return $this->queryStateCars($states);
-    }
+	}
 
 	public function queryStateCars($states,$stime = null, $etime = null) {
 		$condition = '';
@@ -129,8 +137,8 @@ class MonitorSeeker
 			$condition .= "modify_time >= '$stime'";
 		}
 		if(!empty($etime)) {
-            $condition .= "modify_time <= '$etime'";
-        }   
+			$condition .= "modify_time <= '$etime'";
+		}   
 
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT count(*) FROM car WHERE status IN ($str) $condition";
@@ -139,56 +147,56 @@ class MonitorSeeker
 
 	public function queryWareHourseCars($state, $stime = null, $etime = null) {
 		$condition = '';
-        if(!empty($stime)) {
-            $condition .= " AND modify_time >= '$stime'";
-        }
-        if(!empty($etime)) {
-            $condition .= " AND modify_time <= '$etime'";
-        }
+		if(!empty($stime)) {
+			$condition .= " AND modify_time >= '$stime'";
+		}
+		if(!empty($etime)) {
+			$condition .= " AND modify_time <= '$etime'";
+		}
 
-        $sql = "SELECT count(*) FROM car WHERE status LIKE '$state%' $condition";
-        return Yii::app()->db->createCommand($sql)->queryScalar();
+		$sql = "SELECT count(*) FROM car WHERE status LIKE '$state%' $condition";
+		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
 
 	public function queryWareHoursePassCars($stime = null, $etime = null) {
-        $condition = '';
-        if(!empty($stime)) {
-            $condition .= " AND pass_time >= '$stime'";
-        }
-        if(!empty($etime)) {
-            $condition .= " AND pass_time <= '$etime'";
-        }
+		$condition = '';
+		if(!empty($stime)) {
+			$condition .= " AND pass_time >= '$stime'";
+		}
+		if(!empty($etime)) {
+			$condition .= " AND pass_time <= '$etime'";
+		}
 
-        $sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
-        $in = Yii::app()->db->createCommand($sql)->queryScalar();
+		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
+		$in = Yii::app()->db->createCommand($sql)->queryScalar();
 
 		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
-        $out = Yii::app()->db->createCommand($sql)->queryScalar();
+		$out = Yii::app()->db->createCommand($sql)->queryScalar();
 
 
 		return array('warehourse_in' => $in, 'warehourse_out' => $out);
-    }
+	}
 
 	public function queryPlanCars($date) {
 		$seeker = new PlanSeeker();
-        $plans = $seeker->search($date, '', '');
-        $planCars = 0;
-        $finishCars = 0;
+		$plans = $seeker->search($date, '', '');
+		$planCars = 0;
+		$finishCars = 0;
 
-        //stat car pass node
-        foreach($plans as $plan) {
-            $planCars += intval($plan['total']);
-            //$finishCars += intval($plan['finished']);
-        }
+		//stat car pass node
+		foreach($plans as $plan) {
+			$planCars += intval($plan['total']);
+			//$finishCars += intval($plan['finished']);
+		}
 		return $planCars;
 	}
 
 	public function queryFinishCars($stime, $etime, $node) {
 		$sql = "SELECT id FROM node WHERE name='$node'";
-        $nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
-        $sql = "SELECT count(distinct car_id) FROM node_trace WHERE pass_time>'$stime' AND pass_time < '$etime' AND node_id=$nodeId";
-        $finishCars = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $finishCars;
+		$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
+		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE pass_time>'$stime' AND pass_time < '$etime' AND node_id=$nodeId";
+		$finishCars = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $finishCars;
 	}
 
 	public function queryLinePauseTime($section, $stime, $etime, $mode = 'all', $type = '') {
@@ -247,7 +255,7 @@ class MonitorSeeker
 		$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
 		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE pass_time>'$date' AND node_id=$nodeId";
 		$finishCars = Yii::app()->db->createCommand($sql)->queryScalar();
-		
+
 		return array($planCars, $finishCars);
 	}
 
@@ -255,7 +263,7 @@ class MonitorSeeker
 	public function queryLineRunTime($stime, $etime) {
 		//deleted by wujun
 		//$lineRuns = LineRunAR::model()->findAll('event=? AND create_time >= ? AND create_time <=?', array('启动', $stime , $etime));
-        //$lineStops = LineRunAR::model()->findAll('event=? AND create_time >= ? AND create_time <=?', array('停止', $stime, $etime));
+		//$lineStops = LineRunAR::model()->findAll('event=? AND create_time >= ? AND create_time <=?', array('停止', $stime, $etime));
 
 		//$linePauses = LinePauseAR::model()->findAll("pause_time > ? AND pause_type=?" , array($stime, '计划停线'));
 
@@ -263,23 +271,23 @@ class MonitorSeeker
 		//if($diff > 1 || $diff < 0) {
 		//	throw new Exception('line run/stop record error');
 		//}
-        //$lineRunTime = 0;
+		//$lineRunTime = 0;
 		//$trips = count($lineRuns);
-        //for($i = 0; $i < $trips; $i ++) {
+		//for($i = 0; $i < $trips; $i ++) {
 		//	$lineRun = $lineRuns[$i];	
-        //   $lrST = strtotime($lineRun->create_time);
-        //    if(!empty($lineStops[$i])) {
+		//   $lrST = strtotime($lineRun->create_time);
+		//    if(!empty($lineStops[$i])) {
 		//		$lineStop = $lineStops[$i];
-        //        $lrET = strtotime($lineStop->create_time);
+		//        $lrET = strtotime($lineStop->create_time);
 		//	} else {
-        //        $lrET = time();
-        //    }
+		//        $lrET = time();
+		//    }
 
-        //    $lineRunTime += $lrET - $lrST;
+		//    $lineRunTime += $lrET - $lrST;
 		//}
 
 		$lineRunTime = strtotime($etime) - strtotime($stime);	
-        $linePauses = LinePauseAR::model()->findAll("pause_time > ? AND pause_type=?" , array($stime, '计划停线'));
+		$linePauses = LinePauseAR::model()->findAll("pause_time > ? AND pause_type=?" , array($stime, '计划停线'));
 		$planPauseTime = 0;
 		foreach($linePauses as $linePause) {
 			if($linePause->status == 1) {
@@ -330,7 +338,7 @@ class MonitorSeeker
 
 		return $restTime;
 	}
-		
+
 
 	public function queryLineURate($stime , $etime) {
 		//$linePauseTime = $this->queryLinePauseTime('', $stime, $etime, 'without_plan_to_pause');
@@ -356,14 +364,14 @@ class MonitorSeeker
 				$rate = "$rate%";	
 			}
 		}
-		
+
 		return $rate;
 	}
 
 	public function queryLineStatus($stime , $etime) {
 		$lineRun = LineRunAR::model()->find('event=? AND create_time >= ?', array('启动', $stime ));
 
-        $lineStop = LineRunAR::model()->find('event=? AND create_time >= ?', array('停止', $stime));
+		$lineStop = LineRunAR::model()->find('event=? AND create_time >= ?', array('停止', $stime));
 
 		$linePause = LinePauseAR::model()->find("status = ? AND pause_time > ?" , array(1,$stime));
 
@@ -399,8 +407,8 @@ class MonitorSeeker
 
 	public function queryLinePauseDetail($stime , $etime) {
 		$sections = array(
-			'T1','T2','T3','C1','C2','F1','F2','VQ1','L1','EF1','EF2','EF3'
-		);
+				'T1','T2','T3','C1','C2','F1','F2','VQ1','L1','EF1','EF2','EF3'
+				);
 		$ret = array();
 		$ret['total'] = 0;
 		foreach($sections as $section) {
@@ -409,14 +417,14 @@ class MonitorSeeker
 				$type = 'device';
 			}
 			$time = $this->queryLinePauseTime($section, $stime, $etime, 'all', $type);
-			
+
 			$ret[$section] = intval($time / 60);
 			$ret['total'] += $ret[$section];
 		}
 		//merge L1, EF1 EF2 EF3
 		$ret['device'] = $ret['L1'] + $ret['EF1'] + $ret['EF2'] + $ret['EF3'];
-        return $ret;
-    }
+		return $ret;
+	}
 
 
 	public function queryDPU($stime, $etime, $node = 'VQ1') {
@@ -431,7 +439,7 @@ class MonitorSeeker
 		if(!empty($condition)) {
 			$condition = 'WHERE ' . $condition;
 		}
-		
+
 		$cars = 0;
 		$total = 0;
 		$nodeIdStr = $this->parseNodeId($node);
@@ -445,8 +453,8 @@ class MonitorSeeker
 			}
 			$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time <= '$etime' AND node_id IN ($nodeIdStr) AND car_series='$series'";
 			$cars += Yii::app()->db->createCommand($sql)->queryScalar();
-				
-        }
+
+		}
 		$dpu = '-';
 		if(!empty($cars)) {
 			$dpu = round($total / $cars, 2);
@@ -454,11 +462,11 @@ class MonitorSeeker
 		return $dpu;
 	}
 
-	public function queryQualified($stime, $etime, $node = "VQ1" , $roundBit = 3) {
+	public function queryQualified($stime, $etime, $node = "VQ1" , $series = 'all', $roundBit = 3) {
 		$cars = 0;
-        $faults = 0;
-        $nodeIdStr = $this->parseNodeId($node);
-        $arraySeries = $this->parseSeries('all');
+		$faults = 0;
+		$nodeIdStr = $this->parseNodeId($node);
+		$arraySeries = $this->parseSeries($series);
 
 
 		$conditions = array("status != '在线修复'");
@@ -502,7 +510,7 @@ class MonitorSeeker
 		$pause = LinePauseAR::model()->find("status = ? AND pause_time > ?" , array(1,$curDay));
 
 
-		
+
 		$sql = "SELECT id FROM node WHERE section='$section'";
 		$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
 
@@ -524,16 +532,16 @@ class MonitorSeeker
 	public function queryCallStatus($section, $curDay) {
 		$condition = "";	
 		if(!empty($section)) {
-            $sql = "SELECT id FROM node WHERE section='$section'";
-            $nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
-            if(empty($nodeIds)) {
-                return array();
-            }
-            $nodeIdStr = join(',', $nodeIds);
-            $condition = "AND node_id IN ($nodeIdStr)";
-        }
+			$sql = "SELECT id FROM node WHERE section='$section'";
+			$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
+			if(empty($nodeIds)) {
+				return array();
+			}
+			$nodeIdStr = join(',', $nodeIds);
+			$condition = "AND node_id IN ($nodeIdStr)";
+		}
 
-	
+
 
 		$calls = AndonCallAR::model()->findAll("status = ? AND call_time > ? $condition ORDER by call_time DESC", array(1, $curDay));
 
@@ -552,29 +560,29 @@ class MonitorSeeker
 			if($call->call_type === '质量关卡') {
 				$multi = !empty($seatStatus[$call->node_id]);
 				if(!empty($section)) {
-				$seatStatus[$call->node_id] = array(
-                        'node_id' => $call->node_id,
-                        'seat' => $seat,
-                        'full_seat' => $fullSeat,
-						'section' => $otherSection,
-                        'background_text' => 'QG',
-                        'background_font_color' => 'red',
-                        'foreground_text' => $seat,
-                        'foreground_font_color' => 'black',
-                        'foreground_color' => 'yellow',
-                        'multi' => $multi,
-                        'flash_type' => $multi ? 'fast' : 'normal',
-                        );
+					$seatStatus[$call->node_id] = array(
+							'node_id' => $call->node_id,
+							'seat' => $seat,
+							'full_seat' => $fullSeat,
+							'section' => $otherSection,
+							'background_text' => 'QG',
+							'background_font_color' => 'red',
+							'foreground_text' => $seat,
+							'foreground_font_color' => 'black',
+							'foreground_color' => 'yellow',
+							'multi' => $multi,
+							'flash_type' => $multi ? 'fast' : 'normal',
+							);
 				}
 				$sectionStatus['QG'] = array(
-					'section' => 'QG',
-                    'type' => 'flash',
-                    'background_text' => $otherSection,
-					'background_font_color' => 'red',
-					'foreground_text' => 'QG',
-					'foreground_font_color' => 'black',
-					'foreground_color' => 'yellow',
-                );
+						'section' => 'QG',
+						'type' => 'flash',
+						'background_text' => $otherSection,
+						'background_font_color' => 'red',
+						'foreground_text' => 'QG',
+						'foreground_font_color' => 'black',
+						'foreground_color' => 'yellow',
+						);
 			} else {
 				if(isset($seatStatus[$call->node_id])) {
 					$seatStatus[$call->node_id]['multi'] = true;
@@ -595,25 +603,25 @@ class MonitorSeeker
 						'multi' => false,
 						'flash_type' => $flashType,
 						);
-		
+
 				$sectionStatus[$otherSection] = array(
-                        'section' => $otherSection,
-                        'type' => 'block',
-                        'background_text' => '&nbsp;',
-                        'background_font_color' => 'red',
-                        'foreground_text' => $otherSection,
-                        'foreground_font_color' => 'red',
-                        'foreground_color' => 'grey',
-                    );
+						'section' => $otherSection,
+						'type' => 'block',
+						'background_text' => '&nbsp;',
+						'background_font_color' => 'red',
+						'foreground_text' => $otherSection,
+						'foreground_font_color' => 'red',
+						'foreground_color' => 'grey',
+						);
 			}
 		}
 
 		if(!empty($pause) ) {
 			$otherSection = $this->mapSection($pause->node_id);
 			list($fullSeat, $seat) = $this->mapSeat($pause->node_id);
-            if(in_array($fullSeat,array('L1','EF1','EF2','EF3'))) {
-                $otherSection = $fullSeat;
-            }
+			if(in_array($fullSeat,array('L1','EF1','EF2','EF3'))) {
+				$otherSection = $fullSeat;
+			}
 
 			if(!empty($seatStatus[$pause->node_id])) {
 				$seatStatus[$pause->node_id]['background_font_color'] = 'red';
@@ -624,24 +632,24 @@ class MonitorSeeker
 				$seatStatus[$pause->node_id]['flash_type'] = 'red';
 			} else {
 				$seatStatus[$pause->node_id] = array(
-                        'node_id' => $pause->node_id,
-                        'seat' => $seat,
+						'node_id' => $pause->node_id,
+						'seat' => $seat,
 						'section' => $otherSection,
 						'full_seat' => $fullSeat,
-                        'background_text' => intval((time() - strtotime($pause->pause_time)) / 60),
-                        'background_font_color' => 'red',
-                        'foreground_text' => $seat === '00' ? ($fullSeat === 'L1' ? '主链' : $fullSeat) : $seat ,
-                        'foreground_font_color' => 'white',
-                        'foreground_color' => 'red',
+						'background_text' => intval((time() - strtotime($pause->pause_time)) / 60),
+						'background_font_color' => 'red',
+						'foreground_text' => $seat === '00' ? ($fullSeat === 'L1' ? '主链' : $fullSeat) : $seat ,
+						'foreground_font_color' => 'white',
+						'foreground_color' => 'red',
 						'multi' => isset($seatStatus[$pause->node_id]['multi']) ? $seatStatus[$pause->node_id]['multi'] : false,
 						'flash_type' => 'red',
-                        );
+						);
 
 			}
 			$otherSection = $this->mapSection($pause->node_id);
 			if(in_array($fullSeat,array('L1','EF1','EF2','EF3'))) {
-                $otherSection = $fullSeat;
-            }
+				$otherSection = $fullSeat;
+			}
 			if($otherSection !== $section) {
 				$sectionStatus[$otherSection] = array(
 						'section' => $otherSection,
@@ -651,10 +659,10 @@ class MonitorSeeker
 						'foreground_text' => $otherSection === 'L1' ? '主链' : $otherSection,
 						'foreground_font_color' => 'red',
 						'foreground_color' => 'grey',
-					);
+						);
 			}
 		} 
-		
+
 		$runStatus = $this->queryLineStatus($curDay, '');
 
 		$retSeats = array_values($seatStatus);
@@ -672,14 +680,14 @@ class MonitorSeeker
 
 	protected function mapSection($nodeId) {
 		$sql = "SELECT section FROM node WHERE id=$nodeId";
-        $section = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $section;
+		$section = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $section;
 	}
-	
+
 	protected function mapSeat($nodeId) {
 		$sql = "SELECT name,type FROM node WHERE id=$nodeId";
 		$seat = Yii::app()->db->createCommand($sql)->queryRow();
-	
+
 		$name = $seat['name'];	
 		if($seat['type'] !== 'device') {
 			$name = sprintf('%02d', substr($name, 1));
@@ -689,46 +697,46 @@ class MonitorSeeker
 		return array($seat['name'], $name);
 	}
 
-	
+
 
 	protected function mapCallType($callType) {
 		if($callType === '工位求助') {
 			return 'A';
 		}
 		if($callType === '工段质量') {
-            return 'QS';
-        }
+			return 'QS';
+		}
 		if($callType === '质量关卡') {
-            return 'QG';
-        }
+			return 'QG';
+		}
 		if($callType === '设备故障') {
-            return '设备故障';
-        }
+			return '设备故障';
+		}
 
 	}
 
 	protected function parseTables($node, $series) {
 		$tablePrefixs = array(
-			'VQ1_STATIC_TEST' => 10,
-			'VQ2_ROAD_TEST' => 15,
-			'VQ2_LEAK_TEST' => 16,
-			'VQ3_FACADE_TEST' => 17,
-		);
+				'VQ1_STATIC_TEST' => 10,
+				'VQ2_ROAD_TEST' => 15,
+				'VQ2_LEAK_TEST' => 16,
+				'VQ3_FACADE_TEST' => 17,
+				);
 		$nodeTables = array(
-			'VQ1' => 'VQ1_STATIC_TEST',
-			'ROAD_TEST_FINISH' => 'VQ2_ROAD_TEST',
-			'VQ2' => 'VQ2_LEAK_TEST',
-			'VQ3' => 'VQ3_FACADE_TEST',
-		);
+				'VQ1' => 'VQ1_STATIC_TEST',
+				'ROAD_TEST_FINISH' => 'VQ2_ROAD_TEST',
+				'VQ2' => 'VQ2_LEAK_TEST',
+				'VQ3' => 'VQ3_FACADE_TEST',
+				);
 
 		$temps = array();
 		if(empty($node) || $node === 'all') {
 			$temps = $tablePrefixs;
 		} elseif($node === 'VQ2_ALL') {
 			$temps = array(
-				'VQ2_ROAD_TEST' => 15,
-            	'VQ2_LEAK_TEST' => 16,
-			);
+					'VQ2_ROAD_TEST' => 15,
+					'VQ2_LEAK_TEST' => 16,
+				      );
 		} elseif(!empty($nodeTables[$node])) {
 			$temps = array($nodeTables[$node]=>$tablePrefixs[$nodeTables[$node]]);
 		}
@@ -750,17 +758,17 @@ class MonitorSeeker
 
 	private function parseNodeId($node) {
 		$nodeIds = array(
-			'PBS' => 1,
-			'T0'  => 2,
-            'VQ1' => 10,
-			'CHECK_LINE' => 13,
-            'ROAD_TEST_FINISH' => 15,
-            'VQ2' => 16,
-			'VQ2_ALL' => '13,15,16',
-            'VQ3' => 17,
-			'CHECK_IN' => 18,
-			'CHECK_OUT' => 19,
-        );
+				'PBS' => 1,
+				'T0'  => 2,
+				'VQ1' => 10,
+				'CHECK_LINE' => 13,
+				'ROAD_TEST_FINISH' => 15,
+				'VQ2' => 16,
+				'VQ2_ALL' => '13,15,16',
+				'VQ3' => 17,
+				'CHECK_IN' => 18,
+				'CHECK_OUT' => 19,
+				);
 
 		if(empty($node) || $node === 'all') {
 			return join(',', array_values($nodeIds));
@@ -772,10 +780,10 @@ class MonitorSeeker
 
 	private function parseSeries($series) {
 		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
+			$series = array('F0', 'M6', '6B');
+		} else {
+			$series = explode(',', $series);
+		}
 		return $series;
 	}	
 

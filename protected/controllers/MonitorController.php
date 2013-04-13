@@ -1,5 +1,7 @@
 <?php
 Yii::import('application.models.MonitorSeeker');
+Yii::import('application.models.SeriesSeeker');
+
 class MonitorController extends BmsBaseController
 {
 	private static $title_map = array(
@@ -98,11 +100,15 @@ class MonitorController extends BmsBaseController
 		$vq2Balance = $seeker->queryBalanceCount('VQ2');
 		$vq3Balance = $seeker->queryBalanceCount('VQ3');
 
-		$drrs = array(
-            'VQ2_LEAK' => $seeker->queryQualified($stime, $etime, 'VQ2', 2),
-            'VQ2_ROAD' => $seeker->queryQualified($stime, $etime, 'ROAD_TEST_FINISH', 2),
-            'VQ3' => $seeker->queryQualified($stime, $etime, 'VQ3', 2),
-            );
+		$nodes = array('VQ1' => 'VQ1', 'VQ2_LEAK'=> 'VQ2', 'VQ2_ROAD' => 'ROAD_TEST_FINISH', 'VQ3' => 'VQ3');	
+		$seriesArray = SeriesSeeker::findAllCode();
+		$seriesArray[] = 'all';
+		$drrs = array();
+		foreach($seriesArray as $series) {
+			foreach($nodes as $key => $node) {
+				$drrs[$key][$series] = $seeker->queryQualified($stime, $etime, $node, $series, 2);
+			}
+		}
 
         $data = array(
             'line_speed' => $lineSpeed,
@@ -130,6 +136,16 @@ class MonitorController extends BmsBaseController
 
         $this->renderJsonBms(true, 'OK', $data);
 	}
+
+	public function actionShowWarehouseAreaBalance() {
+        $area = $this->validateStringVal('area', 'A');
+        $seeker = new MonitorSeeker();
+
+        $data = $seeker->queryWarehouseAreaBalance($area);
+
+        $this->renderJsonBms(true, 'OK', $data);
+    }
+
 
 	public function actionShowWarehouseBlockBalance() {
         $block = $this->validateStringVal('block', 'A01');
