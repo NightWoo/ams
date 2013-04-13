@@ -2,6 +2,7 @@
 Yii::import('application.models.AR.NodeAR');
 Yii::import('application.models.AR.NodeTraceAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.User');
 
 class NodeSeeker
@@ -39,12 +40,31 @@ class NodeSeeker
             $userInfos[$user['id']] = $user['display_name'];
         }
 
-        $sql = "SELECT id,name FROM car_config";
-        $configs = Yii::app()->db->createCommand($sql)->queryAll();
-        $configInfos = array();
-        foreach($configs as $config) {
-            $configInfos[$config['id']] = $config['name'];
-        }
+        // $sql = "SELECT id,name FROM car_config";
+        // $configs = Yii::app()->db->createCommand($sql)->queryAll();
+        // $configInfos = array();
+        // foreach($configs as $config) {
+        //     $configInfos[$config['id']] = $config['name'];
+        // }
+        $sql = "SELECT id, name, order_config_id FROM car_config";
+		$configs = Yii::app()->db->createCommand($sql)->queryAll();
+		$configInfos = array();
+		foreach($configs as $config){
+			$configInfos[$config['id']]['configName'] = $config['name'];
+			$order = OrderConfigAR::model()->findByPk($config['order_config_id']);
+			if(!empty($order)){
+				$configInfos[$config['id']]['orderConfigName'] = $order->name;
+			} else {
+				$configInfos[$config['id']]['orderConfigName'] = $config['name'];
+			}
+		}
+
+		$sql = "SELECT car_type, car_model FROM car_type_map";
+		$carModels = Yii::app()->db->createCommand($sql)->queryAll();
+		$modelInfo = array();
+		foreach($carModels as $carModel){
+			$modelInfo[$carModel['car_type']]= $carModel['car_model'];
+		}
 
         $sql = "SELECT id,display_name FROM node";
         $nodes = Yii::app()->db->createCommand($sql)->queryAll();
@@ -62,6 +82,15 @@ class NodeSeeker
             $conditions[] = "pass_time <= '$etime'";
         }
 
+        if(!empty($series)){
+	        $arraySeries = $this->parseSeries($series);
+	        $cTmp = array(); 
+	        foreach($arraySeries as $series){
+	        	$cTmp[] = "car_series='$series'";
+	        }
+	        $conditions[] = "(" . join(' OR ', $cTmp) . ")";
+        };
+
         $condition = join(' AND ', $conditions);
 
         $limit = "";
@@ -70,7 +99,7 @@ class NodeSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order
+        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
         		FROM node_trace AS n 
         		LEFT JOIN car AS c
         		ON n.car_id=c.id
@@ -80,6 +109,8 @@ class NodeSeeker
 
         $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
         foreach($datas as &$data){
+        	if($data['series'] == '6B') $data['series'] = '思锐';
+
         	if($data['cold_resistant'] == 1){
         		$data['cold_resistant'] = '耐寒';
         	} else {
@@ -101,6 +132,28 @@ class NodeSeeker
         		$data['config_name'] = $configInfos[$data['config_id']];
         	} else {
         		$data['config_name'] = '-';
+        	}
+
+        	if(!empty($data['type'])){
+	        	$data['car_model'] = $modelInfo[$data['type']];
+        	} else {
+        		$data['car_model'] ='';
+        	}
+        	if(!empty($data['config_id'])){
+        		$data['config_Name'] = $configInfos[$data['config_id']]['configName'];
+	        	$data['order_config_name'] = $configInfos[$data['config_id']]['orderConfigName'];
+	        	$data['type_config'] = $data['car_model'] . '/' . $data['order_config_name'];
+        	}else {
+        		$data['config_Name'] = '';
+	        	$data['order_config_name'] = '';
+	        	$data['type_config'] = $data['type'];
+        	}
+        	
+        	$data['order_number']='-';
+        	if(!empty($data['order_id'])){
+        		$sql = "SELECT order_number FROM `order` WHERE id = '{$data['order_id']}'";
+        		$order_number = Yii::app()->db->createCommand($sql)->queryScalar();
+        		$data['order_number']= $order_number;
         	}
         	$data['node_name'] = $nodeInfos[$data['node_id']];
         }
@@ -128,7 +181,8 @@ class NodeSeeker
 		if($lastHour <= 24) {//hour
 			$format = 'Y-m-d H';
 			$stime = date($format, $s) . ":00:00";
-			$etime = date($format, $e) . ":00:00";
+			$eNextH = strtotime('+1 hour', $e);
+			$etime = date($format, $eNextH) . ":00:00";
 		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
 			//$stime = date($format, $s) . " 00:00:00";				
@@ -147,5 +201,14 @@ class NodeSeeker
 
 
 		return array($stime, $etime);
+	}
+
+	private function parseSeries($series) {
+		if(empty($series) || $series === 'all') {
+            $series = array('F0', 'M6', '6B');
+        } else {
+            $series = explode(',', $series);
+        }
+		return $series;
 	}
 }

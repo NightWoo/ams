@@ -98,6 +98,11 @@ var CHECKOUT_VALIDATE = "/bms/car/validateNode";
 //var CHECKOUT_SUBMIT = "/bms/execution/enterCO";
 var CHECKOUT_SUBMIT = "/bms/execution/warehouseCheckout";
 
+var WAREHOUSE_CHECKIN_QUERY = "/bms/warehouse/checkinDetail";
+var WAREHOUSE_CHECKIN_EXPORT = "/bms/warehouse/exportCheckinDetail";
+var WAREHOUSE_CHECKOUT_QUERY = "/bms/warehouse/checkoutDetail";
+var WAREHOUSE_CHECKOUT_EXPORT = "/bms/warehouse/exportCheckoutDetail";
+
 
 var SHOW_TRACE = "/bms/car/showTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";
@@ -115,6 +120,10 @@ var COMPONENT_QUERY = "/bms/component/query";
 var COMPONENT_EXPORT = "/bms/component/export";
 var QUERY_NODE_TRACE = "/bms/execution/queryNodeTrace";
 var EXPORT_NODE_TRACE = "/bms/execution/exportNodeTrace";
+var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
+var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
+var QUERY_BALANCE_ASSEMBLY = "/bms/car/queryBalanceAssembly";
+var QUERY_BALANCE_DISTRIBUTE = "/bms/car/queryBalanceDistribute";
 
 
 var SHOW_USER = "/bms/user/show";
@@ -124,7 +133,7 @@ var ADD_USER = "/bms/user/save";
 var EDIT_USER = "/bms/user/save";
 var DISABLE_USER = "/bms/user/disable";
 var UPDATE_USER = "/bms/user/update";
-
+var CHECK_CARD_NUMBER ="/bms/user/checkCardNumber";
 
 var QUERY_COMPONENT_LIST = "/bms/component/showList";
 var SAVE_COMPONENT  = "/bms/component/save";
@@ -202,18 +211,26 @@ var EXPORT_PAUSE_RECORD = "/bms/pause/exportRecord";
 var QUERY_USE_RATE = "/bms/pause/queryUseRate";
 var PAUSE_EDIT_SAVE = "/bms/pause/editSave";
 var GET_PAUSE_DUTY_DEPARTMENT_LIST = "/bms/pause/getDutyDepartment";
+var PLAN_PAUSE_SAVE = "/bms/pause/planPauseSave";
+var PAUSE_DELETE = "/bms/pause/delete";
 
 //added by wujun
 //order maintain
-var ORDER_SEARCH = "/bms/order/searchByDate";
+var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";
+var ORDER_CHECK_DETAIL = "/bms/order/checkDetail";
+var ORDER_GENERATE = "/bms/order/generate";
+var ORDER_QUERY = "/bms/order/query";
 var ORDER_SAVE = "/bms/order/save";
 var ORDER_TOP_PRI = "/bms/order/top";
 var ORDER_INC_PRI = "/bms/order/inc";
 var ORDER_DELETE = "/bms/order/delete";
+var ORDER_SPLIT = "/bms/order/split"
 var ORDER_GET_CAR_STANDBY = "/bms/order/getCarStandby";
 var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
+var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig"
 var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
+var QUERY_ORDER_CARS = "/bms/order/queryOrderCars";
 
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';
@@ -228,5 +245,5 @@ var ROLE_ADD_TO_USER = "/bms/role/addToUser";
 
 function alertError (message) {
 	message = 'ajax error'
-	//alert(message);
+	// alert(message);
 }

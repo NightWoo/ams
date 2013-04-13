@@ -15,7 +15,7 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					$("#btnSubmit, #btnTopOut").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include series,type and color
@@ -38,15 +38,17 @@ $("document").ready(function() {
 	}
 
 	//进入
-	function ajaxEnter(){
+	function ajaxEnter(toPrint){
+		// toPrint = arguments[0] ? arguments[0] : false;
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: SUB_CONFIG_PRINT,//ref:  /bms/js/service.js
 			data: {"vin": $('#vinText').attr("value"),
 				"type": $("#subType").val()},
+			async:false,
 			success: function(response){
-				resetPage();
+				// resetPage();
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
 				$(".printFrontImage").attr("src", response.data.image);
@@ -60,14 +62,17 @@ $("document").ready(function() {
 				}
 				$(".printSerialNumber").html(response.data.serialNumber);
 				$(".printRemark").html("备注：" + response.data.remark);
-				
-				if (response.data.frontImage == "" || response.data.backImage == "") {
-					fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+				if(toPrint){
+					if (response.data.frontImage == "" || response.data.backImage == "") {
+						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+					} else {
+						setTimeout(function (){window.print();},500);
+						fadeMessageAlert(response.message,"alert-success");
+					}
 				} else {
-					setTimeout(function (){window.print();},500);
 					fadeMessageAlert(response.message,"alert-success");
-					ajaxGetPrintList();
 				}
+				ajaxGetPrintList();
 			},
 			error:function(){alertError();}
 		});
@@ -85,6 +90,7 @@ $("document").ready(function() {
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val()
 		    },//vin
+		    async:false,
 		    success: function(response){
 		    	$("#tableList tbody").text("");
 		    	$(response.data).each(function (index, value) {
@@ -93,16 +99,17 @@ $("document").ready(function() {
 		    			tr.addClass("info");
 		    		}
 		    		$("<td />").html(value.serial_number).appendTo(tr);
+		    		$("<td />").html(value.queueTime).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.series).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		if(value.coldResistant == "1"){
+		    		if(value.cold_resistant == "1"){
 						$("<td />").html('耐寒').appendTo(tr);						
 					}else{
 						$("<td />").html('非耐寒').appendTo(tr);						
 					}
 		    		$("<td />").html(value.color).appendTo(tr);
-		    		$("<td />").html(value.year).appendTo(tr);
+		    		// $("<td />").html(value.year).appendTo(tr);
 		    		// $("<td />").html(value.order_type).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
@@ -137,7 +144,8 @@ $("document").ready(function() {
 
 		$("#tableList tbody").text("");
 		//set default queue time and get queue
-		$("#startTime").val(window.byd.DateUtil.todayBeginTime);
+		// $("#startTime").val(window.byd.DateUtil.todayBeginTime);
+		$("#startTime").val('2013-04-06 08:00');
 		$("#endTime").val(window.byd.DateUtil.todayEndTime);
 		ajaxGetPrintList();
 
@@ -148,12 +156,12 @@ $("document").ready(function() {
 		if ($("#tableList tr").length > 1) {
 			$("#vinText").attr("disabled", "disabled");
 			//获取第一行的VIN号
-			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(1)").text());
-			$("#btnSubmit").removeAttr("disabled");
+			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(2)").text());
+			$("#btnSubmit, #btnTopOut").removeAttr("disabled");
 		} else {
 			$("#vinText").removeAttr("disabled");
 			$("#vinText").attr("value","");
-			$("#btnSubmit").attr("disabled", "disabled");
+			$("#btnSubmit, #btnTopOut").attr("disabled", "disabled");
 		}
 		
 	}
@@ -230,9 +238,17 @@ $("document").ready(function() {
 
 	//进入彩车身库事件，发ajax，根据响应做提示
 	$("#btnSubmit").click(function() {
-		if(!($("#btnSubmit").hasClass("disabled"))){
-			$("#btnSubmit").attr("disabled","disabled");
-			ajaxEnter();
+		if(!($("#btnSubmit, #btnTopOut").hasClass("disabled"))){
+			$("#btnSubmit, #btnTopOut").attr("disabled","disabled");
+			ajaxEnter(true);
+		}
+		return false;
+	});
+
+	$("#btnTopOut").click(function() {
+		if(!($("#btnTopOut, #btnSubmit").hasClass("disabled"))){
+			$("#btnTopOut, #btnSubmit").attr("disabled","disabled");
+			ajaxEnter(false);
 		}
 		return false;
 	});
@@ -242,7 +258,7 @@ $("document").ready(function() {
 	});
 	//清空
 	$("#btnClear").click(function() {
-		$("#btnSubmit").attr("disabled","disabled");
+		$("#btnSubmit, #btnTopOut").attr("disabled","disabled");
 		$("#vinText").removeAttr("disabled");
 		$("#vinText").attr("value","");
 		$("#tableList tr:eq(1)").removeClass("info");

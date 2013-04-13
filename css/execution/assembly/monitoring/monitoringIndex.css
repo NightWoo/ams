@@ -6,12 +6,13 @@
 }
 .main {
 	position: relative;
-	background-image:url('../../../../img/monitorLayout-cs-as.Ver1.2.width840-hq.jpg');
+	/*background-image:url('../../../../img/monitorLayout-cs-as.Ver1.2.width840-hq.jpg');*/
+	background-image:url('../../../../img/workshop_1200x354.jpg');
 	background-repeat:no-repeat;
-	width:840px;
-	height:200px;
+	width:1200px;
+	height:314px;
 	/*color: #FFF;*/
-	font-weight:bold;
+	/*font-weight:bold;*/
 	font-size:9px;
 	text-align:center;	
 	z-index: 100; 
@@ -54,51 +55,49 @@
 	overflow: hidden;
 }
 .t1{
-	width: 37px;
-	left:233px;
+	left:408px;
 }	
 
 .t2{
-	width: 37px;
-	left:296px;
+	left:480px;
 }
 
 .t3{
-	width: 56px;
-	left:358px;
+	left:551px;
 }
 
 .c1{
-	width: 37px;
-	left:440px;
+	left:641px;
 }
 .c2{
-	width: 37px;
-	left:503px;
+	left:713px;
 }
 .f1{
-	width: 37px;
-	left:565px;
+	left:839px;
 }
 
 .f2{
-	width: 37px;
-	left:627px;
+	left:911px;
 }
 .range{
 	z-index: 101;
 	cursor: pointer;
 	position: absolute;
 	/*background: url('../../img/T-range.png') repeat-x;*/
+	border-radius: 2px;
 	line-height: 9px;
-	height: 9px;
-	top:65px;
+	height: 20px;
+	width: 46px;
+	top:96px;
 	color: black;
 	/*border:1px solid;
 	border-color: #fff #c0d1e3;*/
+	/*border-color: red;
+	border-width: 4px;
+	border-style: solid*/
 }
  
-.range:hover{border:3px solid red;border-radius: 4px;}
+.range:hover{border:4px solid red;border-radius: 5px;}
 
 .optNode{
 	cursor: pointer;
@@ -127,29 +126,33 @@
 .main_chain{
 	left: 235px;
 }
-
+.ui-tooltip-content {
+	text-align: center;
+}
 .pbs{
 	cursor: pointer;
 	border-radius: 4px;
 	/*border: 2px solid #76A9E0;*/
 	position: absolute;
-	top: 22px;
-	left: 75px;
-	width: 122px;
-	height: 56px;
-	line-height: 16px;
+	top: 152px;
+	left: 93px;
+	width: 50px;
+	height: 30px;
+	line-height: 26px;
+/*	border-style:solid;
+	border-color: red;*/
 }
-.pbs:hover{border:3px solid red;}
+/*.pbs:hover{border:3px solid #9966FF;}*/
 
 .vq1{
 	cursor: pointer;
 	border-radius: 4px;
 	position: absolute;
-	top: 36px;
-	left: 682px;
-	width: 86px;
-	height: 19px;
-	line-height: 16px;
+	top: 152px;
+    left: 1103px;
+	width: 20px;
+	height: 30px;
+	line-height: 26px;
 }
 
 .vq1:hover{border:3px solid red;}
@@ -157,51 +160,61 @@
 .vq1_exception{
 	cursor: pointer;
 	border-radius: 4px;
-    height: 10px;
-    left: 728px;
-    line-height: 16px;
+    height: 50px;
+    line-height: 26px;
     position: absolute;
-    top: 41px;
-    width: 40px;
+    top: 168px;
+    left: 1080px;
+    width: 30px;
 }
-
-.vq1_exception:hover{border:3px solid red;}
+/*.vq1_exception:hover{border:3px solid red;}*/
 
 .andon_bord{
 	cursor: pointer;
-	border-radius: 4px;
+	border-radius: 5px;
 	position: absolute;
-	top: 9px;
-	left: 726px;
-	width: 42px;
-	height: 20px;
-	line-height: 16px;
+	top: 90px;
+	left: 1013px;
+	width: 65px;
+	height: 38px;
+	line-height: 40px;
+	/*border-color: red;
+	border-width: 4px;
+	border-style: solid;*/
 }
-
-.andon_bord:hover{border:3px solid red;}
+.andon_bord:hover{border:4px solid red;}
 
 .node_pbs{
 	position: absolute;
-	left: 52px;
+	left: 54px;
+	top: 178px;
 	width: 20px;
 	height: 20px;
-	top: 62px;
+	/*border-color: red;
+	border-width: 2px;
+	border-style: solid;*/
 }
 
 .node_t0{
 	position: absolute;
-	left: 213px;
+	left: 373px;
 	width: 20px;
 	height: 20px;
-	top: 62px;
+	top: 178px;
+	/*border-color: red;
+	border-width: 2px;
+	border-style: solid;*/
 }
 
 .node_vq1{
 	position: absolute;
-	left: 711px;
+	left: 1056px;
 	width: 20px;
 	height: 20px;
-	top: 62px;
+	top: 178px;
+	/*border-color: blue;
+	border-width: 2px;
+	border-style: solid;*/
 }
 
 .ui-tooltip-blue{
@@ -209,62 +222,152 @@
 	/*width: 40px;*/
 	text-align: center;
 	min-width: 30px;
-	font-size: 14px;
+	font-size: 20px;
 	word-wrap: normal;
-	background: #3278C8;
-	color:white;
+	/*background: #3278C8;*/
+	/*color:white;*/
+	background: none;
+	color:#3278C8;
 	border:none;
 }
 
 .ui-tooltip-purple{
+	cursor: pointer;
 	border-radius: 2px;
-	/*width: 40px;*/
 	text-align: center;
-	min-width: 30px;
-	font-size: 14px;
+	min-height: 25px;
+	line-height: 25px;
+	font-size: 24px;
 	word-wrap: normal;
-	color: #fff;
-	background: #9966FF;
-	border:none;
+	color: #9966FF;
+	background: none;
+	border:3px solid transparent;
 }
+.ui-tooltip-purple:hover{border:3px solid #9966FF;}
+
 .ui-tooltip-red{
 	border-radius: 2px;
 	/*width: 40px;*/
 	text-align: center;
 	min-width: 30px;
-	font-size: 14px;
+	font-size: 20px;
 	word-wrap: normal;
-	color:white;
-	background: red;
+	/*color:white;
+	background: red;*/
+	color: red;
+	background: none;
 	border:none;
 }
 
 
 .pauseTimeArea{
 	position: absolute;
-	top:20px;
-	left:200px;
-	height:50px;
-	width:500px;
-	text-align: left;
+	top:58px;
+	left:360px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.pauseTime {
+	position: absolute;
+	top: 10px;
+}
+
+#pauseTimeT1 {
+	left:69px;
+}
+
+#pauseTimeT2 {
+	left:142px;
+}
+
+#pauseTimeT3 {
+	left:214px;
+}
+
+
+#pauseTimeC1 {
+	left:304px;
+}
+
+#pauseTimeC2 {
+	left:376px;
+}
+
+#pauseTimeF1 {
+	left:501px;
+}
+
+#pauseTimeF2 {
+	left:573px;
+}
+
+#pauseTimeDevice {
+	left:628px;
+}
+
+#totalPauseTime {
+	left:682px;
+	font-size: 20px;
+}
+
+#useRate {
+	position: absolute;
+	font-size:20px;
+	color: green;
+	top:103px;
+	left:1100px;
+}
+
+#recycle {
+	position: absolute;
+	font-size:24px;
+	color: #9966FF;
+	top:178px;
+	left:1150px;
+}
+
+#speed {
+	position: absolute;
+	font-size:20px;
+	color: green;
+	top:78px;
+	left:20px;
 }
 
 .stop_mark{
-	position:  absolute;
-	top : 22px;
-	left:200px;
-	width: 30px;
-	height:45px;
-	background-image:url('../../../../img/stop-mark.png');
-	line-height: 30px;
-color: white;
+	/*background-image:url('../../../../img/stop-mark.png');*/
+	background-color: red;
+    border-color: black;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 2px;
+    color: white;
+    font-size: 16px;
+    height: 18px;
+    left: 410px;
+    line-height: 16px;
+    position: absolute;
+    text-align: center;
+    top: 99px;
+    width: 46px;
+
 }
 
 .tab-pane {
 	margin: 0 auto;
 }
 
-.stockyard{position: absolute;color: white;width: 38px;height: 14px;cursor: pointer;border-radius: 2px;border:2px solid #7ECAE2;line-height: 14px;}
+.stockyard{
+	position: absolute;
+	color: white;
+	width: 38px;
+	height: 14px;
+	cursor: pointer;
+	border-radius: 2px;
+	border:2px solid #7ECAE2;
+	line-height: 14px;
+}
 .stockyard:hover{border:2px solid #ff01ed;}
 .A01{left:412px;top: 216px;}
 .A03{left:412px;top: 194px;}

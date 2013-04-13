@@ -37,8 +37,26 @@ return array(
 	'tds_password' => 'VINLABEL',
 	'tds_dbname' => 'VINM_AUTO',
 
+	//HGZ
+	'tds_SELL' => 'SELL',
+	'tds_SELL_username' => 'vinm',
+	'tds_SELL_password' => 'vinm_2011',
+	'tds_dbname_BYDDATABASE' => 'BYDDATABASE',
+
+	
+	'tds_HGZ' => 'HGZ',
+	'tds_HGZ_username' => 'hgz',
+	'tds_HGZ_password' => 'Byd xa_2006',
+	'tds_dbname_HGZ_DATABASE' => 'HGZ_DATABASE',
+
+
 
 	//vinm web service soap wsdl 
 	//'vinm_wsdl' => "http://192.168.1.25/carInfo/carInfo.asmx?wsdl",
 	'vinm_wsdl' => "http://10.23.86.220/carInfo/carInfo.asmx?wsdl",
+
+	'ams2vin_assembly' => "http://10.23.11.6/csvinm/WebServices/AMS2Assembly.asmx?wsdl",
+	'ams2vin_store_in' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreIn.asmx?wsdl",
+	'ams2vin_store_out' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreOut.asmx?wsdl",
+
 );

@@ -140,7 +140,7 @@ $(document).ready(function() {
 		$("#tableConfigList").hide();
 		$(".pagination").hide();
 		
-		$("#carSeries").val("F0")
+		// $("#carSeries").val("F0")
 		fillType($("#carSeries").val());
 		fillConfig($("#carSeries").val());
 	}
@@ -264,11 +264,11 @@ $(document).ready(function() {
 					});
 				 	$("#config").html(option);
 				 
-					if(typeof(carType) == "undefined") {
-						$("#clonedConfig").html("");
-					} else {
+					// if(typeof(carType) == "undefined") {
+						// $("#clonedConfig").html("");
+					// } else {
 						$("#clonedConfig").html(option); 
-					}	
+					// }	
 				}
 			},
 			error: function() { 

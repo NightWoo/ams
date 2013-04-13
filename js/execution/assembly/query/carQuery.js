@@ -65,8 +65,8 @@ $(document).ready(function () {
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
-				    if(car.status && car.status !== "0")
-				    	$('#statusInfo').html(car.status);
+				    if(response.data.status && response.data.status !== "")
+				    	$('#statusInfo').html(response.data.status);
 				    else
 				    	$('#statusInfo').text("");
 		    		$("#carTag").show();

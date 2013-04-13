@@ -48,7 +48,7 @@
 	<div id="formComponent" class="well form-search">
 		<div class="tab-content">
 			<div id="assembly" class="tab-pane active">
-				<form id="formAssembly">
+				<!-- <form id="formAssembly"> -->
 					<table>
 						<tr>
 							<td><label>车系</label></td>
@@ -79,7 +79,7 @@
 							<td><input id="inputComponentName" type="text" class="span2" placeholder="零部件名称"></td>
 							<td><input id="inputFaultMode" type="text" class="span2" placeholder="故障模式"></td>
 							<td>
-								<select id="selectCategoryF0" class="input-small">
+								<select id="selectCategory" class="input-small">
 									<option value="all" selected>全部</option>
 									<option value="enable">启用</option>
 									<option value="disable">禁用</option>
@@ -87,7 +87,7 @@
 							</td>
 							<td id="tdLevel">
 								<button id="btnQuery" type="reset" class="btn btn-primary">查询</button>
-								<button id="btnAddF0" type="reset" class="btn">新增</button>
+								<button id="btnAdd" class="btn btn-success">新增</button>
 								<label class="checkbox">
 									<input type="checkbox" id="levelS" value="1">S
 								</label>
@@ -111,7 +111,7 @@
 							</td>
 						</tr>
 					</table>
-				</form>
+				<!-- </form> -->
 			</div>
 		</div>		               
 
@@ -247,7 +247,7 @@
 			      	<select id="inputSeries" class="span2" disabled="disabled">
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
-									<option value="6B">思锐</option>
+						<option value="6B">思锐</option>
 						
 					</select>
 			    </div>

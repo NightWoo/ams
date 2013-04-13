@@ -1,102 +1,311 @@
-$(document).ready(function() {
-
+$("document").ready(function() {
 	initPage();
-
-	$("#btnQuery").click(function() {
-		ajaxQuery();
-	})
+	var orderArray = [];
 
 	$("#btnAdd").click(function() {
-		$("#newModal").modal("show");
-		if($("#newStandbyDate").val() === ""){
-			$("#newStandbyDate").val(tomorrowDate());
+		$("#newModal").modal('show');
+	})
+
+	$("#newGetOrder").click(function() {
+		if($.trim($("#newOrderNumber").val()) != ''){
+			ajaxGetOriginalOrders();
 		}
+	})
+
+	$(".clearinput").click(function() {
+		$(this).siblings().filter("input").val("");
+	})
+
+	$("#refreshDate").click(function() {
+		$("#standbyDate").val(window.byd.DateUtil.currentDate);
+	})
+
+	$("#btnQuery").click(function() {
+		standbyDate = $.trim($("#standbyDate").val());
+		orderNumber = $.trim($("#orderNumber").val());
+		distributor = $.trim($("#distributor").val());
+		if(standbyDate == "" && orderNumber =="" && distributor ==""){
+			alert("至少要有1个查询条件")
+		} else{
+			ajaxQuery();
+		}
+	})
+
+	$("#newOrderNumber").bind("keydown", function(event){
+		if(event.keyCode == "13"){
+			if($.trim($("#newOrderNumber").val()) != ''){
+				ajaxGetOriginalOrders();
+			}
+			return false;
+		}
+	})
+
+	$("#newClearOrder").click(function(){
+		resetNewModal();
+	})
+
+	$("#btnAddMore").click(function(){
+		// ajaxGenerate();
+		ajaxDetailExist()
+	})
+
+	$("#btnAddConfirm").click(function(){
+		//ajaxGenerate();
+		ajaxDetailExist()
+		$("#newModal").modal('hide');
+	})
+
+	$("#btnSplitConfirm").click(function(){
+		ajaxSplit();
+		$("#splitModal").modal('hide');
 	})
 
 	$("#tableResult").live("click", function(e) {
 		if ($(e.target).is("i")) {
-			if($(e.target).hasClass("icon-thumbs-up")) {
-				ajaxTop($(e.target).closest("tr").data("id"));
-			} else if($(e.target).hasClass("icon-hand-up")){
-				ajaxUp($(e.target).closest("tr").data("id"));
-			} else if($(e.target).hasClass("icon-edit")) {
-				var siblings = $(e.target).closest("td").siblings();
+			var siblings = $(e.target).closest("td").siblings();
+			var tr = $(e.target).closest("tr");
 
-				$("#editStandbyDate").val($(e.target).closest("tr").data("standbyDate"));
-				if(siblings[1].innerHTML === '激活') {
-					$("#editStatus").attr("checked", "checked");
-				} else {
-					$("#editStatus").removeAttr("checked");
-				}
-				$("#editLane").val(siblings[2].innerHTML);
-				$("#editCarrier").val(siblings[3].innerHTML);
-				$("#editOrderNumber").val(siblings[4].innerHTML);
-				$("#editDistributorName").val(siblings[5].innerHTML);
-				$("#editDistributorId").val($(e.target).closest("tr").data("distributorId"));
-				$("#editAmount").val(siblings[6].innerHTML);
-				$("#editSeries").val(siblings[7].innerHTML);
-				$("#editColor").val(siblings[8].innerHTML);
-				$("#editOrderConfig").val($(e.target).closest("tr").data("orderConfigId"));
-				if (siblings[10].innerHTML === '耐寒') {
+			if($(e.target).hasClass("icon-thumbs-up")) {
+				ajaxTop(tr.data("id"));
+			} else if($(e.target).hasClass("icon-hand-up")){
+				ajaxUp(tr.data("id"));
+			} else if($(e.target).hasClass("icon-remove")) {
+				if(confirm('是否删除本订单？')){
+					ajaxDelete(tr.data("id"));
+				}	
+			} else if($(e.target).hasClass("icon-edit")) {
+				emptyEditModal();
+				carSeries = tr.data("series");
+				carType = tr.data("carType");
+				$("#editCarType").html("").append(fillType(carSeries));
+				$("#editOrderConfig").html("").append(fillOrderConfig(carSeries, carType));
+				$("#editColor").html("").append(fillColor(carSeries));
+
+				$("#editStandbyDate").val(tr.data("standbyDate"));
+				$("#editStatus").val(tr.data("status"));
+
+				$("#editLane").val(tr.data("laneId"));
+				$("#editDistributorName").val(tr.data("distributorName"))
+				$("#editAmount").val(tr.data("amount"));
+				$("#editSeries").val(carSeries);
+				$("#editCarType").val(tr.data("carType"));
+				$("#editColor").val(tr.data("color"));
+				$("#editOrderConfig").val(tr.data("orderConfigId"));
+				if (tr.data("coldResistant") == '1') {
 					$("#editColdResistant").attr("checked", "checked");
 				} else {
 					$("#editColdResistant").removeAttr("checked");
 				}
-				$("#editCarType").val(siblings[11].innerHTML);
-				//$("#editCarYear").val(siblings[12].innerHTML);
-				$("#editOrderType").val(siblings[12].innerHTML);
-				$("#editCity").val(siblings[13].innerHTML);
-				$("#editRemark").val(siblings[14].innerHTML);
+				$("#editRemark").val(tr.data("remark"));
 
-				$("#editModal").data("id", $(e.target).closest("tr").data("id"));
+				$("#editModal").data("id", tr.data("id"));
 
 				$("#editModal").modal("show");
-			} else if($(e.target).hasClass("icon-remove")) {
-				if(confirm('是否删除本订单？')){
-					ajaxDelete($(e.target).closest("tr").data("id"));
-				}	
+			} else if($(e.target).hasClass("icon-resize-full")){
+				emptySplitModal();
+				$("#splitModal").data("id",tr.data("id"));
+				$("#splitModal").modal("show");
 			}
 		}
 	})
 
-	$("#btnAddConfirm").click(function() {
-		ajaxAdd();
-		$("#newModal").modal("hide");
-		emptyNewModal();
+	$("#editSeries").change(function() {
+		carSeries = $(this).val();
+		$("#editCarType").html("").append(fillType(carSeries));
+		$("#editOrderConfig").html("");
+		$("#editColor").html("").append(fillColor(carSeries));
 	})
 
-	$("#btnAddMore").click(function() {
-		ajaxAdd();
-		emptyNewModal;
+	$("#editCarType").change(function() {
+		carSeries = $("#editSeries").val();
+		carType = $(this).val();
+		$("#editOrderConfig").html("").append(fillOrderConfig(carSeries, carType));
 	})
 
 	$("#btnEditConfirm").click(function() {
 		ajaxEdit();
+		ajaxQuery();
 		$("#editModal").modal("hide");
 		emptyEditModal();
 	})
-
+	
 	function initPage() {
+		// $("#headPlanLi").addClass("active");
+		// $("#leftOutStandbyMaintainLi").addClass("active");
 		$("#headAssemblyLi").addClass("active");
 		$("#leftOrderMaintainLi").addClass("active");
 
-		$("#newModal").modal("hide");
-		$("#editModal").modal("hide");
+		$("#standbyDate").val(window.byd.DateUtil.currentDate);
 
-		$("#standbyDate").val(currentDate());
-		ajaxQuery();
+	}
 
-		emptyNewModal();
-		emptyEditModal();
+	function ajaxGetOriginalOrders() {
+		$.ajax({
+			url: GET_ORIGIANAL_ORDERS,
+			type: "post",
+			dataType: "json",
+			data: {
+				"orderNumber" : $.trim($("#newOrderNumber").val())
+			},
+			success: function(response) {
+				if(response.success && response.data.length != 0){
+					$("#newOrderNumber").val($.trim($("#newOrderNumber").val()));
+					$("#newDistributor").attr("code", response.data[0].distributor_code).html(response.data[0].distributor);
+					toggleOrderInfo(true);
+					$("#tableNewOrder").hide();
+					$("#tableNewOrder tbody").html("");
+					var i=0;
+					$.each(response.data, function (index, value){
+						var tr = $("<tr />");
+						// $("<td />").html(value.order_detail_id).appendTo(tr);
+						tdCheck =  "<input class='choose' type='checkbox' checked='checked'>";
+						$("<td />").html(tdCheck).appendTo(tr);
+						$("<td />").html(value.amount).appendTo(tr);
+						$("<td />").html(value.series).appendTo(tr);
+						$("<td />").html(value.car_type).appendTo(tr);
+						if(value.cold_resistant == '1'){
+							$("<td />").html("耐寒").appendTo(tr);
+						} else {
+							$("<td />").html("非耐寒").appendTo(tr);
+						}
+						$("<td />").html(value.color).appendTo(tr);
+						
+						
+						configTip = "<select class='input-medium newOrderConfig' rel='tooltip' data-container='#newOrderNumber' data-toggle='tooltip' data-placement='top' title='"+ value.config_description +"' />"
+						options = fillOrderConfig(value.series, value.car_type);
+						configSelect = $(configTip).addClass("orderConfigSelect").append(options);
+						$("<td />").append(configSelect).appendTo(tr);
+
+						inputDate = "<input type='text' id='newStandbyDate"+ index +"' class='input-small newStandbyDate' placeholder='备车日期...' onClick=\"WdatePicker({el:'newStandbyDate"+ index +"',dateFmt:'yyyy-MM-dd'});\"/>";
+						// inputDate = "<input type='text' id='newStandbyDate"+ index +" class='input-small newStandbyDate' placeholder='备车日期...'/>";
+						$("<td />").html(inputDate).appendTo(tr);
+
+						tr.data("orderDetailId", value.order_detail_id);
+						tr.data("distributorName", value.distributor);
+						tr.data("distributorCode", value.distributor_code);
+						tr.data("orderNumber", value.order_number);
+						tr.data("series", value.series);
+						tr.data("carTypeCode", value.car_type_code);
+						tr.data("sellCarType", value.sell_car_type);
+						tr.data("carModel", value.car_model);
+						tr.data("carType", value.car_type);
+						tr.data("color", value.color);
+						tr.data("sellColor", value.sell_color);
+						tr.data("amount", value.amount);
+						tr.data("orderNature", value.order_nature);
+						tr.data("coldResistant", value.cold_resistant);
+						tr.data("remark", value.remark);
+						tr.data("configDescription" , value.config_description);
+
+						$("#tableNewOrder tbody").append(tr);
+						
+					})
+
+					$(".newStandbyDate").val(window.byd.DateUtil.currentDate);
+					$("#tableNewOrder").show();
+				} else {
+					alert("销服系统查无订单[" + $("#newOrderNumber").val() + "]");
+					resetNewModal();
+				}
+			},
+			error: function(){
+				alertError();
+			}
+		})
+	}
+
+
+	function packOrders() {
+		orderArray = [];
+		$("#tableNewOrder tbody tr").each(function (index, tr){
+			thisConfig = $(tr).find("select").filter(".newOrderConfig").val();
+			thisDate = $(tr).find("input").filter(".newStandbyDate").val();
+			console.log(tr);
+			console.log(thisConfig);
+			$(tr).data("orderConfigId", thisConfig);
+			$(tr).data("standbyDate", thisDate);
+			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
+			
+			console.log(chosen);
+			if(chosen){
+				orderArray.push($(tr).data());
+			}
+			console.log(orderArray);
+		})
+
+		var  orderObj ={};
+		for(var i=0; i<orderArray.length;i++){
+			orderObj[i] = orderArray[i];
+		}
+		var jsonText = JSON.stringify(orderObj);
+
+		return jsonText;
+	}
+
+	function ajaxDetailExist(){
+		details = packOrders();
+		$.ajax({
+			url: ORDER_CHECK_DETAIL,
+			type: "post",
+			dataType: "json",
+			data:{
+				"orderDetails" : details
+			},
+			success: function(response) {
+				if(response.success){
+					if(response.data.length == 0){
+						ajaxGenerate(details)
+					} else {
+						confirmMessage = '订单明细：';
+						detailIds= response.data.join(",");
+						confirmMessage += detailIds;
+						confirmMessage += '已经录入过AMS，请确认是否确实需要录入？'
+						if(confirm(confirmMessage)) 
+							ajaxGenerate(details);
+					}
+				}else{
+					alert(response.message);
+				}
+			},
+			error: function(){
+				alertError();
+			}
+		})
+	}
+
+	function ajaxGenerate(details) {
+		//details = packOrders();
+		$.ajax({
+			url: ORDER_GENERATE,
+			type: 'post',
+			dataType: "json",
+			data: {
+				"orderDetails" : details
+			},
+			success: function(response) {
+				if(response.success){
+					resetNewModal();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
 	}
 
 	function ajaxQuery() {
+		orderNumber = $.trim($("#orderNumber").val());
+		distributor = $.trim($("#distributor").val());
 		$.ajax({
 			type: "get",
 			dataType: "json",
-			url: ORDER_SEARCH,
+			url: ORDER_QUERY,
 			data: {
-				"standbyDate": $("#standbyDate").val()
+				"standbyDate": $("#standbyDate").val(),
+				"orderNumber": orderNumber,
+				"distributor": distributor,
 			},
 			success: function(response) {
 				if(response.success) {
@@ -105,10 +314,14 @@ $(document).ready(function() {
 						var tr = $("<tr />");
 						var thumbTd = $("<td />");
 
-						if(index !==0){
-							thumbTd.html('<a href="#" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
+						if(index !==0 && !(orderNumber != "" || distributor != "")){
+							// if(orderNumber != "" || distributor != ""){
+							// 	thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
+							// } else {
+								thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
+							// }
 						} else {
-							thumbTd.html('<a href="#" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" title="编辑"><i class="icon-edit"></i></a>').appendTo(tr);
+							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
 							thumbTd.appendTo(tr);
 						}
 
@@ -116,40 +329,56 @@ $(document).ready(function() {
 
 						if (value.status == "1") {
 							$("<td />").html("激活").appendTo(tr);
+						} else if(value.status == "2") {
+							$("<td />").html("关闭").appendTo(tr);
 						} else {
 							$("<td />").html("冻结").appendTo(tr);
 						}
+						if(value.lane_name == ""){
+							$("<td />").html("-").appendTo(tr);
+						} else {
+							$("<td />").html(value.lane_name).appendTo(tr);
+						}
 
-						$("<td />").html(value.lane).appendTo(tr);
-						$("<td />").html(value.carrier).appendTo(tr);
 						$("<td />").html(value.order_number).appendTo(tr);
 						$("<td />").html(value.distributor_name).appendTo(tr);
 						$("<td />").html(value.amount).appendTo(tr);
+						$("<td />").html(value.hold).appendTo(tr);
 						$("<td />").html(value.series).appendTo(tr);
-						$("<td />").html(value.color).appendTo(tr);
-						$("<td />").html(value.order_config_name).appendTo(tr);
+						$("<td />").html(value.car_type_config).appendTo(tr);
 						
 						if (value.cold_resistant == "1") {
 		    				$("<td />").html("耐寒").appendTo(tr);
 		    			} else {
 		    				$("<td />").html("非耐寒").appendTo(tr);
 		    			}
+						$("<td />").html(value.color).appendTo(tr);
 
-						$("<td />").html(value.car_type).appendTo(tr);
-		    			//$("<td />").html(value.car_year).appendTo(tr)
-						$("<td />").html(value.order_type).appendTo(tr);
-						$("<td />").html(value.city).appendTo(tr);
-						$("<td />").html(value.remark).appendTo(tr);
-
-						//var editTd = $("<td />").html(" ¦ ");
-		    			//$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-		    			//$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
-		    			//editTd.appendTo(tr);
+						// $("<td />").html(value.remark).appendTo(tr);
 
 						tr.data("id", value.id);
-						tr.data("distributorId", value.distributor_id);
+						tr.data("orderNumber", value.order_number);
 						tr.data("standbyDate", value.standby_date);
+						tr.data("priority", value.priority);
+						tr.data("status", value.status);
+						tr.data("amount", value.amount);
+						tr.data("hold", value.hold);
+						tr.data("count", value.count);
+						tr.data("series", value.series);
+						tr.data("carType", value.car_type);
+						tr.data("color", value.color);
+						tr.data("coldResistant", value.cold_resistant);
 						tr.data("orderConfigId", value.order_config_id);
+						tr.data("laneId", value.lane_id);
+						tr.data("orderNature", value.order_nature);
+						tr.data("distributorName", value.distributor_name);
+						tr.data("distributorCode", value.distributor_code);
+						tr.data("country", value.country);
+						tr.data("city", value.city);
+						tr.data("carrier", value.carrier);
+						tr.data("sellCarType", value.sell_color);
+						tr.data("configDescription", value.config_description);
+						tr.data("remark", value.remark);
 
 						$("#tableResult>tbody").append(tr);
 
@@ -167,58 +396,10 @@ $(document).ready(function() {
 
 	}
 
-	function ajaxAdd() {
-		var isCold = 0;
-		if($("#newColdResistant").attr("checked") === "checked")
-			isCold = 1;
-
-		var status = 0;
-		if($("#newStatus").attr("checked") === "checked")
-			status = 1;
-
-		$.ajax({
-			type: "get",
-			dataType: "json",
-			url: ORDER_SAVE,
-			data: {
-				"id": 0,
-				"standbyDate": $("#newStandbyDate").val(),
-				"status": status,
-				"lane": $("#newLane").val(),
-				"carrier": $("#newCarrier").val(),
-				"city": $("#newCity").val(),
-				"distributorId": $("#newDistributorId").val(),
-				"orderNumber": $("#newOrderNumber").val(),
-				"amount": $("#newAmount").val(),
-				"series": $("#newSeries").val(),
-				"carType": $("#newCarType").val(),
-				"orderConfig": $("#newOrderConfig").val(),
-				"color": $("#newColor").val(),
-				"coldResistant": isCold,
-				//"carYear": $("#newCarYear").val(),
-				"orderType": $("#newOrderType").val(),
-				"remark": $("#newRemark").val()
-			},
-			success: function(response) {
-				if(response.success) {
-					emptyNewModal();
-					ajaxQuery();
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(){alertError();}
-		})
-	}
-
 	function ajaxEdit() {
 		var isCold = 0;
 		if($("#editColdResistant").attr("checked") === "checked")
 			isCold = 1;
-
-		var status = 0;
-		if($("#editStatus").attr("checked") === "checked")
-			status = 1;
 
 		$.ajax({
 			type: "get",
@@ -227,20 +408,15 @@ $(document).ready(function() {
 			data: {
 				"id": $("#editModal").data("id"),
 				"standbyDate": $("#editStandbyDate").val(),
-				"status": status,
-				"lane": $("#editLane").val(),
-				"carrier": $("#editCarrier").val(),
-				"city": $("#editCity").val(),
-				"distributorId": $("#editDistributorId").val(),
-				"orderNumber": $("#editOrderNumber").val(),
+				"status": $("#editStatus").val(),
+				"laneId": $("#editLane").val(),
+				"distributorName": $("#editDistributorName").val(),
 				"amount": $("#editAmount").val(),
 				"series": $("#editSeries").val(),
 				"carType": $("#editCarType").val(),
-				"orderConfig": $("#editOrderConfig").val(),
+				"orderConfigId": $("#editOrderConfig").val(),
 				"color": $("#editColor").val(),
 				"coldResistant": isCold,
-				//"carYear": $("#editCarYear").val(),
-				"orderType": $("#editOrderType").val(),
 				"remark": $("#editRemark").val()
 			},
 			success: function(response) {
@@ -312,148 +488,213 @@ $(document).ready(function() {
 		})
 	}
 
-	function emptyEditModal() {
-		$("#editStandbyDate").val("");
-		$("#editStatus").attr("checked", "checked");
-		$("#editLane").val("");
-		$("#editCarrier").val("");
-		$("#editCity").val("");
-		$("#editDistributorId").val("");
-		$("#editDistributorName").val("");
-		$("#editOrderNumber").val("");
-		$("#editAmount").val("");
-		$("#editSeries").val("");
-		$("#editCarType").val("");
-		$("#editOrderConfig").val("");
-		$("#editColor").val("");
-		$("#editColdResistant").removeAttr("checked");
-		//$("#editCarYear").val("");
-		$("#editOrderType").val("");
-		$("#editRemark").val("");
-		$("#editDistributorCode").html("");
-	}
-
-	function emptyNewModal() {
-		//$("#newStandbyDate").val(tomorrowDate());
-		$("#newStatus").attr("checked", "checked");
-		$("#newLane").val("");
-		$("#newCarrier").val("");
-		$("#newCity").val("");
-		$("#newDistributorId").val("");
-		$("#newDistributorName").val("");
-		$("#newOrderNumber").val("");
-		$("#newAmount").val("");
-		$("#newSeries").val("");
-		$("#newCarType").val("");
-		$("#newOrderConfig").val("");
-		$("#newColor").val("");
-		$("#newColdResistant").removeAttr("checked");
-		//$("#newCarYear").val("");
-		$("#newOrderType").val("");
-		$("#newRemark").val("");
-		$("#newDistributorCode").html("");
-	}
-
-	function currentDate (argument) {
-			var now = new Date();
-			var year = now.getFullYear();       //年
-			var month = now.getMonth() + 1;     //月
-			var day = now.getDate();            //日
-		   // var hh = now.getHours();            //时
-			//var mm = now.getMinutes();          //分
-		   
-			var clock = year + '-';
-
-			if(month < 10) clock += '0';
-			clock += month + '-';
-
-			if(day < 10) clock += '0';
-			clock += day + '';
-
-			//clock += "08:00";
-
-			return(clock); 
-		}
-	function tomorrowDate (argument) {
-		//获取系统时间 
-		var now = new Date();
-		var nowYear = now.getFullYear();
-		var nowMonth = now.getMonth();
-		var nowDate = now.getDate();
-		//处理
-		var uom = new Date(nowYear,nowMonth, nowDate);
-		uom.setDate(uom.getDate() + 1);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
-		var LINT_MM = uom.getMonth();
-		LINT_MM++;
-		var LSTR_MM = LINT_MM > 10?LINT_MM:("0"+LINT_MM)
-		var LINT_DD = uom.getDate();
-		var LSTR_DD = LINT_DD > 10?LINT_DD:("0"+LINT_DD)
-		//得到最终结果
-		uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
-		return(uom);  
-	}
-
-	function getDistributorId(distributorName) {
-		var data;
-		$.ajax ({
-			url: GET_DISTRIBUTOR_ID,
-			type: "get",
-			async: false,
-			dataType: "json",
-			data:{
-				"distributorName": distributorName
+	function ajaxSplit(orderId){
+		$.ajax({
+			url: ORDER_SPLIT,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				"id" : $("#splitModal").data("id"),
+				"number" : $.trim($("#splitAmount").val()),
+				"laneId" : $("#splitLane").val(),
 			},
 			success: function(response) {
 				if(response.success) {
-					data = response.data[0];
+					ajaxQuery();
+				} else {
+					alert(response.message);
 				}
 			},
-			error: function(){alertError();}
+			error: function() {
+				alertError();
+			}
 		})
-		return data;
 	}
 
-	//经销商的自动补全
-	$("#newDistributorName").typeahead({
-	    source: function (input, process) {
-	        $.get(GET_DISTRIBUTOR_NAME_LIST, {"distributorName":input}, function (data) {
-	        	if(data.data == '') {
-	        		$("#newDistributorCode").html("<i class='icon-remove'></i>");
-	        	}
-	        	return process(data.data);
-	        },'json');
-	    },
-	    updater:function (item) {
-			$("#newDistributorId").val(getDistributorId(item).distributor_id);
+	// function ajaxLaneQuery() {
+	// 	$.ajax({
+	// 		// url:,
+	// 		type: 'get',
+	// 		dataType: 'json',
+	// 		data: {},
+	// 		success: function(response) {
 
-			if(getDistributorId(item).distributor_id != 0) {
-				$("#newDistributorCode").html("<i class='icon-ok'></i>");
+	// 		},
+	// 		error: function() {
+
+	// 		}
+	// 	})
+	// }
+
+	// function ajaxLaneBind(){
+	// 	$.ajax({
+	// 		// url:,
+	// 		type: 'get',
+	// 		dataType: 'json',
+	// 		data: {},
+	// 		success: function(response) {
+
+	// 		},
+	// 		error: function() {
+
+	// 		}
+	// 	})
+	// }
+
+	// function ajaxChangeStatus(){
+	// 	$.ajax({
+	// 		// url:,
+	// 		type: 'get',
+	// 		dataType: 'json',
+	// 		data: {},
+	// 		success: function(response) {
+
+	// 		},
+	// 		error: function() {
+
+	// 		}
+	// 	})
+	// }
+
+	// function ajaxLaneReset(){
+	// 	$.ajax({
+	// 		// url:,
+	// 		type: 'get',
+	// 		dataType: 'json',
+	// 		data: {},
+	// 		success: function(response) {
+
+	// 		},
+	// 		error: function() {
+
+	// 		}
+	// 	})
+	// }
+
+	function fillOrderConfig(carSeries, carType){
+		var options = '<option value="0" selected>请选择</option>';
+		$.ajax({
+			url: FILL_ORDER_CONFIG,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries,
+				"carType" : carType,	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){						
+					$.each(response.data, function(index,value){
+						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+						options +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+					});
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+		return options;
+	}
+
+	function fillColor(carSeries) {
+		var options = '<option value="" selected>请选择</option>';
+		$.ajax({
+			url: FILL_CAR_COLOR,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$.each(response.data, function(index, value){
+						options += '<option value="'+ value.color +'">'+ value.color +'</option>';
+					});
+				}
+			},
+			error: function() {
+				alertError();
 			}
+		})
+		return options;
+	}
 
-			return item;
-    	}
-	});
+	function fillType(carSeries) {
+		var options = '<option value="" selected>请选择</option>';
+		$.ajax({
+			url: FILL_CAR_TYPE,
+			type: "get",
+			dataType: "json",
+			data: {
+				"carSeries" : carSeries	
+			},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$.each(response.data, function(index, value){
+						options += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+					});
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+		return options;
+	}
+
+	function emptyEditModal (argument) {
+		$("#editModal").data("id", 0),
+		$("#editStandbyDate").val(""),
+		$("#editStatus").val("0"),
+		$("#editLane").val("0"),
+		$("#editDistributorName").val(""),
+		$("#editAmount").val(""),
+		$("#editSeries").val(""),
+		$("#editCarType").val(""),
+		$("#editOrderConfig").val("0"),
+		$("#editColor").val(""),
+		$("#editColdResistant").removeAttr("checked");
+		$("#editRemark").val("")
+	}
 	
-	$("#editDistributorName").typeahead({
-	    source: function (input, process) {
-	        $.get(GET_DISTRIBUTOR_NAME_LIST, {"distributorName":input}, function (data) {
-	        	if(data.data == '') {
-	        		$("#editDistributorCode").html("<i class='icon-remove'></i>");
-	        	}
-	        	return process(data.data);
-	        },'json');
-	    },
-	    updater:function (item) {
-			$("#editDistributorId").val(getDistributorId(item).distributor_id);
+	function resetNewModal (argument) {
+		clearOrderArray()
+		$("#newOrderNumber").val("");
+		$("#tableNewOrder").hide();
+		$("#tableNewOrder tbody").html("");
+		toggleOrderInfo(false);
+	}
 
-			if(getDistributorId(item).distributor_id != 0) {
-				$("#editDistributorCode").html("<i class='icon-ok'></i>");
-			}
-			
-			return item;
-    	}
-	});
+	function emptySplitModal() {
+		$("#splitLane").val("0");
+		$("#splitAmount").val("");
+		$("#splitModal").data("id", "0");
+	}
 
+	function clearOrderArray() {
+		orderArray = [];
+	}
 
+	function emptyLaneModal (argument) {
+
+	}
+
+	function toggleOrderInfo (showOrderInfo) {
+		if(showOrderInfo){
+			$("#hint").hide();
+			$("#orderInfo").fadeIn(500);
+
+		}else{
+			$("#orderInfo").hide();
+			$("#hint").fadeIn(500);
+		}
+	}
+
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });	
 });
-

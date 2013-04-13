@@ -14,13 +14,51 @@ class OrderController extends BmsBaseController
 		);
 	}
 
-	public function actionSearchByDate() {
-		$standbyDate = $this->validateStringVal('standbyDate', '');
-		$status = $this->validateIntVal('status', 0);
-		//$curDate = DateUtil::getCurDate();
+	public function actionGetOriginalOrders(){
+		$orderNumber = $this->validateStringVal('orderNumber', '');
 		try {
 			$seeker = new OrderSeeker();
-			$data = $seeker->searchBydate($standbyDate, $status);
+			$orders = $seeker->getOriginalOrders($orderNumber);
+			$this->renderJsonBms(true, 'OK', $orders);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionCheckDetail(){
+		try{
+			$details = $this->validateStringVal('orderDetails', '{}');
+			$order = new Order();
+			$data = $order->checkDetail($details);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionGenerate(){
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			$details = $this->validateStringVal('orderDetails', '{}');
+			$order = new Order();
+			$order->genernate($details);
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', null);
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionQuery(){
+		try{
+			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$status = $this->validateStringVal('status', 'all');
+			$distributor = $this->validateStringVal('distributor', '');
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+
+			$seeker = new OrderSeeker();
+			$data = $seeker->query($standbyDate, $orderNumber, $distributor, $status);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
@@ -32,7 +70,7 @@ class OrderController extends BmsBaseController
 		try {
 			$order = OrderAR::model()->findByPk($id);
 			if(!empty($order)) {
-				$higher = OrderAR::model()->find('priority=? AND standby_date=?', array($order->priority - 1, $order->standby_date));
+				$higher = OrderAR::model()->find('priority=? AND standby_date=? AND status=1', array($order->priority - 1, $order->standby_date));
 				if(!empty($higher)){
 					$order->priority = $higher->priority;
 					$higher->priority = $higher->priority + 1;
@@ -52,7 +90,7 @@ class OrderController extends BmsBaseController
 		try {
 			$order = OrderAR::model()->findByPk($id);
 			if(!empty($order)) {
-				$highers = OrderAR::model()->findAll('priority<? AND standby_date=?', array($order->priority, $order->standby_date));
+				$highers = OrderAR::model()->findAll('priority<? AND standby_date=? AND status=1', array($order->priority, $order->standby_date));
 				if(!empty($highers)) {
 					$order->priority = 0;
 					foreach($highers as $higher) {
@@ -72,26 +110,18 @@ class OrderController extends BmsBaseController
 		$id = $this->validateIntVal('id', '');
 		$standbyDate = $this->validateStringVal('standbyDate', date('Y-m-d'));
 		$status = $this->validateIntVal('status', 0);
-		$lane = $this->validateStringVal('lane', '');
-		$carrier = $this->validateStringVal('carrier', '');
-		$city = $this->validateStringVal('city', '');
-		$distributorId = $this->validateStringVal('distributorId', '');
-		$orderNumber = $this->validateStringVal('orderNumber', '');
+		$laneId = $this->validateStringVal('laneId', '');
+		$distributorName = $this->validateStringVal('distributorName', '');
 		$amount = $this->validateStringVal('amount', '');
 		$series = $this->validateStringVal('series', '');
 		$carType = $this->validateStringVal('carType', '');
-		$orderConfig = $this->validateIntVal('orderConfig', 0);
+		$orderConfigId = $this->validateIntVal('orderConfigId', 0);
 		$color =$this->validateStringVal('color', '');
 		$coldResistant = $this->validateIntVal('coldResistant', 0);
-		$carYear = $this->validateStringVal('carYear', '');
-		$orderType = $this->validateStringVal('orderType', '');
 		$remark = $this->validateStringVal('remark', '');
 		try {
 			if(empty($standbyDate)) {
 				throw new Exception('备车日期不能为空');
-			}
-			if(empty($orderNumber)) {
-				throw new Exception('订单号不能为空');
 			}
 			if(empty($series)) {
 				throw new Exception('车系不能为空');
@@ -99,14 +129,18 @@ class OrderController extends BmsBaseController
 			if(empty($carType)) {
 				throw new Exception('车型不能为空');
 			}
-			if(empty($orderConfig)) {
+			if(empty($orderConfigId)) {
 				throw new Exception('配置不能为空');
 			}
 			if(empty($color)) {
 				throw new Exception('颜色不能为空');
 			}
-			if(empty($distributorId)) {
-				throw new Exception('经销商不能为空且需使用标准化名称');
+			if(empty($distributorName)) {
+				throw new Exception('经销商不能为空');
+			}
+
+			if($status == 1 && $laneId == 0){
+				throw new Exception('激活订单必须选择车道');
 			}
 
 			$order = OrderAR::model()->findByPk($id);
@@ -114,34 +148,35 @@ class OrderController extends BmsBaseController
 				$order = new OrderAR();
 				$order->id = $id;
 				$order->create_time = date('YmdHis');
-				$max = OrderAR::model()->find('standby_date=? ORDER BY priority DESC', array($standbyDate));
-				$order->priority = 0;
-				if(!empty($max)) {
+				$order->save();
+				// $max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
+				// $order->priority = 0;
+				// if(!empty($max) && $status == 1) {
+				// 	$order->priority = $max->priority + 1;
+				// }
+			}
+			if($status == 1 ){
+				$samePriority = OrderAR::model()->find('standby_date=? AND status=1 AND priority=?', array($standbyDate, $order->priority));
+				if(!empty($samePriority) && $samePriority->id != $order->id) {
+					$max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
 					$order->priority = $max->priority + 1;
 				}
+			}else{
+				$order->priority = 0;
 			}
 
-			$samePriority = OrderAR::model()->find('standby_date=? AND priority=?', array($standbyDate, $order->priority));
-			if(!empty($samePriority) && $samePriority->id != $id) {
-				$max = OrderAR::model()->find('standby_date=? ORDER BY priority DESC', array($standbyDate));
-				$order->priority = $max->priority + 1;
-			}
+			if(empty($laneId)) $order->priority = 0;
 
 			$order->standby_date = $standbyDate;
 			$order->status = $status;
-			$order->lane = $lane;
-			$order->carrier = $carrier;
-			$order->city = $city;
-			$order->distributor_id = $distributorId;
-			$order->order_number = $orderNumber;
+			$order->lane_id = $laneId;
+			$order->distributor_name = $distributorName;
 			$order->amount = $amount;
 			$order->series = $series;
 			$order->car_type = $carType;
-			$order->order_config_id = $orderConfig;
+			$order->order_config_id = $orderConfigId;
 			$order->color = $color;
 			$order->cold_resistant = $coldResistant;
-			//$order->car_year = $carYear;
-			$order->order_type = $orderType;
 			$order->remark = $remark;
 
 			$order->modify_time = date('YmdHis');
@@ -156,15 +191,31 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionSplit(){
+		$orderId = $this->validateIntVal('id', 0);
+		$number = $this->validateIntVal('number', 0);
+		$laneId = $this->validateIntVal('laneId', 0);
+		try{
+			$order = new Order();
+			$order->split($orderId, $number, $laneId); 
+
+			$this->renderJsonBms(true, 'OK', '');
+		} catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionDelete() {
 		$id = $this->validateIntVal('id', 0);
 		try {
 			$order = OrderAR::model()->findByPk($id);
 			if(!empty($order)) {
-				$lowers = OrderAR::model()->findAll('standby_date=? AND priority>?', array($order->standby_date, $order->priority));
-				foreach($lowers as $lower) {
-					$lower->priority -= 1;
-					$lower->save();
+				if($order->status == 1){
+					$lowers = OrderAR::model()->findAll('standby_date=? AND priority>?', array($order->standby_date, $order->priority));
+					foreach($lowers as $lower) {
+						$lower->priority -= 1;
+						$lower->save();
+					}
 				}
 				$order->delete();
 			}
@@ -205,10 +256,6 @@ class OrderController extends BmsBaseController
 	public function actionGetCarStandby() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			//$standbyDate = $this->validateStringVal('standbyDate', '');
-			//if(empty($standbyDate)) {
-			//	throw new Exception('standby date cannot be null');
-			//}
 			$curDate = DateUtil::getCurDate();
 			$order = new Order;
 			$data = $order->getCarStandby($curDate);
@@ -240,6 +287,10 @@ class OrderController extends BmsBaseController
 					$order->count -= 1;
 				}
 				$car->car->order_id = 0;
+				$car->car->lane_id = 0;
+				$car->car->distributor_name='';
+				$car->car->distributor_code='';
+				$car->car->distribute_time = '0000-00-00 00:00:00';
 				$car->car->save();
 				$order->save();
 				$message = $vin . '已释放订单' . $order->order_number . '占位';
@@ -255,11 +306,15 @@ class OrderController extends BmsBaseController
 				$data = $warehouse->checkin($vin);
 				$message = $vin . '已成功退库，请开往' . $data['row'];
 
-				$oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
-				if(!empty($oldRow)){
-					$oldRow->quantity -= 1;
-					$oldRow->save();
-			}
+				$car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->area = $data['area'];
+                $car->car->save();
+
+				// $oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
+				// if(!empty($oldRow)){
+				// 	$oldRow->quantity -= 1;
+				// 	$oldRow->save();
+				// }
 			}
 
 			$transaction->commit();
@@ -268,5 +323,31 @@ class OrderController extends BmsBaseController
 			$transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage());
 		}
+	}
+
+	public function actionQueryOrderCars() {
+		try{
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$standbyDate = $this->validateStringVal('standbyDate', '');
+
+			$seeker = new CarSeeker();
+			$data = $seeker-> queryOrderCar($orderNumber, $standbyDate);
+
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch (Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionGetOrderConfig() {
+		$carSeries = $this->validateStringVal('carSeries', '');
+		$carType = $this->validateStringVal('carType', '');
+		try {
+			$config = new OrderSeeker();
+			$data = $config->getNameList($carSeries, $carType);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}		
 	}
 }

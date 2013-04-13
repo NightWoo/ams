@@ -83,11 +83,17 @@ class FaultBaseSeeker
 
 		$codes = explode('-', $code);
 		if(count($codes) >= 2) {
-			$ret .= substr($codes[1], 0, 7);
+			foreach($codes as $code){
+				if(strlen($code) >=7){
+					$ret .= substr($codes[1], 0, 7);
+					break;
+				}
+			}
 		}
 
 		
-		$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
+		//$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
+		$sql = "SELECT fault_code FROM fault_standard WHERE fault_code LIKE '$ret%' ORDER by fault_code DESC";
 
 		$lastCode = Yii::app()->db->createCommand($sql)->queryScalar();
 	

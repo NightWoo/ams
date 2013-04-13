@@ -169,10 +169,12 @@ class Fault
         return !empty($exist);
 	}
 
-	public function showGasBag($mainGasBag) {
+	//public function showGasBag($mainGasBag) {
+	public function showGasBag() {
 		$car = Car::create($this->vin);
 		$configId =$car->car->config_id;
-		$sql = "SELECT count(*) FROM car_config_list WHERE config_id=$configId AND component_id=$mainGasBag";
+		//$sql = "SELECT count(*) FROM car_config_list WHERE config_id=$configId AND component_id=$mainGasBag";
+		$sql = "SELECT count(*) FROM car_config_list WHERE config_id=$configId AND node_id=15";
 
 		$exist = Yii::app()->db->createCommand($sql)->queryScalar();
 		return !empty($exist);

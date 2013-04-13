@@ -8,7 +8,7 @@ class PauseSeeker
 	public function __construct(){
 	}
 	
-	public function query($startTime, $endTime, $section, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy) {
+	public function query($startTime, $endTime, $section, $pauseType, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy) {
 		$conditions = array();
 		if(!empty($startTime)){
 			$conditions[] = "pause_time >=	'$startTime'";
@@ -24,6 +24,11 @@ class PauseSeeker
 			}
 			$nodeIdStr = join(',', $nodeIds);
 			$conditions[] = "node_id IN ($nodeIdStr)";
+		}
+		if(!empty($pauseType)){
+			$conditions[] = "pause_type = '$pauseType'";
+		} else {
+			$conditions[] ="(pause_type = '紧急停止' OR pause_type = '设备故障' OR pause_type = '质量关卡' OR pause_type = '工位呼叫')";
 		}
 		if(!empty($causeType)){
 			$conditions[] = "cause_type = '$causeType'";
@@ -51,6 +56,7 @@ class PauseSeeker
 		
 		$countSql = "SELECT count(*) FROM pause WHERE $condition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
+		
 		
 		foreach($datas as &$data) {
 			$editor = User::model()->findByPk($data['editor']);
@@ -87,105 +93,7 @@ class PauseSeeker
 		return array($total, $datas);
 	}
 
-	// public function queryDistribute($stime, $etime, $section, $causeType, $dutyDepartment, $pauseReason){
-	// 	$conditions = array();
-	// 	if(!empty($stime)){
-	// 		$conditions[] = "pause_time >=	'$stime'";
-	// 	}
-	// 	if(!empty($etime)){
-	// 		$conditions[] = "pause_time <=	'$etime'";
-	// 	}
-	// 	if(!empty($section)){
-	// 		$sql = "SELECT id FROM node WHERE section='$section'";
-	// 		$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
-	// 		if(empty($nodeIds)) {
-	// 			return 0;	
-	// 		}
-	// 		$nodeIdStr = join(',', $nodeIds);
-	// 		$conditions[] = "node_id IN ($nodeIdStr)";
-	// 	}
-	// 	if(!empty($causeType)){
-	// 		$conditions[] = "cause_type = '$causeType'";
-	// 	}
-	// 	if(!empty($dutyDepartment)){
-	// 		$conditions[] = "duty_department = '$dutyDepartment'";
-	// 	}
-	// 	if(!empty($pauseReason)){
-	// 		$conditions[] = "remark LIKE '%$pauseReason%'";
-	// 	}
-		
-	// 	$condition = join(' AND ', $conditions);
-
-	// 	$dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
-
-	// 	$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
-	// 	$sum = 0;
-	// 	foreach($datas as &$data) {
-	// 		// $node = NodeAR::model()->findByPk($data['node_id']);
-	// 		// if(!empty($node)){
-	// 		// 	$data['section'] = $node->section; 
-	// 		// }
-			
-	// 		if(empty($data['recover_time'])){
-	// 			$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
-	// 		}else {
-	// 			//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
-	// 			//$data['howlong'] = intval($howlong);
-	// 			$data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
-	// 		}
-	// 		$sum += $data['howlong'];
-	// 	}
-
-	// 	$causeTypeChartData = array();
-	// 	$dutyDepartmentChartData = array();
-		
-
-	// 	foreach($datas as &$data) {
-	// 		if(empty($causeTypeChartData[$data['cause_type']])) {
-	// 			$causeTypeChartData[$data['cause_type']] = array(
-	// 				'name' => $data['cause_type'],
-	// 				'howlong' => 0,
-	// 			);
-	// 		}
-
-	// 		if(empty($dutyDepartmentChartData[$data['duty_department']])) {
-	// 			$dutyDepartmentChartData[$data['duty_department']] = array(
-	// 				'name' => $data['duty_department'],
-	// 				'howlong' => 0,
-	// 			);
-	// 		}
-	// 		$causeTypeChartData[$data['cause_type']]['howlong'] += $data['howlong'];
-	// 		$dutyDepartmentChartData[$data['duty_department']]['howlong'] += $data['howlong'];
-	// 	}
-	// 	$cSeries = array();
-	// 	foreach ($causeTypeChartData as &$chartData) {
-	// 		$percentage = round($chartData['howlong'] / $sum, 3);
-	// 		$chartData['percentage'] = $percentage * 100 . "%";
-	// 		$cSeries[] = array($chartData['name'], $percentage);
-	// 		$howlong = $chartData['howlong'] ;
-	// 		$howlongMM = intval($howlong / 60);
-	// 		$howlongSS = intval($howlong % 60);
-	// 		$chartData['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
-	// 	}
-
-	// 	$dSeries = array();
-	// 	foreach ($dutyDepartmentChartData as &$chartData) {
-	// 		$percentage = round($chartData['howlong'] / $sum, 3);
-	// 		$chartData['percentage'] = $percentage * 100 . "%";
-	// 		$dSeries[] = array($chartData['name'], $percentage);
-	// 		$howlong = $chartData['howlong'] ;
-	// 		$howlongMM = intval($howlong / 60);
-	// 		$howlongSS = intval($howlong % 60);
-	// 		$chartData['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
-	// 	}
-
-	// return array(
-	// 		'cause_type_chart_data' => array('detail' => array_values($causeTypeChartData), 'series' => $cSeries),
-	// 		'duty_department_chart_data' => array('detail' => array_values($dutyDepartmentChartData), 'series' => $dSeries),
-	// 	);
-	// }
-
-	public function queryDistribute($stime, $etime, $section, $causeType, $dutyDepartment, $pauseReason){
+	public function queryDistribute($stime, $etime, $section, $pauseType, $causeType,  $dutyDepartment, $pauseReason){
 		$conditions = array();
 		if(!empty($stime)){
 			$conditions[] = "pause_time >=	'$stime'";
@@ -202,6 +110,12 @@ class PauseSeeker
 			$nodeIdStr = join(',', $nodeIds);
 			$conditions[] = "node_id IN ($nodeIdStr)";
 		}
+		if(!empty($pauseType)){
+			$conditions[] = "pause_type = '$pauseType'";
+		} else {
+			$conditions[] ="(pause_type = '紧急停止' OR pause_type = '设备故障' OR pause_type = '质量关卡' OR pause_type = '工位呼叫')";
+		}
+
 		if(!empty($causeType)){
 			$conditions[] = "cause_type = '$causeType'";
 		}
@@ -220,7 +134,7 @@ class PauseSeeker
 
 		$sum = 0;
 		foreach($datas as &$data) {
-			if(empty($data['recover_time'])){
+			if(($data['recover_time']) == '0000-00-00 00:00:00'){
 				$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
 			}else {
 				//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
@@ -324,8 +238,8 @@ class PauseSeeker
 		$curDate = DateUtil::getCurDate();
 		$sDate = date('Ymd', strtotime($sTime));
 		$eDate = date('Ymd', strtotime($eTime));
-		if($eDate >= $curDate){
-			$eDate = DateUtil::getLastDate();
+		if(strtotime($eDate) >= strtotime($curDate)){
+			$eDate = $curDate;
 		}
 
 		$queryTimes = $this->parseQueryTime($sDate, $eDate);
@@ -368,15 +282,15 @@ class PauseSeeker
 				
 				foreach($datas as &$data){
 					$runTime = strtotime($data['end_time']) - strtotime($data['start_time']) - 7199;
-					//$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
+					$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
 					$planPauseTime = 0;
-					// foreach($linePauses as $linePause) {
-					//  	if($linePause->status == 1) {
-					//  		$planPauseTime += (time() - strtotime($linePause->pause_time));
-					//  	} else {
-					// 		$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
-					// 	}
-					// }
+					foreach($linePauses as $linePause) {
+						if($linePause->status == 1) {
+							$planPauseTime += (time() - strtotime($linePause->pause_time));
+						} else {
+							$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
+						}
+					}
 					$runTime = $runTime - $planPauseTime;
 					$capacity += intval($runTime / $data['line_speed']);
 					$production += $this->queryFinishCars($data['start_time'], $data['end_time'], 2);

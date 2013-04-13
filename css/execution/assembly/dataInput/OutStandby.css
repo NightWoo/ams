@@ -7,7 +7,45 @@
 	margin-bottom: 10px;
 }
 
-#tablePlan {
+#cardNumber {
+	height: 50px;
+	width: 450px;
+	font-size: 40px;
+}
+
+#vinLabel, #cardLabel {
+	font-size: 26px;
+    height: 50px;
+    line-height: 50px;
+    width: 50px;
+}
+
+#btnSubmit, #reset {
+	height: 60px;
+	width: 80px;
+	font-size: 26px;
+}
+
+#carInfo {
+    line-height: 40px;
+    margin-top: 20px;
+    padding-left: 0;
+}
+
+ #hint{
+	font-size: 23px;
+	line-height: 40px;
+}
+
+#carInfo .label-info{
+	font-size: 23px;
+	line-height: 30px;
+	padding: 2px 8px;
+}
+
+
+
+/*#tablePlan {
 	margin-top: 15px;
 	margin-bottom: 0px;
 }
@@ -86,4 +124,4 @@ label {
 
 #thRemark {
 	min-width: 100px;
-}
+}*/

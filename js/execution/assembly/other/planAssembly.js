@@ -111,7 +111,7 @@ $(document).ready(function () {
 				$("#editConfig").val(siblings[5].innerHTML);
 				$("#editCarBody").val(siblings[6].innerHTML);	//added by wujun
 				$("#editColor").attr("value",siblings[7].innerHTML);
-				if (siblings[7].innerHTML === '耐寒') {
+				if (siblings[8].innerHTML === '耐寒') {
 					$("#checkboxEditColdResistant").attr("checked", "checked");
 				} else {
 					$("#checkboxEditColdResistant").removeAttr("checked");
@@ -238,9 +238,11 @@ $(document).ready(function () {
 
 	function ajaxAdd (argument) {
 		var isCold = 0;
-		
+		var specialProperty = 0;
 		if($("#checkboxNewColdResistant").attr("checked") === "checked")
 			isCold = 1;
+		if($("#newOrderType").val() == "出口订单") 
+			specialProperty = 1;
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -261,6 +263,7 @@ $(document).ready(function () {
 				"order_type" : $("#newOrderType").val(),
 				"special_order" : $("#newSpecialOrder").val(),
 				"remark" : $("#newRemark").val(),
+				"specialProperty" : specialProperty,
 			},
 		    success:function (response) {
 		    	if (response.success) {
@@ -280,8 +283,12 @@ $(document).ready(function () {
 
 	function ajaxEdit (argument) {
 		var isCold = 0;
+		var specialProperty = 0;
+		
 		if($("#checkboxEditColdResistant").attr("checked") === "checked")
 			isCold = 1;
+		if($("#editOrderType").val() == "出口订单") 
+			specialProperty = 1;
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -303,6 +310,7 @@ $(document).ready(function () {
 				"order_type" : $("#editOrderType").val(),
 				"special_order" : $("#editSpecialOrder").val(),
 				"remark" : $("#editRemark").val(),
+				"specialProperty" : specialProperty,
 			},
 		    success:function (response) {
 		    	if (response.success) {
@@ -424,7 +432,7 @@ $(document).ready(function () {
 		$("#newConfig").val("");
 		$("#newCarBody").val(""),		//added by wujun
 		$("#newColor").val("");
-		$("#newCarYear").val("");
+		$("#newCarYear").val("2013");
 		$("#newOrderType").val("");
 		$("#newSpecialOrder").val("");
 		$("#newRemark").val("");

@@ -8,72 +8,57 @@ $(document).ready(function() {
 	});
 
 	//清空
-	$("#refresh").click(function() {
+	// $("#refresh").click(function() {
+	// 	resetPage();
+	// 	refresh();
+	// 	return false;
+	// });
+
+	$("#reset").click(function() {
+		$("#carInfo").attr("orderId", ""); 
 		resetPage();
-		return false;
+		refresh();
+	})
+
+	$("#cardNumber").bind('keydown', function(event) {
+		//if vinText disable,stop propogation
+		if($(this).attr("disabled") == "disabled")
+			return false;
+		if (event.keyCode == "13"){
+			//remove blanks 
+		    if(jQuery.trim($('#cardNumber').val()) != ""){
+		        ajaxCardNumber();
+	        }   
+		    return false;
+		}
 	});
 
-
-	function ajaxGetOrder() {
+	function ajaxCardNumber() {
 		$.ajax({
-			url: ORDER_SEARCH,
-			type: "get",
+			url: CHECK_CARD_NUMBER,
+			type:"get",
 			dataType: "json",
 			data: {
-				//"standbyDate": workDate(), 
-				"status": 1,
+				"cardNumber": $("#cardNumber").val(),
 			},
 			success: function(response) {
 				if(response.success){
-					$("#tableOrder>tbody").html("");
-					var orders = response.data;
-					var amountAll = 0;
-					var countAll = 0;
-					var remainAll = 0;
-					var holdAll = 0;
-					$.each(orders, function (index,value) {
-						var tr =$("<tr />");
-
-						$("<td />").html(value.priority).appendTo(tr);
-						$("<td />").html(value.remain).appendTo(tr);
-						$("<td />").html(value.order_number).appendTo(tr);
-						$("<td />").html(value.amount).appendTo(tr);
-						$("<td />").html(value.count).appendTo(tr);
-						$("<td />").html(value.series).appendTo(tr);
-						$("<td />").html(value.color).appendTo(tr);
-						$("<td />").html(value.order_config_name).appendTo(tr);
-						$("<td />").html(value.car_type).appendTo(tr);
-						if(value.cold_resistant == "1"){
-							$("<td />").html("耐寒").appendTo(tr);
-						} else {
-							$("<td />").html("非耐寒").appendTo(tr);
-						}
-						//$("<td />").html(value.car_year).appendTo(tr);
-						$("<td />").html(value.lane).appendTo(tr);
-						$("<td />").html(value.carrier).appendTo(tr);
-						$("<td />").html(value.distributor_name).appendTo(tr);
-						$("<td />").html(value.city).appendTo(tr);
-						$("<td />").html(value.remark).appendTo(tr);
-
-						countAll += parseInt(value.count);
-						amountAll += parseInt(value.amount);
-						remainAll = amountAll - countAll;
-						amountAll += parseInt(value.hold);
-
-						tr.data("id", value.id);
-						tr.data("distributerId", value.distributer_id);
-						if(value.id == $("#carInfo").attr("orderId")){
-							tr.addClass("info")
-						}
-						$("#tableOrder>tbody").append(tr);
-						$("#infoCount").html(remainAll +" = " + amountAll + " - " + countAll + " (" + holdAll + ")");						
-					});
-						
+					driver = response.data;
+					// $("#btnSubmit").removeAttr("disabled").focus();
+					$("#cardNumber").attr("value", driver.card_number);
+					$("#cardNumber").attr("disabled","disabled");
+					$("#driver").html(driver.name);
+				} else {
+					$("#carInfo").attr("orderId", "");
+					resetPage();
+					refresh();
+					fadeMessageAlert(response.message, "alert-error");
 				}
 			},
 			error: function() {
 				alertError();
 			}
+
 		})
 	}
 
@@ -85,20 +70,25 @@ $(document).ready(function() {
 			data: {
 				//"standbyDate": workDate(),
 			},
+			async:false,
 			success: function(response) {
 				if(response.success) {
 					var data = response.data;
+					$(".nowTime").html("备车"+nowTime());
 					$("#rowInfo,#rowPrint").html(data.row);
 					$("#vinInfo,#vinPrint").html(data.vin);
 					$("#seriesInfo").html(data.series);
-					$("#typeInfo").html(data.type);
+					$("#typeInfo").html(data.type_info);
+					$("#coldInfo").html(data.cold_resistant);
 					$("#colorInfo").html(data.color);
 					$("#orderNumberInfo").html(data.order_number);
+					$("#distributorInfo").html(data.distributor_name);
+					$("#laneInfo").html(data.lane);
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
-					setTimeout(function (){window.print();},500);
-					ajaxGetOrder();
+					//window.print();
+					resetPage();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");
 				}
@@ -111,15 +101,24 @@ $(document).ready(function() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
 		$(".today").html(workDate())
-		$(".nowTime").html(nowTime());
 		toggleHint(true);
-		ajaxGetOrder();
+		resetPage();
 		$("#messageAlert").hide();
 	}
 
 	function refresh() {
-		ajaxGetOrder();
+		// ajaxGetOrder();
 		toggleHint(true);
+	}
+
+	function resetPage() {
+		$("#cardNumber").removeAttr("disabled");
+		$("#cardNumber").attr("value","");
+		$("#cardNumber").focus();
+		// $("#btnSubmit").attr("disabled","disabled");
+		// ajaxGetOrder();
+		$(".nowTime").html("备车"+nowTime());
+		$("#driver").html("司机")
 	}
 
 	function toggleHint (showVinHint) {
@@ -220,7 +219,70 @@ $(document).ready(function() {
 		$("#messageAlert").show(500,function () {
 			setTimeout(function() {
 				$("#messageAlert").hide(1000);
-			},60000);
+			},5000);
 		});
 	}
+
+	// function ajaxGetOrder() {
+	// 	$.ajax({
+	// 		url: ORDER_SEARCH,
+	// 		type: "get",
+	// 		dataType: "json",
+	// 		data: {
+	// 			//"standbyDate": workDate(), 
+	// 			"status": 1,
+	// 		},
+	// 		success: function(response) {
+	// 			if(response.success){
+	// 				$("#tableOrder>tbody").html("");
+	// 				var orders = response.data;
+	// 				var amountAll = 0;
+	// 				var countAll = 0;
+	// 				var remainAll = 0;
+	// 				var holdAll = 0;
+	// 				$.each(orders, function (index,value) {
+	// 					var tr =$("<tr />");
+
+	// 					$("<td />").html(value.priority).appendTo(tr);
+	// 					$("<td />").html(value.remain).appendTo(tr);
+	// 					$("<td />").html(value.order_number).appendTo(tr);
+	// 					$("<td />").html(value.amount).appendTo(tr);
+	// 					$("<td />").html(value.count).appendTo(tr);
+	// 					$("<td />").html(value.series).appendTo(tr);
+	// 					$("<td />").html(value.color).appendTo(tr);
+	// 					$("<td />").html(value.order_config_name).appendTo(tr);
+	// 					$("<td />").html(value.car_type).appendTo(tr);
+	// 					if(value.cold_resistant == "1"){
+	// 						$("<td />").html("耐寒").appendTo(tr);
+	// 					} else {
+	// 						$("<td />").html("非耐寒").appendTo(tr);
+	// 					}
+	// 					//$("<td />").html(value.car_year).appendTo(tr);
+	// 					$("<td />").html(value.lane).appendTo(tr);
+	// 					$("<td />").html(value.carrier).appendTo(tr);
+	// 					$("<td />").html(value.distributor_name).appendTo(tr);
+	// 					$("<td />").html(value.city).appendTo(tr);
+	// 					$("<td />").html(value.remark).appendTo(tr);
+
+	// 					countAll += parseInt(value.count);
+	// 					amountAll += parseInt(value.amount);
+	// 					remainAll = amountAll - countAll;
+	// 					amountAll += parseInt(value.hold);
+
+	// 					tr.data("id", value.id);
+	// 					tr.data("distributerId", value.distributer_id);
+	// 					if(value.id == $("#carInfo").attr("orderId")){
+	// 						tr.addClass("info")
+	// 					}
+	// 					$("#tableOrder>tbody").append(tr);
+	// 					$("#infoCount").html(remainAll +" = " + amountAll + " - " + countAll + " (" + holdAll + ")");						
+	// 				});
+						
+	// 			}
+	// 		},
+	// 		error: function() {
+	// 			alertError();
+	// 		}
+	// 	})
+	// }
 })

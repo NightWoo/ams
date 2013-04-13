@@ -38,6 +38,14 @@ $(document).ready( function () {
 		return false;
 	});
 
+	$("#btnQuery6B").click(function () {
+		var isFault = Number($("#isFault6B").attr("checked") === "checked");
+		ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
+			isFault);
+		return false;
+	});
+
+
 
 	function ajaxQuery (series, name, code, cate, isFault, pageNumber) {
 
@@ -55,7 +63,11 @@ $(document).ready( function () {
 					$("#tableComponent>tbody").text("");
 					$.each(response.data.list,function (index,value) {
 		    			var tr = $("<tr />");
-		    			$("<td />").html(value.car_series).appendTo(tr);
+		    			if(value.car_series == '6B'){
+			    			$("<td />").html('思锐').appendTo(tr);
+		    			}else{
+			    			$("<td />").html(value.car_series).appendTo(tr);
+		    			}
 		    			$("<td />").html(value.category).appendTo(tr);
 		    			$("<td />").html(value.code).appendTo(tr);
 		    			$("<td />").html(value.display_name).appendTo(tr);		//modifid by wujun
@@ -73,6 +85,7 @@ $(document).ready( function () {
 		    			editTd.appendTo(tr);
 
 		    			//record id and name
+		    			tr.data("carSeries", value.car_series);
 		    			tr.data("componentId", value.id);
 		    			tr.data("categoryId", value.category_id);
 						tr.data("name",value.name);		//added by wujun
@@ -110,8 +123,9 @@ $(document).ready( function () {
 				$('#editModal').modal("toggle");
 
 				var siblings = $(e.target).parent("td").siblings();
-				$("#inputSeries").val(siblings[0].innerHTML);
-				$("#inputCate").val($(e.target).parent("td").parent("tr").data("categoryId"));
+				var tr = $(e.target).closest("tr");
+				$("#inputSeries").val(tr.data("carSeries"));
+				$("#inputCate").val(tr.data("categoryId"));
 				// $("#inputCate").attr("value",siblings[1].innerHTML);
 				$("#inputCode").attr("value",siblings[2].innerHTML);
 				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		//modified by wujun
@@ -124,11 +138,11 @@ $(document).ready( function () {
 				$("#inputComment").attr("value",siblings[6].innerHTML);
 
 				// console.log($(e.target).parent("td").parent("tr").data("componentId"));
-				$("#editModal").data("componentId", $(e.target).parent("td").parent("tr").data("componentId"));
-				$("#inputName").attr("value", $(e.target).parent("td").parent("tr").data("name"));	//added by wujun
+				$("#editModal").data("componentId", tr.data("componentId"));
+				$("#inputName").attr("value", tr.data("name"));	//added by wujun
 				// $("#editModal").data("componentId");//get the component id 
 			} else {
-				ajaxDelete($(e.target).parent("td").parent("tr").data("componentId"));
+				ajaxDelete(tr.data("componentId"));
 			}
 			
 		}
@@ -141,6 +155,11 @@ $(document).ready( function () {
 
 	$("#btnAddM6").click(function () {
 		$('#newSeries').attr("value", "M6");
+		$('#newModal').modal("toggle");
+	});
+
+	$("#btnAdd6B").click(function () {
+		$('#newSeries').attr("value", "6B");
 		$('#newModal').modal("toggle");
 	});
 
@@ -263,9 +282,13 @@ $(document).ready( function () {
 				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
 					isFault ,parseInt($(".curPage").attr("page")));
-			} else {
+			} else if($("#liM6").hasClass("active")) {
 				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")));
+			} else if($("#li6B").hasClass("active")){
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")));
 			}
 			return false;
@@ -275,10 +298,16 @@ $(document).ready( function () {
 	$(".prePage").click(
 		function (){
 			if ($("#liF0").hasClass("active")) {
+				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val()
 					,parseInt($(".curPage").attr("page")) - 1);
-			} else {
+			} else if($("#liM6").hasClass("active")){
+				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")) - 1);
+			} else if(($("#li6B").hasClass("active"))) {
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")) - 1);
 			}
 		}
@@ -290,9 +319,13 @@ $(document).ready( function () {
 				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
 				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
 					isFault ,parseInt($(".curPage").attr("page")) + 1);
-			} else {
+			} else if($("#liM6").hasClass("active")){
 				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
 				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+					isFault, parseInt($(".curPage").attr("page")) + 1);
+			} else if(($("#li6B").hasClass("active"))) {
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")) + 1);
 			}
 		}

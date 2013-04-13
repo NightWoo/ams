@@ -15,7 +15,7 @@ class MonitorSeeker
 	}
 
 	public function querySeats($section) {
-		$sql = "SELECT name FROM node WHERE section='$section' AND type!='device'";
+		$sql = "SELECT display_name FROM node WHERE section='$section' AND type!='device'";
 		$seats = Yii::app()->db->createCommand($sql)->queryColumn();
 		$ret = array();
 		foreach($seats as $seat) {
@@ -303,17 +303,17 @@ class MonitorSeeker
 		$etimeHM = date("H:i", strtotime($etime));
 
 		$restTime = 0;
-		if($etimeHM >= "08:00" && $etimeHM < "11:40"){
+		if($etimeHM >= "08:00" && $etimeHM < "11:30"){
 
 		}
-		if($etimeHM >= "11:40" && $etimeHM < "12:40"){
-			$restTime = strtotime($etime) - strtotime($thisDate . " 11:40:00");
+		if($etimeHM >= "11:30" && $etimeHM < "12:30"){
+			$restTime = strtotime($etime) - strtotime($thisDate . " 11:30:00");
 		}
-		if($etimeHM >= "12:40" && $etimeHM < "17:00"){
+		if($etimeHM >= "12:30" && $etimeHM < "17:00"){
 			$restTime = 3600;
 		}
 		if($etimeHM >= "17:00" && $etimeHM < "18:00"){
-			$restTime = 3600 + (strtotime($etime) - strtotime($thisDate . " 18:00:00"));
+			$restTime = 3600 + (strtotime($etime) - strtotime($thisDate . " 17:00:00"));
 		}
 		if($etimeHM >= "18:00" && $etimeHM < "23:30"){
 			$restTime = 7200;
@@ -390,7 +390,7 @@ class MonitorSeeker
 		$linePause = LinePauseAR::model()->find("status = ? AND pause_time > ?" , array(1,$stime));
 		$seat = '';
 		if(!empty($linePause)) {
-			$sql = "SELECT name FROM node WHERE id=" . $linePause->node_id;
+			$sql = "SELECT display_name FROM node WHERE id=" . $linePause->node_id;
 			$seat = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 
@@ -513,7 +513,7 @@ class MonitorSeeker
 		//	}
 		//}
 		if(!empty($pause) && !in_array($pause->node_id, $nodeIds)) {
-			$sql = "SELECT name FROM node WHERE id={$pause->node_id}" ;
+			$sql = "SELECT display_name FROM node WHERE id={$pause->node_id}" ;
 			$seat = Yii::app()->db->createCommand($sql)->queryScalar();
 			$callStatus = $seat . $pause->pause_type;
 		}

@@ -211,14 +211,16 @@ $("document").ready(function() {
 			//len 18 may be an DongAN gearbox
 			if(compCode.substring(0,5) == 'F4A4B'){
 				simpleCode = compCode.substring(0,5)
-			}else{
+			} else if(compCode.substring(0,9) == 'BYD476ZQA'){ //len 18 may be an 475ZQA engine
+				simpleCode = compCode.substring(0,9)
+			} else{
 				simpleCode = compCode.substring(6,9);
 				providerCode = compCode.substring(0,6);
 			}
 		}else{//特殊零部件
 			if(compCode.length == 16)
 				simpleCode = compCode.substring(0,7);
-			else if(compCode.length == 15)
+			else if(compCode.length == 15)	//liandian ECU
 				simpleCode = compCode.substring(0,3);
 			else if(compCode.length == 3)
 				simpleCode = compCode;
@@ -237,14 +239,18 @@ $("document").ready(function() {
 			}
 				
 		};
+		message = compCode + "不是本工位扫描零部件条码";
+		addCheckMessage(message);
+
 		return -1;
 	}
 
 	/*
 	*/
 	function ifExistInRecordArray (index,recordArray) {
-		for (var i = 0; i < recordArray.length; i++) {
-			if(recordArray[i] == index)
+		for (var i = 0; i < compArray.length; i++) {
+			//if(recordArray[i] == index)
+			if($("#comp"+index).html())
 				return true;
 		};
 		return false;
@@ -295,19 +301,24 @@ $("document").ready(function() {
 			}
 			if(recordArray.length < compArray.length){
 				var unRecordComp = "";
+				var unRecordCount = 0
 				for (var i = 0; i < compArray.length; i++) {
 					if(!ifExistInRecordArray(i,recordArray)){
 						unRecordComp += "-" + compArray[i].display_name + "-\n";
+						++unRecordCount;
 					}
 				};
-
-				var confirmResult = confirm("还有" + (compArray.length - recordArray.length) + "个零部件未扫描:\n\n" + 
+				if(unRecordCount != 0){
+					var confirmResult = confirm("还有" + unRecordCount + "个零部件未扫描:\n\n" + 
 						unRecordComp + "\n请确认是否提交");
 
-				if (confirmResult) {
-				    ajaxEnter();
+					if (confirmResult) {
+				    	ajaxEnter();
+					}else{
+						$("#btnSubmit").removeAttr("disabled");
+					}
 				}else{
-					$("#btnSubmit").removeAttr("disabled");
+					ajaxEnter();
 				}
 			}
 		}
@@ -330,28 +341,29 @@ $("document").ready(function() {
 
 		//modified by wujun
 		if(event.keyCode == "13" || event.keyCode == "10"){
-			
-			console.log($('#compCodeText').val());
-			var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
-			if(index != -1){
-				// if(!compArray[index].bar_code){
-				if(!$("#comp"+index).html()){
-					barCode = jQuery.trim($(this).val());
-					ajaxValidateBarCode(index, barCode);
+			if(jQuery.trim($('#compCodeText').val()) != ""){
+				console.log($('#compCodeText').val());
+				var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
+				if(index != -1){
+					// if(!compArray[index].bar_code){
+					if(!$("#comp"+index).html()){
+						barCode = jQuery.trim($(this).val());
+						ajaxValidateBarCode(index, barCode);
 
-					//$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun
-					//recordArray.push(index);
-				}else{
-					message = "此车辆已记录" + compArray[index].name + "条码：" + $("#comp"+index).html()
-					addCheckMessage(message);
+						//$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun
+						//recordArray.push(index);
+					}else{
+						message = "此车辆已记录" + compArray[index].name + "条码：" + $("#comp"+index).html()
+						addCheckMessage(message);
+					}
 				}
-			}
-			$(this).val("");
-			console.log(compArray.length);
-			console.log(recordArray.length);
-			if(compArray.length == recordArray.length){
-				$("#btnSubmit").focus();
-			}
+				$(this).val("");
+				console.log(compArray.length);
+				console.log(recordArray.length);
+				if(compArray.length == recordArray.length){
+					$("#btnSubmit").focus();
+				}
+			}	
 			return false;
 		}
 	});

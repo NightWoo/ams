@@ -74,11 +74,12 @@ class FaultController extends BmsBaseController
 	}
 
 	public function actionSearchGasBag() {
-		$mainGasBag = 692;
+		//$mainGasBag = 692;
 		$vin = $this->validateStringVal('vin', '');
         try{
             $fault = Fault::create('VQ2_ROAD_TEST',$vin, '[]');
-            $data = $fault->showGasBag($mainGasBag);
+            // $data = $fault->showGasBag($mainGasBag);
+            $data = $fault->showGasBag();
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
@@ -201,6 +202,10 @@ class FaultController extends BmsBaseController
         try{
             $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults);
             $fault->save('离线');
+			
+			$car = Car::create($vin);
+			$vinMessage = $car->throwVinAssembly($car->vin, '面漆修正');
+			
             $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());

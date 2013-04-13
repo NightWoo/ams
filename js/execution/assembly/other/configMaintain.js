@@ -4,13 +4,35 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
-		
+
+		$("#btnAdd, #btnQuery").attr("disabled", "disabled");
 		$("#newModal").modal("hide");
 		$("#editModal").modal("hide");
 	}
+
+	$("#carSeries").change(function () {
+		emptyNewModal();
+		emptyEditModal();
+		if($("#carSeries").val() == ''){
+			$("#btnAdd, #btnQuery").attr("disabled", "disabled");
+		} else {
+			$("#btnAdd, #btnQuery").removeAttr("disabled");
+		}
+		$("#carType").html(fillType($("#carSeries").val()));
+	})
 	
+	$("#newCarSeries").change(function () {
+		$("#newCarType").html(fillType($("#newCarSeries").val()));
+	})
+
+	$("#editCarSeries").change(function () {
+		$("#editCarType").html(fillType($("#editCarSeries").val()));
+	})
+
 	$("#btnAdd").click(function (argument){
 		$("#newModal").modal("show");
+		$("#newCarSeries").val($("#carSeries").val());
+		$("#newCarType").html(fillType($("#newCarSeries").val()))
 	})
 	
 	$("#btnQuery").click(function (){
@@ -40,12 +62,14 @@ $(document).ready(function() {
 	$("#tableConfig").live("click", function(e) {
 		if($(e.target).html()==="编辑"){
 			//var siblings = $(e.target).parent("td").siblings();
-			$("#editCarSeries").val($(e.target).parent("td").parent("tr").data("car_series"));
-			$("#editCarType").val($(e.target).parent("td").parent("tr").data("car_type"));
-			$("#editConfigName").val($(e.target).parent("td").parent("tr").data("config_name"));
-			$("#editRemark").val($(e.target).parent("td").parent("tr").data("remark"));
+			var tr = $(e.target).closest("tr");
+			$("#editCarType").html(fillType(tr.data("car_series")));
+			$("#editCarSeries").val(tr.data("car_series"));
+			$("#editCarType").val(tr.data("car_type"));
+			$("#editConfigName").val(tr.data("config_name"));
+			$("#editRemark").val(tr.data("remark"));
 			
-			$("#editModal").data("id",$(e.target).closest("tr").data("id"));
+			$("#editModal").data("id",tr.data("id"));
 			$("#editModal").modal("show");
 			
 		} else if($(e.target).html()==="删除"){
@@ -186,5 +210,32 @@ $(document).ready(function() {
 	}
 
 });
+
+function fillType(carSeries) {
+	ret=""
+	$.ajax({
+		url: FILL_CAR_TYPE,
+		type: "get",
+		dataType: "json",
+		data: {
+			"carSeries" : carSeries	
+		},
+		async: false,
+		success: function(response) {
+			if(response.success){
+				var option = '<option value="" selected>请选择</option>'
+				$.each(response.data, function(index, value){
+					option += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+				});
+			}
+			ret = option;
+		},
+		error: function() { 
+	    	alertError(); 
+	    }
+	})
+	return ret;
+}
+
 
 //changed

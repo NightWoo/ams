@@ -11,6 +11,7 @@
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
+        <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/manufactureQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
@@ -43,8 +44,8 @@
 					<table>
                         <tr>
                             <td>工段 / 节点</td>
-                            <td>开始时间</td>
-                            <td>结束时间</td>
+                            <td>开始时间&nbsp;<a href="#" id="resetST"><i class="icon-undo"></i></a></td>
+                            <td>结束时间&nbsp;<a href="#" id="refreshET"><i class="icon-refresh"></i></a></td>
                             <td></td>
                             <td class="withSection">停线类型</td>
                             <td class="withSection">责任部门</td>
@@ -72,10 +73,10 @@
                                 
 							</td>
                             <td>
-                                <input type="text" class="span2" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                <input type="text" class="span2" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                             </td>
                             <td>
-                                <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                             </td>
                             <td>&nbsp;&nbsp;</td>
                             <td  class="withSection">
@@ -95,9 +96,9 @@
                             </td>
                             <td>&nbsp;&nbsp;</td>
                             <td class="withNode">
-                                <label class="checkbox"><input type="checkbox" checked="checked" id="checkboxF0" value="F0">F0</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkboxF0" value="F0">F0</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxSiRui" value="思锐" disabled>思锐</input></label>
+                                <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
                             </td>
                             <!-- <td>
                                 <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
@@ -154,13 +155,14 @@
                                         <th>VIN号</th>
                                         <th>车系</th>
                                         <th>流水号</th>
-                                        <th>车型</th>
+                                        <!-- <th>车型</th> -->
                                         <th>配置</th>
                                         <th>颜色</th>
                                         <th>耐寒性</th>
                                         <th>状态</th>
                                         <th>备注</th>
                                         <th>时间</th>
+                                        <!-- <th>订单号</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>

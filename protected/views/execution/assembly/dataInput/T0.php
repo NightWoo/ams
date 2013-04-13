@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate">
 		<title><?php echo $nodeDisplayName;?></title>
     	<!-- Le styles -->
     	<link href="/bms/css/common.css" rel="stylesheet">
@@ -134,7 +135,7 @@ td,th{border:none;}
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="width:840pt;height:1190pt; padding-top:10pt; font-size:18pt">
+		<div class="printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
@@ -155,7 +156,7 @@ td,th{border:none;}
 			</table>
 		</div>
 
-		<div class="printable" style="width:840pt;height:1190pt; padding-top:10pt; font-size:18pt; page-break-before: always">
+		<div class="printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt; page-break-before: always">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>

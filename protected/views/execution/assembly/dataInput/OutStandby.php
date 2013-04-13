@@ -34,38 +34,41 @@
 					require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
-					<div><!-- 面包屑 -->
-						<ul class="breadcrumb">
-							<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-							<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-							<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-							<li class="active">出库备车</li>
-							<li class="pull-right"><a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit">出成品库</a></li>                
-						</ul>
-					</div><!-- end 面包屑 -->
+					<div>
+		            	<legend>备车
+		            		<span class="pull-right">
+		            			<a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit"><i class="icon-link"></i>&nbsp;出成品库</a>
+		            		</span>
+		            	</legend>
+		            </div>
 					<div><!-- 内容主体 -->
 						<form id="form" class="well form-search">
-							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车'></input>
-							<span><a href="" id="refresh"><i class="icon-refresh" style="margin-top:6px"></i></a></span>
+							<div class="input-prepend">
+								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">
+							</div>
+							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车'>
+							<input type="button" class="btn" id ="reset" value ="清空">
+							<!-- <span><a href="" id="refresh"><i class="icon-refresh" style="margin-top:6px"></i></a></span> -->
 							<span class="help-inline" id="hint">未获得任何可备车辆</span>
 							<div class="help-inline" id="carInfo">
 								<span class="label label-info" rel="tooltip" title="车列" id="rowInfo"></span>
 								<span class="label label-info" rel="tooltip" title="Vin号" id="vinInfo"></span>
-								<span class="label" rel="tooltip" title="车系" id="seriesInfo"></span>
-								<span class="label" rel="tooltip" title="车型" id="typeInfo"></span>
-								<span class="label" rel="tooltip" title="颜色" id="colorInfo"></span>
-								<span class="label" rel="tooltip" title="订单号" id="orderNumberInfo"></span>
+								<span class="label label-info" rel="tooltip" title="车系" id="seriesInfo"></span>
+								<span class="label label-info" rel="tooltip" title="车型配置" id="typeInfo"></span>
+								<span class="label label-info" rel="tooltip" title="耐寒性" id="coldInfo"></span>
+								<span class="label label-info" rel="tooltip" title="颜色" id="colorInfo"></span>
+								<span class="label label-info" rel="tooltip" title="订单号" id="orderNumberInfo"></span>
+								<span class="label label-info" rel="tooltip" title="经销商" id="distributorInfo"></span>
+                                <span class="label label-info" rel="tooltip" title="车道号" id="laneInfo"></span>
 							</div> 
 						</form>             
 					</div>
 					<div>
 						<div id="messageAlert" class="alert"></div>    
-					</div> <!-- end 提示信息 -->
+					</div>
 		
-					<!-- <div >
-						<div id="messageAlert" class="alert"></div>    
-					</div >  -->
-					<div class="accordion" id="accordionOrder">
+					<!-- <div class="accordion" id="accordionOrder">
 	                	<div class="accordion-group">
 	                		<div class="accordion-heading">
 	               				<a id="viewToggleOrder" class="accordion-toggle" data-toggle="collapse" data-parent="#accordionOder" href="#collapseOrder">
@@ -87,7 +90,6 @@
                             					<th id="thConfig">配置</th>
                             					<th id="thCarType">车型</th>
                             					<th id="thColdResistant">耐寒性</th>
-                            					<!-- <th id="thCarYear">年份</th> -->
 	                    						<th id="thLane">车道</th>
                             					<th id="thCarrier">承运商 </th>
                             					<th id="thDistributor">经销商</th>
@@ -102,7 +104,7 @@
 	                			</div>
 	                		</div>
 	                	</div>                  	
-					</div>
+					</div> -->
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
@@ -115,9 +117,9 @@
 			</div>
 			<div style="font-size:10pt;">
 				<span id="driver" style="margin-left:10pt">
-					张三三
+					司机
 				</span>
-				<span class="nowTime" style="float:right; margin-right:15pt">
+				<span class="nowTime" style="float:right; margin-right:14pt">
 				</span>
 			</div>
 		</div>

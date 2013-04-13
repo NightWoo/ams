@@ -48,11 +48,11 @@ $(document).ready( function () {
 		}
 
 		$("#selectFaultKind").html(allKindHtml + kindHtml);
-		$("#selectCarSeries").val('F0');
+		//$("#selectCarSeries").val('F0');
 		$("#tdLevel input[type='checkbox']").removeAttr("checked");
 		$("#inputComponentName").val("");
 		$("#inputFaultMode").val("");
-		$("#selectCategoryF0").val("all");
+		$("#selectCategory").val("all");
 		$("#newKind").html(kindHtml);
 		$("#inputKind").html(kindHtml);
 	});
@@ -101,7 +101,7 @@ $(document).ready( function () {
 			level.push("C");
 		// console.log(level);
 
-		ajaxQuery($("#selectCarSeries").val(), $("#inputComponentName").val(), $("#selectFaultKind").val(), level, $("#selectCategoryF0").val(), $("#inputFaultMode").val(), pageNumber);
+		ajaxQuery($("#selectCarSeries").val(), $("#inputComponentName").val(), $("#selectFaultKind").val(), level, $("#selectCategory").val(), $("#inputFaultMode").val(), pageNumber);
 	}
 	function ajaxQuery (series, name, faultKind ,level, status, mode, pageNumber) {
 
@@ -223,15 +223,15 @@ $(document).ready( function () {
 		}
 	});
 
-	$("#btnAddF0").click(function () {
-		$('#newSeries').attr("value", "f0");
-		$('#newModal').modal("toggle");
+	$("#btnAdd").click(function () {
+		$('#newSeries').attr("value", $("#selectCarSeries").val());
+		$('#newModal').modal("show");
 	});
 
-	$("#btnAddM6").click(function () {
-		$('#newSeries').attr("value", "m6");
-		$('#newModal').modal("toggle");
-	});
+	// $("#btnAddM6").click(function () {
+	// 	$('#newSeries').attr("value", "m6");
+	// 	$('#newModal').modal("toggle");
+	// });
 
 	$("#btnEditConfirm").click(function () {
 		ajaxEdit();
@@ -442,7 +442,7 @@ $(document).ready( function () {
 	//自动补全
 	$("#newName").typeahead({
 	    source: function (input, process) {
-	        $.get(SEARCH_COMPONENT_NAME_LIST, {"component":input}, function (data) {
+	        $.get(SEARCH_COMPONENT_NAME_LIST, {"component":input,"series":$("#newSeries").val()}, function (data) {
 	        	return process(data.data);
 	        },'json');
 	    },

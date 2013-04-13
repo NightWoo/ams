@@ -1,0 +1,79 @@
+label {
+	margin-bottom: 0;
+}
+
+#tableResult {
+	font-size: 12px;
+}
+
+#thReorder {
+	min-width: 80px;
+}
+
+#thPriority {
+	min-width: 25px;
+}
+
+#thStatus {
+	min-width: 25px;
+}
+
+#thLane {
+	min-width: 25px;
+}
+
+#thCarrier {
+	min-width: 50px;
+}
+
+#thCity {
+	min-width: 80px;
+}
+
+#thDistributor {
+	min-width: 250px;
+}
+
+#thOrderNumber {
+	min-width: 100px;
+}
+
+#thAmount {
+	min-width: 25px;
+}
+
+#thSeries {
+	min-width: 25px;
+}
+
+#thCarType {
+	min-width: 200px;
+}
+
+#thConfig {
+	min-width: 120px;
+}
+
+#thColor {
+	min-width: 40px;
+}
+
+#thColdResistant {
+	min-width: 40px;
+}
+
+#thCarYear {
+	min-width: 25px;
+}
+
+#thOrderType {
+	min-width: 50px;
+}
+
+#thRemark {
+	min-width: 100px;
+}
+
+#thEdit {
+	min-width: 100px;
+}

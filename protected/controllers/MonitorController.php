@@ -204,7 +204,7 @@ class MonitorController extends BmsBaseController
 		$lineSpeed = $seeker->queryLineSpeed();
 		$lineStatus = $seeker->queryLineStatus($stime, $etime);
         $data = array(
-			'title' => '总装A线',
+			'title' => '总装I线',
             'dpu' => $seeker->queryDPU($stime, date('Y-m-d H:i:s')),
 			'qrate' => $seeker->queryQualified($stime, date('Y-m-d H:i:s')),
             'cur_time' => date('g : i A'),

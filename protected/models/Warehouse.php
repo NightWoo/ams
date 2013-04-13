@@ -1,5 +1,9 @@
 <?php
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.AR.LaneAR');
+Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.UserAR');
 Yii::import('application.models.WarehouseSeeker');
 
 class Warehouse
@@ -11,6 +15,7 @@ class Warehouse
 		$car = CarAR::model()->find('vin=?', array($vin));
 		//$carYear = CarYear::getCarYear($vin);
 		
+		//map the order_config
 		$orderConfigId = 0;
 		$configId = $car->config_id;
 		$config = CarConfigAR::model()->findByPk($configId);
@@ -19,18 +24,25 @@ class Warehouse
 		}
 
 		$conditions = array();
-		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=?";
-		$conditions['free'] = "status=?";
+		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
+		$conditions['free'] = "status=? AND free_seat>?";
 		$condition = join(' AND ', $conditions);
 		$condition .= ' ORDER BY id ASC';
-		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, 0);
-
-		//查找同型车列
+		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property, 0, 0);
 		$row = WarehouseAR::model()->find($condition, $values);
+		// if($car->special_property == 0){//普通车辆查找同型车列
+		// 	$row = WarehouseAR::model()->find($condition, $values);
+		// } else if ($car->special_property == 1){//出口车扔到F区
+		// 	$row = WarehouseAR::model()->find('area=?', array('F'));
+		// } else if ($car->special_property == 2){//降级车扔到Y区
+		// 	$row = WarehouseAR::model()->find('area=?', array('Y'));
+		// }
+
 		//如无同型车列		
 		if(empty($row)) {
-			//查找空车列，并生成同型车列
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
+			//在该车系库区区查找空车列，并生成同型车列
+			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
+			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND special_property=? AND free_seat>0 ORDER BY id ASC', array(0, 0, $car->series, $car->special_property));
 			if(!empty($voidRow) && !empty($orderConfigId)) {
 				$row = $voidRow;
 				$row->car_type = $car->type;
@@ -38,43 +50,42 @@ class Warehouse
 				$row->cold_resistant = $car->cold_resistant;
 				//$row->car_year = $carYear;
 				$row->order_config_id = $orderConfigId;
+				$row->save();
 			} else {
-				//将F0存于于周转C区
-				if($car->series == 'F0') {
-					$row = WarehouseAR::model()->find('area=?', array('C'));
-				} else {
-					//将非F0车系存于B区
-					$row = WarehouseAR::model()->find('area=? AND series=?', array('B', $car->series));
+				//如果连空车列都没有就扔到周转区Z
+				if($car->special_property == 1){
+					$row = WarehouseAR::model()->find('area=? AND series=?', array('F', ''));
+				} else if ($car->special_property == 0) {
+					$row = WarehouseAR::model()->find('area=?', array('Z'));
 				}
 			}
 		} 
 
+		//如明确了进入的车列
 		if(!empty($row)){
-			//进入同型车列
+			//进入车列
 			$row->quantity += 1;
-			if($row->quantity == $row->capacity) {
+			$row->free_seat -= 1;
+			// if($row->quantity == $row->capacity) {
+			if($row->free_seat == 0) {
 				$row->status = 1;
 			}
-
-			$car->warehouse_id = $row->id;
-			$car->area = $row->area;
-			$car->status = '成品库_' . $row->row;
-
 			$row->save();
-			$car->save();
 		} else {
 			throw new Exception('成品库无可用车列');
 		}
 
 		$data =array();
+		$data['vin'] = $car->vin;
 		$data['row'] = $row->row;
 		$data['area'] = $row->area;
+		$data['warehouse_id'] =  $row->id;
 
 		return $data;
 	}
 
 	public function checkout($vin) {
-		$car = CarAr::model()->find('vin=?', array($vin));
+		$car = CarAR::model()->find('vin=?', array($vin));
 		$order = OrderAR::model()->findByPk($car->order_id);
 		$row = WarehouseAR::model()->findByPk($car->warehouse_id);
 		$data = array();
@@ -83,39 +94,32 @@ class Warehouse
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
 			$order->count += 1;
-			if(!empty($row)){
-				$row->quantity -= 1;
-				$row->save();
-			}
-			$lane = $order->lane;
-			$distributorId = $order->distributor_id;
-			$car->lane = $lane;
-			$car->distributor_id = $distributorId;
-
-			$distributor = '';
-			if(!empty($distributorId)) {
-				$distributor = DistributorAR::model()->findByPk($distributorId);
-				$distributor = '_' . $distributor->display_name; 
+			if($order->amount == $order->count){
+				$order->status = 2;
 			}
 
+			//重复了···，备车匹配订单getCarStandby已经减过一次了
+			// if(!empty($row)){
+			// 	$row->quantity -= 1;
+			// 	$row->save();
+			// }
+
+			$lane = LaneAR::model()->findByPk($order->lane_id)->name;
 			$laneName='';
 			if(!empty($lane)) {
 				$laneName = '_' . $lane;
 			}
 
-			$car->status = '公司外' . $laneName . $distributor;
-			$car->warehouse_id = 0;
-			$car->area = 'Departure';
-
-			$order->save();
-			$car->save();
-
-			
 			$data['vin'] = $car->vin;				
-			$data['lane'] = $car->lane;
+			$data['lane'] = $lane;
+			$data['lane_id'] = $order->lane_id;
 			$data['order_id'] = $car->order_id;				
 			$data['order_number'] = $order->order_number;
+			$data['distributor_name'] = $order->distributor_name;
+			$data['distributor_code'] = $order->distributor_code;
 			$data['carrier'] = $order->carrier;				
+
+			$order->save();
 		}
 
 		return $data;

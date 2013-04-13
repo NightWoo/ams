@@ -2,6 +2,7 @@
 Yii::import('application.models.Car');
 Yii::import('application.models.VinManager');
 Yii::import('application.models.SubConfigSeeker');
+Yii::import('application.models.AR.WarehouseAR');
 class CarController extends BmsBaseController
 {
 	/**
@@ -50,12 +51,16 @@ class CarController extends BmsBaseController
 				throw new Exception('node cannot be empty');
 			}
             $enterNode = Node::createByName($nodeName);
-            $leftNode = $enterNode->getParentNode();
-
+			$leftNode = $enterNode->getParentNode();
+            
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
-
+			//$car->leftNode($leftNode->name);
+            
             $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -68,7 +73,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-			$car->leftNode('F10');
+			//$car->leftNode('F10');
 			$car->checkTraceGasolineEngine();
 			//$car->checkTraceGearBox();
             $data = $car->car;
@@ -99,8 +104,11 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-            $car->leftNode('VQ1');
+			if($car->car->series != 'M6'){
+				 $car->leftNode('VQ1');
+			}
 
+			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -119,13 +127,19 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-
-            $car->leftNode('VQ1');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('ROAD_TEST_FINISH');
+			}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2路试还有未修复的故障');
             }
             //$car->passNode('VQ3');
             $data = $car->car;
@@ -140,7 +154,7 @@ class CarController extends BmsBaseController
 		$vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-			$car->leftNode('PBS');
+			//$car->leftNode('PBS');
 
 			//“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
 			//
@@ -167,7 +181,10 @@ class CarController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
+            //$car->leftNode($leftNode->name);
+			if(empty($car->config->name)){
+				throw new Exception($vin . '无配置');
+			}
             $configName = $car->config->name;
 			$data = array(
 				'car' => $car->car,
@@ -200,7 +217,15 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
             $data = $car->getAllTrace($node);
-            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' => $car->car->status));
+            $status = $car->car->status;
+            if(!empty($car->car->lane_id)){
+                $status .= '-' . LaneAR::model()->findByPk($car->car->lane_id)->name;
+            }
+            if(!empty($car->car->distributor_name)){
+                $status .= '-' . $car->car->distributor_name;
+            }
+
+            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' =>$status));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }
@@ -275,8 +300,10 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 
             $car = Car::create($vin);
-
-			$car->leftNode('VQ2');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ2');
+			}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
@@ -305,7 +332,9 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
 
-			$car->leftNode('VQ3');
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ3');
+			}
 
 			$fault = Fault::createSeeker();
         	$exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));
@@ -320,9 +349,24 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
+			if($car->car->warehouse_id > 0){
+				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
+				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
+			}
+			
+			if($car->car->distribute_time != '0000-00-00 00:00:00'){
+				throw new Exception($vin . '已出库，不可再入库');
+			}
 
 			$car->passNode('CHECK_OUT');
-            $this->renderJsonBms(true, 'OK', $car->car);
+
+            $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
+
+            $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -385,6 +429,85 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
 	}
+
+    public function actionQueryBalanceDetail() {
+        try{
+            $state = $this->validateStringVal('state', 'WH');
+            $series = $this->validateStringVal('series', '');
+            $curPage = $this->validateIntVal('curPage', 1);
+            $perPage = $this->validateIntVal('perPage', 20);
+            
+            $seeker = new CarSeeker();
+            list($total, $data) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage);
+            $ret = array(
+                        'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
+                        'data' => $data,
+                    );
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionQueryBalanceAssembly(){
+        try{
+            $state = $this->validateStringVal('state', 'assembly'); 
+            $seeker = new CarSeeker();
+            $data = $seeker-> queryAssemblyBalance($state);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionQueryBalanceDistribute() {
+        try{
+            $state = $this->validateStringVal('state', 'assembly');
+            $series = $this->validateStringVal('series', 'F0');
+            $seeker = new CarSeeker();
+            $data = $seeker -> balanceDistribute($state, $series);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionExportBalanceDetail() {
+        $state = $this->validateStringVal('state', 'WH');
+        $series = $this->validateStringVal('series', '');
+        try{
+            $seeker = new CarSeeker();
+            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0);
+            
+            $title = "carID,流水号,VIN,车系,颜色,车型,车型/配置,耐寒性,状态,下线时间,入库时间,特殊订单号,备注,库区\n";
+            $content = "";
+            foreach($datas as $data) {
+                $content .= "{$data['car_id']},";
+                $content .= "{$data['serial_number']},";
+                $content .= "{$data['vin']},";
+                $content .= "{$data['series']},";
+                $content .= "{$data['color']},";
+				$data['type'] = str_replace(",", "，",$data['type']);
+                $content .= "{$data['type']},";
+                $content .= "{$data['type_info']},";
+                $content .= "{$data['cold']},";
+                $content .= "{$data['status']},";
+                $content .= "{$data['finish_time']},";
+                $content .= "{$data['warehouse_time']},";
+                $content .= "{$data['special_order']},";
+                $data['remark'] = str_replace(",", "，",$data['remark']);
+                $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
+                $content .= "{$data['remark']},";
+                $content .= "{$data['row']},";
+                $content .= "\n";
+            }
+            $export = new Export($state . '结存查询_' .date('Ymd'), $title . $content);
+            $export->toCSV();
+
+
+        } catch(Exception $e) {
+        }
+    }
 
 	public function actionTest()  {
 		$vin = $this->validateStringVal('vin', '');

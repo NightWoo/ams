@@ -6,7 +6,7 @@ class ShiftRecordCommand extends CConsoleCommand
 		
 		$lineSpeed = array(
 			'0' => 120,
-			'1' => 180
+			'1' => 120
 		);
 
 		$curDate = DateUtil::getCurDate();

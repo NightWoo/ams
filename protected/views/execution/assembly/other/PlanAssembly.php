@@ -50,7 +50,7 @@
                                 <select name="" id="carSeries" class="input-small">
                                     <option value="F0" selected>F0</option>
                                     <option value="M6">M6</option>
-                                    <option value="6B" disabled>思锐</option>
+                                    <option value="6B">思锐</option>
                                 </select>
                             </td>
                             <td>
@@ -139,7 +139,7 @@
                         <option value="" selected>请选择</option>
                         <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B" disabled>思锐</option>
+                        <option value="6B">思锐</option>
 
                     </select>
                 </div>
@@ -308,7 +308,7 @@
                         <option value=""></option>
                         <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B" disabled>思锐</option>
+                        <option value="6B">思锐</option>
                         
                     </select>
                 </div>

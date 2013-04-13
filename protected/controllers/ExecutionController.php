@@ -3,6 +3,8 @@ Yii::import('application.models.Car');
 Yii::import('application.models.Fault');
 Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.WarehouseAR');
 class ExecutionController extends BmsBaseController
 {
 	public static $NODE_MAP = array(
@@ -14,7 +16,9 @@ class ExecutionController extends BmsBaseController
 		'CarQuery' => array('READ_ONLY', 'CAR_QUERY', 'CAR_QUERY_ASSEMBLY'),
 		'ManufactureQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 		'ComponentQuery' => array('READ_ONLY', 'COMPONENT_TRACE_QUERY'),
-		'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+        'NodeQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+        'BalanceQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
+		'OrderCarQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 	);
 	/**
 	 * Declares class-based actions.
@@ -48,10 +52,19 @@ class ExecutionController extends BmsBaseController
 			Yii::app()->permitManager->check(self::$QUERY_PRIVILAGE[$queryPanel]);
 			$this->render('assembly/query/' . $queryPanel,array(''));
 		} catch(Exception $e) {
-			header("content-type:text/html; charset=utf-8");
-			print( "<div style='color:red;align:center'>" . $e->getMessage() . "</div>");
-			echo "<div><input   type=button   value=返回   onclick= 'window.history.back() '> </div>";
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
 		}
+    }
+
+    public function actionReport(){
+        $reportPanel = $this->validateStringVal('type','WarehouseReport');
+        try{
+            $this->render('assembly/query/' . $reportPanel);
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }        
     }
 	
 	public function actionChild() {
@@ -89,13 +102,14 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('the car must fit a plan!!');
 			}
             $car = Car::create($vin);
-            $car->leftNode('PBS');
+            //$car->leftNode('PBS');
 			$car->enterNode('T0', 0 ,true);
 			$car->generateSerialNumber();
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
 
-			$car->addSubConfig();
+            $subTypes = array('subEngine','subFrontAxle');
+            $car->addSubConfig($subTypes);
 
 			$transaction->commit();
 
@@ -123,11 +137,22 @@ class ExecutionController extends BmsBaseController
 			$leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
-            $car->leftNode($leftNode->name);
+            //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
-			
+
+            //throw T32 data to vinm
+			if($nodeName == 'T32'){
+                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
+            }
+
 			//save component trace
 			$car->addTraceComponents($enterNode, $componentCode);
+
+            // if($enterNode->id == 4){
+            //     $subTypes = array('subEngine','subFrontAxle');
+            //     $car->addSubConfig($subTypes);
+            // }
+
 			$transaction->commit();
             $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vin);
         } catch(Exception $e) {
@@ -141,10 +166,10 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            $car->leftNode('F10');
+            //$car->leftNode('F10');
             $car->enterNode('F20');
 
-
+            $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
 			//print check trace 
 			$data = $car->generateCheckTraceData();
 			$transaction->commit();
@@ -168,8 +193,12 @@ class ExecutionController extends BmsBaseController
             $car->enterNode('VQ1');
 			$car->finish();
 
+            //throw data to vinm
+			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
+			
 			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
             $fault->save('在线');
+			$car->throwTestlineCarInfo();
 			$transaction->commit();
             $this->renderJsonBms(true, 'OK');
 
@@ -246,16 +275,30 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
             $driverId = $this->validateStringVal('driver', 0);
+            
+            $fault = Fault::createSeeker();
+           
 
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
 
             $car = Car::create($vin);
-            $car->leftNode('ROAD_TEST_START');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ1');
+			}
+            
+			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
-
+			
+			$vinMessage = $car->throwVinAssembly($car->vin, '路试');
+			
 			$fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('在线');
 
@@ -276,15 +319,28 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
             $driverId = $this->validateStringVal('driver', 0);
 
+			
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
-
+			
             $car = Car::create($vin);
-            $car->leftNode('ROAD_TEST_FINISH');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('ROAD_TEST_FINISH');
+			}
+			
+			$fault = Fault::createSeeker();
+			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
+            }
+		
+			
 			$car->passNode('VQ3');
             $car->enterNode('VQ2', $driverId);
-
+			
+			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
 
 			$fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
             $fault->save('在线');
@@ -313,10 +369,16 @@ class ExecutionController extends BmsBaseController
 
 			
 			//只要进入VQ2，则可以多次进入VQ3
-            $car->leftNode('VQ2');
+			
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ2');
+			}
+            
 			$car->passNode('CHECK_IN');
             $car->enterNode('VQ3');
-		
+			
+			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
+			
 			$fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults);
             $fault->save('在线');
 			$transaction->commit();
@@ -383,32 +445,62 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $vin = $this->validateStringVal('vin', '');
+            $driverId = $this->validateIntVal('driverId', 0);
             //$date = date('Y-m-d');
             $date = DateUtil::getCurDate();
 
             $car = Car::create($vin);
 
             $fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复',array('VQ3_FACADE_TEST_'));
+            $exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));
             if(!empty($exist)) {
-                throw new 
-                Exception ($vin .'车辆在VQ3还有未修复的故障');
+                throw new Exception ('VQ3还有未修复故障');
             }
-
-            $car->leftNode('VQ3');
+            $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
+            }
+            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			$car->checkTestLinePassed();
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ3');
+			}       
             $car->passNode('CHECK_OUT');
-            $car->enterNode('CHECK_IN');
-            //$message = $vin . '未匹配订单';
-            //$data = array();
-            list($matched, $data) = $car->matchOrder($date);
-            if($matched) {
-                $message = $vin . '已匹配订单' . $data['orderNumber'] . '请开往WDI区';
-            } else {
+			if($car->car->warehouse_id > 0){
+				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
+			}
+			
+			if($car->car->distribute_time != '0000-00-00 00:00:00'){
+				throw new Exception($vin . '已出库，不可再入库');
+			}
+			
+            $onlyOnce = false;
+            $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
+            
+            //do not make the car standby while checkin point temporally
+            // list($matched, $data) = $car->matchOrder($date);
+            // if($matched) {
+            //     $message = $vin . '已匹配订单' . $data['orderNumber'] . '请开往WDI区';
+            // } else {
                 $warehouse = new Warehouse;
                 $data = $warehouse->checkin($vin);
                 $message = $vin . '已成功入库，请开往' . $data['row'];
-            }
-
+                $car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->area = $data['area'];
+                $car->car->save();
+            // }
+			if(!empty($driverId)){
+				$driverName = User::model()->findByPk($driverId)->display_name;
+			} else {
+				$driverName = Yii::app()->user->display_name;
+			}
+			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
+			
+            $car->warehouseTime();
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -423,15 +515,44 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $vin = $this->validateStringVal('vin', '');
-            $date = date('Y-m-d');
+            $driverId = $this->validateIntVal('driverId', 0);
+            // $date = date('Y-m-d');
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
-            $car->enterNode('CHECK_OUT');
+			$car->checkTestLinePassed();
+            $onlyOnce = true;
+            $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
+            $data = '';
             $warehouse = new Warehouse;
             $data = $warehouse->checkout($vin);
-            $message = $vin . '已成功出库，请开往车道' . $data['lane'];
+            $message = $vin . '已成功出库，请开往车道' . $data['lane'] . '['. $data['distributor_name'] .']';
+
+            $car->car->lane_id = $data['lane_id'];
+            $car->car->distributor_name = $data['distributor_name'];
+            $car->car->distributor_code = $data['distributor_code'];
+            // $car->order_detail_id = $order->order_detail_id;
+            $car->car->warehouse_id = 0;
+            $car->car->area = 'out';
+            $car->car->save();
+            $car->distributeTime();
+            
+            $outDate = date("Y-m-d h:m:s");
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $car->throwCertificateData($outDate, $clientIp);
+            $car->throwInspectionSheetData();
+			
+			if(!empty($driverId)){
+				$driverName = User::model()->findByPk($driverId)->display_name;
+			} else {
+				$driverName = Yii::app()->user->display_name;
+			}
+			$order = OrderAR::model()->findByPk($car->car->order_id);
+			$orderNumber = $order->order_number;
+			$orderDetailId = $order->order_detail_id;
+			
+			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
@@ -469,24 +590,30 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,VIN号,车系,流水号,车型,颜色,耐寒性,配置,状态,特殊订单号,备注,节点,驾驶员,录入人员,录入时间\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,备注,节点,驾驶员,录入人员,订单号,发动机号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
+                $content .= "{$data['serial_number']},";
                 $content .= "{$data['vin']},";
                 $content .= "{$data['series']},";
-                $content .= "{$data['serial_number']},";
-                $content .= "{$data['type']},";
                 $content .= "{$data['color']},";
+				$data['type'] = str_replace(",", "，",$data['type']);
+                $content .= "{$data['type']},";
+                $content .= "{$data['type_config']},";
                 $content .= "{$data['cold_resistant']},";
-                $content .= "{$data['config_name']},";
                 $content .= "{$data['status']},";
+                $content .= "{$data['pass_time']},";
+                $content .= "{$data['distributor_name']},";
                 $content .= "{$data['special_order']},";
                 $data['remark'] = str_replace(",", "，",$data['remark']);
+                $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
                 $content .= "{$data['node_name']},";
                 $content .= "{$data['driver_name']},";
                 $content .= "{$data['user_name']},";
-                $content .= "{$data['pass_time']}\n";
+                $content .= "{$data['order_number']},";
+                $content .= "{$data['engine_code']},";
+                $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);
             $export->toCSV();
@@ -498,6 +625,7 @@ class ExecutionController extends BmsBaseController
     public function actionMonitoringIndex() {
 		
         $this->render('assembly/monitoring/monitoringIndex');
+        // $this->render('assembly/monitoring/monitoringIndex_2');
     }
 
     public function actionMonitoringSection() {
@@ -510,22 +638,46 @@ class ExecutionController extends BmsBaseController
     }
 
     public function actionConfigPlan() {
-        $this->render('assembly/other/PlanAssembly');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/PlanAssembly');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 	
 	//added by wujun
 	public function actionConfigMaintain() {
-		$this->render('assembly/other/ConfigMaintain');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+    		$this->render('assembly/other/ConfigMaintain');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
 	public function actionConfigList() {
-		$this->render('assembly/other/ConfigList');
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/ConfigList');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
 	public function actionConfigPaper() {
-		$this->render('assembly/other/ConfigPaper');	
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/ConfigPaper');	
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
@@ -535,12 +687,46 @@ class ExecutionController extends BmsBaseController
 	
 	//added by wujun
 	public function actionOrderMaintain() {
-		$this->render('assembly/other/OrderMaintain');	
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/OrderMaintain');	
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
+
+    //added by wujun
+    public function actionOutStandbyMaintain() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/OutStandbyMaintain');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    //added by wujun
+    public function actionPlanPause() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/PlanPause');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
 
     //added by ccx
     public function actionSubQueueMaintain() {
-        $this->render('assembly/other/SubQueueMaintain');  
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/SubQueueMaintain');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 
     //added by wujun
@@ -565,39 +751,46 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
-        
-        $date = date('Y-m-d');
+		 try{
+            $vin = $this->validateStringVal('vin', '');
+			$nodeName = 'T32';
+			$componentCode = $this->validateStringVal('componentCode', '{}');
 
-        
-            $condition = "plan_date='$date'";
-        
-        $values = array($date);
-        
-         $condition .= " AND car_series='F0'";
-        
-        //modifed by wujun
-        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc');
+			$enterNode = Node::createByName($nodeName);
+			$leftNode = $enterNode->getParentNode();
 
-        $datas = array();
-        $seeker = new ConfigSeeker();
-        foreach ($plans as $plan) {
-            $temp = $plan->getAttributes();
-            $temp['config_name'] = $seeker->getName($temp['config_id']);
-            
-            $length = strlen($temp['car_type']);
-            $typeName = '';
-            $i = 0;
-            while($i < $length){
-                if($temp['car_type'][$i] === '(' || $temp['car_type'][$i] === '（')
-                    break;
-                else {
+            $car = Car::create($vin);
 
-                    $typeName .= $temp['car_type'][$i];
-                    $i++;
-                    echo $typeName;
-                    echo '<br>';
-                }
+            //throw T32 data to vinm
+			if($nodeName == 'T32'){
+                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
             }
+
+			//save component trace
+			$car->addTraceComponents($enterNode, $componentCode);
+
+
+
+            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }  
+    }
+
+    public function actionDataThrowtest() {
+        try{
+             $vin = $this->validateStringVal('vin', '');
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		FROM Summary WHERE vin='$vin'";
+			
+		$ret=Yii::app()->dbTest->createCommand($sql)->execute();
+		if(empty($ret)){
+			throw new Exception('此车未经过检测线，请返回检测线进行检验');
+		} else if($ret['Final_Flag'] == 'F') {
+			throw new Exception ('此车检测线未合格，请返回检测线进行检验');
+		}
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
 }

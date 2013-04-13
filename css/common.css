@@ -5,10 +5,23 @@
 	width:20px;
 }
 
+#leftHandle {
+  position: absolute;
+  width:10px;
+  height: 150px;
+  background-color: gray;
+  top: 100px;
+  opacity: 0.2;
+  border-radius: 0 6px 6px 0;
+}
+
 #icon-left {
-	position: relative;
-	top: 35px;
-	opacity: 0.5;
+  opacity: 0.6;
+  position: absolute;
+	top: 162px;
+  color: gray;
+	opacity: 1;
+  margin-left: 2px;
 }
 
 .marginleft {
@@ -45,6 +58,11 @@
 	margin-left:20px;
 }
 
+legend span {
+  font-size: 14px;
+  padding-top: 4px;
+}
+
 /*below added by wujun modify bootstrap.css*/
 .icon-white{margin-top:4px;}
 [class^="icon-"],[class*=" icon-"]{margin-top:4px;}
@@ -65,6 +83,17 @@ body{padding-bottom:20px;}
 
 .table th, .table td {
   vertical-align: middle;
+}
+
+.tooltip {
+  z-index: 1060;
+}
+
+.main {
+  margin: 0 auto;
+}
+.modal {
+    /*margin: -360px 0 0 -280px;*/
 }
 /*added by wujun modify bootstrap.css finished*/
 

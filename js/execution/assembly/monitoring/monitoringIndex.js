@@ -1,19 +1,16 @@
 $(document).ready(function () {
-	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".inware").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".outware").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".road").qtip({content: "s",position: {my: 'center left', at: 'center right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".leak").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	// $(".check").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	
-	qtipMe(".node_pbs", "0", "blue");
-	qtipMe(".node_t0", "0", "blue");
-	qtipMe(".node_vq1", "0", "red");
-	qtipMe(".pbs", "0", "purple");
-	qtipMe(".vq1", "0", "purple");
-
-	
-
+	qtipMe(".node_pbs", "-", "blue");
+	qtipMe(".node_t0", "-", "blue");
+	qtipMe(".node_vq1", "-", "red");
+	qtipMe(".pbs", "-", "purple");
+	qtipMe(".vq1", "-", "purple");
 
 	$(".vq2-road,.vq2-check,.vq2-leak").hover(
 	  function () {
@@ -44,14 +41,13 @@ $(document).ready(function () {
 		ajaxRow($(this).children("p").html());
 	});
 
-	window.markMap = {"T0":209,"T1":220,"T2":224,"T3":228,"T4":232,"T5":236,"T6":240,"T7":244,"T8":248,"T9":252,"T10":256,
-	"T11":271,"T12":282,"T13":286,"T14":290,"T15":294,"T16":298,"T17":302,"T18":306,"T19":310,"T20":311,
-	"T21":333,"T22":344,"T23":350,"T24":356,"T25":362,"T26":268,"T27":374,"T28":380,"T29":386,"T30":392,"T31":398,"T32":414,
-	"C1":420,"C2":426,"C3":430,"C4":434,"C5":438,"C6":442,"C7":446,"C8":450,"C9":456,"C10":476,
-	"C11":488,"C12":490,"C13":494,"C14":498,"C15":502,"C16":504,"C17":508,"C18":512,"C19":516,"C20":520,"C21":538,
-	"F1":552,"F2":556,"F3":560,"F4":564,"F5":568,"F6":572,"F7":576,"F8":580,"F9":588,"F10":600,
-	"F11":614,"F12":619,"F13":624,"F14":628,"F15":633,"F16":637,"F17":642,"F18":646,"F19":650,"F20":663
-
+	window.markMap = {"T0":410,"T01":410,"T02":410,"T03":410,"T04":410,"T05":410,"T06":410,"T07":410,"T08":410,"T09":410,"T10":410,"T11":410,
+	"T12":482,"T13":482,"T14":482,"T15":482,"T16":482,"T17":482,"T18":482,"T19":482,"T20":482,"T21":482,
+	"T22":554,"T23":554,"T24":554,"T25":554,"T26":554,"T27":554,"T28":554,"T29":554,"T30":554,"T31":554,"T32":554,
+	"C01":644,"C02":644,"C03":644,"C04":644,"C05":644,"C06":644,"C07":644,"C08":644,"C09":644,"C10":644,
+	"C11":716,"C12":716,"C13":716,"C14":716,"C15":716,"C16":716,"C17":716,"C18":716,"C19":716,"C20":716,"C21":716,
+	"F01":841,"F02":841,"F03":841,"F04":841,"F05":841,"F06":841,"F07":841,"F08":841,"F09":841,"F10":841,
+	"F11":913,"F12":913,"F13":913,"F14":913,"F15":913,"F16":913,"F17":913,"F18":913,"F19":913,"F20":913
 	};
 	// console.log(markMap['T1']);
 	//add head class
@@ -69,7 +65,7 @@ $(document).ready(function () {
 
 	$("#stopMark").hide();
 
-	$("#pauseTimeArea").toggle();
+	// $("#pauseTimeArea").toggle();
 	$("#togglePauseTime").change(function () {
 		$("#pauseTimeArea").toggle();
 	});
@@ -84,7 +80,7 @@ $(document).ready(function () {
 	});
 
 	$("#pbsBalanceModal").modal("hide");
-	$("#pbsBalance").live("click", function () {
+	$("#pbsBalance, #ui-tooltip-8").live("click", function () {
 		ajaxPbsBalance();
 		
 	});
@@ -97,7 +93,7 @@ $(document).ready(function () {
 	});
 
 	$("#vq1ExceptionBalanceModal").modal("hide");
-	$("#vq1ExceptionBalance").live("click", function () {
+	$("#vq1ExceptionBalance, #ui-tooltip-9-content").live("click", function () {
 		ajaxVq1ExceptionBalance();
 		// $("#vq1ExceptionBalanceModal").modal("show");
 	});
@@ -191,16 +187,17 @@ function showAllTips (argument) {
 
 
 function qtipMe (target, text, color) {
-	if (target === ".pbs") {
+	if (target === ".pbs" || target ==='.vq1') {
 		$(target).qtip({
 			content: text,
 			position: {
-				my: 'bottom center', 
-				at: 'top center',
-				adjust: {  
-		            y:35
-		        } 
+				my: 'center', 
+				at: 'center',
+				// adjust: {  
+		  //           y:5
+		  //       } 
 			},
+			// effect: false,
 			show: {
 						event: false, // Don't specify a show event...
 						ready: true // ... but show the tooltip when ready
@@ -215,8 +212,11 @@ function qtipMe (target, text, color) {
 		$(target).qtip({
 			content: text,
 			position: {
-				my: 'bottom center', 
-				at: 'top center'
+				my: 'top center', 
+				at: 'bottom center',
+				adjust: {  
+		            y:5
+		        }
 			},
 			show: {
 						event: false, // Don't specify a show event...
