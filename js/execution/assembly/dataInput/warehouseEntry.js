@@ -81,7 +81,7 @@ $("document").ready(function() {
 					$("#vinPrint").html(response.data.vin);
 				  	fadeMessageAlert(response.message,"alert-success");
 				  	fadeMessageRow(response.data.row,"alert-success");
-				  	window.print();
+				  	setTimeout(function (){window.print();},500);
 					resetPage();
 				}
 				else{

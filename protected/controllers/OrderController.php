@@ -2,6 +2,7 @@
 Yii::import('application.models.Order');
 Yii::import('application.models.OrderSeeker');
 Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.WarehouseAR');
 
 class OrderController extends BmsBaseController
 {
@@ -272,7 +273,8 @@ class OrderController extends BmsBaseController
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$vin = $this->validateStringVal('vin', '');
-			$releaseOnly = $this->validateIntVal('releaseOnly', 0);
+			//$releaseOnly = $this->validateIntVal('releaseOnly', 0);
+			$toVQ3 = $this->validateIntVal('toVQ3', 0);
 
 			//$car = CarAR::model()->find('vin=?', array($vin));
 			$car = Car::create($vin);
@@ -293,28 +295,42 @@ class OrderController extends BmsBaseController
 				$car->car->distribute_time = '0000-00-00 00:00:00';
 				$car->car->save();
 				$order->save();
-				$message = $vin . '已释放订单' . $order->order_number . '占位';
+				$message = $vin . '已释放订单' . $order->order_number .'_'. $order->distributor_name . '备车占位';
 
 			} else {
 				throw new Exception($vin . '释放订单失败，订单不存在或未匹配订单');
 			}
 
-			//退库
-			if($releaseOnly !== 1) {
+			//退回成品库异常区
+			if(empty($toVQ3)) {
 				$car->enterNode('CHECK_IN');
-				$warehouse = new Warehouse;
-				$data = $warehouse->checkin($vin);
-				$message = $vin . '已成功退库，请开往' . $data['row'];
 
-				$car->car->warehouse_id = $data['warehouse_id'];
-                $car->car->area = $data['area'];
+				//异常区X warehouse_id=1000
+				$warehouse = WarehouseAR::model()->findByPk(1000);
+				$warehouse->quantity += 1;
+				$warehouse->free_seat -= 1;
+
+				$car->car->warehouse_id = 1000;
+                $car->car->area = $warehouse->area;
                 $car->car->save();
+
+				$message = $vin . '已成功退回成品库异常区X，请开往' . $warehouse->row;
 
 				// $oldRow = WarehouseAR::model()->findByPk($car->car->warehouse_id);
 				// if(!empty($oldRow)){
 				// 	$oldRow->quantity -= 1;
 				// 	$oldRow->save();
 				// }
+			}
+
+			//退回VQ3
+			if($toVQ3 == 1){
+				$car->enterNode('VQ3');
+				$car->car->status = 'VQ3异常';
+				$car->car->warehouse_id = 0;
+				$car->car->area = '';
+				$car->car->save();
+				$message = $vin . '已成功退回VQ3，请开往VQ3面漆修正区';
 			}
 
 			$transaction->commit();

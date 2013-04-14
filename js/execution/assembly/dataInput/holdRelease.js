@@ -17,7 +17,7 @@ $("document").ready(function() {
 					//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
 					$("#btnSubmit").removeAttr("disabled");
-					$("#releaseOnly").removeAttr("disabled");
+					$("#toVQ3").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -41,14 +41,14 @@ $("document").ready(function() {
 	}
 
 	//提交
-	function ajaxSubmit (releaseOnly){
+	function ajaxSubmit (toVQ3){
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: ORDER_HOLD_RELEASE,
 			data: {
 				"vin": $("#vinText").val(),
-				"releaseOnly": releaseOnly || 0,
+				"toVQ3": toVQ3 || 0,
 			},
 			success: function(response){
 				resetPage();
@@ -96,7 +96,7 @@ $("document").ready(function() {
 		toggleVinHint(true);
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
-		$("#releaseOnly").attr("disabled","disabled");
+		$("#toVQ3").attr("disabled","disabled");
 	}
 
 	//toggle 车辆信息和提示信息
@@ -152,16 +152,16 @@ $("document").ready(function() {
 	$("#btnSubmit").click(function() {
 		if(!($("#btnSubmit").hasClass("disabled"))){
 			$("#btnSubmit").attr("disabled","disabled");
-			$("#releaseOnly").attr("disabled", "disabled");
+			$("#toVQ3").attr("disabled", "disabled");
 			ajaxSubmit();
 		}
 		return false;
 	});
 
-	$("#releaseOnly").click(function() {
-		if(!($("#releaseOnly").hasClass("disabled"))){
+	$("#toVQ3").click(function() {
+		if(!($("#toVQ3").hasClass("disabled"))){
 			$("#btnSubmit").attr("disabled","disabled");
-			$("#releaseOnly").attr("disabled", "disabled");
+			$("#toVQ3").attr("disabled", "disabled");
 			ajaxSubmit(1);
 		}
 	})

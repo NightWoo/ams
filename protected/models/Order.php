@@ -140,7 +140,7 @@ class Order
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         		$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId ORDER BY warehouse_time ASC";
+				$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00' ORDER BY warehouse_time ASC";
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				$car = CarAR::model()->find($matchCondition, $values);
 				 if(!empty($car)){
@@ -190,6 +190,7 @@ class Order
 				$data['series'] = $matchedCar->series;
 				$data['color'] = $matchedCar->color;
 				$data['order_number'] = $matchedOrder->order_number;
+				$data['distributor_name'] = $matchedOrder->distributor_name;
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
 				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';
