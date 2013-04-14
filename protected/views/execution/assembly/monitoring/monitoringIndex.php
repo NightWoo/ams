@@ -165,7 +165,7 @@
 			    		<div class="area-e-right">e</div>
 			    		<div class="area-f">f</div>
 
-			    		<div class="area-total-amount">853</div>
+			    		<div class="area-total-amount"></div>
 
 			    		<div class="span4" id="blockDetail">
 

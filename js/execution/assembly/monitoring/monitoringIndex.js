@@ -419,6 +419,9 @@ function ajaxGetStock (argument) {
 	    		$(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		$(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 
+	    		//warehouse total 
+	    		$(".area-total-amount").html(response.data.warehourse_cars.all);
+
     			//refresh stock
     			$(".vq3-balance-data").html(response.data.balance.VQ3.all);
     			$(".vq2-road-data").html(response.data.balance.VQ2.all);
