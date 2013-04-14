@@ -49,7 +49,7 @@
 	font-weight:bold;
 	font-size:9px;
 	z-index: 100; 
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 #detect {
@@ -448,7 +448,7 @@ z-index: 9999;}
 
 .outware-data{left: 492px;
 top: 53px;}
-.inware-data{left: 595px;
+.inware-data{left: 595px;height: 58px;
 top: 171px;}
 .road-data{left: 489px;
 top: 250px;}
@@ -529,58 +529,70 @@ top: 381px;}
 
 #blockDetail{/*position: absolute;*/
 width: 300px;
+height: 475px;
 /*left: 735px;
 top: 67px;*/
 margin-left: 735px;}
 .area-a{position: absolute;
-width: 50px;
-height: 100px;
-border: 1px solid transparent;
-left: 370px;
-top: 304px;
+width: 61px;
+height: 123px;
+left: 368px;
+top: 298px;
 cursor: pointer;
 color: transparent;}
 .area-b{position: absolute;
-width: 50px;
-height: 100px;
+width: 61px;
+height: 126px;
 border: 1px solid transparent;
-left: 432px;
-top: 304px;
+left: 426px;
+top: 297px;
 cursor: pointer;
 color: transparent;}
 .area-c{position: absolute;
-width: 50px;
-height: 100px;
+width: 61px;
+height: 126px;
 border: 1px solid transparent;
-left: 494px;
-top: 304px;
+left: 490px;
+top: 297px;
 cursor: pointer;
 color: transparent;}
 .area-d{position: absolute;
-width: 50px;
-height: 100px;
-border: 1px solid transparent;
-left: 560px;
-top: 304px;
+width: 59px;
+height: 125px;
+left: 557px;
+top: 298px;
 cursor: pointer;
 color: transparent;}
-.area-e{position: absolute;
-width: 50px;
-height: 251px;
-border: 1px solid transparent;
-left: 498px;
-top: 38px;
-cursor: pointer;
-color: transparent;}
+
 .area-f{position: absolute;
-width: 50px;
-height: 215px;
-border: 1px solid transparent;
-left: 561px;
-top: 76px;
+width: 59px;
+height: 230px;
+left: 552px;
+top: 68px;
 cursor: pointer;
 color: transparent;}
-.area-a:hover,.area-b:hover,.area-c:hover,.area-d:hover,.area-e:hover,.area-f:hover{border-color: orange;}
+.area-a:hover{background: url(../../../../img/area-a.png) no-repeat 0 0 ;}
+.area-b:hover{background: url(../../../../img/area-b.png) no-repeat 0 0 ;}
+.area-c:hover{background: url(../../../../img/area-c.png) no-repeat 0 0 ;}
+.area-d:hover{background: url(../../../../img/area-d.png) no-repeat 0 0 ;}
+
+.area-f:hover{background: url(../../../../img/area-f.png) no-repeat 0 0 ;}
+
+.area-e{position: absolute;
+width: 60px;
+height: 262px;
+left: 495px;
+top: 35px;
+cursor: pointer;
+color: transparent;}
+.area-e-right{position: absolute;
+width: 68px;
+height: 40px;
+left: 554px;
+top: 34px;
+cursor: pointer;
+color: transparent;}
+
 #blockDetail p{margin:0 10px;}
 #blockDetail a{margin:10px 0}
 #blockDetail .progress{margin-bottom: 0px;}

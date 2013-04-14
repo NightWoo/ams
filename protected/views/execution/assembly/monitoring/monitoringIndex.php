@@ -162,6 +162,7 @@
 			    		<div class="area-c">c</div>
 			    		<div class="area-d">d</div>
 			    		<div class="area-e">e</div>
+			    		<div class="area-e-right">e</div>
 			    		<div class="area-f">f</div>
 			    		<div class="span4" id="blockDetail">
 
