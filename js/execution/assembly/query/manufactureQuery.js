@@ -680,7 +680,7 @@ $(document).ready(function () {
 			data: {
 				"stime": $("#startTime").val(),
 				"etime": $("#endTime").val(),
-				"line": "A",
+				"line": "I",
 				"series": getSeriesChecked(),
 				"perPage": 10,
 				"curPage": targetPage || 1,
@@ -757,7 +757,7 @@ $(document).ready(function () {
 			dataType: "json",
 			url: PLAN_QUERY_COMPLETION,
 			data: {
-				"line" : 'A',
+				"line" : 'I',
 				"series": getSeriesChecked(),
 				"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
