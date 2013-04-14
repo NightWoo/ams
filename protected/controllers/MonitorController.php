@@ -115,12 +115,20 @@ class MonitorController extends BmsBaseController
 			}
 		}
 
+		$startTime = DateUtil::getCurDate() . " 08:00:00";
+		$endTime = date('Y-m-d H:i:s');
+		
 		$states = array('warehourse_in' => '成品库', 'warehourse_out' => '公司外');
 		foreach($seriesArray as $series) {
             foreach($states as $key => $state) {
-				$balance[$key][$series] = $seeker->queryWareHourseCars($state, $series, null, null);
+				$balance[$key][$series] = $seeker->queryWareHourseCars($state, $series, $startTime, $endTime);
             }
         }
+
+		$wareHourseCar = array();
+		foreach($seriesArray as $series) {
+			$wareHourseCar[$series] = $seeker->queryWareHourseCars('成品库', $series, null, null);
+		}
 
         $data = array(
             'line_speed' => $lineSpeed,
@@ -129,6 +137,7 @@ class MonitorController extends BmsBaseController
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
 			'balance' => $balance,
 			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
+			'warehourse_cars' => $wareHourseCar,
 			'drr' => $drrs,
 		);
 
