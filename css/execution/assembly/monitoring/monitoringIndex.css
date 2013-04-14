@@ -592,7 +592,15 @@ left: 554px;
 top: 34px;
 cursor: pointer;
 color: transparent;}
-
+.area-total-amount{
+	position: absolute;
+width: 1px;
+height: 1px;
+left: 507px;
+top: 252px;
+color: #9963FF;
+font-size: 50px;
+}
 #blockDetail p{margin:0 10px;}
 #blockDetail a{margin:10px 0}
 #blockDetail .progress{margin-bottom: 0px;}
