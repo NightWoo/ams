@@ -735,8 +735,14 @@ class ExecutionController extends BmsBaseController
     }
 
     //added by wujun
-    public function actionWarehouseReturn() {
-        $this->render('assembly/dataInput/WarehouseReturn');  
+    public function actionHoldRelease() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/dataInput/HoldRelease');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
     }
 
     //added by wujun

@@ -119,7 +119,7 @@ class PauseController extends BmsBaseController
 	public function actionQueryUseRate() {
 		$stime = $this->validateStringVal('startTime', '');
 		$etime = $this->validateStringVal('endTime', '');
-		$line = $this->validateStringVal('line', 'A');
+		$line = $this->validateStringVal('line', 'I');
 		try{
 			$seeker = new PauseSeeker();
 			$data = $seeker->queryUseRate($stime, $etime, $line);

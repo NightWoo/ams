@@ -2,16 +2,16 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>成品库退库</title>
+		<title>释放订单占位</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
-	<link href="/bms/css/execution/assembly/dataInput/WarehouseReturn.css" rel="stylesheet">
+	<link href="/bms/css/execution/assembly/dataInput/HoldRelease.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
     <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
-    <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/warehouseReturn.js"></script>
+    <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/holdRelease.js"></script>
 	</head>
 	<body>
 		<?php
@@ -22,14 +22,13 @@
 				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- Main体 -->
-				<div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active">成品库退库</li> 
-						<li class="pull-right"><a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntry">入成品库</a></li>               
-				</ul></div><!-- END 面包屑 -->
-				<div><!-- 内容主体 -->
+				<div>
+		            	<legend>释放订单占位
+		            		<span class="pull-right">
+		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;备车</a>
+		            		</span>
+		            	</legend>
+		            </div>
 					<div>
 						<form id="form" class="well form-search">
 							<table id="tableInput">
@@ -40,8 +39,8 @@
 											<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 										</div>
 										    <div class="btn-group">
-												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="退库并释放订单">
-												<input type="button" class="btn btn-danger" disabled="disabled" id ="releaseOnly" value ="只释放订单">
+												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="返回成品库异常区">
+												<input type="button" class="btn btn-danger" disabled="disabled" id ="toVQ3" value ="返回VQ3">
 											</div>
 										<input type="button" class="btn" id ="reset" value ="清空">
 										<span class="help-inline" id="vinHint">请输入VIN后回车</span>

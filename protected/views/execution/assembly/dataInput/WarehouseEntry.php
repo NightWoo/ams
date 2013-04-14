@@ -32,7 +32,7 @@
 					<div>
 		            	<legend><?php echo $nodeDisplayName;?>
 		            		<span class="pull-right">
-		            			<a href="/bms/execution/warehouseReturn"><i class="icon-link"></i>&nbsp;退库/释放订单占位</a>
+		            			<!-- <a href="/bms/execution/warehouseReturn"><i class="icon-link"></i>&nbsp;退库/释放订单占位</a> -->
 		            		</span>
 		            	</legend>
 		            </div>

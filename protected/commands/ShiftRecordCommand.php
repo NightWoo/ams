@@ -14,7 +14,7 @@ class ShiftRecordCommand extends CConsoleCommand
 		
 		foreach($lineSpeed as $shift => $value){
 			$ar = new ShiftRecordAR();
-			$ar->line = 'A';
+			$ar->line = 'I';
 			$ar->shift = $shift;
 			$ar->shift_date = $lastDate;
 			$ar->line_speed = $value;

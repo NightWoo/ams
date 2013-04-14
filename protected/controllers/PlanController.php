@@ -228,7 +228,7 @@ class PlanController extends BmsBaseController
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');
-		$line = $this->validateStringVal('line', 'A');
+		$line = $this->validateStringVal('line', 'I');
 		$perPage = $this->validateIntVal('perPage', 10);
 		$curPage = $this->validateIntVal('curPage', 1);
 
@@ -254,7 +254,7 @@ class PlanController extends BmsBaseController
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');
-		$line = $this->validateStringVal('line', 'A');
+		$line = $this->validateStringVal('line', 'I');
 		try{
 			$seeker = new PlanSeeker();
 			$data = $seeker->queryCompletion($stime, $etime, $series, $line);
