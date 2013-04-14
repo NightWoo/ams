@@ -827,6 +827,34 @@ class Car
 
 		return $ret;
 	}
+
+	public function generateInfoPaperData() {
+		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+        $config = CarConfigAR::model()->findByPk($this->car->config_id);
+        $configName = $config->name;
+        $carType = CarTypeMapAR::model()->find('car_type=?', array($this->car->type));
+        $carModel = $carType->car_model;
+        $carTypeShort = $carType->short_name;
+        $coldResistant = $this->car->cold_resistant==1? '/耐寒' : '';
+
+        $ret = array(
+			'vinBarCode' => "/bms/" .$vinBarCodePath,
+			'typeConfig' =>  $configName . $coldResistant,
+			'carModel' => $carModel,
+			'series' => $this->car->series,
+			'serialNumber' => $this->car->serial_number,
+			'line' => $this->car->assembly_line,
+			'date' => date('Ymd'),
+			'color' => $this->car->color,
+			'remark'  => $this->car->remark,
+			'vinCode' => $this->car->vin,
+			'typeShort' => $carModel . '(' . $carTypeShort . ')',
+		);
+
+		return $ret;
+	}
 		
 	//added by wujun
 	public function matchOrder($date) {

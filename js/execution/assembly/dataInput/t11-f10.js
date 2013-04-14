@@ -105,9 +105,23 @@ $("document").ready(function() {
 			success: function(response) {
 				resetPage();
 				if(response.success){
+					carInfo = response.data;
 				  	fadeMessageAlert(response.message,"alert-success");
-				  	$("#vinHint").html("上一辆" + response.data);	//added by wujun
+				  	$("#vinHint").html("上一辆" + carInfo.vinCode);	//added by wujun
 				  	recordArray = [];		//added by wujun
+
+				  	if($("#currentNode").val() == 'C21'){
+					  	$("#carSeriesInfo").html(carInfo.series);
+					  	$("#carTypeShort").html(carInfo.typeShort);
+					  	$(".vinBarcode").attr("src",carInfo.vinBarCode);
+					  	// $(".printDate").html(carInfo.date);
+					  	$(".printSerialNumber").html(carInfo.line + '-' + carInfo.series + '-' + carInfo.serialNumber + '-' + carInfo.date);
+					  	$(".printModel").html(carInfo.carModel);
+					  	$(".printConfig").html(carInfo.typeConfig);
+					  	$(".printRemark").html(carInfo.remark);
+
+					  	setTimeout(function (){window.print();},500);
+				  	}
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");

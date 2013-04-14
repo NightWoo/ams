@@ -6,6 +6,7 @@
 		<!-- Le styles -->
 		<link href="/bms/css/bootstrap.css" rel="stylesheet"  media="screen">
 		<link href="/bms/css/execution/assembly/dataInput/T11-F10.css" rel="stylesheet"  media="screen">
+		<link href="/bms/css/execution/assembly/dataInput/T11-F10_Print.css" rel="stylesheet"  media="print">
 		<link href="/bms/css/common.css" rel="stylesheet"  media="screen">
 		<link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
 		<style type="text/css" media="screen">
@@ -101,28 +102,34 @@
 			</div><!-- end offhead -->	
     	</div>
 
-    	<div class="toPrintable" style="height: 119pt; width: 226pt; padding-top: 5pt;">
-    		<table style="font-size: 18pt">
-    			<tr>
-    				<th colspan="2" style="padding:5pt;"><img class="vinBarcode" alt="" src="/bms/img/barcodeTest.jpeg"></th>
-    			</tr>
-    			<tr>
-    				<td class="alignCenter" style="width:35pt;">整车编号</td>
-    				<td class="printSerialNumber" style="width:170pt;font-size:14pt;padding-left:2pt;">I-F0-D123456</td>
-    			</tr>
-    			<tr>
-    				<td class="alignCenter">计划编号</td>
-    				<td class="printDate" style="width:170pt; font-size:14pt; padding-left:2pt;">20130312</td>
-    			</tr>
-    			<tr>
-    				<td class="alignCenter">车型配置</td>
-    				<td class="printCarType" style="width:170pt;font-size:14pt; padding-left:2pt;">1.0L实用/QA-4/助力</td>
-    			</tr>
-    			<tr>
-    				<td class="alignCenter">备注信息</td>
-    				<td class="printMemo" style="width:170pt;font-size:10pt; padding-left:2pt;">哥斯达黎加CS-1234951,无ABS,无安全气囊,无防盗系统，紧急入库</td>
-    			</tr>
-    		</table>
+    	<div class="toPrintable" style="padding: 5pt; width: 220pt;">
+    		<div id="printBarCode">
+    			<div>
+    				<p id="carSeriesInfo">F0</p>
+    				<p id="carTypeShort">QCJ7100L(1.0排量舒适型)</p>
+    			</div>
+    			<div style="">
+    				<img class="vinBarcode" alt="" src="/bms/img/barcodeTest.jpeg" style="width:247px; height:60px;">
+    			</div>
+    		</div>
+
+    		<div id="printInfo">
+    			<!-- <div>
+    				<p class="printDate">20130312</p>
+    			</div> -->
+    			<div>
+    				<p class="printSerialNumber">I-F0-D123456</p>
+    			</div>
+    			<div>
+    				<p class="printModel">1.0L实用/QA-4/助力</p>
+    			</div>
+    			<div>
+    				<p class="printConfig">1.0L实用/QA-4/助力</p>
+    			</div>
+    			<div>
+    				<p class="printRemark">哥斯达黎加CS-1234951</p>
+    			</div>
+    		</div>
     	</div>	
 	</body>
 </html>

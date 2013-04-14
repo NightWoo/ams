@@ -153,8 +153,9 @@ class ExecutionController extends BmsBaseController
             //     $car->addSubConfig($subTypes);
             // }
 
+            $data = $car->generateInfoPaperData();
 			$transaction->commit();
-            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vin);
+            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);

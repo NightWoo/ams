@@ -1,0 +1,18 @@
+#printInfo p {
+	margin-top:5px;
+	margin-bottom: 0px;
+	font-size:18pt;
+}
+
+#printInfo, #printBarCode {
+	height: 120pt;
+	margin-left: 15px;
+}
+
+#printInfo {
+	margin-top:30px;
+}
+
+#printInfo .printRemark, #printInfo .printDate{
+	font-size: 14pt;
+}
