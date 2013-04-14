@@ -594,12 +594,13 @@ cursor: pointer;
 color: transparent;}
 .area-total-amount{
 	position: absolute;
-width: 1px;
+width: 90px;
 height: 1px;
 left: 507px;
 top: 252px;
 color: #9963FF;
 font-size: 50px;
+text-align: center;
 }
 #blockDetail p{margin:0 10px;}
 #blockDetail a{margin:10px 0}
