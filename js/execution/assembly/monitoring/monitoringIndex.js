@@ -21,10 +21,12 @@ $(document).ready(function () {
 	  function () {
 	    $(".vq2-road-data").addClass("border-purple");
 	    $(".vq2-check-data").addClass("border-purple");
+	    $(".vq2-leak-data").addClass("border-purple");
 	  },
 	  function () {
 	    $(".vq2-road-data").removeClass("border-purple");
 	    $(".vq2-check-data").removeClass("border-purple");
+	    $(".vq2-leak-data").removeClass("border-purple");
 	  }
 	);
 
@@ -369,6 +371,9 @@ $(".sub-flag").live("hover", function () {
 		}
 	});
 	$(this).qtip('option', 'content.text', tipContent.substr(0, tipContent.length - 1));
+}).live("mouseout", function () {
+	
+	$(this).qtip('option', 'content.text', $(this).data("subData").all);
 });
 
 function ajaxGetStock (argument) {
@@ -383,8 +388,8 @@ function ajaxGetStock (argument) {
 	    		$("#line_speed").text(response.data.line_speed);
 	    		$("#line_urate").text(response.data.line_urate);
 	    		$("#totalPauseTime").text(response.data.pause_time.total);
-	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
-	    			parseInt(response.data.balance.VQ3));
+	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1.all) + parseInt(response.data.balance.VQ2.all) +
+	    			parseInt(response.data.balance.VQ3.all));
 	    		//refresh tips
 	    		$(".outware-data").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
 	    		$(".outware-data").data("subData", response.data.balance.warehourse_out);

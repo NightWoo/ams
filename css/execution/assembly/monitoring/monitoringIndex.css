@@ -460,16 +460,16 @@ top: 422px;}
 
 
 .vq3-balance-data{color: transparent;
-height: 109px;
+height: 130px;
 position: absolute;
-width: 153px;
+width: 157px;
 cursor: pointer;
 border: 2px solid transparent;
 left: 153px;
-top: 243px;
-line-height: 117px;
+top: 226px;
+line-height: 145px;
 text-align: center;
-font-size: 16px;}
+font-size: 36px;}
 .vq3-balance-data:hover{color: #9963FF;border-color:  #9963FF;}
 .vq2-road-data{color: transparent;
 height: 117px;
@@ -477,22 +477,22 @@ position: absolute;
 width: 187px;
 cursor: pointer;
 border-width: 2px;
-border-style: solid none none solid;
+border-style: solid solid none solid;
 border-color: transparent;
-left: 316px;
-top: 242px;
-font-size: 14px;
+left: 317px;
+top: 243px;
+font-size: 36px;
 line-height: 117px;
 text-align: center;}
 .vq2-check-data{color: transparent;
-height: 70px;
+height: 61px;
 position: absolute;
-width: 187px;
+width: 164px;
 cursor: pointer;
 border-width: 2px;
-border-style: solid none none solid;
+border-style: solid none solid solid;
 border-color: transparent;
-left: 127px;
+left: 153px;
 top: 361px;
 font-size: 14px;
 line-height: 76px;}
@@ -502,10 +502,10 @@ position: absolute;
 width: 187px;
 cursor: pointer;
 border-width: 2px;
-border-style: solid none none solid;
+border-style: none solid solid none;
 border-color: transparent;
-left: 316px;
-top: 361px;
+left: 319px;
+top: 354px;
 font-size: 14px;
 line-height: 76px;}
 .border-purple{border-color:  #9963FF;color: #9963FF;}
