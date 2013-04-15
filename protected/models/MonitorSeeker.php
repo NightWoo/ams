@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.AR.monitor.*');
+Yii::import('application.models.SeriesSeeker');
 
 class MonitorSeeker
 {
@@ -48,14 +49,16 @@ class MonitorSeeker
 	public function queryProductionLabel($stime,$etime) {
 		//pbs t0 vq1
 		$date = date("Y-m-d", strtotime($stime));
-		$planCars = $this->queryPlanCars($date);
-		return array(
-				'PBS' => $this->queryFinishCars($stime,$etime,'PBS'),
-				//'T0'  => $this->queryFinishCars($stime,$etime, 'T0') . "/$planCars",
-				'T0'  => $this->queryFinishCars($stime,$etime, 'T0'),
-				//'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1') . "/$planCars",
-				'VQ1' => $this->queryFinishCars($stime,$etime, 'VQ1'),
-			    );
+		//$planCars = $this->queryPlanCars($date);
+		$seriesArray = SeriesSeeker::findAllCode();
+        $seriesArray[] = 'all';
+		$nodes = array('PBS','T0','VQ1');
+		foreach($nodes as $node) {
+			foreach($seriesArray as $series) {
+				$ret[$node][$series] = $this->queryFinishCars($stime,$etime,$node,$series);
+			}
+		}
+		return $ret;
 	}
 
 	public function queryQualityLabel($stime,$etime) {
@@ -90,17 +93,23 @@ class MonitorSeeker
 
 
 	public function queryWarehouseBalanceDetail($suffix, $type = 'block') {
-		$prefix = "成品库_";
 		if($type == 'block') {
-			$sql = "SELECT concat('$prefix', row) as status FROM warehouse WHERE block='$suffix'";
+			$sql = "SELECT id FROM warehouse WHERE block='$suffix'";
 
-			$states = Yii::app()->db->createCommand($sql)->queryColumn();
 		} else {
-			$states = $prefix . $suffix;	
+			$sql = "SELECT id FROM warehouse WHERE row = '$suffix'";
 		}
+		$states = Yii::app()->db->createCommand($sql)->queryColumn();
 
-		return $this->queryBalanceDetail($states);
+		return $this->queryBalanceDetailByWareHouseId($states);
 	}
+	
+	public function queryBalanceDetailByWareHouseId($ids) {
+        $str = "'" . join("','", $ids) . "'";
+        $sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE warehouse_id IN ($str)";
+        return Yii::app()->db->createCommand($sql)->queryAll();
+    }
+
 
 	public function queryBalanceDetail($node) {
 		if(!is_array($node)) {
@@ -111,7 +120,7 @@ class MonitorSeeker
 			}
 		} else {
 			$states = $node;
-		}
+	}
 		$str = "'" . join("','", $states) . "'";
 		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
 		return Yii::app()->db->createCommand($sql)->queryAll();
@@ -206,10 +215,13 @@ class MonitorSeeker
 		return $planCars;
 	}
 
-	public function queryFinishCars($stime, $etime, $node) {
+	public function queryFinishCars($stime, $etime, $node,$series = 'all') {
 		$sql = "SELECT id FROM node WHERE name='$node'";
 		$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
 		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE pass_time>'$stime' AND pass_time < '$etime' AND node_id=$nodeId";
+		if($series !== 'all') {
+			$sql .= " AND car_series='$series'";
+		}
 		$finishCars = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $finishCars;
 	}
