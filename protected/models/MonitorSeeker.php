@@ -262,6 +262,16 @@ class MonitorSeeker
 		return $total;
 	}
 
+	public function queryAreaRate() {
+		$sql = "select sum(quantity)/sum(capacity) as rate,area from warehouse group by area";
+		$datas = Yii::app()->db->createcommand($sql)->queryAll();
+		$ret = array();
+		foreach($datas as $data) {
+			$ret[$data['area']] = $data['rate'];
+		}
+		return $ret;
+	}
+
 	public function queryPlan($section, $date) {
 		$seeker = new PlanSeeker();
 		$plans = $seeker->search($date, '', '');

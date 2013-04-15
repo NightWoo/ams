@@ -130,6 +130,8 @@ class MonitorController extends BmsBaseController
 			$wareHourseCar[$series] = $seeker->queryWareHourseCars('成品库', $series, null, null);
 		}
 
+		$areaRates = $seeker->queryAreaRate();
+
         $data = array(
             'line_speed' => $lineSpeed,
             'line_run_time' => intval($lineRunTime / 60),
@@ -139,6 +141,7 @@ class MonitorController extends BmsBaseController
 			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
 			'warehourse_cars' => $wareHourseCar,
 			'drr' => $drrs,
+			'area_rate' => $areaRates,
 		);
 
         $this->renderJsonBms(true, 'OK', $data);
