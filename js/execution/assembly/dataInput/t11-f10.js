@@ -114,8 +114,8 @@ $("document").ready(function() {
 					  	$("#carSeriesInfo").html(carInfo.series);
 					  	$("#carTypeShort").html(carInfo.typeShort);
 					  	$(".vinBarcode").attr("src",carInfo.vinBarCode);
-					  	// $(".printDate").html(carInfo.date);
-					  	$(".printSerialNumber").html(carInfo.line + '-' + carInfo.series + '-' + carInfo.serialNumber + '-' + carInfo.date);
+					  	$(".printDate").html(carInfo.date);
+					  	$(".printSerialNumber").html(carInfo.line + '-' + carInfo.series + '-' + carInfo.serialNumber);
 					  	$(".printModel").html(carInfo.carModel);
 					  	$(".printConfig").html(carInfo.typeConfig);
 					  	$(".printRemark").html(carInfo.remark);

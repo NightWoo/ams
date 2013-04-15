@@ -99,7 +99,7 @@ class WarehouseController extends BmsBaseController
 		try{
 			$seeker = new CarSeeker();
 			list($total, $datas) = $seeker->queryCheckoutDetail($startTime, $endTime, $series);
-			$content = "订单号,车道,经销商,VIN,车系,车型,配置,耐寒性,颜色,发动机号,入库时间,备注,特殊订单号\n";
+			$content = "订单号,车道,经销商,VIN,车系,车型,配置,耐寒性,颜色,发动机号,出库时间,备注,特殊订单号\n";
             foreach($datas as $data) {
                 $content .= "{$data['order_number']},";
                 $content .= "{$data['lane']},";

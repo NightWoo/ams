@@ -114,20 +114,20 @@
     		</div>
 
     		<div id="printInfo">
-    			<!-- <div>
-    				<p class="printDate">20130312</p>
-    			</div> -->
     			<div>
-    				<p class="printSerialNumber">I-F0-D123456</p>
+    				<p class="printDate">-</p>
     			</div>
     			<div>
-    				<p class="printModel">1.0L实用/QA-4/助力</p>
+    				<p class="printSerialNumber">-</p>
     			</div>
     			<div>
-    				<p class="printConfig">1.0L实用/QA-4/助力</p>
+    				<p class="printModel">-</p>
     			</div>
     			<div>
-    				<p class="printRemark">哥斯达黎加CS-1234951</p>
+    				<p class="printConfig">-</p>
+    			</div>
+    			<div>
+    				<p class="printRemark">-</p>
     			</div>
     		</div>
     	</div>	

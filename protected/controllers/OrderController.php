@@ -288,6 +288,10 @@ class OrderController extends BmsBaseController
 				if(strstr($car->car->status, '公司外') !== false) {
 					$order->count -= 1;
 				}
+				
+				if($order->status == 2){
+					$order->status =1;
+				}
 				$car->car->order_id = 0;
 				$car->car->lane_id = 0;
 				$car->car->distributor_name='';
