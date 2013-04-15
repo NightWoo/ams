@@ -80,8 +80,8 @@
 		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div> -->
 		            	<div class="vq1" id="vq1ExceptionBalance"></div>
 		            	<div class="andon_bord" id="andon_board"></div>
-		            	<div class="node_pbs"></div>
-		            	<div class="node_t0"></div>
+		            	<div class="node_pbs sub-flag"></div>
+		            	<div class="node_t0 sub-flag"></div>
 		            	<div class="node_vq1"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
 		            			<div id="pauseTimeT1" class="pauseTime">-</div>

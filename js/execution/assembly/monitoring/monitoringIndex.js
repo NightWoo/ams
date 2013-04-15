@@ -349,8 +349,12 @@ function ajaxThreeInfo () {
 	    success:function (response) {
 	    	if (response.success){
 
-	    		$(".node_pbs").qtip('option', 'content.text', response.data.list.production.PBS);
-	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0);
+	    		$(".node_pbs").qtip('option', 'content.text', response.data.list.production.PBS.all);
+	    		$(".node_pbs").data("subData", response.data.list.production.PBS);
+
+	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0.all);
+	    		$(".node_t0").data("subData", response.data.list.production.T0);
+	    		
 	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1);
     			$(".pbs").qtip('option', 'content.text', response.data.list.balance.PBS);
     			$(".vq1").qtip('option', 'content.text', response.data.list.balance.VQ1);
