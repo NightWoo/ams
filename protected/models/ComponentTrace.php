@@ -24,11 +24,11 @@ class ComponentTrace
 		if(!empty($vin)) {
 			$car = Car::create($vin);
 			$series = array($car->car->series);
-			$conditions[] = "vin='$vin'";
+			$conditions[] = "vin LIKE '%$vin'";
 		}
 		
 		if(!empty($barcode)) {
-			$conditions[] = "bar_code='$barcode'";
+			$conditions[] = "bar_code LIKE '%$barcode'";
 		}
 		if(!empty($node)) {
 			$node = Node::createByName($node);

@@ -39,7 +39,7 @@
 					<table>
 						<tr>
 							<td class="alignRight"><label>VIN&nbsp;&nbsp;</label></td>
-							<td><input type="text" class="span3" placeholder="请输入VIN..." id="vinText" /></td>
+							<td><input type="text" class="span3" placeholder="请输入至少9位VIN..." id="vinText" /></td>
 							<td class="alignRight"><label>&nbsp;&nbsp;&nbsp;&nbsp;物料条码&nbsp;&nbsp;</label></td>
 							<td><input type="text" class="span3" placeholder="请输入..." id="barText" /></td>
 							<td>

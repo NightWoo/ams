@@ -102,6 +102,7 @@ $("document").ready(function() {
         	dataType: "json",//返回json格式的数据
 			url: T11_F10_SUBMIT_PARTS,//ref:  /bms/js/service.js
 			data: {"componentCode":jsonText,vin: $('#vinText').val(),currentNode:$("#currentNode").attr("value")},
+			async: false,
 			success: function(response) {
 				resetPage();
 				if(response.success){

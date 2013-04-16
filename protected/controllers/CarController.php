@@ -218,6 +218,9 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
             $data = $car->getAllTrace($node);
             $status = $car->car->status;
+            if(!empty($car->car->warehouse_id)){
+                $status .= '-' . WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
+            }
             if(!empty($car->car->lane_id)){
                 $status .= '-' . LaneAR::model()->findByPk($car->car->lane_id)->name;
             }
