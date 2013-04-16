@@ -251,6 +251,26 @@ function qtipMe (target, text, color) {
 				classes: 'ui-tooltip-' + color
 			}
 	    });
+	} else if (target === ".node_vq1") {
+		$(target).qtip({
+			content: text,
+			position: {
+				my: 'top center', 
+				at: 'bottom left',
+				adjust: {  
+		            y:5
+		        }
+			},
+			show: {
+						event: false, // Don't specify a show event...
+						ready: true // ... but show the tooltip when ready
+					},
+					hide: false, // Don't specify a hide event either!
+			style: {
+				tip: true,
+				classes: 'ui-tooltip-' + color
+			}
+	    });
 	} else {
 		$(target).qtip({
 			content: text,
