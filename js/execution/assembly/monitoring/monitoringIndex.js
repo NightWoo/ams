@@ -8,7 +8,7 @@ $(document).ready(function () {
 	
 	//warehouse tips
 	$(".inware-warehouse").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
-	$(".outware-warehouse").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
+	$(".outware-warehouse").qtip({content: "s",position: {my: 'center right', at: 'bottom left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3-warehouse").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 
 	qtipMe(".node_pbs", "-", "blue");
@@ -420,8 +420,8 @@ function ajaxGetStock (argument) {
 	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
 	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
 
-	    		$(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
-	    		$(".vq3-warehouse").data("subData", response.data.drr.VQ3);
+	    		// $(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
+	    		// $(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 
 	    		//warehouse total 
 	    		$(".area-total-amount").html(response.data.warehourse_cars.all);
@@ -559,7 +559,7 @@ function ajaxBalance (node) {
 }
 
 //block click handler
-	$(".area-a,.area-b,.area-c,.area-d,.area-e,.area-e-right,.area-f").live("click", function () {
+	$(".area-a,.area-b,.area-c,.area-d,.area-e,.area-e-up,.area-f").live("click", function () {
 		var blockNumber = $(this).html();
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();
@@ -666,10 +666,10 @@ function ajaxVq1ExceptionBalance () {
 	});
 }
 
-$(".area-e,.area-e-right").live("hover", function () {
-	$(".area-e").css("background", "url(../img/area-e.png) no-repeat 0 0");
-	$(".area-e-right").css("background", "url(../img/area-e-right.png) no-repeat 0 0");
+$(".area-e,.area-e-up").live("hover", function () {
+	$(".area-e").css("background", "url(../img/hover_E.png) no-repeat 0 0");
+	$(".area-e-up").css("background", "url(../img/hover_E_up.png) no-repeat 0 0");
 }).live("mouseout", function () {
 	$(".area-e").css("background", "");
-	$(".area-e-right").css("background", "");
+	$(".area-e-up").css("background", "");
 });

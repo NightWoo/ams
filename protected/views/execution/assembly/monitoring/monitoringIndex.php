@@ -153,19 +153,43 @@
 				    	<div class="vq2-check-data"></div>
 
 	      			</div>
-	      			<div id="warehouse" class="tab-pane ">	
-						<div class="outware-warehouse warehouse-node sub-flag"></div>
-			    		<div class="inware-warehouse warehouse-node sub-flag"></div>
-			    		<div class="vq3-warehouse warehouse-node"></div>
-			    		<div class="area-a">a</div>
-			    		<div class="area-b">b</div>
-			    		<div class="area-c">c</div>
-			    		<div class="area-d">d</div>
-			    		<div class="area-e">e</div>
-			    		<div class="area-e-right">e</div>
-			    		<div class="area-f">f</div>
+	      			<div id="warehouse" class="tab-pane">
+	      				<div id="warehouseContainer">
+			      			<div id ="warehouseBack">
+			      			</div>
+			      			<div class="containerE">
+			      				<div class="progressE progressBlue"></div>
+			      			</div>
+			      			<div class="maskF"></div>
+			      			<div class="containerF">
+			      				<div class="progressF progressBlue"></div>
+			      			</div>
+			      			<div class="containerD containerABCD">
+			      				<div class="progressD progressBlue"></div>
+			      			</div>
+			      			<div class="containerC containerABCD">
+			      				<div class="progressC progressBlue"></div>
+			      			</div>
+			      			<div class="containerB containerABCD">
+			      				<div class="progressB progressBlue"></div>
+			      			</div>
+			      			<div class="containerA containerABCD">
+			      				<div class="progressA progressBlue"></div>
+			      			</div>
+			      			<div class="warehouseImg"><img src="/bms/img/warehouse_572x420.png"></div>
+							<div class="outware-warehouse warehouse-node sub-flag"></div>
+				    		<div class="inware-warehouse warehouse-node sub-flag"></div>
+				    		<!-- <div class="vq3-warehouse warehouse-node"></div> -->
+				    		<div class="area-a">A</div>
+				    		<div class="area-b">B</div>
+				    		<div class="area-c">C</div>
+				    		<div class="area-d">D</div>
+				    		<div class="area-f">F</div>
+				    		<div class="area-e">E</div>
+				    		<div class="area-e-up"></div>
+				    		<div class="area-total-amount"></div>
+	      				</div>
 
-			    		<div class="area-total-amount"></div>
 
 			    		<div class="span4" id="blockDetail">
 

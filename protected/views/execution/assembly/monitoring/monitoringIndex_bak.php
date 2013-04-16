@@ -54,14 +54,16 @@
 	          	<div id="divTabs">
 			    	<ul id="tabs" class="nav nav-pills">
 			            <li class="active"   id="liAssembly"><a href="#index" data-toggle="tab">总装车间</a></li>
-			            <li class="" id="liDetecthouse"><a href="#detecthouse" data-toggle="tab">检测车间/成品库</a></li>
+			            <!-- <li class="" id="liDetecthouse"><a href="#detecthouse" data-toggle="tab">检测车间/成品库</a></li> -->
+			            <li class="" id="liDetect"><a href="#detect" data-toggle="tab">检测车间</a></li>
+			            <li class="" id="liWarehouse"><a href="#warehouse" data-toggle="tab">成品库</a></li>
 						<!-- <li class="" id="liWarehouse"><a href="#warehouse" data-toggle="tab">成品库</a></li> -->
 			        </ul>
 			    </div>
 			    <div class="tab-content">
 				    
 		            <div id="index" class="tab-pane active main">
-		            	<div class="stop_mark" id="stopMark"></div>
+		            	<div class="stop_mark" id="stopMark">C00</div>
 		            	<div class="t1 range" id="rangeT1"></div>
 		            	<div class="t2 range" id="rangeT2"></div>
 		            	<div class="t3 range" id="rangeT3"></div>
@@ -69,35 +71,40 @@
 		            	<div class="c2 range" id="rangeC2"></div>
 		            	<div class="f1 range" id="rangeF1"></div>
 		            	<div class="f2 range" id="rangeF2"></div>
-		            	<div class="optNode ef1">EF1</div>
+		            	<!-- <div class="optNode ef1">EF1</div>
 		            	<div class="optNode ef2">EF2</div>
 		            	<div class="optNode ef3">EF3</div>
-		            	<div class="optNode main_chain">主链</div>
+		            	<div class="optNode main_chain">主链</div> -->
 		            	<div class="pbs" id="pbsBalance"></div>
 		            	<!-- <div class="vq1" id="vq1Balance"></div>
 		            	<div class="vq1_exception" id="vq1ExceptionBalance"></div> -->
 		            	<div class="vq1" id="vq1ExceptionBalance"></div>
 		            	<div class="andon_bord" id="andon_board"></div>
-		            	<div class="node_pbs"></div>
-		            	<div class="node_t0"></div>
+		            	<div class="node_pbs sub-flag"></div>
+		            	<div class="node_t0 sub-flag"></div>
 		            	<div class="node_vq1"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
-		            		<div>
-		            			device: <span id="pauseTimeDevice"></span>
-		            		</div>
-		            		<div>
-		            			<span id="pauseTimeT1" style='padding-left:50px'></span>
-		            			<span id="pauseTimeT2" style='padding-left:50px'></span>
-		            			<span id="pauseTimeT3" style='padding-left:70px'></span>
-		            			<span id="pauseTimeC1" style='padding-left:70px'></span>
-		            			<span id="pauseTimeC2" style='padding-left:40px'></span>
-		            			<span id="pauseTimeF1" style='padding-left:47px'></span>
-		            			<span id="pauseTimeF2" style='padding-left:50px'></span>
-		            		</div>
-		            			
+		            			<div id="pauseTimeT1" class="pauseTime">-</div>
+							<div id="pauseTimeT2" class="pauseTime">-</div>
+							<div id="pauseTimeT3" class="pauseTime">-</div>
+							<div id="pauseTimeC1" class="pauseTime">-</div>
+							<div id="pauseTimeC2" class="pauseTime">-</div>
+							<div id="pauseTimeF1" class="pauseTime">-</div>
+							<div id="pauseTimeF2" class="pauseTime">-</div>
+	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
+	            			<div id="totalPauseTime" class="pauseTime">-</div>
+		            	</div>
+		            	<div id="useRate">
+		            		<span id="line_urate"></span>
+		            	</div>
+		            	<div id="recycle">
+		            		<span id="recycleCar"></span>
+		            	</div>
+		            	<div id="speed">
+		            		<span id="line_speed"></span><span style="font-size:14px">&nbsp;秒</span>
 		            	</div>
 		            </div>
-		            <div id="detecthouse" class="tab-pane ">		            	
+		            <!-- <div id="detecthouse" class="tab-pane ">		            	
 		            	<div id="background" class="pull-left">
 				    		<div class="A01 stockyard">A01</div>
 				  		  	<div class="A02 stockyard">A02</div>
@@ -130,38 +137,44 @@
 				    		<div class="stock-amount">36</div>
 				    	</div>
 				    	<div class="span4" style="margin-top:12px;" id="block">
+
               			</div>
+              		</div> -->
+              		<div id="detect" class="tab-pane ">	
+	      				<div class="outware-data data-node sub-flag"></div>
+			    		<div class="inware-data data-node sub-flag"></div>
+			    		<div class="vq3-data data-node sub-flag"></div>
+			    		<div class="leak-data data-node sub-flag"></div>
+			    		<div class="road-data data-node sub-flag"></div>
+			    		<div class="vq1-data data-node sub-flag"></div>
+			    		<div class="vq3-balance-data">36</div>
+				    	<div class="vq2-road-data">84</div>
+				    	<div class="vq2-leak-data"></div>
+				    	<div class="vq2-check-data"></div>
+
+	      			</div>
+	      			<div id="warehouse" class="tab-pane ">	
+						<div class="outware-warehouse warehouse-node sub-flag"></div>
+			    		<div class="inware-warehouse warehouse-node sub-flag"></div>
+			    		<div class="vq3-warehouse warehouse-node"></div>
+			    		<div class="area-a">a</div>
+			    		<div class="area-b">b</div>
+			    		<div class="area-c">c</div>
+			    		<div class="area-d">d</div>
+			    		<div class="area-e">e</div>
+			    		<div class="area-e-right">e</div>
+			    		<div class="area-f">f</div>
+
+			    		<div class="area-total-amount"></div>
+
+			    		<div class="span4" id="blockDetail">
+
+              			</div>
+	      			</div>
 		         </div>
-		         <form class="bs-docs-example form-search" id="generalInfo">
-		            <!-- <i class="icon-hand-right" style="margin: 8px 10px 0 32px;"></i>
-		            <div style="display:inline-block;" id="radioInfo">
-			            <label class="radio inline">
-			              <input type="radio" name="monitoringType" id="monitoringType1" value="productInfo" >
-			              生产
-			            </label>
-			            <label class="radio inline">
-			              <input type="radio" name="monitoringType" id="monitoringType2" value="qualityInfo">
-			              质量
-			            </label>
-			            <label class="radio inline">
-			              <input type="radio" name="monitoringType" id="monitoringType3" value="storeInfo">
-			              结存
-			            </label>
-			            <label class="radio inline">
-			              <input type="radio" name="monitoringType" id="monitoringType4" value="hideInfo" checked="checked">
-			              隐藏
-			            </label>
-		            </div> -->
-		            <div>
-		            <label class="checkbox" style="display:inline-block;padding-top:7px;">
-				      <input type="checkbox" id="togglePauseTime">停线时间
-				    </label> 
-		           		<label style="padding-top:7px; margin-bottom: 0">，合计：&nbsp;&nbsp;<span id="totalPauseTime"></span></label>
-						<label style="padding-top:7px; margin-bottom: 0">。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产利用率：&nbsp;&nbsp;<span id="line_urate"></span></label>
-						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线速：&nbsp;&nbsp;<span id="line_speed"></span></label>
-						<label style="padding-top:7px; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周转车：&nbsp;&nbsp;<span id="recycleCar"></span></label>
-					</div>
-	          	</form>	
+
+		         
+
 	            <div style="width:756px;margin-left:44px;display:none;">
 	            	<table class="table table-bordered" id="tableInfo">
 	            		
@@ -263,7 +276,7 @@
 		<div class="modal" id="vq1ExceptionBalanceModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
 		  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		   	 	<h3>VQ1异常结存明细</h3>
+		   	 	<h3>VQ1结存(异常)明细</h3>
 		  	</div>
 		  	<div class="modal-body">
 		  		<table class="table table-bordered" id="vq1ExceptionBalanceTable">
