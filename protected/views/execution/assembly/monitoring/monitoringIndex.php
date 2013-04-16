@@ -82,7 +82,7 @@
 		            	<div class="andon_bord" id="andon_board"></div>
 		            	<div class="node_pbs sub-flag"></div>
 		            	<div class="node_t0 sub-flag"></div>
-		            	<div class="node_vq1"></div>
+		            	<div class="node_vq1 sub-flag"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
 		            			<div id="pauseTimeT1" class="pauseTime">-</div>
 							<div id="pauseTimeT2" class="pauseTime">-</div>
@@ -191,9 +191,7 @@
 	      				</div>
 
 
-			    		<div class="span4" id="blockDetail">
-
-              			</div>
+			    		
 	      			</div>
 		         </div>
 
@@ -364,6 +362,22 @@
             		</thead>
             		<tbody></tbody>
 	            </table>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
+
+		<!-- modal -->
+		<div class="modal" id="areaModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h3> 库区信息</h3>
+		  	</div>
+		  	<div class="modal-body">
+		  		<div class="span4" id="blockDetail">
+
+              	</div>
 		  	</div>
 		  	<div class="modal-footer">
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>

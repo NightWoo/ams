@@ -86,7 +86,7 @@
 }
 
 .progressE{
-	width:80%;
+	width:90%;
 	float: right;
 }
 
@@ -101,7 +101,7 @@
 
 .progressF{
 	float: right;
-	width:60%;
+	width:90%;
 	right:0;
 }
 
@@ -650,7 +650,7 @@ width: 300px;
 height: 475px;
 /*left: 735px;
 top: 67px;*/
-margin-left: 735px;}
+/*margin-left: 735px;*/}
 .area-a{position: relative;
 /*background: url(../../../../img/hover_A.png) no-repeat 0 0 ;*/
 z-index: 200;

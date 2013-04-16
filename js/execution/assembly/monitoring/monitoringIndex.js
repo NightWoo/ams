@@ -43,10 +43,11 @@ $(document).ready(function () {
 			ajaxStockyard(blockNumber);
 		}
 	});
-	$(".thumbnail").live("click", function () {
-		// console.log();
-		ajaxRow($(this).children("p").html());
-	});
+
+	// $(".thumbnail").live("click", function () {
+	// 	// console.log();
+	// 	ajaxRow($(this).children("p").html());
+	// });
 
 	window.markMap = {"T0":410,"T01":410,"T02":410,"T03":410,"T04":410,"T05":410,"T06":410,"T07":410,"T08":410,"T09":410,"T10":410,"T11":410,
 	"T12":482,"T13":482,"T14":482,"T15":482,"T16":482,"T17":482,"T18":482,"T19":482,"T20":482,"T21":482,
@@ -152,7 +153,7 @@ function showWarehouseTips (argument) {
 	ajaxGetStock();
 	detectHouseRefreshId = setInterval(function () {
 		ajaxGetStock();
-	},10000);
+	},60000);
 	clearInterval(assemblyHouseIntervalId);
 	clearInterval(assemblyHouseRefreshId);
 	$('.node_pbs').qtip('toggle', false);
@@ -355,7 +356,9 @@ function ajaxThreeInfo () {
 	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0.all);
 	    		$(".node_t0").data("subData", response.data.list.production.T0);
 	    		
-	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1);
+	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1.all);
+	    		$(".node_vq1").data("subData", response.data.list.quality.VQ1);
+
     			$(".pbs").qtip('option', 'content.text', response.data.list.balance.PBS);
     			$(".vq1").qtip('option', 'content.text', response.data.list.balance.VQ1);
 
@@ -420,6 +423,13 @@ function ajaxGetStock (argument) {
 	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
 	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
 
+	    		//warehouse proccess
+	    		$(".progressA").css("width", (response.data.area_rate.A * 100) + '%');
+	    		$(".progressB").css("width", (response.data.area_rate.B * 100) + '%');
+	    		$(".progressC").css("width", (response.data.area_rate.C * 100) + '%');
+	    		$(".progressD").css("width", (response.data.area_rate.D * 100) + '%');
+	    		$(".progressE").css("width", (response.data.area_rate.E * 100) + '%');
+	    		$(".progressF").css("width", (response.data.area_rate.F * 100) + '%');
 	    		// $(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		// $(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 
@@ -569,6 +579,8 @@ function ajaxBalance (node) {
 			ajaxStockyard(blockNumber);
 		}
 	});
+
+$("#areaModal").modal("hide");
 function ajaxStockyard (areaName) {
 	$.ajax({
 		type: "get",//使用get方法访问后台
@@ -595,6 +607,8 @@ function ajaxStockyard (areaName) {
 	    			progress.append(bar);
 	    			$("#blockDetail").append(a);
 	    		});
+				$("#areaModal").modal("show");
+
 
 				$("#blockDetail").show();
 	    	} else {
