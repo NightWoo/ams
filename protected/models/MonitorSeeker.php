@@ -62,12 +62,16 @@ class MonitorSeeker
 	}
 
 	public function queryQualityLabel($stime,$etime) {
-		$dpu = $this->queryDPU($stime,$etime);
-		$qua = $this->queryQualified($stime,$etime);
-		return array(
-				//'VQ1' => "$dpu/$qua",
-				'VQ1' => "$qua",
-			    );	
+		//$dpu = $this->queryDPU($stime,$etime);
+		$seriesArray = SeriesSeeker::findAllCode();
+        $seriesArray[] = 'all';
+
+		$ret = array();
+		foreach($seriesArray as $series) {
+			$ret['VQ1'][$series] = $this->queryQualified($stime,$etime, 'VQ1', $series);
+		}
+
+		return $ret;
 	}
 
 	public function queryBalanceLabel($stime,$etime) {
