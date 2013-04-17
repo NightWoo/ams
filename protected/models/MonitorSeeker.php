@@ -194,15 +194,29 @@ class MonitorSeeker
 		if(!empty($etime)) {
 			$condition .= " AND pass_time <= '$etime'";
 		}
+		$seriesArray = SeriesSeeker::findAllCode();
+        $seriesArray[] = 'all';
 
-		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
-		$in = Yii::app()->db->createCommand($sql)->queryScalar();
+		$ret = array();
+		foreach($seriesArray as $series) {
+			$sqlIn = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
 
-		$sql = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
-		$out = Yii::app()->db->createCommand($sql)->queryScalar();
+			$sqlOut = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
+			if($series !== 'all') {
+				$sqlIn .= " AND car_series = '$series'";
+				$sqlOut .= " AND car_series = '$series'";
+			}
 
+			
+			$in = Yii::app()->db->createCommand($sqlIn)->queryScalar();
 
-		return array('warehourse_in' => $in, 'warehourse_out' => $out);
+			$out = Yii::app()->db->createCommand($sqlOut)->queryScalar();
+
+			$ret['warehourse_in'][$series] = $in;
+			$ret['warehourse_out'][$series] = $out;
+		}
+
+		return $ret;
 	}
 
 	public function queryPlanCars($date) {
