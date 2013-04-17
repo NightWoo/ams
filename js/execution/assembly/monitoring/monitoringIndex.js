@@ -420,11 +420,11 @@ function ajaxGetStock (argument) {
 	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1.all) + parseInt(response.data.balance.VQ2.all) +
 	    			parseInt(response.data.balance.VQ3.all));
 	    		//refresh tips
-	    		$(".outware-data").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
-	    		$(".outware-data").data("subData", response.data.balance.warehourse_out);
+	    		$(".outware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_out.all);
+	    		$(".outware-data").data("subData", response.data.pass_car.warehourse_out);
 	    		
-	    		$(".inware-data").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
-	    		$(".inware-data").data("subData", response.data.balance.warehourse_in);
+	    		$(".inware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_in.all);
+	    		$(".inware-data").data("subData", response.data.pass_car.warehourse_in);
 
 	    		$(".vq3-data").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		$(".vq3-data").data("subData", response.data.drr.VQ3);
@@ -437,11 +437,11 @@ function ajaxGetStock (argument) {
 
 
 	    		//warehouse things
-	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
-	    		$(".outware-warehouse").data("subData", response.data.balance.warehourse_out);
+	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.pass_car.warehourse_out.all);
+	    		$(".outware-warehouse").data("subData", response.data.pass_car.warehourse_out);
 	    		
-	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
-	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
+	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.pass_car.warehourse_in.all);
+	    		$(".inware-warehouse").data("subData", response.data.pass_car.warehourse_in);
 
 	    		//warehouse proccess
 	    		$(".progressA").css("width", (response.data.area_rate.A * 100) + '%');
