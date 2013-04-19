@@ -306,6 +306,7 @@ $("document").ready(function() {
 				"standbyDate": $("#standbyDate").val(),
 				"orderNumber": orderNumber,
 				"distributor": distributor,
+				"status": 'all',
 			},
 			success: function(response) {
 				if(response.success) {
@@ -321,7 +322,7 @@ $("document").ready(function() {
 								thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
 							// }
 						} else {
-							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
+							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>').appendTo(tr);
 							thumbTd.appendTo(tr);
 						}
 
@@ -344,6 +345,7 @@ $("document").ready(function() {
 						$("<td />").html(value.distributor_name).appendTo(tr);
 						$("<td />").html(value.amount).appendTo(tr);
 						$("<td />").html(value.hold).appendTo(tr);
+						$("<td />").html(value.count).appendTo(tr);
 						$("<td />").html(value.series).appendTo(tr);
 						$("<td />").html(value.car_type_config).appendTo(tr);
 						

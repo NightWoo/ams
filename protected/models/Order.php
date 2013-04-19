@@ -180,6 +180,7 @@ class Order
 				$matchedOrder->hold += 1;
 				$matchedCar->order_id = $matchedOrder->id;
 				// $matchedCar->lane_id = $matchedOrder->lane_id;
+				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
 				$matchedCar->warehouse_id = 1;		//WDI
 				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';

@@ -54,12 +54,14 @@ class OrderController extends BmsBaseController
 	public function actionQuery(){
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
-			$status = $this->validateStringVal('status', 'all');
-			$distributor = $this->validateStringVal('distributor', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$distributor = $this->validateStringVal('distributor', '');
+			$status = $this->validateStringVal('status', '0');
+			$series = $this->validateStringVal('series', '');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker->query($standbyDate, $orderNumber, $distributor, $status);
+			$data = $seeker-> query($standbyDate, $orderNumber, $distributor, $status, $series);
+
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
@@ -281,13 +283,18 @@ class OrderController extends BmsBaseController
 			$order = OrderAR::model()->findByPk($car->car->order_id);
 			$data = array();
 
+			if(strstr($car->car->status, '公司外') !== false) {
+				throw new Exception($car->vin. '已出库，无法释放订单');
+			}
+
 			if(!empty($order)) {
 				///释放占位订单
 				$order->hold -= 1;
+				$order->standby_date = DateUtil::getCurDate();
 				//如果已出库，备车数量亦需减1
-				if(strstr($car->car->status, '公司外') !== false) {
-					$order->count -= 1;
-				}
+				// if(strstr($car->car->status, '公司外') !== false) {
+				// 	$order->count -= 1;
+				// }
 				
 				if($order->status == 2){
 					$order->status =1;
@@ -347,13 +354,22 @@ class OrderController extends BmsBaseController
 
 	public function actionQueryOrderCars() {
 		try{
-			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$distributor = $this->validateStringVal('distributor', '');
+			$status = $this->validateStringVal('status', '0');
+			$series = $this->validateStringVal('series', '');
+			$curPage = $this->validateIntVal('curPage', 1);
+            $perPage = $this->validateIntVal('perPage', 20);
 
 			$seeker = new CarSeeker();
-			$data = $seeker-> queryOrderCar($orderNumber, $standbyDate);
+			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage);
 
-			$this->renderJsonBms(true, 'OK', $data);
+			$ret = array(
+                        'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
+                        'data' => $data,
+                    );
+			$this->renderJsonBms(true, 'OK', $ret);
 		} catch (Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}

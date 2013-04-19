@@ -71,7 +71,7 @@ class OrderSeeker
         return $datas;
 	}
 
-	public function query($standbyDate, $orderNumber, $distributor, $status='all') {
+	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='') {
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
@@ -87,10 +87,17 @@ class OrderSeeker
 		if(!empty($distributor)){
 			$condition .= " AND distributor_name LIKE '%$distributor%'";
 		}
+
+		if(!empty($series)){
+			$condition .= " AND series='$series'";
+		}
 		
-		$sql = "SELECT id, order_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status FROM bms.order WHERE $condition ORDER BY priority, `status` ASC";
+		$sql = "SELECT id, order_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status FROM bms.order WHERE $condition ORDER BY lane_id, priority, `status` ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
-		
+		if(empty($orderList)){
+			throw new Exception("查无订单");
+		}
+
 		foreach($orderList as &$detail) {
 			if(!empty($detail['order_config_id'])){
 				$detail['order_config_name'] = OrderConfigAR::model()->findByPk($detail['order_config_id'])->name;
@@ -105,6 +112,12 @@ class OrderSeeker
 			}else {
 				$detail['car_type_config'] = $detail['car_model'];
 			}
+			if($detail['cold_resistant'] == 0){
+				$detail['cold'] = '耐寒';
+			} else {
+				$detail['cold'] = '非耐寒';
+			}
+
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
 		}
 

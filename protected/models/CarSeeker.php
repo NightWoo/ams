@@ -369,47 +369,57 @@ class CarSeeker
 		return $total;
 	}
 
-	public function queryOrderCar($orderNumber, $standbyDate=''){
+	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0){
 		$configNames = $this->configNameList();
-		$distributorName = '';
-		$sql = "SELECT id as order_id, order_number, standby_date, distributor_name FROM `order` WHERE order_number LIKE '%$orderNumber' AND amount = count";
-		if(!empty($standbyDate)){
-			$sql  .= " AND standby_date='$standbyDate'";
-		}
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$orderNumberArray = array();
-		$sqls = array();
+		$orderSeeker = new OrderSeeker(); 
+		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series);
+		
+		$contConditions = array();
 		foreach($orders as $order){
-			$orderNumberArray[$order['order_id']] = $order['order_number'];
-			$orderNumber = $order['order_number'];
-			$distributorName = $order['distributor_name'];
-			$orderId= $order['order_id'];
-			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,remark
+			$orderId= $order['id'];
+			$orderNumberArray[$orderId] = $order['order_number'];
+			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,old_wh_id,remark
 							FROM car 
 							WHERE order_id = $orderId)";
+			$countConditions[] = "order_id = $orderId";
 		}
+
 		$dataSql = join(' UNION ALL ', $sqls);
 		$dataSql .= "ORDER BY order_id, distribute_time ASC";
+
+		$countCondition = join(' OR ', $countConditions);
+		$countSql = "SELECT count(*) FROM car where $countCondition";	
+		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		$limit = "";
+		if(!empty($perPage)) {
+			$offset = ($curPage - 1) * $perPage;
+			$limit = " LIMIT $offset, $perPage";
+			$dataSql .= $limit;
+		}
+
 		if(!empty($sqls)){
 			$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 		}
 		if(empty($datas)){
-			throw new Exception("订单" .$orderNumber. "在该日期条件下无车辆明细数据");
+			throw new Exception("查无车辆");
 		}
 		foreach($datas as &$data){
 			$data['config_name'] = $configNames[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
-			// $car = $car = Car::create($data['vin']);
-			// $engineTrace = $car->checkTraceGasolineEngine();
-			// $data['engine_code'] = $engineTrace->bar_code;
 			$data['order_number'] = $orderNumberArray[$data['order_id']];
+			$data['lane'] = '-';
 			if(!empty($data['lane_id'])){
 				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
 			}
+			$data['row'] = '-';
+			if(!empty($data['old_wh_id'])){
+				$data['row'] = WarehouseAR::model()->findByPk($data['old_wh_id'])->row;
+			}
 		}
 
-		return array('distributor_name' => $distributorName,
-					'cars' => $datas);
+		return array($total, $datas);
 	}
 
 	public function configColdArray($state, $series){

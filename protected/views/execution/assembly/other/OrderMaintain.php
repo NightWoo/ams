@@ -130,6 +130,7 @@
 	                            <th id="thDistributor">经销商</th>
 	                            <th id="thAmount">数量</th>
 	                            <th id="thHold">已备</th>
+	                            <th id="thCount">出库</th>
 	                            <th id="thSeries">车系</th>
 	                            <th id="thCarType">车型/配置</th>
 	                            <!-- <th id="thConfig">配置</th> -->
@@ -245,6 +246,14 @@
                                 } else {
 	                                $ret = "<option value=". $i .">加车道</option>";
                                 }
+                                echo $ret;
+                            }
+
+                            $j = 50;
+                            for($i=126;$i<176;$i++){
+                                $num = 'A' . sprintf("%02d", $j);
+                                $j--;
+	                            $ret = "<option value=". $i .">$num</option>";
                                 echo $ret;
                             }
                         ?>
@@ -503,9 +512,21 @@
                     <select id="splitLane"  name=""class="input-small">
                         <option value="0" selected>未选择</option>
                         <?php 
-                            for($i=1;$i<51;$i++){
+                            for($i=1;$i<52;$i++){
                                 $num = sprintf("%02d", $i);
-                                $ret = "<option value=". $i .">$num</option>";
+                                if($i<51){
+	                                $ret = "<option value=". $i .">$num</option>";
+                                } else {
+	                                $ret = "<option value=". $i .">加车道</option>";
+                                }
+                                echo $ret;
+                            }
+
+                            $j = 50;
+                            for($i=126;$i<176;$i++){
+                                $num = 'A' . sprintf("%02d", $j);
+                                $j--;
+	                            $ret = "<option value=". $i .">$num</option>";
                                 echo $ret;
                             }
                         ?>
