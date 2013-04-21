@@ -88,8 +88,8 @@ class Fault
 				throw new Exception('standard fault\'s component is not exist @standardId=' .$modeId);
 			}
 		
-			if(isset($fault['category'])) {	
-				$exist = $faultClass::model()->find('car_id=? AND fault_id=? AND duty_department=? AND status=?', array($car->car->id,$standard->id,$fault['category'], '未修复'));
+			if(isset($fault['dutyDepartment'])) {	
+				$exist = $faultClass::model()->find('car_id=? AND fault_id=? AND duty_department=? AND status=?', array($car->car->id,$standard->id,$fault['dutyDepartment'], '未修复'));
 			} else {
 				$exist = $faultClass::model()->find('car_id=? AND fault_id=? AND status=?', array($car->car->id,$standard->id, '未修复'));
 			}
@@ -136,7 +136,7 @@ class Fault
 	
 		$additional = '';	
 		//if($this->tablePrefix === 'VQ3_FACADE_TEST') 
-		$sql = "SELECT component_id,component_name,fault_id, fault_mode, create_time, creator ,duty_department FROM $table WHERE car_id={$car->car->id} AND status = '未修复'";
+		$sql = "SELECT f.component_id,f.component_name,f.fault_id, f.fault_mode, f.create_time, f.creator ,d.display_name as duty_department FROM $table as f left join duty_department as d on d.id=f.duty_department WHERE f.car_id={$car->car->id} AND f.status = '未修复'";
 
 		$faults = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($faults)) {
