@@ -57,11 +57,11 @@
 }
 
 #newModal .control-label{
-	width:60px;
+	width:80px;
 }
 
 #newModal .controls{
-    margin-left: 70px;
+    margin-left: 90px;
 }
 
 #laneModal .control-label{
@@ -75,6 +75,10 @@
 #laneModal .input-mini{
 	width: 25px;
 	height:12px;
+}
+
+#newOrderNumber {
+	width: 166px;
 }
 
 .appendBtn {

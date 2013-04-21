@@ -74,20 +74,22 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success) {
 					var data = response.data;
-					$(".nowTime").html("备车"+nowTime());
-					$("#rowInfo,#rowPrint").html(data.row);
-					$("#vinInfo,#vinPrint").html(data.vin);
+					// $(".nowTime").html("备车"+nowTime());
+					$("#rowInfo").html(data.row);
+					$("#rowPrint").html(data.row);
+					$("#vinInfo").html(data.vin);
+					$("#vinPrint").html(data.vin + '-' + data.color);
 					$("#seriesInfo").html(data.series);
 					$("#typeInfo").html(data.type_info);
 					$("#coldInfo").html(data.cold_resistant);
 					$("#colorInfo").html(data.color);
-					$("#orderNumberInfo").html(data.order_number);
-					$("#distributorInfo").html(data.distributor_name);
-					$("#laneInfo").html(data.lane);
+					$("#orderNumberInfo, #orderNumberPrint").html(data.order_number);
+					$("#distributorInfo, #distributorPrint").html(data.distributor_name);
+					$("#laneInfo, #lanePrint").html(data.lane + "道");
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
-					//window.print();
+					window.print();
 					resetPage();
 				} else {
 					fadeMessageAlert(response.message,"alert-error");

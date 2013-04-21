@@ -138,7 +138,7 @@ class MonitorController extends BmsBaseController
             'line_urate' =>  $seeker->queryLineURate($stime, $etime),
             'pause_time' => $seeker->queryLinePauseDetail($stime, $etime),
 			'balance' => $balance,
-			'pass_car' => $seeker->queryWareHoursePassCars($stime, $etime),
+			'pass_car' => $seeker->queryWareHousePassCars($stime, $etime),
 			'warehourse_cars' => $wareHourseCar,
 			'drr' => $drrs,
 			'area_rate' => $areaRates,
@@ -274,8 +274,12 @@ class MonitorController extends BmsBaseController
 		$data = array();
 		$planCars = $seeker->queryPlanCars($date);
 		$data['onLine'] = $seeker->queryFinishCars($stime, $etime, 'T0') . " / $planCars";
-		$data['checkin'] = $seeker->queryFinishCars($stime, $etime, 'CHECK_IN') . " / $planCars";
-		$data['checkout'] = $seeker->queryFinishCars($stime, $etime, 'CHECK_OUT') . " / -";
+
+		$wareHousePass = $seeker->queryWareHousePassCars($stime, $etime);
+		$data['checkin'] = $wareHousePass['warehourse_in']['all'] . " / $planCars";
+
+		$standbyPlan = $seeker->queryStandbyPlan($date);
+		$data['checkout'] = $wareHousePass['warehourse_out']['all'] . " / $standbyPlan";
 		$data['lineURate'] = $seeker->queryLineURate($stime, $etime);
 
 		$this->renderJsonBms(true, 'OK', $data);

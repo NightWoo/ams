@@ -121,7 +121,7 @@ $("document").ready(function() {
 					  	$(".printConfig").html(carInfo.typeConfig);
 					  	$(".printRemark").html(carInfo.remark);
 
-					  	setTimeout(function (){window.print();},500);
+					  	setTimeout(function (){window.print();},800);
 				  	}
 				}
 				else{

@@ -40,12 +40,14 @@
 }
 #warehouse {
 	position: relative;
-	min-height: 500px;
+	/*min-height: 500px;*/
 	/*color: #FFF;*/
 	font-weight:bold;
 	font-size:9px;
 	z-index: 100; 
 	/*overflow: hidden;*/
+	max-height: 450px;
+    overflow-y: hidden;
 }
 
 #warehouseContainer{
@@ -171,6 +173,7 @@
 	font-size:9px;
 	z-index: 100; 
 	overflow: hidden;
+	margin-left: 150px;
 }
 
 .t1{

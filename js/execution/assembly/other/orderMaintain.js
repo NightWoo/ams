@@ -3,6 +3,9 @@ $("document").ready(function() {
 	var orderArray = [];
 
 	$("#btnAdd").click(function() {
+		$("#newStandbyDate").val(window.byd.DateUtil.currentDate);
+		boardNum = getBoardNumber();
+		$("#newBoardNumber").val(boardNum);
 		$("#newModal").modal('show');
 	})
 
@@ -85,7 +88,8 @@ $("document").ready(function() {
 				$("#editStatus").val(tr.data("status"));
 
 				$("#editLane").val(tr.data("laneId"));
-				$("#editDistributorName").val(tr.data("distributorName"))
+				$("#editBoardNumber").val(tr.data("boardNumber"));
+				$("#editDistributorName").val(tr.data("distributorName"));
 				$("#editAmount").val(tr.data("amount"));
 				$("#editSeries").val(carSeries);
 				$("#editCarType").val(tr.data("carType"));
@@ -152,15 +156,21 @@ $("document").ready(function() {
 					$("#newOrderNumber").val($.trim($("#newOrderNumber").val()));
 					$("#newDistributor").attr("code", response.data[0].distributor_code).html(response.data[0].distributor);
 					toggleOrderInfo(true);
-					$("#tableNewOrder").hide();
-					$("#tableNewOrder tbody").html("");
+					// $("#tableNewOrder").hide();
+					// $("#tableNewOrder tbody").html("");
 					var i=0;
 					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						// $("<td />").html(value.order_detail_id).appendTo(tr);
 						tdCheck =  "<input class='choose' type='checkbox' checked='checked'>";
 						$("<td />").html(tdCheck).appendTo(tr);
-						$("<td />").html(value.amount).appendTo(tr);
+						distributor = value.distributor
+						$("<td />").html(distributor).appendTo(tr);
+						// tdBoardNum = "<input type='text' id='newBoardNum'"+ index +"' class='input-mini newBoardNum' />"
+						// $("<td />").html(tdBoardNum).appendTo(tr);
+						tdAmount = "<input type='text' id='newAmount'" + index +"' class='input-mini newAmount' value='"+ value.amount +"'/>";
+						$("<td />").html(tdAmount).appendTo(tr);
+						// $("<td />").html(value.amount).appendTo(tr);
 						$("<td />").html(value.series).appendTo(tr);
 						$("<td />").html(value.car_type).appendTo(tr);
 						if(value.cold_resistant == '1'){
@@ -176,9 +186,11 @@ $("document").ready(function() {
 						configSelect = $(configTip).addClass("orderConfigSelect").append(options);
 						$("<td />").append(configSelect).appendTo(tr);
 
-						inputDate = "<input type='text' id='newStandbyDate"+ index +"' class='input-small newStandbyDate' placeholder='备车日期...' onClick=\"WdatePicker({el:'newStandbyDate"+ index +"',dateFmt:'yyyy-MM-dd'});\"/>";
-						// inputDate = "<input type='text' id='newStandbyDate"+ index +" class='input-small newStandbyDate' placeholder='备车日期...'/>";
-						$("<td />").html(inputDate).appendTo(tr);
+						tdLane = "<input type='text' id='newLane'" + index +"' class='input-mini newLane'/>";
+						$("<td />").html(tdLane).appendTo(tr);
+
+						// inputDate = "<input type='text' id='newStandbyDate"+ index +"' class='input-small newStandbyDate' placeholder='备车日期...' onClick=\"WdatePicker({el:'newStandbyDate"+ index +"',dateFmt:'yyyy-MM-dd'});\"/>";
+						// $("<td />").html(inputDate).appendTo(tr);
 
 						tr.data("orderDetailId", value.order_detail_id);
 						tr.data("distributorName", value.distributor);
@@ -191,10 +203,11 @@ $("document").ready(function() {
 						tr.data("carType", value.car_type);
 						tr.data("color", value.color);
 						tr.data("sellColor", value.sell_color);
-						tr.data("amount", value.amount);
+						// tr.data("amount", value.amount);
 						tr.data("orderNature", value.order_nature);
 						tr.data("coldResistant", value.cold_resistant);
 						tr.data("remark", value.remark);
+						tr.data("")
 						tr.data("configDescription" , value.config_description);
 
 						$("#tableNewOrder tbody").append(tr);
@@ -218,12 +231,18 @@ $("document").ready(function() {
 	function packOrders() {
 		orderArray = [];
 		$("#tableNewOrder tbody tr").each(function (index, tr){
+			thisAmount = $(tr).find("input").filter(".newAmount").val();
+			// thisBoard = $(tr).find("input").filter(".newBoardNum").val();
+			thisBoard = $("#newBoardNumber").val();
 			thisConfig = $(tr).find("select").filter(".newOrderConfig").val();
-			thisDate = $(tr).find("input").filter(".newStandbyDate").val();
-			console.log(tr);
-			console.log(thisConfig);
+			// thisDate = $(tr).find("input").filter(".newStandbyDate").val();
+			thisDate = $("#newStandbyDate").val();
+			thisLane = $(tr).find("input").filter(".newLane").val();
 			$(tr).data("orderConfigId", thisConfig);
 			$(tr).data("standbyDate", thisDate);
+			$(tr).data("amount", thisAmount);
+			$(tr).data("boardNumber", thisBoard);
+			$(tr).data("laneId", thisLane);
 			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
 			
 			console.log(chosen);
@@ -256,11 +275,11 @@ $("document").ready(function() {
 					if(response.data.length == 0){
 						ajaxGenerate(details)
 					} else {
-						confirmMessage = '订单明细：';
-						detailIds= response.data.join(",");
-						confirmMessage += detailIds;
-						confirmMessage += '已经录入过AMS，请确认是否确实需要录入？'
-						if(confirm(confirmMessage)) 
+						// confirmMessage = '订单明细：';
+						// detailIds= response.data.join(",");
+						// confirmMessage += detailIds;
+						// confirmMessage += '已经录入过AMS，请确认是否确实需要录入？'
+						// if(confirm(confirmMessage)) 
 							ajaxGenerate(details);
 					}
 				}else{
@@ -306,6 +325,8 @@ $("document").ready(function() {
 				"standbyDate": $("#standbyDate").val(),
 				"orderNumber": orderNumber,
 				"distributor": distributor,
+				"status": 'all',
+				"orderBy": 'priority,lane_id,`status`',
 			},
 			success: function(response) {
 				if(response.success) {
@@ -318,10 +339,10 @@ $("document").ready(function() {
 							// if(orderNumber != "" || distributor != ""){
 							// 	thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
 							// } else {
-								thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
+								thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
 							// }
 						} else {
-							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
+							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>').appendTo(tr);
 							thumbTd.appendTo(tr);
 						}
 
@@ -334,6 +355,8 @@ $("document").ready(function() {
 						} else {
 							$("<td />").html("冻结").appendTo(tr);
 						}
+
+						$("<td />").html(value.board_number).appendTo(tr);
 						if(value.lane_name == ""){
 							$("<td />").html("-").appendTo(tr);
 						} else {
@@ -342,8 +365,6 @@ $("document").ready(function() {
 
 						$("<td />").html(value.order_number).appendTo(tr);
 						$("<td />").html(value.distributor_name).appendTo(tr);
-						$("<td />").html(value.amount).appendTo(tr);
-						$("<td />").html(value.hold).appendTo(tr);
 						$("<td />").html(value.series).appendTo(tr);
 						$("<td />").html(value.car_type_config).appendTo(tr);
 						
@@ -353,6 +374,9 @@ $("document").ready(function() {
 		    				$("<td />").html("非耐寒").appendTo(tr);
 		    			}
 						$("<td />").html(value.color).appendTo(tr);
+						$("<td />").html(value.amount).appendTo(tr);
+						$("<td />").html(value.hold).appendTo(tr);
+						$("<td />").html(value.count).appendTo(tr);
 
 						// $("<td />").html(value.remark).appendTo(tr);
 
@@ -379,6 +403,7 @@ $("document").ready(function() {
 						tr.data("sellCarType", value.sell_color);
 						tr.data("configDescription", value.config_description);
 						tr.data("remark", value.remark);
+						tr.data("boardNumber", value.board_number);
 
 						$("#tableResult>tbody").append(tr);
 
@@ -407,6 +432,7 @@ $("document").ready(function() {
 			url: ORDER_SAVE,
 			data: {
 				"id": $("#editModal").data("id"),
+				"boardNumber": $("#editBoardNumber").val(),
 				"standbyDate": $("#editStandbyDate").val(),
 				"status": $("#editStatus").val(),
 				"laneId": $("#editLane").val(),
@@ -571,6 +597,18 @@ $("document").ready(function() {
 	// 	})
 	// }
 
+	// function fillLane(){
+	// 	var select = $("<select />").addClass("input-mini");
+	// 	$.ajax({
+	// 		url: FILL_LANE,
+	// 		type: "get",
+	// 		dataType: "json",
+	// 		data: {},
+	// 		asnc: false,
+	// 		success
+	// 	})
+	// }
+
 	function fillOrderConfig(carSeries, carType){
 		var options = '<option value="0" selected>请选择</option>';
 		$.ajax({
@@ -665,6 +703,8 @@ $("document").ready(function() {
 		$("#newOrderNumber").val("");
 		$("#tableNewOrder").hide();
 		$("#tableNewOrder tbody").html("");
+		boardNum = getBoardNumber();
+		$("#newBoardNumber").val(boardNum);
 		toggleOrderInfo(false);
 	}
 
@@ -691,6 +731,22 @@ $("document").ready(function() {
 			$("#orderInfo").hide();
 			$("#hint").fadeIn(500);
 		}
+	}
+
+	function getBoardNumber() {
+		var boardNumber;
+		$.ajax({
+			url: GET_BOARD_NUMBER,
+			type: "get",
+			data:{},
+			dataType: "json",
+			async: false,
+			success: function(response){
+				boardNumber = response.data;
+			},
+			error: function(){alertError();}
+		})
+		return boardNumber;
 	}
 
 	$('body').tooltip(

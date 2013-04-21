@@ -30,27 +30,18 @@
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2">
-            	<div>
-					<ul class="breadcrumb"><!-- 面包屑 -->
-						<li>
-							<a href="#">生产执行</a><span class="divider">&gt;</span>
-						</li>
-						<li>
-							<a href="#">总装</a><span class="divider">&gt;</span>
-						</li>
-						<li class="active">
-							生产监控
-						</li>
-						<li class="pull-right">
-							welcome&nbsp;
-						<a id="welcomeShop" href="#">车间板</a>
-						<span class="divider">&frasl;</span>
-						<a id="welcomeSection" href="#">工段板</a>
-					</li>
-					</ul>
-				</div><!-- end 面包屑 -->
+				<div>
+	            	<legend>监控面板
+	            		<span class="pull-right">
+	            			<i class="icon-link"></i>
+	            			welcome
+	            			<a id="welcomeShop" href="#">&nbsp;车间板</a>
+	            			/
+	            			<a id="welcomeSection" href="#">&nbsp;工段板</a>
+	            		</span>
+	            	</legend>
+	            </div>
 
-				
 	          	<div id="divTabs">
 			    	<ul id="tabs" class="nav nav-pills">
 			            <li class="active"   id="liAssembly"><a href="#index" data-toggle="tab">总装车间</a></li>

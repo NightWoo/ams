@@ -227,13 +227,18 @@ var ORDER_SAVE = "/bms/order/save";
 var ORDER_TOP_PRI = "/bms/order/top";
 var ORDER_INC_PRI = "/bms/order/inc";
 var ORDER_DELETE = "/bms/order/delete";
-var ORDER_SPLIT = "/bms/order/split"
+var ORDER_SPLIT = "/bms/order/split";
 var ORDER_GET_CAR_STANDBY = "/bms/order/getCarStandby";
 var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
 var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig"
 var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
 var QUERY_ORDER_CARS = "/bms/order/queryOrderCars";
+var QUERY_ORDER_DETAIL = "/bms/order/query";
+var QUERY_ORDER_BY_LANE ="/bms/order/queryBylane";
+var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
+
+var GET_LANE_INFO ="/bms/lane/orderInfo";
 
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';
