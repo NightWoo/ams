@@ -49,6 +49,8 @@ class Order
 			$ar->distributor_name = $order['distributorName'];
 			$ar->sell_car_type = $order['sellCarType'];
 			$ar->sell_color = $order['sellColor'];
+			$ar->board_number = $order['boardNumber'];
+			$ar->lane_id = $order['laneId'];
 
 			$ar->create_time = date('YmdHis');
 			$ar->user_id = Yii::app()->user->id;
@@ -144,9 +146,9 @@ class Order
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				
 				//先看库里面有没这么多一个单需要的车，如果不够，不备此单
-				$count = CarAR::model()->count($matchCondition, $values);
-				$need = $order->amount - $order->hold;
-				if($count<$need) continue;
+				// $count = CarAR::model()->count($matchCondition, $values);
+				// $need = $order->amount - $order->hold;
+				// if($count<$need) continue;
 
 				$matchCondition .= "  ORDER BY warehouse_time ASC";
 				$car = CarAR::model()->find($matchCondition, $values);
@@ -178,6 +180,10 @@ class Order
 				}
 
 				$matchedOrder->hold += 1;
+				if($matchedOrder->hold == $matchedOrder->amount){
+					$matchedOrder->standby_finish_time = date('YmdHis');
+				}
+
 				$matchedCar->order_id = $matchedOrder->id;
 				// $matchedCar->lane_id = $matchedOrder->lane_id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;

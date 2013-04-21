@@ -171,31 +171,48 @@ $(document).ready(function () {
 		    	"distributor": $("#distributorText").val(),
 		    	"series" : $("#selectSeries").val(),
 		    	"status" : getStatusChecked(),
+		    	"orderBy": 'board_number,lane_id,priority,`status`',
 		    },
 		    success:function (response) {
 	    		var orders = response.data;
+	    		var amountSum = 0;
+	    		var holdSum = 0;
+	    		var countSum = 0;
 
 	    		$.each(orders ,function (index,value) {
 	    			var tr = $("<tr />");
+					$("<td />").html(value.board_number).appendTo(tr);
 					$("<td />").html(value.lane_name).appendTo(tr);
 	    			$("<td />").html(value.order_number).appendTo(tr);
 	    			$("<td />").html(value.distributor_name).appendTo(tr);
+	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(value.car_type_config).appendTo(tr);
+	    			$("<td />").html(value.cold).appendTo(tr);
+	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.amount).appendTo(tr);
 	    			$("<td />").html(value.hold).appendTo(tr);
 	    			$("<td />").html(value.count).appendTo(tr);
-	    			$("<td />").html(value.series).appendTo(tr);
-	    			$("<td />").html(value.color).appendTo(tr);
-	    			$("<td />").html(value.car_type_config).appendTo(tr);
-	    			$("<td />").html(value.cold).appendTo(tr);
 	    			$("<td />").html(value.standby_date).appendTo(tr);
 
-	    			if(parseInt(value.amount) == parseInt(value.count)){
+	    			if(value.status == 2){
 	    				$(tr).addClass('success');
 	    			}
+
+	    			amountSum += parseInt(value.amount);
+	    			holdSum += parseInt(value.hold);
+	    			countSum += parseInt(value.count);
 
 	    			$("#tableOrderDetail tbody").append(tr);
 	    			console.log($("#tableOrderDetail tbody"));
 	    		});
+					trTotal = $("<tr />");	
+					tdLabel = "<td colspan='8' style='text-align:right'>合计&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+					trTotal.append(tdLabel);
+					$("<td />").html(amountSum).appendTo(trTotal);
+					$("<td />").html(holdSum).appendTo(trTotal);
+					$("<td />").html(countSum).appendTo(trTotal);
+					$("<td />").appendTo(trTotal);
+					$("#tableOrderDetail tbody").append(trTotal);
 
 	    		$("#tableOrderDetail").show();
 		    },

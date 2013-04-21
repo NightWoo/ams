@@ -1,5 +1,6 @@
 $("document").ready(function() {
 	initPage();
+	var isOut = false;
 //------------------- ajax -----------------------
 	//校验
 	function ajaxValidate (argument){
@@ -30,6 +31,9 @@ $("document").ready(function() {
 				    	$('#statusInfo').html(car.status);
 				    else
 				    	$('#statusInfo').text("");
+				    if(car.status.indexOf('公司外')>0 || car.distribute_time > '0000-00-00 00:00:00'){
+				    	isOut = true;
+				    }
 			    }
 			    else{
 				    resetPage();
@@ -62,6 +66,7 @@ $("document").ready(function() {
 			error:function(){alertError();}
 		});
 	}
+
 //-------------------END ajax -----------------------
 	
 //------------------- common functions -----------------------	
@@ -87,6 +92,8 @@ $("document").ready(function() {
 		4.disable submit
 	*/
 	function resetPage () {
+		//还原isOut
+		isOut = false;
 		//empty vinText
 		$("#vinText").removeAttr("disabled");
 		$("#vinText").attr("value","");
@@ -151,19 +158,28 @@ $("document").ready(function() {
 	//进入彩车身库事件，发ajax，根据响应做提示
 	$("#btnSubmit").click(function() {
 		if(!($("#btnSubmit").hasClass("disabled"))){
-			$("#btnSubmit").attr("disabled","disabled");
-			$("#toVQ3").attr("disabled", "disabled");
-			ajaxSubmit();
+			if(isOut){
+				if(confirm('此车已出库，是否坚持要释放订单，并让车辆返回成品库异常区X？')){
+					ajaxSubmit();
+				}
+			} else {
+				ajaxSubmit();
+			}
 		}
 		return false;
 	});
 
 	$("#toVQ3").click(function() {
 		if(!($("#toVQ3").hasClass("disabled"))){
-			$("#btnSubmit").attr("disabled","disabled");
-			$("#toVQ3").attr("disabled", "disabled");
-			ajaxSubmit(1);
+			if(isOut){
+				if(confirm('此车已出库，是否坚持要释放订单,并让车辆返回VQ3？')){
+					ajaxSubmit(1);
+				}
+			} else {
+				ajaxSubmit(1);
+			}
 		}
+		return false;
 	})
 
 	//清空

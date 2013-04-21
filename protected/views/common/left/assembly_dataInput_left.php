@@ -4,6 +4,7 @@
 		<li class="nav-header">数据录入</li>
 			<li id="leftNodeSelectLi"><a href="/bms/execution/index">录入节点</a></li>
 			<li id="leftPauseEditLi"><a href="/bms/execution/pauseEdit">停线编辑</a></li>
+			<li id="leftWarehousePrintLi"><a href="/bms/execution/warehousePrint">出库打印</a></li>
 		<li class="nav-header">生产监控</li>
 			<li id="leftMonitoringLi"><a href="/bms/execution/monitoringIndex">监控面板</a></li>
 		<li class="nav-header">数据查询</li>
@@ -12,16 +13,16 @@
 			<li id="leftManufactureQueryLi"><a href="/bms/execution/query?type=ManufactureQuery">生产查询</a></li>
 			<li id="leftNodeQueryLi"><a href="/bms/execution/query?type=NodeQuery">质量查询</a></li>
 			<li id="leftBalanceQueryLi"><a href="/bms/execution/query?type=BalanceQuery">结存查询</a></li>
-			<li id="leftOrderCarQueryLi"><a href="/bms/execution/query?type=OrderCarQuery">订单查询</a></li>
+			<li id="leftOrderCarQueryLi"><a href="/bms/execution/query?type=OrderCarQuery">发车查询</a></li>
 			<!-- <li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li> -->
 		<li class="nav-header">生产报表</li>
 			<li><a href="#">生产日报</a></li>
 			<li><a id="leftWarehouseReportLi" href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li>
 			<!-- <li><a href="#">追溯零部件换件</a></li> -->
 		<li class="nav-header">维护与帮助</li>
-			<li id="leftConfigLi"><a href="/bms/execution/configPlan">日执行计划</a></li>
+			<li id="leftConfigLi"><a href="/bms/execution/configPlan">生产计划</a></li>
 			<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
-			<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">订单维护</a></li>
+			<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">发车计划</a></li>
 			<li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li>
 			<li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li>
 			<!-- <li><a href="#">操作手册.总装</a></li>    -->

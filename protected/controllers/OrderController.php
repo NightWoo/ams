@@ -51,6 +51,16 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionGetBoardNumber() {
+		try {
+			$seeker = new OrderSeeker();
+			$data = $seeker->generateBoardNumber();
+			$this->renderJsonBms(true, 'OK', $data);
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}	
+	}
+
 	public function actionQuery(){
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
@@ -58,9 +68,10 @@ class OrderController extends BmsBaseController
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');		
+			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker-> query($standbyDate, $orderNumber, $distributor, $status, $series);
+			$data = $seeker-> query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -122,6 +133,7 @@ class OrderController extends BmsBaseController
 		$color =$this->validateStringVal('color', '');
 		$coldResistant = $this->validateIntVal('coldResistant', 0);
 		$remark = $this->validateStringVal('remark', '');
+		$boardNumber = $this->validateStringVal('boardNumber', '');
 		try {
 			if(empty($standbyDate)) {
 				throw new Exception('备车日期不能为空');
@@ -181,6 +193,7 @@ class OrderController extends BmsBaseController
 			$order->color = $color;
 			$order->cold_resistant = $coldResistant;
 			$order->remark = $remark;
+			$order->board_number = $boardNumber;
 
 			$order->modify_time = date('YmdHis');
 			$order->user_id = Yii::app()->user->id;
@@ -283,18 +296,29 @@ class OrderController extends BmsBaseController
 			$order = OrderAR::model()->findByPk($car->car->order_id);
 			$data = array();
 
-			if(strstr($car->car->status, '公司外') !== false) {
-				throw new Exception($car->vin. '已出库，无法释放订单');
-			}
+			// if(strstr($car->car->status, '公司外') !== false) {
+			// 	throw new Exception($car->vin. '已出库，无法释放订单');
+			// }
 
 			if(!empty($order)) {
 				///释放占位订单
 				$order->hold -= 1;
 				$order->standby_date = DateUtil::getCurDate();
 				//如果已出库，备车数量亦需减1
-				// if(strstr($car->car->status, '公司外') !== false) {
-				// 	$order->count -= 1;
-				// }
+				if(strstr($car->car->status, '公司外') !== false) {
+					$order->count -= 1;
+
+					//优先级置顶
+					$highers = OrderAR::model()->findAll('priority<? AND standby_date=? AND status=1', array($order->priority, $order->standby_date));
+					if(!empty($highers)) {
+						$order->priority = 0;
+						foreach($highers as $higher) {
+							$higher->priority = $higher->priority + 1;
+							$higher->save();
+						}
+						$order->save();
+					}
+				}
 				
 				if($order->status == 2){
 					$order->status =1;
@@ -371,6 +395,17 @@ class OrderController extends BmsBaseController
                     );
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch (Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionQueryByLane() {
+		try{
+			$laneId = $this->validateIntVal('laneId', 0);
+			$seeker = new OrderSeeker();
+			$data = $seeker->queryByLane($laneId);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}

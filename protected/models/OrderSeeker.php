@@ -35,8 +35,12 @@ class OrderSeeker
             }else if(!empty($order['additions'])){
             	$order['config_description'] .= $order['additions'];
             }
-
             $order['cold_resistant'] == '耐寒型' ? $order['cold_resistant'] = '1' : $order['cold_resistant'] = '0';
+
+            $sql="SELECT SUM(amount) FROM `order` WHERE order_detail_id='{$order['order_detail_id']}'";
+            $amountSum = Yii::app()->db->createCommand($sql)->queryScalar();
+            $order['amount'] -= $amountSum;
+            if($order['amount']<0) $order['amount'] = 0;
         }
 
         return $orders;
@@ -71,7 +75,7 @@ class OrderSeeker
         return $datas;
 	}
 
-	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='') {
+	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`') {
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
@@ -92,7 +96,7 @@ class OrderSeeker
 			$condition .= " AND series='$series'";
 		}
 		
-		$sql = "SELECT id, order_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status FROM bms.order WHERE $condition ORDER BY lane_id, priority, `status` ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -112,7 +116,7 @@ class OrderSeeker
 			}else {
 				$detail['car_type_config'] = $detail['car_model'];
 			}
-			if($detail['cold_resistant'] == 0){
+			if($detail['cold_resistant'] == 1){
 				$detail['cold'] = '耐寒';
 			} else {
 				$detail['cold'] = '非耐寒';
@@ -146,6 +150,71 @@ class OrderSeeker
 		return $order;
 	}
 
+	public function getLaneInfo(){
+		$laneSql = "SELECT id,name FROM lane";
+		$lanes = Yii::app()->db->createCommand($laneSql)->queryAll();
+		$laneArray = array();
+		$laneInfo = array();
+		$totalToPrint = 0;
+		foreach($lanes as $lane){
+			$laneArray[$lane['id']] = $lane['name'];
+			$countSum = 0;
+			$amountSum = 0;
+			$toPrint = 0;
+			$sql = "SELECT id,amount,hold,count,lane_id,`status`,isPrinted 
+					FROM `order` 
+					WHERE lane_id='{$lane['id']}' AND (`status`=1 OR `status`=2) AND isPrinted=0";
+			$orders = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach($orders as $order){
+				$countSum += $order['count'];
+				$amountSum += $order['amount'];
+				if($order['count'] == $order['amount']){
+					++$toPrint;
+					++$totalToPrint;
+				}
+			}
+			$laneInfo[$lane['id']] = array(
+					'name' => $lane['name'],
+					'toPrint' => $toPrint,
+					'countSum' => $countSum,
+					'amountSum' => $amountSum,
+			);
+		}
+
+		return array('totalToPrint'=>$totalToPrint, 'laneInfo'=>$laneInfo);
+	}
+
+	public function queryByLane($laneId){
+		$sql = "SELECT lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
+				FROM `order`
+				WHERE lane_id=$laneId AND (`status`=1 OR `status`=2) AND isPrinted=0";
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($orders as &$order) {
+			if(!empty($order['order_config_id'])){
+				$order['order_config_name'] = OrderConfigAR::model()->findByPk($order['order_config_id'])->name;
+			}
+			$order['car_model'] = CarTypeMapAR::model()->find("car_type=?", array($order['car_type']))->car_model;
+			
+			$order['lane_name'] = '';
+			$lane = LaneAR::model()->findByPk($order['lane_id']);
+			if(!empty($lane)) $order['lane_name'] = $lane->name;
+			if(!empty($order['order_config_name'])){
+				$order['car_type_config'] = $order['car_model']. "/" . $order['order_config_name'];
+			}else {
+				$order['car_type_config'] = $order['car_model'];
+			}
+			if($order['cold_resistant'] == 1){
+				$order['cold'] = '耐寒';
+			} else {
+				$order['cold'] = '非耐寒';
+			}
+
+			$order['remain'] = $order['amount']; - $orderl['hold'];
+		}
+		return $orders;
+	}
+
 	public function getNameList ($carSeries, $carType) {
 		$condition = "car_series=?";
 		$values = array($carSeries);
@@ -162,6 +231,22 @@ class OrderSeeker
 			$datas[]=$data;
 		}
 		return $datas;
+	}
+
+	public function generateBoardNumber() {
+		$date = strtotime(DateUtil::getCurDate());
+		$year = date("Y", $date);
+		$yearCode = CarYear::getYearCode($year);
+		$monthDay = date("md", $date);
+		$ret = $yearCode . $monthDay;
+
+		$sql = "SELECT board_number FROM `order` WHERE board_number LIKE '$ret%' ORDER BY board_number DESC";
+		$lastSerial = Yii::app()->db->createCommand($sql)->queryScalar();
+		$lastKey = intval(substr($lastSerial, 5 , 3));
+		
+		$ret .= sprintf("%03d", (($lastKey + 1) % 1000));
+		
+		return $ret;
 	}
 
 	private function parseStatus($status) {

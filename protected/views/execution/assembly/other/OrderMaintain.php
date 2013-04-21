@@ -28,7 +28,7 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>备车订单
+            	<legend>发车计划
             		<span class="pull-right">
             			<!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
             		</span>
@@ -36,7 +36,7 @@
             </div>
             
    	   		<div><!-- 主体 -->
-			    <div class="accordion span4 pull-left" id="accordionLane">
+			    <!-- <div class="accordion span4 pull-left" id="accordionLane">
 			    	<div class="accordion-group" id="laneGroup1">
 			    		<div class="accordion-heading">
 			    			<div class="headBadge">
@@ -44,9 +44,6 @@
 		    				 	<span class="label label-info" id="loadingGroup1">3</span>
 			    				<span class="label label-warning" id="fullGroup1">5</span>
 			    			</div>
-			    			<!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionLane" href="#collapse1">
-			    				01-10
-			    			</a> -->
 			    		</div>
 			    		<div id="collapse1" class="accordion-body collapse in">
 			    			<div class="accordion-inner">
@@ -80,9 +77,9 @@
 			    			</div>
 			    		</div>
 			    	</div>
-			    </div>
+			    </div> -->
 
-			    <div class="offset4">
+			    <div class="">
 			    	<form id="form" class="well form-inline">
 	                    <table>
 	                        <tr>
@@ -125,17 +122,18 @@
 	                            <th id="thReorder">调整</th>
 	                            <th id="thPriority">优先</th>
 	                            <th id="thStatus">状态</th>
+	                            <th id="thBoard">备板编号</th>
 	                            <th id="thLane">车道</th>
 	                            <th id="thOrderNumber">订单号</th>
 	                            <th id="thDistributor">经销商</th>
-	                            <th id="thAmount">数量</th>
-	                            <th id="thHold">已备</th>
-	                            <th id="thCount">出库</th>
 	                            <th id="thSeries">车系</th>
 	                            <th id="thCarType">车型/配置</th>
 	                            <!-- <th id="thConfig">配置</th> -->
 	                            <th id="thColdResistant">耐寒性</th>
 	                            <th id="thColor">颜色</th>
+	                            <th id="thAmount">数量</th>
+	                            <th id="thHold">已备</th>
+	                            <th id="thCount">出库</th>
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
 	                            <!-- <th id="thEdit"></th> -->
@@ -158,7 +156,14 @@
   	<div class="modal-body">
   		<form id="" class="form-horizontal">
   			<div class="control-group">
-			    <label class="control-label" for="">*&nbsp;订单号</label>
+			    <label class="control-label" for="">*&nbsp;备板编号</label>
+			    <div class="controls">
+			      	<input type="text" id="newBoardNumber" class="input-small" placeholder="备板编号...">
+			      	<input type="text" id="newStandbyDate" class="input-small" placeholder="备车日期..."  onClick="WdatePicker({el:'newStandbyDate',dateFmt:'yyyy-MM-dd'});">
+			    </div>
+			</div> 
+			<div class="control-group">
+			    <label class="control-label" for="">*&nbsp;获取订单</label>
 			    <div class="controls">
 			    	<div class="input-append">
 				      	<input type="text" id="newOrderNumber" class="input-medium" placeholder="订单号...">
@@ -166,7 +171,7 @@
 			    	</div>
 			    	<span class="help-inline" id="hint">请输入订单号取得订单明细</span>
 			      	<div class="help-inline" id="orderInfo" style="display:none">
-						<span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span>
+						<!-- <span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span> -->
 			      		<a class="btn btn-link" id="newClearOrder"><i class="icon-remove"></i></a>
 					</div>
 			    </div>
@@ -189,13 +194,14 @@
 			<thead>
 				<tr>
 					<th>选择</th>
+					<th>经销商</th>
 					<th>数量</th>
 					<th>车系</th>
 					<th>车型</th>
 					<th>耐寒性</th>
 					<th>颜色</th>
 					<th>配置</th>
-					<th>备车日期</th>
+					<th>车道</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -217,6 +223,12 @@
     </div>
     <div class="modal-body">
         <form id="editForm" class="form-horizontal">
+        	<div class="control-group">
+                <label class="control-label" for="editBoardNumber">*&nbsp;备板编号</label>
+                <div class="controls">
+                    <input id="editBoardNumber"  type="text" class="input-small" placeholder="备板编号..."/>
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="editStandbyDate">*&nbsp;备车日期</label>
                 <div class="controls">

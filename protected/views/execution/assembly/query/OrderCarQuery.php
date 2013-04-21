@@ -28,7 +28,7 @@
         	<!-- Main体 -->		
             <div id="bodyright" class="offset2">
                 <div>
-                    <legend>订单车辆查询
+                    <legend>发车查询
                         <span class="pull-right">
                             <!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
                         </span>
@@ -111,16 +111,17 @@
                         <div class="tab-pane" id="tabOrderDetail">
                             <table id="tableOrderDetail" class="table table-condensed table-hover table-bordered">
                                 <thead>
+                                    <th>备板编号</th>
                                 	<th>车道</th>
                                     <th>订单号</th>
                                     <th>经销商</th>
+                                    <th>车系</th>
+                                    <th>车型配置</th>
+                                    <th>耐寒性</th>
+                                    <th>颜色</th>
                                     <th>数量</th>
                                     <th>已备</th>
                                     <th>出库</th>
-                                    <th>车系</th>
-                                    <th>颜色</th>
-                                    <th>配置</th>
-                                    <th>耐寒性</th>
                                     <th>备车日期</th>
                                 </thead>
                                 <tbody>
