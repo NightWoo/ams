@@ -226,6 +226,11 @@ function getSeriesChecked () {
 		    success:function (response) {
 		    	if(response.success){
 		    		$("#resultTable tbody").html("");
+		    		if ($("#selectNode").val() == "WDI") {
+		    			$("#thChecker, #thSubChecker").show();
+		    		} else {
+		    			$("#thChecker, #thSubChecker").hide();
+		    		}
 		    		$.each(response.data.data,function (index,value) {
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
@@ -237,8 +242,15 @@ function getSeriesChecked () {
 		    			var createTimeTd = "<td>" + value.create_time + "</td>";
 		    			var userNameTd = "<td>" + value.user_name + "</td>";
 		    			var memoTd = "<td>" + value.modify_time + "</td>";
+		    			var checkerTd = "";
+		    			var subCheckerTd = "";
+		    			if ($("#selectNode").val() == "WDI") {
+		    				checkerTd = "<td>" + value.checker + "</td>";
+		    				subCheckerTd = "<td>" + value.sub_checker + "</td>";
+		    			}
 		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
-		    				faultStatusTd + nodeNameTd + driverNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
+		    				faultStatusTd + nodeNameTd + driverNameTd + userNameTd + createTimeTd + memoTd 
+		    				+ checkerTd + subCheckerTd+  "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();
 		    		});

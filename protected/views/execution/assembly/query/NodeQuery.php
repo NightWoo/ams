@@ -133,6 +133,8 @@
                                         <th>录入人员</th>
                                         <th>录入时间</th>
                                         <th>确认时间</th>
+                                        <th id="thChecker">初检人员</th>
+                                        <th id="thSubChecker">复检人员</th>
                                     </tr>
                                 </thead>
                                 <tbody>
