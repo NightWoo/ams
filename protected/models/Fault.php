@@ -8,13 +8,15 @@ class Fault
 	private $tablePrefix;
 	private $vin;
 	private $faults;
-	protected function __construct($tablePrefix, $vin, $faults){
+	private $others;
+	protected function __construct($tablePrefix, $vin, $faults, $others = null){
 		$this->tablePrefix = $tablePrefix;
 		
 		$this->vin = $vin;
 		$this->faults = CJSON::decode($faults);
+		$this->others = $others;
 	}
-
+		
 	public static function createSeeker() {
 		return new FaultSeeker();
 	}
@@ -27,13 +29,13 @@ class Fault
 		return new FaultComponentSeeker($component, $series);
 	}
 
-	public static function create($tablePrefix, $vin, $faults) {
+	public static function create($tablePrefix, $vin, $faults, $others = null) {
 		$c = __class__;
-		return new $c($tablePrefix, $vin, $faults);
+		return new $c($tablePrefix, $vin, $faults, $others);
 	}
 
 		
-	public function save($statusPrefix) {
+	public function save($statusPrefix, $iswdi = false) {
 		$car = Car::create($this->vin);
 		$series = $car->car->series;
 		
@@ -103,9 +105,10 @@ class Fault
 					continue;
 				}
 			}
-			if($statusPrefix === '离线') {
+			if($statusPrefix === '离线' && !$iswdi) {
 				continue;
 			}
+			//wdi need save
 
 			$ar = new $faultClass();
 			$ar->car_id = $car->car->id;
@@ -119,6 +122,13 @@ class Fault
 			$ar->status = $status;
 			$ar->creator = $userId;
 			$ar->updator = $userId;
+
+			if($iswdi) {
+				$ar->modify_time = $curtime;
+                $ar->create_time = empty($this->others['checkTime']) ? $curtime : $this->others['checkTime'];
+				$ar->checker1 = empty($this->others['checker']) ? 0 : $this->others['checker'];
+				$ar->checker2 = empty($this->others['subChecker']) ? 0 : $this->others['subChecker'];
+            }
 			
 			if(isset($fault['dutyDepartment'])) {
 				$ar->duty_department = $fault['dutyDepartment'];
@@ -126,6 +136,7 @@ class Fault
 
 			$ar->save();
 		}
+		if(!$iswdi)
 		$car->detectStatus();	
 	}
 
@@ -184,9 +195,10 @@ class Fault
 		$splits = explode('_', $tableName);
 
 		$cls = ucwords($splits[0]);
-		$cls .= ucFirst(strtolower($splits[1]));
-		$cls .= ucFirst(strtolower($splits[2]));
-		$cls .= ucFirst(strtolower($splits[3]));
+		$total = count($splits);
+		for($i = 1; $i < $total; ++ $i) {
+			$cls .= ucFirst(strtolower($splits[$i]));
+		}
 
 		return $cls . "AR";
 	}

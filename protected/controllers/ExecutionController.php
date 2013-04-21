@@ -391,6 +391,32 @@ class ExecutionController extends BmsBaseController
     }
 
 
+	public function actionEnterWDI() {
+		$transaction = Yii::app()->db->beginTransaction();
+        try{
+            $vin = $this->validateStringVal('vin', '');
+			$faults = $this->validateStringVal('fault', '');
+			$checkTime = $this->validateStringVal('checkTime', '');
+			$checker = $this->validateStringVal('checker', '');
+			$subChecker = $this->validateStringVal('subChecker', '');
+            $car = Car::create($vin);
+	
+            $car->enterNode('WDI');
+			$others = array(
+				'checkTime' => $checkTime,
+				'checker' => $checker,
+				'subChecker' => $subChecker,
+			);
+			$fault = Fault::create('WDI_TEST',$vin, $faults, $others);
+            $fault->save('离线' , true);//is wdi
+			$transaction->commit();
+            $this->renderJsonBms(true, 'OK', $vin);
+        } catch(Exception $e) {
+			$transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
 	public function actionEnterCI() {
 		$transaction = Yii::app()->db->beginTransaction();
         try{

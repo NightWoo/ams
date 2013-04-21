@@ -184,7 +184,8 @@ class Car
 
 
 			//car status 
-			$this->detectStatus($node);
+			if($nodeName !== 'WDI')
+				$this->detectStatus($node);
 		//}
 	}
 

@@ -6,7 +6,10 @@ class FaultSeeker
 	}
 
 	public function getAllByCategory($faultCategory, $mode = '', $series = '') {
-		$sql = "SELECT * FROM fault_component_category WHERE category_key='{$faultCategory}'";
+		$sql = "SELECT * FROM fault_component_category WHERE 1=1";
+		if(!empty($faultCategory)) {
+			$sql .= " AND category_key='{$faultCategory}'";
+		}
 		if(!empty($series)) {
 			$sql .= " AND series='$series'";
 		}
@@ -134,6 +137,10 @@ class FaultSeeker
 			$offset = ($curPage - 1) * $perPage;
 			$limit = "LIMIT $offset, $perPage";
 		}
+		$checkerParam = "'' as checker, '' as sub_checker, ";
+		if($nodeName === 'WDI') {
+			$checkerParam = "c.checker1 as checker, c.checker2 as sub_checker, ";
+		}
 		$dataSqls = array();
 		$countSqls = array();
 		foreach($tables as $table=>$nodeId) {
@@ -150,10 +157,11 @@ class FaultSeeker
 			} else {
 				$curCondition = "AND n.node_id=$nodeId AND ". $traceSeriesConditon ; 
 			}
-			
+
+			//wdi need checker1 checker2
 			//要求n.pass_time 和 c.create_time都在查询时间条件区间内（实际生产中，同一辆车在不同日期录入多次但不是每次都有故障：比如一辆车今天录其合格，后天录其有故障，如果查询条件为今天则其为合格；如果查询条件为后天，则其为有故障）
 			$timeCondition = "n.pass_time >= '$stime' AND n.pass_time <= '$etime' AND c.create_time >= '$stime' AND c.create_time <= '$etime'";
-			$dataSqls[] = "(SELECT n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id WHERE n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
+			$dataSqls[] = "(SELECT $checkerParam n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id WHERE n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
 			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id WHERE n.node_id=$nodeId AND $timeCondition  $curCondition";
 		}
 
@@ -185,6 +193,13 @@ class FaultSeeker
 			} else {
 				$data['user_name'] = $userInfos[$data['user_id']];
 			}
+			if(!empty($data['checker'])) {
+				$data['checker'] = empty($userInfos[$data['checker']]) ? '' : $userInfos[$data['checker']];
+			}
+			if(!empty($data['sub_checker'])) {
+                $data['sub_checker'] = empty($userInfos[$data['sub_checker']]) ? '' : $userInfos[$data['sub_checker']];
+            }
+
 			if(!empty($data['driver_id'])) {
 				$data['driver_name'] = $userInfos[$data['driver_id']];
 			} else {
@@ -721,12 +736,14 @@ class FaultSeeker
 			'VQ2_ROAD_TEST' => 15,
 			'VQ2_LEAK_TEST' => 16,
 			'VQ3_FACADE_TEST' => 17,
+			'WDI_TEST' => 95,
 		);
 		$nodeTables = array(
 			'VQ1' => 'VQ1_STATIC_TEST',
 			'ROAD_TEST_FINISH' => 'VQ2_ROAD_TEST',
 			'VQ2' => 'VQ2_LEAK_TEST',
 			'VQ3' => 'VQ3_FACADE_TEST',
+			'WDI' => 'WDI_TEST',
 		);
 
 		$temps = array();
@@ -768,6 +785,7 @@ class FaultSeeker
             'VQ3' => 17,
 			'CHECK_IN' => 18,
 			'CHECK_OUT' => 19,
+			'WDI'  => 95,
         );
 
 		if(empty($node) || $node === 'all') {
