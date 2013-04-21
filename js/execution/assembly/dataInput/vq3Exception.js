@@ -36,7 +36,7 @@ $("document").ready(function() {
 								"<input name='faultId' type='hidden' value='" + comp.fault_id + "' />"
 						var nameTd = "<td>" + comp.component_name + comp.fault_mode + hiddenInputs + "</td>";
 						
-						var category = "<td class='resp-category'>" + translate(comp.category) + "</td>";
+						var category = "<td class='resp-category'>" + comp.duty_department + "</td>";
 
 						var displayNameTd = "<td>" + comp.display_name + "</td>";
 						var createTimeTd = "<td>" + comp.create_time + "</td>";
@@ -190,7 +190,7 @@ $("document").ready(function() {
 				obj.fixed = true;
 			obj.faultId = $(value).find("input[type='hidden'][name='faultId']").val();
 			obj.componentId = $(value).find("input[type='hidden'][name='componentId']").val();
-			obj.category = translate($(value).find(".resp-category").html());
+			obj.category = $(value).find(".resp-category").html();
 			sendData.fault.push(obj);
 		});
 		sendData.fault = JSON.stringify(sendData.fault);

@@ -361,7 +361,8 @@ $(document).ready(function  () {
 				if($(value).find("input[type='checkbox']").attr("checked") == "checked")
 					obj.fixed = true;
 				obj.componentId = $(value).find("input[type='hidden'][name='componentId']").val();
-				obj.category = $(value).find("input[type='hidden'][name='category']").val();
+				// obj.category = $(value).find("input[type='hidden'][name='category']").val();
+				obj.dutyDepartment = $(value).find(".duty").val();
 				console.log(obj);
 				sendData.fault.push(obj);
 			}
@@ -377,7 +378,9 @@ $(document).ready(function  () {
 				if($(value).find("input[type='checkbox']").attr("checked") == "checked")
 					obj.fixed = true;
 				obj.componentId = $(value).find("select[name='compSelect']").val();
-				obj.category = $(value).find(".active").attr("value");
+				// obj.category = $(value).find(".active").attr("value");
+				obj.dutyDepartment = $(value).find(".duty").val();
+				
 				console.log(obj);
 				sendData.fault.push(obj);
 			}
