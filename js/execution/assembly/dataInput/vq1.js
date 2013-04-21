@@ -93,6 +93,24 @@ $(document).ready(function  () {
 					var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
 					$("#otherTable tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
 				};
+
+				$("#otherTable input[type='text']").typeahead({
+				    source: function (input, process) {
+				    	disableTr(currentOtherFocusIndex);
+				        $.get(VQ1_SEARCH_PART, {"component":input,"series":$("#divDetail").data("series")}, function (data) {
+				        	return process(data.data);
+				        },'json');
+				    },
+				    updater:function (item) {
+				     	ajaxViewParts(item);//根据part的名字查找故障模式
+			        	return item;
+			    	}
+				});
+
+				currentOtherFocusIndex = -1;
+				$("#otherTable input[type='text']").focus(function () {
+					currentOtherFocusIndex = $("#otherTable tbody tr").index($(this).parent().parent());
+				});
 			}
 		})
 	}
@@ -174,14 +192,14 @@ $(document).ready(function  () {
 					if(response.success){
 						var tr = $("#otherTable tbody tr").eq(currentOtherFocusIndex);
 						//重新选择的时候 清空select
-						tr.find("select").text("");
+						tr.find("select").filter(".fault-type").text("");
 						var options = "";
 						$.each(response.data.fault_mode,function (ind,value) {
 							options += '<option value="' + value.id + '">' + value.mode + '</option>';
 							
 						});
 						var optionTd = '<option value="">-请选择故障-</option>' + options ;
-						tr.find("select").append(optionTd);
+						tr.find("select").filter(".fault-type").append(optionTd);
 						enableTr(currentOtherFocusIndex);
 					}
 					else
@@ -221,7 +239,7 @@ $(document).ready(function  () {
 
 	function disableTr (index) {
 		var tr = $("#otherTable tbody tr").eq(index);
-		var select = tr.find("select");
+		var select = tr.find("select").filter(".fault-type");
 		select.text('');
 		select.append('<option value="">-请选择故障-</option>');
 		select.attr("disabled","disabled");
@@ -229,7 +247,7 @@ $(document).ready(function  () {
 	}
 	function enableTr (index) {
 		var tr = $("#otherTable tbody tr").eq(index);
-		var select = tr.find("select");
+		var select = tr.find("select").filter(".fault-type");
 		select.removeAttr("disabled");
 		tr.find("input[type='checkbox']").removeAttr("disabled");
 	}
