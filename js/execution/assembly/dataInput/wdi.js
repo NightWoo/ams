@@ -17,7 +17,7 @@ $(document).ready(function  () {
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#driver").removeAttr("disabled");
+					$("#btnSubmit").removeAttr("disabled");
 					$("#checker").removeAttr("disabled");
 					$("#subChecker").removeAttr("disabled");
 					$("#driver").removeAttr("disabled");
@@ -194,7 +194,7 @@ $(document).ready(function  () {
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
-		$("#checker, #subChecker, #checkTime").attr("disabled","disabled");
+		$("#btnSubmit, #checker, #subChecker, #checkTime").attr("disabled","disabled");
 		$("#divDetail").hide();
 		//init all
 
