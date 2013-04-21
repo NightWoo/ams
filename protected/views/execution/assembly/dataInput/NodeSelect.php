@@ -119,6 +119,9 @@
 					<div class="node-vq2yc node-LSYC" onclick="window.location.href='/bms/execution/child?node=路试&view=VQ2RoadTestException'">
 							路试
 					</div>
+					<div class="node-qg node-WDI" onclick="window.location.href='/bms/execution/child?node=WDI&view=WDI'">
+						WDI
+					</div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->
 		</div><!-- end offhead -->
