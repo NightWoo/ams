@@ -12,8 +12,7 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	//初始化第一栏
-					ajaxGetComponents("VQ2_road_test");
+			    	
 			    	//send ajax to decide showing bag or not
 			    	$.ajax({
 			    		type: "get",//使用get方法访问后台
@@ -70,9 +69,9 @@ $(document).ready(function  () {
 					$.each(comp.fault_mode,function (ind,value) {
 						options += '<option value="' + value.id + '">' + value.mode + '</option>';
 					});
-					var optionTd = "<td>" + '<select><option value="">-请选择故障-</option>' + options + "</td>";
+					var optionTd = "<td>" + '<select class="fault-type"><option value="">-请选择故障-</option>' + options + "</td>";
 					// var checkTd = '<td><input type="checkbox" value=""></td>';
-					$("#tableGeneral tbody").append("<tr>" + indexTd + nameTd + optionTd + "</tr>");
+					$("#tableGeneral tbody").append("<tr>" + indexTd + nameTd + optionTd + dutyOption + "</tr>");
 				});
 		    },
 		    error:function(){alertError();}
@@ -109,14 +108,14 @@ $(document).ready(function  () {
 				if(response.success){
 					var tr = $("#tableOther tbody tr").eq(currentOtherFocusIndex);
 					//重新选择的时候 清空select
-					tr.find("select").text("");
+					tr.find("select").filter(".fault-type").text("");
 					var options = "";
 					$.each(response.data.fault_mode,function (ind,value) {
 						options += '<option value="' + value.id + '">' + value.mode + '</option>';
 						
 					});
 					var optionTd = '<option value="">-请选择故障-</option>' + options ;
-					tr.find("select").append(optionTd);
+					tr.find("select").filter(".fault-type").append(optionTd);
 					enableTr(currentOtherFocusIndex);
 				}
 				else
@@ -125,6 +124,51 @@ $(document).ready(function  () {
 			error:function(){alertError();}
 		});
 	}
+	var dutyOption = "";
+	ajaxDutyList();
+	function ajaxDutyList() {
+		$.ajax({
+			url : QUERY_DUTY_DRPARTMENT,
+			dataType : "json",
+			data : {"node" : "VQ2"},
+			success : function  (response) {
+				var options = "";
+				$.each(response.data, function(index, value) {
+					options += '<option value="' + value.id + '">' + value.name + '</option>';
+				});
+				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
+				$("#tableOther tbody").text("");
+				//初始化  ‘其他’栏
+				for (var i = 0; i < 10; i++) {
+					var indexTd = "<td>" + (i + 1) + "</td>";
+					var nameTd = "<td><input type='text' /></td>";
+					var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
+					var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
+					$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
+				};
+				//初始化第一栏
+				ajaxGetComponents("VQ2_road_test");
+				$("#tableOther input[type='text']").typeahead({
+				    source: function (input, process) {
+				    	disableTr(currentOtherFocusIndex);
+				        $.get(VQ1_SEARCH_PART, {"component":input,"series":$("#divDetail").data("series")}, function (data) {
+				        	return process(data.data);
+				        },'json');
+				    },
+				    updater:function (item) {
+				     	ajaxViewParts(item);//根据part的名字查找故障模式
+			        	return item;
+			    	}
+				});
+
+				currentOtherFocusIndex = -1;
+				$("#tableOther input[type='text']").focus(function () {
+					currentOtherFocusIndex = $("#tableOther tbody tr").index($(this).parent().parent());
+				});
+			}
+		})
+	}
+
 //-------------------END ajax -----------------------
 	
 //------------------- common functions -----------------------	
@@ -164,17 +208,19 @@ $(document).ready(function  () {
 
 		$("#formBag").hide();
 		
-		//初始化  ‘其他’栏
-		$("#tableOther tbody").text("");
-		for (var i = 0; i < 10; i++) {
-			var indexTd = "<td>" + (i + 1) + "</td>";
-			var nameTd = "<td><input type='text' /></td>";
-			var optionTd = "<td>" + '<select disabled="disabled"><option value="">-请选择故障-</option></select>' + "</td>";
-			//注释掉，路试结束没有checkbox
-			// var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-			$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + "</tr>");
-			// $("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
-		};
+		if (dutyOption != "") {
+			//初始化  ‘其他’栏
+			$("#tableOther tbody").text("");
+			for (var i = 0; i < 10; i++) {
+				var indexTd = "<td>" + (i + 1) + "</td>";
+				var nameTd = "<td><input type='text' /></td>";
+				var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
+				//注释掉，路试结束没有checkbox
+				// var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
+				$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + dutyOption + "</tr>");
+				// $("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
+			};
+		}
 	}
 
 	//toggle 车辆信息和提示信息
@@ -251,9 +297,10 @@ $(document).ready(function  () {
 		sendData.driver = $("#driver").val();
 		sendData.fault = [];
 		console.log($("#tabContent tr").length);
-		var selects = $("#tabContent tr select option:selected");
+		var selects = $("#tabContent tr select").filter(".fault-type");
 
 		$.each(selects,function (index,value) {
+			value = $(value).find("option:selected");
 			if($(value).val() != ""){
 				var obj = {};
 				obj.faultId = $(value).val();
@@ -264,6 +311,7 @@ $(document).ready(function  () {
 				// if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
 				// 	obj.fixed = true;
 				obj.componentId = $(tr).find("input[type='hidden']").val();
+				obj.dutyDepartment = $(tr).find(".duty").val();
 				console.log(obj.componentId);
 				sendData.fault.push(obj);
 			}
@@ -301,14 +349,14 @@ $(document).ready(function  () {
 
 	function disableTr (index) {
 		var tr = $("#tableOther tbody tr").eq(index);
-		var select = tr.find("select");
+		var select = tr.find("select").filter(".fault-type");
 		select.text('');
 		select.append('<option value="">-请选择故障-</option>');
 		select.attr("disabled","disabled");
 	}
 	function enableTr (index) {
 		var tr = $("#tableOther tbody tr").eq(index);
-		var select = tr.find("select");
+		var select = tr.find("select").filter(".fault-type");
 		select.removeAttr("disabled");
 	}
 
