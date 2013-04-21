@@ -74,7 +74,7 @@ $(document).ready(function  () {
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
-			url: RTF_SUBMIT,
+			url: WDI_SUBMIT,
 			data:  sendData,
 			success: function(response){
 				resetPage();
@@ -275,7 +275,6 @@ $(document).ready(function  () {
 			//vin号，和故障数组
 			var sendData = {};
 			sendData.vin = $('#vinText').val();
-			sendData.bag = $("#inputBag").val();
 			sendData.checker = $("#checker").val();
 			sendData.subChecker = $("#subChecker").val();
 			sendData.checkTime = $("#checkTime").val();
