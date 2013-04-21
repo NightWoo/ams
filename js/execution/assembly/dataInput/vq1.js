@@ -62,16 +62,40 @@ $(document).ready(function  () {
 					$.each(comp.fault_mode,function (ind,value) {
 						options += '<option value="' + value.id + '">' + value.mode + '</option>';
 					});
-					var optionTd = "<td>" + '<select><option value="">-请选择故障-</option>' + options + "</td>";
+					var optionTd = "<td>" + '<select class="fault-type"><option value="">-请选择故障-</option>' + options + "</td>";
 					var checkTd = '<td><input type="checkbox" value=""></td>';
-					$("#" + tableId + " tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
+					$("#" + tableId + " tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
 				});
 		    },
 		    error:function(){alertError();}
         });
 	}
 
-
+	var dutyOption = "";
+	ajaxDutyList();
+	function ajaxDutyList() {
+		$.ajax({
+			url : QUERY_DUTY_DRPARTMENT,
+			dataType : "json",
+			data : {"node" : $("#currentNode").val()},
+			success : function  (response) {
+				var options = "";
+				$.each(response.data, function(index, value) {
+					options += '<option value="' + value.id + '">' + value.name + '</option>';
+				});
+				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
+				$("#otherTable tbody").text("");
+				//初始化  ‘其他’栏
+				for (var i = 0; i < 10; i++) {
+					var indexTd = "<td>" + (i + 1) + "</td>";
+					var nameTd = "<td><input type='text' /></td>";
+					var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
+					var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
+					$("#otherTable tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
+				};
+			}
+		})
+	}
 	//进入
 	function ajaxSubmit (sendData){
 		$.ajax({
@@ -101,16 +125,19 @@ $(document).ready(function  () {
 	function clearInputs () {
 		$("select").val(0);
 		$(":checkbox").removeAttr("checked");
-		$("#otherTable tbody").text("");
-		//初始化  ‘其他’栏
-		for (var i = 0; i < 10; i++) {
-			var indexTd = "<td>" + (i + 1) + "</td>";
-			var nameTd = "<td><input type='text' /></td>";
-			var optionTd = "<td>" + '<select disabled="disabled"><option value="">-请选择故障-</option></select>' + "</td>";
-			var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-			$("#otherTable tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
-		};
+		if (dutyOption != "") {
+			$("#otherTable tbody").text("");
+			//初始化  ‘其他’栏
+			for (var i = 0; i < 10; i++) {
+				var indexTd = "<td>" + (i + 1) + "</td>";
+				var nameTd = "<td><input type='text' /></td>";
+				var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
+				var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
+				$("#otherTable tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
+			};
 
+		}
+		
 		$("#otherTable input[type='text']").typeahead({
 		    source: function (input, process) {
 		    	disableTr(currentOtherFocusIndex);
@@ -172,14 +199,7 @@ $(document).ready(function  () {
 	var clicked = [true,false,false,false,false,true];
 	//初始化第一栏
 	
-	//初始化  ‘其他’栏
-	for (var i = 0; i < 10; i++) {
-		var indexTd = "<td>" + (i + 1) + "</td>";
-		var nameTd = "<td><input type='text' /></td>";
-		var optionTd = "<td>" + '<select disabled="disabled"><option value="">-请选择故障-</option></select>' + "</td>";
-		var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-		$("#otherTable tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
-	};
+	
 
 	$("#otherTable input[type='text']").typeahead({
 	    source: function (input, process) {
@@ -332,9 +352,10 @@ $(document).ready(function  () {
 			sendData.vin = $('#vinText').val();
 			sendData.fault = [];
 			console.log($("#tabContent tr").length);
-			var selects = $("#tabContent tr select option:selected");
+			var selects = $("#tabContent tr select").filter(".fault-type");
 
 			$.each(selects,function (index,value) {
+				value = $(value).find("option:selected");
 				if($(value).val() != ""){
 					var obj = {};
 					obj.faultId = $(value).val();
@@ -345,10 +366,12 @@ $(document).ready(function  () {
 					if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
 						obj.fixed = true;
 					obj.componentId = $(tr).find("input[type='hidden']").val();
+
+					obj.dutyDepartment = $(tr).find(".duty").val();
 					console.log(obj.componentId);
 					sendData.fault.push(obj);
 				}
-			})
+			});
 			sendData.fault = JSON.stringify(sendData.fault);
 			ajaxSubmit(sendData);
 		}
