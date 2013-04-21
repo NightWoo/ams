@@ -327,6 +327,19 @@ class CarController extends BmsBaseController
         }
     }
 
+	public function actionValidateWDI() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            $car = Car::create($vin);
+
+            $data = $car->car;
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
 
 	public function actionValidateCI() {
         try{
