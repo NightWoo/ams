@@ -7,8 +7,8 @@ $(document).ready(function  () {
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: RTF_VALIDATE,
-		    data: {"vin": $('#vinText').val(),"currentNode":$("#currentNode").attr("value")},
+		    url: WDI_VALIDATE,
+		    data: {"vin": $('#vinText').val()},
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
@@ -45,11 +45,11 @@ $(document).ready(function  () {
 	}
 
 	//校验
-	function ajaxGetComponents (compType){
+	function ajaxGetComponents (){
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: RTF_GET_FAULT_PARTS + "?category=" + compType,
+		    url: RTF_GET_FAULT_PARTS,
 		    data: {"series" : $("#divDetail").data("series")},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
@@ -139,7 +139,7 @@ $(document).ready(function  () {
 					$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + dutyOption + "</tr>");
 				};
 				//初始化第一栏
-				ajaxGetComponents("VQ2_road_test");
+				ajaxGetComponents();
 				$("#tableOther input[type='text']").typeahead({
 				    source: function (input, process) {
 				    	disableTr(currentOtherFocusIndex);
