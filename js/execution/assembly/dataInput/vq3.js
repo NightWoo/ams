@@ -14,8 +14,7 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	//初始化第一栏
-					ajaxGetComponents();
+			    	
 
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);		//added by wujun
@@ -95,19 +94,20 @@ $(document).ready(function  () {
 
 					var hiddenAssembly = "<input type='hidden' value='assembly' name='category' />";
 					// $("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + checkTd + "</tr>");
-					$("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + "</tr>");
+					$("#tableAssembly tbody").append("<tr>" + hiddenAssembly + indexTd + nameTd + optAssemblyTd + dutyOption + "</tr>");
 					var hiddenPaint = "<input type='hidden' value='paint' name='category' />";
 					// $("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + checkTd + "</tr>");
-					$("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + "</tr>");
+					$("#tablePaint tbody").append("<tr>" + hiddenPaint + indexTd + nameTd + optPaintTd + dutyOption + "</tr>");
 					var hiddenWelding = "<input type='hidden' value='welding' name='category' />";
 					// $("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + checkTd + "</tr>");
-					$("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + "</tr>");
+					$("#tableBody tbody").append("<tr>" + hiddenWelding + indexTd + nameTd + optBodyTd + dutyOption + "</tr>");
 
 					
 					
 					
-					
 				});
+
+				//init mix
 				for (var i = 0; i <10; i++) {
 					var mixIndex = "<td>" + (i + 1) + "</td>";
 					var nameOptions = "";
@@ -118,12 +118,12 @@ $(document).ready(function  () {
 					
 					var mixOption = "<td>" + '<select name="faultSelect"><option value="">-请选择故障-</option>' +  "</select></td>";
 					// var mixCheck = '<td><input type="checkbox" value=""></td>';
-					var mixResp = '<td><div class="btn-group responsibility" data-toggle="buttons-radio"><button class="btn" type="button" value="assembly">总装</button><button class="btn" type="button" value="paint">涂装</button><button class="btn" type="button" value="welding">焊装</button></div></td>';
+					// var mixResp = '<td><div class="btn-group responsibility" data-toggle="buttons-radio"><button class="btn" type="button" value="assembly">总装</button><button class="btn" type="button" value="paint">涂装</button><button class="btn" type="button" value="welding">焊装</button></div></td>';
 
 					// $("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + mixCheck + mixResp + "</tr>");
-					$("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + mixResp + "</tr>");
+					$("#tableMix tbody").append("<tr>" + mixIndex + mixName + mixOption + dutyOption + "</tr>");
 				};
-				$("#tableMix tbody").find("select[name='faultSelect']").attr("disabled","disabled");
+				// $("#tableMix tbody").find("select[name='faultSelect']").attr("disabled","disabled");
 				$("#tableMix tbody").find("select[name='compSelect']").change(function (){
 					//当综合中的select框改变时，故障模式加入响应的值
 					var index = $("#tableMix tbody tr").index($(this).parent().parent());
@@ -158,11 +158,11 @@ $(document).ready(function  () {
 						$(select).attr("disabled","disabled");
 					}
 				});
-				//change toggle button color
-				$(".responsibility .btn").click(function(){
-					$($(this).siblings()).removeClass("btn-danger");
-					$(this).addClass("btn-danger");
-				})	
+				// //change toggle button color
+				// $(".responsibility .btn").click(function(){
+				// 	$($(this).siblings()).removeClass("btn-danger");
+				// 	$(this).addClass("btn-danger");
+				// })	
 		    },
 		   error:function(){alertError();}
         });
@@ -215,6 +215,23 @@ $(document).ready(function  () {
 			error:function(){alertError();}
 		});
 	}
+	var dutyOption = "";
+	ajaxDutyList();
+	function ajaxDutyList() {
+		$.ajax({
+			url : QUERY_DUTY_DRPARTMENT,
+			dataType : "json",
+			data : {"node" : "VQ3"},
+			success : function  (response) {
+				var options = "";
+				$.each(response.data, function(index, value) {
+					options += '<option value="' + value.id + '">' + value.name + '</option>';
+				});
+				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
+				ajaxGetComponents();
+			}
+		})
+	}
 //------------------- common functions -----------------------	
 	//initialize this page
 	/*
@@ -253,7 +270,7 @@ $(document).ready(function  () {
 		$("#tablePaint tbody").text("");
 		$("#tableBody tbody").text("");
 		$("#tableMix tbody").text("");
-		ajaxGetComponents();
+		
 	}
 
 	//toggle 车辆信息和提示信息
@@ -310,20 +327,20 @@ $(document).ready(function  () {
 	// fault:[{"componentId":1,"faultId":1,"fixed":false},{}]
 	$("#btnSubmit").click(function() {
 		//如果没有选择右侧的toggleButton，不让其提交
-		var flag = false;
-		$.each($(".other tr"),function(index,value){
-			var faultId = $(value).find("select[name='faultSelect']").val();
-			if(faultId != ""){
-				var activeLength = $(value).find(".active").length;
-				console.log("activeLength:" + activeLength);
-				if(activeLength == 0){
-					alert("vq3综合栏中，存在没有选择\"责任部门\"的条目，请选择后再进行提交");
-					flag = true;
-					return false;
-				}
-			}
-		});
-		if(flag) return false;//stop from submitting
+		// var flag = false;
+		// $.each($(".other tr"),function(index,value){
+		// 	var faultId = $(value).find("select[name='faultSelect']").val();
+		// 	if(faultId != ""){
+		// 		var activeLength = $(value).find(".active").length;
+		// 		console.log("activeLength:" + activeLength);
+		// 		if(activeLength == 0){
+		// 			alert("vq3综合栏中，存在没有选择\"责任部门\"的条目，请选择后再进行提交");
+		// 			flag = true;
+		// 			return false;
+		// 		}
+		// 	}
+		// });
+		// if(flag) return false;//stop from submitting
 
 		//遍历总装
 		// var 
