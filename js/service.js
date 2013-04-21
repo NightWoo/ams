@@ -33,6 +33,8 @@ var F20_GET_INFO = "/bms/car/validateF20";
 //F20 打印检验跟单
 var F20_PRINT_CHECK_LIST = "/bms/execution/enterF20";
 
+//
+var QUERY_DUTY_DRPARTMENT = "/bms/query/queryDutyDepartment";
 
 //VQ1校验      需返回车系、颜色、车身、VIN号
 var VQ1_VALIDATE = "/bms/car/validateVQ1";
