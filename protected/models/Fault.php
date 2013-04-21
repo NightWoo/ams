@@ -120,8 +120,8 @@ class Fault
 			$ar->creator = $userId;
 			$ar->updator = $userId;
 			
-			if(isset($fault['category'])) {
-				$ar->duty_department = $fault['category'];
+			if(isset($fault['dutyDepartment'])) {
+				$ar->duty_department = $fault['dutyDepartment'];
 			}			
 
 			$ar->save();
@@ -135,8 +135,8 @@ class Fault
         $table = $this->tablePrefix . "_" . $series;
 	
 		$additional = '';	
-		if($this->tablePrefix === 'VQ3_FACADE_TEST') $additional = ",duty_department as category";
-		$sql = "SELECT component_id,component_name,fault_id, fault_mode, create_time, creator $additional FROM $table WHERE car_id={$car->car->id} AND status = '未修复'";
+		//if($this->tablePrefix === 'VQ3_FACADE_TEST') 
+		$sql = "SELECT component_id,component_name,fault_id, fault_mode, create_time, creator ,duty_department FROM $table WHERE car_id={$car->car->id} AND status = '未修复'";
 
 		$faults = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($faults)) {
