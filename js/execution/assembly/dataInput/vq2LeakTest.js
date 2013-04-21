@@ -13,8 +13,7 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	//初始化第一栏
-					ajaxGetComponents("VQ2_leak_test");
+			    	
 
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin)	//added by wujun
@@ -60,7 +59,7 @@ $(document).ready(function  () {
 					var nameTd = "<td>" + comp.component_name + "<input type='hidden' value='" + comp.component_id + "' />" + "</td>";
 					
 					// var checkTd = '<td><input type="checkbox" value=""></td>';
-					$("#tableGeneral tbody").append("<tr>" + indexTd + checkTd + nameTd  + "</tr>");
+					$("#tableGeneral tbody").append("<tr>" + indexTd + checkTd + nameTd + dutyOption + "</tr>");
 
 
 				});
@@ -100,14 +99,14 @@ $(document).ready(function  () {
 				if(response.success){
 					var tr = $("#tableOther tbody tr").eq(currentOtherFocusIndex);
 					//重新选择的时候 清空select
-					tr.find("select").text("");
+					tr.find("select").filter(".fault-type").text("");
 					var options = "";
 					$.each(response.data.fault_mode,function (ind,value) {
 						options += '<option value="' + value.id + '">' + value.mode + '</option>';
 						
 					});
 					var optionTd = '<option value="">-请选择故障-</option>' + options ;
-					tr.find("select").append(optionTd);
+					tr.find("select").filter(".fault-type").append(optionTd);
 					enableTr(currentOtherFocusIndex);
 				}
 				else
@@ -116,6 +115,26 @@ $(document).ready(function  () {
 			error:function(){alertError();}
 		});
 	}
+
+	var dutyOption = "";
+	ajaxDutyList();
+	function ajaxDutyList() {
+		$.ajax({
+			url : QUERY_DUTY_DRPARTMENT,
+			dataType : "json",
+			data : {"node" : "VQ2"},
+			success : function  (response) {
+				var options = "";
+				$.each(response.data, function(index, value) {
+					options += '<option value="' + value.id + '">' + value.name + '</option>';
+				});
+				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
+				//初始化第一栏
+					ajaxGetComponents("VQ2_leak_test");
+			}
+		})
+	}
+
 //------------------- common functions -----------------------	
 	//initialize this page
 	/*
@@ -227,6 +246,7 @@ $(document).ready(function  () {
 				var obj = {};
 				obj.faultId = $(value).find("input[type='checkbox']").attr("value");
 				obj.componentId = $(value).find("input[type='hidden']").val();
+				obj.dutyDepartment = $(value).find(".duty").val();
 				console.log(obj.componentId);
 				sendData.fault.push(obj);
 			}
