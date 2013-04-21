@@ -547,7 +547,7 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
-			// $car->checkTestLinePassed();
+			$car->checkTestLinePassed();
             $onlyOnce = true;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
@@ -567,8 +567,8 @@ class ExecutionController extends BmsBaseController
             
             $outDate = date("Y-m-d h:m:s");
             $clientIp = $_SERVER["REMOTE_ADDR"];
-            // $car->throwCertificateData($outDate, $clientIp);
-            // $car->throwInspectionSheetData();
+            $car->throwCertificateData($outDate, $clientIp);
+            $car->throwInspectionSheetData();
 			
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;
@@ -579,7 +579,7 @@ class ExecutionController extends BmsBaseController
 			$orderNumber = $order->order_number;
 			$orderDetailId = $order->order_detail_id;
 			
-			// $vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
+			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);

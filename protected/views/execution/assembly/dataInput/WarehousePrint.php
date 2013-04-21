@@ -50,25 +50,8 @@
 			    		</div>
 			    		<div id="collapse1" class="accordion-body collapse in" style="overflow-y: scroll; height:460px">
 			    			<div class="accordion-inner">
-			    				<div class="block">
-									<?php 
-										for($i=1;$i<51;$i++){
-											$num = sprintf("%02d", $i);
-											echo "<div>";
-											echo 	"<div class='pull-left laneContainer'>";
-											echo 		"<a class='thumbnail lane' href='#' laneid='$i'>";
-											echo 			"<p class='pull-left'>#$num</p>";
-											echo 			"<p class='label pull-right laneOK' laneid='$i'>0</p>";
-											echo 			"<div class='progress progress-info'>";
-											echo 				"<div class='bar' style='width:100%' laneid='$i'>10/10</div>";
-											echo 			"</div>";
-											echo 		"</a>";
-											echo 	"</div>";
-											echo "</div>";
-										}
-									?>
-
-									<div>
+			    				<div id="boardBar" class="block">
+									<!-- <div>
 				    					<div class="pull-left laneContainer">
 					    					<a class="thumbnail" href="#">
 												<p class="pull-left" laneid="51">#加</p>
@@ -78,7 +61,7 @@
 												</div>
 											</a>
 										</div>
-									</div>
+									</div> -->
 								</div>
 			    			</div>
 			    		</div>
@@ -87,20 +70,20 @@
 
 			    <div class="offset4">
 	                
-	                <table id="tableResult" class="table table-condensed table-hover" style="font-size:12px;">
+	                <table id="tableOrders" class="table table-condensed table-hover" style="font-size:12px; display:none">
 	                    <thead>
 	                        <tr>
-	                            <!-- <th>#</th> -->
+	                            <th>#</th>
 	                            <th id="thLane">车道</th>
 	                            <th id="thOrderNumber">订单号</th>
 	                            <th id="thDistributor">经销商</th>
+	                            <th id="thSeries">车系</th>
+	                            <th id="thCarType">车型/配置</th>
+	                            <th id="thColdResistant">耐寒性</th>
+	                            <th id="thColor">颜色</th>
 	                            <th id="thAmount">数量</th>
 	                            <th id="thHold">已备</th>
 	                            <th id="thCount">出库</th>
-	                            <th id="thSeries">车系</th>
-	                            <th id="thColor">颜色</th>
-	                            <th id="thCarType">车型/配置</th>
-	                            <th id="thColdResistant">耐寒性</th>
 	                            <!-- <th id="thStandbyDate">备车日期</th> -->
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
@@ -112,13 +95,13 @@
 	                        	<td>34</td>
 	                        	<td>ZCDG-20130327599959</td>
 	                        	<td>南京苏舜亚通汽车销售服务有限公司</td>
+	                        	<td>M6</td>
+	                        	<td>QCJ6480MJ/2.4L尊贵/4G69</td>
+	                        	<td>非耐寒</td>
+	                        	<td>瑞亚银</td>
 	                        	<td>3</td>
 	                        	<td>2</td>
 	                        	<td>1</td>
-	                        	<td>M6</td>
-	                        	<td>瑞亚银</td>
-	                        	<td>QCJ6480MJ/2.4L尊贵/4G69</td>
-	                        	<td>非耐寒</td>
 	                        	<!-- <td>2013-04-19</td> -->
 	                        	<td>
 	                        		<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="车辆明细"><i class="btnDetail icon-list"></i></a>
@@ -138,7 +121,7 @@
 		   	 	<h4>#01_南京苏舜亚通汽车销售服务有限公司_ZCDG-20130327599959</h4>
 		  	</div>
 		  	<div class="modal-body">
-		  		<table class="table table-condensed table-hover" id="detailTable">
+		  		<table class="table table-condensed table-hover" id="tableDetail">
             		<thead>
             			<th style="width:20px"></th>
             			<th style="width:120px">VIN号</th>

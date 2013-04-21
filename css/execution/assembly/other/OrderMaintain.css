@@ -45,8 +45,8 @@
 }
 
 #newModal{
-	margin: 0 0 0 -420px;
-	width: 800px;
+	margin: 0 0 0 -460px;
+	width: 900px;
 	font-size: 12px;
 }
 
@@ -99,7 +99,11 @@
 
 #tableNewOrder {
 	margin: 0 auto;
-    width: 780px;
+    width: 860px;
+}
+
+#tableNewOrder .input-mini{
+	width: 25px;
 }
 
 #tableNewOrder select, #tableNewOrder input {

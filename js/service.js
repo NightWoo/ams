@@ -238,10 +238,11 @@ var GET_DISTRIBUTOR_NAME_LIST = "/bms/order/getDistributorList";
 var GET_DISTRIBUTOR_ID = "/bms/order/getDistributorId";
 var QUERY_ORDER_CARS = "/bms/order/queryOrderCars";
 var QUERY_ORDER_DETAIL = "/bms/order/query";
-var QUERY_ORDER_BY_LANE ="/bms/order/queryBylane";
+var QUERY_ORDER_BY_BOARD ="/bms/order/queryByBoard";
 var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
 
 var GET_LANE_INFO ="/bms/lane/orderInfo";
+var GET_BOARD_INFO ="/bms/order/queryBoardInfo";
 
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';

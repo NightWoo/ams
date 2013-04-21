@@ -192,7 +192,18 @@ $(document).ready(function () {
 	    			$("<td />").html(value.amount).appendTo(tr);
 	    			$("<td />").html(value.hold).appendTo(tr);
 	    			$("<td />").html(value.count).appendTo(tr);
-	    			$("<td />").html(value.standby_date).appendTo(tr);
+	    			// $("<td />").html(value.standby_date).appendTo(tr);
+	    			$("<td />").html(value.create_time.substring(0,16)).appendTo(tr);
+	    			if(value.standby_finish_time ==='0000-00-00 00:00:00'){
+	    				$("<td />").html('未备齐').appendTo(tr);
+	    			} else {
+	    				$("<td />").html(value.standby_finish_time.substring(0,16)).appendTo(tr);
+	    			}
+	    			if(value.out_finish_time ==='0000-00-00 00:00:00'){
+	    				$("<td />").html('未完成').appendTo(tr);
+	    			} else {
+	    				$("<td />").html(value.out_finish_time.substring(0,16)).appendTo(tr);
+	    			}
 
 	    			if(value.status == 2){
 	    				$(tr).addClass('success');

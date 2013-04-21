@@ -96,7 +96,7 @@ class OrderSeeker
 			$condition .= " AND series='$series'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, standby_finish_time, out_finish_time FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -184,10 +184,10 @@ class OrderSeeker
 		return array('totalToPrint'=>$totalToPrint, 'laneInfo'=>$laneInfo);
 	}
 
-	public function queryByLane($laneId){
-		$sql = "SELECT lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
+	public function queryByBoard($boardNumber){
+		$sql = "SELECT board_number,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
 				FROM `order`
-				WHERE lane_id=$laneId AND (`status`=1 OR `status`=2) AND isPrinted=0";
+				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND isPrinted=0";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
 		foreach($orders as &$order) {
@@ -210,9 +210,39 @@ class OrderSeeker
 				$order['cold'] = '非耐寒';
 			}
 
-			$order['remain'] = $order['amount']; - $orderl['hold'];
+			$order['remain'] = $order['amount']; - $order['hold'];
 		}
 		return $orders;
+	}
+
+	public function queryBoardInfo(){
+		$boardArray = array();
+		$boardInfo = array();
+		$totalToPrint = 0;
+
+		$sql = "SELECT board_number, id,amount,hold,count,lane_id,`status`,isPrinted
+				 FROM `order`
+				 WHERE isPrinted=0 AND (`status`=1 OR `status`=2)
+				 ORDER BY board_number ASC";
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($orders as $order){
+			if(!in_array($order['board_number'], $boardArray)){
+				$boardArray[] = $order['board_number'];
+				$boardInfo[$order['board_number']] = array(
+					'toPrint' => 0,
+					'countSum' => 0,
+					'amountSum' => 0,
+				);
+			}
+			$boardInfo[$order['board_number']]['countSum'] += $order['count'];
+			$boardInfo[$order['board_number']]['amountSum'] += $order['amount'];
+			if($order['count'] == $order['amount']){
+				++$boardInfo[$order['board_number']]['toPrint'];
+				++$totalToPrint;
+			}
+		}
+
+		return array('boardArray'=>$boardArray, 'totalToPrint'=>$totalToPrint, 'boardInfo'=>$boardInfo);
 	}
 
 	public function getNameList ($carSeries, $carType) {

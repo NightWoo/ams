@@ -618,7 +618,7 @@ function ajaxStockyard (areaName) {
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.quantity) / parseInt(value.capacity) * 100) + "%").text(value.quantity + "/" + value.capacity);
 	    			if (value.quantity == value.capacity) {
 	    				progress.removeClass().addClass("progress").addClass("progress-success");
-	    			} else if (value.quantity == "0"){
+	    			} else if (value.counts == "0"){
 	    				bar.css("color", "black");
 	    			}
 	    				

@@ -122,7 +122,9 @@
                                     <th>数量</th>
                                     <th>已备</th>
                                     <th>出库</th>
-                                    <th>备车日期</th>
+                                    <th>指令时间</th>
+                                    <th>备齐时间</th>
+                                    <th>完成时间</th>
                                 </thead>
                                 <tbody>
 

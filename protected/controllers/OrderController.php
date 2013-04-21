@@ -79,6 +79,16 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionQueryBoardInfo(){
+		try{
+			$orderSeeker = new OrderSeeker();
+			$data = $orderSeeker->queryBoardInfo();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionInc() {
 		$id = $this->validateIntVal('id', 0);
 		try {
@@ -399,11 +409,11 @@ class OrderController extends BmsBaseController
 		}
 	}
 
-	public function actionQueryByLane() {
+	public function actionQueryByBoard() {
 		try{
-			$laneId = $this->validateIntVal('laneId', 0);
+			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$seeker = new OrderSeeker();
-			$data = $seeker->queryByLane($laneId);
+			$data = $seeker->queryByBoard($boardNumber);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
