@@ -925,6 +925,9 @@ class Car
 	}
 	
 	public function checkTestLinePassed() {
+		if(YII_DEBUG) {
+			return;
+		}
 		$vin = $this->car->vin;
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";
@@ -1019,7 +1022,7 @@ class Car
 
 		$gearboxCode = '';
 		$absInfo = '';
-		if(($this->car->series != 'M6')){
+		if(($this->car->series == 'F0')){
 			$gearboxTrace = $this->checkTraceGearBox() ;
 			$gearboxCode = $gearboxTrace->bar_code;
 
@@ -1110,7 +1113,9 @@ class Car
 	}
 
 	public function throwVinAssembly($vin, $point, $shift='总装1线A班'){
-		
+		if(YII_DEBUG) {
+			return;
+		}
 		// $ponit = iconv('UTF-8', 'GB2312', $ponit);
 		// $shift = iconv('UTF-8', 'GB2312', $shift);
 

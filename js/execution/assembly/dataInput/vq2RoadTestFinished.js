@@ -12,7 +12,7 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	
+			    	ajaxDutyList();
 			    	//send ajax to decide showing bag or not
 			    	$.ajax({
 			    		type: "get",//使用get方法访问后台
@@ -103,7 +103,8 @@ $(document).ready(function  () {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: VQ1_VIEW_PART,
-			data: {"component":text},
+			data: {"component":text,
+					"series" : $("#divDetail").data("series")},
 			success: function(response){
 				if(response.success){
 					var tr = $("#tableOther tbody tr").eq(currentOtherFocusIndex);
@@ -125,7 +126,7 @@ $(document).ready(function  () {
 		});
 	}
 	var dutyOption = "";
-	ajaxDutyList();
+	//ajaxDutyList();
 	function ajaxDutyList() {
 		$.ajax({
 			url : QUERY_DUTY_DRPARTMENT,
@@ -144,7 +145,7 @@ $(document).ready(function  () {
 					var nameTd = "<td><input type='text' /></td>";
 					var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
 					var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-					$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + dutyOption + "</tr>");
+					$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + dutyOption + "</tr>");
 				};
 				//初始化第一栏
 				ajaxGetComponents("VQ2_road_test");

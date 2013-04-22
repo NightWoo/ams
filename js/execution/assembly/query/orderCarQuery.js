@@ -21,7 +21,7 @@ $(document).ready(function () {
 	})
 	
 	$(".resetDate").click(function() {
-		$(this).siblings().filter("input").val(window.byd.DateUtil.currentDate);
+		$(this).siblings().filter("input").val(window.byd.DateUtil.currentTime);
 	})
 
 

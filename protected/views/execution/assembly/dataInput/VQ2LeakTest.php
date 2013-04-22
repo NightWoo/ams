@@ -22,14 +22,11 @@
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2"><!-- Main -->  
-           
-				<div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active"><?php echo $nodeDisplayName;?></li>
-						<li class="pull-right"><a href="/bms/execution/child?node=漏雨&view=VQ2LeakTestException">前往VQ2异常.漏雨</a></li>                
-				</ul></div><!-- end 面包屑 -->
+           		<legend><?php echo $nodeDisplayName;?>
+                    <span class="pull-right">
+                        <a href="/bms/execution/child?node=漏雨&view=VQ2LeakTestException"><i class="icon-link"></i>&nbsp;VQ2异常.漏雨</a>
+                    </span>
+	            </legend>
             
 				<div><!-- 内容主体 -->
 					<div>
@@ -88,7 +85,8 @@
 												<tr>
 													<td class="span1">序号</td>
 													<td class="span1">漏水</td>
-													<td class="span12">故障零部件</td>
+													<td class="span3">故障零部件</td>
+													<td class="">责任部门</td>
 												</tr>
 											</thead>
 											<tbody>

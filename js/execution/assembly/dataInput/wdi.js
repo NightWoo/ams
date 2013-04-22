@@ -12,8 +12,9 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	
-			    	$("#divDetail").fadeIn(1000);
+			    	console.log($("#divDetail").data("series"));
+			    	ajaxDutyList();
+			    	// $("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
@@ -46,11 +47,14 @@ $(document).ready(function  () {
 
 	//校验
 	function ajaxGetComponents (){
+		console.log($("#divDetail").data("series"));
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: RTF_GET_FAULT_PARTS,
-		    data: {"series" : $("#divDetail").data("series")},
+		    url: WDI_GET_FAULT_PARTS + "?category=WDI",
+		    data: {"series" : $("#divDetail").data("series")
+
+			},
 		    // data: {vin: $('#vinText').val()},
 		    success: function(response){
 		    	$("#tableGeneral tbody").text("");
@@ -65,6 +69,7 @@ $(document).ready(function  () {
 					// var checkTd = '<td><input type="checkbox" value=""></td>';
 					$("#tableGeneral tbody").append("<tr>" + indexTd + nameTd + optionTd + dutyOption + "</tr>");
 				});
+				$("#divDetail").fadeIn(1000);
 		    },
 		    error:function(){alertError();}
         });
@@ -95,7 +100,10 @@ $(document).ready(function  () {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: VQ1_VIEW_PART,
-			data: {"component":text},
+			data: {
+				"component":text,
+				"series" : $("#divDetail").data("series")
+			},
 			success: function(response){
 				if(response.success){
 					var tr = $("#tableOther tbody tr").eq(currentOtherFocusIndex);
@@ -117,7 +125,7 @@ $(document).ready(function  () {
 		});
 	}
 	var dutyOption = "";
-	ajaxDutyList();
+	//ajaxDutyList();
 	function ajaxDutyList() {
 		$.ajax({
 			url : QUERY_DUTY_DRPARTMENT,
@@ -174,6 +182,7 @@ $(document).ready(function  () {
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
+
 		resetPage();
 		$("#messageAlert").hide();
 	}
@@ -187,8 +196,9 @@ $(document).ready(function  () {
 	*/
 	function resetPage () {
 		//empty vinText
-		$("#vinText").removeAttr("disabled");
-		$("#checker, #subChecker, #checkTime").attr("value","");
+		$("#vinText").removeAttr("disabled").val("");
+		$("#checker, #subChecker").attr("value","");
+		$("#checkTime").val(window.byd.DateUtil.currentTime);
 		//聚焦到vin输入框上
 		$("#vinText").focus();
 		//to show vin input hint
@@ -198,7 +208,7 @@ $(document).ready(function  () {
 		$("#divDetail").hide();
 		//init all
 
-		$("#formBag").hide();
+		// $("#formBag").hide();
 		
 		if (dutyOption != "") {
 			//初始化  ‘其他’栏
@@ -213,6 +223,7 @@ $(document).ready(function  () {
 				// $("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
 			};
 		}
+		$("#tableGeneral tbody").text("");
 	}
 
 	//toggle 车辆信息和提示信息
@@ -295,6 +306,7 @@ $(document).ready(function  () {
 					// 	obj.fixed = true;
 					obj.componentId = $(tr).find("input[type='hidden']").val();
 					obj.dutyDepartment = $(tr).find(".duty").val();
+					obj.fixed = true;
 					console.log(obj.componentId);
 					sendData.fault.push(obj);
 				}

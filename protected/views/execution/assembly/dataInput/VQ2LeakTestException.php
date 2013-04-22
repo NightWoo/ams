@@ -22,15 +22,11 @@
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2"><!-- Main -->  
-				<div><!-- breadcrumb -->
-					<ul class="breadcrumb">
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active"><?php echo $nodeDisplayName;?></li>
-						<li class="pull-right"><a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest">返回VQ2.淋雨</a></li>                
-					</ul>
-				</div><!-- end of breadcrumb -->
+				<legend>VQ2异常.淋雨
+                    <span class="pull-right">
+                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"><i class="icon-link"></i>&nbsp;VQ2-淋雨</a>
+                    </span>
+                </legend>
             
 				<div><!-- 内容主体 -->
 					<form id="formConfirmation" class="well form-search">

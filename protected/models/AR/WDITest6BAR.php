@@ -1,6 +1,6 @@
 <?php
 
-class WDITest6BAR extends CActiveRecord
+class WDITest6bAR extends CActiveRecord
 {
 	/**
 	 * @var integer $id

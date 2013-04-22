@@ -14,8 +14,8 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
+					ajaxDutyList();
 					ajaxGetComponents("tableEngine", "engine");
-
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);	//added by wujun
 			    	//disable vinText and open submit button
@@ -85,6 +85,7 @@ $(document).ready(function  () {
 				});
 				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
 				$("#otherTable tbody").text("");
+
 				//初始化  ‘其他’栏
 				for (var i = 0; i < 10; i++) {
 					var indexTd = "<td>" + (i + 1) + "</td>";
@@ -217,7 +218,6 @@ $(document).ready(function  () {
 	var clicked = [true,false,false,false,false,true];
 	//初始化第一栏
 	
-	
 
 	$("#otherTable input[type='text']").typeahead({
 	    source: function (input, process) {
@@ -305,10 +305,16 @@ $(document).ready(function  () {
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
 		$("#divDetail").hide();
-
 		clearInputs();									//added by wujun
 		$("#tabs li").removeClass("active");			//added by wujun
 		$("#tabs li:first-child").addClass("active");	//added by wujun
+
+		$("#tabContent .tab-pane").removeClass("active");
+		$("#tabContent .tab-pane:first-child").addClass("active");
+
+		clicked = [true,false,false,false,false,true];
+		console.log(clicked);
+
 	}
 
 	//toggle 车辆信息和提示信息

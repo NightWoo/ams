@@ -22,15 +22,14 @@
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2"><!-- Main -->  
-            <div><!-- breadcrumb -->
-            	<ul class="breadcrumb">
-            		<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                	<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-                    <li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-                	<li class="active"><?php echo $nodeDisplayName;?></li>
-                	<li class="pull-right"><a href="/bms/execution/child?node=VQ3异常&view=VQ3Exception">前往VQ3异常</a></li>                
-            	</ul>
-            </div><!-- end of breadcrumb -->
+            
+            <div>
+                <legend><?php echo $nodeDisplayName;?>
+                    <span class="pull-right">
+                        <a href="/bms/execution/child?node=VQ3异常&view=VQ3Exception"><i class="icon-link"></i>&nbsp;前往VQ3异常</a>
+                    </span>
+                </legend>
+            </div>
             
    	   		<div><!-- 主体 -->
 				<div>
@@ -58,9 +57,9 @@
                     	<div id="divDetail">
                     		<div>
                     			<ul id="tabs" class="nav nav-pills">
-                            		<li><a href="#assembly" data-toggle="tab">总装</a></li>
-                                	<li><a href="#paint" data-toggle="tab">涂装</a></li>
-                                	<li><a href="#body" data-toggle="tab">焊装</a></li>
+                            		<li><a href="#assembly" data-toggle="tab">常见</a></li>
+                                	<!-- <li><a href="#paint" data-toggle="tab">涂装</a></li>
+                                	<li><a href="#body" data-toggle="tab">焊装</a></li> -->
                                 	<li class="active"><a href="#mix" data-toggle="tab">综合</a></li>
                             	</ul>
                             </div>
@@ -73,7 +72,7 @@
                             					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
                             					<!-- <td class="span2">在线修复</td> -->
-                                                <td></td>
+                                                <td>责任部门</td>
                             				</tr>
                             			</thead>
                             			<tbody>
@@ -81,14 +80,14 @@
                             			</tbody>
                             		</table>
                             	</div>
-                                <div class="tab-pane" id="paint">
+                                <!-- <div class="tab-pane" id="paint">
                                 	<table id="tablePaint" class="table table-hover table-condensed">
                             			<thead>
                             				<tr>
                             					<td class="span1">序号</td>
                             					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<!-- <td class="span2">在线修复</td> -->
+                            					<td class="span2">在线修复</td>
                                                 <td></td>
                             				</tr>
                             			</thead>
@@ -104,7 +103,7 @@
                             					<td class="span1">序号</td>
                             					<td class="span2">故障零部件</td>
                             					<td class="span3">故障模式</td>
-                            					<!-- <td class="span2">在线修复</td> -->
+                            					<td class="span2">在线修复</td>
                                                 <td></td>
                             				</tr>
                             			</thead>
@@ -112,7 +111,7 @@
                             				
                             			</tbody>
                             		</table>
-                                </div>
+                                </div> -->
                                 
                                 <div class="tab-pane active" id="mix">
                                 	<table id="tableMix" class="table table-hover table-condensed">

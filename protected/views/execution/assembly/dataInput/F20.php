@@ -29,12 +29,10 @@
 			require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- Main体 -->
-				<div><ul class="breadcrumb"><!-- 面包屑 -->
-					  <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active"><?php echo $nodeDisplayName;?></li>                
-				</ul></div><!-- END 面包屑 -->
+                <div>
+                    <legend><?php echo $nodeDisplayName;?>
+                    </legend>
+                </div>
             			           
 				<div><!-- 内容主体 -->
 					<form id="form" class="well form-search">

@@ -22,15 +22,11 @@
 				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- 页体 -->
-				<div><!-- breadcrumb -->
-					<ul class="breadcrumb">
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active"><?php echo $nodeDisplayName;?></li>
-						<li class="pull-right"><a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception">前往VQ1异常</a></li>                
-					</ul>
-				</div><!-- end of breadcrumb -->
+				<legend><?php echo $nodeDisplayName;?>静态检验
+                    <span class="pull-right">
+                        <a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception"><i class="icon-link"></i>&nbsp;VQ1异常</a>
+                    </span>
+                </legend>
 				
 				<div><!-- 内容主体 -->
 					<div>
@@ -75,6 +71,7 @@
 													<td class="span3">故障零部件</td>
 													<td class="span4">故障模式</td>
 													<td>在线修复</td>
+													<td>责任部门</td>
 												</tr>
 											</thead>
 											<tbody>
@@ -90,6 +87,7 @@
 													<td class="span3">故障零部件</td>
 													<td class="span4">故障模式</td>
 													<td>在线修复</td>
+													<td>责任部门</td>
 												</tr>
 											</thead>
 											<tbody>

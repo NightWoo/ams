@@ -14,7 +14,7 @@ $(document).ready(function  () {
 		    success: function(response){
 			    if(response.success){
 			    	$("#divDetail").data("series", response.data.series);
-			    	
+			    	ajaxDutyList();
 
 			    	$("#divDetail").fadeIn(1000);
 			    	$("#vinText").val(response.data.vin);		//added by wujun
@@ -194,7 +194,9 @@ $(document).ready(function  () {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: VQ1_VIEW_PART,
-			data: {"component":text},
+			data: {"component":text,
+				"series" : $("#divDetail").data("series")
+			},
 			success: function(response){
 				if(response.success){
 					var tr = $("#otherTable tbody tr").eq(currentOtherFocusIndex);
@@ -216,7 +218,7 @@ $(document).ready(function  () {
 		});
 	}
 	var dutyOption = "";
-	ajaxDutyList();
+	// ajaxDutyList();
 	function ajaxDutyList() {
 		$.ajax({
 			url : QUERY_DUTY_DRPARTMENT,

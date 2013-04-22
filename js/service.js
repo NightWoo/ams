@@ -90,6 +90,7 @@ var VQ3_SEARCH_PART = "/bms/fault/search";
 var VQ3_SHOW_EXCEPTION = "/bms/fault/showVQ3";
 var VQ3_SUBMIT_EXCEPTION = "/bms/fault/saveVQ3";
 
+var WDI_GET_FAULT_PARTS = "/bms/fault/show";
 var WDI_VALIDATE = "/bms/car/validateWDI";
 var WDI_SUBMIT = "/bms/execution/enterWDI";
 

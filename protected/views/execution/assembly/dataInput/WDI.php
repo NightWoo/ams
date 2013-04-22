@@ -11,7 +11,8 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
-        <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/bms/js/common.js"></script>
 
     <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/wdi.js"></script>
 	</head>
@@ -24,12 +25,11 @@
 				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 		<div id="bodyright" class="offset2"><!-- Main体 -->           
-            <div ><ul class="breadcrumb"><!-- 面包屑 -->
-                    <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                	<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-					<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-                	<li class="active"><?php echo $nodeDisplayName;?></li>
-            </ul></div><!-- end 面包屑 -->
+            <legend><?php echo $nodeDisplayName;?>
+                   <!--  <span class="pull-right">
+                        <a href=""><i class="icon-link"></i>&nbsp;WDI异常</a>
+                    </span> -->
+            </legend>
 				<div><!-- 内容主体 -->
 					<div>
 						<form id="formFailure" class="well form-search">
@@ -39,16 +39,44 @@
 								
 								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
 								<button id="reset" type="reset" class="btn">清空</button>
-								<span class="help-inline" id="vinHint">请输入VIN后回车</span>
+								<!-- <span class="help-inline" id="vinHint">请输入VIN后回车</span> -->
 								<select name="" id="checker" class="input-small" disalbled='disabled'>
-									<option value="" selected>初检人员</option>
-									<option value="149">陈亚军</option>
+									<option value="" selected>初检员</option>
+									<option value="195">郭卫东</option>
+									<option value="196">冯涛</option>
+									<option value="197">王建文</option>
+									<option value="198">邓观佑</option>
+									<option value="199">刘洋</option>
+									<option value="200">全权</option>
+									<option value="201">饶名义</option>
+									<option value="202">苏韦</option>
+									<option value="203">王傲</option>
+									<option value="204">朱芳书</option>
+									<option value="205">陈祥星</option>
+									<option value="206">巴帅锋</option>
+									<option value="207">徐文超</option>
+									<option value="208">田士爱</option>
+									<option value="209">彭辉成</option>
 								</select>
 								<select name="" id="subChecker" class="input-small" disalbled='disabled'>
-									<option value="" selected>复检人员</option>
-									<option value="149">陈亚军</option>
+									<option value="" selected>复检员</option>
+									<option value="195">郭卫东</option>
+									<option value="196">冯涛</option>
+									<option value="197">王建文</option>
+									<option value="198">邓观佑</option>
+									<option value="199">刘洋</option>
+									<option value="200">全权</option>
+									<option value="201">饶名义</option>
+									<option value="202">苏韦</option>
+									<option value="203">王傲</option>
+									<option value="204">朱芳书</option>
+									<option value="205">陈祥星</option>
+									<option value="206">巴帅锋</option>
+									<option value="207">徐文超</option>
+									<option value="208">田士爱</option>
+									<option value="209">彭辉成</option>
 								</select>
-								<input type="text" class="span3" placeholder="检验日期..." id="checkTime" onClick="WdatePicker({el:'checkTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+								<input type="text" class="input-medium" placeholder="检验日期..." id="checkTime" onClick="WdatePicker({el:'checkTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 								
 								<div class="help-inline" id="carInfo">
@@ -69,12 +97,12 @@
 							<form id="divDetail" class="well form-search">
 								<div>
 									<ul id="tabs" class="nav nav-pills">
-										<li class="active"><a href="#general" data-toggle="tab">常见</a></li>
-										<li><a href="#other" data-toggle="tab">其他</a></li>
+										<li><a href="#general" data-toggle="tab">常见</a></li>
+										<li class="active"><a href="#other" data-toggle="tab">其他</a></li>
 									</ul>
 								</div>
 								<div id="tabContent" class="tab-content">
-									<div class="tab-pane active" id="general">
+									<div class="tab-pane" id="general">
 										<table id="tableGeneral" class="table">
 											<thead>
 												<tr>
@@ -90,7 +118,7 @@
 										</table>
 									</div>
 									
-									<div class="tab-pane" id="other">
+									<div class="tab-pane active" id="other">
 										<table id="tableOther" class="table">
 											<thead>
 												<tr>
