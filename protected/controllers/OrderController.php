@@ -420,6 +420,29 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionQueryCarsById() {
+		try{
+			$orderId = $this->validateIntVal('orderId', 0);
+			$seeker = new OrderSeeker();
+			$data = $seeker->queryCarsByid($orderId);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionPrintByOrder() {
+		try{
+			$orderId = $this->validateIntVal('orderId', 0);
+			$order = new Order();
+			$board = $order->printByOrder($orderId);
+
+			$this->renderJsonBms(true, 'print success', $board);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionGetOrderConfig() {
 		$carSeries = $this->validateStringVal('carSeries', '');
 		$carType = $this->validateStringVal('carType', '');

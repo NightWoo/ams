@@ -925,9 +925,9 @@ class Car
 	}
 	
 	public function checkTestLinePassed() {
-		if(YII_DEBUG) {
-			return;
-		}
+		// if(YII_DEBUG) {
+		// 	return;
+		// }
 		$vin = $this->car->vin;
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";
@@ -1042,17 +1042,22 @@ class Car
 		$updatesql = "UPDATE Print_Table
 						SET DGMXID='{$cData['order_detail_id']}', CLXH='{$cData['car_model']}', CLYS='{$cData['sell_color']}', FDJH='{$engineCode}', NOTE='{$cData['certificate_note']}', DGDH='{$cData['order_number']}', SCD='{$district}', CLXZ='{$cData['country']}', DDXZ='{$cData['order_nature']}',  EMP='{$computerName}', AUTO_GEARBOX='{$gearboxCode}', AUTO_DATE='{$outDate}', Zxzlxs='{$cData['assisted_stecring']}', Clkx='{$carType}', Ltgg='{$cData['tyre']}', WZCLXH='{$cData['sell_car_type']}'
 						WHERE VIN='{$vin}'";
+		$deletesql = "DELETE FROM Print_Table WHERE VIN='{$vin}'";
 
 		//insert
 		$tdsSever = Yii::app()->params['tds_HGZ'];
         $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
         $tdsUser = Yii::app()->params['tds_HGZ_username'];
         $tdsPwd = Yii::app()->params['tds_HGZ_password'];  
+
         if($this->existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin)){
-	   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $updatesql);
-        }else{
-	   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
-        }   
+	   		// $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $updatesql);
+	   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $deletesql);
+        }
+      //   else{
+	   		// $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
+      //   }   
+	   	$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
 	}
 
 	public function existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin){
@@ -1113,9 +1118,9 @@ class Car
 	}
 
 	public function throwVinAssembly($vin, $point, $shift='总装1线A班'){
-		if(YII_DEBUG) {
-			return;
-		}
+		// if(YII_DEBUG) {
+		// 	return;
+		// }
 		// $ponit = iconv('UTF-8', 'GB2312', $ponit);
 		// $shift = iconv('UTF-8', 'GB2312', $shift);
 
@@ -1153,6 +1158,9 @@ class Car
 
 	public function throwVinStoreOut($vin, $lane, $order, $orderDetailId, $distributorName, $engineCode){
 		
+		// if(YII_DEBUG) {
+		// 	return;
+		// }
 		// $distributorName = iconv('UTF-8', 'GB2312', $distributorName);
 
 		$client = new SoapClient(Yii::app()->params['ams2vin_store_out']);

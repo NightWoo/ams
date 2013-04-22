@@ -16,7 +16,7 @@
 	font-size: 30px;
     line-height: 40px;
 }
-#refreshLane:hover {
+#refreshLane:hover,.goPrint, .goPrint:hover, .goDetail, .goDetail:hover{
 	text-decoration: none;
 }
 

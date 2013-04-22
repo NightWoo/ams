@@ -11,6 +11,8 @@ class OrderSeeker
 	public function __construct(){
 	}
 
+	private static $COLD_RESISTANT = array('非耐寒','耐寒');
+
 	public function getOriginalOrders($orderNumber) {
         if(empty($orderNumber)){
         	throw new Exception ('订单号不能为空');
@@ -161,9 +163,9 @@ class OrderSeeker
 			$countSum = 0;
 			$amountSum = 0;
 			$toPrint = 0;
-			$sql = "SELECT id,amount,hold,count,lane_id,`status`,isPrinted 
+			$sql = "SELECT id,amount,hold,count,lane_id,`status`,is_printed 
 					FROM `order` 
-					WHERE lane_id='{$lane['id']}' AND (`status`=1 OR `status`=2) AND isPrinted=0";
+					WHERE lane_id='{$lane['id']}' AND (`status`=1 OR `status`=2) AND is_printed=0";
 			$orders = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach($orders as $order){
 				$countSum += $order['count'];
@@ -185,9 +187,9 @@ class OrderSeeker
 	}
 
 	public function queryByBoard($boardNumber){
-		$sql = "SELECT board_number,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
+		$sql = "SELECT board_number,id as order_id,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
 				FROM `order`
-				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND isPrinted=0";
+				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND is_printed=0";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
 		foreach($orders as &$order) {
@@ -220,9 +222,9 @@ class OrderSeeker
 		$boardInfo = array();
 		$totalToPrint = 0;
 
-		$sql = "SELECT board_number, id,amount,hold,count,lane_id,`status`,isPrinted
+		$sql = "SELECT board_number, id,amount,hold,count,lane_id,`status`,is_printed
 				 FROM `order`
-				 WHERE isPrinted=0 AND (`status`=1 OR `status`=2)
+				 WHERE is_printed=0 AND (`status`=1 OR `status`=2)
 				 ORDER BY board_number ASC";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach($orders as $order){
@@ -243,6 +245,19 @@ class OrderSeeker
 		}
 
 		return array('boardArray'=>$boardArray, 'totalToPrint'=>$totalToPrint, 'boardInfo'=>$boardInfo);
+	}
+
+	public function queryCarsById($orderId){
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, engine_code 
+				FROM car 
+				WHERE order_id=$orderId";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		$configName = $this->configNameList();
+		foreach($cars as &$car){
+			$car['type_config'] = $configName[$car['config_id']];
+			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+		}
+		return $cars;
 	}
 
 	public function getNameList ($carSeries, $carType) {
@@ -286,6 +301,16 @@ class OrderSeeker
             $status = explode(',', $status);
         }
 		return $status;
+	}
+
+	private function configNameList(){
+		$configName = array();
+		$sql = "SELECT car_config_id, order_config_id , name , car_model FROM view_config_name";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($datas as $data){
+			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
+		}
+		return $configName;
 	}
 
 }

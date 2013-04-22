@@ -241,6 +241,8 @@ var QUERY_ORDER_CARS = "/bms/order/queryOrderCars";
 var QUERY_ORDER_DETAIL = "/bms/order/query";
 var QUERY_ORDER_BY_BOARD ="/bms/order/queryByBoard";
 var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
+var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
+var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
 
 var GET_LANE_INFO ="/bms/lane/orderInfo";
 var GET_BOARD_INFO ="/bms/order/queryBoardInfo";

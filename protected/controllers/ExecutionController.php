@@ -795,26 +795,18 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $vin = $this->validateStringVal('vin', '');
-			$nodeName = 'T32';
-			$componentCode = $this->validateStringVal('componentCode', '{}');
-
-			$enterNode = Node::createByName($nodeName);
-			$leftNode = $enterNode->getParentNode();
+            $vin = 'LGXC14DG1D0008366';
+			
 
             $car = Car::create($vin);
 
-            //throw T32 data to vinm
-			if($nodeName == 'T32'){
-                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
-            }
-
-			//save component trace
-			$car->addTraceComponents($enterNode, $componentCode);
+            $outDate = date("Y-m-d h:m:s");
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $car->throwCertificateData($outDate, $clientIp);
+            $car->throwInspectionSheetData();
 
 
-
-            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $vinMessage);
+            $this->renderJsonBms(true, $vin . '成功录入' , $car);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

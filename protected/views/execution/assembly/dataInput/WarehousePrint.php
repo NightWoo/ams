@@ -43,7 +43,7 @@
 		    				 	<span class="label label-success" id="totalOK">2</span>
 			    			</div> -->
 			    			<a href="#" id="refreshLane"><i class="icon-refresh pull-right"></i></a>
-			    			<p class="text-success" id="totalOK">12</p>
+			    			<p class="text-success" id="totalOK">0</p>
 			    			<!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionLane" href="#collapse1">
 			    				01-10
 			    			</a> -->
@@ -73,26 +73,26 @@
 	                <table id="tableOrders" class="table table-condensed table-hover" style="font-size:12px; display:none">
 	                    <thead>
 	                        <tr>
-	                            <th>#</th>
-	                            <th id="thLane">车道</th>
-	                            <th id="thOrderNumber">订单号</th>
-	                            <th id="thDistributor">经销商</th>
-	                            <th id="thSeries">车系</th>
-	                            <th id="thCarType">车型/配置</th>
-	                            <th id="thColdResistant">耐寒性</th>
-	                            <th id="thColor">颜色</th>
-	                            <th id="thAmount">数量</th>
-	                            <th id="thHold">已备</th>
-	                            <th id="thCount">出库</th>
+	                            <th style="width:40px"></th>
+	                            <th style="width:50px">#</th>
+	                            <th style="width:30px">车道</th>
+	                            <th>订单号</th>
+	                            <th style="width:150px">经销商</th>
+	                            <th style="width:30px">车系</th>
+	                            <th style="width:180px">车型/配置</th>
+	                            <th style="width:40px">耐寒性</th>
+	                            <th style="width:40px">颜色</th>
+	                            <th style="width:30px">数量</th>
+	                            <th style="width:30px">已备</th>
+	                            <th style="width:30px">出库</th>
 	                            <!-- <th id="thStandbyDate">备车日期</th> -->
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
-	                            <th id="thEdit"></th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                        	<td>34</td>
+	                        	<!-- <td>34</td>
 	                        	<td>ZCDG-20130327599959</td>
 	                        	<td>南京苏舜亚通汽车销售服务有限公司</td>
 	                        	<td>M6</td>
@@ -101,7 +101,7 @@
 	                        	<td>瑞亚银</td>
 	                        	<td>3</td>
 	                        	<td>2</td>
-	                        	<td>1</td>
+	                        	<td>1</td> -->
 	                        	<!-- <td>2013-04-19</td> -->
 	                        	<td>
 	                        		<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="车辆明细"><i class="btnDetail icon-list"></i></a>
@@ -117,35 +117,47 @@
 <!-- new record -->
 <div class="modal" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
   	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		   	 	<h4>#01_南京苏舜亚通汽车销售服务有限公司_ZCDG-20130327599959</h4>
-		  	</div>
-		  	<div class="modal-body">
-		  		<table class="table table-condensed table-hover" id="tableDetail">
-            		<thead>
-            			<th style="width:20px"></th>
-            			<th style="width:120px">VIN号</th>
-            			<th style="width:30px">车系</th>
-            			<th style="width:50px">颜色</th>
-            			<th style="width:300px">车型/配置</th>
-            			<th style="width:40px">耐寒性</th>
-            			<th style="width:150px">出库时间</th>
-            		</thead>
-            		<tbody>
-            			<td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint icon-print"></i></a></td>
-                    	<td>LGXC34CG6D1014718</td>
-            			<td>M6</td>
-                    	<td>瑞亚银</td>
-                    	<td>QCJ6480MJ/2.4L尊贵/4G69</td>
-                    	<td>非耐寒</td>
-                    	<td>2013-04-18 09:00:00</td>
-            		</tbody>
-	            </table>
-		  	</div>
-		  	<div class="modal-footer">
-			    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			    <button class="btn btn-primary" id="detailPrintAll"><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
-		  	</div>
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h4>#01_南京苏舜亚通汽车销售服务有限公司_ZCDG-20130327599959</h4>
+  	</div>
+  	<div class="modal-body">
+  		<table class="table table-condensed table-hover" id="tableDetail">
+    		<thead>
+    			<tr>
+	    			<th style="width:20px"></th>
+	    			<th style="width:120px">VIN号</th>
+	    			<th style="width:30px">车系</th>
+	    			<th style="width:200px">车型/配置</th>
+	    			<th style="width:50px">耐寒性</th>
+	    			<th style="width:50px">颜色</th>
+	    			<th style="width:50px">发动机号</th>
+	    			<th style="width:50px">状态</th>
+	    			<th style="width:150px">出库时间</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<!-- <td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint icon-print"></i></a></td>
+            	<td>LGXC34CG6D1014718</td>
+    			<td></td>
+            	<td>瑞亚银</td>
+            	<td>QCJ6480MJ/2.4L尊贵/4G69</td>
+            	<td>非耐寒</td>
+            	<td>2013-04-18 09:00:00</td> -->
+    		</tbody>
+        </table>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" id="detailPrintAll"><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
+  	</div>
+</div>
+
+<div class="modal" id="spinModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;top:25%">
+  	<div class="modal-body">
+  		<div style="margin: 0 auto; width:40px;">
+  		<i class="icon-spin icon-spinner" style="font-size:40px;line-height: 36px"></i>
+	  	</div>
+  	</div>
 </div>
 
 </body>

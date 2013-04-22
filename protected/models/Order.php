@@ -180,6 +180,7 @@ class Order
 				}
 
 				$matchedOrder->hold += 1;
+				$matchedOrder->save();
 				if($matchedOrder->hold == $matchedOrder->amount){
 					$matchedOrder->standby_finish_time = date('YmdHis');
 				}
@@ -215,6 +216,23 @@ class Order
 		}
 		return $data;
 
+	}
+
+	public function printByOrder($orderId){
+		$order = OrderAR::model()->findByPk($orderId);
+		$sql = "SELECT vin FROM car WHERE order_id=$orderId AND distribute_time>'0000-00-00 00:00:00'";
+		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
+		foreach($vins as $vin){
+			$car = Car::create($vin);
+			$outDate = $car->car->distribute_time;
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+			$car->throwCertificateData($outDate, $clientIp);
+            $car->throwInspectionSheetData();
+		}
+		$order->is_printed = 1;
+		$order->save();
+
+		return $order->board_number;
 	}
 	
 }
