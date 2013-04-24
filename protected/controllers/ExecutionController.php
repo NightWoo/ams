@@ -552,6 +552,12 @@ class ExecutionController extends BmsBaseController
             if(empty($car->car->engine_code)){
                 throw new Exception($car->car->vin . "系统未记录发动机号，无法出库");
             }
+
+            if($car->car->series == 'F0'){
+                $gearboxTrace = $car->checkTraceGearBox();
+                $absTrace = $car->checkTraceABS();
+            }
+
 			$car->checkTestLinePassed();
             $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
