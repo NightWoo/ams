@@ -124,15 +124,16 @@
   		<table class="table table-condensed table-hover" id="tableDetail">
     		<thead>
     			<tr>
-	    			<th style="width:20px"></th>
+	    			<!-- <th style="width:20px"></th> -->
 	    			<th style="width:120px">VIN号</th>
+	    			<th style="width:150px">出库时间</th>
+	    			<th style="width:50px">证件</th>
+	    			<th style="width:200px">经销商</th>
 	    			<th style="width:30px">车系</th>
 	    			<th style="width:200px">车型/配置</th>
 	    			<th style="width:50px">耐寒性</th>
 	    			<th style="width:50px">颜色</th>
 	    			<th style="width:50px">发动机号</th>
-	    			<th style="width:50px">状态</th>
-	    			<th style="width:150px">出库时间</th>
     			</tr>
     		</thead>
     		<tbody>
@@ -148,7 +149,7 @@
   	</div>
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-primary" id="detailPrintAll"><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
+	    <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
   	</div>
 </div>
 

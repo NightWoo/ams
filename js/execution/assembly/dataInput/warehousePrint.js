@@ -142,21 +142,23 @@ $("document").ready(function() {
 				cars = response.data;
 				$.each(cars, function (index, value) {
 					tr = $("<tr />");
-					tdBtn = $("<td />");
-					tdBtn.html("<a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印' disabled><i class='btnPrint icon-print'></i></a>");
-					tdBtn.appendTo(tr);
+					// tdBtn = $("<td />");
+					// tdBtn.html("<a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印' disabled><i class='btnPrint icon-print'></i></a>");
+					// tdBtn.appendTo(tr);
 					$('<td />').html(value.vin).appendTo(tr);
-					$('<td />').html(value.series).appendTo(tr);
-					$('<td />').html(value.type_config).appendTo(tr);
-					$('<td />').html(value.cold).appendTo(tr);
-					$('<td />').html(value.color).appendTo(tr);
-					$('<td />').html(value.engine_code).appendTo(tr);
-					$('<td />').html(value.status).appendTo(tr);
 					if(value.distribute_time === '0000-00-00 00:00:00'){
 						$('<td />').html('未出库').appendTo(tr);
 					} else {
 						$('<td />').html(value.distribute_time).appendTo(tr);
 					}
+					// $('<td />').html(value.status).appendTo(tr);
+					$('<td />').html('新证').appendTo(tr);
+					$('<td />').html(value.distributor_name).appendTo(tr);
+					$('<td />').html(value.series).appendTo(tr);
+					$('<td />').html(value.type_config).appendTo(tr);
+					$('<td />').html(value.cold).appendTo(tr);
+					$('<td />').html(value.color).appendTo(tr);
+					$('<td />').html(value.engine_code).appendTo(tr);
 
 					$("#tableDetail tbody").append(tr);
 
@@ -252,9 +254,16 @@ $("document").ready(function() {
 				$("#detailModal").data("orderId", tr.data('orderId'));
 				$("#detailModal").data("amount", tr.data('amount'));
 				$("#detailModal").data("hold", tr.data('hold'));
+				$("#detailModal").data("count", tr.data('count'));
 				modalHead = "#" + tr.data("laneName") + "_" + tr.data("orderNumber") + "_" + tr.data("distributorName");
 				$("#detailModal .modal-header h4").html(modalHead);
 				$("#detailModal").modal('show');
+
+				if($("#detailModal").data("amount") == $("#detailModal").data("count")){
+					$("#detailPrintAll").removeAttr("disabled");
+				}else{
+					$("#detailPrintAll").attr("disabled", "disabled");
+				}
 			}
 
 			if($(e.target).hasClass("btnPrint")){
@@ -278,6 +287,14 @@ $("document").ready(function() {
 					}
 				}
 			}
+		}
+	})
+
+	$("#detailPrintAll").click(function () {
+		if(confirm('是否传输打印？')){
+			$("#detailModal").modal("hide");
+			$("#spinModal").modal("show");
+			printAll($("#detailModal").data("orderId"));
 		}
 	})
 

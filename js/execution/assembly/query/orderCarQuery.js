@@ -224,6 +224,11 @@ $(document).ready(function () {
 	    				} else{
 		    				$("<td />").html(order.out_finish_time).appendTo(tr);
 	    				}
+	    				if(order.is_printed == 1){
+	    					$("<td />").html("<i class='icon-print'></i>").appendTo(tr);
+	    				} else {
+	    					$("<td />").html("-").appendTo(tr);
+	    				}
 	    				if(order.status == 2){
 		    				$(tr).addClass('success');
 		    			}
@@ -251,7 +256,7 @@ $(document).ready(function () {
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(amountSum).appendTo(trTotal);
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(holdSum).appendTo(trTotal);
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(countSum).appendTo(trTotal);
-					$("<td />").attr("colspan", "3").appendTo(trTotal);
+					$("<td />").attr("colspan", "4").appendTo(trTotal);
 					$("#tableOrderDetail thead").prepend(trTotal);
 
 	    		$("#tableOrderDetail").show();

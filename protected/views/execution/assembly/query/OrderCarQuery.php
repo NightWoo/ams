@@ -125,6 +125,7 @@
                                     <th>指令时间</th>
                                     <th>备齐时间</th>
                                     <th>完成时间</th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
 

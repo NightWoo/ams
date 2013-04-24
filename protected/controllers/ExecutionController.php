@@ -543,12 +543,14 @@ class ExecutionController extends BmsBaseController
         try {
             $vin = $this->validateStringVal('vin', '');
             $driverId = $this->validateIntVal('driverId', 0);
-            // $date = date('Y-m-d');
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
             if($car->car->distribute_time > '0000-00-00 00:00:00' || $car->car->distributor_name != ''){
                 throw new Exception($car->car->vin . "已出库，不可重复出库");
+            }
+            if(empty($car->car->engine_code)){
+                throw new Exception($car->car->vin . "系统未记录发动机号，无法出库");
             }
 			$car->checkTestLinePassed();
             $onlyOnce = false;
@@ -568,6 +570,7 @@ class ExecutionController extends BmsBaseController
             $car->car->save();
             $car->distributeTime();
             
+            //no need to throw one by one
             //$outDate = date("Y-m-d h:m:s");
             //$clientIp = $_SERVER["REMOTE_ADDR"];
             //$car->throwCertificateData($outDate, $clientIp);

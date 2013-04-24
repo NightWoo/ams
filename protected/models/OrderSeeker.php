@@ -101,7 +101,7 @@ class OrderSeeker
 			$condition .= " AND series='$series'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, standby_finish_time, out_finish_time FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, standby_finish_time, out_finish_time, is_printed FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -281,7 +281,7 @@ class OrderSeeker
 	}
 
 	public function queryCarsById($orderId){
-		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, engine_code 
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code 
 				FROM car 
 				WHERE order_id=$orderId ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
