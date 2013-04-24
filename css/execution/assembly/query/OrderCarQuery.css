@@ -11,3 +11,13 @@
 	 padding: 2px 8px;
 	 line-height: 24px;
 }
+
+#tableOrderDetail .totalTd{
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#tableOrderDetail .amountTd, #tableOrderDetail .holdTd, #tableOrderDetail .countTd {
+	text-align: right;
+}

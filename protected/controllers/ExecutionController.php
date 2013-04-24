@@ -547,8 +547,11 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->leftNode('CHECK_IN');
+            if($car->car->distribute_time > '0000-00-00 00:00:00' || $car->car->distributor_name != ''){
+                throw new Exception($car->car->vin . "已出库，不可重复出库");
+            }
 			$car->checkTestLinePassed();
-            $onlyOnce = true;
+            $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
             $data = '';
@@ -565,10 +568,10 @@ class ExecutionController extends BmsBaseController
             $car->car->save();
             $car->distributeTime();
             
-            $outDate = date("Y-m-d h:m:s");
-            $clientIp = $_SERVER["REMOTE_ADDR"];
-            $car->throwCertificateData($outDate, $clientIp);
-            $car->throwInspectionSheetData();
+            //$outDate = date("Y-m-d h:m:s");
+            //$clientIp = $_SERVER["REMOTE_ADDR"];
+            //$car->throwCertificateData($outDate, $clientIp);
+            //$car->throwInspectionSheetData();
 			
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;

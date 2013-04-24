@@ -29,6 +29,9 @@ class OrderSeeker
         $orders = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
 
         foreach($orders as &$order){
+        	if($order['series'] == '思锐'){
+        		$order['series'] = '6B';
+        	}
             $order['car_type'] = $order['car_model']. "(" . $order['car_type_description'] . ")";
             $order['config_description'] = '';
             if(!empty($order['options'])){
@@ -130,6 +133,28 @@ class OrderSeeker
 		return $orderList;
 	}
 
+	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`'){
+		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
+		$boards = array();
+
+		foreach($orders as $order){
+			if(empty($boards[$order['board_number']])){
+				$boards[$order['board_number']] = array(
+					'boardNumber' => $order['board_number'],
+					'boardAmount' => 0,
+					'boardHold' => 0,
+					'boardCount' => 0,
+					'orders' => array(),
+				);
+			}
+			$boards[$order['board_number']]['boardAmount'] += $order['amount'];
+			$boards[$order['board_number']]['boardHold'] += $order['hold'];
+			$boards[$order['board_number']]['boardCount'] += $order['count'];
+			$boards[$order['board_number']]['orders'][] = $order;
+		}
+		return $boards;
+	}
+
 	public function matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date) {
 
 		if(empty($date)){
@@ -192,6 +217,8 @@ class OrderSeeker
 				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND is_printed=0";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
+		$countSum = 0;
+		$amountSum = 0;
 		foreach($orders as &$order) {
 			if(!empty($order['order_config_id'])){
 				$order['order_config_name'] = OrderConfigAR::model()->findByPk($order['order_config_id'])->name;
@@ -213,8 +240,14 @@ class OrderSeeker
 			}
 
 			$order['remain'] = $order['amount']; - $order['hold'];
+
+			$countSum += $order['count'];
+			$amountSum += $order['amount'];
 		}
-		return $orders;
+
+		$remainTotal = $amountSum - $countSum;
+
+		return array($orders, $remainTotal);
 	}
 
 	public function queryBoardInfo(){
@@ -250,7 +283,7 @@ class OrderSeeker
 	public function queryCarsById($orderId){
 		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, engine_code 
 				FROM car 
-				WHERE order_id=$orderId";
+				WHERE order_id=$orderId ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 		$configName = $this->configNameList();
 		foreach($cars as &$car){

@@ -105,6 +105,8 @@ class FaultSeeker
 		foreach($nodes as $node) {
 			$nodeInfos[$node['id']] = $node['display_name'];
 		}
+
+		$dutyList = $this->dutyList();
 		
 		$conditions = array();
 		$validConditions = array();
@@ -208,14 +210,16 @@ class FaultSeeker
 			$data['node_name'] = $nodeInfos[$data['node_id']];
 			if(empty($data['duty_department']))
 				$data['duty_department'] = '-';
-			else if($data['duty_department'] === 'assembly')
-				$data['duty_department'] = '总装';
-			else if($data['duty_department'] === 'paint')
-				$data['duty_department'] = '涂装';
-			else if($data['duty_department'] === 'welding')
-				$data['duty_department'] = '焊装';
+			 else{
+			 	$data['duty_department'] = $dutyList[$data['duty_department']];
+			 }
+			// 	$data['duty_department'] = $dutyList[$data['duty_department']];
+			// else if($data['duty_department'] === 'paint')
+			// 	$data['duty_department'] = '涂装';
+			// else if($data['duty_department'] === 'welding')
+			// 	$data['duty_department'] = '焊装';
 
-				$data['series'] = $name[$data['series']];
+			$data['series'] = $name[$data['series']];
 		}
 
 		$total = 0;
@@ -904,5 +908,16 @@ class FaultSeeker
 		);
 
 		return $seriesName;
+	}
+
+	public function dutyList(){
+		$list = array();
+		$sql = "SELECT id,name,display_name FROM duty_department";
+		$dutyDepartments = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($dutyDepartments as $department){
+			$list[$department['id']] = $department['display_name'];
+		}
+
+		return $list;
 	}
 }

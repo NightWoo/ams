@@ -83,7 +83,7 @@ $("document").ready(function() {
 			},
 			success: function (response) {
 				$("#tableOrders tbody").html("");
-				orders = response.data;
+				orders = response.data.orders;
 				$.each(orders, function (index, value) {
 					tr = $("<tr />");
 					tdBtn = $("<td />");
@@ -117,7 +117,11 @@ $("document").ready(function() {
 
 				})
 				trPrintAll = $("<tr />");
-				$("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary' id='boardPrintAll' disabled><i class='btnPrint icon-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
+				$("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary printAllByBoard' id='boardPrintAll' disabled><i class='btnPrint icon-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
+				if(response.data.remainTotal == '0'){
+					trPrintAll.children("td").children(".btn").removeAttr("disabled");
+				}
+
 				$("#tableOrders tbody").append(trPrintAll);
 				$("#tableOrders").show();
 			},
@@ -176,8 +180,34 @@ $("document").ready(function() {
 			success: function(response){
 				queryOrdersByBoardNumber(response.data);
 				getBoardInfo();
-				$("#spinModal").modal("hide")
+				$("#spinModal").modal("hide");
 				alert("打印传输完成!");
+			},
+			error: function(){alertError();}
+		})
+	}
+
+	function printAllByBoard(boardNumber) {
+		$.ajax({
+			url: WAREHOUSE_PRINT_BY_BOARD,
+			type: "get",
+			dataType: "json",
+			data: {
+				"boardNumber" : boardNumber,
+			},
+			success: function(response) {
+				if(response.success){
+					getBoardInfo();
+					$("#spinModal").modal("hide");
+					alert("打印传输完成!");
+					$("#tableOrders tbody").html("");
+					curboard = '';
+				} else {
+					alert(response.message);
+					getBoardInfo();
+					queryOrdersByBoardNumber(curBoard);
+					$("#spinModal").modal("hide");
+				}
 			},
 			error: function(){alertError();}
 		})
@@ -189,6 +219,9 @@ $("document").ready(function() {
 
 	$("#refreshLane").click(function(){
 		getBoardInfo();
+		if(curBoard != ''){
+			queryOrdersByBoardNumber(curBoard);
+		}
 	})
 
 	$("#boardBar").live("click", function(e) {
@@ -196,6 +229,17 @@ $("document").ready(function() {
 			boardNumber = $(e.target).attr("boardnum");
 			queryOrdersByBoardNumber(boardNumber);
 			curBoard = boardNumber;
+		}
+	})
+
+	$("#boardPrintAll").live("click", function(e){
+		if($(e.target).attr("disabled") == "disabled"){
+					return false;
+		} else {
+			if(confirm('是否传输打印？')){
+				$("#spinModal").modal("show");
+				printAllByBoard(curBoard);
+			}
 		}
 	})
 
@@ -220,6 +264,17 @@ $("document").ready(function() {
 					if(confirm('是否传输打印？')){
 						$("#spinModal").modal("show");
 						printAll(tr.data("orderId"));
+					}
+				}
+			}
+
+			if($(e.target).hasClass("printAllByBoard")){
+				if($(e.target).attr("disabled") == "disabled"){
+					return false;
+				} else {
+					if(confirm('是否传输打印？')){
+						$("#spinModal").modal("show");
+						printAllByBoard(curBoard);
 					}
 				}
 			}

@@ -79,6 +79,24 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionQueryBoardOrders(){
+		try{
+			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$distributor = $this->validateStringVal('distributor', '');
+			$status = $this->validateStringVal('status', '0');
+			$series = $this->validateStringVal('series', '');		
+			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
+
+			$seeker = new OrderSeeker();
+			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
+
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionQueryBoardInfo(){
 		try{
 			$orderSeeker = new OrderSeeker();
@@ -413,7 +431,11 @@ class OrderController extends BmsBaseController
 		try{
 			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$seeker = new OrderSeeker();
-			$data = $seeker->queryByBoard($boardNumber);
+			list($orders, $remainTotal) = $seeker->queryByBoard($boardNumber);
+			$data = array(
+				'orders' => $orders,
+				'remainTotal' => $remainTotal,
+			);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
@@ -436,6 +458,18 @@ class OrderController extends BmsBaseController
 			$orderId = $this->validateIntVal('orderId', 0);
 			$order = new Order();
 			$board = $order->printByOrder($orderId);
+
+			$this->renderJsonBms(true, 'print success', $board);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionPrintByBoard() {
+		try{
+			$boardNumber = $this->validateStringVal('boardNumber', '');
+			$order = new Order();
+			$board = $order->printByBoard($boardNumber);
 
 			$this->renderJsonBms(true, 'print success', $board);
 		} catch(Exception $e) {

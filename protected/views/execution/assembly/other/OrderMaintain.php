@@ -86,12 +86,13 @@
 	                            <td>备车日期&nbsp;<a href="#" id="refreshDate"><i class="icon-refresh"></i></a></td>
 	                            <td>订单号</td>
 	                            <td>经销商</td>
+	                            <td>车系</td>
 	                            <td></td>
 	                        </tr>
 	                        <tr>
 	                            <td>
 	                            	<div class="input-append">
-								      	<input id="standbyDate"  type="text" class="input-medium" placeholder="备车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/>
+								      	<input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/>
 							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 							    	</div>
 	                            </td>
@@ -107,9 +108,20 @@
 							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 							    	</div>
 	                           </td>
+	                           <td>
+	                           		<select name="" id="selectSeries" class="input-small">
+		                                <option value="">全车系</option>
+		                                <option value="F0">F0</option>
+		                                <option value="M6">M6</option>
+		                                <option value="6B">思锐</option>
+		                            </select>
+	                           </td>
 	                            <td>
 	                                <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
 	                                <input id="btnAdd" type="button" class="btn btn-success" value="录入"></input>
+	                                <label class="checkbox"><input type="checkbox" id="checkboxActive" value="1">激活</input></label>
+		                            <label class="checkbox"><input type="checkbox" id="checkFreeze" value="0">冻结</input></label>
+		                            <label class="checkbox"><input type="checkbox" id="checkClosed" value="2">完成</input></label>
 	                            </td>
 	                        </tr>
 	                    </table>

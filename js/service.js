@@ -227,6 +227,7 @@ var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";
 var ORDER_CHECK_DETAIL = "/bms/order/checkDetail";
 var ORDER_GENERATE = "/bms/order/generate";
 var ORDER_QUERY = "/bms/order/query";
+var  QUERY_BOARD_ORDERS = "/bms/order/queryBoardOrders";
 var ORDER_SAVE = "/bms/order/save";
 var ORDER_TOP_PRI = "/bms/order/top";
 var ORDER_INC_PRI = "/bms/order/inc";
@@ -243,6 +244,7 @@ var QUERY_ORDER_BY_BOARD ="/bms/order/queryByBoard";
 var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
 var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
 var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
+var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
 
 var GET_LANE_INFO ="/bms/lane/orderInfo";
 var GET_BOARD_INFO ="/bms/order/queryBoardInfo";

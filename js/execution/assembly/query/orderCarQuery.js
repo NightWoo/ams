@@ -160,11 +160,13 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryOrder() {
-		$("#tableOrderDetail >tbody").html("");
+		$("#tableOrderDetail>tbody").html("");
+		$("#tableOrderDetail>thead td").remove();
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: ORDER_QUERY ,//ref:  /bms/js/service.js
+		    // url: ORDER_QUERY ,//ref:  /bms/js/service.js
+		    url: QUERY_BOARD_ORDERS ,//ref:  /bms/js/service.js
 		    data: {
 		    	"orderNumber": $("#orderNumberText").val(),
 		    	"standbyDate": $("#standbyDate").val(),
@@ -174,56 +176,83 @@ $(document).ready(function () {
 		    	"orderBy": 'board_number,lane_id,priority,`status`',
 		    },
 		    success:function (response) {
-	    		var orders = response.data;
+	    		var boards = response.data;
 	    		var amountSum = 0;
 	    		var holdSum = 0;
 	    		var countSum = 0;
 
-	    		$.each(orders ,function (index,value) {
-	    			var tr = $("<tr />");
-					$("<td />").html(value.board_number).appendTo(tr);
-					$("<td />").html(value.lane_name).appendTo(tr);
-	    			$("<td />").html(value.order_number).appendTo(tr);
-	    			$("<td />").html(value.distributor_name).appendTo(tr);
-	    			$("<td />").html(value.series).appendTo(tr);
-	    			$("<td />").html(value.car_type_config).appendTo(tr);
-	    			$("<td />").html(value.cold).appendTo(tr);
-	    			$("<td />").html(value.color).appendTo(tr);
-	    			$("<td />").html(value.amount).appendTo(tr);
-	    			$("<td />").html(value.hold).appendTo(tr);
-	    			$("<td />").html(value.count).appendTo(tr);
-	    			// $("<td />").html(value.standby_date).appendTo(tr);
-	    			$("<td />").html(value.create_time.substring(0,16)).appendTo(tr);
-	    			if(value.standby_finish_time ==='0000-00-00 00:00:00'){
-	    				$("<td />").html('未备齐').appendTo(tr);
-	    			} else {
-	    				$("<td />").html(value.standby_finish_time.substring(0,16)).appendTo(tr);
-	    			}
-	    			if(value.out_finish_time ==='0000-00-00 00:00:00'){
-	    				$("<td />").html('未完成').appendTo(tr);
-	    			} else {
-	    				$("<td />").html(value.out_finish_time.substring(0,16)).appendTo(tr);
-	    			}
+	    		$.each(boards, function (board, value){
+	    			//以board为单位构造子表
+	    			var num = value.orders.length;
+	    			var tmp = $("<tbody />");
+	    			console.log(num);
 
-	    			if(value.status == 2){
-	    				$(tr).addClass('success');
-	    			}
+	    			amountSum += value.boardAmount;
+		    		holdSum += value.boardHold;
+		    		countSum += value.boardCount;
 
-	    			amountSum += parseInt(value.amount);
-	    			holdSum += parseInt(value.hold);
-	    			countSum += parseInt(value.count);
+	    			for(var i=0; i<num; i++){
+	    				$("<tr />").appendTo(tmp);
+	    				
+	    			};
+	    			console.log(tmp);
 
-	    			$("#tableOrderDetail tbody").append(tr);
-	    			console.log($("#tableOrderDetail tbody"));
-	    		});
+	    			$.each(value.orders, function (index,order){
+	    				tr = tmp.children("tr:eq("+ index +")");
+	    				$("<td />").html(order.lane_name).appendTo(tr);
+	    				$("<td />").html(order.order_number).appendTo(tr);
+	    				$("<td />").html(order.distributor_name).appendTo(tr);
+	    				if(order.series == '6B'){
+		    				$("<td />").html('思锐').appendTo(tr);
+	    				} else {
+		    				$("<td />").html(order.series).appendTo(tr);
+	    				};
+	    				$("<td />").html(order.car_type_config).appendTo(tr);
+	    				$("<td />").html(order.cold).appendTo(tr);
+	    				$("<td />").html(order.color).appendTo(tr);
+	    				$("<td />").html(order.amount).addClass('amountTd').appendTo(tr);
+	    				$("<td />").html(order.hold).addClass('holdTd').appendTo(tr);
+	    				$("<td />").html(order.count).addClass('countTd').appendTo(tr);
+	    				$("<td />").html(order.create_time).appendTo(tr);
+	    				if(order.standby_finish_time === '0000-00-00 00:00:00'){
+		    				$("<td />").html('未备齐').appendTo(tr);
+	    				} else{
+		    				$("<td />").html(order.standby_finish_time).appendTo(tr);
+	    				}
+	    				if(order.out_finish_time === '0000-00-00 00:00:00'){
+		    				$("<td />").html('未完成').appendTo(tr);
+	    				} else{
+		    				$("<td />").html(order.out_finish_time).appendTo(tr);
+	    				}
+	    				if(order.status == 2){
+		    				$(tr).addClass('success');
+		    			}
+	    			})
+
+					//首行，被合并的单元格放在此行
+	    			var firstTr = tmp.children("tr:eq(0)");	
+	    			//合并的备板编号
+	    			boardTd = $("<td />").attr("rowspan", num).html(value.boardNumber).prependTo(firstTr);
+	    			//合并的需备数量
+	    			boardAmountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardAmount).insertAfter(firstTr.children("td:eq(8)"));
+	    			//合并的已备数量
+	    			boardHoldTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardHold).insertAfter(firstTr.children("td:eq(10)"));
+	    			//合并的完成数量
+	    			boardCountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardCount).insertAfter(firstTr.children("td:eq(12)"));
+	    			
+	    			console.log(firstTr.children("td:eq(8)"));
+	    			console.log(tmp.children("tr"));
+	    			$("#tableOrderDetail tbody").append(tmp.children("tr"));
+	    		})
+
 					trTotal = $("<tr />");	
 					tdLabel = "<td colspan='8' style='text-align:right'>合计&nbsp;&nbsp;&nbsp;&nbsp;</td>";
 					trTotal.append(tdLabel);
-					$("<td />").html(amountSum).appendTo(trTotal);
-					$("<td />").html(holdSum).appendTo(trTotal);
-					$("<td />").html(countSum).appendTo(trTotal);
-					$("<td />").appendTo(trTotal);
-					$("#tableOrderDetail tbody").append(trTotal);
+					$("<td />").attr("colspan", "2").addClass("totalTd").html(amountSum).appendTo(trTotal);
+					$("<td />").attr("colspan", "2").addClass("totalTd").html(holdSum).appendTo(trTotal);
+					$("<td />").attr("colspan", "2").addClass("totalTd").html(countSum).appendTo(trTotal);
+					$("<td />").attr("colspan", "3").appendTo(trTotal);
+					$("#tableOrderDetail thead").prepend(trTotal);
 
 	    		$("#tableOrderDetail").show();
 		    },

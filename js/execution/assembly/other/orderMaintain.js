@@ -171,7 +171,11 @@ $("document").ready(function() {
 						tdAmount = "<input type='text' id='newAmount'" + index +"' class='input-mini newAmount' value='"+ value.amount +"'/>";
 						$("<td />").html(tdAmount).appendTo(tr);
 						// $("<td />").html(value.amount).appendTo(tr);
-						$("<td />").html(value.series).appendTo(tr);
+						if(value.series === '6B'){
+							$("<td />").html('思锐').appendTo(tr);
+						} else {
+							$("<td />").html(value.series).appendTo(tr);
+						}
 						$("<td />").html(value.car_type).appendTo(tr);
 						if(value.cold_resistant == '1'){
 							$("<td />").html("耐寒").appendTo(tr);
@@ -325,7 +329,8 @@ $("document").ready(function() {
 				"standbyDate": $("#standbyDate").val(),
 				"orderNumber": orderNumber,
 				"distributor": distributor,
-				"status": 'all',
+				"series" : $("#selectSeries").val(),
+		    	"status" : getStatusChecked(),
 				"orderBy": 'priority,lane_id,`status`',
 			},
 			success: function(response) {
@@ -747,6 +752,25 @@ $("document").ready(function() {
 			error: function(){alertError();}
 		})
 		return boardNumber;
+	}
+
+	function getStatusChecked () {
+		var activeChecked = $("#checkboxActive").attr("checked") === "checked";
+		var freezeChecked = $("#checkFreeze").attr("checked") === "checked";
+		var closedChecked = $("#checkClosed").attr("checked") === "checked";
+		
+		if(!activeChecked && !freezeChecked && !closedChecked){
+			return 'all'
+		} else {
+		var temp = [];
+		if (activeChecked)
+			temp.push($("#checkboxActive").val());
+		if (freezeChecked)
+			temp.push($("#checkFreeze").val());
+		if (closedChecked)
+			temp.push($("#checkClosed").val());
+		return temp.join(",");
+		}
 	}
 
 	$('body').tooltip(

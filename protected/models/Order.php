@@ -100,8 +100,6 @@ class Order
 			$new->save();
 			$old->save();
 		}
-
-
 	}
 
 	public function match($series, $carType, $configId, $color, $coldResistant, $date) {
@@ -220,7 +218,7 @@ class Order
 
 	public function printByOrder($orderId){
 		$order = OrderAR::model()->findByPk($orderId);
-		$sql = "SELECT vin FROM car WHERE order_id=$orderId AND distribute_time>'0000-00-00 00:00:00'";
+		$sql = "SELECT vin FROM car WHERE order_id=$orderId AND distribute_time>'0000-00-00 00:00:00' ORDER BY distribute_time ASC";
 		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach($vins as $vin){
 			$car = Car::create($vin);
@@ -234,5 +232,29 @@ class Order
 
 		return $order->board_number;
 	}
-	
+
+	public function printByBoard($boardNumber) {
+		if(empty($boardNumber)){
+			throw new Exception ('无法按空备板编号打印');
+		}
+
+		$orderSql = "SELECT id , board_number ,count, amount FROM `order` WHERE board_number='$boardNumber' AND `status`=1 AND is_printed=0";
+		$orders = Yii::app()->db->createCommand($orderSql)->queryAll();
+
+		if(!empty($orders)){
+			$countSum = 0;
+			$amountSum = 0;
+			foreach($orders as $order){
+				$countSum += $order['count'];
+				$amountSum += $order['amount'];
+			}
+			if($amountSum > $countSum){
+				throw new Exception("此板未完成，暂不可传输打印");
+			}
+			foreach($orders as $order){
+				$this->printByOrder($order['id']);
+			}
+		}
+		return $boardNumber;
+	}
 }

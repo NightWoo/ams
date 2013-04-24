@@ -20,6 +20,15 @@ class OrderCommand extends CConsoleCommand
 				$order->priority = $pri ++;
 				$order->standby_date=$curDate;
 				$order->save();
+
+				$sameBoardOrders = $this->findSameBoardOrders($order->board_number);
+				if(!empty($sameBoardOrders)){
+					foreach($sameBoardOrders as $sameBoard){
+						$sameBoard->priority = 9999;
+						$sameBoard->standby_date=$curDate;
+						$sameBoard->save();
+					}
+				}
 			}
 		}
 
@@ -33,9 +42,13 @@ class OrderCommand extends CConsoleCommand
 
 	private function getUnfinishedOrders(){
 		$lastDate = DateUtil::getLastDate();
-		$orders = OrderAR::model()->findAll('standby_date=? AND status=1 AND amount>hold ORDER BY priority ASC', array($lastDate));
-		$count = OrderAR::model()->count('standby_date=? AND status=1 AND amount>hold ORDER BY priority ASC', array($lastDate));
+		$orders = OrderAR::model()->findAll('standby_date=? AND status=1 AND amount>count ORDER BY priority ASC', array($lastDate));
+		$count = OrderAR::model()->count('standby_date=? AND status=1 AND amount>count ORDER BY priority ASC', array($lastDate));
 		return array($orders, $count);
 	}
 
+	private function findSameBoardOrders($boardNumber){
+		$orders = OrderAR::model()->findAll('board_number=? AND amount=count', array($boardNumber));
+		return $orders;
+	}
 }

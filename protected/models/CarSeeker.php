@@ -46,7 +46,7 @@ class CarSeeker
 		$dataSql = "SELECT id as car_id,serial_number,warehouse_id,vin,series,type,config_id,cold_resistant,color,engine_code,finish_time,warehouse_time,remark,special_order,assembly_line
 				      FROM car 
 				     WHERE $condition 
-			      ORDER BY distribute_time ASC $limit";
+			      ORDER BY order_id, lane_id, distribute_time ASC $limit";
 
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
