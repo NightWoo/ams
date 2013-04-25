@@ -47,6 +47,7 @@ $(document).ready(function() {
 					// $("#btnSubmit").removeAttr("disabled").focus();
 					$("#cardNumber").attr("value", driver.card_number);
 					$("#cardNumber").attr("disabled","disabled");
+					$("#cardNumber").attr("driverid",driver.user_id);
 					$("#driver").html(driver.name);
 				} else {
 					$("#carInfo").attr("orderId", "");
@@ -69,6 +70,7 @@ $(document).ready(function() {
 			dataType: "json",
 			data: {
 				//"standbyDate": workDate(),
+				"driverId" : $("#cardNumber").attr("driverid"),
 			},
 			async:false,
 			success: function(response) {

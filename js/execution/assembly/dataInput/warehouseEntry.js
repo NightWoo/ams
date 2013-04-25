@@ -51,7 +51,7 @@ $("document").ready(function() {
 			success: function (response) {
 				if(response.success){
 					driver = response.data;
-					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.id).attr("disabled", "disabled");
+					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.user_id).attr("disabled", "disabled");
 					$("#driver").html(driver.name);
 					ajaxSubmit();
 				}else{
@@ -71,7 +71,7 @@ $("document").ready(function() {
 			url: CHECKIN_SUBMIT,
 			data: {
 				"vin": $("#vinText").val(),
-				"driverId": $("#cardText").attr("cardId"),
+				"driverId": $("#cardText").attr("cardid"),
 			},
 			async:false,
 			success: function(response){

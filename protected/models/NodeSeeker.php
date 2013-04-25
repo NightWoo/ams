@@ -165,6 +165,9 @@ class NodeSeeker
 	}
 
 	private function reviseSETime($stime,$etime) {
+		//cancel the revise function
+		return array($stime, $etime);
+
 		$s = strtotime($stime);
 		$e = strtotime($etime);
 	

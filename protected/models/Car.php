@@ -964,17 +964,43 @@ class Car
 
 		$insertsql = "INSERT INTO ShopPrint
 				SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";
-		$updatesql = "UPDATE ShopPrint
-						SET Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}'
-						WHERE vin='{$vin}'";
-		$existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
+		// $updatesql = "UPDATE ShopPrint
+		// 				SET Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}'
+		// 				WHERE vin='{$vin}'";
+		// $existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
 		
-		$exist=Yii::app()->dbTest->createCommand($existsql)->execute();
-		if(empty($exist)){
+		// $exist=Yii::app()->dbTest->createCommand($existsql)->execute();
+		// if(empty($exist)){
 			Yii::app()->dbTest->createCommand($insertsql)->execute();
-		}else{
-			Yii::app()->dbTest->createCommand($updatesql)->execute();
-		}
+		// }else{
+			// Yii::app()->dbTest->createCommand($updatesql)->execute();
+		// }
+	}
+	public function throwMarkPrintData() {
+		//好像有点太过程化了，找时间优化
+		$carId = $this->car->id;
+		$vin = $this->car->vin;
+		$config = $this->car->config_id;
+		$series = $this->car->series;
+		$color = $this->car->color;
+
+		$carType = $this->car->type;
+		$carType = str_replace("（", "(",$carType);
+		$carType = str_replace("）", ")",$carType);
+
+		$engineTrace = $this->checkTraceGasolineEngine();
+		// $engineCode = $engineTrace->bar_code;
+		$engine = CarEngineAR::model()->find('engine_component_id=?', array($engineTrace->component_id));
+		$engineType = $engine->engine_type;
+		$engineCode = substr($engineTrace->bar_code, -$engine->code_digit);
+
+		$cData = $this->getCertificateData($carId);
+
+		$insertsql = "INSERT INTO MarkPrint
+				SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";			
+		
+		Yii::app()->dbTest->createCommand($insertsql)->execute();
+		
 	}
 
 	public function getCertificateData($carId) {
@@ -1057,7 +1083,9 @@ class Car
       //   else{
 	   		// $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
       //   }   
-	   	$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
+	   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
+
+	   	return $ret;
 	}
 
 	public function existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin){
@@ -1094,10 +1122,12 @@ class Car
         mssql_select_db($tdsDB ,$mssql);
         
         //execute insert
-        mssql_query($sql);
+        $ret = mssql_query($sql);
         
         //disconnect
         mssql_close($mssql);
+
+        return $ret;
 	}
 
 	public function getAbsInfo($barCode) {

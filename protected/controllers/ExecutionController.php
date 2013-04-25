@@ -558,7 +558,7 @@ class ExecutionController extends BmsBaseController
                 $absTrace = $car->checkTraceABS();
             }
 
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();
             $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
@@ -591,7 +591,7 @@ class ExecutionController extends BmsBaseController
 			$orderNumber = $order->order_number;
 			$orderDetailId = $order->order_detail_id;
 			
-			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
+			// $vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
@@ -807,15 +807,15 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $vin = 'LGXC14DG1D0008366';
+            //$vin = 'LGXC14DG1D0008366';
 			
 
             $car = Car::create($vin);
 
             $outDate = date("Y-m-d h:m:s");
             $clientIp = $_SERVER["REMOTE_ADDR"];
-            $car->throwCertificateData($outDate, $clientIp);
-            $car->throwInspectionSheetData();
+            //$car->throwCertificateData($outDate, $clientIp);
+            //$car->throwInspectionSheetData();
 
 
             $this->renderJsonBms(true, $vin . '成功录入' , $car);
@@ -826,16 +826,15 @@ class ExecutionController extends BmsBaseController
 
     public function actionDataThrowtest() {
         try{
-             $vin = $this->validateStringVal('vin', '');
-		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
-		FROM Summary WHERE vin='$vin'";
-			
-		$ret=Yii::app()->dbTest->createCommand($sql)->execute();
-		if(empty($ret)){
-			throw new Exception('此车未经过检测线，请返回检测线进行检验');
-		} else if($ret['Final_Flag'] == 'F') {
-			throw new Exception ('此车检测线未合格，请返回检测线进行检验');
-		}
+            $vin = $this->validateStringVal('vin', '');
+            
+            $car = Car::create($vin);
+
+            $outDate = date("Y-m-d h:m:s");
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            // $data = $car->throwCertificateData($outDate, $clientIp);
+            // $data = $car->throwInspectionSheetData();
+            $this->renderJsonBms(true, $vin . '成功录入' , $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

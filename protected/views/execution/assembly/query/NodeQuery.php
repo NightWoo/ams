@@ -44,13 +44,13 @@
 						<tr>
 							<td class="alignRight"><label>起止时间&nbsp;&nbsp;</label></td>
                             <td>
-                                <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                             </td>
                             <td>
                                 -
                             </td>
                             <td>
-                                <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+                                <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                             </td>
 							<td>
 								<select name="" id="selectNode" class="input-medium">

@@ -4,6 +4,7 @@ Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.AR.DistributorAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.AR.LaneAR');
+Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.Order');
 
 class OrderSeeker
@@ -137,7 +138,17 @@ class OrderSeeker
 		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
 		$boards = array();
 
-		foreach($orders as $order){
+		foreach($orders as &$order){
+			$sql = "SELECT id FROM car_config WHERE order_config_id = {$order['order_config_id']}";
+        	$configId = Yii::app()->db->createCommand($sql)->queryColumn();
+        	$configId = "(" . join(',', $configId) . ")";
+
+			$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+			$values = array($order['series'], $order['color'], $order['cold_resistant']);
+
+			$matchCount = CarAR::model()->count($matchCondition, $values);
+			$order['short'] = $matchCount - ($order['amount'] - $order['hold']);
+
 			if(empty($boards[$order['board_number']])){
 				$boards[$order['board_number']] = array(
 					'boardNumber' => $order['board_number'],

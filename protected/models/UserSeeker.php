@@ -57,14 +57,14 @@ class UserSeeker
 
 	public function checkCardNumber($number) {
 		if(strlen($number) == 10){
-			$sql = "SELECT id, card_number, display_name as name FROM user WHERE card_8H10D = '$number'";
+			$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_8H10D = '$number'";
 			$user = Yii::app()->db->createCommand($sql)->queryRow();
 			if(empty($user) || $user['card_number'] == '0'){
-				$sql = "SELECT id, card_number, display_name as name FROM user WHERE card_number = '$number'";
+				$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_number = '$number'";
 				$user = Yii::app()->db->createCommand($sql)->queryRow();
 			}
 		} else {
-			$sql = "SELECT id, card_number, display_name as name FROM user WHERE card_number = '$number'";
+			$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_number = '$number'";
 			$user = Yii::app()->db->createCommand($sql)->queryRow();
 		}
 		return $user;

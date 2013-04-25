@@ -227,7 +227,12 @@ $(document).ready(function () {
 	    				if(order.is_printed == 1){
 	    					$("<td />").html("<i class='icon-print'></i>").appendTo(tr);
 	    				} else {
-	    					$("<td />").html("-").appendTo(tr);
+	    					if(order.short < 0){
+		    					$("<td />").html(order.short).addClass("totalTd text-error").appendTo(tr);
+		    					$(tr).addClass('error');
+	    					} else {
+	    						$("<td />").html("-").appendTo(tr);
+	    					}
 	    				}
 	    				if(order.status == 2){
 		    				$(tr).addClass('success');

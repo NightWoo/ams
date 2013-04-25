@@ -300,9 +300,14 @@ class OrderController extends BmsBaseController
 	public function actionGetCarStandby() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
+			$driverId = $this->validateIntVal('driverId', 0); 
 			$curDate = DateUtil::getCurDate();
 			$order = new Order;
 			$data = $order->getCarStandby($curDate);
+
+			$car = Car::create($data['vin']);
+			$car->throwMarkPrintData();
+			$car->enterNode('OutStandby', $driverId);
 			
 			$transaction->commit();
 			$this->renderJsonBms(true, 'OK', $data);

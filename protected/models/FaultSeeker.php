@@ -812,7 +812,7 @@ class FaultSeeker
 	//modified by wujun
 	private function parseQueryTime($stime,$etime) {
 		
-		list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
+		// list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		$s = strtotime($stime);
 		$e = strtotime($etime);
 	
@@ -836,8 +836,22 @@ class FaultSeeker
 			$format = 'Y-m';
 			//$slice = 86400 * 31;		//deleted by wujun
 		}
+
+		//首个分割段
+		$t0 = $s;
+		$t = $t0 + ($slice - ($t0%$slice));
+		if($pointFormat === 'H') {
+				$point = date($pointFormat, $t0) . '～' . date($pointFormat, $t) . '点';
+			} else {
+				$point = date($pointFormat, $t0);
+		}
+		$ret[] = array(
+				'stime' => date($format, $t0),
+				'etime' => date($format, $t),
+				'point' => $point,
+		);
 		
-		$t = $s;
+		// $t = $s;
 		while($t < $e) {
 			if($pointFormat === 'H') {
 				$point = date($pointFormat, $t) . '～' . date($pointFormat, $t + $slice) . '点';
@@ -849,13 +863,17 @@ class FaultSeeker
 			if($pointFormat === 'Y-m') {
 				$slice = 86400 * intval(date('t' ,$t));
 			}
+			$etmp = $t+$slice;
+			if($etmp>=$e){
+				$etmp=$e;
+			} 
 
 			$ret[] = array(
 				'stime' => date($format, $t),
-				'etime' => date($format, $t + $slice),
+				'etime' => date($format, $etmp),
 				'point' => $point,
 			);	
-			$t += $slice;			
+			$t = $etmp;			
 		}
 
 		return $ret;
