@@ -59,4 +59,6 @@ return array(
 	'ams2vin_store_in' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreIn.asmx?wsdl",
 	'ams2vin_store_out' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreOut.asmx?wsdl",
 
+	'rpc.gate' => array('host' => '127.0.0.1' ,'port' => 60000),
+
 );
