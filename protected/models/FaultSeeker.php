@@ -208,16 +208,12 @@ class FaultSeeker
 				$data['driver_name'] = $data['user_name'];
 			}
 			$data['node_name'] = $nodeInfos[$data['node_id']];
-			if(empty($data['duty_department']))
+			if(empty($data['duty_department'])){
 				$data['duty_department'] = '-';
-			 else{
+			}
+			else{
 			 	$data['duty_department'] = $dutyList[$data['duty_department']];
 			 }
-			// 	$data['duty_department'] = $dutyList[$data['duty_department']];
-			// else if($data['duty_department'] === 'paint')
-			// 	$data['duty_department'] = '涂装';
-			// else if($data['duty_department'] === 'welding')
-			// 	$data['duty_department'] = '焊装';
 
 			$data['series'] = $name[$data['series']];
 		}
@@ -641,7 +637,7 @@ class FaultSeeker
 				$cc[] = "create_time >= '$ss'";
 			}   
 			if(!empty($ee)) {
-				$cc[] = "create_time <= '$ee'";
+				$cc[] = "create_time < '$ee'";
 			}   
 			$condition = join(' AND ', $cc);
 			if(!empty($condition)) {
@@ -810,7 +806,7 @@ class FaultSeeker
 	}
 
 	//modified by wujun
-	private function parseQueryTime($stime,$etime) {
+	public function parseQueryTime($stime,$etime) {
 		
 		// list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		$s = strtotime($stime);
@@ -829,17 +825,23 @@ class FaultSeeker
 			$slice = 3600;
 		} elseif($lastDay <= 31) {//day
 			$pointFormat = 'm-d';
-			$format = 'Y-m-d H';
+			$format = 'Y-m-d H:i:s';
 			$slice = 86400;
 		} else {//month
 			$pointFormat = 'Y-m';
-			$format = 'Y-m';
-			//$slice = 86400 * 31;		//deleted by wujun
+			$format = 'Y-m-d H:i:s';
+			// $slice = 86400 * intval(date('t' ,$s));
 		}
 
 		//首个分割段
 		$t0 = $s;
-		$t = $t0 + ($slice - ($t0%$slice));
+		if($pointFormat === 'Y-m'){
+			$eNextM = strtotime('+1 month', $t0);			//next month			//added by wujun
+			$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
+			$t = strtotime($ee);	//next month firstday	//added by wujun
+		}else{
+			$t = $t0 + ($slice - ($t0%$slice));
+		}
 		if($pointFormat === 'H') {
 				$point = date($pointFormat, $t0) . '～' . date($pointFormat, $t) . '点';
 			} else {
@@ -861,9 +863,13 @@ class FaultSeeker
 
 			//added by wujun
 			if($pointFormat === 'Y-m') {
-				$slice = 86400 * intval(date('t' ,$t));
+				// $slice = 86400 * intval(date('t' ,$t));
+				$eNextM = strtotime('+1 month', $t);			//next month			//added by wujun
+				$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
+				$etmp = strtotime($ee);	//next month firstday	//added by wujun
+			} else {
+				$etmp = $t+$slice;
 			}
-			$etmp = $t+$slice;
 			if($etmp>=$e){
 				$etmp=$e;
 			} 
@@ -935,6 +941,9 @@ class FaultSeeker
 		foreach($dutyDepartments as $department){
 			$list[$department['id']] = $department['display_name'];
 		}
+		$list['assembly'] = '总装';
+		$list['paint'] = '涂装';
+		$list['welding'] = '焊装';
 
 		return $list;
 	}

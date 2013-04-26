@@ -213,8 +213,15 @@ class CarController extends BmsBaseController
 
 	public function actionShowTrace() {
 		$vin = $this->validateStringVal('vin', '');
-		$node = $this->validateStringVal('node', '');
+        $node = $this->validateStringVal('node', '');
+        $series = $this->validateStringVal('series', '');
+		$serialNumber = $this->validateStringVal('serialNumber', '');
         try{
+            $seeker = new CarSeeker();
+            $vin = $seeker->queryCar($vin,$series,$serialNumber);
+            if(empty($vin)){
+                throw new Exception('查无车辆');
+            }
             $car = Car::create($vin);
             $data = $car->getAllTrace($node);
             $status = $car->car->status;

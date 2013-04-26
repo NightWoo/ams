@@ -232,12 +232,12 @@ function getSeriesChecked () {
 		    			$("#thChecker, #thSubChecker").hide();
 		    		}
 		    		$.each(response.data.data,function (index,value) {
+		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
 		    			var componentTd = "<td>" + value.component_name + "</td>";
 						var faultTd = "<td>" + value.fault_mode + "</td>";
 						var faultStatusTd = "<td>" + value.fault_status + "</td>";
-		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
 		    			var driverNameTd = "<td>" + value.driver_name + "</td>";
 		    			var createTimeTd = "<td>" + value.create_time + "</td>";
 		    			var userNameTd = "<td>" + value.user_name + "</td>";
@@ -248,8 +248,8 @@ function getSeriesChecked () {
 		    				checkerTd = "<td>" + value.checker + "</td>";
 		    				subCheckerTd = "<td>" + value.sub_checker + "</td>";
 		    			}
-		    			var tr = "<tr>" + seriesTd + vinTd + componentTd + faultTd + 
-		    				faultStatusTd + nodeNameTd + driverNameTd + userNameTd + createTimeTd + memoTd 
+		    			var tr = "<tr>" + nodeNameTd + seriesTd + vinTd + componentTd + faultTd + 
+		    				faultStatusTd + driverNameTd + createTimeTd + memoTd 
 		    				+ checkerTd + subCheckerTd+  "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();

@@ -44,7 +44,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.success){
 					driver = response.data;
-					// $("#btnSubmit").removeAttr("disabled").focus();
+					$("#btnSubmit").removeAttr("disabled").focus();
 					$("#cardNumber").attr("value", driver.card_number);
 					$("#cardNumber").attr("disabled","disabled");
 					$("#cardNumber").attr("driverid",driver.user_id);
@@ -119,7 +119,7 @@ $(document).ready(function() {
 		$("#cardNumber").removeAttr("disabled");
 		$("#cardNumber").attr("value","");
 		$("#cardNumber").focus();
-		// $("#btnSubmit").attr("disabled","disabled");
+		$("#btnSubmit").attr("disabled","disabled");
 		// ajaxGetOrder();
 		$(".nowTime").html("备车"+nowTime());
 		$("#driver").html("司机")

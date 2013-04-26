@@ -228,7 +228,7 @@ $(document).ready(function () {
 	    					$("<td />").html("<i class='icon-print'></i>").appendTo(tr);
 	    				} else {
 	    					if(order.short < 0){
-		    					$("<td />").html(order.short).addClass("totalTd text-error").appendTo(tr);
+		    					$("<td />").html(order.short).addClass("text-error").appendTo(tr);
 		    					$(tr).addClass('error');
 	    					} else {
 	    						$("<td />").html("-").appendTo(tr);

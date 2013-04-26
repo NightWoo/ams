@@ -14,7 +14,7 @@ $("document").ready(function() {
 					//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
 			    	$("#cardText").removeAttr("disabled").focus();
-					$("#btnSubmit").removeAttr("disabled");
+					// $("#btnSubmit").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -51,6 +51,7 @@ $("document").ready(function() {
 				if(response.success){
 					driver = response.data;
 					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.user_id).attr("disabled", "disabled");
+					$("#btnSubmit").removeAttr("disabled");
 					ajaxSubmit();
 				}else{
 					resetPage();

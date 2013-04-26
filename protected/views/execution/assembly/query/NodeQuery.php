@@ -30,16 +30,12 @@
             require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
-        	 <div id="bodyright" class="offset2">
-                <div ><ul class="breadcrumb"><!-- 面包屑 -->
-                        <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                        <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-                        <li><a href="#">数据查询</a><span class="divider">&gt;</span></li>
-                        <li class="active">质量查询</li>                
-                </ul></div><!-- end 面包屑 -->
+        	<div id="bodyright" class="offset2">
                 <div>
+                    <legend>质量查询
+                    </legend>
+                </div>
                 <form id="form" class="well form-inline">
-                    <!-- <legend>节点查询</legend> -->
 					<table>
 						<tr>
 							<td class="alignRight"><label>起止时间&nbsp;&nbsp;</label></td>
@@ -90,7 +86,6 @@
                         </tr>
 					</table> 
                 </form>      
-                </div>
                <!-- <div style="display:none">
                     <h5 class='pull-left'>查询结果:<span id='totalText'></span></h5>               
                 </div>-->
@@ -129,8 +124,8 @@
                                         <th>故障模式</th>
                                         <th>故障状态</th>
                                         <th>节点</th>
-                                        <th>驾驶员</th>
                                         <th>录入人员</th>
+                                        <!-- <th>录入人员</th> -->
                                         <th>录入时间</th>
                                         <th>确认时间</th>
                                         <th id="thChecker">初检人员</th>

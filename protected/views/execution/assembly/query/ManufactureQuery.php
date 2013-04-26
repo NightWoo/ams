@@ -31,16 +31,12 @@
             require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
-        	 <div id="bodyright" class="offset2">
-                <div ><ul class="breadcrumb"><!-- 面包屑 -->
-                        <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                        <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-                        <li><a href="#">数据查询</a><span class="divider">&gt;</span></li>
-                        <li class="active">生产查询</li>                
-                </ul></div><!-- end 面包屑 -->
+        	<div id="bodyright" class="offset2">
                 <div>
+                    <legend>车辆查询
+                    </legend>
+                </div>
                 <form id="form" class="well form-inline">
-                    <!-- <legend>节点查询</legend> -->
 					<table>
                         <tr>
                             <td>工段 / 节点</td>
@@ -68,6 +64,7 @@
                                     <option value="F2">F2/F20</option>
                                     <option value="VQ1">VQ1/下线</option>
                                     <option value="CHECK_IN">WH/入库</option>
+                                    <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
 								</select>
                                 
@@ -108,7 +105,6 @@
                         </tr>    
 					</table> 
                 </form>      
-                </div>
                 <div id="divDetail">
                     <div>
                         <ul id="tabs" class="nav nav-pills">

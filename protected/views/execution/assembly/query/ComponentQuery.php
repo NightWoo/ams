@@ -28,14 +28,11 @@
         	<!-- Main体 -->	
     		
             <div id="bodyright" class="offset2">
-                <div ><ul class="breadcrumb"><!-- 面包屑 -->
-                        <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                        <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-                        <li><a href="#">数据查询</a><span class="divider">&gt;</span></li>
-                        <li class="active">零部件查询</li>                
-                </ul></div><!-- end 面包屑 -->
+                <div>
+                    <legend>零部件查询
+                    </legend>
+                </div>
                 <form id="form" class="well form-search">
-                    <!-- <legend>零部件查询</legend> -->
 					<table>
 						<tr>
 							<td class="alignRight"><label>VIN&nbsp;&nbsp;</label></td>

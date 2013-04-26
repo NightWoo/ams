@@ -28,8 +28,15 @@ $(document).ready(function () {
 	
 	$("#btnQuery").click (function () {
 		//clear last
-		$("#resultTable tbody").text("");
-		ajaxQuery();
+		if($.trim($("#vinText").val()) != ""){
+			$("#resultTable tbody").text("");
+			ajaxQuery();
+		} else if ($.trim($("#serialText").val()) != "" && $("#selectSeries").val() == ""){
+			alert("通过流水号查询需选择车系");
+		} else if($.trim($("#serialText").val()) != "" || $.trim($("#serialText").val()) != ""){
+			$("#resultTable tbody").text("");
+			ajaxQuery();
+		}
 		return false;
 	});
 
@@ -45,6 +52,11 @@ $(document).ready(function () {
 			if($.trim($("#vinText").val()) != ""){
 				$("#resultTable tbody").text("");
 				ajaxQuery();
+			} else if ($.trim($("#serialText").val()) == "" && $("#selectSeries").val() == ""){
+				alert("通过流水号查询需选择车系");
+			} else if($.trim($("#serialText").val()) != "" || $.trim($("#serialText").val()) != "") {
+				$("#resultTable tbody").text("");
+				ajaxQuery();
 			}
 			return false;
 		}	
@@ -56,7 +68,12 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: SHOW_TRACE,//ref:  /bms/js/service.js
-		    data: {"vin": $('#vinText').val(),"node":$("#selectNode").val()},
+		    data: {
+		    	"vin": $('#vinText').val(),
+		    	"series": $('#selectSeries').val(),
+		    	"serialNumber": $('#serialText').val(),
+		    	"node":$("#selectNode").val()
+		    },
 		    success:function (response) {
 		    	if(response.success){
 		    		var car = response.data.car;
@@ -73,18 +90,18 @@ $(document).ready(function () {
 					$("#resultTable").show();	//add by wujun
 
 		    		$.each(response.data.traces,function (index,value) {
-		    			var createTimeTd = "<td>" + value.create_time + "</td>";
 		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
 		    			var faultTd = "<td>" + value.fault + "</td>";
 		    			var faultStatusTd = "<td>" + value.fault_status + "</td>";
 		    			var userNameTd = "<td>" + value.user_name + "</td>";
 		    			var memoTd = "<td>" + value.modify_time + "</td>";
-		    			var tr = "<tr>" + createTimeTd + nodeNameTd + faultTd + 
-		    				faultStatusTd + userNameTd + memoTd + "</tr>";
+		    			var createTimeTd = "<td>" + value.create_time + "</td>";
+		    			var tr = "<tr>" + nodeNameTd + faultTd + 
+		    				faultStatusTd + userNameTd + createTimeTd + memoTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 		    		});
 		    	}else{
-		    		$("#vinText").val("");
+		    		// $("#vinText").val("");
 		    		alert(response.message);
 
 		    	}

@@ -558,7 +558,7 @@ class ExecutionController extends BmsBaseController
                 $absTrace = $car->checkTraceABS();
             }
 
-			// $car->checkTestLinePassed();
+			$car->checkTestLinePassed();
             $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
@@ -591,7 +591,7 @@ class ExecutionController extends BmsBaseController
 			$orderNumber = $order->order_number;
 			$orderDetailId = $order->order_detail_id;
 			
-			// $vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
+			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
 
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
@@ -807,18 +807,22 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
+            $seeker = new CarSeeker();
+            $vin='';
+            $vin = $seeker ->queryCar($vin='', $series='F0',$serial='D021034');
+
             //$vin = 'LGXC14DG1D0008366';
-			
 
-            $car = Car::create($vin);
+            // $car = Car::create($vin);
 
-            $outDate = date("Y-m-d h:m:s");
-            $clientIp = $_SERVER["REMOTE_ADDR"];
-            //$car->throwCertificateData($outDate, $clientIp);
-            //$car->throwInspectionSheetData();
+            // $outDate = date("Y-m-d h:m:s");
+            // $clientIp = $_SERVER["REMOTE_ADDR"];
+            // //$car->throwCertificateData($outDate, $clientIp);
+            // //$car->throwInspectionSheetData();
 
 
-            $this->renderJsonBms(true, $vin . '成功录入' , $car);
+            $this->renderJsonBms(true, 'OK' , $vin);
+            //$this->renderJsonBms(true, $vin . '成功录入' , $car);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

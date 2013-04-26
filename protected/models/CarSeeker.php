@@ -422,6 +422,27 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
+	public function queryCar($vin='',$series='',$serial=''){
+		$conditions = array();
+
+		if(!empty($vin)){
+			$conditions[] = "vin LIKE '%$vin'";
+		}
+		if(!empty($series)){
+			$conditions[] = "series='$series'";
+		};
+		if(!empty($serial)){
+			$conditions[] = "serial_number LIKE '%$serial'";
+		}
+		if(!empty($conditions)){
+			$condition = join(' AND ', $conditions);
+		}
+
+		$sql = "SELECT vin FROM car WHERE $condition ORDER BY id ASC";
+		$vin = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $vin;
+	}
+
 	public function configColdArray($state, $series){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
