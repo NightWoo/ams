@@ -207,48 +207,57 @@ $(document).ready(function () {
 	    				} else {
 		    				$("<td />").html(order.series).appendTo(tr);
 	    				};
-	    				$("<td />").html(order.car_type_config).appendTo(tr);
-	    				$("<td />").html(order.cold).appendTo(tr);
+	    				$("<td />").html(order.car_type_config + "/" + order.cold).appendTo(tr);
+	    				// $("<td />").html(order.cold).appendTo(tr);
 	    				$("<td />").html(order.color).appendTo(tr);
 	    				$("<td />").html(order.amount).addClass('amountTd').appendTo(tr);
 	    				$("<td />").html(order.hold).addClass('holdTd').appendTo(tr);
 	    				$("<td />").html(order.count).addClass('countTd').appendTo(tr);
-	    				$("<td />").html(order.create_time).appendTo(tr);
+	    				$("<td />").html(order.activate_time).appendTo(tr);
 	    				if(order.standby_finish_time === '0000-00-00 00:00:00'){
-		    				$("<td />").html('未备齐').appendTo(tr);
+		    				$("<td />").html("<i class='icon-time'></i>" + order.standby_last + "H").appendTo(tr);
 	    				} else{
 		    				$("<td />").html(order.standby_finish_time).appendTo(tr);
 	    				}
 	    				if(order.out_finish_time === '0000-00-00 00:00:00'){
-		    				$("<td />").html('未完成').appendTo(tr);
+	    					if(order.standby_finish_time === '0000-00-00 00:00:00'){
+	    						$("<td />").html("未备齐").appendTo(tr);
+	    					}else{
+		    					$("<td />").html("<i class='icon-time'></i>" + order.out_last + "H").appendTo(tr);
+	    					}
 	    				} else{
 		    				$("<td />").html(order.out_finish_time).appendTo(tr);
 	    				}
 	    				if(order.is_printed == 1){
-	    					$("<td />").html("<i class='icon-print'></i>").appendTo(tr);
+	    					$("<td />").addClass("alignCenter").html("<i class='icon-print'></i>").appendTo(tr);
 	    				} else {
 	    					if(order.short < 0){
-		    					$("<td />").html(order.short).addClass("text-error").appendTo(tr);
-		    					$(tr).addClass('error');
+		    					$("<td />").html(order.short).addClass("text-error alignCenter").appendTo(tr);
+		    					$(tr).addClass('warning');
 	    					} else {
-	    						$("<td />").html("-").appendTo(tr);
+	    						$("<td />").addClass("alignCenter").html("-").appendTo(tr);
 	    					}
 	    				}
-	    				if(order.status == 2){
+	    				if(order.status ==1 && order.standby_finish_time === '0000-00-00 00:00:00'){
+	    					if(order.standby_last >= 12){
+	    						$(tr).removeClass('warning').addClass('error');
+	    					}
+	    				}else if(order.status == 2){
 		    				$(tr).addClass('success');
 		    			}
 	    			})
 
 					//首行，被合并的单元格放在此行
-	    			var firstTr = tmp.children("tr:eq(0)");	
+	    			var firstTr = tmp.children("tr:eq(0)");
+	    			firstTr.addClass("thickBorder");	
 	    			//合并的备板编号
-	    			boardTd = $("<td />").attr("rowspan", num).html(value.boardNumber).prependTo(firstTr);
+	    			boardTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardNumber).prependTo(firstTr);
 	    			//合并的需备数量
-	    			boardAmountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardAmount).insertAfter(firstTr.children("td:eq(8)"));
+	    			boardAmountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info rowSpanTd").html(value.boardAmount).insertAfter(firstTr.children("td:eq(7)"));
 	    			//合并的已备数量
-	    			boardHoldTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardHold).insertAfter(firstTr.children("td:eq(10)"));
+	    			boardHoldTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info rowSpanTd").html(value.boardHold).insertAfter(firstTr.children("td:eq(9)"));
 	    			//合并的完成数量
-	    			boardCountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info").html(value.boardCount).insertAfter(firstTr.children("td:eq(12)"));
+	    			boardCountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info rowSpanTd").html(value.boardCount).insertAfter(firstTr.children("td:eq(11)"));
 	    			
 	    			console.log(firstTr.children("td:eq(8)"));
 	    			console.log(tmp.children("tr"));
@@ -256,12 +265,12 @@ $(document).ready(function () {
 	    		})
 
 					trTotal = $("<tr />");	
-					tdLabel = "<td colspan='8' style='text-align:right'>合计&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+					tdLabel = "<td colspan='7' style='text-align:right'>合计&nbsp;&nbsp;&nbsp;&nbsp;</td>";
 					trTotal.append(tdLabel);
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(amountSum).appendTo(trTotal);
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(holdSum).appendTo(trTotal);
 					$("<td />").attr("colspan", "2").addClass("totalTd").html(countSum).appendTo(trTotal);
-					$("<td />").attr("colspan", "4").appendTo(trTotal);
+					$("<td />").attr("colspan", "3").appendTo(trTotal);
 					$("#tableOrderDetail thead").prepend(trTotal);
 
 	    		$("#tableOrderDetail").show();

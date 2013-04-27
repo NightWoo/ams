@@ -109,22 +109,22 @@
                         </div>
 
                         <div class="tab-pane" id="tabOrderDetail">
-                            <table id="tableOrderDetail" class="table table-condensed table-hover table-bordered">
+                            <table id="tableOrderDetail" class="table table-condensed table-bordered">
                                 <thead>
                                     <th>备板编号</th>
-                                	<th>车道</th>
+                                	<th style="width:30px">车道</th>
                                     <th>订单号</th>
-                                    <th>经销商</th>
-                                    <th>车系</th>
-                                    <th>车型配置</th>
-                                    <th>耐寒性</th>
-                                    <th>颜色</th>
+                                    <th style="width:200px">经销商</th>
+                                    <th style="width:30px">车系</th>
+                                    <th style="width:200px">车型/配置/耐寒性</th>
+                                    <!-- <th style="width:40px">耐寒性</th> -->
+                                    <th style="width:40px">颜色</th>
                                     <th colspan="2" style="text-align: center">数量</th>
                                     <th colspan="2" style="text-align: center">已备</th>
                                     <th colspan="2" style="text-align: center">出库</th>
-                                    <th>指令时间</th>
-                                    <th>备齐时间</th>
-                                    <th>完成时间</th>
+                                    <th style="width:70px">指令时间</th>
+                                    <th style="width:70px">备齐时间</th>
+                                    <th style="width:70px">完成时间</th>
                                     <th></th>
                                 </thead>
                                 <tbody>

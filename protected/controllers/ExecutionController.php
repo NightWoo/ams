@@ -807,21 +807,9 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $seeker = new CarSeeker();
-            $vin='';
-            $vin = $seeker ->queryCar($vin='', $series='F0',$serial='D021034');
-
-            //$vin = 'LGXC14DG1D0008366';
-
-            // $car = Car::create($vin);
-
-            // $outDate = date("Y-m-d h:m:s");
-            // $clientIp = $_SERVER["REMOTE_ADDR"];
-            // //$car->throwCertificateData($outDate, $clientIp);
-            // //$car->throwInspectionSheetData();
-
-
-            $this->renderJsonBms(true, 'OK' , $vin);
+            $seeker = new FaultSeeker();
+            $data = $seeker-> parseQueryTime('2013-02-08 08:15:00', '2013-04-10 15:23:00');
+            $this->renderJsonBms(true, 'OK' , $data);
             //$this->renderJsonBms(true, $vin . '成功录入' , $car);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);

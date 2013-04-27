@@ -82,7 +82,7 @@ class FaultSeeker
 
 	public function query($component, $mode, $series, $stime, $etime, $nodeName,$curPage, $perPage) {
 
-		list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
+		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		$arraySeries = $this->parseSeries($series);
 		$tables = $this->parseTables($nodeName,$series);	
 		if(empty($tables)) {//
@@ -123,7 +123,7 @@ class FaultSeeker
 		}
  	    if(!empty($etime)) {
             $conditions[] = "c.create_time <= '$etime'";
-			$validConditions[] = "n.pass_time <= '$etime'";
+			$validConditions[] = "n.pass_time < '$etime'";
         }
 		$condition = join(' AND ', $conditions);
 		$validCondition = join( ' AND ', $validConditions);
@@ -238,7 +238,7 @@ class FaultSeeker
             $conditions[] = "pass_time >= '$stime'";
         }
         if(!empty($etime)) {
-            $conditions[] = "pass_time <= '$etime'";
+            $conditions[] = "pass_time < '$etime'";
         }
 
         $sql = "SELECT id,display_name FROM user";
@@ -286,7 +286,7 @@ class FaultSeeker
 		
 	public function queryDistribute($component, $mode, $series, $stime, $etime, $node) {
 
-		list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
+		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		
 		$tables = $this->parseTables($node,$series);	
 		if(empty($tables)) {
@@ -314,7 +314,7 @@ class FaultSeeker
 			$conditions[] = "create_time >= '$stime'";
 		}
  	    if(!empty($etime)) {
-            $conditions[] = "create_time <= '$etime'";
+            $conditions[] = "create_time < '$etime'";
         }
 		$condition = join(' AND ', $conditions);
 		if(!empty($condition)) {
@@ -459,7 +459,7 @@ class FaultSeeker
 				$cc[] = "create_time >= '$ss'";
 			}   
 			if(!empty($ee)) {
-				$cc[] = "create_time <= '$ee'";		
+				$cc[] = "create_time < '$ee'";		
 			}   
 			$condition = join(' AND ', $cc);
 			if(!empty($condition)) {
@@ -506,7 +506,7 @@ class FaultSeeker
 
 	public function queryPlaton($series, $stime, $etime, $node) {
 		
-		list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
+		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 
 		$tables = $this->parseTables($node,$series);	
 		if(empty($tables)) {
@@ -527,7 +527,7 @@ class FaultSeeker
             $conditions[] = "create_time >= '$stime'";
         }
         if(!empty($etime)) {
-            $conditions[] = "create_time <= '$etime'";
+            $conditions[] = "create_time < '$etime'";
         }
         $condition = join(' AND ', $conditions);
         if(!empty($condition)) {
@@ -835,13 +835,22 @@ class FaultSeeker
 
 		//首个分割段
 		$t0 = $s;
-		if($pointFormat === 'Y-m'){
-			$eNextM = strtotime('+1 month', $t0);			//next month			//added by wujun
-			$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
-			$t = strtotime($ee);	//next month firstday	//added by wujun
-		}else{
-			$t = $t0 + ($slice - ($t0%$slice));
+		
+		if($pointFormat === 'H'){
+			// $t = $t0 + ($slice - ($t0%$slice));
+			$eNextH = strtotime('+1 hour', $t0);			//next hour
+			$ee = date('Y-m-d H', $eNextH) . ":00:00";	
+			$t = strtotime($ee);
+		} else if($pointFormat === 'm-d'){
+			$eNextD = strtotime('+1 day', $t0);		//next day						
+			$ee = date(('Y-m-d'), $eNextD) . " 08:00:00";
+			$t = strtotime($ee);
+		} else if($pointFormat === 'Y-m'){
+			$eNextM = strtotime('+1 month', $t0);			//next month
+			$ee = date('Y-m', $eNextM) . "-01 08:00:00";	
+			$t = strtotime($ee);
 		}
+
 		if($pointFormat === 'H') {
 				$point = date($pointFormat, $t0) . '～' . date($pointFormat, $t) . '点';
 			} else {
@@ -886,6 +895,9 @@ class FaultSeeker
 	}
 
 	private function reviseSETime($stime,$etime) {
+		//cancel the reviseSETime
+		return array($stime, $etime);
+
 		$s = strtotime($stime);
 		$e = strtotime($etime);
 	

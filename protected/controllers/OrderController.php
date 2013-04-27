@@ -204,6 +204,7 @@ class OrderController extends BmsBaseController
 					$max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
 					$order->priority = $max->priority + 1;
 				}
+
 			}else{
 				$order->priority = 0;
 			}
@@ -226,8 +227,14 @@ class OrderController extends BmsBaseController
 			$order->modify_time = date('YmdHis');
 			$order->user_id = Yii::app()->user->id;
 
-			$order->save();
+			if($order->status == 1){
+				$curDate = DateUtil::getCurDate();
+				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){
+					$order->activate_time = date('YmdHis');
+				}
+			}
 
+			$order->save();
 			$this->renderJsonBms(true, 'OK', '');
 
 		} catch(Exception $e) {

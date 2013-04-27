@@ -95,6 +95,42 @@ body{padding-bottom:20px;}
 .modal {
     /*margin: -360px 0 0 -280px;*/
 }
+
+.table tbody tr.success > td {
+  background-color: #d0e9c6;
+}
+
+.table tbody tr.error > td {
+  background-color: #ebcccc;
+}
+
+.table tbody tr.warning > td {
+  background-color: #faf2cc;
+}
+
+.table tbody tr.info > td {
+  background-color: #c4e3f3;
+}
+
+.table-hover tbody tr.success:hover > td {
+  
+  background-color: #dff0d8;
+}
+
+.table-hover tbody tr.error:hover > td {
+  
+  background-color: #f2dede;
+}
+
+.table-hover tbody tr.warning:hover > td {
+  background-color: #fcf8e3;
+  
+}
+
+.table-hover tbody tr.info:hover > td {
+  background-color: #d9edf7;
+  
+}
 /*added by wujun modify bootstrap.css finished*/
 
 /*bootstrap 2.2.2 add*/

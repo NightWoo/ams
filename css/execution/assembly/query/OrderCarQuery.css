@@ -21,3 +21,15 @@
 #tableOrderDetail .amountTd, #tableOrderDetail .holdTd, #tableOrderDetail .countTd {
 	text-align: right;
 }
+
+#tableOrderDetail .thickBorder td{
+	border-top-width: 2px;
+}
+
+#tableOrderDetail .rowSpanTd{
+	background-color: white; 
+}
+
+#tableOrderDetail .alignCenter{
+	text-align: center;
+}

@@ -118,12 +118,12 @@
                             <table id="resultTable" class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>节点</th>
                                         <th>车系</th>
                                         <th>VIN号</th>
                                         <th>故障零部件</th>
                                         <th>故障模式</th>
                                         <th>故障状态</th>
-                                        <th>节点</th>
                                         <th>录入人员</th>
                                         <!-- <th>录入人员</th> -->
                                         <th>录入时间</th>

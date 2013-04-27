@@ -26,7 +26,7 @@ class NodeSeeker
 				  );
 	
 	public function queryTrace($stime, $etime, $series, $node, $curPage, $perPage) {
-		list($stime, $etime) = $this->reviseSETime($stime, $etime);
+		//list($stime, $etime) = $this->reviseSETime($stime, $etime);
 		if(empty($node)){
 			throw new Exception("车辆明细查询必须选择节点", 1);
 		} else {
