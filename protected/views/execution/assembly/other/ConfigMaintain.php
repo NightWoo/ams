@@ -21,24 +21,19 @@
 	?>
 	<div class="offhead">
 	   <?php
-		require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+		require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
-            <div><!-- breadcrumb -->
-            	<ul class="breadcrumb">
-            		<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                	<li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-					<li><a href="#">维护与帮助</a><span class="divider">&gt;</span></li>
-                	<li class="active">配置维护</li>
-					<li class="pull-right">
-						<a href="/bms/execution/configPaper">配置跟单</a>
-						<span class="divider">&frasl;</span>
-						<a href="/bms/execution/configList">配置明细</a>
-					</li>             
-            	</ul>
-            </div><!-- end of breadcrumb -->
-            
+            <div>
+            	<legend>配置维护
+            		<span class="pull-right">
+            			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
+            			/
+            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细 </a>
+            		</span>
+            	</legend>
+            </div>
    	   		<div><!-- 主体 -->
 				<form id="form" class="well form-search">
 					<table>

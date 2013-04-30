@@ -258,6 +258,12 @@ var SUB_CONFIG_PRINT = "/bms/car/printSubConfig";
 var SUB_CONFIG_VALIDATE = "/bms/car/validateSubConfig";
 var SUB_CONFIG_SAVE = "/bms/config/saveSub";
 
+var VALIDATE_DATA_THROW = "/bms/car/validateDataThrow";
+var WAREHOUSE_IN_DATA_THROW = "/bms/car/throwStoreIn";
+var WAREHOUSE_OUT_DATA_THROW = "/bms/car/throwStoreOut";
+var MARK_PRINT_THROW = "/bms/car/throwMarkPrint";
+var CERTIFICATE_THROW_ONE = "/bms/car/throwOutPrintDataOne";
+
 var ROLE_SHOW_ALL = "/bms/role/showAll";
 var ROLE_ADD_TO_USER = "/bms/role/addToUser";
 

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	initPage();
 
 	function initPage() {
-		$("#headAssemblyLi").addClass("active");
+		$("#headPlanLi").addClass("active");
 		$("#leftSubQueueMaintainLi").addClass("active");
 
 		$("#editModal").modal("hide");

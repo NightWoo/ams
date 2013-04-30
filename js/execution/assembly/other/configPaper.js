@@ -1,8 +1,8 @@
 $(document).ready(function () {
+	initPage();
+	$("#configContainer").hide();
 
-$("#configContainer").hide();
-
-$("#frontForm").submit(function () {
+	$("#frontForm").submit(function () {
 	
 	$("#frontForm").ajaxSubmit({
 		type: "post",
@@ -105,6 +105,11 @@ $(".btnDelect").live("click",function () {
 		ajaxSender.ajaxGetConfigDetail($(this).val());
 		$("#configContainer").show();
 	});
+
+	function initPage() {
+		$("#headPlanLi").addClass("active");
+		$("#leftConfigMaintainLi").addClass("active");
+	}
 
 	function resetConfigItem () {
 		$(".config-item button").removeClass().addClass("btn btn-primary");

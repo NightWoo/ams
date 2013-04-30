@@ -395,6 +395,19 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionValidateDataThrow() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            $car = Car::create($vin);
+
+            $data = $car->car;
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
 
 	public function actionEnterCI() {
         try{
@@ -529,6 +542,69 @@ class CarController extends BmsBaseController
 
 
         } catch(Exception $e) {
+        }
+    }
+
+    public function actionThrowOutPrintDataOne() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            
+            $car = Car::create($vin);
+
+            $outDate = ($car->car->distribute_time > '0000-00-00 00:00:00') ? $car->car->distribute_time : date("Y-m-d h:m:s");
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $data = $car->throwCertificateData($outDate, $clientIp);
+            $car->throwInspectionSheetData();
+            $this->renderJsonBms(true, $vin . '成功抛送合格证与厂检单数据' , $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionThrowMarkPrint() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            
+            $car = Car::create($vin);
+
+            $data = $car->throwMarkPrintData();
+            $this->renderJsonBms(true, $vin . '成功抛送铭牌数据' , $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionThrowStoreIn(){
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            
+            $row = '';
+            $driverName = '汪辉';
+            $inDate = $car->car->warehouse_time;
+
+            $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
+
+            $this->renderJsonBms(true, $vin . '成功抛送入库数据' , $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionThrowStoreOut(){
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $lane = '';
+            $order = OrderAR::model()->findByPk($car->car->order_id);
+            $orderNumber = $order->order_number;
+            $orderDetailId = $order->order_detail_id;
+            $outDate = $car->car->distribute_time;
+            
+            $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
+            $this->renderJsonBms(true, $vin . '成功抛送出库数据' , $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
 

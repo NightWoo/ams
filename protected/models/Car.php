@@ -1155,7 +1155,7 @@ class Car
 		return array('type' => $type[$providerCode], 'provider' => $provider[$providerCode]);
 	}
 
-	public function throwVinAssembly($vin, $point, $shift='总装1线A班'){
+	public function throwVinAssembly($vin, $point, $shift='总装1线A班', $time=''){
 		// if(YII_DEBUG) {
 		// 	return;
 		// }
@@ -1170,13 +1170,15 @@ class Car
 			'Work'=>$point, 
 			'Team'=>$shift
 		);
-		
+		if(!empty($time)){
+			$params['Date'] = $time;
+		}
 		$result = (array)$client -> Assembly($params);
 
 		return $result;
 	}
 
-	public function throwVinStoreIn($vin, $row, $driverName=''){
+	public function throwVinStoreIn($vin, $row, $driverName='', $inTime=''){
 		
 		// $row = iconv('UTF-8', 'GB2312', $row);
 		// $driverName = iconv('UTF-8', 'GB2312', $driverName);
@@ -1189,12 +1191,15 @@ class Car
 			'Area'=>$row, 
 			'EmpName'=>$driverName
 		);
+		if(!empty($inTime)){
+			$params['Date'] = $inTime;
+		}
 		$result = $client -> StoreIn($params);
 
 		return $result;
 	}
 
-	public function throwVinStoreOut($vin, $lane, $order, $orderDetailId, $distributorName, $engineCode){
+	public function throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $distributorName, $engineCode, $outTime=''){
 		
 		// if(YII_DEBUG) {
 		// 	return;
@@ -1207,11 +1212,14 @@ class Car
 		$params = array(
 			'Vincode'=>$vin, 
 			'Area'=>$lane, 
-			'Order'=>$order,
+			'Order'=>$orderNumber,
 			'OrderID'=>$orderDetailId,
 			'VenName'=>$distributorName,
 			'AutoEngine'=>$engineCode
 		);
+		if(!empty($outTime)){
+			$params['Date'] = $outTime;
+		}
 		$result = $client -> StoreOut($params);
 
 		return $result;

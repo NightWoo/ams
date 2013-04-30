@@ -2,7 +2,7 @@ $(document).ready(function() {
 	initPage();
 	
 	function initPage() {
-		$("#headAssemblyLi").addClass("active");
+		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
 
 		$("#btnAdd, #btnQuery").attr("disabled", "disabled");

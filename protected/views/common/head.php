@@ -16,7 +16,7 @@
 						</ul> -->
 					</li>
 					<li class="dropdown" id="headAssemblyLi">
-						<a href="/bms/execution" class="dropdown-toggle" >生产</a>
+						<a href="/bms/execution" class="dropdown-toggle">生产</a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="/bms/execution/home">总装</a></li>
 							<li><a href="#">涂装</a></li>
@@ -25,7 +25,7 @@
 						</ul> -->
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">现场<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle">现场<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">现场管理1</a></li>
 							<li><a href="#">现场管理2</a></li>
@@ -33,10 +33,10 @@
 						</ul> -->
 					</li>
 					<li class="dropdown" id="headPlanLi">
-						<a href="/bms/execution/configPlan" class="dropdown-toggle" data-toggle="dropdown">计划<!-- <b class="caret"></b> --></a>
+						<a href="/bms/execution/configPlan">计划<!-- <b class="caret"></b> --></a>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">质量<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle">质量<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">质量工程</a></li>
 							<li><a href="#">IQS售后质量</a></li>
@@ -64,7 +64,7 @@
 						</ul> -->
 					</li>
 					<li id="headGeneralInformationLi">
-						<a href="/bms/generalInformation/faultMaintain" class="dropdown-toggle">数据库<!-- <b class="caret"></b> --></a>
+						<a href="/bms/generalInformation/faultMaintain">数据库<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">情报中心</a></li>
 							<li><a href="/bms/generalInformation/generalIndex">基础数据库</a></li>
@@ -76,7 +76,7 @@
         		<ul class="nav pull-right">
           			<!-- <li><a href="#"><i class="icon-envelope"></i>&nbsp;0</a></li> -->
           			<li class="dropdown">
-            			<a href="/bms/generalInformation/accountMaintain" class="dropdown-toggle"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
+            			<a href="/bms/generalInformation/accountMaintain"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
             			<!-- <ul class="dropdown-menu">
               				<li><a href="/bms/generalInformation/accountMaintain">个人中心</a></li>
               				<li><a href="/bms/site/logout">注销</a></li>

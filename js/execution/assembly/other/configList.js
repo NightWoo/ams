@@ -127,7 +127,7 @@ $(document).ready(function() {
 	})
 	
 	function initPage() {
-		$("#headAssemblyLi").addClass("active");
+		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
 		
 		$("#btnAdd").attr("disabled", "disabled");

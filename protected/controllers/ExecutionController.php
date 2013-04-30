@@ -782,6 +782,17 @@ class ExecutionController extends BmsBaseController
     }
 
     //added by wujun
+    public function actionDataThrow() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/DataThrow');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    //added by wujun
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  
     }
@@ -819,17 +830,51 @@ class ExecutionController extends BmsBaseController
         }  
     }
 
-    public function actionDataThrowtest() {
+    public function actionThrowOutDataOne() {
         try{
             $vin = $this->validateStringVal('vin', '');
             
             $car = Car::create($vin);
 
-            $outDate = date("Y-m-d h:m:s");
+            $outDate = ($car->car->distribute_time > '0000-00-00 00:00:00') ? $car->car->distribute_time : date("Y-m-d h:m:s");
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data = $car->throwCertificateData($outDate, $clientIp);
             // $car->throwInspectionSheetData();
             $this->renderJsonBms(true, $vin . '成功录入' , $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionVinStoreIn(){
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            
+            $row = '';
+            $driverName = '汪辉';
+            $inDate = $car->car->warehouse_time;
+
+            $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
+
+            $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionVinStoreOut(){
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $lane = '';
+            $order = OrderAR::model()->findByPk($car->car->order_id);
+            $orderNumber = $order->order_number;
+            $orderDetailId = $order->order_detail_id;
+            $outDate = $car->car->distribute_time;
+            
+            $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
+            $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

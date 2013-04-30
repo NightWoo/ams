@@ -22,17 +22,14 @@
 	?>
 	<div class="offhead">
 	   <?php
-		require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+		require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
-            <div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">维护与帮助</a><span class="divider">&gt;</span></li>
-						<li class="active">计划停线</li>
-				</ul></div><!-- end 面包屑 -->
-            
+            <div>
+                <legend>计划停线
+                </legend>
+            </div>
    	   		<div><!-- 主体 -->
 				<form id="form" class="well form-search">
 					<table>

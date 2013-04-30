@@ -59,7 +59,7 @@ $(document).ready(function(e) {
 
 	
 	function initPage() {
-		$("#headAssemblyLi").addClass("active");
+		$("#headPlanLi").addClass("active");
 		$("#leftPlanPauseLi").addClass("active");
 		
 		$("#startTime").val(currentDate8());

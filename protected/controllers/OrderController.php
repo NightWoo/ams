@@ -389,6 +389,7 @@ class OrderController extends BmsBaseController
 
 				$car->car->warehouse_id = 1000;
                 $car->car->area = $warehouse->area;
+                $car->car->status = '成品库';
                 $car->car->save();
 
 				$message = $vin . '已成功退回成品库异常区X，请开往' . $warehouse->row;

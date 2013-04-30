@@ -136,7 +136,7 @@ $("document").ready(function() {
 	function initPage() {
 		// $("#headPlanLi").addClass("active");
 		// $("#leftOutStandbyMaintainLi").addClass("active");
-		$("#headAssemblyLi").addClass("active");
+		$("#headPlanLi").addClass("active");
 		$("#leftOrderMaintainLi").addClass("active");
 
 		$("#standbyDate").val(window.byd.DateUtil.currentDate);

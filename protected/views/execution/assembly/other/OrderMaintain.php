@@ -23,7 +23,7 @@
 	?>
 	<div class="offhead">
 	   <?php
-		require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+		require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
