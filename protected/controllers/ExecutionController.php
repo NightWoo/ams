@@ -409,6 +409,9 @@ class ExecutionController extends BmsBaseController
 			);
 			$fault = Fault::create('WDI_TEST',$vin, $faults, $others);
             $fault->save('离线' , true);//is wdi
+            if($faults === '[]'){
+                $fault->wdiNoFault();
+            }
 			$transaction->commit();
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
@@ -824,8 +827,8 @@ class ExecutionController extends BmsBaseController
 
             $outDate = date("Y-m-d h:m:s");
             $clientIp = $_SERVER["REMOTE_ADDR"];
-            // $data = $car->throwCertificateData($outDate, $clientIp);
-            // $data = $car->throwInspectionSheetData();
+            $data = $car->throwCertificateData($outDate, $clientIp);
+            // $car->throwInspectionSheetData();
             $this->renderJsonBms(true, $vin . '成功录入' , $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);

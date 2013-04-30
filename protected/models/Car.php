@@ -967,14 +967,15 @@ class Car
 		// $updatesql = "UPDATE ShopPrint
 		// 				SET Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}'
 		// 				WHERE vin='{$vin}'";
-		// $existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
+		$deletesql = "DELETE FROM ShopPrint WHERE vin='{$vin}'";
+		$existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
 		
-		// $exist=Yii::app()->dbTest->createCommand($existsql)->execute();
-		// if(empty($exist)){
-			Yii::app()->dbTest->createCommand($insertsql)->execute();
-		// }else{
-			// Yii::app()->dbTest->createCommand($updatesql)->execute();
-		// }
+		$exist=Yii::app()->dbTest->createCommand($existsql)->execute();
+		if(!empty($exist)){
+			Yii::app()->dbTest->createCommand($deletesql)->execute();
+		}
+		
+		Yii::app()->dbTest->createCommand($insertsql)->execute();
 	}
 	public function throwMarkPrintData() {
 		//好像有点太过程化了，找时间优化
@@ -997,7 +998,14 @@ class Car
 		$cData = $this->getCertificateData($carId);
 
 		$insertsql = "INSERT INTO MarkPrint
-				SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";			
+							SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";			
+		$deletesql = "DELETE FROM MarkPrint WHERE vin='{$vin}'";
+		$existsql = "SELECT vin,Order_ID FROM MarkPrint WHERE vin='{$vin}'";				
+		
+		$exist=Yii::app()->dbTest->createCommand($existsql)->execute();
+		if(!empty($exist)){
+			Yii::app()->dbTest->createCommand($deletesql)->execute();
+		}
 		
 		Yii::app()->dbTest->createCommand($insertsql)->execute();
 		

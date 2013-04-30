@@ -218,13 +218,24 @@ class Order
 
 	public function printByOrder($orderId){
 		$order = OrderAR::model()->findByPk($orderId);
+		if($order->amount > $order->count){
+			throw new Exception("订单明细".$order->order_detail_id."_". $order->order_number. "_" . $order->distributor_name ."未完成，暂不可传输打印");
+		}
 		$sql = "SELECT vin FROM car WHERE order_id=$orderId AND distribute_time>'0000-00-00 00:00:00' ORDER BY distribute_time ASC";
 		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach($vins as $vin){
 			$car = Car::create($vin);
 			$outDate = $car->car->distribute_time;
             $clientIp = $_SERVER["REMOTE_ADDR"];
-			$car->throwCertificateData($outDate, $clientIp);
+			$retry = 5;
+            do{
+				$ret = $car->throwCertificateData($outDate, $clientIp);
+				if($ret === false){
+					$curTime = date("YmdHis");
+					BmsLogger::warning($vin . " throwCertificateData failed @ " . $curTime);
+				}
+				--$retry;
+            } while ($ret === false &&  $retry>0);
             $car->throwInspectionSheetData();
 		}
 		$order->is_printed = 1;

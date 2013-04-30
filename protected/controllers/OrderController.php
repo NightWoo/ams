@@ -2,6 +2,7 @@
 Yii::import('application.models.Order');
 Yii::import('application.models.OrderSeeker');
 Yii::import('application.models.AR.OrderAR');
+Yii::import('application.models.AR.LaneOrderAR');
 Yii::import('application.models.AR.WarehouseAR');
 
 class OrderController extends BmsBaseController
@@ -231,6 +232,7 @@ class OrderController extends BmsBaseController
 				$curDate = DateUtil::getCurDate();
 				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){
 					$order->activate_time = date('YmdHis');
+					$order->lane_status = 1;
 				}
 			}
 
@@ -434,6 +436,43 @@ class OrderController extends BmsBaseController
                         'data' => $data,
                     );
 			$this->renderJsonBms(true, 'OK', $ret);
+		} catch (Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionExportOrderCars() {
+		try{
+			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$distributor = $this->validateStringVal('distributor', '');
+			$status = $this->validateStringVal('status', '0');
+			$series = $this->validateStringVal('series', '');
+
+			$seeker = new CarSeeker();
+			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0);
+			$content = "车道,订单号,经销商,流水号,VIN,车系,配置,耐寒性,颜色,发动机号,出库时间,原库道\n";
+            foreach($datas as $data) {
+                $content .= "{$data['lane']},";
+                $content .= "{$data['order_number']},";
+                $content .= "{$data['distributor_name']},";
+                $content .= "{$data['serial_number']},";
+                $content .= "{$data['vin']},";
+                $content .= "{$data['series']},";
+                $content .= "{$data['config_name']},";
+                $content .= "{$data['cold']},";
+                $content .= "{$data['color']},";
+                $content .= "{$data['engine_code']},";
+                if($data['distribute_time'] === '0000-00-00 00:00:00'){
+                	$data['distribute_time'] = '未出库';
+                }
+                $content .= "{$data['distribute_time']},";
+                $content .= "{$data['row']},";
+                $content .= "\n";
+            }
+			
+			$export = new Export('订单车辆明细_' .date('YmdHi'), $content);
+            $export->toCSV();
 		} catch (Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}

@@ -92,13 +92,14 @@
                                     	<th>车道</th>
                                         <th>订单号</th>
                                         <th>经销商</th>
+                                        <th>流水号</th>
                                         <th>VIN</th>
                                         <th>车系</th>
-                                        <th>颜色</th>
                                         <th>配置</th>
                                         <th>耐寒性</th>
-                                        <th>出库时间</th>
+                                        <th>颜色</th>
                                         <th>发动机号</th>
+                                        <th>出库时间</th>
                                         <th>原库道</th>
                                     </tr>
                                 </thead>

@@ -180,6 +180,30 @@ class Fault
         return !empty($exist);
 	}
 
+	public function wdiNoFault(){
+		$car = Car::create($this->vin);
+		$series = $car->car->series;
+		
+		$userId = Yii::app()->user->id;
+		$curtime = date('Y-m-d H:i:s');
+		
+		$faultClass = $this->getFaultClass($this->tablePrefix . "_" . $series);
+		$ar = new $faultClass();
+		$ar->car_id = $car->car->id;
+		$ar->create_time = $curtime;
+		
+		$ar->status = '合格';
+		$ar->creator = $userId;
+		$ar->updator = $userId;
+
+		$ar->modify_time = $curtime;
+        $ar->create_time = empty($this->others['checkTime']) ? $curtime : $this->others['checkTime'];
+		$ar->checker1 = empty($this->others['checker']) ? 0 : $this->others['checker'];
+		$ar->checker2 = empty($this->others['subChecker']) ? 0 : $this->others['subChecker'];
+		
+		$ar->save();
+	}
+
 	//public function showGasBag($mainGasBag) {
 	public function showGasBag() {
 		$car = Car::create($this->vin);

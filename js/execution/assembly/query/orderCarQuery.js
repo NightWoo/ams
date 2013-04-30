@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
-		if(index<3)
+		if(index<2)
 			$("#paginationCars").hide();
 		if (index == 0)
 			ajaxQueryCars(1);
@@ -81,10 +81,11 @@ $(document).ready(function () {
 
 	$("#exportCars").click(
 		function () {
-			ajaxExportNodeTrace ();
+			ajaxExportOrderCars()
 			return false;
 		}
 	);
+
 
 	function ajaxQueryCars (targetPage) {
 		$("#tableOrderCars>tbody").html("");
@@ -106,24 +107,25 @@ $(document).ready(function () {
 		    		var cars = response.data.data;
 
 		    		$.each(cars ,function (index,value) {
-		    			var orderNumberTd = "<td>" + value.order_number + "</td>";
 		    			var laneTd = "<td>" + value.lane + "</td>";
+		    			var orderNumberTd = "<td>" + value.order_number + "</td>";
 		    			var distributorNameTd = "<td>" + value.distributor_name + "</td>";
+		    			var serialNumberTd = "<td>" + value.serial_number + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
 		    			var seriesTd = "<td>" + value.series + "</td>";
-		    			var colorTd = "<td>" + value.color + "</td>";
 		    			var configTd = "<td>" + value.config_name + "</td>";
 		    			var coldTd = "<td>" + value.cold + "</td>";
+		    			var colorTd = "<td>" + value.color + "</td>";
+		    			var engineTd = "<td>" + value.engine_code + "</td>";
 		    			if(value.distribute_time == '0000-00-00 00:00:00'){
 			    			var distributeTimeTd = "<td>" + '未出库' + "</td>";
 		    			}else{
 			    			var distributeTimeTd = "<td>" + value.distribute_time + "</td>";
 		    			}
-		    			var engineTd = "<td>" + value.engine_code + "</td>";
 		    			var rowTd = "<td>" + value.row + "</td>";
 
 		    			var tr = "<tr>"  + laneTd + orderNumberTd  + distributorNameTd + 
-		    				vinTd + seriesTd + colorTd + configTd + coldTd + distributeTimeTd + engineTd + rowTd +"</tr>";
+		    				serialNumberTd + vinTd + seriesTd +  configTd + coldTd + colorTd + engineTd + distributeTimeTd + rowTd +"</tr>";
 		    			$("#tableOrderCars tbody").append(tr);
 		    		});
 					if(response.data.pager.curPage == 1) {
@@ -157,6 +159,16 @@ $(document).ready(function () {
 		    },
 		    error:function(){alertError();}
 		});
+	}
+
+	function ajaxExportOrderCars(){
+		window.open(EXPORT_ORDER_CARS +
+			"?&orderNumber=" + $("#orderNumberText").val() +
+			"&standbyDate=" + $("#standbyDate").val() +
+			"&distributor=" + $("#distributorText").val() +
+			"&series=" + $("#selectSeries").val() +
+			"&status=" + getStatusChecked()
+			)
 	}
 
 	function ajaxQueryOrder() {

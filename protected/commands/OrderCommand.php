@@ -8,12 +8,14 @@ class OrderCommand extends CConsoleCommand
 		$curDate = DateUtil::getCurDate();
 		$lastDate = DateUtil::getLastDate();
 		$maxPri = 0;
-		if($count > 0 && !empty($curDateOrders)) {
+		if(!empty($curDateOrders)) {
 			foreach($curDateOrders as $order) {
-				
-				$order->priority += $count;
+				if($count>0){
+					$order->priority += $count;
+				}
 				if($order->status == 1 && $order->activate_time == '0000-00-00 00:00:00'){
 					$order->activate_time = date('YmdHis');
+					$order->lane_status = 1;
 				}
 				$order->save();
 				$maxPri = $order->priority;

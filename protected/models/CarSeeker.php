@@ -379,7 +379,7 @@ class CarSeeker
 		foreach($orders as $order){
 			$orderId= $order['id'];
 			$orderNumberArray[$orderId] = $order['order_number'];
-			$sqls[] = "(SELECT vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,old_wh_id,remark
+			$sqls[] = "(SELECT serial_number, vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,old_wh_id,remark
 							FROM car 
 							WHERE order_id = $orderId)";
 			$countConditions[] = "order_id = $orderId";
