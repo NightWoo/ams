@@ -724,7 +724,13 @@ class ExecutionController extends BmsBaseController
 	
 	//added by wujun
 	public function actionPauseEdit() {
-		$this->render('assembly/dataInput/PauseEdit');	
+        try{
+            Yii::app()->permitManager->check('ASSEMBLY_MAINTAIN');
+    		$this->render('assembly/dataInput/PauseEdit');	
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 	
 	//added by wujun
@@ -753,6 +759,16 @@ class ExecutionController extends BmsBaseController
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
             $this->render('assembly/dataInput/WarehousePrint');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    public function actionlaneManage() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/dataInput/LaneManage');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -821,10 +837,12 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $seeker = new FaultSeeker();
-            $data = $seeker-> parseQueryTime('2013-02-08 08:15:00', '2013-04-10 15:23:00');
-            $this->renderJsonBms(true, 'OK' , $data);
-            //$this->renderJsonBms(true, $vin . '成功录入' , $car);
+            $date = date("Y-m-d H:i:s");
+            $date = str_replace(" ","T",$date);
+            // $seeker = new FaultSeeker();
+            // $data = $seeker-> parseQueryTime('2013-02-08 08:15:00', '2013-04-10 15:23:00');
+            $this->renderJsonBms(true, 'OK' , $date);
+            // $this->renderJsonBms(true, $vin . '成功录入' , $car);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

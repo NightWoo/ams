@@ -81,13 +81,16 @@ class OrderSeeker
         return $datas;
 	}
 
-	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`') {
+	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='') {
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
 		
 		if(!empty($standbyDate)){
-			$condition .= " AND standby_date='$standbyDate'";
+			if(empty($standbyDateEnd)){
+				$standbyDateEnd = $standbyDate;
+			}
+			$condition .= " AND standby_date>='$standbyDate' AND standby_date<='$standbyDateEnd'";
 		}
 
 		if(!empty($orderNumber)){
@@ -147,8 +150,8 @@ class OrderSeeker
 		return $orderList;
 	}
 
-	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`'){
-		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
+	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd=''){
+		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd);
 		$boards = array();
 
 		foreach($orders as &$order){
@@ -177,6 +180,98 @@ class OrderSeeker
 			$boards[$order['board_number']]['orders'][] = $order;
 		}
 		return $boards;
+	}
+
+	public function queryLaneOrders(){
+		$condition = "lane_status=1";
+		$orderBy='board_number,lane_id';
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, lane_status, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$countSql = "SELECT COUNT(DISTINCT lane_id) FROM `order` WHERE $condition";
+		$laneCount = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		$boards = array();
+		$lanes = array();
+
+		foreach ($orders as $order) {
+			if(empty($boards[$order['board_number']])){
+				$boards[$order['board_number']] = array(
+					'boardNumber' => $order['board_number'],
+					'boardAmount' => 0,
+					'boardHold' => 0,
+					'boardCount' => 0,
+					'boardActivateTime' => '0000-00-00 00:00:00',
+					'boardStandbyFinishTime' => '0000-00-00 00:00:00',
+					'boardOutFinishTime' => '0000-00-00 00:00:00',
+					'lane' => array(),
+					// 'orders' => array(),
+				);
+			}
+
+			if(empty($boards[$order['board_number']]['lane'][$order['lane_id']])){
+				$boards[$order['board_number']]['lane'][$order['lane_id']] = array(
+					'laneName' => LaneAR::model()->findByPk($order['lane_id'])->name,
+					'laneAmount' => 0,
+					'laneHold' => 0,
+					'laneCount' => 0,
+					'orders' => array(),
+				);
+			}
+
+			$boards[$order['board_number']]['boardAmount'] += $order['amount'];
+			$boards[$order['board_number']]['boardHold'] += $order['hold'];
+			$boards[$order['board_number']]['boardCount'] += $order['count'];
+			$boards[$order['board_number']]['lane'][$order['lane_id']]['laneAmount'] += $order['amount'];
+			$boards[$order['board_number']]['lane'][$order['lane_id']]['laneHold'] += $order['hold'];
+			$boards[$order['board_number']]['lane'][$order['lane_id']]['laneCount'] += $order['count'];
+			$boards[$order['board_number']]['lane'][$order['lane_id']]['orders'][] = $order;
+			
+			if($order['activate_time'] >'0000-00-00 00:00:00'){
+				if($boards[$order['board_number']]['boardActivateTime'] === '0000-00-00 00:00:00' || $order['activate_time'] < $boards[$order['board_number']]['boardActivateTime']){
+					$boards[$order['board_number']]['boardActivateTime'] = $order['activate_time'];
+				}
+			}
+			if($order['standby_finish_time'] > $boards[$order['board_number']]['boardStandbyFinishTime']){
+				$boards[$order['board_number']]['boardStandbyFinishTime'] = $order['standby_finish_time'];
+			}
+			if($order['out_finish_time'] > $boards[$order['board_number']]['boardOutFinishTime']){
+				$boards[$order['board_number']]['boardOutFinishTime'] = $order['out_finish_time'];
+			}
+		}
+
+		foreach($boards as &$board){
+			foreach($board['lane'] as $lane){
+				foreach($lane['orders'] as $order){
+					if($order['standby_finish_time'] === '0000-00-00 00:00:00'){
+						$boards[$order['board_number']]['boardStandbyFinishTime'] = '0000-00-00 00:00:00';
+						break;
+					}
+				}
+				foreach($lane['orders'] as $order){
+					if($order['out_finish_time'] === '0000-00-00 00:00:00'){
+						$boards[$order['board_number']]['boardOutFinishTime'] = '0000-00-00 00:00:00';
+						break 2;
+					}
+				}
+			}
+			if($board['boardStandbyFinishTime'] === '0000-00-00 00:00:00'){
+				$board['boardStandbyLast'] =(strtotime(date('Y-m-d H:i:s')) - strtotime($board['boardActivateTime'])) / 3600;
+				$board['boardOutLast'] =0;
+			} else {
+				$board['boardStandbyLast'] =(strtotime($board['boardStandbyFinishTime']) - strtotime($board['boardActivateTime'])) / 3600;
+				if($board['boardOutFinishTime'] === '0000-00-00 00:00:00'){
+					$board['boardOutLast'] =(strtotime(date('Y-m-d H:i:s')) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+				} else {
+					$board['boardOutLast'] =(strtotime($board['boardOutFinishTime']) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+				}
+			}
+			$board['boardStandbyLast'] = round($board['boardStandbyLast'] ,1);
+			$board['boardOutLast'] = round($board['boardOutLast'] ,1);
+
+		}
+
+		return array($boards, $laneCount);
 	}
 
 	public function matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date) {

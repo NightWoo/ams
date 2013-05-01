@@ -13,7 +13,7 @@ $(document).ready(function () {
 		$("#leftOrderCarQueryLi").addClass("active");
 		$("#divInfo").hide();
 		$("#tableOrderCars, #tableOrderDetail").hide();	//add by wujun
-		$("#standbyDate").val(window.byd.DateUtil.currentDate);
+		$("#standbyDate, #standbyDateEnd").val(window.byd.DateUtil.currentDate);
 	}
 
 	$(".clearinput").click(function() {
@@ -96,6 +96,7 @@ $(document).ready(function () {
 		    data: {
 		    	"orderNumber": $("#orderNumberText").val(),
 		    	"standbyDate":$ ("#standbyDate").val(),
+		    	"standbyDateEnd":$ ("#standbyDateEnd").val(),
 		    	"distributor": $("#distributorText").val(),
 		    	"series" : $("#selectSeries").val(),
 		    	"status" : getStatusChecked(),
@@ -165,6 +166,7 @@ $(document).ready(function () {
 		window.open(EXPORT_ORDER_CARS +
 			"?&orderNumber=" + $("#orderNumberText").val() +
 			"&standbyDate=" + $("#standbyDate").val() +
+			"&standbyDateEnd=" + $("#standbyDateEnd").val() +
 			"&distributor=" + $("#distributorText").val() +
 			"&series=" + $("#selectSeries").val() +
 			"&status=" + getStatusChecked()
@@ -182,6 +184,7 @@ $(document).ready(function () {
 		    data: {
 		    	"orderNumber": $("#orderNumberText").val(),
 		    	"standbyDate": $("#standbyDate").val(),
+		    	"standbyDateEnd": $("#standbyDateEnd").val(),
 		    	"distributor": $("#distributorText").val(),
 		    	"series" : $("#selectSeries").val(),
 		    	"status" : getStatusChecked(),

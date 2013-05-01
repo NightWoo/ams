@@ -13,12 +13,12 @@ class CarSeeker
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
 		'VQ1' => array('VQ1异常'),
 		'VQ1-EXCEPTION' => array('VQ1异常'),
-		'VQ2' => array('整车下线', '出生产车间', '检测线缓冲', 'VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨'),
+		'VQ2' => array('整车下线', '出生产车间', '检测线缓冲','VQ2检测线检验', 'VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨'),
 		'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常'),
-		'recycle' => array('VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常'),
+		'recycle' => array('VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2检测线检验','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常'),
 		'WH' => array('成品库','WDI'),
 		'WHin' => array('成品库'),
-		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
+		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2检测线检验','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
 	);
 
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
@@ -369,11 +369,11 @@ class CarSeeker
 		return $total;
 	}
 
-	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0){
+	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0, $standbyDateEnd=''){
 		$configNames = $this->configNameList();
 		$orderNumberArray = array();
 		$orderSeeker = new OrderSeeker(); 
-		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series);
+		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series, $standbyDateEnd);
 		
 		$contConditions = array();
 		foreach($orders as $order){
@@ -494,7 +494,7 @@ class CarSeeker
 			'PBS' => array('PBS'),
 			'onLine' => array('PBS'),
 			'VQ1' => array('VQ1'),
-			'VQ2' => array('VQ1'),
+			'VQ2' => array('VQ2'),
 			'VQ3' => array('VQ3'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
 			'WH' => array('WH'),

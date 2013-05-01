@@ -247,8 +247,10 @@ var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
 var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
 var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
 
-var GET_LANE_INFO ="/bms/lane/orderInfo";
+var GET_LANE_INFO ="/bms/lane/queryOrderInfo";
 var GET_BOARD_INFO ="/bms/order/queryBoardInfo";
+
+var RELEASE_LANE_ORDERS = "/bms/lane/releaseOrders";
 
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';

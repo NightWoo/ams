@@ -28,7 +28,7 @@ $("document").ready(function() {
 				var boardInfo = response.data.boardInfo;
 				$.each(boardInfo, function (boardNumber, value){
 					var div = $("<div />");
-					var divContainer = $("<div />").addClass("pull-left boardContainer")
+					var divContainer = $("<div />").addClass("pull-left boardContainer");
 					var a = $("<a />").addClass("thumbnail board").attr("href", "#").attr("boardnum",boardNumber);
 					var pNumber = $("<p />").addClass("pull-left board").attr("boardnum",boardNumber).html("#"+boardNumber);
 					var pOK = $("<p />").addClass("label pull-right boardOK board").attr("boardnum",boardNumber).html(value.toPrint);

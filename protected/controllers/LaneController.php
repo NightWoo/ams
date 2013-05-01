@@ -16,12 +16,37 @@ class LaneController extends BmsBaseController
 		);
 	}
 
-	public function actionOrderInfo(){
+	public function actionQueryOrderInfo(){
 		try{
 			$orderSeeker = new OrderSeeker();
-			$data = $orderSeeker->getLaneInfo();
+			list($boards, $laneCount) = $orderSeeker->queryLaneOrders();
+			$data = array(
+				'boards' => $boards,
+				'laneCount' => $laneCount,
+			);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionReleaseOrders(){
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			$laneId = $this->validateIntVal("laneId", 0);
+
+			$orders = OrderAR::model()->findAll("lane_status=1 AND lane_id=?", array($laneId));
+			if(!empty($orders)){
+				foreach($orders as $order){
+					$order->lane_status = 2;
+					$order->lane_release_time = date("YmdHis");
+					$order->save();
+				}
+			}
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', $orders);
+		} catch(Exception $e){
+			$transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}

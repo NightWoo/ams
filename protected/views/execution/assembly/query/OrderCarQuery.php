@@ -46,8 +46,11 @@
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
                         <!-- <input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input> -->
-                        <div class="input-append">
+                        <div class="input-append input-prepend" style="clear: right">
+                            <span class="add-on">日期</span>
                             <input id="standbyDate"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/>
+                            <span class="add-on" style="padding:4px 0">-</span>
+                            <input id="standbyDateEnd"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDateEnd',dateFmt:'yyyy-MM-dd'});"/>
                             <!-- <a class="btn resetDate appendBtn"><i class="icon-undo"></i></a> -->
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>

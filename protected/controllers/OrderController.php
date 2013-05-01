@@ -83,6 +83,7 @@ class OrderController extends BmsBaseController
 	public function actionQueryBoardOrders(){
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
@@ -90,7 +91,7 @@ class OrderController extends BmsBaseController
 			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
+			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -422,6 +423,7 @@ class OrderController extends BmsBaseController
 	public function actionQueryOrderCars() {
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
@@ -430,7 +432,7 @@ class OrderController extends BmsBaseController
             $perPage = $this->validateIntVal('perPage', 20);
 
 			$seeker = new CarSeeker();
-			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage);
+			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage, $standbyDateEnd);
 
 			$ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
@@ -445,13 +447,14 @@ class OrderController extends BmsBaseController
 	public function actionExportOrderCars() {
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');
 
 			$seeker = new CarSeeker();
-			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0);
+			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0,$standbyDateEnd);
 			$content = "车道,订单号,经销商,流水号,VIN,车系,配置,耐寒性,颜色,发动机号,出库时间,原库道\n";
             foreach($datas as $data) {
                 $content .= "{$data['lane']},";

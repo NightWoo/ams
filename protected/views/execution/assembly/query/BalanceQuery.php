@@ -126,7 +126,7 @@
 
                         <div class="tab-pane" id="carsDistribute">
                             
-                                <div class="tableContainer span9 pull-left">
+                                <div class="tableContainer span10 pull-left">
                                     <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
                                         <thead>
 
@@ -142,7 +142,7 @@
                                         </label>
                                     </div>                          
                                 </div>
-                                <div class="chartContainer offset9">
+                                <div class="chartContainer offset10">
                                     <!-- <div id="divRadio">   
                                         <label class="radio inline">
                                           <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
