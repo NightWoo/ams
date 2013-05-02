@@ -12,7 +12,7 @@ $(document).ready(function () {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftManufactureQueryLi").addClass("active");
 
-		$("#startTime").val(currentDate8());
+		$("#startTime").val(window.byd.DateUtil.currentDate8);
 		// $("#endTime").val(currentDate16());
 		$("#endTime").val(window.byd.DateUtil.currentTime);
 
@@ -52,48 +52,6 @@ $(document).ready(function () {
 	        },'json');
 	    },
 	});
-
-	function currentDate8 (argument) {
-		var now = new Date();
-	        var year = now.getFullYear();       //年
-	        var month = now.getMonth() + 1;     //月
-	        var day = now.getDate();            //日
-	        var hh = now.getHours();            //时
-	        var mm = now.getMinutes();          //分
-	       
-	        var clock = year + '-';
-
-	        if(month < 10) clock += '0';
-	        clock += month + '-';
-
-	        if(day < 10) clock += '0';
-	        clock += day + ' ';
-
-	        clock += "08:00";
-
-	        return(clock); 
-	}
-
-	function currentDate16 (argument) {
-		var now = new Date();
-	        var year = now.getFullYear();       //年
-	        var month = now.getMonth() + 1;     //月
-	        var day = now.getDate();            //日
-	        var hh = now.getHours();            //时
-	        var mm = now.getMinutes();          //分
-	       
-	        var clock = year + '-';
-
-	        if(month < 10) clock += '0';
-	        clock += month + '-';
-
-	        if(day < 10) clock += '0';
-	        clock += day + ' ';
-
-	        clock += "16:00";
-
-	        return(clock); 
-	}
 
 	function resetAll (argument) {
 		$(".pager").hide();

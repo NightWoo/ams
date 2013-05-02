@@ -243,6 +243,17 @@ $(document).ready(function () {
 	    				} else{
 		    				$("<td />").html(order.out_finish_time).appendTo(tr);
 	    				}
+
+	    				if(order.lane_release_time === '0000-00-00 00:00:00'){
+	    					if(order.out_finish_time === '0000-00-00 00:00:00'){
+	    						$("<td />").html("未完成").appendTo(tr);
+	    					}else{
+	    						$("<td />").html("<i class='icon-time'></i>" + order.lane_last + "H").appendTo(tr);
+	    					}
+	    				} else {
+	    					$("<td />").html(order.lane_release_time).appendTo(tr);
+	    				}
+
 	    				if(order.is_printed == 1){
 	    					$("<td />").addClass("alignCenter").html("<i class='icon-print'></i>").appendTo(tr);
 	    				} else {
@@ -254,7 +265,7 @@ $(document).ready(function () {
 	    					}
 	    				}
 	    				if(order.status ==1 && order.standby_finish_time === '0000-00-00 00:00:00'){
-	    					if(order.standby_last >= 12){
+	    					if(order.standby_last >= 12 || order.out_last >= 12 || order.lane_last >= 12){
 	    						$(tr).removeClass('warning').addClass('error');
 	    					}
 	    				}else if(order.status == 2){

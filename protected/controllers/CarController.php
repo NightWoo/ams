@@ -579,13 +579,18 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
             
-            $row = '';
+            $row = 'Z000';
+            if(!empty($car->car->warehouse_id)){
+                $row = WarehouseAR::modal()->findByPk($car->car->warehouse_id)->row;
+            }else if(!empty($car->car->old_wh_id)){
+                $row = WarehouseAR::modal()->findByPk($car->car->old_wh_id)->row;
+            }
             $driverName = '汪辉';
             $inDate = $car->car->warehouse_time;
 
             $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
 
-            $this->renderJsonBms(true, $vin . '成功抛送入库数据' , $vinMessage);
+            $this->renderJsonBms(true, '操作完成，'. $vinMessage , $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -596,13 +601,16 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
             $lane = '';
+            if(!empty($car->car->lane_id)){
+                $lane = LaneAR::model()->findByPk($car->car->lane_id)->name;
+            }
             $order = OrderAR::model()->findByPk($car->car->order_id);
             $orderNumber = $order->order_number;
             $orderDetailId = $order->order_detail_id;
             $outDate = $car->car->distribute_time;
             
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
-            $this->renderJsonBms(true, $vin . '成功抛送出库数据' , $vinMessage);
+            $this->renderJsonBms(true, '操作完成，'. $vinMessage , $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

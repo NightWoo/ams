@@ -105,7 +105,7 @@ class OrderSeeker
 			$condition .= " AND series='$series'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -130,21 +130,30 @@ class OrderSeeker
 			} else {
 				$detail['cold'] = '非耐寒';
 			}
-
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
+			
+			$detail['standby_last'] = 0;
+			$detail['out_last'] = 0;
+			$detail['lane_last'] = 0;
 			if($detail['standby_finish_time'] === '0000-00-00 00:00:00'){
 				$detail['standby_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
-				$detail['out_last'] = 0;
+
 			}else{
 				$detail['standby_last'] = (strtotime($detail['standby_finish_time']) - strtotime($detail['activate_time'])) / 3600;
 				if($detail['out_finish_time'] === '0000-00-00 00:00:00'){
 					$detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['standby_finish_time'])) / 3600;
 				}else{
 					$detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['standby_finish_time'])) / 3600;
+					if($detail['lane_release_time'] === '0000-00-00 00:00:00'){
+						$detail['lane_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['out_finish_time'])) / 3600;
+					} else {
+						$detail['lane_last'] = (strtotime($detail['lane_release_time']) - strtotime($detail['out_finish_time'])) / 3600;
+					}
 				}
 			}
 			$detail['standby_last'] = round($detail['standby_last'],1);
 			$detail['out_last'] = round($detail['out_last'],1);
+			$detail['lane_last'] = round($detail['lane_last'],1);
 		}
 
 		return $orderList;

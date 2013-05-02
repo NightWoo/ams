@@ -46,7 +46,7 @@ class BarCodeGenerator
 		try {
 			$color_black = new BCGColor(0, 0, 0);
 			$color_white = new BCGColor(255, 255, 255);
-			$font = new BCGFontFile('/home/work/bms/web/bms/barcode/font/Arial.ttf', 8);
+			$font = new BCGFontFile('/home/work/bms/web/bms/barcode/font/Arial.ttf', 10);
 
 			$code_generated = new $this->className();
 

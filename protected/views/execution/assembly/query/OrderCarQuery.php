@@ -129,6 +129,7 @@
                                     <th style="width:70px">指令时间</th>
                                     <th style="width:70px">备齐时间</th>
                                     <th style="width:70px">完成时间</th>
+                                    <th style="width:70px">释放时间</th>
                                     <th></th>
                                 </thead>
                                 <tbody>
