@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.AR.monitor.*');
+Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.SeriesSeeker');
 
 class MonitorSeeker
@@ -86,6 +87,22 @@ class MonitorSeeker
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 
 		return $rows;
+	}
+
+	public function queryLaneInfo() {
+		$datas=array();
+		for($i=1;$i<51;$i++){
+			$sql="SELECT lane_id, SUM(amount) as amount, SUM(count) as count FROM `order` WHERE lane_id=$i AND lane_status=1";
+			$data = Yii::app()->db->createCommand($sql)->queryRow();
+			$data['lane_id'] = $i;
+			$data['lane_name']= LaneAR::model()->findByPk($i)->name;
+			if(empty($data['amount'])){
+				$data['amount'] = 0;
+				$data['count'] = 0;
+			}
+			$datas[] = $data;
+		}
+		return $datas;
 	}
 
 	public function queryWarehouseAreaBalance($area) {

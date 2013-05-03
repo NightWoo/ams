@@ -14,6 +14,8 @@
         <script type="text/javascript" src="/bms/js/head.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/query/orderCarQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
+        <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
 	</head>
 
 
@@ -35,13 +37,18 @@
                     </legend>
                 </div>
                 <form class="well form-inline">
+                        <div class="input-prepend input-append">
+                            <span class="add-on">板号</span>
+                            <input type="text" class="input-small" placeholder="请输入备板号..." id="boardNumberText" />
+                            <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+                        </div>
                     	<div class="input-prepend input-append">
-							<span class="add-on">订单号</span>
+							<span class="add-on">单号</span>
 							<input type="text" class="input-medium" placeholder="请输入订单号..." id="orderNumberText" />
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
                         <div class="input-prepend input-append">
-                            <span class="add-on">经销商</span>
+                            <span class="add-on">商家</span>
                             <input type="text" class="input-medium" placeholder="请输入经销商..." id="distributorText" />
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
@@ -54,7 +61,7 @@
                             <!-- <a class="btn resetDate appendBtn"><i class="icon-undo"></i></a> -->
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
-                        <div class="help-inline"  style="padding-left:0;">
+                        <div class="help-inline"  style="padding-left:0; margin-top:5px ">
                             <select name="" id="selectSeries" class="input-small">
                                 <option value="">全车系</option>
                                 <option value="F0">F0</option>
@@ -73,6 +80,7 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li><a href="#tabOrderCars" data-toggle="tab">车辆明细</a></li>
                             <li><a href="#tabOrderDetail" data-toggle="tab">订单明细</a></li>
+                            <li><a href="#tabPeriod" data-toggle="tab">发车周期</a></li>
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
                                     <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
@@ -126,10 +134,10 @@
                                     <th colspan="2" style="text-align: center">数量</th>
                                     <th colspan="2" style="text-align: center">已备</th>
                                     <th colspan="2" style="text-align: center">出库</th>
-                                    <th style="width:70px">指令时间</th>
-                                    <th style="width:70px">备齐时间</th>
-                                    <th style="width:70px">完成时间</th>
-                                    <th style="width:70px">释放时间</th>
+                                    <th style="width:70px">指令激活</th>
+                                    <th style="width:70px">备车完成</th>
+                                    <th style="width:70px">出库完成</th>
+                                    <th style="width:70px">车道释放</th>
                                     <th></th>
                                 </thead>
                                 <tbody>
@@ -137,6 +145,15 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="tab-pane" id="tabPeriod">
+                            <div id="periodContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <table id="tablePeriod" class="table table-condensed">
+                                <thead />
+                                <tbody />
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div><!-- END MAIN -->

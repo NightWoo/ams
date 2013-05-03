@@ -177,9 +177,10 @@ var SHOW_HOME_INFO = "/bms/monitor/showHomeEfficiency";		//added by wujun
 var SHOW_MONITOR_LABEL = "/bms/monitor/showLabel";
 var SHOW_BALANCE_DETAIL = "/bms/monitor/showBalanceDetail";
 var MONITOR_PRODUCT_INFO = "/bms/monitor/showProductInfo";
-var MONITOR_AREA_INFO = "/bms/monitor/ShowWarehouseAreaBalance";
-var MONITOR_BLOCK_INFO = "/bms/monitor/ShowWarehouseBlockBalance";
+var MONITOR_AREA_INFO = "/bms/monitor/showWarehouseAreaBalance";
+var MONITOR_BLOCK_INFO = "/bms/monitor/showWarehouseBlockBalance";
 var MONITOR_ROW_BALANCE_DETAIL = "/bms/monitor/showWarehouseBalanceDetail";
+var MONITOR_LANE_INFO = "/bms/monitor/showLaneInfo";
 
 var GET_YEAR_CODE = "/bms/plan/getYearCode";
 
@@ -246,6 +247,8 @@ var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
 var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
 var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
 var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
+
+var QUERY_DISTRIBUTE_PERIOD = '/bms/order/queryPeriod';
 
 var GET_LANE_INFO ="/bms/lane/queryOrderInfo";
 var GET_BOARD_INFO ="/bms/order/queryBoardInfo";

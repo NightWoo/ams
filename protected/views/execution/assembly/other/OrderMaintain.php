@@ -84,6 +84,7 @@
 	                    <table>
 	                        <tr>
 	                            <td>备车日期&nbsp;<a href="#" id="refreshDate"><i class="icon-refresh"></i></a></td>
+	                            <td>备板编号</td>
 	                            <td>订单号</td>
 	                            <td>经销商</td>
 	                            <td>车系</td>
@@ -96,6 +97,12 @@
 							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 							    	</div>
 	                            </td>
+	                        	<td>
+	                        		<div class="input-append">
+		                        		<input id="boardNumber" type="text" class="input-small" placeholder="备板号...">
+							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+							    	</div>
+	                        	</td>
 	                        	<td>
 	                        		<div class="input-append">
 		                        		<input id="orderNumber" type="text" class="input-medium" placeholder="订单号...">

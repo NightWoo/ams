@@ -25,9 +25,10 @@ $("document").ready(function() {
 
 	$("#btnQuery").click(function() {
 		standbyDate = $.trim($("#standbyDate").val());
+		boardNumber = $.trim($("#boardNumber").val());
 		orderNumber = $.trim($("#orderNumber").val());
 		distributor = $.trim($("#distributor").val());
-		if(standbyDate == "" && orderNumber =="" && distributor ==""){
+		if(standbyDate == "" && orderNumber =="" && distributor =="" && boardNumber == ""){
 			alert("至少要有1个查询条件")
 		} else{
 			ajaxQuery();
@@ -320,6 +321,7 @@ $("document").ready(function() {
 
 	function ajaxQuery() {
 		orderNumber = $.trim($("#orderNumber").val());
+		boardNumber = $.trim($("#boardNumber").val());
 		distributor = $.trim($("#distributor").val());
 		$.ajax({
 			type: "get",
@@ -328,6 +330,7 @@ $("document").ready(function() {
 			data: {
 				"standbyDate": $("#standbyDate").val(),
 				"orderNumber": orderNumber,
+				"boardNumber": boardNumber,
 				"distributor": distributor,
 				"series" : $("#selectSeries").val(),
 		    	"status" : getStatusChecked(),

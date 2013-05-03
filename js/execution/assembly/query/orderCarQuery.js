@@ -27,17 +27,20 @@ $(document).ready(function () {
 
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
-		if(index<2)
+		if(index<3)
 			$("#paginationCars").hide();
-		if (index == 0)
+		if (index == 0){
 			ajaxQueryCars(1);
-		else if (index === 1){
+		} else if (index === 1){
 			standbyDate = $.trim($("#standbyDate").val());
 			orderNumber = $.trim($("#orderNumberText").val());
+			boardNumber = $.trim($("#boardNumberText").val());
 			distributor = $.trim($("#distributorText").val());
-			if(standbyDate == "" && orderNumber =="" && distributor =="")
+			if(standbyDate == "" && orderNumber =="" && distributor == "" && boardNumber =="")
 				alert("除车系外至少要有1个查询条件")
 			ajaxQueryOrder();
+		} else if (index ===2){
+			ajaxQueryPeriod();
 		}
 	});
 
@@ -183,6 +186,7 @@ $(document).ready(function () {
 		    url: QUERY_BOARD_ORDERS ,//ref:  /bms/js/service.js
 		    data: {
 		    	"orderNumber": $("#orderNumberText").val(),
+		    	"boardNumber": $("#boardNumberText").val(),
 		    	"standbyDate": $("#standbyDate").val(),
 		    	"standbyDateEnd": $("#standbyDateEnd").val(),
 		    	"distributor": $("#distributorText").val(),
@@ -228,15 +232,25 @@ $(document).ready(function () {
 	    				$("<td />").html(order.amount).addClass('amountTd').appendTo(tr);
 	    				$("<td />").html(order.hold).addClass('holdTd').appendTo(tr);
 	    				$("<td />").html(order.count).addClass('countTd').appendTo(tr);
-	    				$("<td />").html(order.activate_time).appendTo(tr);
+	    				if(order.activate_time==='0000-00-00 00:00:00'){
+	    					$("<td />").html('-').appendTo(tr);
+	    				}else{
+		    				$("<td />").html(order.activate_time).appendTo(tr);
+	    				}
+
 	    				if(order.standby_finish_time === '0000-00-00 00:00:00'){
-		    				$("<td />").html("<i class='icon-time'></i>" + order.standby_last + "H").appendTo(tr);
+		    				if(order.activate_time === "0000-00-00 00:00:00"){
+		    					$("<td />").html('-').appendTo(tr);
+		    				}else{
+			    				$("<td />").html("<i class='icon-time'></i>" + order.standby_last + "H").appendTo(tr);
+		    				}
 	    				} else{
 		    				$("<td />").html(order.standby_finish_time).appendTo(tr);
 	    				}
+
 	    				if(order.out_finish_time === '0000-00-00 00:00:00'){
 	    					if(order.standby_finish_time === '0000-00-00 00:00:00'){
-	    						$("<td />").html("未备齐").appendTo(tr);
+	    						$("<td />").html("-").appendTo(tr);
 	    					}else{
 		    					$("<td />").html("<i class='icon-time'></i>" + order.out_last + "H").appendTo(tr);
 	    					}
@@ -246,7 +260,7 @@ $(document).ready(function () {
 
 	    				if(order.lane_release_time === '0000-00-00 00:00:00'){
 	    					if(order.out_finish_time === '0000-00-00 00:00:00'){
-	    						$("<td />").html("未完成").appendTo(tr);
+	    						$("<td />").html("-").appendTo(tr);
 	    					}else{
 	    						$("<td />").html("<i class='icon-time'></i>" + order.lane_last + "H").appendTo(tr);
 	    					}
@@ -305,6 +319,27 @@ $(document).ready(function () {
 		});
 	}
 
+	function ajaxQueryPeriod() {
+		$.ajax({
+			type: "get",//使用get方法访问后台
+    	    dataType: "json",//返回json格式的数据
+		    url: QUERY_DISTRIBUTE_PERIOD ,//ref:  /bms/js/service.js
+		    data: {
+		    	"startDate": $("#standbyDate").val(),
+		    	"endDate": $("#standbyDateEnd").val(),
+		    	"status" : getStatusChecked(),
+		    	"orderBy": 'board_number,lane_id,priority,`status`',
+		    },
+		    success: function (response) {
+		    	orderQuery.areaPeriod.areaPeriodAjaxData = response.data;
+		    	orderQuery.areaPeriod.drawAreaPeriod();
+		    },
+		    error: function() {alertError();}
+		});
+	}
+
+	
+
 	function getStatusChecked () {
 		var activeChecked = $("#checkboxActive").attr("checked") === "checked";
 		var freezeChecked = $("#checkFreeze").attr("checked") === "checked";
@@ -322,6 +357,84 @@ $(document).ready(function () {
 			temp.push($("#checkClosed").val());
 		return temp.join(",");
 		}
+	}
+ 
+ 	
+
+});
+
+!$(function () {
+	window.orderQuery = window.orderQeury || {};
+	window.orderQuery.areaPeriod = {
+		areaPeriodAjaxData: {},
+		areaPeriodChartData: {
+			chart: {
+	                type: 'area',
+	                renderTo: 'periodContainer'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '周期（小时/板）'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+            tooltip: {
+                shared: true,
+                valueSuffix: ' min'
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
+            series: []
+	    },
+
+	    drawAreaPeriod: function() {
+	    	var areaSeries = [];
+	    	var periodSeries = this.areaPeriodAjaxData.periodSeries;
+	    	var areaData = this.areaPeriodAjaxData.series;
+	    	$.each(periodSeries, function (index, period) {
+	    		areaSeries[index] = {name: period, data:orderQuery.areaPeriod.prepare(areaData.y[period])};
+	    	})
+	    	this.areaPeriodChartData.series = areaSeries;
+	    	this.areaPeriodChartData.xAxis.categories = areaData.x;
+	    	var chart;
+			chart = new Highcharts.Chart(this.areaPeriodChartData);
+	    },
+
+	    updatePoriodTable: function() {
+
+	    },
+
+	    prepare: function (dataArray) {
+	    	return $(dataArray).map(function (index, item) {
+	    		return {x: index, y: item, show: false};
+	    	})
+	    }
 	}
 
 });

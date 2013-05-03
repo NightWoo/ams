@@ -1,8 +1,8 @@
 $("document").ready(function() {
 	initPage();
-	var RefreshLane = setInterval(function () {
-		queryLaneOrderInfo();
-	},30000);
+	// var RefreshLane = setInterval(function () {
+	// 	queryLaneOrderInfo();
+	// },30000);
 
 	function initPage(){
 		//add head class
@@ -25,7 +25,7 @@ $("document").ready(function() {
 				$.each(boards, function(board, value){
 					var laneJson = JSON.stringify(value); 
 					var num = laneJson.length;
-					console.log(laneJson.length);
+					// console.log(laneJson.length);
 					var tmp = $("<tbody />");
 					var lanes = value.lane;
 					for(var i=0; i<num; i++){
@@ -51,7 +51,7 @@ $("document").ready(function() {
 						a.append(progress);
 						progressTd.append(a);
 						progressTd.appendTo(tr);
-						console.log(lane);
+						// console.log(lane);
 						tr.data("laneId", lane);
 						tr.data("laneName", value.laneName);
 						++laneIndex;
@@ -88,7 +88,7 @@ $("document").ready(function() {
 					}
 
 					$("#tableBoard tbody").append(tmp.children("tr"));
-					console.log(tmp);
+					// console.log(tmp);
 				})
 				
 				$("#tableBoard").show();

@@ -600,6 +600,10 @@ function ajaxBalance (node) {
 		}
 	});
 
+	$(".area-lane").live("click", function() {
+		ajaxLaneInfo ();
+	})
+
 $("#areaModal").modal("hide");
 function ajaxStockyard (areaName) {
 	$.ajax({
@@ -638,6 +642,52 @@ function ajaxStockyard (areaName) {
 	    error:function(){alertError();}
 	});
 }
+
+function ajaxLaneInfo (){
+	$.ajax({
+		type: "get",//使用get方法访问后台
+	    dataType: "json",//返回json格式的数据
+	    url: MONITOR_LANE_INFO,//ref:  /bms/js/service.js
+	    data: {},
+	    success:function (response) {
+	    	if (response.success){
+	    		//clear Text
+	    		$("#laneDetail").text("");
+	    		freeNum = 0;
+	    		fullNum = 0;
+	    		loadingNum = 0;
+	    		$.each(response.data, function (index, value) {
+	    			if(parseInt(value.amount) === 0) ++freeNum;
+	    			if(parseInt(value.count) < parseInt(value.amount)) ++loadingNum;
+	    			if(parseInt(value.amount) !=0 && parseInt(value.amount) === parseInt(value.count)) ++fullNum;
+	    			var a = $("<a />").addClass("thumbnail").attr("href", "#");
+	    			var p = $("<p />").addClass("pull-left").text("#"+value.lane_name);
+	    			var progress = $("<div />").addClass("progress");
+	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.count) / parseInt(value.amount) * 100) + "%").text(value.count + "/" + value.amount);
+	    			if (value.count == value.amount) {
+	    				progress.removeClass().addClass("progress").addClass("progress-success");
+	    			} else if (value.count == "0"){
+	    				bar.css("color", "black");
+	    			}
+	    				
+	    			a.append(p);
+	    			a.append(progress);
+	    			progress.append(bar);
+	    			$("#laneDetail").append(a);
+	    		});
+				$("#laneModal").modal("show");
+				$("#freeLane").text("空闲 " + freeNum);
+				$("#fullLane").text("备齐 " + fullNum);
+				$("#loadingLane").text("在备 " + loadingNum);
+
+	    	} else {
+	    		alert(response.message);
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
+}
+
 function ajaxRow (rowName) {
 	$.ajax({
 		type: "get",//使用get方法访问后台

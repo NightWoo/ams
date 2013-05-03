@@ -700,12 +700,22 @@ left: 133px;
 top: -1669px;
 cursor: pointer;
 color: transparent;}
+.area-lane{position: relative;
+/*background: url(../../../../img/hover_lane.png) no-repeat 0 0 ;*/
+z-index: 200;
+width: 95px;
+height: 201px;
+left: 252px;
+top: -1730px;
+cursor: pointer;
+color: transparent;}
 .area-a:hover{background: url(../../../../img/hover_A.png) no-repeat 0 0 ;}
 .area-b:hover{background: url(../../../../img/hover_B.png) no-repeat 0 0 ;}
 .area-c:hover{background: url(../../../../img/hover_C.png) no-repeat 0 0 ;}
 .area-d:hover{background: url(../../../../img/hover_D.png) no-repeat 0 0 ;}
 
 .area-f:hover{background: url(../../../../img/hover_F.png) no-repeat 0 0 ;}
+.area-lane:hover{background: url(../../../../img/hover_lane.png) no-repeat 0 0 ;}
 
 .area-e{position: relative;
 /*background: url(../../../../img/hover_E.png) no-repeat 0 0 ;*/
@@ -737,6 +747,10 @@ color: transparent;}
 	text-align: center;
 	z-index: 205;
 }
-#blockDetail p{margin:0 10px;}
-#blockDetail a{margin:10px 0}
-#blockDetail .progress{margin-bottom: 0px;}
+#blockDetail p, #laneDetail p{margin:0 10px;}
+#blockDetail a, #laneDetail a{margin:10px 0}
+#blockDetail .progress, #laneDetail .progress{margin-bottom: 0px;}
+#freeLane, #fullLane, #loadingLane {
+	font-size: 26px;
+	line-height: 45px;
+}

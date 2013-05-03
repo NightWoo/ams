@@ -81,7 +81,7 @@ class OrderSeeker
         return $datas;
 	}
 
-	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='') {
+	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='') {
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
@@ -103,6 +103,10 @@ class OrderSeeker
 
 		if(!empty($series)){
 			$condition .= " AND series='$series'";
+		}
+
+		if(!empty($boardNumber)){
+			$condition .= " AND board_number LIKE '%$boardNumber'";
 		}
 		
 		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
@@ -159,8 +163,8 @@ class OrderSeeker
 		return $orderList;
 	}
 
-	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd=''){
-		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd);
+	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber=''){
+		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber);
 		$boards = array();
 
 		foreach($orders as &$order){
@@ -281,6 +285,134 @@ class OrderSeeker
 		}
 
 		return array($boards, $laneCount);
+	}
+
+	public function queryPeriod($startDate, $endDate, $status = 'all'){
+		if(empty($startDate)){
+			throw new Exception("起始时间不能为空");
+		} else {
+			if(empty($endDate)){
+				$endDate = $startDate;
+			}
+		}
+		$statusArray = $this->parseStatus($status);
+		$statusCondition = "`status` IN(" . join(",", $statusArray) . ")";
+
+		$queryTimes = $this->parseQueryTime($startDate, $endDate, $status);
+		$detail = array();
+		$dataSeriesX = array();
+		$dataSeriesY = array();
+		$retTotal = array(
+			'warehousePeriodAvg' => 0,
+			'transportPeriodAvg' => 0,
+			'totalPeriodAvg' => 0,
+			'boardCountSum' => 0,
+		);
+		$boardCountSum = 0;
+		$warehousePeriodSum = 0;
+		$transportPeriodSum =  0;
+		$totalPeriodSum = 0;
+
+		foreach($queryTimes as $queryTime){
+			$ss = $queryTime['stime'];
+			$ee = $queryTime['etime'];
+			$cc = array();
+			$cc[] = $statusCondition;
+			if(!empty($ss)) {
+				$cc[] = "activate_time>='$ss'";
+			}
+			if(!empty($ee)) {
+				$cc[] = "activate_time<'$ee'";
+			}
+			$condition = join(' AND ', $cc);
+			if(!empty($condition)) {
+				$condition = 'WHERE ' . $condition;
+			}
+
+			$sql = "SELECT 	board_number, 
+							MIN(activate_time) AS min_activate, 
+							MAX(activate_time) AS max_activate, 
+							MIN(out_finish_time) AS min_out, 
+							MAX(out_finish_time) AS max_out,
+							MIN(lane_release_time) AS min_release,
+							MAX(lane_release_time) AS max_relaese 
+					FROM 	`order` $condition
+					GROUP BY board_number";
+			$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` $condition"; 
+
+			$datas = Yii::app()->db->createCommand($sql)->queryAll();
+			$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
+			$boardCountSum += $boardCount;
+			$warehousePeriod = 0;
+			$transportPeriod = 0;
+			$temp = array();
+			foreach($datas as &$data){
+				//获得每板的激活、完成、释放这三个周期时间点
+				$boardActivate = $data['min_activate'];
+				if($data['min_out'] === '0000-00-00 00:00:00'){
+					$boardOutFinish = date('Y-m-d H:i:s');
+				} else {
+					$boardOutFinish = $data['max_out'];
+				}
+				if($data['min_release'] === '0000-00-00 00:00:00'){
+					$boardRelease = date('Y-m-d H:i:s');
+				} else {
+					$boardRelease = $data['max_relaese'];
+				}
+
+				//计算成品库周期，出库完成时间-激活时间
+				$data['warehousePeriod'] = strtotime($boardOutFinish) - strtotime($boardActivate);
+				$warehousePeriod += $data['warehousePeriod'] ;
+				//计算储运周期，车道释放时间-完成时间
+				$data['transportPeriod'] = strtotime($boardRelease) - strtotime($boardOutFinish);
+				$transportPeriod += $data['transportPeriod'];
+			}
+			$totalPeriod = $warehousePeriod + $transportPeriod;
+			if($boardCount == 0){
+				$totalPeriodAvg = null;
+				$warehousePeriodAvg = null;
+				$transportPeriodAvg = null;
+			} else {
+				$totalPeriodAvg = round(($warehousePeriod + $transportPeriod) / $boardCount / 3600);
+				$warehousePeriodAvg = round($warehousePeriod / $boardCount / 3600);
+				$transportPeriodAvg = round($transportPeriod / $boardCount / 3600);
+			}
+
+			$dataSeriesX[] = $queryTime['point'];
+			$dataSeriesY['成品库周期'][] = $warehousePeriodAvg;
+			$dataSeriesY['储运周期'][] = $transportPeriodAvg;
+			$dataSeriesY['totalPeriod'][] = $totalPeriodAvg;
+
+			$temp['成品库周期'] = $warehousePeriodAvg;
+			$temp['储运周期'] = $transportPeriodAvg;
+			$temp['totalPeriod'] = $totalPeriodAvg;
+			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
+
+			$warehousePeriodSum +=  $warehousePeriod;
+			$transportPeriodSum +=  $transportPeriod;
+			$totalPeriodSum +=  $totalPeriod;
+			
+		}
+			$retTotal['boardCountSum'] = $boardCountSum;
+			if($boardCountSum == 0){
+				$retTotal['warehousePeriodAvg'] = null;
+				$retTotal['transportPeriodAvg'] = null;
+				$retTotal['totalPeriodAvg'] =  null;
+			}else{
+				$retTotal['warehousePeriodAvg'] = round($warehousePeriod / $boardCountSum / 3600);
+				$retTotal['transportPeriodAvg'] = round($transportPeriod / $boardCountSum / 3600);
+				$retTotal['totalPeriodAvg'] =  round(($warehousePeriodSum + $transportPeriodSum) / $boardCountSum /60);
+			}
+
+		return array(
+			'periodSeries' => array('储运周期','成品库周期'),
+			'detail' => $detail,
+			'total' => $retTotal,
+			'series' => array(
+							'x' => $dataSeriesX,
+							'y' => $dataSeriesY,
+						),
+		);
 	}
 
 	public function matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date) {
@@ -472,6 +604,54 @@ class OrderSeeker
 			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
 		}
 		return $configName;
+	}
+
+	private function parseQueryTime($stime,$etime) {
+
+		$format = 'Y-m-d';
+		$stime = date($format, strtotime($stime));
+		$etime = date($format, strtotime($etime));
+
+		$s = strtotime($stime);
+		$e = strtotime($etime);
+
+		$lastDay = (strtotime($etime) - strtotime($stime)) / 86400;//days
+
+		$ret = array();
+		if($lastDay <= 31) {
+			$pointFormat = 'm-d';
+		} else {	
+			$format = 'Y-m';
+			$stime = date($format, $s);
+			$etime = date($format, $e);
+			$pointFormat = 'Y-m';
+		}
+		
+		$t = $s;
+		while($t <= $e) {
+			
+			$point = date($pointFormat, $t);
+
+			if($pointFormat === 'm-d'){
+				$nextD = strtotime('+1 day', $t);
+				$ret[] = array(
+					'stime' => date($format, $t),
+					'etime' => date($format, $nextD),
+					'point' => $point,
+				);
+				$t = $nextD;	
+			} else {
+				$nextM = strtotime('+1 month', $t);
+				$ret[] = array(
+					'stime' => date($format, $t),
+					'etime' => date($format, $nextM),
+					'point' => $point,
+				);
+				$t = $nextM;
+			}		
+		}
+
+		return $ret;
 	}
 
 }

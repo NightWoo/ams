@@ -179,6 +179,7 @@
 				    		<div class="area-e">E</div>
 				    		<div class="area-e-up"></div>
 				    		<div class="area-total-amount"></div>
+				    		<div class="area-lane"></div>
 	      				</div>
 
 
@@ -360,7 +361,7 @@
 		</div>
 
 		<!-- modal -->
-		<div class="modal" id="areaModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
+		<div class="modal" id="areaModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:600px;margin-left:-300px;">
 		  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		   	 	<h3> 库区信息</h3>
@@ -368,6 +369,27 @@
 		  	<div class="modal-body">
 		  		<div class="span4" id="blockDetail">
 
+              	</div>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
+
+		<div class="modal" id="laneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:600px;margin-left:-300px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h3>发车道</h3>
+		  	</div>
+		  	<div class="modal-body">
+		  		<div class="span4" id="laneDetail">
+
+              	</div>
+
+              	<div class="span2">
+              		<p id="loadingLane" class="text-info"></p>
+              		<p id="fullLane" class="text-success"></p>
+              		<p id="freeLane" class="text-warning"></p>
               	</div>
 		  	</div>
 		  	<div class="modal-footer">

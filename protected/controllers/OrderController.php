@@ -65,14 +65,16 @@ class OrderController extends BmsBaseController
 	public function actionQuery(){
 		try{
 			$standbyDate = $this->validateStringVal('standbyDate', '');
+			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');		
 			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker-> query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy);
+			$data = $seeker-> query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -85,13 +87,14 @@ class OrderController extends BmsBaseController
 			$standbyDate = $this->validateStringVal('standbyDate', '');
 			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');		
 			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd);
+			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -478,6 +481,20 @@ class OrderController extends BmsBaseController
 			$export = new Export('订单车辆明细_' .date('YmdHi'), $content);
             $export->toCSV();
 		} catch (Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionQueryPeriod() {
+		try{
+			$startDate = $this->validateStringVal('startDate', '');
+			$endDate = $this->validateStringVal('endDate', '');
+			$status = $this->validateStringVal('status', '0');
+			$seeker = new OrderSeeker();
+			$data = $seeker->queryPeriod($startDate, $endDate);
+
+			$this->renderJsonBms(true, 'OK',  $data);
+		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}

@@ -166,6 +166,12 @@ class MonitorController extends BmsBaseController
         $this->renderJsonBms(true, 'OK', $data);
     }
 
+    public function actionShowLaneInfo() {
+        $seeker = new MonitorSeeker();
+        $data = $seeker->queryLaneInfo();
+        $this->renderJsonBms(true, 'OK', $data);
+    }
+
 
 	public function actionShowWarehouseBlockBalance() {
         $block = $this->validateStringVal('block', 'A01');
