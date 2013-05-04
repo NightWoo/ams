@@ -90,7 +90,7 @@ class OrderSeeker
 			if(empty($standbyDateEnd)){
 				$standbyDateEnd = $standbyDate;
 			}
-			$condition .= " AND standby_date>='$standbyDate' AND standby_date<='$standbyDateEnd'";
+			$condition .= " AND (standby_date>='$standbyDate' AND standby_date<='$standbyDateEnd')";
 		}
 
 		if(!empty($orderNumber)){
@@ -373,9 +373,9 @@ class OrderSeeker
 				$warehousePeriodAvg = null;
 				$transportPeriodAvg = null;
 			} else {
-				$totalPeriodAvg = round(($warehousePeriod + $transportPeriod) / $boardCount / 3600);
-				$warehousePeriodAvg = round($warehousePeriod / $boardCount / 3600);
-				$transportPeriodAvg = round($transportPeriod / $boardCount / 3600);
+				$totalPeriodAvg = round((($warehousePeriod + $transportPeriod) / $boardCount / 3600), 1);
+				$warehousePeriodAvg = round(($warehousePeriod / $boardCount / 3600), 1);
+				$transportPeriodAvg = round(($transportPeriod / $boardCount / 3600), 1);
 			}
 
 			$dataSeriesX[] = $queryTime['point'];
@@ -399,9 +399,9 @@ class OrderSeeker
 				$retTotal['transportPeriodAvg'] = null;
 				$retTotal['totalPeriodAvg'] =  null;
 			}else{
-				$retTotal['warehousePeriodAvg'] = round($warehousePeriod / $boardCountSum / 3600);
-				$retTotal['transportPeriodAvg'] = round($transportPeriod / $boardCountSum / 3600);
-				$retTotal['totalPeriodAvg'] =  round(($warehousePeriodSum + $transportPeriodSum) / $boardCountSum /60);
+				$retTotal['warehousePeriodAvg'] = round(($warehousePeriodSum / $boardCountSum / 3600), 1);
+				$retTotal['transportPeriodAvg'] = round(($transportPeriodSum / $boardCountSum / 3600), 1);
+				$retTotal['totalPeriodAvg'] =  round((($warehousePeriodSum + $transportPeriodSum) / $boardCountSum / 3600), 1);
 			}
 
 		return array(

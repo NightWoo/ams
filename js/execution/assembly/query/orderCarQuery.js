@@ -105,6 +105,7 @@ $(document).ready(function () {
 		    	"status" : getStatusChecked(),
 		    	"perPage":20,
 				"curPage":targetPage || 1,
+				"orderBy": 'lane_id,priority,`status`',
 		    },
 		    success:function (response) {
 		    	if(response.success){
@@ -333,6 +334,7 @@ $(document).ready(function () {
 		    success: function (response) {
 		    	orderQuery.areaPeriod.areaPeriodAjaxData = response.data;
 		    	orderQuery.areaPeriod.drawAreaPeriod();
+		    	orderQuery.areaPeriod.updatePoriodTable();
 		    },
 		    error: function() {alertError();}
 		});
@@ -375,6 +377,10 @@ $(document).ready(function () {
             title: {
                 text: ''
             },
+            credits: {
+				href: '',
+				text: ''
+			},
             subtitle: {
                 text: ''
             },
@@ -397,7 +403,24 @@ $(document).ready(function () {
             },
             tooltip: {
                 shared: true,
-                valueSuffix: ' min'
+                // valueSuffix: ' min'
+                useHTML: true,
+                formatter: function() {
+                	console.log(this);
+                	var s = this.points[0].key +'<table>';
+                	total = 0;
+                	$.each(this.points, function(i, point) {
+                		value = point.y === null ? 0:point.y;
+                    	s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ value +'小时</b></td></tr>';
+            			total += value
+                	});
+					total = total.toFixed(1);
+                	s += '<tr><td>合计:</td><td style="text-align: right;"><b>'+ total +'小时</b></td></tr>'
+                	s += '</table>';
+                	return s;
+                        
+                }
             },
             plotOptions: {
                 area: {
@@ -427,6 +450,36 @@ $(document).ready(function () {
 	    },
 
 	    updatePoriodTable: function() {
+	    	var periodSeries = this.areaPeriodAjaxData.periodSeries;
+	    	var detail = this.areaPeriodAjaxData.detail;
+	    	var total = this.areaPeriodAjaxData.total;
+
+	    	$("#tablePeriod thead").html('<tr />');
+	    	$("#tablePeriod tbody").html('<tr />');
+	    	$.each(periodSeries, function (index, value) {
+	    		$('<tr />').appendTo($("#tablePeriod tbody"));
+	    	})
+    		$('<tr />').appendTo($("#tablePeriod tbody"));
+
+	    	var thTr = $("#tablePeriod tr:eq(0)");
+	    	$('<th />').html('日期').appendTo(thTr);
+    		$.each(periodSeries, function (index, period) {
+	    			$('<td />').html(period).appendTo($("#tablePeriod tr:eq("+ (index+1) +")"));
+	    		})
+    		$('<td />').html("总计").appendTo($("#tablePeriod tr:eq(3)"));
+
+	    	$('<th />').html('合计').appendTo(thTr);
+	    	$('<td />').html(total.transportPeriodAvg).appendTo($("#tablePeriod tr:eq(1)"));
+	    	$('<td />').html(total.warehousePeriodAvg).appendTo($("#tablePeriod tr:eq(2)"));
+	    	$('<td />').html(total.totalPeriodAvg).appendTo($("#tablePeriod tr:eq(3)"));
+
+	    	$.each(detail, function (index, value){
+	    		$('<td />').html(value.time).appendTo(thTr);
+	    		$.each(periodSeries, function (index, period) {
+	    			$('<td />').html(value[period]).appendTo($("#tablePeriod tr:eq("+ (index+1) +")"));
+	    		})
+	    		$('<td />').html(value.totalPeriod).appendTo($("#tablePeriod tr:eq(3)"));
+	    	})
 
 	    },
 

@@ -148,7 +148,7 @@
 
                         <div class="tab-pane" id="tabPeriod">
                             <div id="periodContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tablePeriod" class="table table-condensed">
+                            <table id="tablePeriod" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>

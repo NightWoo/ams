@@ -433,9 +433,10 @@ class OrderController extends BmsBaseController
 			$series = $this->validateStringVal('series', '');
 			$curPage = $this->validateIntVal('curPage', 1);
             $perPage = $this->validateIntVal('perPage', 20);
+			$orderBy = $this->validateStringVal('orderBy', 'lane_id,priority,`status`');
 
 			$seeker = new CarSeeker();
-			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage, $standbyDateEnd);
+			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage,$orderBy, $standbyDateEnd);
 
 			$ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
@@ -455,9 +456,10 @@ class OrderController extends BmsBaseController
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');
+			$orderBy = $this->validateStringVal('orderBy', 'lane_id,priority,`status`');
 
 			$seeker = new CarSeeker();
-			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0,$standbyDateEnd);
+			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0,$orderBy,$standbyDateEnd);
 			$content = "车道,订单号,经销商,流水号,VIN,车系,配置,耐寒性,颜色,发动机号,出库时间,原库道\n";
             foreach($datas as $data) {
                 $content .= "{$data['lane']},";

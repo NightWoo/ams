@@ -369,11 +369,11 @@ class CarSeeker
 		return $total;
 	}
 
-	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0, $standbyDateEnd=''){
+	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd=''){
 		$configNames = $this->configNameList();
 		$orderNumberArray = array();
 		$orderSeeker = new OrderSeeker(); 
-		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series, $standbyDateEnd);
+		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series,$orderBy, $standbyDateEnd);
 		
 		$contConditions = array();
 		foreach($orders as $order){

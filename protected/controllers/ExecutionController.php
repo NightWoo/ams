@@ -725,7 +725,7 @@ class ExecutionController extends BmsBaseController
 	//added by wujun
 	public function actionPauseEdit() {
         try{
-            Yii::app()->permitManager->check('ASSEMBLY_MAINTAIN');
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
     		$this->render('assembly/dataInput/PauseEdit');	
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
