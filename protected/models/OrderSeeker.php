@@ -196,7 +196,7 @@ class OrderSeeker
 	}
 
 	public function queryLaneOrders(){
-		$condition = "lane_status=1";
+		$condition = "lane_status=1 AND lane_id>0";
 		$orderBy='board_number,lane_id';
 		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, lane_status, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
@@ -218,13 +218,19 @@ class OrderSeeker
 					'boardStandbyFinishTime' => '0000-00-00 00:00:00',
 					'boardOutFinishTime' => '0000-00-00 00:00:00',
 					'lane' => array(),
+					'laneNum' => 0,
 					// 'orders' => array(),
 				);
 			}
 
 			if(empty($boards[$order['board_number']]['lane'][$order['lane_id']])){
+				$laneName = '';
+				$lane = LaneAR::model()->findByPk($order['lane_id']);
+				if(!empty($lane)){
+					$laneName = $lane->name;
+				}
 				$boards[$order['board_number']]['lane'][$order['lane_id']] = array(
-					'laneName' => LaneAR::model()->findByPk($order['lane_id'])->name,
+					'laneName' => $laneName,
 					'laneAmount' => 0,
 					'laneHold' => 0,
 					'laneCount' => 0,
@@ -239,6 +245,9 @@ class OrderSeeker
 			$boards[$order['board_number']]['lane'][$order['lane_id']]['laneHold'] += $order['hold'];
 			$boards[$order['board_number']]['lane'][$order['lane_id']]['laneCount'] += $order['count'];
 			$boards[$order['board_number']]['lane'][$order['lane_id']]['orders'][] = $order;
+
+			$laneNum = sizeof($boards[$order['board_number']]['lane']);
+			$boards[$order['board_number']]['laneNum'] = $laneNum;
 			
 			if($order['activate_time'] >'0000-00-00 00:00:00'){
 				if($boards[$order['board_number']]['boardActivateTime'] === '0000-00-00 00:00:00' || $order['activate_time'] < $boards[$order['board_number']]['boardActivateTime']){

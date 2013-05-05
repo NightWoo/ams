@@ -581,16 +581,16 @@ class CarController extends BmsBaseController
             
             $row = 'Z000';
             if(!empty($car->car->warehouse_id)){
-                $row = WarehouseAR::modal()->findByPk($car->car->warehouse_id)->row;
+                $row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
             }else if(!empty($car->car->old_wh_id)){
-                $row = WarehouseAR::modal()->findByPk($car->car->old_wh_id)->row;
+                $row = WarehouseAR::model()->findByPk($car->car->old_wh_id)->row;
             }
             $driverName = '汪辉';
             $inDate = $car->car->warehouse_time;
 
             $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
 
-            $this->renderJsonBms(true, '操作完成，'. $vinMessage , $vinMessage);
+            $this->renderJsonBms(true, '操作完成', $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -610,7 +610,7 @@ class CarController extends BmsBaseController
             $outDate = $car->car->distribute_time;
             
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
-            $this->renderJsonBms(true, '操作完成，'. $vinMessage , $vinMessage);
+            $this->renderJsonBms(true, '操作完成' , $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

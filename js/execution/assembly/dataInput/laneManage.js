@@ -1,14 +1,14 @@
 $("document").ready(function() {
 	initPage();
-	// var RefreshLane = setInterval(function () {
-	// 	queryLaneOrderInfo();
-	// },30000);
+	var RefreshLane = setInterval(function () {
+		queryLaneOrderInfo();
+	},30000);
 
 	function initPage(){
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftLaneManageLi").addClass("active");
-		//getBoardInfo();
+		queryLaneOrderInfo();
 	}
 
 	function queryLaneOrderInfo(){
@@ -23,9 +23,8 @@ $("document").ready(function() {
 				$("#tableBoard tbody").html("");
 				var boards = response.data.boards;
 				$.each(boards, function(board, value){
-					var laneJson = JSON.stringify(value); 
-					var num = laneJson.length;
-					// console.log(laneJson.length);
+					var num = value.laneNum;
+					console.log(num);
 					var tmp = $("<tbody />");
 					var lanes = value.lane;
 					for(var i=0; i<num; i++){

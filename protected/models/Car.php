@@ -189,6 +189,27 @@ class Car
 		//}
 	}
 
+	public function enterNodeWDI($passtime,$driverId = 0){
+		$node = Node::createByName('WDI');
+		if(!$node->exist()){
+			throw new Exception('不存在名字为' . $nodeName . '的节点');
+		}
+
+		$nodeId = $node->id;
+		$exist = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,$nodeId));
+		if(empty($passtime)){
+			$passtime = date('YmdHis');
+		}
+		$trace = new NodeTraceAR();
+		$trace->node_id = $nodeId;
+		$trace->user_id = Yii::app()->user->id;
+		$trace->driver_id = $driverId;
+		$trace->pass_time = $passtime;
+		$trace->car_id = $this->car->id;
+		$trace->car_series = $this->car->series;
+		$trace->save();
+	}
+
 	public function detectStatus($node = null) {
 		//TODO：可以优化
 		if(empty($node)) {

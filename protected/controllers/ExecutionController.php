@@ -401,7 +401,8 @@ class ExecutionController extends BmsBaseController
 			$subChecker = $this->validateStringVal('subChecker', '');
             $car = Car::create($vin);
 	
-            $car->enterNode('WDI');
+            // $car->enterNode('WDI');
+            $car->enterNodeWDI($checkTime);
 			$others = array(
 				'checkTime' => $checkTime,
 				'checker' => $checker,
