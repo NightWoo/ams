@@ -766,6 +766,16 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionWarehousePrintExport() {
+        try{
+            Yii::app()->permitManager->check('WAREHOUSE_PRINT');
+            $this->render('assembly/dataInput/WarehousePrintExport');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     public function actionlaneManage() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');

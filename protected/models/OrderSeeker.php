@@ -562,6 +562,30 @@ class OrderSeeker
 		return $cars;
 	}
 
+	public function queryCarsBySpecialOrder($specialOrder){
+		$specialOrder = trim($specialOrder);
+		if(empty($specialOrder)){
+			throw new Exception('特殊订单号不可为空');
+		}
+		$condition = "(special_order='$special_order' OR remark LIKE '%$special_order%') AND special_property";
+
+		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code, warehouse_time, remain 
+				FROM car
+				WHERE $condition 
+				ORDER BY serial_number ASC";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$configName = $this->configNameList();
+
+		$countTotal = 0;
+		$countInspection = 0;
+		$countCertificate = 0;
+		foreach($cars as &$car){
+			$car['type_config'] = $configName[$car['config_id']];
+			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+		}
+	}
+
 	public function getNameList ($carSeries, $carType) {
 		$condition = "car_series=?";
 		$values = array($carSeries);

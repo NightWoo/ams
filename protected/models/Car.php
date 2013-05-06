@@ -12,6 +12,7 @@ class Car
 	private $carYear;	
 	private $config;
 	private $configList;
+	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
 	protected function __construct($vin){
 		$this->vin = $vin;
 		$this->car = VinManager::getCar($vin);
@@ -851,7 +852,7 @@ class Car
 	}
 
 	public function generateInfoPaperData() {
-		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+		$barcodeGenerator = BarCodeGenerator::create("BCGcode128");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
         $config = CarConfigAR::model()->findByPk($this->car->config_id);
@@ -860,12 +861,13 @@ class Car
         $carModel = $carType->car_model;
         $carTypeShort = $carType->short_name;
         $coldResistant = $this->car->cold_resistant==1? '/耐寒' : '';
+		$series =self::$SERIES_NAME[$this->car->series];
 
         $ret = array(
 			'vinBarCode' => "/bms/" .$vinBarCodePath,
 			'typeConfig' =>  $configName . $coldResistant,
 			'carModel' => $carModel,
-			'series' => $this->car->series,
+			'series' => $series,
 			'serialNumber' => $this->car->serial_number,
 			'line' => $this->car->assembly_line,
 			'date' => date('Ymd'),

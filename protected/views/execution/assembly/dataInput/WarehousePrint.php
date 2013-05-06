@@ -30,7 +30,7 @@
             <div>
             	<legend>出库打印
             		<span class="pull-right">
-            			<!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
+            			<a href="/bms/execution/warehousePrintExport"><i class="icon-link"></i>&nbsp;出口车批量传输</a>
             		</span>
             	</legend>
             </div>

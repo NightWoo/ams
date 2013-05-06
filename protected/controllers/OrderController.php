@@ -527,6 +527,17 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionQueryCarsBySpecialOrder() {
+		try{
+			$specailOrder = $this->validateStringVal('specialOrder', '');
+			$seeker = new OrderSeeker();
+			
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionPrintByOrder() {
 		try{
 			$orderId = $this->validateIntVal('orderId', 0);

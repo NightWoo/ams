@@ -32,3 +32,4 @@ class RpcService
 		}
 		return $ret;
 	}
+}

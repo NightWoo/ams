@@ -200,13 +200,15 @@ $(document).ready( function () {
 					"simpleCode" : $("#inputSimpleCode").attr("value"),
 					"remark" : $("#inputComment").attr("value")},
 			success : function (response) {
-				$("#editModal").modal("hide");
-				// if(response.success) {
+				if(response.success) {
+					$("#editModal").modal("hide");
 
-				// }
+				} else {
+					alert(response.message);
+				}
 			},
-			error : function (response) {
-				alert(response.message);
+			error : function () {
+				alertError();
 			}
 		});
 	}

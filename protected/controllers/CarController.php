@@ -590,7 +590,7 @@ class CarController extends BmsBaseController
 
             $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
 
-            $this->renderJsonBms(true, '操作完成', $vinMessage);
+            $this->renderJsonBms(true, '操作完成，'. $vinMessage->ResultStoreIn, $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -610,7 +610,7 @@ class CarController extends BmsBaseController
             $outDate = $car->car->distribute_time;
             
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
-            $this->renderJsonBms(true, '操作完成' , $vinMessage);
+            $this->renderJsonBms(true, '操作完成，'. $vinMessage->ResultStoreOut, $vinMessage);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

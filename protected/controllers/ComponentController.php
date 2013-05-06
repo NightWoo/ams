@@ -128,7 +128,7 @@ class ComponentController extends BmsBaseController
 			if(empty($name) || empty($code)) {
 				throw new Exception('零部件编号/名称不能为空');
 			}
-			$exist = ComponentAR::model()->find('code=? && id!=?', array($code, $id));
+			$exist = ComponentAR::model()->find('code=? && id!=? && car_series=?', array($code, $id, $series));
 			if(!empty($code) && !empty($exist)) {
 				throw new Exception('零部件编码已存在');
 			}

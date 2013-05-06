@@ -247,6 +247,7 @@ var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
 var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
 var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
 var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
+var QUERY_CARS_BY_SPECIAL_ORDER = '/bms/order/queryCarsBySpecialOrder';
 
 var QUERY_DISTRIBUTE_PERIOD = '/bms/order/queryPeriod';
 
