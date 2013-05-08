@@ -241,6 +241,18 @@ class OrderController extends BmsBaseController
 			}
 
 			$order->save();
+			
+			if($order->status === 2){
+				if($order->standby_finish_time === '0000-00-00 00:00:00' && $order->amount === $order->hold){
+					$order->standby_finish_time = date("YmdHis");
+				}
+				if($order->out_finish_time === '0000-00-00 00:00:00' && $order->amount === $order->count){
+					$order->out_finish_time = date("YmdHis");
+				}	
+			}
+
+			$order->save();
+
 			$this->renderJsonBms(true, 'OK', '');
 
 		} catch(Exception $e) {
@@ -428,6 +440,7 @@ class OrderController extends BmsBaseController
 			$standbyDate = $this->validateStringVal('standbyDate', '');
 			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');
@@ -436,7 +449,7 @@ class OrderController extends BmsBaseController
 			$orderBy = $this->validateStringVal('orderBy', 'lane_id,priority,`status`');
 
 			$seeker = new CarSeeker();
-			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage,$orderBy, $standbyDateEnd);
+			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage,$orderBy, $standbyDateEnd, $boardNumber);
 
 			$ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
@@ -453,13 +466,14 @@ class OrderController extends BmsBaseController
 			$standbyDate = $this->validateStringVal('standbyDate', '');
 			$standbyDateEnd = $this->validateStringVal('standbyDateEnd', '');
 			$orderNumber = $this->validateStringVal('orderNumber', '');
+			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');
 			$orderBy = $this->validateStringVal('orderBy', 'lane_id,priority,`status`');
 
 			$seeker = new CarSeeker();
-			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0,$orderBy,$standbyDateEnd);
+			list($total, $datas) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, 0, 0,$orderBy,$standbyDateEnd, $boardNumber);
 			$content = "车道,订单号,经销商,流水号,VIN,车系,配置,耐寒性,颜色,发动机号,出库时间,原库道\n";
             foreach($datas as $data) {
                 $content .= "{$data['lane']},";
@@ -529,10 +543,29 @@ class OrderController extends BmsBaseController
 
 	public function actionQueryCarsBySpecialOrder() {
 		try{
-			$specailOrder = $this->validateStringVal('specialOrder', '');
+			$specialOrder = $this->validateStringVal('specialOrder', '');
 			$seeker = new OrderSeeker();
+			list($cars,$total,$isGood) = $seeker->queryCarsBySpecialOrder($specialOrder);
+			$ret = array(
+				'cars' => $cars,
+				'total' => $total,
+				'isGood' => $isGood,
+				);
+			$this->renderJsonBms(true, 'OK', $ret);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionPrintBySpecialOrder() {
+		
+		try{
+			$specialOrder = $this->validateStringVal('specialOrder', '');
 			
-			$this->renderJsonBms(true, 'OK', $data);
+			$order = new Order();
+			$ret = $order->printBySpecialOrder($specialOrder);
+
+			$this->renderJsonBms(true, 'print success', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}

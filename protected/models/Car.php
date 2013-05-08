@@ -606,24 +606,40 @@ class Car
 		foreach($traces as $trace) {
 			$name = $nodeInfos[$trace['node_id']];
 			$values = array();
-			if(!empty($processed[$trace['node_id']])) {
-				continue;
-			}
+			// if(!empty($processed[$trace['node_id']])) {
+			// 	continue;
+			// }
 			$processed[$trace['node_id']] = $trace['node_id'];
 			switch($trace['node_id']) {
 				case 10:
-					$values = $vq1s;
+					foreach($vq1s as $vq1){
+						if($vq1['create_time'] === $trace['pass_time']){
+							$values[] = $vq1;
+						}
+					}
 					break;
 				case 14:
 					break;
 				case 15:
-					$values = $roads;
+					foreach($roads as $road){
+						if($road['create_time'] === $trace['pass_time']){
+							$values[] = $road;
+						}
+					}
 					break;
 				case 16:
-					$values = $leaks;
+					foreach($leaks as $leak){
+						if($leak['create_time'] === $trace['pass_time']){
+							$values[] = $leak;
+						}
+					}
                     break;
 				case 17:
-					$values = $vq3s;
+					foreach($vq3s as $vq3){
+						if($vq3['create_time'] === $trace['pass_time']){
+							$values[] = $vq3;
+						}
+					}
                     break;
 				default:
 					;
@@ -828,6 +844,9 @@ class Car
 
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
+		if($this->car->series === 'F0'){
+			$this->checkTraceABS();
+		}
         $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
         $engineCode = $engineTrace->bar_code;
 		$barcodeGenerator->generate($engineCode,'./' . $engineBarCodePath);
@@ -998,8 +1017,47 @@ class Car
 			Yii::app()->dbTest->createCommand($deletesql)->execute();
 		}
 		
-		Yii::app()->dbTest->createCommand($insertsql)->execute();
+		$ret = Yii::app()->dbTest->createCommand($insertsql)->execute();
+
+		return $ret;
 	}
+
+	public function throwInspectionSheetDataExport($specialOrder) {
+		$carId = $this->car->id;
+		$vin = $this->car->vin;
+		$config = $this->car->config_id;
+		$series = $this->car->series;
+		$color = $this->car->color;
+
+		$carType = $this->car->type;
+		$carType = str_replace("（", "(",$carType);
+		$carType = str_replace("）", ")",$carType);
+
+		$engineTrace = $this->checkTraceGasolineEngine();
+		$engine = CarEngineAR::model()->find('engine_component_id=?', array($engineTrace->component_id));
+		$engineType = $engine->engine_type;
+		$engineCode = substr($engineTrace->bar_code, -$engine->code_digit);
+
+		$cData = $this->getCertificateDataExport($carId);
+		$country = $cData['export_country']; 
+		$clime = $cData['mark_clime']; 
+		$laneName = 'A';
+
+		$insertsql = "INSERT INTO ShopPrint
+				SET vin='{$vin}', Order_ID='{$specialOrder}', VenName='{$country}', Clime='{$clime}', `Path`='{$laneName}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";
+		$deletesql = "DELETE FROM ShopPrint WHERE vin='{$vin}'";
+		$existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
+		
+		$exist=Yii::app()->dbTest->createCommand($existsql)->execute();
+		if(!empty($exist)){
+			Yii::app()->dbTest->createCommand($deletesql)->execute();
+		}
+		
+		$ret = Yii::app()->dbTest->createCommand($insertsql)->execute();
+
+		return $ret;
+	}
+
 	public function throwMarkPrintData() {
 		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
@@ -1035,8 +1093,18 @@ class Car
 	}
 
 	public function getCertificateData($carId) {
-		$sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_stecring, tyre, lane_name, sell_color, sell_car_type
+		$sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_steering, tyre, lane_name, sell_color, sell_car_type
 				FROM view_certificate
+				WHERE car_id = $carId";
+		$data = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($data)) {
+			return $data;
+		}
+	}
+
+	public function getCertificateDataExport($carId) {
+		$sql = "SELECT car_model, certificate_note, assisted_steering, tyre, export_country, mark_clime
+				FROM view_certificate_export
 				WHERE car_id = $carId";
 		$data = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!empty($data)) {
@@ -1058,10 +1126,10 @@ class Car
 		// }
 
 		if(empty($outDate)){
-			$outDate = date("Y-m-d h:m:s");
+			$outDate = date("Y-m-d H:i:s");
 		} 
 
-		// $sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_stecring, tyre, lane_name, sell_color, sell_car_type
+		// $sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_steering, tyre, lane_name, sell_color, sell_car_type
 		// 		FROM view_certificate
 		// 		WHERE car_id = $carId";
 		// $cData = Yii::app()->db->createCommand($sql)->queryRow();
@@ -1095,9 +1163,9 @@ class Car
 		}
 
 		$insertsql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg,WZCLXH) 
-                		   VALUES('{$cData['order_detail_id']}','{$vin}', '{$cData['car_model']}', '{$cData['sell_color']}', '{$engineCode}', '{$cData['certificate_note']}', '{$cData['order_number']}', '{$district}', '{$cData['country']}', '{$cData['order_nature']}', '{$computerName}', '{$gearboxCode}', '{$outDate}', '{$cData['assisted_stecring']}', '{$carType}', '{$cData['tyre']}', '{$cData['sell_car_type']}')";
+                		   VALUES('{$cData['order_detail_id']}','{$vin}', '{$cData['car_model']}', '{$cData['sell_color']}', '{$engineCode}', '{$cData['certificate_note']}', '{$cData['order_number']}', '{$district}', '{$cData['country']}', '{$cData['order_nature']}', '{$computerName}', '{$gearboxCode}', '{$outDate}', '{$cData['assisted_steering']}', '{$carType}', '{$cData['tyre']}', '{$cData['sell_car_type']}')";
 		$updatesql = "UPDATE Print_Table
-						SET DGMXID='{$cData['order_detail_id']}', CLXH='{$cData['car_model']}', CLYS='{$cData['sell_color']}', FDJH='{$engineCode}', NOTE='{$cData['certificate_note']}', DGDH='{$cData['order_number']}', SCD='{$district}', CLXZ='{$cData['country']}', DDXZ='{$cData['order_nature']}',  EMP='{$computerName}', AUTO_GEARBOX='{$gearboxCode}', AUTO_DATE='{$outDate}', Zxzlxs='{$cData['assisted_stecring']}', Clkx='{$carType}', Ltgg='{$cData['tyre']}', WZCLXH='{$cData['sell_car_type']}'
+						SET DGMXID='{$cData['order_detail_id']}', CLXH='{$cData['car_model']}', CLYS='{$cData['sell_color']}', FDJH='{$engineCode}', NOTE='{$cData['certificate_note']}', DGDH='{$cData['order_number']}', SCD='{$district}', CLXZ='{$cData['country']}', DDXZ='{$cData['order_nature']}',  EMP='{$computerName}', AUTO_GEARBOX='{$gearboxCode}', AUTO_DATE='{$outDate}', Zxzlxs='{$cData['assisted_steering']}', Clkx='{$carType}', Ltgg='{$cData['tyre']}', WZCLXH='{$cData['sell_car_type']}'
 						WHERE VIN='{$vin}'";
 		$deletesql = "DELETE FROM Print_Table WHERE VIN='{$vin}'";
 
@@ -1114,6 +1182,78 @@ class Car
       //   else{
 	   		// $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
       //   }   
+	   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
+
+	   	return $ret;
+	}
+
+	public function throwCertificateDataExport($specialOrder, $outDate='',$computerName= '10.23.1.67', $district='比亚迪长沙') {
+		$carId = $this->car->id;
+		$vin = $this->car->vin;
+		$config = $this->car->config_id;
+		$coldResistant = $this->car->cold_resistant;
+
+		if(empty($outDate)){
+			$outDate = date("Y-m-d H:i:s");
+		} 
+
+		$cData = $this->getCertificateDataExport($carId);
+		foreach($cData as $key => $data){
+			$cData[$key] = iconv('UTF-8', 'GB2312', $data);
+		}
+
+		$carType = iconv('UTF-8', 'GB2312', $this->car->type);
+		$color = iconv('UTF-8', 'GB2312', $this->car->color);
+		$district = iconv('UTF-8', 'GB2312', $district);
+		
+
+		$engineTrace = $this->checkTraceGasolineEngine();
+		$engineCode = $engineTrace->bar_code;
+
+		$gearboxCode = '';
+		$absInfo = '';
+		if(($this->car->series == 'F0')){
+			$gearboxTrace = $this->checkTraceGearBox() ;
+			$gearboxCode = $gearboxTrace->bar_code;
+
+			$absTrace = $this->checkTraceABS();
+			if(!empty($absTrace) && ($this->car->series == 'F0')){
+				$barCode = $absTrace->bar_code;
+				$abs = $this->getAbsInfo($barCode);
+				$absInfo = '';
+				$absInfo = "ABS系统控制器型号：" . $abs['type'] . "；ABS系统控制器生产企业：" . $abs['provider'];
+				$absInfo = iconv('UTF-8', 'GB2312', $absInfo);
+				$cData['certificate_note'] .= $absInfo;
+			}
+		}
+		$carModel = $cData['car_model'];
+		$certificatenote = $cData['certificate_note'];
+		$assistedStecring = $cData['assisted_steering'];
+		$tyre = $cData['tyre'];
+		
+		if(!empty($cData['export_country'])){
+			$country = $cData['export_country'];
+		} else {
+			$country = iconv('UTF-8', 'GB2312', '出口');
+		}
+		
+		$orderDetailId = 0;
+		$sellColor = $color;
+		$sellCarType = '';
+
+		$insertsql = "INSERT INTO Print_Table(DGMXID,VIN,CLXH,CLYS,FDJH,NOTE,DGDH,SCD,CLXZ,DDXZ,EMP,AUTO_GEARBOX,AUTO_DATE,Zxzlxs,Clkx,Ltgg,WZCLXH) 
+                		   VALUES('{$orderDetailId}','{$vin}', '{$carModel}', '{$sellColor}', '{$engineCode}', '{$certificatenote}', '{$specialOrder}', '{$district}', '{$country}', '{$sellCarType}', '{$computerName}', '{$gearboxCode}', '{$outDate}', '{$assistedStecring}', '{$carType}', '{$tyre}', '{$sellCarType}')";
+        $deletesql = "DELETE FROM Print_Table WHERE VIN='{$vin}'";
+
+		//insert
+		$tdsSever = Yii::app()->params['tds_HGZ'];
+        $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
+        $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        $tdsPwd = Yii::app()->params['tds_HGZ_password'];  
+
+        if($this->existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin)){
+	   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $deletesql);
+        }
 	   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
 
 	   	return $ret;

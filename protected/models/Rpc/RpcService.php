@@ -27,7 +27,7 @@ class RpcService
 		fclose($socket);
 
 
-		if($ret === 'Opening Success') {
+		if(trim($ret) === 'Opening Success') {
 			return '驾驶员不要驾车在道杆下逗留，谨慎快速通过';
 		}
 		return $ret;

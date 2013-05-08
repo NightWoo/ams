@@ -567,23 +567,41 @@ class OrderSeeker
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
 		}
-		$condition = "(special_order='$special_order' OR remark LIKE '%$special_order%') AND special_property";
+		$condition = "(special_order='$specialOrder' OR remark LIKE '%$specialOrder%') AND special_property";
 
-		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code, warehouse_time, remain 
+		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code,finish_time, warehouse_time, remark 
 				FROM car
 				WHERE $condition 
 				ORDER BY serial_number ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$configName = $this->configNameList();
-
-		$countTotal = 0;
-		$countInspection = 0;
-		$countCertificate = 0;
+		$total = 0;
+		$isGood = 0;
 		foreach($cars as &$car){
 			$car['type_config'] = $configName[$car['config_id']];
 			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+			$testlinePassed = $this->checkTestLinePassed($car['vin']);
+			
+			if($testlinePassed){
+				$car['inspectionSheet'] = 'OK';
+			} else {
+				$car['inspectionSheet'] = 'NG';
+			}
+
+			if(!empty($car['engine_code'])){
+				$car['certificatePaper'] = 'OK';
+				if($testlinePassed){
+					++$isGood;
+				}
+			} else {
+				$car['certificatePaper'] = 'NG';
+			}
+			
+			++$total;
 		}
+
+		return array($cars, $total, $isGood);
 	}
 
 	public function getNameList ($carSeries, $carType) {
@@ -637,6 +655,18 @@ class OrderSeeker
 			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
 		}
 		return $configName;
+	}
+
+	public function checkTestLinePassed($vin) {
+		$flag = false;
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		FROM Summary WHERE vin='$vin'";
+			
+		$ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
+		if($ret['Final_Flag'] === 'T') 
+			$flag = true;
+		
+		return $flag;
 	}
 
 	private function parseQueryTime($stime,$etime) {

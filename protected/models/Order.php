@@ -268,4 +268,69 @@ class Order
 		}
 		return $boardNumber;
 	}
+
+	public function printBySpecialOrder($specialOrder, $country='出口', $clime='出口'){
+		$specialOrder = trim($specialOrder);
+		if(empty($specialOrder)){
+			throw new Exception('特殊订单号不可为空');
+		}
+		if(empty($country)){
+			$country = '出口';
+		}
+		$condition = "(special_order='$specialOrder' OR remark LIKE '%$specialOrder%') AND special_property";
+
+		$sql = "SELECT vin FROM car WHERE $condition ORDER BY serial_number ASC";
+		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
+
+		$ret = $this->printByVins($vins, $specialOrder);
+		
+		return $ret;
+	}
+
+	public function printByVins($vins, $specialOrder){
+		$total = 0;
+		$certificateSuccess = 0;
+		$inspectionSuccess = 0;
+		$certificateFailures = array();
+		$inspectionFailures = array();
+		foreach($vins as $vin){
+			++$total;
+			$car = Car::create($vin);
+			if($car->car->distribute_time === '0000-00-00 00:00:00'){
+				$outDate = date("Y-m-d H:i:s");
+			}else{
+				$outDate = $car->car->distribute_time;
+			}
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+			$retry = 5;
+            do{
+				$ret = $car->throwCertificateDataExport($specialOrder, $outDate, $clientIp);
+				if($ret === false){
+					$curTime = date("YmdHis");
+					BmsLogger::warning($vin . " throwCertificateData failed @ " . $curTime);
+					if($retry === 1){
+						$certificateFailures[] = $vin;
+					}
+				} else {
+					++$certificateSuccess; 
+				}
+				--$retry;
+            } while ($ret === false &&  $retry>0);
+            
+           	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
+           	if($ret>0){
+           		++$inspectionSuccess;
+           	}else{
+           		$inspectionFailures[] = $vin;
+           	}
+		}
+
+		return array(
+			"total" => $total,
+			"certificateSuccess" => $certificateSuccess,
+			"inspectionSuccess"=>$inspectionSuccess,
+			"certificateFailures" => $certificateFailures,
+			"inspectionFailures" => $inspectionFailures
+		);
+	}
 }

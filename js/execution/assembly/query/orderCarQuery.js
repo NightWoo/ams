@@ -99,6 +99,7 @@ $(document).ready(function () {
 		    data: {
 		    	"orderNumber": $("#orderNumberText").val(),
 		    	"standbyDate":$ ("#standbyDate").val(),
+		    	"boardNumber": $("#boardNumberText").val(),
 		    	"standbyDateEnd":$ ("#standbyDateEnd").val(),
 		    	"distributor": $("#distributorText").val(),
 		    	"series" : $("#selectSeries").val(),
@@ -169,6 +170,7 @@ $(document).ready(function () {
 	function ajaxExportOrderCars(){
 		window.open(EXPORT_ORDER_CARS +
 			"?&orderNumber=" + $("#orderNumberText").val() +
+			"?boardNumber=" + $("#boardNumberText").val() +
 			"&standbyDate=" + $("#standbyDate").val() +
 			"&standbyDateEnd=" + $("#standbyDateEnd").val() +
 			"&distributor=" + $("#distributorText").val() +
