@@ -49,6 +49,9 @@
 					</div>
 	            </div>
 	            <div>
+                    <div id="messageAlert" class="alert"></div>    
+                </div> 
+	            <div>
 	            	<table id="tableResult" class="table table-condensed table-hover table-bordered">
 	            		<thead>
 	            			<tr>
@@ -73,9 +76,7 @@
 	            </div>
 
 
-				<div>
-                    <div id="messageAlert" class="alert"></div>    
-                </div> 	
+					
 		  	</div><!-- end of 主体 -->
         </div><!-- end of 页体 -->
 	</div><!-- offhead -->

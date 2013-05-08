@@ -1059,7 +1059,6 @@ class Car
 	}
 
 	public function throwMarkPrintData() {
-		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;

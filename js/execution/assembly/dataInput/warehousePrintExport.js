@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 	function resetPage() {
 		$("#printAll").attr("disabled", "disabled");
-		$("#specialOrder").html("").remove("disabled");
+		$("#specialOrder").val("").removeAttr("disabled");
 		toggleVinHint(true);
 		toggleSerachRemove(true);
 		$("#tableResult").hide();
@@ -120,13 +120,23 @@ $(document).ready(function() {
 			},
 			success: function(response) {
 				if(response.success){
+					data = response.data
 					$("#spinModal").modal("hide");
 					alert("打印传输完成!");
 					resetPage();
+					message = $("#specialOrder").val() + '共传输' + data.total + '，厂检单传输成功' + data.inspectionSuccess + '，合格证传输成功' + data.certificateSuccess;
+					if(data.inspectionSuccess === 0 || data.certificateSuccess === 0){
+						fadeMessageAlert(message,"alert-error");
+					} else if(data.total === data.inspectionSuccess && data.total === data.certificateSuccess){
+						fadeMessageAlert(message,"alert-success");
+					} else if(data.total > data.inspectionSuccess || data.total > data.certificateSuccess){
+						fadeMessageAlert(message,"alert-warning");
+					}
 				}else{
 					$("#spinModal").modal("hide");
 					alert(response.message);
 					resetPage();
+					fadeMessageAlert(response.message,"alert-error");
 				}
 			},
 			error: function(){
@@ -162,7 +172,7 @@ $(document).ready(function() {
 		$("#messageAlert").show(500,function () {
 			setTimeout(function() {
 				$("#messageAlert").hide(1000);
-			},5000);
+			},60000);
 		});
 	}
 
