@@ -368,7 +368,7 @@ class Car
 				$trace->create_time = date('YmdHis');
 			}
 			$trace->user_id = Yii::app()->user->id;
-			$trace->user_display_name = Yii::app()->user->name;
+			$trace->user_display_name = Yii::app()->user->display_name;
 			$trace->provider = $this->calProvider($code, $componentId);
 			$trace->bar_code = $code;
 			$trace->save();
@@ -613,7 +613,7 @@ class Car
 			switch($trace['node_id']) {
 				case 10:
 					foreach($vq1s as $vq1){
-						if($vq1['create_time'] === $trace['pass_time']){
+						if(strtotime($vq1['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq1;
 						}
 					}
@@ -622,21 +622,21 @@ class Car
 					break;
 				case 15:
 					foreach($roads as $road){
-						if($road['create_time'] === $trace['pass_time']){
+						if(strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $road;
 						}
 					}
 					break;
 				case 16:
 					foreach($leaks as $leak){
-						if($leak['create_time'] === $trace['pass_time']){
+						if(strtotime($leak['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($leak['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $leak;
 						}
 					}
                     break;
 				case 17:
 					foreach($vq3s as $vq3){
-						if($vq3['create_time'] === $trace['pass_time']){
+						if(strtotime($vq3['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq3['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq3;
 						}
 					}

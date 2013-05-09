@@ -235,7 +235,11 @@ class CarController extends BmsBaseController
                 $status .= '-' . $car->car->distributor_name;
             }
 
-            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $car->car, 'status' =>$status));
+            $carData=$car->car;
+            if($carData['series']==='6B'){
+                $carData['series'] = '思锐';
+            }
+            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData, 'status' =>$status));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }

@@ -74,7 +74,7 @@
                                 <div id='carTag' class="help-inline">
                                     <span class="label label-info" rel="tooltip" title="车系" id="series"></span>
                                     <span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
-                                    <!--<span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>-->
+                                    <span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>
                                     <span class="label label-info" rel="tooltip" title="车型" id="type"></span>
                                     <span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
                                     <span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>

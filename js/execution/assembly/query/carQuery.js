@@ -18,10 +18,16 @@ $(document).ready(function () {
 
 	$(window).bind('keydown', enterHandler);
 	function enterHandler (event) {
-		if (event.keyCode == "13"){
-		    //clear last
-			$("#resultTable tbody").text("");
-			ajaxQuery();
+		if(event.keyCode == '13'){
+			if($.trim($("#vinText").val()) != ""){
+				$("#resultTable tbody").text("");
+				ajaxQuery();
+			} else if ($.trim($("#serialText").val()) != "" && $("#selectSeries").val() == ""){
+				alert("通过流水号查询需选择车系");
+			} else if($.trim($("#serialText").val()) != "" || $.trim($("#serialText").val()) != "") {
+				$("#resultTable tbody").text("");
+				ajaxQuery();
+			}
 			return false;
 		}
 	}
@@ -47,12 +53,12 @@ $(document).ready(function () {
 		}
 	);
 
-	$("#vinText").bind("keydown", function (event) {
+	$("#vinText, #serialText").bind("keydown", function (event) {
 		if(event.keyCode == '13'){
 			if($.trim($("#vinText").val()) != ""){
 				$("#resultTable tbody").text("");
 				ajaxQuery();
-			} else if ($.trim($("#serialText").val()) == "" && $("#selectSeries").val() == ""){
+			} else if ($.trim($("#serialText").val()) != "" && $("#selectSeries").val() == ""){
 				alert("通过流水号查询需选择车系");
 			} else if($.trim($("#serialText").val()) != "" || $.trim($("#serialText").val()) != "") {
 				$("#resultTable tbody").text("");
@@ -77,7 +83,8 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		var car = response.data.car;
-		    		$("#vinText").val(car.vin);
+		    		// $("#vinText").val(car.vin);
+		    		$("#vin").html(car.vin);
 		    		$('#serialNumber').html(car.serial_number);
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);

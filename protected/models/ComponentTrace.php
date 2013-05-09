@@ -72,6 +72,10 @@ class ComponentTrace
 		foreach($datas as &$data) {
             $data['node_name'] = $this->getNodeName($data['node_id']);
 			$data['user_name'] = $data['user_display_name'];
+
+			if($data['car_series'] === '6B'){
+				$data['car_series'] = '思锐';
+			}
         } 
 
 		$total = 0;

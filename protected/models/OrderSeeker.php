@@ -134,6 +134,9 @@ class OrderSeeker
 			} else {
 				$detail['cold'] = '非耐寒';
 			}
+			if($detail['series'] === '6B'){
+				$detail['series'] = '思锐';
+			}
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
 			
 			$detail['standby_last'] = 0;
