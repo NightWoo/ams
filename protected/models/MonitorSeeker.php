@@ -100,6 +100,33 @@ class MonitorSeeker
 				$data['amount'] = 0;
 				$data['count'] = 0;
 			}
+
+			$orderSql = "SELECT lane_id,
+							MIN(activate_time) AS min_activate, 
+							MAX(activate_time) AS max_activate, 
+							MIN(out_finish_time) AS min_out, 
+							MAX(out_finish_time) AS max_out,
+							MIN(lane_release_time) AS min_release,
+							MAX(lane_release_time) AS max_relaese
+						FROM `order` 
+						WHERE lane_status=1 AND lane_id=$i
+						GROUP BY lane_id";
+			$time = Yii::app()->db->createCommand($orderSql)->queryRow();
+			$laneActivate = $time['min_activate'];
+			$now = date("Y-m-d H:i:s");
+			$last = 0;
+			if($time['min_out'] === '0000-00-00 00:00:00'){
+				$last = strtotime($now) - strtotime($laneActivate); 
+			} else {
+				$laneOutFinish = $time['max_out'];
+				$last = strtotime($now) - strtotime($laneOutFinish);
+			}
+
+			$last = round($last/3600, 1);
+			$data['last'] = $last;
+			if(empty($laneActivate) || $laneActivate === '0000-00-00 00:00:00'){
+				$data['last'] = '';
+			}
 			$datas[] = $data;
 		}
 		return $datas;

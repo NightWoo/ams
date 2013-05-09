@@ -754,3 +754,8 @@ color: transparent;}
 	font-size: 26px;
 	line-height: 45px;
 }
+
+.lastTime {
+	width: 60px;
+	text-align: left;
+}

@@ -379,18 +379,17 @@
 		<div class="modal" id="laneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:600px;margin-left:-300px;">
 		  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		   	 	<h3>发车道</h3>
+		   	 	<h4 id="laneHead">发车道</h4>
 		  	</div>
 		  	<div class="modal-body">
-		  		<div class="span4" id="laneDetail">
-
+		  		<div class="" id="laneDetail">
               	</div>
 
-              	<div class="span2">
+              	<!-- <div class="span2">
               		<p id="loadingLane" class="text-info"></p>
               		<p id="fullLane" class="text-success"></p>
               		<p id="freeLane" class="text-warning"></p>
-              	</div>
+              	</div> -->
 		  	</div>
 		  	<div class="modal-footer">
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>

@@ -662,6 +662,21 @@ function ajaxLaneInfo (){
 	    			if(parseInt(value.amount) !=0 && parseInt(value.amount) === parseInt(value.count)) ++fullNum;
 	    			var a = $("<a />").addClass("thumbnail").attr("href", "#");
 	    			var p = $("<p />").addClass("pull-left").text("#"+value.lane_name);
+	    			var pLast
+	    			if(value.last != ''){
+		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='icon-time'></i>"+value.last + 'H');
+		    			if(value.last >=3 && value.last <6){
+		    				pLast.addClass("text-info");
+		    			}
+		    			if(value.last >=6 && value.last <12){
+		    				pLast.addClass("text-warning");
+		    			}
+		    			if(value.last >=12){
+		    				pLast.addClass("text-error");
+		    			}
+	    			}else{
+		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='icon-time'></i>"+value.last + 'H');
+	    			}
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.count) / parseInt(value.amount) * 100) + "%").text(value.count + "/" + value.amount);
 	    			if (value.count == value.amount) {
@@ -671,14 +686,16 @@ function ajaxLaneInfo (){
 	    			}
 	    				
 	    			a.append(p);
+	    			a.append(pLast);
 	    			a.append(progress);
 	    			progress.append(bar);
 	    			$("#laneDetail").append(a);
 	    		});
 				$("#laneModal").modal("show");
-				$("#freeLane").text("空闲 " + freeNum);
-				$("#fullLane").text("备齐 " + fullNum);
-				$("#loadingLane").text("在备 " + loadingNum);
+				$("#laneHead").text("发车道 空闲:" + freeNum + "，备齐:" + fullNum + "，在备:" + loadingNum)
+				// $("#freeLane").text("空闲：" + freeNum);
+				// $("#fullLane").text("，备齐：" + fullNum);
+				// $("#loadingLane").text("，在备：" + loadingNum);
 
 	    	} else {
 	    		alert(response.message);
