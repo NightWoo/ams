@@ -6,16 +6,19 @@
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/ManufactureQuery.css" rel="stylesheet">
-		<link href="/bms/css/common.css" rel="stylesheet">
+        <link href="/bms/css/common.css" rel="stylesheet">
+		<link href="/bms/css/datetimepicker.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
-        <script type="text/javascript" src="/bms/js/execution/assembly/query/manufactureQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
         <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
+        <script type="text/javascript" src="/bms/js/execution/assembly/query/manufactureQuery.js"></script>
 	<!--[if IE 6]>    
             <link href="/bms/css/ie6.min.css" rel="stylesheet">
     <![endif]-->
@@ -70,10 +73,12 @@
                                 
 							</td>
                             <td>
-                                <input type="text" class="span2" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <!-- <input type="text" class="span2" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+                                <input type="text" class="span2" placeholder="开始时间..." id="startTime"/>
                             </td>
                             <td>
-                                <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <!-- <input type="text" class="span2" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+                                <input type="text" class="span2" placeholder="结束时间..." id="endTime"/>
                             </td>
                             <td>&nbsp;&nbsp;</td>
                             <td  class="withSection">

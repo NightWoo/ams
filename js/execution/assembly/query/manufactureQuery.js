@@ -253,6 +253,14 @@ $(document).ready(function () {
 		$("#endTime").val(window.byd.DateUtil.currentTime);
 	});
 
+    $("#startTime, #endTime").datetimepicker({
+	    format: 'yyyy-mm-dd hh:ii',
+	    autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left",
+		language: "zh-CN"
+    });
+
 //-------------------END event bindings -----------------------
 
 

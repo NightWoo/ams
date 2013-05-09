@@ -6,11 +6,14 @@
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/OrderCarQuery.css" rel="stylesheet">
-		<link href="/bms/css/common.css" rel="stylesheet">		
+		<link href="/bms/css/common.css" rel="stylesheet">
+        <link href="/bms/css/datetimepicker.css" rel="stylesheet">		
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/query/orderCarQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -55,9 +58,11 @@
                         <!-- <input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input> -->
                         <div class="input-append input-prepend" style="clear: right">
                             <span class="add-on">日期</span>
-                            <input id="standbyDate"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/>
+                            <!-- <input id="standbyDate"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/> -->
+                            <input id="standbyDate"  type="text" class="input-small" placeholder="开始日期..."/>
                             <span class="add-on" style="padding:4px 0">-</span>
-                            <input id="standbyDateEnd"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDateEnd',dateFmt:'yyyy-MM-dd'});"/>
+                            <!-- <input id="standbyDateEnd"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDateEnd',dateFmt:'yyyy-MM-dd'});"/> -->
+                            <input id="standbyDateEnd"  type="text" class="input-small" placeholder="结束日期..."/>
                             <!-- <a class="btn resetDate appendBtn"><i class="icon-undo"></i></a> -->
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
