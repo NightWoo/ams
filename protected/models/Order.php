@@ -269,7 +269,7 @@ class Order
 		return $boardNumber;
 	}
 
-	public function printBySpecialOrder($specialOrder, $country='出口', $clime='出口'){
+	public function printBySpecialOrder($specialOrder, $forceThrow=false, $country='出口', $clime='出口'){
 		$specialOrder = trim($specialOrder);
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
@@ -282,12 +282,12 @@ class Order
 		$sql = "SELECT vin FROM car WHERE $condition ORDER BY serial_number ASC";
 		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
 
-		$ret = $this->printByVins($vins, $specialOrder);
+		$ret = $this->printByVins($vins, $specialOrder, $forceThrow);
 		
 		return $ret;
 	}
 
-	public function printByVins($vins, $specialOrder){
+	public function printByVins($vins, $specialOrder, $forceThrow=false){
 		$total = 0;
 		$certificateSuccess = 0;
 		$inspectionSuccess = 0;
@@ -304,7 +304,7 @@ class Order
             $clientIp = $_SERVER["REMOTE_ADDR"];
 			$retry = 5;
             do{
-				$ret = $car->throwCertificateDataExport($specialOrder, $outDate, $clientIp);
+				$ret = $car->throwCertificateDataExport($specialOrder, $forceThrow, $outDate, $clientIp);
 				if($ret === false){
 					$curTime = date("YmdHis");
 					BmsLogger::warning($vin . " throwCertificateData failed @ " . $curTime);
@@ -318,7 +318,7 @@ class Order
             } while ($ret === false &&  $retry>0);
             
            	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
-           	if($ret>0){
+           	if($throwRet>0){
            		++$inspectionSuccess;
            	}else{
            		$inspectionFailures[] = $vin;

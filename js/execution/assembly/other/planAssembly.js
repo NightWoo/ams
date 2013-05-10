@@ -167,6 +167,16 @@ $(document).ready(function () {
 		    return false;
 		}
 	});
+
+	$("#planDate").datetimepicker({
+	    format: 'yyyy-mm-dd',
+	    minView: 2,
+	    autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left",
+		language: "zh-CN"
+    });
+    
 	function ajaxQuery (argument) {
 		//clear before render
 		$("#tablePlanAssembly tbody").html("");

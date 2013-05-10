@@ -6,11 +6,14 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<link href="/bms/css/datetimepicker.css" rel="stylesheet">
 	<link href="/bms/css/execution/assembly/other/OrderMaintain.css" rel="stylesheet">	
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script type="text/javascript" src="/bms/js/common.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/orderMaintain.js"></script>
@@ -93,7 +96,8 @@
 	                        <tr>
 	                            <td>
 	                            	<div class="input-append">
-								      	<input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/>
+								      	<!-- <input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/> -->
+								      	<input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."/>
 							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 							    	</div>
 	                            </td>

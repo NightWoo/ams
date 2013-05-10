@@ -41,6 +41,7 @@ $(document).ready(function() {
 		toggleVinHint(true);
 		toggleSerachRemove(true);
 		$("#tableResult").hide();
+		$("#checkboxForce").removeAttr("checked");
 	}
 
 
@@ -86,16 +87,24 @@ $(document).ready(function() {
 						} else {
 							$("<td />").html("").appendTo(tr);
 						}
-						if(value.certificatePaper === 'OK'){
-							$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
-						} else {
-							$("<td />").html("").appendTo(tr);
+						if(value.cPrinted){
+							$("<td />").html("<i class='icon-print'></i>").addClass("alignCenter").appendTo(tr);
+						}else{
+							if(value.certificatePaper === 'OK'){
+								$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
+							} else {
+								$("<td />").html("").appendTo(tr);
+							}
 						}
 
 						if(value.inspectionSheet === 'NG' && value.certificatePaper === 'NG'){
 							tr.addClass("error");
 						}else if(value.inspectionSheet === 'NG' || value.certificatePaper === 'NG'){
 							tr.addClass("warning");
+						}
+
+						if(value.cPrinted){
+							tr.addClass("success");
 						}
 
 						$("#tableResult>tbody").append(tr);
@@ -111,12 +120,16 @@ $(document).ready(function() {
 	}
 
 	function printBySpecialOrder() {
+		var force = 0;
+		if($("#checkboxForce").attr("checked") === "checked")
+			force = 1;
 		$.ajax({
 			url: PRINT_BY_SPECIAL_ORDER,
 			type: "get",
 			dataType: "json",
 			data: {
 				'specialOrder' : $("#specialOrder").val(),
+				'forceThrow' : force,
 			},
 			success: function(response) {
 				if(response.success){

@@ -561,9 +561,10 @@ class OrderController extends BmsBaseController
 		
 		try{
 			$specialOrder = $this->validateStringVal('specialOrder', '');
-			
+			$force = $this->validateIntVal('forceThrow', 0);
+			$forceArray = array(false,true);
 			$order = new Order();
-			$ret = $order->printBySpecialOrder($specialOrder);
+			$ret = $order->printBySpecialOrder($specialOrder, $forceArray[$force]);
 
 			$this->renderJsonBms(true, 'print success', $ret);
 		} catch(Exception $e) {

@@ -600,6 +600,12 @@ class OrderSeeker
 			} else {
 				$car['certificatePaper'] = 'NG';
 			}
+
+			$car['cPrinted'] = false;
+			$existInHGZ = $this->existInHGZ($car['vin']);
+			if($existInHGZ){
+				$car['cPrinted'] = true;
+			}
 			
 			++$total;
 		}
@@ -718,6 +724,34 @@ class OrderSeeker
 		}
 
 		return $ret;
+	}
+
+	public function existInHGZ($vin){
+		$exist = false;
+		$tdsSever = Yii::app()->params['tds_HGZ'];
+        $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
+        $tdsUser = Yii::app()->params['tds_HGZ_username'];
+        $tdsPwd = Yii::app()->params['tds_HGZ_password']; 
+
+		$sql = "SELECT VIN,DGDH,DGMXID FROM Print_Table WHERE VIN='{$vin}'";
+		//connect
+        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        if(empty($mssql)) {
+            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        }
+        mssql_select_db($tdsDB ,$mssql);
+        
+        //execute insert
+        $ret=mssql_query($sql);
+        
+        //disconnect
+        mssql_close($mssql);
+
+        if(mssql_num_rows($ret) > 0){
+        	$exist = true;
+        }
+
+        return $exist;
 	}
 
 }

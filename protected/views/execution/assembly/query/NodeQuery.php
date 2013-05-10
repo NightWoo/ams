@@ -7,9 +7,12 @@
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/NodeQuery.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
+        <link href="/bms/css/datetimepicker.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/nodeQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -40,13 +43,15 @@
 						<tr>
 							<td class="alignRight"><label>起止时间&nbsp;&nbsp;</label></td>
                             <td>
-                                <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <!-- <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+                                <input type="text" class="span3" placeholder="开始时间..." id="startTime"/>
                             </td>
                             <td>
                                 -
                             </td>
                             <td>
-                                <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+                                <!-- <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+                                <input type="text" class="span3" placeholder="结束时间..." id="endTime"/>
                             </td>
 							<td>
 								<select name="" id="selectNode" class="input-medium">

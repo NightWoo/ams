@@ -133,6 +133,15 @@ $("document").ready(function() {
 		$("#editModal").modal("hide");
 		emptyEditModal();
 	})
+
+	$("#standbyDate").datetimepicker({
+	    format: 'yyyy-mm-dd',
+	    minView: 2,
+	    autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left",
+		language: "zh-CN"
+    });
 	
 	function initPage() {
 		// $("#headPlanLi").addClass("active");

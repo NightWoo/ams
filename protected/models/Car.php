@@ -1186,7 +1186,7 @@ class Car
 	   	return $ret;
 	}
 
-	public function throwCertificateDataExport($specialOrder, $outDate='',$computerName= '10.23.1.67', $district='比亚迪长沙') {
+	public function throwCertificateDataExport($specialOrder, $forceThrow=false, $outDate='',$computerName= '10.23.1.67', $district='比亚迪长沙') {
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;
@@ -1250,10 +1250,17 @@ class Car
         $tdsUser = Yii::app()->params['tds_HGZ_username'];
         $tdsPwd = Yii::app()->params['tds_HGZ_password'];  
 
-        if($this->existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin)){
-	   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $deletesql);
+        $exist = $this->existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin);
+        if($exist){
+        	if($forceThrow){
+		   		$this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $deletesql);
+			   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
+        	} else {
+        		$ret = false;
+        	}
+        } else {
+		   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
         }
-	   	$ret = $this->wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $insertsql);
 
 	   	return $ret;
 	}

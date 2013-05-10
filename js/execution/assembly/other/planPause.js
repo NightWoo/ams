@@ -57,6 +57,14 @@ $(document).ready(function(e) {
 		return false;
 	});
 
+	 $(".datetimepicker").datetimepicker({
+	    format: 'yyyy-mm-dd hh:ii:ss',
+	    autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left",
+		language: "zh-CN"
+    });
+
 	
 	function initPage() {
 		$("#headPlanLi").addClass("active");

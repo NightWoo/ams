@@ -58,6 +58,14 @@ $(document).ready(function () {
 			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
 		}
 	);
+
+	$("#startTime, #endTime").datetimepicker({
+	    format: 'yyyy-mm-dd hh:ii',
+	    autoclose: true,
+		todayBtn: true,
+		pickerPosition: "bottom-left",
+		language: "zh-CN"
+    });
 //-------------------END event bindings -----------------------
 
 

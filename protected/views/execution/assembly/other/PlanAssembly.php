@@ -6,9 +6,12 @@
         <!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
+        <link href="/bms/css/datetimepicker.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/other/planAssembly.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -41,7 +44,8 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" class="input-medium" placeholder="执行日期..." id="planDate" onClick="WdatePicker({el:'planDate',dateFmt:'yyyy-MM-dd'});"/>
+                                <!-- <input type="text" class="input-medium" placeholder="执行日期..." id="planDate" onClick="WdatePicker({el:'planDate',dateFmt:'yyyy-MM-dd'});"/> -->
+                                <input type="text" class="input-medium" placeholder="执行日期..." id="planDate"/>
                             </td>
                             <td>
                                 <select name="" id="carSeries" class="input-small">

@@ -40,7 +40,8 @@
 							<a class="btn goSearch appendBtn" id="search-remove" style="width: 11px;"><i class="icon-search"></i></a>
 						</div>
 						<!-- <button class="btn btn-primary" id="check"><i class="icon-search"></i></button> -->
-						<button class="btn btn-primary btnPrint" id="printAll" disabled><i class="icon-print"></i>&nbsp;打印全部</button>
+						<button class="btn btn-primary btnPrint" id="printAll" disabled><i class="icon-print"></i>&nbsp;打印</button>
+						<label class="checkbox"><input type="checkbox" id="checkboxForce" value="1">将已传输过车辆一同传输</input></label>
 						<span class="help-inline" id="orderHint">请输入特殊订单号后回车进行校验</span>
 						<div class="help-inline" id="orderInfo">
 							<span class="label label-info" rel="tooltip" title="共计" id="total"></span>

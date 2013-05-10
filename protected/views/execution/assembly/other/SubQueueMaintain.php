@@ -6,10 +6,13 @@
         <!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet">
         <link href="/bms/css/common.css" rel="stylesheet">
+        <link href="/bms/css/datetimepicker.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/other/subQueueMaintain.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/other/subQueueMaintain.js"></script>
@@ -62,13 +65,15 @@
                                 <label>列队时间&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input type="text" class="input-medium" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+                                <!-- <input type="text" class="input-medium" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/> -->
+                                <input type="text" class="input-medium datetimepicker" placeholder="请输入开始时间..." id="startTime"/>
                             </td>
                             <td>
                                 -
                             </td>
                             <td>
-                                <input type="text" class="input-medium" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+                                <!-- <input type="text" class="input-medium" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/> -->
+                                <input type="text" class="input-medium datetimepicker" placeholder="请输入结束时间..." id="endTime"/>
                             </td>
                             <td>
                                 <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
@@ -112,7 +117,8 @@
             <div class="control-group">
                 <label class="control-label" for="queueTime">排队时间</label>
                 <div class="controls">
-                    <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'queueTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+                    <!-- <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'queueTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/> -->
+                    <input id="queueTime" type="text" class="input-large datetimepicker" placeholder="请输入排队时间..."/>
                 </div>
             </div>
            

@@ -6,11 +6,14 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<link href="/bms/css/datetimepicker.css" rel="stylesheet">
 	<link href="/bms/css/execution/assembly/other/PlanPause.css" rel="stylesheet">	
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/planPause.js"></script>
 	<script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -40,10 +43,12 @@
 						</tr>
 						<tr>
 							<td>
-								<input type="text" class="input-large" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+								<!-- <input type="text" class="input-large" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+								<input type="text" class="input-large datetimepicker" placeholder="开始时间..." id="startTime"/>
 							</td>
 							<td>
-								<input type="text" class="input-large" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+								<!-- <input type="text" class="input-large" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+								<input type="text" class="input-large datetimepicker" placeholder="结束时间..." id="endTime"/>
 							</td>
 							<td>
 								<input id="btnQuery" type="button" class="btn btn-primary" value="查询"></input>
@@ -94,13 +99,15 @@
 			<div class="control-group">
 				<label class="control-label" for="">开始时间</label>
 				<div class="controls">
-					<input type="text" class="input-large" placeholder="开始时间..." id="newStartTime" onClick="WdatePicker({el:'newStartTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+					<!-- <input type="text" class="input-large" placeholder="开始时间..." id="newStartTime" onClick="WdatePicker({el:'newStartTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+					<input type="text" class="input-large datetimepicker" placeholder="开始时间..." id="newStartTime"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">结束时间</label>
 				<div class="controls">
-					<input type="text" class="input-large" placeholder="结束时间..." id="newEndTime" onClick="WdatePicker({el:'newEndTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
+					<!-- <input type="text" class="input-large" placeholder="结束时间..." id="newEndTime" onClick="WdatePicker({el:'newEndTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+					<input type="text" class="input-large datetimepicker" placeholder="结束时间..." id="newEndTime"/>
 				</div>
 			</div>
   			<div class="control-group">
@@ -128,13 +135,15 @@
 			<div class="control-group">
 				<label class="control-label" for="">开始时间</label>
 				<div class="controls">
-					<input type="text" class="input-large" placeholder="开始时间..." id="editStartTime" onClick="WdatePicker({el:'editStartTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+					<!-- <input type="text" class="input-large" placeholder="开始时间..." id="editStartTime" onClick="WdatePicker({el:'editStartTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/> -->
+					<input type="text" class="input-large datetimepicker" placeholder="开始时间..." id="editStartTime"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">结束时间</label>
 				<div class="controls">
-					<input type="text" class="input-large" placeholder="结束时间..." id="editEndTime" onClick="WdatePicker({el:'editEndTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+					<!-- <input type="text" class="input-large" placeholder="结束时间..." id="editEndTime" onClick="WdatePicker({el:'editEndTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/> -->
+					<input type="text" class="input-large datetimepicker" placeholder="结束时间..." id="editEndTime"/>
 				</div>
 			</div>
   			<div class="control-group">
