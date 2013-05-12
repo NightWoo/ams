@@ -274,10 +274,11 @@ class Order
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
 		}
+		$specialOrder = strtoupper($specialOrder);
 		if(empty($country)){
 			$country = '出口';
 		}
-		$condition = "(special_order='$specialOrder' OR remark LIKE '%$specialOrder%') AND special_property";
+		$condition = "(UPPER(special_order)='$specialOrder' OR UPPER(remark) LIKE '%$specialOrder%') AND special_property";
 
 		$sql = "SELECT vin FROM car WHERE $condition ORDER BY serial_number ASC";
 		$vins = Yii::app()->db->createCommand($sql)->queryColumn();

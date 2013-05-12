@@ -179,7 +179,7 @@ $(document).ready(function () {
 	function ajaxExportOrderCars(){
 		window.open(EXPORT_ORDER_CARS +
 			"?&orderNumber=" + $("#orderNumberText").val() +
-			"?boardNumber=" + $("#boardNumberText").val() +
+			"&boardNumber=" + $("#boardNumberText").val() +
 			"&standbyDate=" + $("#standbyDate").val() +
 			"&standbyDateEnd=" + $("#standbyDateEnd").val() +
 			"&distributor=" + $("#distributorText").val() +

@@ -134,9 +134,7 @@ class OrderSeeker
 			} else {
 				$detail['cold'] = '非耐寒';
 			}
-			if($detail['series'] === '6B'){
-				$detail['series'] = '思锐';
-			}
+
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
 			
 			$detail['standby_last'] = 0;
@@ -570,7 +568,8 @@ class OrderSeeker
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
 		}
-		$condition = "(special_order='$specialOrder' OR remark LIKE '%$specialOrder%') AND special_property";
+		$specialOrder = strtoupper($specialOrder);
+		$condition = "(UPPER(special_order)='$specialOrder' OR UPPER(remark) LIKE '%$specialOrder%') AND special_property";
 
 		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code,finish_time, warehouse_time, remark 
 				FROM car

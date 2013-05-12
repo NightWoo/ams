@@ -32,8 +32,10 @@
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
             	<legend>发车计划
-            		<span class="pull-right">
-            			<!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
+            		<span class="">
+            			<!-- <a id="addSpecialOrder" href="#"><i class="icon-plus"></i>&nbsp;出口订单</a>
+            			/
+            			<a id="addInternalOrder" href="#"><i class="icon-plus"></i>&nbsp;内部订单</a> -->
             		</span>
             	</legend>
             </div>
@@ -238,6 +240,63 @@
 	    <button class="btn btn-primary" id="btnAddConfirm">确认录入</button>
   	</div>
 </div>
+
+<!-- new record -->
+<div class="modal" id="specialModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h3>录入订单</h3>
+  	</div>
+  	<div class="modal-body">
+  		<form id="" class="form-horizontal">
+  			<div class="control-group">
+			    <label class="control-label" for="">*&nbsp;备板编号</label>
+			    <div class="controls">
+			      	<input type="text" id="specialBoardNumber" class="input-small" placeholder="备板编号...">
+			      	<input type="text" id="specialStandbyDate" class="input-small" placeholder="备车日期..."  onClick="WdatePicker({el:'newStandbyDate',dateFmt:'yyyy-MM-dd'});">
+			    </div>
+			</div> 
+			<div class="control-group">
+			    <label class="control-label" for="">*&nbsp;特殊订单</label>
+			    <div class="controls">
+			    	<div class="input-append">
+				      	<input type="text" id="specialOrderNumber" class="input-medium" placeholder="订单号...">
+			      		<a class="btn appendBtn" id="specialGetOrder"><i class="icon-search"></i></a>
+			    	</div>
+			    	<span class="help-inline" id="hint">请输入特殊订单号取得订单明细</span>
+			      	<div class="help-inline" id="orderInfo" style="display:none">
+						<!-- <span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span> -->
+			      		<a class="btn btn-link" id="specialClearOrder"><i class="icon-remove"></i></a>
+					</div>
+			    </div>
+			</div> 	  
+		</form>
+		<legend></legend>
+		<table id="tableSpecialOrder" class="table table-condensed table-hover" style="display:none">
+			<thead>
+				<tr>
+					<th>分拆</th>
+					<th>数量</th>
+					<th>车系</th>
+					<th>车型</th>
+					<th>耐寒性</th>
+					<th>颜色</th>
+					<th>配置</th>
+					<th>车道</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-success" id="btnAddMoreSpecial">继续录入</button>
+	    <button class="btn btn-primary" id="btnAddConfirmSpecial">确认录入</button>
+  	</div>
+</div>
+
 <!-- edit record -->
 <div class="modal" id="editModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
     <div class="modal-header">
@@ -295,18 +354,7 @@
                     </select>
                 </div>
             </div>
-            <!-- <div class="control-group">
-                <label class="control-label" for="editCarrier">*&nbsp;承运商</label>
-                <div class="controls">
-                    <input id="editCarrier" type="text" class="input-medium" placeholder="输入承运商..."/>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="ditCity">*&nbsp;城市</label>
-                <div class="controls">
-                    <input id="editCity" type="text" class="input-medium" placeholder="输入城市..."/>
-                </div>
-            </div> -->
+
             <div class="control-group">
                 <label class="control-label" for="">经销商</label>
                 <div class="controls">
@@ -366,15 +414,7 @@
                     <input id="editColdResistant" type="checkbox">
                 </div>
             </div>
-            <!-- <div class="control-group">
-                <label class="control-label" for="editOrderType">*&nbsp;订单类型</label>
-                <div class="controls">
-                    <select id="editOrderNature" class="input-medium">
-                        <option value="0">普通订单</option>
-                        <option value="1">三方订单</option>
-                    </select>
-                </div>
-            </div> -->
+
             <div class="control-group">
                 <label class="control-label" for="editRemark">备注</label>
                 <div class="controls">
@@ -390,132 +430,7 @@
 </div>
 
 <!-- new record -->
-<div class="modal" id="laneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
-  	<div class="modal-header">
-    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   	 	<h3>车道分配</h3>
-  	</div>
-  	<div class="modal-body">
-  		<form id="" class="form-horizontal">
-  			<div class="control-group">
-			    <label class="control-label" for="">订单号/经销商</label>
-			    <div class="controls">
-				      	<input type="text" id="laneOrderNumber" class="input-medium" placeholder="订单号..."> / 
-				      	<input type="text" id="laneDistributor" class="input-medium" placeholder="经销商...">
-			      		<button class="btn" id="laneOrderQuery"><i class="icon-search"></i></button>
-			    </div>
-			</div> 	  
-		</form>
-		<legend>未分配订单</legend>
-		<table id="tableDistribution" class="table table-condensed table-hover">
-			<thead>
-				<tr>
-					<!-- <th style="width:80px">#</th> -->
-					<th style="width:30px">释放</th>
-					<th style="width:30px">数量</th>
-					<th style="width:140px">订单号</th>
-					<th style="width:200px">经销商</th>
-					<th style="width:30px">车系</th>
-					<th style="width:200px">车型/配置</th>
-					<th style="width:40px">耐寒性</th>
-					<th style="width:40px">颜色</th>
-					<!-- <th>配置</th> -->
-					<!-- <th>备车日期</th> -->
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<!-- <td>1187177</td> -->
-					<td>
-						<a href="#" title="加配此单"><i class="icon-plus-sign icon-large"></i></a>
-					</td>
-					<td>20</td>
-					<td>ZCDG-20130220992705</td>
-					<td>广元市万仕达汽车销售服务有限公司</td>
-					<td>F0</td>
-					<td>QCJ7100L(1.0排量舒适型)</td>
-					<td>耐寒</td>
-					<td>冰岛蓝</td>
-					<!-- <td>F0实用助力</td> -->
-					<td>
-						<input type="text" class="input-mini" placeholder="0"/><a class="btn btn-link">分拆</a>
-					</td>
-				</tr>
-				<tr>
-					<!-- <td>1187177</td> -->
-					<td>
-						<a href="#" title="加配此单"><i class="icon-plus-sign icon-large"></i></a>
-					</td>
-					<td>20</td>
-					<td>ZCDG-20130220992705</td>
-					<td>广元市万仕达汽车销售服务有限公司</td>
-					<td>F0</td>
-					<td>QCJ7100L(1.0排量舒适型)</td>
-					<td>耐寒</td>
-					<td>冰岛蓝</td>
-					<!-- <td>F0实用助力</td> -->
-					<td>
-						<input type="text" class="input-mini" placeholder="0"/><a class="btn btn-link">分拆</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
 
-		<legend>车道01调整</legend>
-		<table id="tableAdjust" class="table table-condensed table-hover">
-			<thead>
-				<tr>
-					<!-- <th style="width:80px">#</th> -->
-					<th style="width:30px">释放</th>
-					<th style="width:30px">数量</th>
-					<th style="width:140px">订单号</th>
-					<th style="width:200px">经销商</th>
-					<th style="width:30px">车系</th>
-					<th style="width:200px">车型/配置</th>
-					<th style="width:40px">耐寒性</th>
-					<th style="width:40px">颜色</th>
-					<!-- <th>配置</th> -->
-					<!-- <th>备车日期</th> -->
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<!-- <td>1187177</td> -->
-					<td>
-						<input id="checkboxDistribution1" type="checkbox">
-					</td>
-					<td>20</td>
-					<td>ZCDG-20130220992705</td>
-					<td>广元市万仕达汽车销售服务有限公司</td>
-					<td>F0</td>
-					<td>QCJ7100L(1.0排量舒适型)</td>
-					<td>耐寒</td>
-					<td>冰岛蓝</td>
-					<!-- <td>F0实用助力</td> -->
-				</tr>
-				<tr>
-					<!-- <td>1187177</td> -->
-					<td>
-						<input id="checkboxDistribution2" type="checkbox">
-					</td>
-					<td>20</td>
-					<td>ZCDG-20130220992705</td>
-					<td>广元市万仕达汽车销售服务有限公司</td>
-					<td>F0</td>
-					<td>QCJ7100L(1.0排量舒适型)</td>
-					<td>耐寒</td>
-					<td>冰岛蓝</td>
-					<!-- <td>F0实用助力</td> -->
-				</tr>
-			</tbody>
-		</table>
-  	</div>
-  	<div class="modal-footer">
-	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  	</div>
-</div>
 
 <!-- edit record -->
 <div class="modal" id="splitModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">

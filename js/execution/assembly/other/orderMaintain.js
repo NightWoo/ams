@@ -382,7 +382,11 @@ $("document").ready(function() {
 
 						$("<td />").html(value.order_number).appendTo(tr);
 						$("<td />").html(value.distributor_name).appendTo(tr);
-						$("<td />").html(value.series).appendTo(tr);
+						if(value.series === '6B'){
+							$("<td />").html('思锐').appendTo(tr);
+						}else{
+							$("<td />").html(value.series).appendTo(tr);
+						}
 						$("<td />").html(value.car_type_config).appendTo(tr);
 						
 						if (value.cold_resistant == "1") {

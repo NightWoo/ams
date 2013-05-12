@@ -56,6 +56,11 @@ $("document").ready(function() {
 					$(".printDate").html(data.date);
 					$(".printCarType").html(data.type);
 					$(".printColor").html(data.color);
+					if(data.series === '6B'){
+						$(".printSeries").html('思锐');
+					} else{
+						$(".printSeries").html(data.series);
+					}
 					$(".printMemo").html(data.remark);
 					$(".vinBarcode").attr("src",data.vinBarCode);
 					$(".engineBarcode").attr("src",data.engineBarCode);

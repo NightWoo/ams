@@ -63,7 +63,8 @@ class VinManager
 		//if(!empty($car)) {
 		//	return $car;
 		//} else 
-		if (strlen($vin) >= 9) {												//added by wujun
+		if (strlen($vin) >= 9) {
+			$vin = strtoupper($vin);												//added by wujun
 			$car = CarAR::model()->find("upper(vin) LIKE ?", array("%$vin"));		//added by wujun
 			if(!empty($car)){														//added by wujun
 				return $car;														//added by wujun
