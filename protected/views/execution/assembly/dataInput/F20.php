@@ -59,7 +59,7 @@
 			</div><!-- end main体 -->
 		</div><!-- end offhead -->
     	</div>
-    	<div id="printF0" class="printable" style="height:560pt;width:832pt;margin: 0px auto;">
+    	<div id="printF0" class="printable" style="height:560pt;width:820pt;margin: 0px auto;">
             <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
         <table class="tableHead">
             <thead>
@@ -418,6 +418,17 @@
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
             </tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            </tr>
 
             <tr>
                 <td colspan="6" class="docCode" style="border:none; vertical-align:bottom; padding-top:3pt;">措施：不良···X；返修···R；更换···G；确认···<img src="/bms/img/confirm-x.png" style="position:relative; top:3pt;">； 未录AMS系统···<img src="/bms/img/trangle.png" style="position:relative; top:3pt;"></td>
@@ -427,7 +438,7 @@
         </table>
     </div>
 
-    <div id="printM6" class="printable" style="height:560pt;width:832pt;margin: 0px auto;">
+    <div id="printM6" class="printable" style="height:560pt;width:820pt;margin: 0px auto;">
             <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
         <table class="tableHead">
             <thead>
@@ -786,6 +797,17 @@
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
             </tr>
+            <tr class="trList">
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            </tr>
 
             <tr>
                 <td colspan="6" class="docCode" style="border:none; vertical-align:bottom; padding-top:3pt;">措施：不良···X；返修···R；更换···G；确认···<img src="/bms/img/confirm-x.png" style="position:relative; top:3pt;">； 未录AMS系统···<img src="/bms/img/trangle.png" style="position:relative; top:3pt;"></td>
@@ -971,7 +993,7 @@
                 <td class="tdList alignRight">性能检验〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
-                <td class="tdList alignRight">行李箱盖门〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
+                <td class="tdList alignRight">行李箱盖〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
@@ -1001,7 +1023,7 @@
                 <td class="tdCheck"></td>
             </tr>
             <tr class="trList">
-                <td class="tdList">_____门玻璃/天窗异响、卡滞、不工作</td>
+                <td class="tdList">_________________门玻璃/天窗异响、卡滞、不工作</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList">后保险杠与左/右侧围间隙、面差</td>
@@ -1012,7 +1034,7 @@
                 <td class="tdCheck"></td>
             </tr>
             <tr class="trList">
-                <td class="tdList">____故障灯异常</td>
+                <td class="tdList">____________________________________故障灯异常</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList">左/右组合后灯与侧围间隙、面差</td>
@@ -1078,40 +1100,7 @@
                 <td class="tdCheck"></td>
             </tr>
             <tr class="trList">
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-            </tr>
-            <tr class="trList">
                 <td class="tdList alignRight">左侧门〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-            </tr>
-            <tr class="trList">
-                <td class="tdList">左前、后门框密封条未装配到位、亮饰条高点</td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-                <td class="tdList"></td>
-                <td class="tdCheck"></td>
-                <td class="tdCheck"></td>
-            </tr>
-            <tr class="trList">
-                <td class="tdList">左翼子板与前门间隙、面差</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList alignCenter">VQ1关联检验</td>
@@ -1122,10 +1111,32 @@
                 <td class="tdCheck"></td>
             </tr>
             <tr class="trList">
-                <td class="tdList">左前门与后门间隙、面差</td>
+                <td class="tdList">左前、后门框密封条未装配到位、亮饰条高点</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList">云服务空调开启失败、提交失败</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            </tr>
+            <tr class="trList">
+                <td class="tdList">左翼子板与前门间隙、面差</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+            </tr>
+            <tr class="trList">
+                <td class="tdList">左前门与后门间隙、面差</td>
+                <td class="tdCheck"></td>
+                <td class="tdCheck"></td>
+                <td class="tdList"></td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList"></td>

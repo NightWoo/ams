@@ -170,7 +170,7 @@ class ExecutionController extends BmsBaseController
             //$car->leftNode('F10');
             $car->enterNode('F20');
 
-            // $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
+            $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
 			//print check trace 
 			$data = $car->generateCheckTraceData();
 			$transaction->commit();

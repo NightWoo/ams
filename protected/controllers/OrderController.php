@@ -481,6 +481,9 @@ class OrderController extends BmsBaseController
                 $content .= "{$data['distributor_name']},";
                 $content .= "{$data['serial_number']},";
                 $content .= "{$data['vin']},";
+                if($data['series'] === '6B'){
+                	$data['series'] = '思锐';
+                }
                 $content .= "{$data['series']},";
                 $content .= "{$data['config_name']},";
                 $content .= "{$data['cold']},";
