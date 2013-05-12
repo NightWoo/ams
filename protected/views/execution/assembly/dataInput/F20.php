@@ -1125,7 +1125,7 @@
                 <td class="tdList">左前门与后门间隙、面差</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
-                <td class="tdList"></td>
+                <td class="tdList">云服务空调开启失败、提交失败</td>
                 <td class="tdCheck"></td>
                 <td class="tdCheck"></td>
                 <td class="tdList"></td>
