@@ -71,6 +71,11 @@
                                     <option value="F1">F1/F10</option>
                                     <option value="F2">F2/F20</option>
                                     <option value="VQ1">VQ1/下线</option>
+                                    <option value="CHECK_LINE">VQ2/检测线</option>
+                                    <option value="ROAD_TEST_FINISH">VQ2/路试</option>
+                                    <option value="VQ2">VQ2/淋雨</option>
+                                    <option value="VQ3">VQ3/面漆</option>
+                                    <option value="VQ3_WAREHOUSE_RETURN">VQ3/退库</option>
                                     <option value="CHECK_IN">WH/入库</option>
                                     <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
@@ -179,7 +184,7 @@
 
                         <div class="tab-pane" id="statistic">
                             <div id="statisticContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tableStatistic" class="table table-condensed">
+                            <table id="tableStatistic" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>
@@ -231,7 +236,7 @@
                             </div> -->
                             <div id="pauseAnalysisContainer" style="min-width: 400px; height: 500px; margin: 0 auto">
                             </div>
-                            <table id="tablePauseAnalysis" class="table table-condensed">
+                            <table id="tablePauseAnalysis" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>
@@ -239,7 +244,7 @@
 
                         <div class="tab-pane" id="paneUseRate">
                             <div id="useRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tableUseRate" class="table table-condensed">
+                            <table id="tableUseRate" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>
@@ -282,7 +287,7 @@
 
                         <div class="tab-pane" id="planCompletionRate">
                             <div id="completionRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tablecompletionRate" class="table table-condensed">
+                            <table id="tablecompletionRate" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>

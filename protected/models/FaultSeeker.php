@@ -122,7 +122,7 @@ class FaultSeeker
 			$validConditions[] = "n.pass_time >= '$stime'";
 		}
  	    if(!empty($etime)) {
-            $conditions[] = "c.create_time <= '$etime'";
+            $conditions[] = "c.create_time < '$etime'";
 			$validConditions[] = "n.pass_time < '$etime'";
         }
 		$condition = join(' AND ', $conditions);
@@ -162,9 +162,9 @@ class FaultSeeker
 
 			//wdi need checker1 checker2
 			//要求n.pass_time 和 c.create_time都在查询时间条件区间内（实际生产中，同一辆车在不同日期录入多次但不是每次都有故障：比如一辆车今天录其合格，后天录其有故障，如果查询条件为今天则其为合格；如果查询条件为后天，则其为有故障）
-			$timeCondition = "n.pass_time >= '$stime' AND n.pass_time <= '$etime' AND c.create_time >= '$stime' AND c.create_time <= '$etime'";
-			$dataSqls[] = "(SELECT $checkerParam n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.pass_time=c.create_time WHERE n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
-			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND n.pass_time=c.create_time WHERE n.node_id=$nodeId AND $timeCondition  $curCondition";
+			$timeCondition = "n.pass_time >= '$stime' AND n.pass_time < '$etime' AND c.create_time >= '$stime' AND c.create_time < '$etime'";
+			$dataSqls[] = "(SELECT $checkerParam n.car_id, n.user_id,n.driver_id, n.pass_time, c.create_time, c.modify_time, c.updator, c.component_name, c.fault_mode, c.status as fault_status, c.duty_department as duty_department, '$nodeId' as 'node_id' FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND $timeCondition WHERE n.node_id=$nodeId AND $timeCondition $curCondition ORDER BY n.pass_time DESC)";
+			$countSqls[] = "SELECT count(*) FROM node_trace AS n LEFT JOIN $table AS c ON n.car_id=c.car_id AND $timeCondition WHERE n.node_id=$nodeId AND $timeCondition  $curCondition";
 		}
 
 		$dataSql = join(' UNION ALL ', $dataSqls);
@@ -699,7 +699,7 @@ class FaultSeeker
         }
 
          //total
-        $con = array("status != '在线修复'");
+        $con = array("status != '在线修复' AND status != '合格'");
         if(!empty($stime)) {
 			$con[] = "create_time>='$stime'";
 		}   
@@ -725,7 +725,7 @@ class FaultSeeker
 			$totalSql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time < '$etime' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
 			$cars = Yii::app()->db->createCommand($totalSql)->queryScalar();
 
-			$retTotal[$name[$series]]['qualifiedTotal'] = $totalFaults;
+			$retTotal[$name[$series]]['qualifiedTotal'] = $cars - $totalFaults;
 			$retTotal[$name[$series]]['carTotal'] = $cars;
         	$retTotal[$name[$series]]['rateTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['qualifiedTotal'] / $retTotal[$name[$series]]['carTotal'], 3) * 100 . '%';
         }
@@ -738,8 +738,12 @@ class FaultSeeker
 	}
 
 
-	public function queryCars($series, $stime, $etime, $node) {
+	public function queryCars($series, $stime, $etime, $node, $returnNode=0) {
 		$nodeIdStr = $this->parseNodeId($node);
+		$traceTable = 'node_trace';
+		if(!empty($returnNode)){
+			$traceTable = 'warehouse_return_trace';
+		}
 		$arraySeries = $this->parseSeries($series);
 
 		$queryTimes = $this->parseQueryTime($stime,$etime);
@@ -759,7 +763,7 @@ class FaultSeeker
 			$ee = $queryTime['etime'];
 			$temp = array();
 			foreach($arraySeries as $series) {
-				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
+				$sql = "SELECT count(DISTINCT car_id) FROM $traceTable WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 				
@@ -781,6 +785,32 @@ class FaultSeeker
         	if($series == '6B') $arraySeries[$key] = '思锐';
         }
 		return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
+	}
+
+	public function queryCarsAllSeris($stime,$etime,$node){
+		$nodeIdStr = $this->parseNodeId($node);
+		$arraySeries = array('全车系');
+		$queryTimes = $this->parseQueryTime($stime,$etime);
+		$ret = array();
+		$dataSeriesX = array();
+		$dataSeriesY = array();
+		$retTotal = array();
+		foreach($queryTimes as $queryTime) {
+			$ss = $queryTime['stime'];
+			$ee = $queryTime['etime'];
+			$temp = array();
+			foreach($arraySeries as $series) {
+				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr)";
+
+				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
+				$temp[$series] = $cars;
+				$dataSeriesY[$series][] = intval($cars);
+				$retTotal[$series] += intval($cars);
+			}	
+			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
+			$dataSeriesX[] = $queryTime['point'];
+        }
+        return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
 	protected function parseTables($node, $series) {
@@ -839,6 +869,7 @@ class FaultSeeker
 			'CHECK_IN' => 18,
 			'CHECK_OUT' => 19,
 			'WDI'  => 95,
+			'VQ3_WAREHOUSE_RETURN'=>17,
         );
 
 		if(empty($node) || $node === 'all') {

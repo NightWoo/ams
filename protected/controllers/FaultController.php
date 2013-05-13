@@ -314,9 +314,12 @@ class FaultController extends BmsBaseController
             if(empty($node)){
                 throw new Exception("车辆统计必须选择节点", 1);
             }
-
+            $returnNode = 0;
+            if($node === 'VQ3_WAREHOUSE_RETURN'){
+                $returnNode = 17;
+            }
             $fault = Fault::createSeeker();
-            $data = $fault->queryCars($series, $stime, $etime, $node);
+            $data = $fault->queryCars($series, $stime, $etime, $node, $returnNode);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);

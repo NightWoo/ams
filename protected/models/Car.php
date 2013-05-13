@@ -928,6 +928,32 @@ class Car
 
         return array($success, $data);
 	}
+
+	public function warehouseReturn($nodeName,$driverId = 0){
+		$node = Node::createByName($nodeName);
+		if(!$node->exist()){
+			throw new Exception('不存在名字为' . $nodeName . '的节点');
+		}
+
+		$nodeId = $node->id;
+
+		if(!empty($driverId)) {
+			$user = User::model()->findByPk($driverId);
+			if(empty($user)) {
+				throw new Exception($driverId . '的司机不存在');
+			}
+		}
+
+		$passtime = date('YmdHis');
+		$trace = new WarehouseReturnTraceAR();
+		$trace->node_id = $nodeId;
+		$trace->user_id = Yii::app()->user->id;
+		$trace->driver_id = $driverId;
+		$trace->pass_time = $passtime;
+		$trace->car_id = $this->car->id;
+		$trace->car_series = $this->car->series;
+		$trace->save();
+	}
 	
 	
 	public function throwTestlineCarInfo(){

@@ -21,8 +21,13 @@ class NodeSeeker
 					"F1" =>8,
 					"F2" =>9,
 					"VQ1" =>10,
+					"CHECK_LINE" =>13,
+					"ROAD_TEST_FINISH" =>15,
+					"VQ2" =>16,
+					"VQ3" =>17,
 					"CHECK_IN" =>18,
-					"CHECK_OUT" =>19
+					"CHECK_OUT" =>19,
+					'VQ3_WAREHOUSE_RETURN'=>17,
 				  );
 	
 	public function queryTrace($stime, $etime, $series, $node, $curPage, $perPage) {
@@ -31,6 +36,11 @@ class NodeSeeker
 			throw new Exception("车辆明细查询必须选择节点", 1);
 		} else {
 			$nodeId = self::$SECTION_NODEID_MAP[$node];
+		}
+
+		$traceTable = 'node_trace';
+		if($node === 'VQ3_WAREHOUSE_RETURN'){
+			$traceTable = 'warehouse_return_trace';
 		}
 
         $sql = "SELECT id,display_name FROM user";
@@ -100,7 +110,7 @@ class NodeSeeker
         }
 
         $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
-        		FROM node_trace AS n 
+        		FROM $traceTable AS n 
         		LEFT JOIN car AS c
         		ON n.car_id=c.id
         		WHERE $condition
@@ -158,7 +168,7 @@ class NodeSeeker
         	$data['node_name'] = $nodeInfos[$data['node_id']];
         }
 
-        $countSql = "SELECT count(id) FROM node_trace WHERE $condition";
+        $countSql = "SELECT count(id) FROM $traceTable WHERE $condition";
         $total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
 		return array($total, $datas);

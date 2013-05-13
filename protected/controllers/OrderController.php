@@ -420,7 +420,8 @@ class OrderController extends BmsBaseController
 			//退回VQ3
 			if($toVQ3 == 1){
 				$car->enterNode('VQ3');
-				$car->car->status = 'VQ3异常';
+				$car->warehouseReturn('VQ3');
+				$car->car->status = 'VQ3退库';
 				$car->car->warehouse_id = 0;
 				$car->car->area = '';
 				$car->car->save();

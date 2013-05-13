@@ -229,8 +229,13 @@ $(document).ready(function () {
 		var index = $("#tabs li").index(this);
 		if(index<9)
 			$(".pagination").hide();
-		if (index == 1)
-			ajaxStatistics();
+		if (index == 1){
+			if(getSeriesChecked() === ''){
+				ajaxStatisticsAll();
+			}else{
+				ajaxStatistics();
+			}
+		}
 		else if (index == 3)
 			ajaxQueryPause(1);
 		else if (index == 4)
@@ -358,6 +363,29 @@ $(document).ready(function () {
 		});
 	}
 
+	function ajaxStatisticsAll() {
+		$.ajax({
+			type: "get",//使用get方法访问后台
+    	    dataType: "json",//返回json格式的数据
+		    url: NODE_QUERY_CAR,//ref:  /bms/js/service.js
+		    data: { "vin": $('#vinText').val(), 
+		    		"node":$("#selectNode").val(),
+					"series": getSeriesChecked(),
+					"stime":$("#startTime").val(),
+					"etime":$("#endTime").val(),
+				},
+		    success:function (response) {
+		    	if(response.success){
+		    		mQuery.statisticsAll.statisticsAllAjaxData = response.data;
+			    	mQuery.statisticsAll.drawArea();
+			    	mQuery.statisticsAll.updateStatisticsTable();
+		    	}else
+		    		alert(response.message);
+		    },
+		    error:function(){alertError();}
+		});
+	}
+
 
 	function ajaxStatistics () {
 		$.ajax({
@@ -462,7 +490,7 @@ $(document).ready(function () {
         });
 		
 		var thTr = $("#tableStatistic tr:eq(0)");
-        $("<th />").html("日期").appendTo(thTr);    
+        $("<th />").html("车系").appendTo(thTr);    
         $("<th />").html("合计").appendTo(thTr);
 		$.each(carSeries, function (index, series) {
             $("<td />").html(series).appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
@@ -1303,6 +1331,134 @@ $(document).ready(function () {
 		updatePauseAnalysisTable: function() {
 
 		}
+	}
+
+	window.mQuery.statisticsAll = {
+		statisticsAllAjaxData: {},
+		statisticsAllChartData: {
+			chart: {
+	                type: 'area',
+	                renderTo: 'statisticContainer'
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+				href: '',
+				text: ''
+			},
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '车辆数'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+            tooltip: {
+                shared: true,
+                // valueSuffix: ' min'
+                useHTML: true,
+                formatter: function() {
+                	console.log(this);
+                	var s = this.points[0].key +'<table>';
+                	var ss = '';
+                	total = 0;
+                	$.each(this.points, function(i, point) {
+                		value = point.y === null ? 0:point.y;
+                    	ss += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ value +'辆</b></td></tr>';
+            			total += value;
+                	});
+                	s += '<tr><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;"><b>'+ total +'辆</b></td></tr>';
+                	s += ss;
+                	s += '</table>';
+                	return s;
+                        
+                }
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
+            series: []
+	    },
+
+	    drawArea: function() {
+	    	var areaSeries = [];
+	    	var carSeries = this.statisticsAllAjaxData.carSeries;
+	    	var areaData = this.statisticsAllAjaxData.series;
+	    	$.each(carSeries, function (index, series) {
+	    		areaSeries[index] = {name: series, data:mQuery.statisticsAll.prepare(areaData.y[series])};
+	    	})
+	    	this.statisticsAllChartData.series = areaSeries;
+	    	this.statisticsAllChartData.xAxis.categories = areaData.x;
+	    	var chart;
+			chart = new Highcharts.Chart(this.statisticsAllChartData);
+	    },
+
+	    updateStatisticsTable: function() {
+	    	var carSeries = this.statisticsAllAjaxData.carSeries;
+	    	var detail = this.statisticsAllAjaxData.detail;
+	    	var total = this.statisticsAllAjaxData.total;
+
+			$("#tableStatistic thead").html("<tr />");
+			$("#tableStatistic tbody").html("");		
+	        $.each(carSeries, function (index,value) {
+	            $("<tr />").appendTo($("#tableStatistic tbody"));
+	        });
+	        
+			var thTr = $("#tableStatistic tr:eq(0)");
+	        $("<th />").html("车系").appendTo(thTr);    
+	        $("<th />").html("合计").appendTo(thTr);
+
+	        totalTotal = 0;
+			$.each(carSeries, function (index, series) {
+	            $("<td />").html(series).appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
+	            $("<td />").html(total[series]).appendTo($("#tableStatistic tr:eq(" + (index*1+1) + ")"));
+	            totalTotal += total[series];
+	        });
+
+	        var totalTr =  $("<tr />").appendTo($("#tableStatistic tbody"));
+	        $("<td />").html('总计').appendTo(totalTr);
+	        $("<td />").html(totalTotal).appendTo(totalTr);
+
+			$.each(detail, function (index,value) {
+				$("<td />").html(value.time).appendTo(thTr);
+				detailTotal = 0;
+				$.each(carSeries, function (index,series) {
+					$("<td />").html(value[series]).appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
+					detailTotal += parseInt(value[series]);
+				});
+				$("<td />").html(detailTotal).appendTo(totalTr);
+			});
+
+	    },
+
+	    prepare: function (dataArray) {
+	    	return $(dataArray).map(function (index, item) {
+	    		return {x: index, y: item, show: false};
+	    	})
+	    }
 	}
 });
 
