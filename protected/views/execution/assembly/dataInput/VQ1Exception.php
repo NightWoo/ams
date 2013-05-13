@@ -54,10 +54,11 @@
 								<table id="tableConfirmation" class="table">
 									<thead>
 										<tr>
-											<th class="span2">序号</th>
-											<th>修复</th>
-											<th>故障现象</th>
-											<th>录入人员</th>
+											<th class="span1">序号</th>
+											<th class="span1">修复</th>
+											<th class="span3">故障现象</th>
+											<th class="span3">责任部门</th>
+											<th class="span2">录入人员</th>
 											<th>录入时间</th>
 										</tr>
 									</thead>

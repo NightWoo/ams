@@ -83,7 +83,7 @@ $(document).ready(function  () {
 				$.each(response.data, function(index, value) {
 					options += '<option value="' + value.id + '">' + value.name + '</option>';
 				});
-				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
+				dutyOption = "<td>" + '<select class="duty input-medium"><option value="">-请选择责任部门-</option>' + options + "</td>";
 				$("#otherTable tbody").text("");
 
 				//初始化  ‘其他’栏

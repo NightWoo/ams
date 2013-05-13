@@ -253,6 +253,7 @@ $(document).ready(function () {
 		$("#endTime").val(window.byd.DateUtil.currentTime);
 	});
 
+	//bootstrap-datatimepicker
   //   $("#startTime").datetimepicker({
 	 //    format: 'yyyy-mm-dd hh:ii',
 	 //    autoclose: true,
@@ -261,6 +262,7 @@ $(document).ready(function () {
 		// language: "zh-CN"
   //   });
 
+	//jquery-ui-datetimepicker
     $('#startTime, #endTime').datetimepicker({
 		timeFormat: "HH:mm",
 		changeMonth: true,

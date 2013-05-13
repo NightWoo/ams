@@ -20,7 +20,7 @@
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
-        <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script> -->
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
         <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/manufactureQuery.js"></script>

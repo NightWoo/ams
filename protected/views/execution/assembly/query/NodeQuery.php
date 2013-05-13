@@ -7,15 +7,20 @@
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/NodeQuery.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
-        <link href="/bms/css/datetimepicker.css" rel="stylesheet">
+        <!-- <link href="/bms/css/datetimepicker.css" rel="stylesheet"> -->
+        <link href="/bms/css/flick/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+        <link href="/bms/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
-        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script> -->
+        <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/nodeQuery.js"></script>
-        <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script> -->
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
         <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
 	<!--[if IE 6]>    
@@ -145,7 +150,7 @@
 
                         <div class="tab-pane" id="plato">
                             <div id="platoContainer" style="min-width: 800px; min-height: 600px; margin: 0 auto"></div>
-                            <table id="tablePlato" class="table table-condensed">
+                            <table id="tablePlato" class="table table-condensed  table-bordered">
                                 <thead />
                                 <tbody />
                             </table>
@@ -173,7 +178,7 @@
                             </div>
                             <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                             
-                            <table id="tableFaultDistribute" class="table table-condensed">
+                            <table id="tableFaultDistribute" class="table table-condensed  table-bordered">
                                 <thead>
                                     <tr></tr>
                                 </thead>
@@ -186,7 +191,8 @@
 
                         <div class="tab-pane" id="dpu">
                             <div id="lineContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tableDpu" class="table table-condensed">
+                            <div><p class="text-info">注：由于车辆可能在不同的时间多次进入经过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
+                            <table id="tableDpu" class="table table-condensed  table-bordered">
                                 <thead>
                                     <tr></tr>
                                 </thead>
@@ -201,7 +207,8 @@
 
                         <div class="tab-pane" id="passRate">
                             <div id="passRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tablePassRate" class="table table-condensed">
+                            <div><p class="text-info">注：由于车辆可能在不同的时间多次进入经过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
+                            <table id="tablePassRate" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>
@@ -209,7 +216,7 @@
 
                         <div class="tab-pane" id="statistic">
                             <div id="statisticContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tableStatistic" class="table table-condensed">
+                            <table id="tableStatistic" class="table table-condensed  table-bordered">
                                 <thead />
                                 <tbody />
                             </table>

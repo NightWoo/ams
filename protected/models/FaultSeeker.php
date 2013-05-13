@@ -473,7 +473,7 @@ class FaultSeeker
 					$countSql = "(SELECT count(*) FROM $table $condition)";
 					$total += Yii::app()->db->createCommand($countSql)->queryScalar();
 				}
-				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
+				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time < '$ee' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 				
 					$temp[$name[$series]] = array(
@@ -484,8 +484,8 @@ class FaultSeeker
 							);
 					if(empty($dataSeriesY[$name[$series]])) $dataSeriesY[$name[$series]] = array();
 					$dataSeriesY[$name[$series]][] = empty($cars) ? null : round($total / $cars, 2);
-					$retTotal[$name[$series]]['faultTotal'] += $total;
-					$retTotal[$name[$series]]['carTotal'] += $cars;
+					// $retTotal[$name[$series]]['faultTotal'] += $total;
+					// $retTotal[$name[$series]]['carTotal'] += $cars;
 				
 
 			}
@@ -493,9 +493,33 @@ class FaultSeeker
 			$dataSeriesX[] = $queryTime['point'];
         }
 
+        //total
+        $con = $conditions;
+        if(!empty($stime)) {
+			$con[] = "create_time>='$stime'";
+		}   
+		if(!empty($etime)) {
+			$con[] = "create_time<'$etime'";		
+		}   
+		$totalCondition = join(' AND ', $con);
+		if(!empty($totalCondition)) {
+			$totalCondition = 'WHERE ' . $totalCondition;
+		}
         foreach($arraySeries as $series) {
+			$tables = $this->parseTables($node,$series);
+			$totalTotal = 0;
+			foreach($tables as $table=>$nodeName) {
+				$totalCountSql = "SELECT count(*) FROM $table $totalCondition";
+				$totalTotal += Yii::app()->db->createCommand($totalCountSql)->queryScalar();
+			}
+			$totalSql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time < '$etime' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
+			$cars = Yii::app()->db->createCommand($totalSql)->queryScalar();
+
+			$retTotal[$name[$series]]['faultTotal'] = $totalTotal;
+			$retTotal[$name[$series]]['carTotal'] = $cars;
         	$retTotal[$name[$series]]['dpuTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['faultTotal'] / $retTotal[$name[$series]]['carTotal'], 2);
         }
+
         $carSeries = array();
         foreach ($arraySeries as $series){
         	$carSeries[] = $name[$series];
@@ -674,9 +698,38 @@ class FaultSeeker
 
         }
 
+         //total
+        $con = array("status != '在线修复'");
+        if(!empty($stime)) {
+			$con[] = "create_time>='$stime'";
+		}   
+		if(!empty($etime)) {
+			$con[] = "create_time<'$etime'";		
+		}   
+		$totalCondition = join(' AND ', $con);
+		if(!empty($totalCondition)) {
+			$totalCondition = 'WHERE ' . $totalCondition;
+		}
         foreach($arraySeries as $series) {
+			$totalTotal = 0;
+			$dataSqls = array();
+			$tables = $this->parseTables($node, $series);
+			foreach($tables as $table=>$nodeName) {
+				$dataSqls[] = "SELECT car_id FROM $table $totalCondition";
+			}
+			$sql = join(' UNION ALL ', $dataSqls);			
+			$datas = Yii::app()->db->createCommand($sql)->queryColumn();
+			$datas = array_unique($datas);
+			$totalFaults = count($datas);
+
+			$totalSql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time < '$etime' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
+			$cars = Yii::app()->db->createCommand($totalSql)->queryScalar();
+
+			$retTotal[$name[$series]]['qualifiedTotal'] = $totalFaults;
+			$retTotal[$name[$series]]['carTotal'] = $cars;
         	$retTotal[$name[$series]]['rateTotal'] = empty($retTotal[$name[$series]]['carTotal']) ? '-' : round($retTotal[$name[$series]]['qualifiedTotal'] / $retTotal[$name[$series]]['carTotal'], 3) * 100 . '%';
         }
+
         $carSeries = array();
         foreach ($arraySeries as $series){
         	$carSeries[] = $name[$series];

@@ -99,6 +99,9 @@ class Fault
 				if($status === '离线修复') {
 					//updater
 					$exist->status = $status;
+					if(isset($fault['newDutyDepartment'])){
+						$exist->duty_department = $fault['newDutyDepartment'];
+					}
 					$exist->updator = $userId;
 					$exist->modify_time = date('YmdHis');
 					$exist->save();
@@ -147,7 +150,7 @@ class Fault
 	
 		$additional = '';	
 		//if($this->tablePrefix === 'VQ3_FACADE_TEST') 
-		$sql = "SELECT f.component_id,f.component_name,f.fault_id, f.fault_mode, f.create_time, f.creator ,d.display_name as duty_department FROM $table as f left join duty_department as d on d.id=f.duty_department WHERE f.car_id={$car->car->id} AND f.status = '未修复'";
+		$sql = "SELECT f.component_id,f.component_name,f.fault_id, f.fault_mode, f.create_time, f.creator, f.duty_department as duty_department_id, d.display_name as duty_department FROM $table as f left join duty_department as d on d.id=f.duty_department WHERE f.car_id={$car->car->id} AND f.status = '未修复'";
 
 		$faults = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($faults)) {
