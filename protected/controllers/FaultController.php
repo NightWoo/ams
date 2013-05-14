@@ -255,6 +255,23 @@ class FaultController extends BmsBaseController
 
     }
 
+    public function actionQueryDutyDistribution() {
+        $component = $this->validateStringVal('component', '');
+        $mode = $this->validateStringVal('mode', '');
+        $series = $this->validateStringVal('series', '');
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $node = $this->validateStringVal('node', '');
+        try{
+            $fault = Fault::createSeeker();
+            $data = $fault->queryDutyDistribution($component, $mode, $series, $stime, $etime, $node);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+
+    }
+
 	public function actionQueryDPU() {
         $component = $this->validateStringVal('component', '');
         $mode = $this->validateStringVal('mode', '');

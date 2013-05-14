@@ -104,7 +104,7 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li id="carsDetail"><a href="#dataList" data-toggle="tab"> 详细报表 </a></li>
                             <li id="platoTab"><a href="#plato" data-toggle="tab">柏拉图</a></li>
-                            <li><a href="#faultDistribute" data-toggle="tab">故障分布</a></li>
+                            <li><a href="#dutyDistribution" data-toggle="tab">责任分布</a></li>
                             <li id="dpuTab"><a href="#dpu" data-toggle="tab">DPU趋势</a></li>
                             <li id="passRateTab"><a href="#passRate" data-toggle="tab">合格率趋势</a></li>
                             <!-- <li><a href="#statistic" data-toggle="tab">车辆统计</a></li> -->
@@ -156,10 +156,9 @@
                             </table>
                         </div>
 
-                        <div class="tab-pane" id="faultDistribute">
+                        <div class="tab-pane" id="dutyDistribution">
                             <div id="divRadio">   
-                                <!--<span>分布条件:</span>-->
-                                <label class="radio inline">
+                                <!-- <label class="radio inline">
                                   <input type="radio" name="optionsRadios" id="optionsRadios1" value="component_chart_data" checked>
                                   零部件
                                 </label>
@@ -174,11 +173,11 @@
                                 <label class="radio inline">
                                   <input type="radio" name="optionsRadios" id="optionsRadios4" value="node_chart_data">
                                   节点
-                                </label>
+                                </label> -->
                             </div>
-                            <div id="pieContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                            <div id="dutyDistibutionContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                             
-                            <table id="tableFaultDistribute" class="table table-condensed  table-bordered">
+                            <table id="tableFaultDistribution" class="table table-condensed  table-bordered">
                                 <thead>
                                     <tr></tr>
                                 </thead>

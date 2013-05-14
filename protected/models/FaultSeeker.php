@@ -420,6 +420,125 @@ class FaultSeeker
 		);
 	}
 
+	public function queryDutyDistribution($component, $mode, $series, $stime, $etime, $node) {
+		$tables = $this->parseTables($node,$series);	
+		if(empty($tables)) {
+			return array(0, array());
+		}
+		$nodeIdStr = $this->parseNodeId($node);
+
+		$name = $this->seriesName();
+		$sql = "SELECT * FROM node";
+        $nodes = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $nodeInfos = array();
+        foreach($nodes as $node) {
+            $nodeInfos[$node['id']] = $node['display_name'];
+        }
+
+        $dutyList = $this->dutyList();
+
+        $arraySeries = $this->parseSeries($series);
+        $traceSeriesConditon = array();
+        foreach($arraySeries as $series) {
+            $traceSeriesConditon[] = "car_series = '$series'";
+        }
+
+        $traceSeriesConditon = "(" . join(' OR ', $traceSeriesConditon) . ")";
+
+		$conditions = array();
+		if(!empty($component)) {
+			$conditions[] = "component_name LIKE '%$component%'";
+		}
+		if(!empty($mode)) {
+            $conditions[] = "fault_mode LIKE '%$mode%'";
+        }
+		if(!empty($stime)) {
+			$conditions[] = "create_time >= '$stime'";
+		}
+ 	    if(!empty($etime)) {
+            $conditions[] = "create_time < '$etime'";
+        }
+		$condition = join(' AND ', $conditions);
+		if(!empty($condition)) {
+			$condition = 'WHERE ' . $condition;
+		}
+		
+		$dataSqls = array();
+		$countSqls = array();
+		foreach($tables as $table=>$nodeId) {
+			$dataSqls[] = "(SELECT car_id, component_id,component_name, fault_id, fault_mode,duty_department, status as fault_status, '$nodeId' as 'node_id' FROM $table $condition)";
+		}
+
+		$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time < '$etime' AND node_id IN ($nodeIdStr) AND $traceSeriesConditon";
+        $cars = Yii::app()->db->createCommand($sql)->queryScalar();
+
+		$dataSql = join(' UNION ALL ', $dataSqls);
+		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+
+		$total = count($datas);
+		$dutyDepartments = array();
+		foreach($datas as $data) {
+			$duty = $dutyList[$data['duty_department']];
+			if(empty($dutyDepartments[$duty])){
+				$dutyDepartments[$duty] = array(
+					'name' => $duty,
+					'count' => 0,
+				);
+			}
+			++ $dutyDepartments[$duty]['count'];
+		}
+
+		//sort
+		ksort($dutyDepartments);
+		$dutyDepartments = array_values($dutyDepartments);
+		$dutyCount = count($dutyDepartments);
+		$temps = array();
+
+		for($i = 0; $i < $dutyCount; $i++){
+			$max = 1 - PHP_INT_MAX;
+			$curIndex = -1;
+			for($j = 0; $j < $dutyCount; $j++){
+				if(empty($dutyDepartments[$j]['sorted'])){
+					if($max < $dutyDepartments[$j]['count']){
+						$max = $dutyDepartments[$j]['count'];
+						$curIndex = $j;
+					}
+				}
+			}
+			$temps[] = $dutyDepartments[$curIndex];
+			$dutyDepartments[$curIndex]['sorted'] = true;
+		}
+
+		$key = 0;
+		$pSeriesX = array();
+		$pSeriesY = array();
+		$pColumnY = array();
+		$pSeriesP = array();
+		$pn = 0;
+		$detail = array();
+		// $totalDutys = 0;
+		foreach($temps as $temp) {
+			if($key / $total < 1) {
+				$temp['dpu'] = empty($cars) ? '-' :round($temp['count'] / $cars, 3);
+				$temp['percentage'] = $temp['count'] / $total;
+				$key += $temp['count'];
+
+				$pn +=$temp['percentage'];
+				$pColumnY[] = $temp['count'];
+				$pSeriesY[] = $pn;
+				$pSeriesP[] = $temp['percentage'];
+				$pSeriesX[] = $temp['name'];
+				$temp['percentage'] = round($temp['percentage'], 3) * 100 . "%";
+				$detail[] = $temp;
+				// ++ $totalDutys;
+			}
+		}
+
+		return array('detail'=> $detail, 'series' => array('x' => $pSeriesX, 'y' => $pSeriesY, 'column' => $pColumnY, 'p' => $pSeriesP));
+
+	}
+
 	public function queryDPU($component, $mode, $series, $stime, $etime, $node) {
 		$tables = $this->parseTables($node,$series);
 		$name = $this->seriesName();	
@@ -612,14 +731,14 @@ class FaultSeeker
 		foreach($temps as $temp) {
 			if($key / $total < 0.8) {
 				$temp['dpu'] = empty($cars) ? '-' : round($temp['count'] / $cars, 3);
-				$temp['percentage'] = round($temp['count'] / $total, 3);
+				$temp['percentage'] = $temp['count'] / $total;
 				$key += $temp['count'];
 
 				$pn += $temp['percentage'];
 				$pColumnY[] = $temp['count'];
 				$pSeriesY[] = $pn;
 				$pSeriesX[] = $temp['name'];
-				$temp['percentage'] = $temp['percentage'] * 100 . "%";
+				$temp['percentage'] = round($temp['percentage'], 3) * 100 . "%";
 				$detail[] = $temp;
 				++ $totalFaults;
 				if($totalFaults >= 15) {
@@ -1040,6 +1159,7 @@ class FaultSeeker
 		$list['assembly'] = '总装';
 		$list['paint'] = '涂装';
 		$list['welding'] = '焊装';
+		$list[''] = '-';
 
 		return $list;
 	}

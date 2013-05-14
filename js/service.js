@@ -115,6 +115,7 @@ var TRACE_EXPORT = "/bms/car/exportTrace";
 var FAULT_QUERY = "/bms/fault/query";
 var FAULT_EXPORT = "/bms/fault/export";
 var FAULT_QUERY_DISTRIBUTE = "/bms/fault/queryDistribute";
+var FAULT_QUERY_DUTY_DISTRIBUTION = "/bms/fault/queryDutyDistribution";
 var FAULT_QUERY_DPU = "/bms/fault/queryDPU";
 var NODE_QUERY = "/bms/fault/query";
 var NODE_QUERY_PLATON = "/bms/fault/queryPlaton";

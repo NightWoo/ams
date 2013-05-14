@@ -169,7 +169,7 @@ $(document).ready(function () {
 		if (index == 1)
 			ajaxPlato();
 		else if (index === 2)
-			ajaxFautlDistribute();
+			ajaxDutyDistribution();
 		else if (index === 3)
 			ajaxDpu();
 		else if (index === 4)
@@ -887,6 +887,188 @@ function getSeriesChecked () {
 	   			 },
 			    error:function(){alertError();}
 			});
+	}
+
+	function ajaxDutyDistribution (targetPage) {
+		var ajaxData = { 
+			    'node': $('#selectNode').val(),
+				'component': $('#componentText').val(),
+				'mode': $('#faultModeText').val(),
+				'series': getSeriesChecked(),
+				'stime': $('#startTime').val(),
+				'etime': $('#endTime').val()
+			};
+		$.ajax({
+			type: 'get',//使用get方法访问后台
+		    dataType: 'json',//返回json格式的数据
+		    url: FAULT_QUERY_DUTY_DISTRIBUTION,//ref:  /bms/js/service.js
+		    data: ajaxData,
+		    success: function (response) {
+    			if(response.success){
+		    		drawDutyPlato(response.data.series);
+		    		changeDistibutionTable(response.data.detail);
+		    		
+		    	}else{
+		    		alert(response.message);
+		    	}
+   			 },
+		    error:function(){alertError();}
+		});
+	}
+
+	function drawDutyPlato (lineData) {
+		var chart;
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'dutyDistibutionContainer'
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                href: '',
+                text: ''
+            },
+            xAxis: {
+                categories: lineData.x,
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style : {
+                    	fontSize: '12px',
+                    	fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+                    	//fontWeight: "bold"
+                    }
+                }
+            },
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    style: {
+                        color: '#4572A7'
+                    }
+                },
+                title: {
+                    text: '故障数',
+                    style: {
+                        color: '#4572A7'
+                    }
+                },
+                min: 0
+            }, { // Secondary yAxis
+                title: {
+                    text: '累积百分率(%)',
+                    style: {
+                        color: '#AA4643'
+                    }
+                },
+                gridLineWidth: 0,
+                labels: {
+                    formatter: function() {
+                        return Math.round(this.value * 100) + '%';
+                    },
+                    style: {
+                        color: '#AA4643',
+                    }
+                },
+                min: 0,
+                max: 1,
+                opposite: true,
+            }],
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function() {
+                	// console.log(this);
+                	var s = this.points[0].key +'<table>';
+                	total = 0;
+                	$.each(this.points, function(i, point) {
+                		value = point.y === null ? 0:point.y;
+                		if(value>0 && value<1){
+	                    	s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(value * 100) +'%</b></td></tr>';
+                		} else if(value>1){
+                			s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ value +'</b></td></tr>';
+                		}
+                	});
+                	s += '</table>';
+                	return s;
+                        
+                }
+				
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+			
+            series: [{
+                type: 'column',
+                color: Highcharts.getOptions().colors[0],
+                name: '故障数',
+                data: lineData.column
+            },{
+                type: 'line',
+				yAxis: 1,
+				showInLegend: false,
+				color: Highcharts.getOptions().colors[0],
+				name: '百分率',
+				data: lineData.p,
+				dataLabels:{
+					enabled: false,
+					style: {
+						fontSize: '14px',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					},
+					align: 'center',
+                	//y: 30,
+        			color: 'black',
+        			formatter: function() {
+        				return (this.y * 100).toFixed(1) + '%';
+        			}
+				},
+				marker: {
+                	lineWidth: 2,
+                	lineColor: Highcharts.getOptions().colors[0],
+                	fillColor: 'white'
+                },
+				
+				lineWidth: 0
+            },{
+                type: 'spline',
+                color: '#AA4643',
+                symbols: 'circle',
+                name: '累积率',
+                data: lineData.y,
+                yAxis: 1,
+                marker: {
+                	lineWidth: 2,
+                	lineColor: Highcharts.getOptions().colors[3],
+                	fillColor: 'white',
+                }
+            }]
+        });
+	}
+
+	function changeDistibutionTable (detail) {
+		$("#tableFaultDistribution thead").html("<tr />");
+		$("#tableFaultDistribution tbody").html("<tr /><tr /><tr />");
+		var thTr = $("#tableFaultDistribution tr:eq(0)");
+		var dataTr = $("#tableFaultDistribution tr:eq(1)");
+		var percentageTr = $("#tableFaultDistribution tr:eq(2)");
+		var singleLackTr = $("#tableFaultDistribution tr:eq(3)");
+		$("<td />").html("责任部门").appendTo(thTr);
+		$("<td />").html("数量").appendTo(dataTr);
+		$("<td />").html("百分比").appendTo(percentageTr);
+		$("<td />").html("DPU").appendTo(singleLackTr);
+		$.each(detail, function (index,value) {
+			$("<td />").html(value.name).appendTo(thTr);
+			$("<td />").html(value.count).appendTo(dataTr);
+			$("<td />").html(value.percentage).appendTo(percentageTr);
+			$("<td />").html(value.dpu).appendTo(singleLackTr);
+		});
 	}
 //-------------------END ajax query -----------------------
 
