@@ -983,10 +983,10 @@ function getSeriesChecked () {
                 	total = 0;
                 	$.each(this.points, function(i, point) {
                 		value = point.y === null ? 0:point.y;
-                		if(value>0 && value<1){
+                		if(point.series.name == '累积率' || point.series.name == '百分率'){
 	                    	s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
             					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(value * 100) +'%</b></td></tr>';
-                		} else if(value>1){
+                		} else {
                 			s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
             					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ value +'</b></td></tr>';
                 		}
