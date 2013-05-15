@@ -244,6 +244,14 @@ class Order
 		return $order->board_number;
 	}
 
+	public function printByOrders($orderIds){
+		foreach($orderids as $orderid){
+			$this->printByOrder($orderId);
+		}
+
+		return $orderIds;
+	}
+
 	public function printByBoard($boardNumber) {
 		if(empty($boardNumber)){
 			throw new Exception ('无法按空备板编号打印');

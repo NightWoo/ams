@@ -550,6 +550,42 @@ class OrderSeeker
 		return array('boardArray'=>$boardArray, 'totalToPrint'=>$totalToPrint, 'boardInfo'=>$boardInfo);
 	}
 
+	public function queryOrderInBoardInfo(){
+		$orderInBoardArray = array();
+		$orderInBoardInfo = array();
+		$totalToPrint = 0;
+
+		$sql = "SELECT board_number,order_number, id,amount,hold,count,lane_id,`status`,is_printed
+				 FROM `order`
+				 WHERE is_printed=0 AND (`status`=1 OR `status`=2)
+				 ORDER BY board_number ASC";
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($orders as &$order){
+			$name = $order['order_number'] . '@' . $order['board_number'];
+			if(!in_array($name, $orderInBoardArray)){
+				$orderInBoardArray[] = $name;
+				$orderInBoardInfo[$name] = array(
+					'orderIdArray' => array(),
+					'countSum'=> 0,
+					'amountSum' => 0,
+					'toPrint' => false,
+				);
+			}
+			$orderInBoardInfo[$name]['orderIdArray'][] = $order['id'];
+			$orderInBoardInfo[$name]['countSum'] += $order['count'];
+			$orderInBoardInfo[$name]['amountSum'] += $order['amount'];
+		}
+
+		foreach($orderInBoardInfo as &$orderInboard){
+			if($orderInboard['amountSum'] > 0 && $orderInboard['countSum'] === $orderInboard['amountSum']){
+				++$totalToPrint;
+				$orderInboard['toPrint'] = true;
+			}
+		}
+
+		return array('orderInBoardArray' => $orderInBoardArray, 'totalToPrint'=>$totalToPrint, 'orderInBoardInfo'=>$orderInBoardInfo);
+	}
+
 	public function queryCarsById($orderId){
 		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code 
 				FROM car 
@@ -559,6 +595,24 @@ class OrderSeeker
 		foreach($cars as &$car){
 			$car['type_config'] = $configName[$car['config_id']];
 			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+		}
+		return $cars;
+	}
+
+	public function queryCarsByIds($orderIds){
+		$orderIds = "(" . join(',', $orderIds) . ")";
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code,lane_id
+				FROM car 
+				WHERE order_id IN $orderIds ORDER BY distribute_time ASC";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		$configName = $this->configNameList();
+		foreach($cars as &$car){
+			$car['type_config'] = $configName[$car['config_id']];
+			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+			$car['lane_name'] = '';
+			if(!empty($car['lane_id'])){
+				$car['lane_name'] = LaneAR::model()->findByPk($car['lane_id'])->name;
+			}
 		}
 		return $cars;
 	}

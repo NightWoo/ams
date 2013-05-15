@@ -1,0 +1,70 @@
+/* CSS Document */
+
+#accordionOrderInBoard{
+	margin-left: 0;
+	position: fixed;
+}
+#group1 {
+	border: none;
+}
+
+.ordersContainer{
+	border-bottom: 1px solid #E5E5E5;;
+}
+
+.ordersContainer p{
+	margin-bottom: 0;
+}
+
+#refresh {
+	font-size: 30px;
+    line-height: 40px;
+}
+#refresh:hover {
+	text-decoration: none;
+}
+
+#refresh i {
+	margin-top: 8px;
+	margin-left: 0;
+}
+
+#totalOK{
+	font-size: 40px;
+    line-height: 40px;
+    margin: 5px 0 5px 228px;
+    text-align: right;
+    width: 80px;
+}
+
+#legendDetail {
+	padding-top: 10px;
+}
+
+#printAll {
+	font-size: 21px;
+	padding-bottom: 6px;
+    padding-top: 0;
+}
+
+#orderBoardName {
+	font-size: 21px;
+}
+
+#tableDetail a{
+	font-size: 14px;
+	padding: 0 2px;
+}
+
+#tableDetail {
+	font-size: 12px;
+}
+
+.offset4 {
+    margin-left: 320px;
+}
+
+.input-medium {
+    width: 160px;
+}
+

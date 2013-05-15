@@ -451,7 +451,7 @@ class FaultController extends BmsBaseController
 			if(!empty($code) && !empty($exist)) {
 				throw new Exception('故障代码已存在');
 			}
-			$component = ComponentAR::model()->find('display_name=?', array($componentName));
+			$component = ComponentAR::model()->find('is_fault=1 AND display_name=? AND car_series=?', array($componentName,$series));
 			if(empty($component)) {
 				throw new Exception('请选择一个零部件后再保存');
 			}

@@ -108,7 +108,7 @@ class ExecutionController extends BmsBaseController
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
 
-            $subTypes = array('subEngine','subFrontAxle');
+            $subTypes = array('subEngine','subFrontAxle','subInstrument');
             $car->addSubConfig($subTypes);
 
 			$transaction->commit();
@@ -539,6 +539,62 @@ class ExecutionController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
+	
+	public function actionWarehouseRelocateSubmit() {
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $vin = $this->validateStringVal('vin', '');
+            $driverId = $this->validateIntVal('driverId', 0);
+            $date = DateUtil::getCurDate();
+
+            $car = Car::create($vin);
+
+            $fault = Fault::createSeeker();
+            $exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ('VQ3还有未修复故障');
+            }
+            $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
+            }
+            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            if(!empty($exist)) {
+                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			$car->checkTestLinePassed();
+			if($car->car->series != 'M6'){
+				$car->leftNode('VQ3');
+			}       
+            //$car->passNode('CHECK_OUT');
+			if($car->car->warehouse_id === 0){
+				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
+			}
+			
+			if($car->car->distribute_time != '0000-00-00 00:00:00'){
+				throw new Exception($vin . '已出库，不可重复分配库位');
+			}
+			
+			$warehouse = new Warehouse;
+			$data = $warehouse->checkin($vin);
+			$message = $vin . '已重新分配库位，请开往' . $data['row'];
+			$car->car->warehouse_id = $data['warehouse_id'];
+			$car->car->area = $data['area'];
+			$car->car->save();
+			if(!empty($driverId)){
+				$driverName = User::model()->findByPk($driverId)->display_name;
+			} else {
+				$driverName = Yii::app()->user->display_name;
+			}
+			
+            $transaction->commit();
+            $this->renderJsonBms(true, $message, $data);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
 
     //added by wujun
     //checkin warehouse
@@ -766,6 +822,16 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionWarehousePrintOrderInBoard() {
+        try{
+            Yii::app()->permitManager->check('WAREHOUSE_PRINT');
+            $this->render('assembly/dataInput/WarehousePrintOrderInBoard');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     public function actionWarehousePrintExport() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
@@ -822,6 +888,10 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  
+    }
+	
+	public function actionWarehouseRelocate() {
+        $this->render('assembly/dataInput/WarehouseRelocate');  
     }
 
     //added by wujun

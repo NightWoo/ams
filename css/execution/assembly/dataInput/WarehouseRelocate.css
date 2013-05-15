@@ -1,0 +1,52 @@
+/* CSS Document */
+#form {
+	margin-bottom: 10px;
+}
+
+#vinText,#cardText {
+	height: 50px;
+	width: 450px;
+	font-size: 40px;
+}
+
+#vinLabel,#cardLabel {
+	font-size: 26px;
+    height: 50px;
+    line-height: 50px;
+    width: 50px;
+}
+
+#btnSubmit, #reset {
+	height: 60px;
+	width: 80px;
+	font-size: 26px;
+}
+
+#carInfo {
+     line-height: 40px;
+    margin-top: 20px;
+    padding-left: 0;
+}
+
+#carInfo .label-info{
+	font-size: 23px;
+	line-height: 30px;
+	padding: 2px 8px;
+}
+
+ #vinHint{
+	font-size: 23px;
+	line-height: 40px;
+}
+
+#messageAlert {
+	padding: 15px;
+    font-size: 26px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#messageRow {
+	padding: 15px;
+    font-size: 40px;
+}

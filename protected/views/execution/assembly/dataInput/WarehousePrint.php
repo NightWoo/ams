@@ -30,6 +30,8 @@
             <div>
             	<legend>出库打印
             		<span class="pull-right">
+            			<!-- <a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
+            			/ -->
             			<a href="/bms/execution/warehousePrintExport"><i class="icon-link"></i>&nbsp;出口车批量传输</a>
             		</span>
             	</legend>

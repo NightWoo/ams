@@ -2,17 +2,17 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $nodeDisplayName;?></title>
+		<title>分配库位</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="/bms/css/common.css" rel="stylesheet" media="screen">
-	<link href="/bms/css/execution/assembly/dataInput/WarehouseEntry.css" rel="stylesheet" media="screen">
+	<link href="/bms/css/execution/assembly/dataInput/WarehouseRelocate.css" rel="stylesheet" media="screen">
 	<link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
     <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
-    <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/warehouseEntry.js"></script>
+    <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/warehouseRelocate.js"></script>
     <style type="text/css" media="screen">
 			.printable{
 				display: none;
@@ -30,9 +30,9 @@
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
-		            	<legend><?php echo $nodeDisplayName;?>
+		            	<legend>WH-重新分配库位
 		            		<span class="pull-right">
-		            			 <a href="/bms/execution/warehouseRelocate"><i class="icon-link"></i>&nbsp;重新分配库位</a>
+		            			 <a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntry"><i class="icon-link"></i>&nbsp;成品库入库</a> 
 		            		</span>
 		            	</legend>
 		            </div>
@@ -49,7 +49,7 @@
 											<!-- <input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="入库">
 											<input type="button" class="btn" id ="reset" value ="清空"> -->
 											<input type="button" class="btn" id ="reset" value ="清空">
-											<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'>
+											<input type="hidden" id='currentNode' name='currentNode' value='CHECK_IN'>
 										</td>
 									</tr>
 									<tr>
@@ -58,7 +58,7 @@
 												<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 												<input type="text" class="span3" placeholder="请贴厂牌完成入库..." id="cardText" disabled="disabled">
 											</div>
-												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="入库">
+												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="分配">
 										</td>
 									</tr>
 									<tr>

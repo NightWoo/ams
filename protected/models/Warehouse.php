@@ -71,6 +71,13 @@ class Warehouse
 				$row->status = 1;
 			}
 			$row->save();
+			
+			//原库位数量减1
+			if($car->warehouse_id>200){
+				$oldRow = WarehouseAR::model()->findByPk($car->warehouse_id);
+				$oldRow->quantity -=1;
+				$oldRow->save();
+			}
 		} else {
 			throw new Exception('成品库无可用车列');
 		}

@@ -93,6 +93,7 @@ var VQ3_SUBMIT_EXCEPTION = "/bms/fault/saveVQ3";
 var WDI_GET_FAULT_PARTS = "/bms/fault/show";
 var WDI_VALIDATE = "/bms/car/validateWDI";
 var WDI_SUBMIT = "/bms/execution/enterWDI";
+var WAREHOUSE_RELOCATE ="/bms/execution/warehouseRelocateSubmit";
 
 //warehouse checkin
 var CHECKIN_VALIDATE = "/bms/car/validateCI";
@@ -246,7 +247,9 @@ var QUERY_ORDER_DETAIL = "/bms/order/query";
 var QUERY_ORDER_BY_BOARD ="/bms/order/queryByBoard";
 var GET_BOARD_NUMBER = "/bms/order/getBoardNumber";
 var QUERY_CARS_BY_ORDER_ID = '/bms/order/queryCarsById';
+var QUERY_CARS_BY_ORDER_IDS = '/bms/order/queryCarsByIds';
 var WAREHOUSE_PRINT_BY_ORDER = '/bms/order/printByOrder';
+var WAREHOUSE_PRINT_BY_ORDER_IDS = '/bms/order/printByOrderIds';
 var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
 var QUERY_CARS_BY_SPECIAL_ORDER = '/bms/order/queryCarsBySpecialOrder';
 var PRINT_BY_SPECIAL_ORDER = '/bms/order/printBySpecialOrder';
@@ -255,6 +258,7 @@ var QUERY_DISTRIBUTE_PERIOD = '/bms/order/queryPeriod';
 
 var GET_LANE_INFO ="/bms/lane/queryOrderInfo";
 var GET_BOARD_INFO ="/bms/order/queryBoardInfo";
+var GET_ORDER_In_BOARD_INFO = "/bms/order/queryOrderInBoardInfo";
 
 var RELEASE_LANE_ORDERS = "/bms/lane/releaseOrders";
 

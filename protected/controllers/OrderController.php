@@ -112,6 +112,16 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionQueryOrderInBoardInfo(){
+		try{
+			$orderSeeker = new OrderSeeker();
+			$data = $orderSeeker->queryOrderInBoardInfo();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionInc() {
 		$id = $this->validateIntVal('id', 0);
 		try {
@@ -538,7 +548,18 @@ class OrderController extends BmsBaseController
 		try{
 			$orderId = $this->validateIntVal('orderId', 0);
 			$seeker = new OrderSeeker();
-			$data = $seeker->queryCarsByid($orderId);
+			$data = $seeker->queryCarsById($orderId);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionQueryCarsByIds() {
+		try{
+			$orderIds = $this->validateArrayVal('orderIds', array());
+			$seeker = new OrderSeeker();
+			$data = $seeker->queryCarsByIds($orderIds);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
@@ -583,6 +604,18 @@ class OrderController extends BmsBaseController
 			$board = $order->printByOrder($orderId);
 
 			$this->renderJsonBms(true, 'print success', $board);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionPrintByOrders() {
+		try{
+			$orderIds = $this->validateArrayVal('orderIds', array());
+			$order = new Order();
+			$data = $order->printByOrders($orderIds);
+
+			$this->renderJsonBms(true, '打印传输成功', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}
