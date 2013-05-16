@@ -37,7 +37,7 @@
             </div>
             
    	   		<div><!-- 主体 -->
-			    <div>
+			    <div style="overflow-y: scroll; height:460px">
 	                <table id="tableBoard" class="table table-condensed table-bordered" style="font-size:14px;">
 	                    <thead>
 	                        <tr>

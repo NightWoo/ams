@@ -28,7 +28,7 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>出库打印_订单号车道
+            	<legend>出库打印_板内方式订单
             		<span class="pull-right">
             			<a href="/bms/execution/warehousePrint"><i class="icon-link"></i>&nbsp;出库打印</a>
             			/

@@ -245,7 +245,7 @@ class Order
 	}
 
 	public function printByOrders($orderIds){
-		foreach($orderids as $orderid){
+		foreach($orderIds as $orderId){
 			$this->printByOrder($orderId);
 		}
 

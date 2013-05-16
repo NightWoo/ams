@@ -30,8 +30,8 @@
 	            	<legend>出口车厂检单、合格证打印数据传输
 	            		<span class="pull-right">
            					<a href="/bms/execution/warehousePrint"><i class="icon-link"></i>&nbsp;出库打印</a>
-           					<!-- /
-	            			<a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a> -->
+           					/
+	            			<a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
 	            		</span>
 	            	</legend>
 					<div id="form" class="well form-inline">
