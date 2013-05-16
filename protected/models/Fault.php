@@ -139,8 +139,8 @@ class Fault
 
 			$ar->save();
 		}
-		if(!$iswdi)
-		$car->detectStatus();	
+		// if(!$iswdi)
+		// $car->detectStatus();	
 	}
 
 	public function show() {

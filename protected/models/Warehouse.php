@@ -54,9 +54,11 @@ class Warehouse
 			} else {
 				//如果连空车列都没有就扔到周转区Z
 				if($car->special_property == 1){
-					$row = WarehouseAR::model()->find('area=? AND series=?', array('F', ''));
+					$row = WarehouseAR::model()->find('area=? AND series=?', array('G', ''));
 				} else if ($car->special_property == 0) {
-					$row = WarehouseAR::model()->find('area=?', array('Z'));
+					//$row = WarehouseAR::model()->find('area=?', array('Z'));
+				} else if ($car->special_property == 9) {
+					$row = WarehouseAR::model()->find('area=?', array('X'));
 				}
 			}
 		} 
@@ -79,7 +81,7 @@ class Warehouse
 				$oldRow->save();
 			}
 		} else {
-			throw new Exception('成品库无可用车列');
+			throw new Exception('库区已满，无法完成入库');
 		}
 
 		$data =array();

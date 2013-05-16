@@ -58,6 +58,7 @@
 									<option value="144">杨自西</option>
 									<option value="150">曾海龙</option>
 									<option value="154">赵松</option>
+                                    <option value="227">顾善军</option>
 								</select>
 								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
 								<button id="reset" type="reset" class="btn">清空</button>

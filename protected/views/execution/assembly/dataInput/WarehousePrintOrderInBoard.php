@@ -38,7 +38,7 @@
             </div>
             
    	   		<div><!-- 主体 -->
-			    <div class="accordion span5" id="accordionOrderInBoard">
+			    <div class="accordion span4" id="accordionOrderInBoard">
 			    	<div class="accordion-group" id="group1">
 			    		<div class="accordion-heading">
 			    			<a href="#" id="refresh"><i class="icon-refresh pull-right"></i></a>
@@ -59,21 +59,21 @@
 			    	</div>
 			    </div>
 
-			    <div class="offset5">
+			    <div class="offset4">
 			    	<legend id="legendDetail"><span id="orderBoardName">-</span><a class="btn btn-link" id="printAll" href="#"><i class="icon-print"></i>传输打印</a></legend>
 	                <table class="table table-condensed table-hover" id="tableDetail" style="display: none">
 			    		<thead>
 			    			<tr>
 				    			<th style="width:30px">车道</th>
 				    			<th style="width:120px">VIN号</th>
-				    			<th style="width:150px">出库时间</th>
+				    			<th style="width:120px">出库时间</th>
 				    			<th style="width:50px">证件</th>
-				    			<th style="">经销商</th>
+				    			<th style="width:200px">经销商</th>
 				    			<th style="width:40px">车系</th>
-				    			<th style="">车型/配置</th>
+				    			<th style="width:150px">车型/配置</th>
 				    			<th style="width:50px">耐寒性</th>
 				    			<th style="width:50px">颜色</th>
-				    			<th style="width:50px">发动机号</th>
+				    			<th style="">发动机号</th>
 			    			</tr>
 			    		</thead>
 			    		<tbody>

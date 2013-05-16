@@ -5,6 +5,7 @@ Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.Rpc.RpcService');
 class ExecutionController extends BmsBaseController
 {
 	public static $NODE_MAP = array(
@@ -501,7 +502,7 @@ class ExecutionController extends BmsBaseController
 			}       
             $car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id > 0){
-				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}
 			
@@ -532,6 +533,12 @@ class ExecutionController extends BmsBaseController
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
 			
             $car->warehouseTime();
+			
+			//open gate
+			$rpc = new RpcService();
+			$host='10.23.86.172';
+			$ret = $rpc->openGate($host);
+			
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -567,8 +574,7 @@ class ExecutionController extends BmsBaseController
 				$car->leftNode('VQ3');
 			}       
             //$car->passNode('CHECK_OUT');
-			if($car->car->warehouse_id === 0){
-				$row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+			if($car->car->warehouse_id == 0 || $car->car->status != '成品库'){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
 			
@@ -587,6 +593,8 @@ class ExecutionController extends BmsBaseController
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
+			
+			
 			
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
@@ -635,6 +643,11 @@ class ExecutionController extends BmsBaseController
             $car->car->area = 'out';
             $car->car->save();
             $car->distributeTime();
+			
+			//open gate
+			$rpc = new RpcService();
+			$host='10.23.86.3';
+			$ret = $rpc->openGate($host);
             
             //no need to throw one by one
             //$outDate = date("Y-m-d h:m:s");
@@ -918,12 +931,9 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $date = date("Y-m-d H:i:s");
-            $date = str_replace(" ","T",$date);
-            // $seeker = new FaultSeeker();
-            // $data = $seeker-> parseQueryTime('2013-02-08 08:15:00', '2013-04-10 15:23:00');
-            $this->renderJsonBms(true, 'OK' , $date);
-            // $this->renderJsonBms(true, $vin . '成功录入' , $car);
+            $rpc = new RpcService();
+			$ret = $rpc->openGate();
+			$this->renderJsonBms(true, $ret , $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

@@ -1,5 +1,8 @@
 $("document").ready(function() {
 	initPage();
+	var RefreshBoard = setInterval(function () {
+		getOrderInBoardInfo();
+	},30000);
 	
 	$("#refresh").click(function(){
 		getOrderInBoardInfo();
@@ -90,7 +93,7 @@ $("document").ready(function() {
 					if(value.distribute_time === '0000-00-00 00:00:00'){
 						$('<td />').html('未出库').appendTo(tr);
 					} else {
-						$('<td />').html(value.distribute_time).appendTo(tr);
+						$('<td />').html(value.distribute_time.substring(0,16)).appendTo(tr);
 					}
 					$('<td />').html('新证').appendTo(tr);
 					$('<td />').html(value.distributor_name).appendTo(tr);

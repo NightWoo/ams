@@ -37,6 +37,15 @@
     width: 80px;
 }
 
+.ordersContainer a{
+	font-size: 12px;
+	padding: 4px 8px;
+}
+
+.ordersContainer .label{
+	font-size:9px;
+}
+
 #legendDetail {
 	padding-top: 10px;
 }

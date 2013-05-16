@@ -7,18 +7,18 @@ $ret = $rpc->openGate();
 */
 class RpcService
 {
-	protected $host;
+	//protected $host;
 	protected $port;
 	protected $retry = 2;
     public function __construct($name = 'rpc.gate') {
-		$this->host = Yii::app()->params[$name]['host'];
+		//$this->host = Yii::app()->params[$name]['host'];
 		$this->port = Yii::app()->params[$name]['port'];
     }
 
-	public function openGate() {
+	public function openGate($host) {
 		$msg = 'Open';
 		$timeout = 5;
-		$socket = fsockopen($this->host, $this->port, $errno, $errstr, $timeout); 
+		$socket = fsockopen($host, $this->port, $errno, $errstr, $timeout); 
 		do  {
 			fputs($socket, $msg);
 			$ret = fgets($socket, 255);
