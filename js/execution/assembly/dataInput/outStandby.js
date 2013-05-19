@@ -81,7 +81,7 @@ $(document).ready(function() {
 					$("#rowPrint").html(data.row);
 					$("#vinInfo").html(data.vin);
 					$("#vinPrint").html(data.vin + '-' + data.color);
-					$("#seriesInfo").html(data.series);
+					$("#seriesInfo").html(byd.SeriesName[data.series]);
 					$("#typeInfo").html(data.type_info);
 					$("#coldInfo").html(data.cold_resistant);
 					$("#colorInfo").html(data.color);

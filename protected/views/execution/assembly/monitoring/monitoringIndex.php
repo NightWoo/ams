@@ -148,13 +148,16 @@
 	      				<div id="warehouseContainer">
 			      			<div id ="warehouseBack">
 			      			</div>
-			      			<div class="containerE">
-			      				<div class="progressE progressBlue"></div>
+			      			<div class="containerG">
+			      				<div class="progressG progressBlue"></div>
 			      			</div>
-			      			<div class="maskF"></div>
 			      			<div class="containerF">
 			      				<div class="progressF progressBlue"></div>
 			      			</div>
+			      			<div class="containerE">
+			      				<div class="progressE progressBlue"></div>
+			      			</div>
+			      			<!-- <div class="maskF"></div> -->
 			      			<div class="containerD containerABCD">
 			      				<div class="progressD progressBlue"></div>
 			      			</div>
@@ -175,9 +178,10 @@
 				    		<div class="area-b">B</div>
 				    		<div class="area-c">C</div>
 				    		<div class="area-d">D</div>
-				    		<div class="area-f">F</div>
 				    		<div class="area-e">E</div>
-				    		<div class="area-e-up"></div>
+				    		<div class="area-f">F</div>
+				    		<div class="area-g">G</div>
+				    		<!-- <div class="area-e-up"></div> -->
 				    		<div class="area-total-amount"></div>
 				    		<div class="area-lane"></div>
 	      				</div>

@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
+    <script type="text/javascript" src="/bms/js/common.js"></script>
     <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/warehouseRelocate.js"></script>
     <style type="text/css" media="screen">
 			.printable{

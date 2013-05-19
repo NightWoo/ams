@@ -67,7 +67,7 @@
 .warehouseImg{
 	position: relative;
 	left: 0;
-	top: -911px;
+	top: -933px;
 	z-index: 200;
 
 }
@@ -78,32 +78,39 @@
 	opacity:0.5;
 }
 
-.containerE{
-	position:relative;
-	height:101px;
-	width:287px;
-	top:-375px;
-	left:71px;
-	z-index: 105;
+.containerG{
+	height: 68px;
+    left: 134px;
+    position: relative;
+    top: -410px;
+    width: 225px;
+    z-index: 105;
+	border:1px solid;
+	border-color: red red;
+	/*border-color: red;
+	border-width: 4px;
+	border-style: solid*/
 }
 
-.progressE{
-	width:90%;
+.progressG{
+	width:100%;
 	float: right;
 }
 
 .containerF{
+    height: 107px;
+    left: 68px;
     position: relative;
-	height: 65px;
-    left: 136px;
-    top: -576px;
-    width: 222px;
+    top: -450px;
+    width: 58px;
     z-index: 120;
+    border:1px solid;
+	border-color: red red;
 }
 
 .progressF{
 	float: right;
-	width:90%;
+	width:100%;
 	right:0;
 }
 
@@ -117,26 +124,44 @@
 	z-index: 110;
 }
 
+.containerE{
+	height: 64px;
+    left: 134px;
+    position: relative;
+    top: -515px;
+    width: 225px;
+    z-index: 105;
+	border:1px solid;
+	border-color: red red;
+}
+
+.progressE{
+	width:100%;
+	float: right;
+}
+
 .containerABCD{
     position: relative;
 	height: 65px;
     width: 126px;
     z-index: 120;
+    border:1px solid;
+	border-color: red red;
 }
 
 .containerD{
-	left: 372px;
-    top: -638px;
+	left: 370px;
+    top: -655px;
 }
 
 .progressD{
 	width:100%;
-	width:60%;
+	width:100%;
 }
 
 .containerC{
-	left: 372px;
-    top: -632px;
+	left: 370px;
+    top: -648px;
 }
 
 .progressC{
@@ -144,8 +169,8 @@
 }
 
 .containerB{
-	left: 372px;
-    top: -625px;
+	left: 370px;
+    top: -644px;
 }
 
 .progressB{
@@ -153,8 +178,8 @@
 }
 
 .containerA{
-	left: 372px;
-    top: -619px;
+	left: 370px;
+    top: -640px;
 }
 
 .progressA{
@@ -307,11 +332,11 @@
 .andon_bord:hover{border:4px solid red;}
 
 .node_pbs{
-	position: absolute;
-	left: 54px;
-	top: 178px;
-	width: 20px;
-	height: 20px;
+	height: 35px;
+    left: 48px;
+    position: absolute;
+    top: 172px;
+    width: 35px;
 	/*border-color: red;
 	border-width: 2px;
 	border-style: solid;*/
@@ -319,10 +344,10 @@
 
 .node_t0{
 	position: absolute;
-	left: 373px;
-	width: 20px;
-	height: 20px;
-	top: 178px;
+	left: 367px;
+	width: 35px;
+	height: 35px;
+	top: 173px;
 	/*border-color: red;
 	border-width: 2px;
 	border-style: solid;*/
@@ -330,10 +355,10 @@
 
 .node_vq1{
 	position: absolute;
-	left: 1056px;
-	width: 20px;
-	height: 20px;
-	top: 178px;
+	left: 1050px;
+	width: 35px;
+	height: 35px;
+	top: 173px;
 	/*border-color: blue;
 	border-width: 2px;
 	border-style: solid;*/
@@ -632,12 +657,12 @@ line-height: 76px;}
 
 .outware-warehouse{
 	left: 312px;
-	top: -959px;
+	top: -981px;
 	z-index: 200;
 }
 .inware-warehouse{
 	left: 385px;
-	top: -1008px;
+	top: -1030px;
 	z-index: 200;
 }
 .vq3-warehouse{
@@ -660,88 +685,115 @@ z-index: 200;
 width: 127px;
 height: 63px;
 left: 370px;
-top: -1201px;
+top: -1224px;
 cursor: pointer;
-color: transparent;}
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 65px;}
 .area-b{position: relative;
 /*background: url(../../../../img/hover_B.png) no-repeat 0 0 ;*/
 z-index: 200;
 width: 129px;
 height: 64px;
 left: 370px;
-top: -1335px;
+top: -1357px;
 cursor: pointer;
-color: transparent;}
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 65px;}
 .area-c{position: relative;
 /*background: url(../../../../img/hover_C.png) no-repeat 0 0 ;*/
 z-index: 200;
 width: 129px;
 height: 63px;
 left: 370px;
-top: -1470px;
+top: -1492px;
 cursor: pointer;
-color: transparent;}
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 65px;}
 .area-d{position: relative;
 /*background: url(../../../../img/hover_D.png) no-repeat 0 0 ;*/
 z-index: 200;
 width: 129px;
 height: 63px;
 left: 370px;
-top: -1605px;
+top: -1627px;
 cursor: pointer;
-color: transparent;}
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 75px;}
+
+.area-e{position: relative;
+/*background: url(../../../../img/hover_E.png) no-repeat 0 0 ;*/
+z-index: 200;
+width: 226px;
+height: 63px;
+left: 134px;
+top: -1618px;
+cursor: pointer;
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 65px;}
 
 .area-f{position: relative;
 /*background: url(../../../../img/hover_F.png) no-repeat 0 0 ;*/
 z-index: 200;
+width: 58px;
+height: 108px;
+left: 69px;
+top: -1726px;
+cursor: pointer;
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 100px;
+}
+
+.area-g{position: relative;
+/*background: url(../../../../img/hover_G.png) no-repeat 0 0 ;*/
+z-index: 200;
 width: 226px;
 height: 63px;
 left: 133px;
-top: -1669px;
+top: -1863px;
 cursor: pointer;
-color: transparent;}
+color: gray;
+font-size: 30px;
+text-align: center;
+line-height: 65px;}
+
+
 .area-lane{position: relative;
 /*background: url(../../../../img/hover_lane.png) no-repeat 0 0 ;*/
 z-index: 200;
 width: 95px;
 height: 201px;
 left: 252px;
-top: -1730px;
+top: -1817px;
 cursor: pointer;
 color: transparent;}
 .area-a:hover{background: url(../../../../img/hover_A.png) no-repeat 0 0 ;}
 .area-b:hover{background: url(../../../../img/hover_B.png) no-repeat 0 0 ;}
 .area-c:hover{background: url(../../../../img/hover_C.png) no-repeat 0 0 ;}
 .area-d:hover{background: url(../../../../img/hover_D.png) no-repeat 0 0 ;}
-
+.area-e:hover{background: url(../../../../img/hover_E.png) no-repeat 0 0 ;}
 .area-f:hover{background: url(../../../../img/hover_F.png) no-repeat 0 0 ;}
+.area-g:hover{background: url(../../../../img/hover_G.png) no-repeat 0 0 ;}
 .area-lane:hover{background: url(../../../../img/hover_lane.png) no-repeat 0 0 ;}
 
-.area-e{position: relative;
-/*background: url(../../../../img/hover_E.png) no-repeat 0 0 ;*/
-z-index: 200;	
-width: 291px;
-height: 63px;
-left: 69px;
-top: -1660px;
-cursor: pointer;
-color: transparent;}
-.area-e-up{position: relative;
-z-index: 200;
-/*background: url(../../../../img/hover_E_up.png) no-repeat 0 0 ;*/
-width: 59px;
-height: 43px;
-left: 69px;
-top: -1766px;
-cursor: pointer;
-color: transparent;}
 .area-total-amount{
 	position: relative;
 	width: 160px;
 	line-height: 50px;
 	height: 50px;
 	left: 286px;
-	top: -1795px;
+	top: -1880px;
 	color: #9963FF;
 	font-size: 50px;
 	text-align: center;

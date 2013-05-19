@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
+    <script type="text/javascript" src="/bms/js/common.js"></script>
     <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/vq2LeakTestException.js"></script>
 	</head>
 	<body>
@@ -53,11 +54,12 @@
 							<table id="tableConfirmation" class="table">
 								<thead>
 									<tr>
-										<th class="span2">序号</th>
-										<th class="span2">修复</th>
-										<th>故障现象</th>
-										<th>录入人员</th>
-                                        <th>录入时间</th>
+										<th class="span1">序号</th>
+										<th class="span1">修复</th>
+										<th class="span3">故障现象</th>
+										<th class="span3">责任部门</th>
+										<th class="span2">录入人员</th>
+										<th>录入时间</th>
 									</tr>
 								</thead>
 								<tbody>

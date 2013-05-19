@@ -23,7 +23,7 @@ $("document").ready(function() {
 			    	//render car info data,include serialNumber,series,type and color
 		    		var car = response.data.car;
 		    		$('#serialNumber').html(car.serial_number);
-		    	 	$('#series').html(car.series);
+		    	 	$('#series').html(window.byd.SeriesName[car.series]);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    if(car.status && car.status !== "0")
@@ -157,7 +157,7 @@ $("document").ready(function() {
 	function ajaxDutyList() {
 		var dutyOption = '<select class="duty input-medium"><option value="">-请选择责任部门-</option>';
 		$.ajax({
-			url: QUERY_DUTY_DRPARTMENT,
+			url: QUERY_DUTY_DEPARTMENT,
 			dataType: "json",
 			data: {"node" : 'VQ1'},
 			async: false,

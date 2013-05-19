@@ -56,7 +56,7 @@
     								<select name="" id="selectState" class="input-medium">
                                         <option value="assembly">总装(除PBS)</option>
                                         <option value="WH">成品库</option>
-                                        <option value="WHin">成品库(除WDI)</option>
+                                        <option value="WHin">成品库可备</option>
                                         <option value="recycle">周转车</option>
                                         <option value="VQ3">VQ3</option>
                                         <option value="VQ2">VQ2</option>

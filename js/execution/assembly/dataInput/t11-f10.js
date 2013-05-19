@@ -28,7 +28,8 @@ $("document").ready(function() {
 			    	//render car info data,include series,type and color
 					var car = response.data.car;
 					$('#serialNumber').html(car.serial_number);
-					$('#series').html(car.series);
+					// $('#series').html(car.series);
+					$('#series').html(window.byd.SeriesName[car.series]);
 					$('#type').html(car.type);
 					$('#config').html(response.data.config);
 					if(car.cold_resistant == "1") {

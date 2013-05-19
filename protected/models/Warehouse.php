@@ -24,41 +24,40 @@ class Warehouse
 		}
 
 		$conditions = array();
-		$conditions['match'] = "series=? AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
-		$conditions['free'] = "status=? AND free_seat>?";
+		$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
+		$conditions['free'] = "status=0 AND free_seat>0";
 		$condition = join(' AND ', $conditions);
 		$condition .= ' ORDER BY id ASC';
-		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property, 0, 0);
+		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property);
+		// 寻找同型车列
 		$row = WarehouseAR::model()->find($condition, $values);
-		// if($car->special_property == 0){//普通车辆查找同型车列
-		// 	$row = WarehouseAR::model()->find($condition, $values);
-		// } else if ($car->special_property == 1){//出口车扔到F区
-		// 	$row = WarehouseAR::model()->find('area=?', array('F'));
-		// } else if ($car->special_property == 2){//降级车扔到Y区
-		// 	$row = WarehouseAR::model()->find('area=?', array('Y'));
-		// }
 
 		//如无同型车列		
 		if(empty($row)) {
-			//在该车系库区区查找空车列，并生成同型车列
-			// $voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND area=? ORDER BY id ASC', array(0, 0, $car->series, 'A'));
-			$voidRow = WarehouseAR::model()->find('status=? AND quantity=? AND series=? AND special_property=? AND free_seat>0 ORDER BY id ASC', array(0, 0, $car->series, $car->special_property));
-			if(!empty($voidRow) && !empty($orderConfigId)) {
+			//查找空车列，并生成同型车列
+			$voidRow = WarehouseAR::model()->find("status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC", array($car->series, $car->special_property));
+			//E区是F0、6B混合区
+			// if(empty($voidRow) && ($car->series === 'F0' || $car->series === '6B')){
+			// 	$voidRow = WarehouseAR::model()->find("status=0 AND quantity=0 AND area='E' AND series='' AND special_property=? AND free_seat>0 ORDER BY id ASC", array($car->special_property));
+			// } 
+
+			if(!empty($voidRow) && !empty($orderConfigId)){
 				$row = $voidRow;
 				$row->car_type = $car->type;
 				$row->color = $car->color;
 				$row->cold_resistant = $car->cold_resistant;
-				//$row->car_year = $carYear;
 				$row->order_config_id = $orderConfigId;
 				$row->save();
 			} else {
 				//如果连空车列都没有就扔到周转区Z
 				if($car->special_property == 1){
-					$row = WarehouseAR::model()->find('area=? AND series=?', array('G', ''));
+					// $row = WarehouseAR::model()->find('area=? AND series=?', array('G', ''));
+					$row = WarehouseAR::model()->findByPk(200);
 				} else if ($car->special_property == 0) {
 					//$row = WarehouseAR::model()->find('area=?', array('Z'));
 				} else if ($car->special_property == 9) {
-					$row = WarehouseAR::model()->find('area=?', array('X'));
+					// $row = WarehouseAR::model()->find('area=?', array('X'));
+					$row = WarehouseAR::model()->findByPk(1000);
 				}
 			}
 		} 

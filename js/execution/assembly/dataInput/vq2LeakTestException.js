@@ -21,7 +21,7 @@ $("document").ready(function() {
 			    	//render car info data,include serialNumber,series,type and color
 		    		var car = response.data.car;
 		    		$('#serialNumber').html(car.serial_number);
-		    	 	$('#series').html(car.series);
+		    	 	$('#series').html(byd.SeriesName[car.series]);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    if(car.status && car.status !== "0")
@@ -31,15 +31,25 @@ $("document").ready(function() {
 				    //遍历拿到的json，拼html,塞到table中
 				    $("#tableConfirmation tbody").text("");//清除之前的东东
 				    $.each(response.data.faults,function(index,comp){
-						var indexTd = "<td>" + (index + 1) + "</td>";
-						var checkTd = '<td><input type="checkbox" value=""></td>';
-						var hiddenInputs = "<input name='componentId' type='hidden' value='" + comp.component_id + "' />" +
-								"<input name='faultId' type='hidden' value='" + comp.fault_id + "' />"
-						var nameTd = "<td>" + comp.component_name + comp.fault_mode + hiddenInputs + "</td>";
-						var displayNameTd = "<td>" + comp.display_name + "</td>";
-						var createTimeTd = "<td>" + comp.create_time + "</td>";
-						$("#tableConfirmation tbody").append("<tr>" + indexTd + checkTd + nameTd + 
-							displayNameTd + createTimeTd +  "</tr>");
+						var tr = $("<tr />");
+				    	$("<td />").html(index + 1).appendTo(tr);
+				    	$("<td />").html("<input type='checkbox' value=''>").appendTo(tr);
+						var hiddenInputs = "<input name='componentId' type='hidden' value='" + comp.component_id + "' />" +"<input name='faultId' type='hidden' value='" + comp.fault_id + "' />"
+				    	$("<td />").html(comp.component_name + comp.fault_mode + hiddenInputs).appendTo(tr);
+						var duty = $(ajaxDutyList());
+						duty.val(comp.duty_department_id);
+						var dutyTd = $("<td />").append(duty)
+			 			dutyTd.appendTo(tr);
+						console.log(dutyTd);
+
+						$("<td />").html(comp.display_name).appendTo(tr);
+						$("<td />").html(comp.create_time).appendTo(tr);
+
+						tr.data("componentId", comp.component_id);
+						tr.data("faultId", comp.fault_id);
+						tr.data("dutyDepartment", comp.duty_department_id);
+
+						$("#tableConfirmation tbody").append(tr);
 					});
 			    }
 			    else{
@@ -140,6 +150,28 @@ $("document").ready(function() {
 			},5000);
 		});
 	}
+
+	function ajaxDutyList() {
+		var dutyOption = '<select class="duty input-medium"><option value="">-请选择责任部门-</option>';
+		$.ajax({
+			url: QUERY_DUTY_DEPARTMENT,
+			dataType: "json",
+			data: {"node" : 'VQ2'},
+			async: false,
+			success: function (response) {
+				var options = '';
+				$.each(response.data, function(index, value) {
+						options += '<option value="' + value.id + '">' + value.name + '</option>';
+				});
+				
+				dutyOption += options;
+			},
+			error: function () {
+				alertError();
+			}
+		})
+		return dutyOption;
+	}
 //-------------------END common functions -----------------------
 
 //------------------- event bindings -----------------------
@@ -183,8 +215,12 @@ $("document").ready(function() {
 			obj.fixed = false;
 			if($(value).find("input[type='checkbox']").attr("checked") == "checked")
 				obj.fixed = true;
-			obj.faultId = $(value).find("input[type='hidden'][name='faultId']").val();
-			obj.componentId = $(value).find("input[type='hidden'][name='componentId']").val();
+			// obj.faultId = $(value).find("input[type='hidden'][name='faultId']").val();
+			obj.faultId = $(value).data("faultId");
+			// obj.componentId = $(value).find("input[type='hidden'][name='componentId']").val();
+			obj.componentId = $(value).data("componentId");
+			obj.dutyDepartment = $(value).data("dutyDepartment");
+			obj.newDutyDepartment = $(value).find(".duty").val();
 			sendData.fault.push(obj);
 		});
 		sendData.fault = JSON.stringify(sendData.fault);

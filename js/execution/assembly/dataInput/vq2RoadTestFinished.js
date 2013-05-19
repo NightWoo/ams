@@ -35,7 +35,7 @@ $(document).ready(function  () {
 			    	//render car info data,include serialNumber,series,type and color
 		    		 var data = response.data;
 		    		 $('#serialNumber').html(data.serial_number);
-		    	 	 $('#series').html(data.series);
+		    	 	 $('#series').html(byd.SeriesName[data.series]);
 			    	 $('#color').html(data.color);
 				     $('#type').html(data.type);
 				     if(data.status && data.status !== "0")
@@ -129,7 +129,7 @@ $(document).ready(function  () {
 	//ajaxDutyList();
 	function ajaxDutyList() {
 		$.ajax({
-			url : QUERY_DUTY_DRPARTMENT,
+			url : QUERY_DUTY_DEPARTMENT,
 			dataType : "json",
 			data : {"node" : "VQ2"},
 			success : function  (response) {

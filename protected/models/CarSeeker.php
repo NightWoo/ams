@@ -114,7 +114,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0){
+	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0, $whAvailableOnly = false){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -154,6 +154,10 @@ class CarSeeker
 		$condition = " WHERE status IN ($str)";
 		if(!empty($series)){
 			$condition .= " AND series='$series'";
+		}
+
+		if($whAvailableOnly){
+			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
 		}
 
 		$limit = "";
@@ -216,7 +220,7 @@ class CarSeeker
 		foreach($stateArray as $state){
 			$temp = array();
 			foreach($seriesArray as $series){
-				$count = $this->countStateCars($state,$series);
+				$count = $this->countStateCars($state, $series);
 				$temp[$seriesName[$series]] = $count;
 				$dataSeriesY[$seriesName[$series]][] = intval($count);
 				$seriesTotal[$seriesName[$series]] += intval($count);
@@ -267,6 +271,7 @@ class CarSeeker
 		foreach($colorArray as $index => $color){
 			$data = array();
 			$temp = array();
+			
 			$colorCount = $this->countStateCars($state, $series, $color);
 			$data['y'] = $colorCount;
 			$colorTotal[$color] += $colorCount;
@@ -304,7 +309,7 @@ class CarSeeker
 
 	}
 
-	public function queryBalanceCars($state, $series){
+	public function queryBalanceCars($state, $series, $whAvailableOnly=false){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -319,6 +324,9 @@ class CarSeeker
 		$condition = "status IN ($str)";
 		if(!empty($series)){
 			$condition .= " AND series='$series'";
+		}
+		if($whAvailableOnly){
+			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
 		}
 
 		$sql = "SELECT car_id,, `status`, vin, series, color, type, car_model, config_id, config_name, order_config_name,
@@ -347,6 +355,7 @@ class CarSeeker
 			$states = $state;
 		}
 
+
 		$sql = "SELECT id FROM car_config WHERE order_config_id = $orderConfigId";
         $configId = Yii::app()->db->createCommand($sql)->queryColumn();
         $configIds = join(',', $configId);
@@ -364,6 +373,14 @@ class CarSeeker
 		}
 		if($coldResistant != 2){
 			$condition .= " AND cold_resistant=$coldResistant";
+		}
+
+		$whAvailableOnly = false;
+        if($state === 'WHin'){
+            $whAvailableOnly = true;
+        }
+		if($whAvailableOnly){
+			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
 		}
 
 		$sql = "SELECT count(*) FROM car $condition";	
@@ -517,9 +534,9 @@ class CarSeeker
 			'VQ3' => 'VQ3',
 			'recycle' => '周转车',
 			'WH' => '成品库',
-			'WHin' => '成品库(除WDI)',
+			'WHin' => '成品库可备',
 			'assembly' => '总装',
-			'VQ3-NORMAL' => 'VQ3普通',
+			'VQ3-NORMAL' => 'VQ3正常',
 			'VQ3-RETURN' => 'VQ3退库',
 		);
 

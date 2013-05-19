@@ -22,7 +22,7 @@ $("document").ready(function() {
 			    	//render car info data,include serialNumber,series,type and color
 		    		var car = response.data;
 		    		$('#serialNumber').html(car.serial_number);
-		    	 	$('#series').html(car.series);
+		    	 	$('#series').html(byd.SeriesName[car.series]);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    if(car.status && car.status !== "0")

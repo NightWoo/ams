@@ -22,7 +22,7 @@ $("document").ready(function() {
 			    	//render car info data,include serialNumber,series,type and color
 		    		var data = response.data;
 		    		$('#serialNumber').html(data.serial_number);
-		    	 	$('#series').html(data.series);
+		    	 	$('#series').html(window.byd.SeriesName[data.series]);
 			    	$('#color').html(data.color);
 				    $('#type').html(data.type);
 				    if(data.status && data.status !== "0")
@@ -56,11 +56,7 @@ $("document").ready(function() {
 					$(".printDate").html(data.date);
 					$(".printCarType").html(data.type);
 					$(".printColor").html(data.color);
-					if(data.series === '6B'){
-						$(".printSeries").html('思锐');
-					} else{
-						$(".printSeries").html(data.series);
-					}
+					$(".printSeries").html(window.byd.SeriesName[data.series]);
 					$(".printMemo").html(data.remark);
 					$(".vinBarcode").attr("src",data.vinBarCode);
 					$(".engineBarcode").attr("src",data.engineBarCode);

@@ -40,6 +40,7 @@
 								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
 								<button id="reset" type="reset" class="btn">清空</button>
 								<!-- <span class="help-inline" id="vinHint">请输入VIN后回车</span> -->
+								<input type="text" class="input-medium" placeholder="检验日期..." id="checkTime" onClick="WdatePicker({el:'checkTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
 								<select name="" id="checker" class="input-small" disalbled='disabled'>
 									<option value="" selected>初检员</option>
 									<option value="195">郭卫东</option>
@@ -76,7 +77,6 @@
 									<option value="208">田士爱</option>
 									<option value="209">彭辉成</option>
 								</select>
-								<input type="text" class="input-medium" placeholder="检验日期..." id="checkTime" onClick="WdatePicker({el:'checkTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 								
 								<div class="help-inline" id="carInfo">

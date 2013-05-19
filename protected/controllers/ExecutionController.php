@@ -533,6 +533,7 @@ class ExecutionController extends BmsBaseController
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
 			
             $car->warehouseTime();
+            // $car->car->warehouse_time = date("YmdHis");
 			
 			//open gate
 			$rpc = new RpcService();

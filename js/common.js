@@ -184,32 +184,36 @@ $(function () {
 	        clock += " 08:00";
 
 	        return(clock); 
-	},
+		},
 
-	currentDate16: function () {
-		var now = new Date();
-	        var year = now.getFullYear();       //年
-	        var month = now.getMonth() + 1;     //月
-	        var day = now.getDate();            //日
-	        var hh = now.getHours();            //时
-	        var mm = now.getMinutes();          //分
-	       
-	        var clock = year + '-';
+		currentDate16: function () {
+			var now = new Date();
+		        var year = now.getFullYear();       //年
+		        var month = now.getMonth() + 1;     //月
+		        var day = now.getDate();            //日
+		        var hh = now.getHours();            //时
+		        var mm = now.getMinutes();          //分
+		       
+		        var clock = year + '-';
 
-	        if(month < 10) clock += '0';
-	        clock += month + '-';
+		        if(month < 10) clock += '0';
+		        clock += month + '-';
 
-	        if(day < 10) clock += '0';
-	        clock += day + ' ';
+		        if(day < 10) clock += '0';
+		        clock += day + ' ';
 
-	        clock += "16:00";
+		        clock += "16:00";
 
-	        return(clock); 
-	}	
+		        return(clock); 
+		}	
 
 	};/* END DataUtil CLASS DEFINITION */
 
-
+	window.byd.SeriesName = {
+		"F0" : "F0",
+		"M6" : "M6",
+		"6B" : "思锐",
+	}
 /* Constants
   * ========================= */	
 

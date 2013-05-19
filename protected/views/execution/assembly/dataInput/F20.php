@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
+    <script type="text/javascript" src="/bms/js/common.js"></script>
     <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/f20.js"></script>
 	</head>
 	<body>

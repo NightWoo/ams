@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
+    <script type="text/javascript" src="/bms/js/common.js"></script>
     <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/holdRelease.js"></script>
 	</head>
 	<body>
@@ -39,7 +40,7 @@
 											<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 										</div>
 										    <div class="btn-group">
-												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="返回成品库异常区">
+												<!-- <input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="返回成品库异常区"> -->
 												<input type="button" class="btn btn-danger" disabled="disabled" id ="toVQ3" value ="返回VQ3">
 											</div>
 										<input type="button" class="btn" id ="reset" value ="清空">

@@ -13,6 +13,7 @@
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
+        <script type="text/javascript" src="/bms/js/common.js"></script>
 
 		<script type="text/javascript" src="/bms/js/bootstrap-collapse.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/dataInput/outStandby.js"></script>

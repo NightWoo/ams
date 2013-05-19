@@ -3,6 +3,7 @@ Yii::import('application.models.Car');
 Yii::import('application.models.VinManager');
 Yii::import('application.models.SubConfigSeeker');
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.AR.CarConfigAR');
 class CarController extends BmsBaseController
 {
 	/**
@@ -238,10 +239,15 @@ class CarController extends BmsBaseController
                 $status .= '-' . $car->car->distributor_name;
             }
 
-            $carData=$car->car;
+            $carData=$car->car->getAttributes();
             if($carData['series']==='6B'){
                 $carData['series'] = '思锐';
             }
+            $carData['config_name'] = '';
+            if(!empty($car->car->config_id)){
+                $carData['config_name'] = CarConfigAR::model()->findByPk($car->car->config_id)->name;
+            }
+
             $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData, 'status' =>$status));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
@@ -481,7 +487,11 @@ class CarController extends BmsBaseController
             $perPage = $this->validateIntVal('perPage', 20);
             
             $seeker = new CarSeeker();
-            list($total, $data) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage);
+            $whAvailableOnly = false;
+            if($state === 'WHin'){
+                $whAvailableOnly = true;
+            }
+            list($total, $data) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage, $whAvailableOnly);
             $ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
                         'data' => $data,
@@ -520,7 +530,11 @@ class CarController extends BmsBaseController
         $series = $this->validateStringVal('series', '');
         try{
             $seeker = new CarSeeker();
-            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0);
+            $whAvailableOnly = false;
+            if($state === 'WHin'){
+                $whAvailableOnly = true;
+            }
+            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0, $whAvailableOnly);
             
             $title = "carID,流水号,VIN,车系,颜色,车型,车型/配置,耐寒性,状态,下线时间,入库时间,特殊订单号,备注,库区\n";
             $content = "";
