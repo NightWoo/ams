@@ -433,6 +433,7 @@ class OrderController extends BmsBaseController
 				$car->warehouseReturn('VQ3');
 				$car->car->status = 'VQ3退库';
 				$car->car->warehouse_id = 0;
+				$car->car->warehouse_time = '0000-00-00 00:00:00';
 				$car->car->area = '';
 				$car->car->save();
 				$message = $vin . '已成功退回VQ3，请开往VQ3面漆修正区';

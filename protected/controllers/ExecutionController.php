@@ -287,9 +287,9 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
 			
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ1');
-			}
+			//}
             
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -328,9 +328,9 @@ class ExecutionController extends BmsBaseController
 			
             $car = Car::create($vin);
 			
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('ROAD_TEST_FINISH');
-			}
+			//}
 			
 			$fault = Fault::createSeeker();
 			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
@@ -368,13 +368,20 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
             }
-
+			
+			if($car->car->warehouse_time>'0000-00-00 00:00:00') {
+                throw new Exception ($vin .'已入库，无法录入VQ3');
+            }
+			
+			if($car->car->distribute_time>'0000-00-00 00:00:00') {
+                throw new Exception ($vin .'已出库，无法录入VQ3');
+            }
 			
 			//只要进入VQ2，则可以多次进入VQ3
 			
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ2');
-			}
+			//}
             
 			$car->passNode('CHECK_IN');
             $car->enterNode('VQ3');
@@ -497,9 +504,9 @@ class ExecutionController extends BmsBaseController
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
 			$car->checkTestLinePassed();
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ3');
-			}       
+			//}       
             $car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id > 0){
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;

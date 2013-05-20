@@ -108,9 +108,9 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				 $car->leftNode('VQ1');
-			}
+			//}
 
 			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
@@ -132,9 +132,9 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 			
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('ROAD_TEST_FINISH');
-			}
+			//}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -324,9 +324,9 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
 			
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ2');
-			}
+			//}
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
@@ -336,6 +336,14 @@ class CarController extends BmsBaseController
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            }
+			
+			if($car->car->warehouse_time>'0000-00-00 00:00:00') {
+                throw new Exception ($vin .'已入库，无法录入VQ3');
+            }
+			
+			if($car->car->distribute_time>'0000-00-00 00:00:00') {
+                throw new Exception ($vin .'已出库，无法录入VQ3');
             }
 
             $car->passNode('CHECK_IN');
@@ -368,9 +376,9 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
 
-			if($car->car->series != 'M6'){
+			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ3');
-			}
+			//}
 
 			$fault = Fault::createSeeker();
         	$exist = $fault->exist($car, '未修复', array('VQ3_FACADE_TEST_'));

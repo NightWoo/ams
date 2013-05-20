@@ -1,4 +1,4 @@
-n<?php
+<?php
 Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.WarehouseAR');
@@ -140,7 +140,7 @@ class Order
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         		$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND warehouse_id < 1000 AND series=? AND color=? AND cold_resistant=? AND special_property<>9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+				$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND special_property<>9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				
 				//先看库里面有没这么多一个单需要的车，如果不够，不备此单
@@ -257,7 +257,7 @@ class Order
 			throw new Exception ('无法按空备板编号打印');
 		}
 
-		$orderSql = "SELECT id , board_number ,count, amount FROM `order` WHERE board_number='$boardNumber' AND `status`=1 AND is_printed=0";
+		$orderSql = "SELECT id , board_number ,count, amount FROM `order` WHERE board_number='$boardNumber' AND `status`>0 AND is_printed=0";
 		$orders = Yii::app()->db->createCommand($orderSql)->queryAll();
 
 		if(!empty($orders)){

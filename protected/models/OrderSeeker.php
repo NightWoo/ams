@@ -34,7 +34,7 @@ class OrderSeeker
         		$order['series'] = '6B';
         	}
         	if($order['sell_color'] == '巧克力'){
-        		$order['sell_color'] == '巧克力棕';
+        		$order['sell_color'] = '巧克力棕';
         	}
             $order['car_type'] = $order['car_model']. "(" . $order['car_type_description'] . ")";
             $order['config_description'] = '';

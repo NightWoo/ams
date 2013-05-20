@@ -372,7 +372,7 @@
 		   	 	<h3> 库区信息</h3>
 		  	</div>
 		  	<div class="modal-body">
-		  		<div class="span4" id="blockDetail">
+		  		<div class="" id="blockDetail">
 
               	</div>
 		  	</div>
