@@ -321,7 +321,7 @@
 	border-radius: 5px;
 	position: absolute;
 	top: 90px;
-	left: 1013px;
+	left: 1068px;
 	width: 65px;
 	height: 38px;
 	line-height: 40px;
@@ -417,44 +417,52 @@
 
 .pauseTime {
 	position: absolute;
-	top: 10px;
+	top: 5px;
+	width:40px;
+	text-align: center;
+}
+
+#pauseTimeDevice {
+	left:5px;
 }
 
 #pauseTimeT1 {
-	left:69px;
+	left:55px;
 }
 
 #pauseTimeT2 {
-	left:142px;
+	left:126px;
 }
 
 #pauseTimeT3 {
-	left:214px;
+	left:198px;
 }
 
 
 #pauseTimeC1 {
-	left:304px;
+	left:289px;
 }
 
 #pauseTimeC2 {
-	left:376px;
+	left:360px;
 }
 
 #pauseTimeF1 {
-	left:501px;
+	left:486px;
 }
 
 #pauseTimeF2 {
-	left:573px;
+	left:558px;
 }
 
-#pauseTimeDevice {
-	left:628px;
+#pauseTimeVQ1 {
+	left:630px;
 }
+
+
 
 #totalPauseTime {
-	left:682px;
+	left:725px;
 	font-size: 20px;
 }
 
@@ -463,7 +471,7 @@
 	font-size:20px;
 	color: green;
 	top:103px;
-	left:1100px;
+	left:1150px;
 }
 
 #recycle {

@@ -55,7 +55,8 @@ $(document).ready(function () {
 	"C01":644,"C02":644,"C03":644,"C04":644,"C05":644,"C06":644,"C07":644,"C08":644,"C09":644,"C10":644,
 	"C11":716,"C12":716,"C13":716,"C14":716,"C15":716,"C16":716,"C17":716,"C18":716,"C19":716,"C20":716,"C21":716,
 	"F01":841,"F02":841,"F03":841,"F04":841,"F05":841,"F06":841,"F07":841,"F08":841,"F09":841,"F10":841,
-	"F11":913,"F12":913,"F13":913,"F14":913,"F15":913,"F16":913,"F17":913,"F18":913,"F19":913,"F20":913
+	"F11":913,"F12":913,"F13":913,"F14":913,"F15":913,"F16":913,"F17":913,"F18":913,"F19":913,"F20":913,
+	"F21":985,"F22":985,"F23":985,"F24":985,"F25":985,
 	};
 	// console.log(markMap['T1']);
 	//add head class
@@ -339,6 +340,7 @@ function ajaxRefresh () {
 	    		$("#pauseTimeC2").text(response.data.pause_time.C2);
 	    		$("#pauseTimeF1").text(response.data.pause_time.F1);
 	    		$("#pauseTimeF2").text(response.data.pause_time.F2);
+	    		$("#pauseTimeVQ1").text(response.data.pause_time.VQ1);
 
 	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
 	    			parseInt(response.data.balance.VQ3));

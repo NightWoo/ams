@@ -75,14 +75,15 @@
 		            	<div class="node_t0 sub-flag"></div>
 		            	<div class="node_vq1 sub-flag"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
-		            			<div id="pauseTimeT1" class="pauseTime">-</div>
+	            			<div id="pauseTimeT1" class="pauseTime">-</div>
+	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
 							<div id="pauseTimeT2" class="pauseTime">-</div>
 							<div id="pauseTimeT3" class="pauseTime">-</div>
 							<div id="pauseTimeC1" class="pauseTime">-</div>
 							<div id="pauseTimeC2" class="pauseTime">-</div>
 							<div id="pauseTimeF1" class="pauseTime">-</div>
 							<div id="pauseTimeF2" class="pauseTime">-</div>
-	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
+							<div id="pauseTimeVQ1" class="pauseTime">-</div>
 	            			<div id="totalPauseTime" class="pauseTime">-</div>
 		            	</div>
 		            	<div id="useRate">
