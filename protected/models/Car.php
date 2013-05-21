@@ -845,8 +845,11 @@ class Car
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
 		if($this->car->series === 'F0'){
-			$barCode = $this->checkTraceABS()->bar_code;
-			$abs = $this->getAbsInfo($barCode);
+			$absTrace = $this->checkTraceABS();
+				if(!empty($absTrace)){
+					$barCode = $absTrace->bar_code;
+                	$abs = $this->getAbsInfo($barCode);
+			}
 		}
         $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
         $engineCode = $engineTrace->bar_code;
