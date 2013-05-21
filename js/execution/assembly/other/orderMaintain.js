@@ -195,7 +195,7 @@ $("document").ready(function() {
 						$("<td />").html(value.color).appendTo(tr);
 						
 						
-						configTip = "<select class='input-medium newOrderConfig' rel='tooltip' data-container='#newOrderNumber' data-toggle='tooltip' data-placement='top' title='"+ value.config_description +"' />"
+						configTip = "<select class='input-medium newOrderConfig' rel='tooltip' data-toggle='tooltip' data-placement='top' title='"+ value.config_description +"' />"
 						options = fillOrderConfig(value.series, value.car_type);
 						configSelect = $(configTip).addClass("orderConfigSelect").append(options);
 						$("<td />").append(configSelect).appendTo(tr);

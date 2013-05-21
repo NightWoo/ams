@@ -503,7 +503,7 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();
 			//if($car->car->series != 'M6'){
 				$car->leftNode('VQ3');
 			//}       
@@ -537,7 +537,7 @@ class ExecutionController extends BmsBaseController
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
-			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
+			// $vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
 			
             $car->warehouseTime();
             // $car->car->warehouse_time = date("YmdHis");
@@ -545,7 +545,7 @@ class ExecutionController extends BmsBaseController
 			//open gate
 			$rpc = new RpcService();
 			$host='10.23.86.172';
-			$ret = $rpc->openGate($host);
+			// $ret = $rpc->openGate($host);
 			
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);

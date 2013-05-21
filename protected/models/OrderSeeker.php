@@ -622,6 +622,7 @@ class OrderSeeker
 
 	public function queryCarsBySpecialOrder($specialOrder){
 		$specialOrder = trim($specialOrder);
+		$specialOrder = strtoupper($specialOrder);
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
 		}
@@ -661,6 +662,11 @@ class OrderSeeker
 			$existInHGZ = $this->existInHGZ($car['vin']);
 			if($existInHGZ){
 				$car['cPrinted'] = true;
+			}
+			$car['iPrinted'] = false;
+			$isReportPrinted = $this->isReportPrinted($car['vin']);
+			if($isReportPrinted){
+				$car['iPrinted'] = true;
 			}
 			
 			++$total;
@@ -808,6 +814,16 @@ class OrderSeeker
         }
 
         return $exist;
+	}
+
+	public function isReportPrinted($vin) {
+		$isPrinted = false;
+		$existsql = "SELECT vin,Order_ID,ReportPrinted FROM ShopPrint WHERE vin='{$vin}'";				
+		$exist=Yii::app()->dbTest->createCommand($existsql)->queryRow();
+		if(!empty($exist) && $exist['ReportPrinted'] == '已打印'){
+			$isPrinted = true;
+		}
+		return $isPrinted;
 	}
 
 }

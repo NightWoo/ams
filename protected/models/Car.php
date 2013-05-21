@@ -845,7 +845,8 @@ class Car
 		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
 		if($this->car->series === 'F0'){
-			$this->checkTraceABS();
+			$barCode = $this->checkTraceABS()->bar_code;
+			$abs = $this->getAbsInfo($barCode);
 		}
         $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
         $engineCode = $engineTrace->bar_code;
@@ -1010,6 +1011,19 @@ class Car
 		return;
 	}
 
+	public function isTestLinePassed() {
+		$flag = false;
+		$vin = $this->car->vin;
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		FROM Summary WHERE vin='$vin'";
+			
+		$ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
+		if($ret['Final_Flag'] === 'T') 
+			$flag = true;
+		
+		return $flag;
+	}
+
 	public function throwInspectionSheetData() {
 		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
@@ -1072,11 +1086,16 @@ class Car
 		$insertsql = "INSERT INTO ShopPrint
 				SET vin='{$vin}', Order_ID='{$specialOrder}', VenName='{$country}', Clime='{$clime}', `Path`='{$laneName}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";
 		$deletesql = "DELETE FROM ShopPrint WHERE vin='{$vin}'";
-		$existsql = "SELECT vin,Order_ID FROM ShopPrint WHERE vin='{$vin}'";				
+		$existsql = "SELECT vin,Order_ID,ReportPrinted FROM ShopPrint WHERE vin='{$vin}'";				
 		
-		$exist=Yii::app()->dbTest->createCommand($existsql)->execute();
+		$exist=Yii::app()->dbTest->createCommand($existsql)->queryRow();
 		if(!empty($exist)){
-			Yii::app()->dbTest->createCommand($deletesql)->execute();
+			if($exist['ReportPrinted'] == '待打印'){
+				Yii::app()->dbTest->createCommand($deletesql)->execute();
+			} else {
+				$ret = 0;
+				return $ret;
+			}
 		}
 		
 		$ret = Yii::app()->dbTest->createCommand($insertsql)->execute();
@@ -1346,8 +1365,12 @@ class Car
 							'104029' => '博世汽车部件（苏州）有限公司',
 							'102442' => '浙江万向精工有限公司'
 							);
+		if(array_key_exists($providerCode,$type)){
+			return array('type' => $type[$providerCode], 'provider' => $provider[$providerCode]);
+		} else {
+			throw new Exception('无ABS厂家信息,请联系AMS信息管理员确认ABS条码信息');
+		}
 
-		return array('type' => $type[$providerCode], 'provider' => $provider[$providerCode]);
 	}
 
 	public function throwVinAssembly($vin, $point, $shift='总装1线A班', $time=''){

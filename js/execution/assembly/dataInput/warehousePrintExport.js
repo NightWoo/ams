@@ -62,7 +62,8 @@ $(document).ready(function() {
 					toggleVinHint(false);
 					toggleSerachRemove(false);
 					$("#specialOrder").attr("disabled", "disabled");
-					if(response.data.total != 0 && response.data.total === response.data.isGood){
+					// if(response.data.total != 0 && response.data.total === response.data.isGood){
+					if(response.data.total > 0 && response.data.isGood >0){
 						$("#printAll").removeAttr("disabled");
 					}
 					cars = response.data.cars;
@@ -82,10 +83,14 @@ $(document).ready(function() {
 							$("<td />").html(value.finish_time.substring(0,16)).appendTo(tr);
 						}
 						$("<td />").html(value.remark).appendTo(tr);
-						if(value.inspectionSheet === 'OK'){
-							$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
+						if(value.iPrinted){
+							$("<td />").html("<i class='icon-print'></i>").addClass("alignCenter").appendTo(tr);
 						} else {
-							$("<td />").html("").appendTo(tr);
+							if(value.inspectionSheet === 'OK'){
+								$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
+							} else {
+								$("<td />").html("").appendTo(tr);
+							}
 						}
 						if(value.cPrinted){
 							$("<td />").html("<i class='icon-print'></i>").addClass("alignCenter").appendTo(tr);
@@ -103,7 +108,7 @@ $(document).ready(function() {
 							tr.addClass("warning");
 						}
 
-						if(value.cPrinted){
+						if(value.cPrinted && value.iPrinted){
 							tr.addClass("success");
 						}
 

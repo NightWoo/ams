@@ -279,6 +279,7 @@ class Order
 
 	public function printBySpecialOrder($specialOrder, $forceThrow=false, $country='出口', $clime='出口'){
 		$specialOrder = trim($specialOrder);
+		$specialOrder = strtoupper($specialOrder);
 		if(empty($specialOrder)){
 			throw new Exception('特殊订单号不可为空');
 		}
@@ -305,6 +306,11 @@ class Order
 		foreach($vins as $vin){
 			++$total;
 			$car = Car::create($vin);
+			if(empty($car->car->engine_code)){
+				$certificateFailures[] = $vin;
+				$inspectionFailures[] = $vin;
+				continue;
+			}
 			if($car->car->distribute_time === '0000-00-00 00:00:00'){
 				$outDate = date("Y-m-d H:i:s");
 			}else{
@@ -325,8 +331,12 @@ class Order
 				}
 				--$retry;
             } while ($ret === false &&  $retry>0);
-            
-           	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
+
+            $isTLpassed = $car->isTestLinePassed();
+            $throwRet = 0;
+            if($isTLpassed){
+	           	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
+            }
            	if($throwRet>0){
            		++$inspectionSuccess;
            	}else{

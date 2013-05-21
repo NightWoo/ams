@@ -78,7 +78,8 @@ class CarController extends BmsBaseController
 			$car->checkTraceGasolineEngine();
 			//$car->checkTraceGearBox();
             if($car->car->series === 'F0'){
-                $car->checkTraceABS();
+                $barCode = $car->checkTraceABS()->bar_code;
+                $abs = $car->getAbsInfo($barCode);
             }
             $data = $car->car;
 			
