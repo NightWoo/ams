@@ -915,19 +915,22 @@ class Car
 		$order = new Order;            
         list($success, $data) = $order->match($series, $carType, $config, $color, $coldResistant, $date);
         if($success) {
-        	$area = 'WDI';
-            //$this->moveToArea($area);
             $warehouse = WarehouseAR::model()->find('area=?', array('WDI'));
-            $warehouse->quantity += 1;
+            // $warehouse->quantity += 1;
             $warehouse->save();
 
             $this->car->order_id = $data['orderId'];
-            $this->car->status = 'WDI';
             $this->car->warehouse_id = $warehouse->id;
+            $this->car->status = 'WDI';
+            $this->car->area = 'WDI';
             $this->car->save();
 
             $data['area'] = $warehouse->area;
             $data['row'] = $warehouse->row;
+            $data['vin'] = $this->car->vin;
+            $data['type'] = $this->car->type;
+            $data['color'] = $this->car->color;
+            $data['cold_resistant'] = ($this->car->cold_resistant == 1)? '耐寒':'非耐寒';
         }
 
         return array($success, $data);

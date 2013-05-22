@@ -14,6 +14,8 @@ class BmsMailer extends PHPMailer {
 	var $Password = '';
 	var $SMTPDebug = false;
 	public function __construct() {
+		$this->IsSMTP();
+		// $this->SMTPSecure = "ssl";
 		$this->Enable = Yii::app()->params['mail_enable'];
 		$this->From = Yii::app()->params['mail_from'];
 		$this->FromName = Yii::app()->params['mail_fromName'];
@@ -21,6 +23,7 @@ class BmsMailer extends PHPMailer {
 		$this->Host = Yii::app()->params['mail_host'];
 		$this->Port = Yii::app()->params['mail_port'];
 		$this->Mailer = Yii::app()->params['mailer'];
+		$this->CharSet = 'utf-8';
 		if($this->Mailer === 'smtp') {
 			$this->SMTPDebug = Yii::app()->params['smtp_debug'];		
 			$this->Username = Yii::app()->params['smtp_username'];
@@ -35,10 +38,10 @@ class BmsMailer extends PHPMailer {
 
 	public function sendMail($subject, $content, $receivers) {
 		if(!$this->Enable) {
-			return;
+			return 'not enable';
 		}
 		if(empty($receivers)) {
-			return;
+			return 'no receivers';
 		}
 		if(!empty(Yii::app()->params['SEND_ALL_MAIL_TO'])) {
 			$receiverConent = $receivers . ' change to ' ;
@@ -55,7 +58,7 @@ class BmsMailer extends PHPMailer {
 		}
 		$this->Subject = $subject;
 		$this->Body = $content;
-		$this->Send(); // send message
+		$ret = $this->Send(); // send message
+		return $ret;
 	}
-
 }

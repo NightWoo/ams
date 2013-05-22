@@ -118,10 +118,18 @@ class Order
 		if(!empty($order)) {
 			$order->hold += 1;
 			$order->save();
+
+			if($order->hold == $order->amount && $order->standby_finish_time == '0000-00-00 00:00:00'){
+				$order->standby_finish_time = date("YmdHis");
+			}
+			$order->save();
 			
 			$data['orderId'] = $order->id;
 			$data['orderNumber'] = $order->order_number;
-			// $data['lane_id'] = $order->lane_id;
+			$data['distributorName'] = $order->distributor_name;
+			$data['laneId'] = $order->lane_id;
+			$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
+
 			$success = true;
 		}
 

@@ -36,6 +36,9 @@ class OrderSeeker
         	if($order['sell_color'] == '巧克力'){
         		$order['sell_color'] = '巧克力棕';
         	}
+        	if($order['color'] == '巧克力'){
+        		$order['color'] = '巧克力棕';
+        	}
             $order['car_type'] = $order['car_model']. "(" . $order['car_type_description'] . ")";
             $order['config_description'] = '';
             if(!empty($order['options'])){
@@ -440,7 +443,7 @@ class OrderSeeker
 
 		$condition = join(' AND ', $conditions);
 
-		$sql = "SELECT id, standby_date, priority, amount, hold, count, series, car_type, color, car_year, cold_resistant, order_config_id, lane_id, carrier, order_number
+		$sql = "SELECT *
 				  FROM bms.order
 				 WHERE $condition
 			  ORDER BY priority ASC";

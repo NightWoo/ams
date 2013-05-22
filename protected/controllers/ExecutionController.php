@@ -287,9 +287,7 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
 			
-			//if($car->car->series != 'M6'){
-				$car->leftNode('VQ1');
-			//}
+			$car->leftNode('VQ1');
             
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -328,9 +326,7 @@ class ExecutionController extends BmsBaseController
 			
             $car = Car::create($vin);
 			
-			//if($car->car->series != 'M6'){
-				$car->leftNode('ROAD_TEST_FINISH');
-			//}
+			$car->leftNode('ROAD_TEST_FINISH');
 			
 			$fault = Fault::createSeeker();
 			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
@@ -379,9 +375,7 @@ class ExecutionController extends BmsBaseController
 			
 			//只要进入VQ2，则可以多次进入VQ3
 			
-			//if($car->car->series != 'M6'){
-				$car->leftNode('VQ2');
-			//}
+			$car->leftNode('VQ2');
             
 			$car->passNode('CHECK_IN');
             $car->enterNode('VQ3');
@@ -485,7 +479,6 @@ class ExecutionController extends BmsBaseController
         try {
             $vin = $this->validateStringVal('vin', '');
             $driverId = $this->validateIntVal('driverId', 0);
-            //$date = date('Y-m-d');
             $date = DateUtil::getCurDate();
 
             $car = Car::create($vin);
@@ -504,9 +497,7 @@ class ExecutionController extends BmsBaseController
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
 			$car->checkTestLinePassed();
-			//if($car->car->series != 'M6'){
-				$car->leftNode('VQ3');
-			//}       
+			$car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id > 0){
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
@@ -521,17 +512,22 @@ class ExecutionController extends BmsBaseController
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             
             //do not make the car standby while checkin point temporally
-            // list($matched, $data) = $car->matchOrder($date);
-            // if($matched) {
-            //     $message = $vin . '已匹配订单' . $data['orderNumber'] . '请开往WDI区';
-            // } else {
+            list($matched, $data) = $car->matchOrder($date);
+            if($matched) {
+                $message = $vin . '已匹配订单' . $data['orderNumber'] . '请开往WDI区';
+                $car->throwMarkPrintData();
+            } else {
                 $warehouse = new Warehouse;
                 $data = $warehouse->checkin($vin);
                 $message = $vin . '已成功入库，请开往' . $data['row'];
                 $car->car->warehouse_id = $data['warehouse_id'];
                 $car->car->area = $data['area'];
                 $car->car->save();
-            // }
+
+                $data['lane'] = '--';
+                $data['orderNumber'] = '-------------------';
+                $data['distributorName'] = '-------------------';
+            }
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;
 			} else {
@@ -540,13 +536,15 @@ class ExecutionController extends BmsBaseController
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
 			
             $car->warehouseTime();
-            // $car->car->warehouse_time = date("YmdHis");
 			
 			//open gate
 			$rpc = new RpcService();
-			$host='10.23.86.172';
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+			$data['clientIp'] = $clientIp;
+            $host='10.23.86.172';
 			$ret = $rpc->openGate($host);
 			
+
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -653,13 +651,15 @@ class ExecutionController extends BmsBaseController
             $car->distributeTime();
 			
 			//open gate
-			$rpc = new RpcService();
-			$host='10.23.86.3';
-			$ret = $rpc->openGate($host);
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $data['clientIp'] = $clientIp;
+            $rpc = new RpcService();
+            $host='10.23.86.3';
+            $ret = $rpc->openGate($host);
             
             //no need to throw one by one
             //$outDate = date("Y-m-d h:m:s");
-            //$clientIp = $_SERVER["REMOTE_ADDR"];
+            // $clientIp = $_SERVER["REMOTE_ADDR"];
             //$car->throwCertificateData($outDate, $clientIp);
             //$car->throwInspectionSheetData();
 			
@@ -992,6 +992,22 @@ class ExecutionController extends BmsBaseController
             
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
             $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionTestMailer(){
+        try{
+            $mailer = new BmsMailer();
+            $mes = $mailer->sendMail('mailerTest', 'this is a test', 'wu.jun9@byd.com');
+            
+            // $fp = fsockopen("smtp.163.com",25,$errno,$errstr,60); 
+            // if(! $fp) 
+            //     $mes = '$errstr   ($errno) <br> \n '; 
+            // else 
+            //     $mes = 'ok <br> \n ';
+            $this->renderJsonBms(true, $mes, $mes);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

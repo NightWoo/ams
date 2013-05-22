@@ -85,7 +85,7 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead体 -->
 		</div>
-		<div class="printable toPrint" style="width:168pt;height:70pt; margin:8pt 0; font-family: Microsoft YaHei;">
+		<!-- <div class="printable toPrint" style="width:168pt;height:70pt; margin:8pt 0; font-family: Microsoft YaHei;">
 			<div style="text-align:center;font-size:24pt;text-align: center;">
 				<p id="rowPrint" style="margin: 0 5pt 0 0;">A000</p>
 			</div>
@@ -99,8 +99,8 @@
 				<span class="nowTime" style="float:right; margin-right:14pt">
 				</span>
 			</div>
-		</div>
-		<!-- <div class="printable toPrint" style="width:220pt;height:100pt; padding: 7pt 5pt; font-family: Microsoft YaHei;">
+		</div> -->
+		<div class="printable toPrint" style="width:220pt;height:100pt; padding: 7pt 5pt; font-family: Microsoft YaHei;">
 			<div style="text-align:center;font-size:14pt;text-align: center;">
 				<p id="rowPrint" style="margin: 2pt 5pt;">A000</p>
 			</div>
@@ -116,6 +116,6 @@
 			<div style="text-align:center;font-size:14pt;margin: 0 5pt;">
 				<p id="lanePrint" style="margin:2pt 5pt;"></p>
 			</div>
-		</div>  -->  	
+		</div>   	
 	</body>
 </html>
