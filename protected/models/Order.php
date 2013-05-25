@@ -340,16 +340,17 @@ class Order
 				--$retry;
             } while ($ret === false &&  $retry>0);
 
-            $isTLpassed = $car->isTestLinePassed();
-            $throwRet = 0;
-            if($isTLpassed){
-	           	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
-            }
-           	if($throwRet>0){
-           		++$inspectionSuccess;
-           	}else{
-           		$inspectionFailures[] = $vin;
-           	}
+            //do not throw Inspection Sheet Data 
+            // $isTLpassed = $car->isTestLinePassed();
+            // $throwRet = 0;
+            // if($isTLpassed){
+	           // 	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
+            // }
+           	// if($throwRet>0){
+           	// 	++$inspectionSuccess;
+           	// }else{
+           	// 	$inspectionFailures[] = $vin;
+           	// }
 		}
 
 		return array(

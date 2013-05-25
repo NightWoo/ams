@@ -44,7 +44,7 @@
     width: 160px;
 }
 
-#newModal{
+#newModal, #specialModal{
 	margin: 0 0 0 -460px;
 	width: 900px;
 	font-size: 12px;
@@ -56,11 +56,11 @@
 	font-size: 12px;
 }
 
-#newModal .control-label{
+#newModal .control-label, #specialModal .control-label{
 	width:80px;
 }
 
-#newModal .controls{
+#newModal .controls, #specialModal .controls{
     margin-left: 90px;
 }
 
@@ -77,7 +77,7 @@
 	height:12px;
 }
 
-#newOrderNumber {
+#newOrderNumber, #specialOrderNumber {
 	width: 166px;
 }
 

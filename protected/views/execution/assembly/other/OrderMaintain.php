@@ -33,9 +33,11 @@
             <div>
             	<legend>发车计划
             		<span class="">
-            			<!-- <a id="addSpecialOrder" href="#"><i class="icon-plus"></i>&nbsp;出口订单</a>
-            			/
-            			<a id="addInternalOrder" href="#"><i class="icon-plus"></i>&nbsp;内部订单</a> -->
+            			<a id="addOrder" href="#"><i class="icon-plus"></i>&nbsp;普通</a>
+            			|
+            			<a id="addSpecialOrder" href="#"><i class="icon-plus"></i>&nbsp;出口</a>
+            			|
+            			<a id="addInternalOrder" href="#"><i class="icon-plus"></i>&nbsp;内部</a>
             		</span>
             	</legend>
             </div>
@@ -245,7 +247,7 @@
 <div class="modal" id="specialModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   	 	<h3>录入订单</h3>
+   	 	<h3>录入出口订单</h3>
   	</div>
   	<div class="modal-body">
   		<form id="" class="form-horizontal">

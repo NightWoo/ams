@@ -511,11 +511,11 @@ class ExecutionController extends BmsBaseController
             $onlyOnce = false;
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             
-            //do not make the car standby while checkin point temporally
             list($matched, $data) = $car->matchOrder($date);
             if($matched) {
-                $message = $vin . '已匹配订单' . $data['orderNumber'] . '请开往WDI区';
+                $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
                 $car->throwMarkPrintData();
+                $car->enterNode('OutStandby', $driverId);
             } else {
                 $warehouse = new Warehouse;
                 $data = $warehouse->checkin($vin);
@@ -575,10 +575,9 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
+            
 			$car->checkTestLinePassed();
-			if($car->car->series != 'M6'){
-				$car->leftNode('VQ3');
-			}       
+			$car->leftNode('VQ3');
             //$car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id == 0 || $car->car->status != '成品库'){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
@@ -587,20 +586,30 @@ class ExecutionController extends BmsBaseController
 			if($car->car->distribute_time != '0000-00-00 00:00:00'){
 				throw new Exception($vin . '已出库，不可重复分配库位');
 			}
-			
-			$warehouse = new Warehouse;
-			$data = $warehouse->checkin($vin);
-			$message = $vin . '已重新分配库位，请开往' . $data['row'];
-			$car->car->warehouse_id = $data['warehouse_id'];
-			$car->car->area = $data['area'];
-			$car->car->save();
+
+            list($matched, $data) = $car->matchOrder($date);
+            if($matched) {
+                $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
+                $car->throwMarkPrintData();
+                $car->enterNode('OutStandby', $driverId);
+            } else {
+                $warehouse = new Warehouse;
+                $data = $warehouse->checkin($vin);
+                $message = $vin . '已重新分配库位，请开往' . $data['row'];
+                $car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->area = $data['area'];
+                $car->car->save();
+
+                $data['lane'] = '--';
+                $data['orderNumber'] = '-------------------';
+                $data['distributorName'] = '-------------------';
+            }
+
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
-			
-			
 			
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);

@@ -1088,9 +1088,10 @@ class Car
 		$country = $cData['export_country']; 
 		$clime = $cData['mark_clime']; 
 		$laneName = 'A';
+		$reportPrinted = '待打印';
 
 		$insertsql = "INSERT INTO ShopPrint
-				SET vin='{$vin}', Order_ID='{$specialOrder}', VenName='{$country}', Clime='{$clime}', `Path`='{$laneName}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";
+				SET vin='{$vin}', Order_ID='{$specialOrder}', VenName='{$country}', Clime='{$clime}', `Path`='{$laneName}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}', ReportPrinted='{$reportPrinted}' ";
 		$deletesql = "DELETE FROM ShopPrint WHERE vin='{$vin}'";
 		$existsql = "SELECT vin,Order_ID,ReportPrinted FROM ShopPrint WHERE vin='{$vin}'";				
 		

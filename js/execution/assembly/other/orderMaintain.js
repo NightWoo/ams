@@ -2,7 +2,7 @@ $("document").ready(function() {
 	initPage();
 	var orderArray = [];
 
-	$("#btnAdd").click(function() {
+	$("#btnAdd, #addOrder").click(function() {
 		$("#newStandbyDate").val(window.byd.DateUtil.currentDate);
 		boardNum = getBoardNumber();
 		$("#newBoardNumber").val(boardNum);
@@ -13,6 +13,13 @@ $("document").ready(function() {
 		if($.trim($("#newOrderNumber").val()) != ''){
 			ajaxGetOriginalOrders();
 		}
+	})
+
+	$("#addSpecialOrder").click(function() {
+		$("#specialStandbyDate").val(window.byd.DateUtil.currentDate);
+		boardNum = getBoardNumber();
+		$("#specialBoardNumber").val(boardNum);
+		$("#specialModal").modal('show');
 	})
 
 	$(".clearinput").click(function() {
