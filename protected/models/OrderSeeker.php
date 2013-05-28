@@ -58,6 +58,67 @@ class OrderSeeker
         return $orders;
 	}
 
+	public function getSellOrderDetail($orderDetailId) {
+		$sql = "SELECT DATAK40_DGMXID AS order_detail_id, DATAK40_JXSMC AS distributor, DATAK40_DGDH AS order_number, DATAK40_CXMC AS series, DATAK40_CLDM AS car_type_code, DATAK40_CLXH AS sell_car_type, DATAK40_BZCX AS car_model, DATAK40_CXSM AS car_type_description, DATAK40_CLYS AS sell_color, DATAK40_VINMYS AS color, DATAK40_DGSL AS amount, DATAK40_XZPZ AS options, DATAK40_DDXZ AS order_nature, DATAK40_DDLX AS cold_resistant, DATAK40_NOTE AS remark, DATAK40_JZPZ AS additions, DATAK40_SSDW AS production_base, DATAK40_JXSDM AS distributor_code
+                FROM DATAK40_CLDCKMX
+                WHERE DATAK40_SSDW = '3' AND DATAK40_DGMXID = $$orderDetailId";
+		
+		$tdsSever = Yii::app()->params['tds_SELL'];
+        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsUser = Yii::app()->params['tds_SELL_username'];
+        $tdsPwd = Yii::app()->params['tds_SELL_password'];
+       
+        $datas = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
+
+        $order = $datas[0];
+
+        if($order['series'] == '思锐'){
+        		$order['series'] = '6B';
+    	}
+    	if($order['sell_color'] == '巧克力'){
+    		$order['sell_color'] = '巧克力棕';
+    	}
+    	if($order['color'] == '巧克力'){
+    		$order['color'] = '巧克力棕';
+    	}
+        $order['car_type'] = $order['car_model']. "(" . $order['car_type_description'] . ")";
+        $order['config_description'] = '';
+        if(!empty($order['options'])){
+        	$order['config_description'] .= $order['options'];
+        	if(!empty($order['additions'])) $order['config_description'] .= $order['additions'];
+        }else if(!empty($order['additions'])){
+        	$order['config_description'] .= $order['additions'];
+        }
+        $order['cold_resistant'] == '耐寒型' ? $order['cold_resistant'] = '1' : $order['cold_resistant'] = '0';
+
+        return $order;
+	}
+
+	public function getSpecialOrders($specialNumber){
+		if(empty($specialNumber)){
+        	throw new Exception ('订单号不能为空');
+        }
+        $specialNumber = trim($specialNumber);
+		$specialNumber = strtoupper($specialNumber);
+
+		$sql = "SELECT COUNT(id) AS amount, series, type AS car_type, order_config_id, order_config_name,cold_resistant, color, special_order,remark
+				FROM view_car_info_order_config 
+				WHERE UPPER(special_order) = '$specialNumber' OR UPPER(remark) LIKE '%$specialNumber%' 
+				GROUP BY series, type,order_config_id, order_config_name,cold_resistant, color";
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($orders as $order){
+			$sumSql = "SELECT SUM(amount)
+						FROM `order` 
+						WHERE UPPER(order_number)='$specialNumber' AND series='{$order['series']}' AND car_type='{$order['car_type']}' AND order_config_id='{$order['order_config_id']}' AND cold_resistant='{$order['cold_resistant']}' AND color='{$order['color']}'";
+			$amountSum = Yii::app()->db->createCommand($sql)->queryScalar();
+			$order['amount'] -= $amountSum;
+			if($order['amount']<0) $order['amount'] = 0;
+		}
+
+		return $orders;
+	}
+
 	public function mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql){
 		//php 5.4 linux use pdo cannot connet to ms sqlsrv db 
         //use mssql_XXX instead

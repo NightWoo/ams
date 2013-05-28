@@ -22,6 +22,12 @@ $("document").ready(function() {
 		$("#specialModal").modal('show');
 	})
 
+	$("#specialGetOrder").click(function() {
+		if($.trim($("#specialOrderNumber").val()) != ''){
+			ajaxGetSpeceialOrders();
+		}
+	})
+
 	$(".clearinput").click(function() {
 		$(this).siblings().filter("input").val("");
 	})
@@ -280,6 +286,28 @@ $("document").ready(function() {
 		var jsonText = JSON.stringify(orderObj);
 
 		return jsonText;
+	}
+
+	function ajaxGetSpeceialOrders() {
+		$.ajax({
+			url: GET_SPECIAL_ORDERS,
+			type: "post",
+			dataType: "json",
+			data: {
+				"specialNumber" : $.trim($("#specialOrderNumber").val())
+			},
+			success: function(response) {
+				if(response.success && response.data.length != 0){
+					
+				} else {
+					alert("查无匹配单[" + $("#specialOrderNumber").val() + "]");
+					resetNewModal();
+				}
+			},
+			error: function(){
+				alertError();
+			}
+		})
 	}
 
 	function ajaxDetailExist(){

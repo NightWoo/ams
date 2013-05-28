@@ -227,6 +227,7 @@ var PAUSE_DELETE = "/bms/pause/delete";
 //added by wujun
 //order maintain
 var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";
+var GET_SPECIAL_ORDERS = "/bms/order/getSpecialOrders";
 var ORDER_CHECK_DETAIL = "/bms/order/checkDetail";
 var ORDER_GENERATE = "/bms/order/generate";
 var ORDER_QUERY = "/bms/order/query";

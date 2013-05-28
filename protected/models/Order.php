@@ -226,6 +226,8 @@ class Order
 
 	public function printByOrder($orderId){
 		$order = OrderAR::model()->findByPk($orderId);
+		$this->updateOrderSellInfo($order);
+
 		if($order->amount > $order->count){
 			throw new Exception("订单明细".$order->order_detail_id."_". $order->order_number. "_" . $order->distributor_name ."未完成，暂不可传输打印");
 		}
@@ -283,6 +285,24 @@ class Order
 			}
 		}
 		return $boardNumber;
+	}
+
+	public function updateOrderSellInfo($order = null){
+		if(!empty($order)){
+			$orderDetailId = $order->order_detail_id;
+			$seeker = new OrderSeeker();
+
+			$sellOrder = $seeker->getSellOrderDetail($orderDetailId);
+
+			$order->sell_car_type = $sellOrder['sell_car_type'];
+			$order->car_type = $sellOrder['car_type'];
+			$order->color = $sellOrder['color'];
+			$order->sell_color = $sellOrder['sell_color'];
+			$order->cold_resistant = $sellOrder['cold_resistant'];
+
+			$order->save();
+		}
+
 	}
 
 	public function printBySpecialOrder($specialOrder, $forceThrow=false, $country='出口', $clime='出口'){

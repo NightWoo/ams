@@ -23,23 +23,23 @@ class WarehouseCountCommand extends CConsoleCommand
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
-			throwTextData('入库',$checkin,$series,$countDate,$log);
+			throwTextData('入库',$checkin,$seriesName,$countDate,$log);
 
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
-			throwTextData('已入',$monthCheckin,$series,$countDate,$log);
+			throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
 			$this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log);
-			throwTextData('出库',$checkout,$series,$countDate,$log);
+			throwTextData('出库',$checkout,$seriesName,$countDate,$log);
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已出',$monthCheckout,$series,$countDate,$workDate,$log);
-			throwTextData('已出',$monthCheckout,$series,$countDate,$log);
+			throwTextData('已出',$monthCheckout,$seriesName,$countDate,$log);
 			
 			$balance = $this->countBalance($series);
 			$this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
-			throwTextData('库存',$balance,$series,$countDate,$log);
+			throwTextData('库存',$balance,$seriesName,$countDate,$log);
 		}
 	}
 
@@ -59,23 +59,23 @@ class WarehouseCountCommand extends CConsoleCommand
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
-			throwTextData('入库',$checkin,$series,$countDate,$log);
+			throwTextData('入库',$checkin,$seriesName,$countDate,$log);
 
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
-			throwTextData('已入',$monthCheckin,$series,$countDate,$log);
+			throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
 			$this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log);
-			throwTextData('出库',$checkout,$series,$countDate,$log);
+			throwTextData('出库',$checkout,$seriesName,$countDate,$log);
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已出',$monthCheckout,$series,$countDate,$workDate,$log);
-			throwTextData('已出',$monthCheckout,$series,$countDate,$log);
+			throwTextData('已出',$monthCheckout,$seriesName,$countDate,$log);
 			
 			$balance = $this->countBalance($series);
 			$this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
-			throwTextData('库存',$balance,$series,$countDate,$log);
+			throwTextData('库存',$balance,$seriesName,$countDate,$log);
 		}
 	}
 

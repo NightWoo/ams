@@ -79,6 +79,9 @@ $("document").ready(function() {
 					$(".nowTime").html("入库"+nowTime());
 					$("#rowPrint").html(response.data.row);
 					$("#vinPrint").html(response.data.vin);
+					$("#distributorPrint").html(response.data.distributorName);
+					$("#orderNumberPrint").html(response.data.orderNumber);
+					$("#lanePrint").html(response.data.lane + "道");
 				  	fadeMessageAlert(response.message,"alert-success");
 				  	fadeMessageRow(response.data.row,"alert-success");
 				  	setTimeout(function (){window.print();},500);

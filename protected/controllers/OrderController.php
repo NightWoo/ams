@@ -52,6 +52,17 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionGetSpecialOrders(){
+		$specialNumber = $this->validateStringVal('specialNumber', '');
+		try {
+			$seeker = new OrderSeeker();
+			$orders = $seeker->getSpecialOrders($specialNumber);
+			$this->renderJsonBms(true, 'OK', $orders);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionGetBoardNumber() {
 		try {
 			$seeker = new OrderSeeker();
@@ -260,6 +271,17 @@ class OrderController extends BmsBaseController
 					$order->out_finish_time = date("YmdHis");
 				}	
 			}
+
+			$order->save();
+
+			//update from sell order
+			$seeker = new OrderSeeker();
+			$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
+			$order->sell_car_type = $sellOrder['sell_car_type'];
+			$order->car_type = $sellOrder['car_type'];
+			$order->color = $sellOrder['color'];
+			$order->sell_color = $sellOrder['sell_color'];
+			$order->cold_resistant = $sellOrder['cold_resistant'];
 
 			$order->save();
 

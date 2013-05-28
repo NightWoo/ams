@@ -842,9 +842,9 @@ class Car
         $typeName = $this->cutCarType($this->car->type);
         $coldResistant = $this->car->cold_resistant==1? '耐寒' : '非耐寒';
 
-		//$this->checkTraceGearBox();
 		$engineTrace = $this->checkTraceGasolineEngine(); 
 		if($this->car->series === 'F0'){
+			$this->checkTraceGearBox();
 			$absTrace = $this->checkTraceABS();
 				if(!empty($absTrace)){
 					$barCode = $absTrace->bar_code;
@@ -920,6 +920,7 @@ class Car
             $warehouse->save();
 
             $this->car->order_id = $data['orderId'];
+            $this->car->old_wh_id = $this->car->warehouse_id;
             $this->car->warehouse_id = $warehouse->id;
             $this->car->status = 'WDI';
             $this->car->area = 'WDI';
