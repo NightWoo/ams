@@ -101,7 +101,7 @@ class OrderSeeker
         $specialNumber = trim($specialNumber);
 		$specialNumber = strtoupper($specialNumber);
 
-		$sql = "SELECT COUNT(id) AS amount, series, type AS car_type, order_config_id, order_config_name,cold_resistant, color, special_order,remark
+		$sql = "SELECT COUNT(id) AS amount, series, type AS car_type, order_config_id, order_config_name,cold_resistant, color, special_order,remark,export_country,mark_clime
 				FROM view_car_info_order_config 
 				WHERE UPPER(special_order) = '$specialNumber' OR UPPER(remark) LIKE '%$specialNumber%' 
 				GROUP BY series, type,order_config_id, order_config_name,cold_resistant, color";

@@ -133,7 +133,7 @@
 	                           </td>
 	                            <td>
 	                                <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
-	                                <input id="btnAdd" type="button" class="btn btn-success" value="录入"></input>
+	                                <!-- <input id="btnAdd" type="button" class="btn btn-success" value="录入"></input> -->
 	                                <label class="checkbox"><input type="checkbox" id="checkboxActive" value="1">激活</input></label>
 		                            <label class="checkbox"><input type="checkbox" id="checkFreeze" value="0">冻结</input></label>
 		                            <label class="checkbox"><input type="checkbox" id="checkClosed" value="2">完成</input></label>
@@ -265,19 +265,26 @@
 				      	<input type="text" id="specialOrderNumber" class="input-medium" placeholder="订单号...">
 			      		<a class="btn appendBtn" id="specialGetOrder"><i class="icon-search"></i></a>
 			    	</div>
-			    	<span class="help-inline" id="hint">请输入特殊订单号取得订单明细</span>
-			      	<div class="help-inline" id="orderInfo" style="display:none">
+			    	<span class="help-inline" id="specialHint">请输入特殊订单号取得订单明细</span>
+			      	<div class="help-inline" id="specialOrderInfo" style="display:none">
 						<!-- <span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span> -->
 			      		<a class="btn btn-link" id="specialClearOrder"><i class="icon-remove"></i></a>
 					</div>
 			    </div>
-			</div> 	  
+			</div>
+			<!-- <div class="control-group">
+			    <label class="control-label" for="">*&nbsp;出口国家</label>
+			    <div class="controls">
+			      	<input type="text" id="country" class="input-small" placeholder="国家...">
+			    </div>
+			</div> -->	  
 		</form>
 		<legend></legend>
 		<table id="tableSpecialOrder" class="table table-condensed table-hover" style="display:none">
 			<thead>
 				<tr>
-					<th>分拆</th>
+					<th>选择</th>
+					<!-- <th>分拆</th> -->
 					<th>数量</th>
 					<th>车系</th>
 					<th>车型</th>

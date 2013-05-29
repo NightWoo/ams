@@ -24,6 +24,12 @@ $("document").ready(function() {
 
 	$("#specialGetOrder").click(function() {
 		if($.trim($("#specialOrderNumber").val()) != ''){
+			ajaxGetSpecialOrders();
+		}
+	})
+
+	$("#specialGetOrder").click(function() {
+		if($.trim($("#specialGetOrder").val()) != ''){
 			ajaxGetSpeceialOrders();
 		}
 	})
@@ -63,13 +69,41 @@ $("document").ready(function() {
 
 	$("#btnAddMore").click(function(){
 		// ajaxGenerate();
-		ajaxDetailExist()
+		// ajaxDetailExist();
+		details = packOrders();
+		ajaxGenerate(details);
 	})
 
 	$("#btnAddConfirm").click(function(){
 		//ajaxGenerate();
-		ajaxDetailExist()
+		// ajaxDetailExist();
+		details = packOrders();
+		ajaxGenerate(details);
 		$("#newModal").modal('hide');
+	})
+
+	$("#specialOrderNumber").bind("keydown", function(event){
+		if(event.keyCode == "13"){
+			if($.trim($("#specialOrderNumber").val()) != ''){
+				ajaxGetSpecialOrders();
+			}
+			return false;
+		}
+	})
+
+	$("#specialClearOrder").click(function(){
+		resetSpecialModal();
+	})
+
+	$("#btnAddConfirmSpecial").click(function(){
+		details = packSpecialOrders();
+		ajaxGenerate(details);
+		$("#specialModal").modal('hide');
+	})
+
+	$("#btnAddMoreSpecial").click(function(){
+		details = packSpecialOrders();
+		ajaxGenerate(details);
 	})
 
 	$("#btnSplitConfirm").click(function(){
@@ -123,6 +157,16 @@ $("document").ready(function() {
 				emptySplitModal();
 				$("#splitModal").data("id",tr.data("id"));
 				$("#splitModal").modal("show");
+			}
+		}
+	})
+
+	$("#tableSpecialOrder").live("click", function(e){
+		if ($(e.target).is("i")) {
+			// var siblings = $(e.target).closest("td").siblings();
+			var tr = $(e.target).closest("tr");
+			if($(e.target).hasClass("specialSplit")) {
+				splitSpecialOrder(tr);
 			}
 		}
 	})
@@ -185,13 +229,14 @@ $("document").ready(function() {
 					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						// $("<td />").html(value.order_detail_id).appendTo(tr);
-						tdCheck =  "<input class='choose' type='checkbox' checked='checked'>";
+						tdCheck =  "<input class='choose' type='checkbox' checked='checked' />";
 						$("<td />").html(tdCheck).appendTo(tr);
 						distributor = value.distributor
 						$("<td />").html(distributor).appendTo(tr);
 						// tdBoardNum = "<input type='text' id='newBoardNum'"+ index +"' class='input-mini newBoardNum' />"
 						// $("<td />").html(tdBoardNum).appendTo(tr);
-						tdAmount = "<input type='text' id='newAmount'" + index +"' class='input-mini newAmount' value='"+ value.amount +"'/>";
+						// tdAmount = "<input type='text' id='newAmount'" + index +"' class='input-mini newAmount' value='"+ value.amount +"'/>";
+						tdAmount = "<input type='text' class='input-mini newAmount' value='"+ value.amount +"'/>";
 						$("<td />").html(tdAmount).appendTo(tr);
 						// $("<td />").html(value.amount).appendTo(tr);
 						if(value.series === '6B'){
@@ -213,7 +258,7 @@ $("document").ready(function() {
 						configSelect = $(configTip).addClass("orderConfigSelect").append(options);
 						$("<td />").append(configSelect).appendTo(tr);
 
-						tdLane = "<input type='text' id='newLane'" + index +"' class='input-mini newLane'/>";
+						tdLane = "<input type='text' class='input-mini newLane'/>";
 						$("<td />").html(tdLane).appendTo(tr);
 
 						// inputDate = "<input type='text' id='newStandbyDate"+ index +"' class='input-small newStandbyDate' placeholder='备车日期...' onClick=\"WdatePicker({el:'newStandbyDate"+ index +"',dateFmt:'yyyy-MM-dd'});\"/>";
@@ -234,7 +279,7 @@ $("document").ready(function() {
 						tr.data("orderNature", value.order_nature);
 						tr.data("coldResistant", value.cold_resistant);
 						tr.data("remark", value.remark);
-						tr.data("")
+						tr.data("orderType", '普通');
 						tr.data("configDescription" , value.config_description);
 
 						$("#tableNewOrder tbody").append(tr);
@@ -288,17 +333,70 @@ $("document").ready(function() {
 		return jsonText;
 	}
 
-	function ajaxGetSpeceialOrders() {
+	function ajaxGetSpecialOrders() {
+		$("#tableSpecialOrder tbody").html("");
+		specialNumber = $.trim($("#specialOrderNumber").val());
 		$.ajax({
 			url: GET_SPECIAL_ORDERS,
 			type: "post",
 			dataType: "json",
 			data: {
-				"specialNumber" : $.trim($("#specialOrderNumber").val())
+				"specialNumber" : specialNumber,
 			},
 			success: function(response) {
 				if(response.success && response.data.length != 0){
-					
+					$("#specialOrderNumber").val($.trim($("#specialOrderNumber").val()));
+					toggleSpecialOrderInfo(true);
+					var i=0;
+					$.each(response.data, function (index, value) {
+						var tr = $("<tr />");
+						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='icon-resize-full specialSplit'></i></a>";
+						$("<td />").html(tdCheck).appendTo(tr);
+
+						// tdSplit = "<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='icon-resize-full'></i></a>";
+						// $("<td />").html(tdSplit).appendTo(tr);
+
+						tdAmount = "<input type='text' class='input-mini specialAmount' value='"+ value.amount +"'/>";
+						$("<td />").html(tdAmount).appendTo(tr);
+						if(value.series === '6B'){
+							$("<td />").html('思锐').appendTo(tr);
+						} else {
+							$("<td />").html(value.series).appendTo(tr);
+						}
+						$("<td />").html(value.car_type).appendTo(tr);
+						if(value.cold_resistant == '1'){
+							$("<td />").html("耐寒").appendTo(tr);
+						} else {
+							$("<td />").html("非耐寒").appendTo(tr);
+						}
+						$("<td />").html(value.color).appendTo(tr);
+
+						$("<td />").html(value.order_config_name).appendTo(tr);
+						tdLane = "<input type='text' class='input-mini specialLane'/>";
+						$("<td />").html(tdLane).appendTo(tr);
+
+						tr.data("orderConfigId", value.order_config_id);
+						tr.data("distributorName", value.export_country);
+						tr.data("country", value.mark_clime);
+						tr.data("orderDetailId", 0);
+						tr.data("distributorCode", '');
+						tr.data("orderNumber", specialNumber);
+						tr.data("series", value.series);
+						tr.data("carType", value.car_type);
+						tr.data("sellCarType", '');
+						tr.data("color", value.color);
+						tr.data("sellColor", value.color);
+						tr.data("orderNature", 0);
+						tr.data("coldResistant", value.cold_resistant);
+						tr.data("remark", value.remark);
+						tr.data("orderType", '出口');
+						tr.data("configDescription" , '');
+
+						$("#tableSpecialOrder tbody").append(tr);
+
+						$(".specialStandbyDate").val(window.byd.DateUtil.currentDate);
+						$("#tableSpecialOrder").show();
+					})
 				} else {
 					alert("查无匹配单[" + $("#specialOrderNumber").val() + "]");
 					resetNewModal();
@@ -308,6 +406,41 @@ $("document").ready(function() {
 				alertError();
 			}
 		})
+	}
+
+	function splitSpecialOrder(tr) {
+		newTr = tr.clone(true);
+		newTr.find("input").filter(".specialAmount").val(0);
+		newTr.insertAfter(tr);
+	}
+
+	function packSpecialOrders() {
+		orderArray = [];
+		$("#tableSpecialOrder tbody tr").each(function (index, tr){
+			thisAmount = $(tr).find("input").filter(".specialAmount").val();
+			thisBoard = $("#specialBoardNumber").val();
+			thisDate = $("#specialStandbyDate").val();
+			thisLane = $(tr).find("input").filter(".specialLane").val();
+			$(tr).data("standbyDate", thisDate);
+			$(tr).data("amount", thisAmount);
+			$(tr).data("boardNumber", thisBoard);
+			$(tr).data("laneId", thisLane);
+			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
+			
+			console.log(chosen);
+			if(chosen){
+				orderArray.push($(tr).data());
+			}
+			console.log(orderArray);
+		})
+
+		var  orderObj ={};
+		for(var i=0; i<orderArray.length;i++){
+			orderObj[i] = orderArray[i];
+		}
+		var jsonText = JSON.stringify(orderObj);
+
+		return jsonText;
 	}
 
 	function ajaxDetailExist(){
@@ -353,6 +486,7 @@ $("document").ready(function() {
 			success: function(response) {
 				if(response.success){
 					resetNewModal();
+					resetSpecialModal();
 				} else {
 					alert(response.message);
 				}
@@ -764,6 +898,16 @@ $("document").ready(function() {
 		toggleOrderInfo(false);
 	}
 
+	function resetSpecialModal (argument) {
+		clearOrderArray()
+		$("#specialOrderNumber").val("");
+		$("#tableSpecialOrder").hide();
+		$("#tableSpecialOrder tbody").html("");
+		boardNum = getBoardNumber();
+		$("#sepcialBoardNumber").val(boardNum);
+		toggleSpecialOrderInfo(false);
+	}
+
 	function emptySplitModal() {
 		$("#splitLane").val("0");
 		$("#splitAmount").val("");
@@ -778,14 +922,25 @@ $("document").ready(function() {
 
 	}
 
-	function toggleOrderInfo (showOrderInfo) {
-		if(showOrderInfo){
+	function toggleOrderInfo (showInfo) {
+		if(showInfo){
 			$("#hint").hide();
 			$("#orderInfo").fadeIn(500);
 
 		}else{
 			$("#orderInfo").hide();
 			$("#hint").fadeIn(500);
+		}
+	}
+
+	function toggleSpecialOrderInfo (showInfo) {
+		if(showInfo){
+			$("#specialHint").hide();
+			$("#specialOrderInfo").fadeIn(500);
+
+		}else{
+			$("#specialOrderInfo").hide();
+			$("#specialHint").fadeIn(500);
 		}
 	}
 

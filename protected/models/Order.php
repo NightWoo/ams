@@ -51,6 +51,10 @@ class Order
 			$ar->sell_color = $order['sellColor'];
 			$ar->board_number = $order['boardNumber'];
 			$ar->lane_id = $order['laneId'];
+			$ar->order_type = $order['orderType'];
+			if(!empty($order['country'])){
+				$ar->country = $order['country'];
+			}
 
 			$ar->create_time = date('YmdHis');
 			$ar->user_id = Yii::app()->user->id;
@@ -149,6 +153,10 @@ class Order
         		$configId = "(" . join(',', $configId) . ")";
 
 				$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND special_property<>9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+				if($order['order_type'] === '出口'){
+					$matchCondition .= " AND (UPPER(special_order)='{$order['order_number']}' OR UPPER(remark) LIKE '%{$order['order_number']}%')";
+				}
+
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				
 				//先看库里面有没这么多一个单需要的车，如果不够，不备此单
@@ -360,17 +368,16 @@ class Order
 				--$retry;
             } while ($ret === false &&  $retry>0);
 
-            //do not throw Inspection Sheet Data 
-            // $isTLpassed = $car->isTestLinePassed();
-            // $throwRet = 0;
-            // if($isTLpassed){
-	           // 	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
-            // }
-           	// if($throwRet>0){
-           	// 	++$inspectionSuccess;
-           	// }else{
-           	// 	$inspectionFailures[] = $vin;
-           	// }
+            $isTLpassed = $car->isTestLinePassed();
+            $throwRet = 0;
+            if($isTLpassed){
+	           	$throwRet = $car->throwInspectionSheetDataExport($specialOrder);
+            }
+           	if($throwRet>0){
+           		++$inspectionSuccess;
+           	}else{
+           		$inspectionFailures[] = $vin;
+           	}
 		}
 
 		return array(

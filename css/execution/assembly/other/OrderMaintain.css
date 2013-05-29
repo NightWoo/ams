@@ -87,7 +87,7 @@
 	width:15px;
 }
 
-#newClearOrder {
+#newClearOrder, #specialClearOrder {
 	padding: 0 0 0 2px;
 	color: red;
 }
@@ -102,17 +102,17 @@
     width: 860px;
 }
 
-#tableNewOrder .input-mini{
+#tableNewOrder .input-mini ,#tableSpecialOrder .input-mini{
 	width: 25px;
 }
 
-#tableNewOrder select, #tableNewOrder input {
+#tableNewOrder select, #tableNewOrder input,#tableSpecialOrder select, #tableSpecialOrder input {
 	margin-bottom: 0;
 	font-size: 12px;
 	height: 28px;
 }
 
-#tableNewOrder input, #tableDistribution input, #tableAdjust input {
+#tableNewOrder input, #tableDistribution input, #tableAdjust input, #tableSpecialOrder input {
 	height: 18px;
 	margin: 0;
 }

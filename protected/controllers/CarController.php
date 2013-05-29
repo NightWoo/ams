@@ -76,8 +76,9 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
 			//$car->leftNode('F10');
 			$car->checkTraceGasolineEngine();
-			//$car->checkTraceGearBox();
+			
             if($car->car->series === 'F0'){
+                $car->checkTraceGearBox();
 				$absTrace = $car->checkTraceABS();
 				if(!empty($absTrace)){
 					$barCode = $absTrace->bar_code;

@@ -1201,7 +1201,9 @@ class Car
 		$absInfo = '';
 		if(($this->car->series == 'F0')){
 			$gearboxTrace = $this->checkTraceGearBox() ;
-			$gearboxCode = $gearboxTrace->bar_code;
+			if(!empty($gearboxTrace)){
+				$gearboxCode = $gearboxTrace->bar_code;
+			}
 
 			$absTrace = $this->checkTraceABS();
 			if(!empty($absTrace) && ($this->car->series == 'F0')){
