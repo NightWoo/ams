@@ -438,10 +438,140 @@
     </div>
 </div>
 
-<!-- new record -->
+<!-- internal record -->
+<div class="modal" id="internalModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>新增内部订单</h3>
+    </div>
+    <div class="modal-body">
+        <form id="internalForm" class="form-horizontal">
+        	<div class="control-group">
+                <label class="control-label" for="internalBoardNumber">*&nbsp;备板编号</label>
+                <div class="controls">
+                    <input id="internalBoardNumber"  type="text" class="input-small" placeholder="备板编号..."/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalStandbyDate">*&nbsp;备车日期</label>
+                <div class="controls">
+                    <input id="internalStandbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'editStandbyDate',dateFmt:'yyyy-MM-dd'});"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalStatus">&nbsp;状态</label>
+                <div class="controls">
+                	<select id="internalStatus" class="input-small">
+                		<option value="0">冻结</option>
+                		<option value="1">激活</option>
+                		<option value="2">关闭</option>
+                	</select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalLane">&nbsp;车道</label>
+                <div class="controls">
+                    <select id="internalLane"  name=""class="input-small">
+                        <option value="0" selected>未选择</option>
+                        <?php 
+                            for($i=1;$i<52;$i++){
+                                $num = sprintf("%02d", $i);
+                                if($i<51){
+	                                $ret = "<option value=". $i .">$num</option>";
+                                } else {
+	                                $ret = "<option value=". $i .">加车道</option>";
+                                }
+                                echo $ret;
+                            }
+
+                            $j = 50;
+                            for($i=126;$i<176;$i++){
+                                $num = 'A' . sprintf("%02d", $j);
+                                $j--;
+	                            $ret = "<option value=". $i .">$num</option>";
+                                echo $ret;
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="">经销商</label>
+                <div class="controls">
+                    <input type="text" id="internalDistributorName" class="input-large" placeholder="请输入经销商">
+                </div>
+            </div>
+            <!-- <div class="control-group">
+                <label class="control-label" for="editOrderNumber">*&nbsp;订单号</label>
+                <div class="controls">
+                    <input id="editOrderNumber" type="text" class="input-medium" placeholder="输入订单号..."/>
+                </div>
+            </div> -->
+            <div class="control-group">
+                <label class="control-label" for="editAmount">*&nbsp;数量</label>
+                <div class="controls">
+                    <input id="internalAmount" type="text" class="input-small" placeholder="请输入数量..."/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalSeries">*&nbsp;车系</label>
+                <div class="controls">
+                    <select id="internalSeries" class="input-small">
+                        <option value="" selected>请选择</option>
+                        <option value="F0">F0</option>
+                        <option value="M6">M6</option>
+                        <option value="6B">思锐</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalCarType">*&nbsp;车型</label>
+                <div class="controls">
+                    <select id="internalCarType" name="" class="input-large">
+                        <!-- <option value="">请选择</option> -->
+                    </select> 
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="internalOrderConfig">*&nbsp;配置</label>
+                <div class="controls">
+                    <select id="internalOrderConfig" name=""class="input-medium">
+                        <!-- <option value="">请选择</option> -->
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="ditColor">*&nbsp;颜色</label>
+                <div class="controls">
+                    <select id="internalColor" name=""class="input-small">
+                        <!-- <option value="">请选择</option> -->
+                    </select> 
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="">耐寒型</label>
+                <div class="controls">
+                    <input id="internalColdResistant" type="checkbox">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editRemark">备注</label>
+                <div class="controls">
+                    <textarea id="internalRemark" class="input-large"rows="2"></textarea>
+                </div>
+            </div>        
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="btnInternalConfirm">确认编辑</button>
+    </div>
+</div>
 
 
-<!-- edit record -->
+<!-- split record -->
 <div class="modal" id="splitModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

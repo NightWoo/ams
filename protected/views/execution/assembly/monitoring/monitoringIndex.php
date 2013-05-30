@@ -146,6 +146,14 @@
 
 	      			</div>
 	      			<div id="warehouse" class="tab-pane">
+	      				<div id="extraArea" class="pull-left">
+      					    <dl class="dl-horizontal">
+							    <dt>27#厂房</dt><dd class="area-h">-</dd>
+							    <dt>异常区X</dt><dd class="area-x">-</dd>
+							    <dt>临时区Y</dt><dd class="area-y">-</dd>
+							    <dt>临时区Z</dt><dd class="area-z">-</dd>
+						    </dl>
+	      				</div>
 	      				<div id="warehouseContainer">
 			      			<div id ="warehouseBack">
 			      			</div>

@@ -380,7 +380,7 @@ class CarSeeker
             $whAvailableOnly = true;
         }
 		if($whAvailableOnly){
-			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
+			$condition .= " AND warehouse_id>1 AND warehouse_id<>1000 AND special_property=0";
 		}
 
 		$sql = "SELECT count(*) FROM car $condition";	

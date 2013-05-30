@@ -457,6 +457,10 @@ function ajaxGetStock (argument) {
 
 	    		//warehouse total 
 	    		$(".area-total-amount").html(response.data.warehourse_cars.all);
+	    		$(".area-h").html(response.data.area_quantity.H);
+	    		$(".area-x").html(response.data.area_quantity.X);
+	    		$(".area-y").html(response.data.area_quantity.Y);
+	    		$(".area-z").html(response.data.area_quantity.Z);
 
     			//refresh stock
     			$(".vq3-balance-data").html(response.data.balance.VQ3.all);

@@ -352,6 +352,37 @@ class MonitorSeeker
 		return $ret;
 	}
 
+	public function queryAreaQuantity(){
+		$sql = "SELECT SUM(quantity) AS quantity, area FROM warehouse GROUP BY area";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		$ret = array();
+		foreach($datas as $data) {
+			$ret[$data['area']] = $data['quantity'];
+		}
+
+		$countRet = array(
+			'1' => 0,
+			'200' => 0,
+			'999' => 0,
+			'1000' => 0,
+			'1001' => 0,
+		);
+		
+		$countSql = "SELECT COUNT(id) AS quantity, warehouse_id FROM car WHERE warehouse_id=1 or warehouse_id>=200 GROUP BY warehouse_id";
+		$countDatas = Yii::app()->db->createCommand($countSql)->queryAll();
+		foreach($countDatas as $data) {
+			$countRet[$data['warehouse_id']] = $data['quantity'];
+		}
+
+
+		$ret['WDI'] = $countRet['1'];
+		$ret['Z'] = $countRet['999'];
+		$ret['X'] = $countRet['1000'];
+		$ret['Y'] = $countRet['1001'];
+
+		return $ret;
+	}
+
 	public function queryPlan($section, $date) {
 		$seeker = new PlanSeeker();
 		$plans = $seeker->search($date, '', '');

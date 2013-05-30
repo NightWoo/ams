@@ -217,7 +217,10 @@ class OrderController extends BmsBaseController
 				$order = new OrderAR();
 				$order->id = $id;
 				$order->create_time = date('YmdHis');
-				$order->save();
+				$order->order_number = "NBDD-" . date('YmdHis');
+				$order->order_type = "内部";
+				$order->sell_color = $color;
+				// $order->save();
 				// $max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
 				// $order->priority = 0;
 				// if(!empty($max) && $status == 1) {
@@ -260,8 +263,6 @@ class OrderController extends BmsBaseController
 					$order->lane_status = 1;
 				}
 			}
-
-			$order->save();
 			
 			if($order->status === 2){
 				if($order->standby_finish_time === '0000-00-00 00:00:00' && $order->amount === $order->hold){
@@ -272,16 +273,17 @@ class OrderController extends BmsBaseController
 				}	
 			}
 
-			$order->save();
-
 			//update from sell order
 			$seeker = new OrderSeeker();
-			$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
-			$order->sell_car_type = $sellOrder['sell_car_type'];
-			$order->car_type = $sellOrder['car_type'];
-			$order->color = $sellOrder['color'];
-			$order->sell_color = $sellOrder['sell_color'];
-			$order->cold_resistant = $sellOrder['cold_resistant'];
+			if(!empty($seeker)){
+				$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
+				$order->sell_car_type = $sellOrder['sell_car_type'];
+				$order->car_type = $sellOrder['car_type'];
+				$order->color = $sellOrder['color'];
+				$order->sell_color = $sellOrder['sell_color'];
+				$order->cold_resistant = $sellOrder['cold_resistant'];
+
+			}
 
 			$order->save();
 

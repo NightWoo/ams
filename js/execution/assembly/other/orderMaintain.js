@@ -22,6 +22,13 @@ $("document").ready(function() {
 		$("#specialModal").modal('show');
 	})
 
+	$("#addInternalOrder").click(function() {
+		$("#internalStandbyDate").val(window.byd.DateUtil.currentDate);
+		boardNum = getBoardNumber();
+		$("#internalBoardNumber").val(boardNum);
+		$("#internalModal").modal('show');
+	})
+
 	$("#specialGetOrder").click(function() {
 		if($.trim($("#specialOrderNumber").val()) != ''){
 			ajaxGetSpecialOrders();
@@ -189,6 +196,26 @@ $("document").ready(function() {
 		ajaxQuery();
 		$("#editModal").modal("hide");
 		emptyEditModal();
+	})
+
+	$("#internalSeries").change(function() {
+		carSeries = $(this).val();
+		$("#internalCarType").html("").append(fillType(carSeries));
+		$("#internalOrderConfig").html("");
+		$("#internalColor").html("").append(fillColor(carSeries));
+	})
+
+	$("#internalCarType").change(function() {
+		carSeries = $("#internalSeries").val();
+		carType = $(this).val();
+		$("#internalOrderConfig").html("").append(fillOrderConfig(carSeries, carType));
+	})
+
+	$("#btnInternalConfirm").click(function() {
+		ajaxAddInternalOrder();
+		ajaxQuery();
+		$("#internalModal").modal("hide");
+		emptyInternalModal();
 	})
 
 	$("#standbyDate").datetimepicker({
@@ -647,6 +674,41 @@ $("document").ready(function() {
 		})
 	}
 
+	function ajaxAddInternalOrder() {
+		var isCold = 0;
+		if($("#internalColdResistant").attr("checked") === "checked")
+			isCold = 1;
+
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: ORDER_SAVE,
+			data: {
+				"boardNumber": $("#internalBoardNumber").val(),
+				"standbyDate": $("#internalStandbyDate").val(),
+				"status": $("#internalStatus").val(),
+				"laneId": $("#internalLane").val(),
+				"distributorName": $("#internalDistributorName").val(),
+				"amount": $("#internalAmount").val(),
+				"series": $("#internalSeries").val(),
+				"carType": $("#internalCarType").val(),
+				"orderConfigId": $("#internalOrderConfig").val(),
+				"color": $("#internalColor").val(),
+				"coldResistant": isCold,
+				"remark": $("#internalRemark").val()
+			},
+			success: function(response) {
+				if(response.success) {
+					emptyInternalModal();
+					ajaxQuery();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function(){alertError();}
+		})
+	}
+
 	function ajaxDelete(orderId) {
 		$.ajax({
 			type: "get",
@@ -886,6 +948,21 @@ $("document").ready(function() {
 		$("#editColor").val(""),
 		$("#editColdResistant").removeAttr("checked");
 		$("#editRemark").val("")
+	}
+
+	function emptyInternalModal (argument) {
+		$("#internalModal").data("id", 0),
+		$("#internalStandbyDate").val(""),
+		$("#internalStatus").val("0"),
+		$("#internalLane").val("0"),
+		$("#internalDistributorName").val(""),
+		$("#internalAmount").val(""),
+		$("#internalSeries").val(""),
+		$("#internalCarType").val(""),
+		$("#internalOrderConfig").val("0"),
+		$("#internalColor").val(""),
+		$("#internalColdResistant").removeAttr("checked");
+		$("#internalRemark").val("")
 	}
 	
 	function resetNewModal (argument) {

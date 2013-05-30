@@ -819,3 +819,25 @@ color: transparent;}
 	width: 60px;
 	text-align: left;
 }
+
+#extraArea {
+	font-size: 16px;
+	margin-left: 150px;
+    margin-top: 6px;
+}
+
+#extraArea span {
+	margin-bottom:10px;
+}
+
+#extraArea dt{
+    margin-top: 5px;
+    color: gray;
+}
+
+#extraArea dd{
+    margin-top: 5px;
+    color: #9966FF;
+    text-align: right;
+    width: 40px;
+}

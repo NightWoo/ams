@@ -131,6 +131,7 @@ class MonitorController extends BmsBaseController
 		}
 
 		$areaRates = $seeker->queryAreaRate();
+		$areaQuantity = $seeker->queryAreaQuantity();
 
         $data = array(
             'line_speed' => $lineSpeed,
@@ -142,6 +143,7 @@ class MonitorController extends BmsBaseController
 			'warehourse_cars' => $wareHourseCar,
 			'drr' => $drrs,
 			'area_rate' => $areaRates,
+			'area_quantity'=> $areaQuantity,
 		);
 
         $this->renderJsonBms(true, 'OK', $data);
