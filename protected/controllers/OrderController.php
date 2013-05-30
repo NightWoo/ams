@@ -281,7 +281,7 @@ class OrderController extends BmsBaseController
 				$order->car_type = $sellOrder['car_type'];
 				$order->color = $sellOrder['color'];
 				$order->sell_color = $sellOrder['sell_color'];
-				$order->cold_resistant = $sellOrder['cold_resistant'];
+				// $order->cold_resistant = $sellOrder['cold_resistant'];
 
 			}
 
@@ -663,10 +663,20 @@ class OrderController extends BmsBaseController
 		$carType = $this->validateStringVal('carType', '');
 		try {
 			$config = new OrderSeeker();
-			$data = $config->getNameList($carSeries, $carType);
+			$data = $config->getConfigList($carSeries, $carType);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	
 		}		
+	}
+
+	public function actionGetLaneList() {
+		try{
+			$seeker = new OrderSeeker();
+			$data = $seeker->getLaneList();
+			$this->renderJsonBms(true, 'OK', $data);
+		}catch(exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
 	}
 }

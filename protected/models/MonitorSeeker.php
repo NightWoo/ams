@@ -376,6 +376,7 @@ class MonitorSeeker
 
 
 		$ret['WDI'] = $countRet['1'];
+		$ret['H'] = $countRet['200'];
 		$ret['Z'] = $countRet['999'];
 		$ret['X'] = $countRet['1000'];
 		$ret['Y'] = $countRet['1001'];

@@ -742,7 +742,7 @@ class OrderSeeker
 		return array($cars, $total, $isGood);
 	}
 
-	public function getNameList ($carSeries, $carType) {
+	public function getConfigList ($carSeries, $carType) {
 		$condition = "car_series=?";
 		$values = array($carSeries);
 		if(!empty($carType)) {
@@ -755,6 +755,18 @@ class OrderSeeker
 		foreach($configs as $config) {
 			$data['config_id'] = $config->id;
 			$data['config_name']= $config->name;
+			$datas[]=$data;
+		}
+		return $datas;
+	}
+
+	public function getLaneList() {
+		$sql = "SELECT id, name FROM lane";
+		$lanes = Yii::app()->db->createCommand($sql)->queryAll();
+		$datas = array();
+		foreach($lanes as $lane){
+			$data['lane_id'] = $lane['id'];
+			$data['lane_name'] = $lane['name'];
 			$datas[]=$data;
 		}
 		return $datas;

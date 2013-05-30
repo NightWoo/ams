@@ -253,6 +253,7 @@ $("document").ready(function() {
 					// $("#tableNewOrder").hide();
 					// $("#tableNewOrder tbody").html("");
 					var i=0;
+					selectLane = getLaneList();
 					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						// $("<td />").html(value.order_detail_id).appendTo(tr);
@@ -285,8 +286,9 @@ $("document").ready(function() {
 						configSelect = $(configTip).addClass("orderConfigSelect").append(options);
 						$("<td />").append(configSelect).appendTo(tr);
 
-						tdLane = "<input type='text' class='input-mini newLane'/>";
-						$("<td />").html(tdLane).appendTo(tr);
+						// tdLane = "<input type='text' class='input-mini newLane'/>";
+						// $("<td />").html(tdLane).appendTo(tr);
+						$("<td />").html(selectLane).appendTo(tr);
 
 						// inputDate = "<input type='text' id='newStandbyDate"+ index +"' class='input-small newStandbyDate' placeholder='备车日期...' onClick=\"WdatePicker({el:'newStandbyDate"+ index +"',dateFmt:'yyyy-MM-dd'});\"/>";
 						// $("<td />").html(inputDate).appendTo(tr);
@@ -336,7 +338,7 @@ $("document").ready(function() {
 			thisConfig = $(tr).find("select").filter(".newOrderConfig").val();
 			// thisDate = $(tr).find("input").filter(".newStandbyDate").val();
 			thisDate = $("#newStandbyDate").val();
-			thisLane = $(tr).find("input").filter(".newLane").val();
+			thisLane = $(tr).find("select").filter(".selectLane").val();
 			$(tr).data("orderConfigId", thisConfig);
 			$(tr).data("standbyDate", thisDate);
 			$(tr).data("amount", thisAmount);
@@ -375,6 +377,8 @@ $("document").ready(function() {
 					$("#specialOrderNumber").val($.trim($("#specialOrderNumber").val()));
 					toggleSpecialOrderInfo(true);
 					var i=0;
+					selectLane = getLaneList();
+					console.log(selectLane);
 					$.each(response.data, function (index, value) {
 						var tr = $("<tr />");
 						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='icon-resize-full specialSplit'></i></a>";
@@ -399,8 +403,9 @@ $("document").ready(function() {
 						$("<td />").html(value.color).appendTo(tr);
 
 						$("<td />").html(value.order_config_name).appendTo(tr);
-						tdLane = "<input type='text' class='input-mini specialLane'/>";
-						$("<td />").html(tdLane).appendTo(tr);
+						
+						// tdLane = "<input type='text' class='input-mini specialLane'/>";
+						$("<td />").html(selectLane).appendTo(tr);
 
 						tr.data("orderConfigId", value.order_config_id);
 						tr.data("distributorName", value.export_country);
@@ -447,7 +452,7 @@ $("document").ready(function() {
 			thisAmount = $(tr).find("input").filter(".specialAmount").val();
 			thisBoard = $("#specialBoardNumber").val();
 			thisDate = $("#specialStandbyDate").val();
-			thisLane = $(tr).find("input").filter(".specialLane").val();
+			thisLane = $(tr).find("select").filter(".selectLane").val();
 			$(tr).data("standbyDate", thisDate);
 			$(tr).data("amount", thisAmount);
 			$(tr).data("boardNumber", thisBoard);
@@ -849,17 +854,29 @@ $("document").ready(function() {
 	// 	})
 	// }
 
-	// function fillLane(){
-	// 	var select = $("<select />").addClass("input-mini");
-	// 	$.ajax({
-	// 		url: FILL_LANE,
-	// 		type: "get",
-	// 		dataType: "json",
-	// 		data: {},
-	// 		asnc: false,
-	// 		success
-	// 	})
-	// }
+	function getLaneList(){
+		var options = "<select class='input-small selectLane'>"
+					+ "<option value='0' selected>请选择</option>";
+		$.ajax({
+			url: FILL_LANE,
+			type: "get",
+			dataType: "json",
+			data: {},
+			async: false,
+			success: function(response) {
+				if(response.success){
+					$.each(data = response.data, function (index, value) {
+						options += '<option value="' + value.lane_id +'">'+ value.lane_name +'</option>';
+					});
+					options += "</select>";
+				}
+			},
+			error: function(){
+				alertError();
+			}
+		})
+		return options;
+	}
 
 	function fillOrderConfig(carSeries, carType){
 		var options = '<option value="0" selected>请选择</option>';
