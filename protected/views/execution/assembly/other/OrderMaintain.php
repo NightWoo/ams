@@ -340,26 +340,6 @@
                 <label class="control-label" for="editLane">&nbsp;车道</label>
                 <div class="controls">
                     <select id="editLane"  name=""class="input-small">
-                        <option value="0" selected>未选择</option>
-                        <?php 
-                            for($i=1;$i<52;$i++){
-                                $num = sprintf("%02d", $i);
-                                if($i<51){
-	                                $ret = "<option value=". $i .">$num</option>";
-                                } else {
-	                                $ret = "<option value=". $i .">加车道</option>";
-                                }
-                                echo $ret;
-                            }
-
-                            $j = 50;
-                            for($i=126;$i<176;$i++){
-                                $num = 'A' . sprintf("%02d", $j);
-                                $j--;
-	                            $ret = "<option value=". $i .">$num</option>";
-                                echo $ret;
-                            }
-                        ?>
                     </select>
                 </div>
             </div>
@@ -472,26 +452,7 @@
                 <label class="control-label" for="internalLane">&nbsp;车道</label>
                 <div class="controls">
                     <select id="internalLane"  name=""class="input-small">
-                        <option value="0" selected>未选择</option>
-                        <?php 
-                            for($i=1;$i<52;$i++){
-                                $num = sprintf("%02d", $i);
-                                if($i<51){
-	                                $ret = "<option value=". $i .">$num</option>";
-                                } else {
-	                                $ret = "<option value=". $i .">加车道</option>";
-                                }
-                                echo $ret;
-                            }
-
-                            $j = 50;
-                            for($i=126;$i<176;$i++){
-                                $num = 'A' . sprintf("%02d", $j);
-                                $j--;
-	                            $ret = "<option value=". $i .">$num</option>";
-                                echo $ret;
-                            }
-                        ?>
+                        
                     </select>
                 </div>
             </div>

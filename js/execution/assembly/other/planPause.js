@@ -57,13 +57,23 @@ $(document).ready(function(e) {
 		return false;
 	});
 
-	 $(".datetimepicker").datetimepicker({
-	    format: 'yyyy-mm-dd hh:ii:ss',
-	    autoclose: true,
-		todayBtn: true,
-		pickerPosition: "bottom-left",
-		language: "zh-CN"
-    });
+	 // $(".datetimepicker").datetimepicker({
+	 //    format: 'yyyy-mm-dd hh:ii:ss',
+	 //    autoclose: true,
+		// todayBtn: true,
+		// pickerPosition: "bottom-left",
+		// language: "zh-CN"
+  //   });
+
+	 $('.datetimepicker').datetimepicker({
+		timeFormat: "HH:mm",
+		changeMonth: true,
+	    changeYear: true,
+	    showOtherMonths: true,
+	    selectOtherMonths: true,
+	    duration: "fast",
+	    buttonImageOnly: true,
+	});
 
 	
 	function initPage() {

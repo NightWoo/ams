@@ -6,14 +6,19 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<link href="/bms/css/flick/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+	<link href="/bms/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
 	<link href="/bms/css/execution/assembly/dataInput/PauseEdit.css" rel="stylesheet">	
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="/bms/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.zh-CN.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/execution/assembly/dataInput/pauseEdit.js"></script>
-	<script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+	<!-- <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script> -->
 </head>
 <body>
 		
@@ -57,10 +62,12 @@
 								</select>
 							</td>
 							<td>
-								<input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+								<!-- <input type="text" class="span3" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+								<input type="text" class="span3" placeholder="开始时间..." id="startTime"/>
 							</td>
 							<td>
-								<input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
+								<!-- <input type="text" class="span3" placeholder="结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
+								<input type="text" class="span3" placeholder="结束时间..." id="endTime"/>
 							</td>
 							<td>
 								<select name="" id="section" class="input-small">

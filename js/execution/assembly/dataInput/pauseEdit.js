@@ -38,6 +38,23 @@ $(document).ready(function(e) {
 			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
 		}
 	})
+
+	$("#export").click(
+		function () {
+			ajaxExportPauseRecord();
+			return false;
+		}
+	);
+
+	$('#startTime, #endTime').datetimepicker({
+		timeFormat: "HH:mm",
+		changeMonth: true,
+	    changeYear: true,
+	    showOtherMonths: true,
+	    selectOtherMonths: true,
+	    duration: "fast",
+	    buttonImageOnly: true,
+	});
 	
 	function initPage() {
 		$("#headAssemblyLi").addClass("active");
@@ -125,6 +142,16 @@ $(document).ready(function(e) {
 				alertError();
 			}	
 		})
+	}
+
+	function ajaxExportPauseRecord () {
+		window.open(EXPORT_PAUSE_RECORD +
+			"?&startTime=" + $("#startTime").val() +
+			"&endTime=" + $("#endTime").val() +
+			"&causeType=" + $("#causeType").val() +
+			"&dutyDepartment=" + $("#dutyDepartment").val() +
+			"&section=" + $("#section").val()
+		);
 	}
 	
 	function ajaxEdit() {

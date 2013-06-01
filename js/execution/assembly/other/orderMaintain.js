@@ -26,6 +26,8 @@ $("document").ready(function() {
 		$("#internalStandbyDate").val(window.byd.DateUtil.currentDate);
 		boardNum = getBoardNumber();
 		$("#internalBoardNumber").val(boardNum);
+		laneOption = getLaneList();
+		$("#internalLane").append(laneOption);
 		$("#internalModal").modal('show');
 	})
 
@@ -253,7 +255,8 @@ $("document").ready(function() {
 					// $("#tableNewOrder").hide();
 					// $("#tableNewOrder tbody").html("");
 					var i=0;
-					selectLane = getLaneList();
+					optionLane = getLaneList();
+					selectLane = "<select class='input-small selectLane'>" + optionLane + "</select>";
 					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						// $("<td />").html(value.order_detail_id).appendTo(tr);
@@ -377,7 +380,8 @@ $("document").ready(function() {
 					$("#specialOrderNumber").val($.trim($("#specialOrderNumber").val()));
 					toggleSpecialOrderInfo(true);
 					var i=0;
-					selectLane = getLaneList();
+					optionLane = getLaneList();
+					selectLane = "<select class='input-small selectLane'>" + optionLane + "</select>";
 					console.log(selectLane);
 					$.each(response.data, function (index, value) {
 						var tr = $("<tr />");
@@ -855,8 +859,8 @@ $("document").ready(function() {
 	// }
 
 	function getLaneList(){
-		var options = "<select class='input-small selectLane'>"
-					+ "<option value='0' selected>请选择</option>";
+		// var options = "<select class='input-small selectLane'>"
+		var options = "<option value='0' selected>未选择</option>";
 		$.ajax({
 			url: FILL_LANE,
 			type: "get",
@@ -868,7 +872,7 @@ $("document").ready(function() {
 					$.each(data = response.data, function (index, value) {
 						options += '<option value="' + value.lane_id +'">'+ value.lane_name +'</option>';
 					});
-					options += "</select>";
+					// options += "</select>";
 				}
 			},
 			error: function(){
@@ -956,7 +960,9 @@ $("document").ready(function() {
 		$("#editModal").data("id", 0),
 		$("#editStandbyDate").val(""),
 		$("#editStatus").val("0"),
-		$("#editLane").val("0"),
+		// $("#editLane").val("0"),
+		option = getLaneList();
+		$("#editLane").append(option);
 		$("#editDistributorName").val(""),
 		$("#editAmount").val(""),
 		$("#editSeries").val(""),
@@ -971,7 +977,9 @@ $("document").ready(function() {
 		$("#internalModal").data("id", 0),
 		$("#internalStandbyDate").val(""),
 		$("#internalStatus").val("0"),
-		$("#internalLane").val("0"),
+		// $("#internalLane").val("0"),
+		option = getLaneList();
+		$("#internalLane").append(option);
 		$("#internalDistributorName").val(""),
 		$("#internalAmount").val(""),
 		$("#internalSeries").val(""),

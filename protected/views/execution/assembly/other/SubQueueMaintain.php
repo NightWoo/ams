@@ -6,17 +6,22 @@
         <!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet">
         <link href="/bms/css/common.css" rel="stylesheet">
-        <link href="/bms/css/datetimepicker.css" rel="stylesheet">
+        <link href="/bms/css/flick/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+        <link href="/bms/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+        <!-- <link href="/bms/css/datetimepicker.css" rel="stylesheet"> -->
 		<link href="/bms/css/execution/assembly/other/subQueueMaintain.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.js"></script>
+        <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
-        <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script> -->
+        <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/other/subQueueMaintain.js"></script>
-        <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
+        <!-- <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script> -->
     </head>
 
 
