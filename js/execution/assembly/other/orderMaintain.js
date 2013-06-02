@@ -166,6 +166,18 @@ $("document").ready(function() {
 				emptySplitModal();
 				$("#splitModal").data("id",tr.data("id"));
 				$("#splitModal").modal("show");
+			} else if($(e.target).hasClass("icon-tags")){
+				if($(e.target).parent().attr("disabled") != "disabled"){
+					emptyManualModal();
+					tr = $(e.target).closest("tr");
+					$("#manualModal").data("orderId", tr.data("id"));
+					$("#manualModal").data("series", tr.data("series"));
+					$("#manualModal").data("orderConfigId", tr.data("orderConfigId"));
+					$("#manualModal").data("coldResistant", tr.data("coldResistant"));
+					$("#manualModal").data("color", tr.data("color"));
+					$("#manualModal .modal-header h4").html("手工配单" + tr.data("orderNumber") + "-" + tr.data("distributorName"));
+					$("#manualModal").modal("show");
+				}
 			}
 		}
 	})
@@ -198,6 +210,19 @@ $("document").ready(function() {
 		ajaxQuery();
 		$("#editModal").modal("hide");
 		emptyEditModal();
+	})
+
+	$("#manualSearch").click(function() {
+		ajaxManualQuery();
+	})
+
+	$("#btnAddMoreManual").click(function(){
+		ajaxManualMatch();
+	})
+
+	$("#btnAddConfirmManual").click(function(){
+		ajaxManualMatch();
+		$("#manualModal").modal('hide');
 	})
 
 	$("#internalSeries").change(function() {
@@ -561,10 +586,17 @@ $("document").ready(function() {
 							// if(orderNumber != "" || distributor != ""){
 							// 	thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
 							// } else {
-								thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>').appendTo(tr);
+								thumbTd.html('<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>'
+									+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+									+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>'
+									+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>'
+									+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
 							// }
 						} else {
-							thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>').appendTo(tr);
+							thumbTd.html('<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>'
+								+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+								+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>'
+								+'&nbsp;<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
 							thumbTd.appendTo(tr);
 						}
 
@@ -605,6 +637,10 @@ $("document").ready(function() {
 						$("<td />").html(value.count).appendTo(tr);
 
 						// $("<td />").html(value.remark).appendTo(tr);
+
+						if(value.amount == value.hold){
+							thumbTd.find("i").filter(".icon-tags").parent().attr("disabled", "disabled");
+						}
 
 						tr.data("id", value.id);
 						tr.data("orderNumber", value.order_number);
@@ -798,65 +834,91 @@ $("document").ready(function() {
 		})
 	}
 
-	// function ajaxLaneQuery() {
-	// 	$.ajax({
-	// 		// url:,
-	// 		type: 'get',
-	// 		dataType: 'json',
-	// 		data: {},
-	// 		success: function(response) {
+	function ajaxManualQuery(){
+		$.ajax({
+			url: ORDER_MANUAL_QUERY,
+			type: "get",
+			dataType: "json",
+			data: {
+				"vinText": $("#manualVinText").val(),
+			},
+			success: function(response) {
+				if(response.success){
+					$("#tableManual>tbody").html("");
+					data = response.data;
+					$.each(data, function (index, value){
+						var tr = $("<tr />");
 
-	// 		},
-	// 		error: function() {
+						if(value.order_config_id != $("#manualModal").data("orderConfigId") || value.cold_resistant != $("#manualModal").data("coldResistant") || value.color != $("#manualModal").data("color")){
+							tdCheck ="<input class='choose' type='checkbox' disabled/>"
+						} else {
+							tdCheck = "<input class='choose' type='checkbox'/>";
+						}
+						$("<td />").html(tdCheck).appendTo(tr);
+						$("<td />").html(value.vin).appendTo(tr);
+						$("<td />").html(value.series).appendTo(tr);
+						$("<td />").html(value.order_config_name).appendTo(tr);
+						$("<td />").html(value.cold).appendTo(tr);
+						$("<td />").html(value.color).appendTo(tr);
+						$("<td />").html(value.engine_code).appendTo(tr);
+						$("<td />").html(value.remark).appendTo(tr);
 
-	// 		}
-	// 	})
-	// }
+						tr.data("vin", value.vin);
 
-	// function ajaxLaneBind(){
-	// 	$.ajax({
-	// 		// url:,
-	// 		type: 'get',
-	// 		dataType: 'json',
-	// 		data: {},
-	// 		success: function(response) {
+						$("#tableManual>tbody").append(tr);
+					})
 
-	// 		},
-	// 		error: function() {
+					$("#tableManual").show();
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
 
-	// 		}
-	// 	})
-	// }
+	function ajaxManualMatch(){
+		vins  = packManualVin();
+		$.ajax({
+			url: ORDER_MATCH_MANUALLY,
+			type: "post",
+			dataType: "json",
+			data: {
+				"orderId" : $("#manualModal").data("orderId"),
+				"vins" : vins,
+			},
+			success: function(response) {
+				if(response.success){
+					$("#tableManual>tbody").html("");
+					$("#tableManual").hide();
+					ajaxQuery();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
 
-	// function ajaxChangeStatus(){
-	// 	$.ajax({
-	// 		// url:,
-	// 		type: 'get',
-	// 		dataType: 'json',
-	// 		data: {},
-	// 		success: function(response) {
+	function packManualVin() {
+		vinArray = [];
+		$("#tableManual tbody tr").each(function (index, tr){
+			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
+			if(chosen){
+				vinArray.push($(tr).data("vin"));
+			}
+		})
 
-	// 		},
-	// 		error: function() {
+		var  vinObj ={};
+		for(var i=0; i<vinArray.length;i++){
+			vinObj[i] = vinArray[i];
+		}
+		var jsonText = JSON.stringify(vinObj);
 
-	// 		}
-	// 	})
-	// }
-
-	// function ajaxLaneReset(){
-	// 	$.ajax({
-	// 		// url:,
-	// 		type: 'get',
-	// 		dataType: 'json',
-	// 		data: {},
-	// 		success: function(response) {
-
-	// 		},
-	// 		error: function() {
-
-	// 		}
-	// 	})
-	// }
+		return jsonText;
+	}
 
 	function getLaneList(){
 		// var options = "<select class='input-small selectLane'>"
@@ -988,6 +1050,17 @@ $("document").ready(function() {
 		$("#internalColor").val(""),
 		$("#internalColdResistant").removeAttr("checked");
 		$("#internalRemark").val("")
+	}
+
+	function emptyManualModal(argument) {
+		$("#manualModal").data("orderId", 0);
+		$("#manualModal").data("series", "");
+		$("#manualModal").data("orderConfigId", 0);
+		$("#manualModal").data("coldResistant", 0);
+		$("#manualModal").data("color", '');
+		$("#manualVinText").val("");
+		$("#tableManual>tbody").html("");
+		$("#tableManual").hide();
 	}
 	
 	function resetNewModal (argument) {

@@ -650,6 +650,17 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionQueryVins(){
+        try{
+            $vinText = $this->validateStringVal('vinText', '');
+            $seeker = new CarSeeker();
+            $data = $seeker->queryVins($vinText);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false,$e->getMessage(),null);
+        }
+    }
+
 	public function actionTest()  {
 		$vin = $this->validateStringVal('vin', '');
 		$car = VinManager::importCar($vin);

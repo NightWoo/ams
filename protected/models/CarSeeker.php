@@ -489,6 +489,34 @@ class CarSeeker
 		return $configColdArray;
 	}
 
+	public function queryVins($vinText){
+
+		$vinArray = preg_split ('[\s|,|，]',$vinText);
+        ArrayFunc::array_remove_empty($vinArray);
+
+        $conditions = array();
+        foreach($vinArray as &$vin){
+        	$vin = str_replace('[,|，]',' ', $vin);
+        	$vin = trim($vin);
+        	if(strlen($vin)>=8){
+	        	$conditions[] = "vin LIKE '%$vin'";
+        	}
+        }
+
+        $conVin = join(' OR ', $conditions);
+
+        $condition = "warehouse_time>'0000-00-00 00:00:00' AND ($conVin)"; 
+        $sql = "SELECT id, vin, serial_number, series, type, order_config_name, cold_resistant, config_id, order_config_id, color, engine_code, remark, warehouse_time
+        		FROM view_car_info_order_config
+        		WHERE $condition";
+        $datas = Yii::app()->db->createCommand($sql)->queryAll();
+        foreach($datas as &$data){
+        	$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
+        }
+
+        return $datas;
+	}
+
 	private function parseSeries($series) {
 		if(empty($series) || $series === 'all') {
             $series = array('F0', 'M6', '6B');

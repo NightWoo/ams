@@ -255,6 +255,8 @@ var WAREHOUSE_PRINT_BY_ORDERS = '/bms/order/printByOrders';
 var WAREHOUSE_PRINT_BY_BOARD = '/bms/order/printByBoard';
 var QUERY_CARS_BY_SPECIAL_ORDER = '/bms/order/queryCarsBySpecialOrder';
 var PRINT_BY_SPECIAL_ORDER = '/bms/order/printBySpecialOrder';
+var ORDER_MANUAL_QUERY = '/bms/car/queryVins';
+var ORDER_MATCH_MANUALLY = '/bms/order/matchManually';
 
 var QUERY_DISTRIBUTE_PERIOD = '/bms/order/queryPeriod';
 

@@ -232,6 +232,67 @@ class Order
 
 	}
 
+	public function matchManually($orderId, $vins){
+		$vins = CJSON::decode($vins);
+		if(empty($orderId) || empty($vins)){
+			return;
+		}
+
+		$order = OrderAR::model()->findByPk($orderId);
+		if($order->amount == $order->hold){
+			$orderNumber = $order->order_number;
+			throw new Exception("$orderNumber已备齐，无法继续匹配车辆", 1);
+		}
+		$successVins = array();
+		foreach($vins as $vin){
+			$car = Car::create($vin);
+			if(!empty($car)){
+				if($car->car->warehouse_time == '0000-00-00 00:00:00'){
+					throw new Exception($vin. "未入库，不可匹配订单", 1);
+				}
+
+				if($car->car->order_id > 0){
+					throw new Exception($vin. "已匹配订单，不可再次匹配", 1);
+				}
+
+				if($car->car->distribute_time > '0000-00-00 00:00:00'){
+					throw new Exception($vin. "已出库，不可匹配订单", 1);
+				}
+
+				$warehouseId = $car->car->warehouse_id;
+				$row = WarehouseAR::model()->findByPk($warehouseId);
+				$row->quantity -= 1;
+				$row->save();
+
+				$rowWDI = WarehouseAR::model()->findByPk(1);
+				$rowWDI->quantity += 1;
+				$rowWDI->save();
+
+				$car->enterNode('OutStandby');
+				$car->car->order_id = $order->id;
+				$car->car->old_wh_id = $warehouseId;
+				$car->car->warehouse_id = 1;
+				$car->car->area = 'WDI';
+				$car->car->save();
+				$successVins[] = $vin;
+
+				$order->hold += 1;
+
+				if($order->hold == $order->amount){
+					if($order->activate_time == '0000-00-00 00:00:00'){
+						$order->activate_time = date("YmdHis");
+					}
+					$order->standby_finish_time = date("YmdHis");
+					break;
+				}
+			}
+		}
+
+		$order->save();
+
+		return array($order->order_number, $successVins);
+	}
+
 	public function printByOrder($orderId){
 		$order = OrderAR::model()->findByPk($orderId);
 		$this->updateOrderSellInfo($order);

@@ -458,7 +458,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="">经销商</label>
+                <label class="control-label" for="">需求部门</label>
                 <div class="controls">
                     <input type="text" id="internalDistributorName" class="input-large" placeholder="请输入经销商">
                 </div>
@@ -596,6 +596,49 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
         <button class="btn btn-primary" id="btnSplitConfirm">确认编辑</button>
     </div>
+</div>
+
+<!-- new record -->
+<div class="modal" id="manualModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h4>手工配单</h4>
+  	</div>
+  	<div class="modal-body">
+  		<form id="" class="form-horizontal">
+  			<div class="control-group">
+			    <label class="control-label" for="">*&nbsp;VIN</label>
+			    <div class="controls">
+				    <textarea id="manualVinText" class="input-xlarge"rows="3"></textarea>
+				    <a class="btn" id="manualSearch" style="vertical-align: top;"><i class="icon-search"></i>查询</a>
+				    <span class="help-inline" id="manualHint" style="vertical-align: top; margin-top:8px;">请以逗号、空格、换行、tab分隔VIN</span>
+				</div>
+			</div> 	  
+		</form>
+		<legend></legend>
+		<table id="tableManual" class="table table-condensed table-hover">
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>VIN</th>
+					<th>车系</th>
+					<th>配置</th>
+					<th>耐寒性</th>
+					<th>颜色</th>
+					<th>发动机号</th>
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-success" id="btnAddMoreManual">继续录入</button>
+	    <button class="btn btn-primary" id="btnAddConfirmManual">确认录入</button>
+  	</div>
 </div>
   	
 </body>

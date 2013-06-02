@@ -61,5 +61,5 @@ return array(
 	'ams2vin_note' => "http://10.23.11.6/csvinm/WebServices/AMS2NOTE.asmx?wsdl",
 
 	'rpc.gate' => array('host' => '127.0.0.1' ,'port' => 60000),
-
+	
 );

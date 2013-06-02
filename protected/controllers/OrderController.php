@@ -376,6 +376,27 @@ class OrderController extends BmsBaseController
 		}
 	}
 
+	public function actionMatchManually(){
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$orderId = $this->validateIntVal('orderId', 0);
+			$vins = $this->validateStringVal('vins', '{}');
+			$order = new Order();
+			list($orderNumber, $successVins) = $order->matchManually($orderId, $vins);
+
+			$data = array(
+				'orderNumber' => $orderNumber,
+				'successVins' => $successVins,
+			);
+			
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionHoldRelease() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {

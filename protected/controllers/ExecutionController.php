@@ -103,6 +103,9 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('the car must fit a plan!!');
 			}
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             //$car->leftNode('PBS');
 			$car->enterNode('T0', 0 ,true);
 			$car->generateSerialNumber();
@@ -138,6 +141,9 @@ class ExecutionController extends BmsBaseController
 			$leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 
@@ -168,6 +174,9 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             //$car->leftNode('F10');
             $car->enterNode('F20');
 
@@ -190,6 +199,9 @@ class ExecutionController extends BmsBaseController
 		    $faults = $this->validateStringVal('fault', '[]');
 
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             $car->leftNode('F20');
 			$car->passNode('LEFT_WORK_SHOP');
             $car->enterNode('VQ1');
@@ -214,6 +226,9 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -232,6 +247,9 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             $car->leftNode('LEFT_WORK_SHOP');
             $car->enterNode('ENTER_CHECK_SHOP', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -244,6 +262,9 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             $car->leftNode('ENTER_CHECK_SHOP');
             $car->enterNode('CHECK_LINE', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -260,6 +281,9 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('请选择司机后再开始路试');
 			}
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
             $car->leftNode('CHECK_LINE');
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_START', $driverId);
@@ -286,6 +310,9 @@ class ExecutionController extends BmsBaseController
             }
 
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
 			
 			$car->leftNode('VQ1');
             
@@ -325,7 +352,10 @@ class ExecutionController extends BmsBaseController
             }
 			
             $car = Car::create($vin);
-			
+			if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
+
 			$car->leftNode('ROAD_TEST_FINISH');
 			
 			$fault = Fault::createSeeker();
@@ -357,6 +387,9 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '');
             $car = Car::create($vin);
+            if($car->car->distribute_time > '0000-00-00 00:00:00'){
+                throw new Exception($vin . "已出库，不可录入");
+            }
 
 
 			$fault = Fault::createSeeker();
@@ -583,7 +616,7 @@ class ExecutionController extends BmsBaseController
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
 			
-			if($car->car->distribute_time != '0000-00-00 00:00:00'){
+			if($car->car->distribute_time > '0000-00-00 00:00:00'){
 				throw new Exception($vin . '已出库，不可重复分配库位');
 			}
 
@@ -948,9 +981,11 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $rpc = new RpcService();
-			$ret = $rpc->openGate();
-			$this->renderJsonBms(true, $ret , $ret);
+            $test = 'aaa fff
+            bbb ccc,ddd';
+            $ret = preg_split ('[\s|,]',$test);
+            ArrayFunc::array_remove_empty($ret);
+			$this->renderJsonBms(true, $test , $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  
