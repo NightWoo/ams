@@ -133,9 +133,15 @@ class WarehouseCountCommand extends CConsoleCommand
 	    $sql = "SELECT SUM(count) as sum, series FROM `order` WHERE order_detail_id>1700000 GROUP BY series";
 	    $rets = Yii::app()->db->createCommand($sql)->queryAll();
 
+	    $revise = array(
+	    	'F0' => 0,
+	    	'M6' => 0,
+	    	'6B' => 0,
+	    );
+
 	    foreach($rets as $ret){
 	    	if(array_key_exists($ret['series'],$amount) ){
-		    	$count[$ret['series']] = $amount[$ret['series']] - $ret['sum'];
+		    	$count[$ret['series']] = $amount[$ret['series']] - $ret['sum'] + $revise[$ret['series']];
 	    	} else {
 	    		$count[$ret['series']] = 0;
 	    	}

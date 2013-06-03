@@ -930,7 +930,7 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionHoldRelease() {
         try{
-            Yii::app()->permitManager->check('ORDER_MAINTAIN');
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/dataInput/HoldRelease');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

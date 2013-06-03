@@ -275,8 +275,8 @@ class OrderController extends BmsBaseController
 
 			//update from sell order
 			$seeker = new OrderSeeker();
-			if(!empty($seeker)){
-				$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
+			$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
+			if(!empty($sellOrder)){
 				$order->sell_car_type = $sellOrder['sell_car_type'];
 				$order->car_type = $sellOrder['car_type'];
 				$order->color = $sellOrder['color'];
