@@ -61,7 +61,7 @@
 		
 		<div id="maintain" class="tile square">
 			<div class="title">
-				<h3>数据维护</h3>
+				<h3>总装维护</h3>
 			</div>
 		</div>
 		
@@ -107,9 +107,9 @@
 			</div>
 		</div>
 		
-		<div id="basicDatabase" class="tile square">
+		<div id="warehouseMaintain" class="tile square">
 			<div class="title">
-				<h3>基础<br>数据库</h3>
+				<h3>成品库<br>维护</h3>
 			</div>
 		</div>
 		
@@ -156,9 +156,9 @@
 			</div>
 		</div>
 		
-		<div id="" class="tile square">
+		<div id="basicDatabase" class="tile square">
 			<div class="title">
-				<h3></h3>
+				<h3>基础<br>数据库</h3>
 			</div>
 		</div>
 		

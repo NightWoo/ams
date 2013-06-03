@@ -85,6 +85,7 @@ class ExecutionController extends BmsBaseController
 		try{
 			$vin = $this->validateStringVal('vin', '');
 			$car = Car::create($vin);
+            $car->checkAlreadyOut();
         	$car->enterNode('PBS', 0 , true);
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {
@@ -103,9 +104,8 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('the car must fit a plan!!');
 			}
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
             //$car->leftNode('PBS');
 			$car->enterNode('T0', 0 ,true);
 			$car->generateSerialNumber();
@@ -141,9 +141,8 @@ class ExecutionController extends BmsBaseController
 			$leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
             //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 
@@ -174,9 +173,8 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
             //$car->leftNode('F10');
             $car->enterNode('F20');
 
@@ -199,9 +197,7 @@ class ExecutionController extends BmsBaseController
 		    $faults = $this->validateStringVal('fault', '[]');
 
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
             $car->leftNode('F20');
 			$car->passNode('LEFT_WORK_SHOP');
             $car->enterNode('VQ1');
@@ -226,9 +222,8 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -247,9 +242,8 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
             $car->leftNode('LEFT_WORK_SHOP');
             $car->enterNode('ENTER_CHECK_SHOP', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -262,9 +256,8 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
+
             $car->leftNode('ENTER_CHECK_SHOP');
             $car->enterNode('CHECK_LINE', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -281,9 +274,7 @@ class ExecutionController extends BmsBaseController
 				throw new Exception('请选择司机后再开始路试');
 			}
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
             $car->leftNode('CHECK_LINE');
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_START', $driverId);
@@ -310,9 +301,7 @@ class ExecutionController extends BmsBaseController
             }
 
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
 			
 			$car->leftNode('VQ1');
             
@@ -352,9 +341,7 @@ class ExecutionController extends BmsBaseController
             }
 			
             $car = Car::create($vin);
-			if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+			$car->checkAlreadyOut();
 
 			$car->leftNode('ROAD_TEST_FINISH');
 			
@@ -387,9 +374,7 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '');
             $car = Car::create($vin);
-            if($car->car->distribute_time > '0000-00-00 00:00:00'){
-                throw new Exception($vin . "已出库，不可录入");
-            }
+            $car->checkAlreadyOut();
 
 
 			$fault = Fault::createSeeker();
@@ -537,9 +522,7 @@ class ExecutionController extends BmsBaseController
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}
 			
-			if($car->car->distribute_time != '0000-00-00 00:00:00'){
-				throw new Exception($vin . '已出库，不可再入库');
-			}
+			$car->checkAlreadyOut();
 			
             $onlyOnce = false;
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
@@ -616,9 +599,7 @@ class ExecutionController extends BmsBaseController
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
 			
-			if($car->car->distribute_time > '0000-00-00 00:00:00'){
-				throw new Exception($vin . '已出库，不可重复分配库位');
-			}
+			$car->checkAlreadyOut();
 
             list($matched, $data) = $car->matchOrder($date);
             if($matched) {
@@ -856,24 +837,13 @@ class ExecutionController extends BmsBaseController
 	//added by wujun
 	public function actionOrderMaintain() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/other/OrderMaintain');	
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
         }
 	}
-
-    //added by wujun
-    public function actionOutStandbyMaintain() {
-        try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
-            $this->render('assembly/other/OutStandbyMaintain');  
-        } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
-                $this->render('../site/permissionDenied');
-        }
-    }
 
     public function actionWarehousePrint() {
         try{
@@ -907,7 +877,7 @@ class ExecutionController extends BmsBaseController
 
     public function actionlaneManage() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/dataInput/LaneManage');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
@@ -940,7 +910,7 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionDataThrow() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/other/DataThrow');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
@@ -960,7 +930,7 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionHoldRelease() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/dataInput/HoldRelease');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

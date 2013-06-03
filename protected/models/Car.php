@@ -962,6 +962,12 @@ class Car
 		$trace->car_series = $this->car->series;
 		$trace->save();
 	}
+
+	public function checkAlreadyOut(){
+		if($this->car->distribute_time > '0000-00-00 00:00:00'){
+			throw new Exception($this->car->vin . '已出库');
+		}
+	}
 	
 	
 	public function throwTestlineCarInfo(){

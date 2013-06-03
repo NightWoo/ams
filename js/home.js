@@ -20,7 +20,10 @@ $(function () {
 	$("#query").click(function(){
 		window.location.href='/bms/execution/query?type=CarQuery'
 	})
-	
+
+	$("#warehouseMaintain").click(function(){
+		window.location.href='/bms/execution/orderMaintain'
+	})
 	
 	$("#maintain").click(function(){
 		window.location.href='/bms/execution/ConfigPlan'

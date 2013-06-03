@@ -379,6 +379,7 @@ class OrderController extends BmsBaseController
 	public function actionMatchManually(){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
+			Yii::app()->permitManager->check('ORDER_MATCH_MANUALLY');
 			$orderId = $this->validateIntVal('orderId', 0);
 			$vins = $this->validateStringVal('vins', '{}');
 			$order = new Order();
@@ -393,7 +394,11 @@ class OrderController extends BmsBaseController
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$transaction->rollback();
-			$this->renderJsonBms(false, $e->getMessage());
+			if($e->getMessage() == 'permission denied'){
+				$this->renderJsonBms(false, '抱歉，您无此操作权限');
+			}else{
+				$this->renderJsonBms(false, $e->getMessage());
+			}
 		}
 	}
 
