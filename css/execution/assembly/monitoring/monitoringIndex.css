@@ -46,7 +46,7 @@
 	font-size:9px;
 	z-index: 100; 
 	/*overflow: hidden;*/
-	max-height: 450px;
+	max-height: 480px;
     overflow-y: hidden;
 }
 
@@ -54,6 +54,17 @@
 	margin: 0 auto;
 	width: 572px;
 	background-color: white;
+}
+
+#capacityRate {
+	margin: 0 auto;
+	width: 460px;
+	height: 30px;
+}
+
+#capacityRate .progress{
+	margin-bottom: 0;
+	margin-left: 5px;
 }
 
 #warehouseBack{
@@ -696,8 +707,8 @@ left: 370px;
 top: -1224px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
-text-align: center;
+font-size: 26px;
+/*text-align: center;*/
 line-height: 65px;}
 .area-b{position: relative;
 /*background: url(../../../../img/hover_B.png) no-repeat 0 0 ;*/
@@ -708,8 +719,8 @@ left: 370px;
 top: -1357px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
-text-align: center;
+font-size: 26px;
+/*text-align: center;*/
 line-height: 65px;}
 .area-c{position: relative;
 /*background: url(../../../../img/hover_C.png) no-repeat 0 0 ;*/
@@ -720,8 +731,8 @@ left: 370px;
 top: -1492px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
-text-align: center;
+font-size: 26px;
+/*text-align: center;*/
 line-height: 65px;}
 .area-d{position: relative;
 /*background: url(../../../../img/hover_D.png) no-repeat 0 0 ;*/
@@ -732,8 +743,8 @@ left: 370px;
 top: -1627px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
-text-align: center;
+font-size: 26px;
+/*text-align: center;*/
 line-height: 75px;}
 
 .area-e{position: relative;
@@ -745,7 +756,7 @@ left: 134px;
 top: -1618px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
+font-size: 26px;
 text-align: center;
 line-height: 65px;}
 
@@ -758,7 +769,7 @@ left: 69px;
 top: -1726px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
+font-size: 26px;
 text-align: center;
 line-height: 100px;
 }
@@ -772,9 +783,13 @@ left: 133px;
 top: -1863px;
 cursor: pointer;
 color: gray;
-font-size: 30px;
+font-size: 26px;
 text-align: center;
 line-height: 65px;}
+
+.quantity{
+	color: #9966FF;
+}
 
 
 .area-lane{position: relative;
@@ -800,8 +815,8 @@ color: transparent;}
 	width: 160px;
 	line-height: 50px;
 	height: 50px;
-	left: 286px;
-	top: -1880px;
+	left: 520px;
+	top: -1840px;
 	color: #9963FF;
 	font-size: 50px;
 	text-align: center;
@@ -822,8 +837,11 @@ color: transparent;}
 
 #extraArea {
 	font-size: 16px;
-	margin-left: 150px;
-    margin-top: 6px;
+    left: 440px;
+    position: relative;
+    top: -2200px;
+    width: 95px;
+    z-index: 200;
 }
 
 #extraArea span {
@@ -840,4 +858,22 @@ color: transparent;}
     color: #9966FF;
     text-align: right;
     width: 40px;
+}
+
+#divWarehousePeriod {
+	font-size: 22px;
+    left: 265px;
+    position: relative;
+    top: -2020px;
+    width: 95px;
+    z-index: 200;
+}
+
+#divTransportPeriod {
+	font-size: 22px;
+    left: 110px;
+    position: relative;
+    top: -2043px;
+    width: 95px;
+    z-index: 200;
 }

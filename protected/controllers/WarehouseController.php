@@ -126,4 +126,30 @@ class WarehouseController extends BmsBaseController
 		}
 
 	}
+
+	public function actionQueryRow(){
+		$area = $this->validateStringVal('area', '');
+		$row = $this->validateStringVal('row', '');
+		$series = $this->validateStringVal('series', '');
+		$orderConfig = $this->validateIntVal('orderConfig', 0);
+		$color = $this->validateStringVal('color', '');
+		try{
+			$seeker = new WarehouseSeeker();
+			$data = $seeker->query($area, $row, $series, $orderConfig, $color);
+			$this->renderJsonBms(true, 'OK', $data);
+		}catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionResetFreeSeat(){
+		$warehouseId = $this->validateIntVal("warehouseId", 0);
+		try{
+			$warehouse = new Warehouse();
+			$data = $warehouse->resetFreeSeat($warehouseId);
+			$this->renderJsonBms(true, 'OK', $data);
+		}catch(Exception $e){
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
 }

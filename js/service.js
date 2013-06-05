@@ -266,6 +266,9 @@ var GET_ORDER_In_BOARD_INFO = "/bms/order/queryOrderInBoardInfo";
 
 var RELEASE_LANE_ORDERS = "/bms/lane/releaseOrders";
 
+var WAREHOUSE_QUERY = "/bms/warehouse/queryRow";
+var RESET_FREE_SEAT = "/bms/warehouse/resetFreeSeat";
+
 var CONFIG_SHOW_IMAGE = '/bms/config/showImages';
 var CONFIG_UPLOAD_IMAGE = '/bms/config/upload';
 var CONFIG_DELETE_IMAGE = '/bms/config/deleteImage';

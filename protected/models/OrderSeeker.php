@@ -825,6 +825,9 @@ class OrderSeeker
 		$stime = date($format, strtotime($stime));
 		$etime = date($format, strtotime($etime));
 
+		$stime = $stime . " 08:00:00";
+		$etime = $etime . " 08:00:00";
+
 		$s = strtotime($stime);
 		$e = strtotime($etime);
 

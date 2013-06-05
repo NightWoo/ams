@@ -293,10 +293,12 @@ class FaultController extends BmsBaseController
         $series = $this->validateStringVal('series', '');
         $stime = $this->validateStringVal('stime', '');
         $etime = $this->validateStringVal('etime', '');
+        $component = $this->validateStringVal('component', '');
+        $mode = $this->validateStringVal('mode', '');
         $node = $this->validateStringVal('node', '');
         try{
             $fault = Fault::createSeeker();
-            $data = $fault->queryPlaton($series, $stime, $etime, $node);
+            $data = $fault->queryPlaton($series, $stime, $etime, $node, $component, $mode);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());

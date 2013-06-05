@@ -78,7 +78,7 @@ $(document).ready(function() {
 					var data = response.data;
 					// $(".nowTime").html("备车"+nowTime());
 					$("#rowInfo").html(data.row);
-					$("#rowPrint").html(data.row);
+					$("#rowPrint").html(data.row + '-' + data.driver_name);
 					$("#vinInfo").html(data.vin);
 					$("#vinPrint").html(data.vin + '-' + data.color);
 					$("#seriesInfo").html(byd.SeriesName[data.series]);

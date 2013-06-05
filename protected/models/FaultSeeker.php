@@ -112,9 +112,11 @@ class FaultSeeker
 		$validConditions = array();
 		if(!empty($component)) {
 			$conditions[] = "c.component_name LIKE '%$component%'";
+			$validConditions[] = "c.component_name LIKE '%$component%'";
 		}
 		if(!empty($mode)) {
             $conditions[] = "c.fault_mode LIKE '%$mode%'";
+            $validConditions[] = "c.fault_mode LIKE '%$mode%'";
         }
 
 		if(!empty($stime)) {
@@ -647,7 +649,7 @@ class FaultSeeker
 	}
 
 
-	public function queryPlaton($series, $stime, $etime, $node) {
+	public function queryPlaton($series, $stime, $etime, $node, $component, $mode) {
 		
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 
@@ -672,6 +674,13 @@ class FaultSeeker
         if(!empty($etime)) {
             $conditions[] = "create_time < '$etime'";
         }
+        if(!empty($component)) {
+			$conditions[] = "component_name LIKE '%$component%'";
+		}
+		if(!empty($mode)) {
+            $conditions[] = "fault_mode LIKE '%$mode%'";
+        }
+        
         $condition = join(' AND ', $conditions);
         if(!empty($condition)) {
             $condition = 'WHERE ' . $condition;

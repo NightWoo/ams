@@ -146,13 +146,8 @@
 
 	      			</div>
 	      			<div id="warehouse" class="tab-pane">
-	      				<div id="extraArea" class="pull-left">
-      					    <dl class="dl-horizontal">
-							    <dt>27#厂房</dt><dd class="area-h">-</dd>
-							    <dt>异常区X</dt><dd class="area-x">-</dd>
-							    <dt>临时区Y</dt><dd class="area-y">-</dd>
-							    <dt>临时区Z</dt><dd class="area-z">-</dd>
-						    </dl>
+	      				<div id="capacityRate">
+
 	      				</div>
 	      				<div id="warehouseContainer">
 			      			<div id ="warehouseBack">
@@ -183,16 +178,32 @@
 							<div class="outware-warehouse warehouse-node sub-flag"></div>
 				    		<div class="inware-warehouse warehouse-node sub-flag"></div>
 				    		<!-- <div class="vq3-warehouse warehouse-node"></div> -->
-				    		<div class="area-a">A</div>
-				    		<div class="area-b">B</div>
-				    		<div class="area-c">C</div>
-				    		<div class="area-d">D</div>
-				    		<div class="area-e">E</div>
-				    		<div class="area-f">F</div>
-				    		<div class="area-g">G</div>
-				    		<!-- <div class="area-e-up"></div> -->
+				    		<div class="area-a">&nbsp;&nbsp;A-<span class="quantity quantity-a">0</span></div>
+				    		<div class="area-b">&nbsp;&nbsp;B-<span class="quantity quantity-b">0</span></div>
+				    		<div class="area-c">&nbsp;&nbsp;C-<span class="quantity quantity-c">0</span></div>
+				    		<div class="area-d">&nbsp;&nbsp;D-<span class="quantity quantity-d">0</span></div>
+				    		<div class="area-e">E-<span class="quantity quantity-e">0</span></div>
+				    		<div class="area-f">F-<span class="quantity quantity-f">0</span></div>
+				    		<div class="area-g">G-<span class="quantity quantity-g">0</span></div>
 				    		<div class="area-total-amount"></div>
 				    		<div class="area-lane"></div>
+
+				    		<div id="extraArea" class="">
+	      					    <dl class="dl-horizontal">
+								    <dt>27#厂房</dt><dd class="area-h">-</dd>
+								    <dt>特殊区X</dt><dd class="area-x">-</dd>
+								    <!-- <dt>临时区Y</dt><dd class="area-y">-</dd>
+								    <dt>临时区Z</dt><dd class="area-z">-</dd> -->
+							    </dl>
+		      				</div>
+
+		      				<div id="divWarehousePeriod">
+		      					<span id="warehousePeriod"><i class="icon-time"></i>-H</span>
+		      				</div>
+
+		      				<div id="divTransportPeriod">
+		      					<span id="transportPeriod"><i class="icon-time"></i>-H</span>
+		      				</div>
 	      				</div>
 
 

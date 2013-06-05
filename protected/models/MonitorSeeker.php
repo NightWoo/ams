@@ -360,26 +360,98 @@ class MonitorSeeker
 			$ret[$data['area']] = $data['quantity'];
 		}
 
-		$countRet = array(
-			'1' => 0,
-			'200' => 0,
-			'999' => 0,
-			'1000' => 0,
-			'1001' => 0,
-		);
+		// $countRet = array(
+		// 	'1' => 0,
+		// 	'200' => 0,
+		// 	'999' => 0,
+		// 	'1000' => 0,
+		// 	'1001' => 0,
+		// );
 		
-		$countSql = "SELECT COUNT(id) AS quantity, warehouse_id FROM car WHERE warehouse_id=1 or warehouse_id>=200 GROUP BY warehouse_id";
-		$countDatas = Yii::app()->db->createCommand($countSql)->queryAll();
-		foreach($countDatas as $data) {
-			$countRet[$data['warehouse_id']] = $data['quantity'];
+		// $countSql = "SELECT COUNT(id) AS quantity, warehouse_id FROM car WHERE warehouse_id=1 or warehouse_id>=200 GROUP BY warehouse_id";
+		// $countDatas = Yii::app()->db->createCommand($countSql)->queryAll();
+		// foreach($countDatas as $data) {
+		// 	$countRet[$data['warehouse_id']] = $data['quantity'];
+		// }
+
+
+		// $ret['WDI'] = $countRet['1'];
+		// $ret['H'] = $countRet['200'];
+		// $ret['Z'] = $countRet['999'];
+		// $ret['X'] = $countRet['1000'];
+		// $ret['Y'] = $countRet['1001'];
+
+		return $ret;
+	}
+
+	public function queryCapacityRate() {
+		$sql = "SELECT SUM(capacity) AS capacity_sum, SUM(quantity) AS quantity_sum, SUM(free_seat) AS free_seat_sum FROM warehouse WHERE id>1 AND id<200";
+		$data = Yii::app()->db->createCommand($sql)->queryRow();
+
+		return $data;		
+	} 
+
+	public function queryPeriod() {
+		$curDate = DateUtil::getCurDate();
+		$stime = $curDate . ' 08:00:00';
+		$etime = date("Y-m-d H:i:s");
+
+		$sql = "SELECT 	board_number, 
+						MIN(activate_time) AS min_activate, 
+						MAX(activate_time) AS max_activate, 
+						MIN(out_finish_time) AS min_out, 
+						MAX(out_finish_time) AS max_out,
+						MIN(lane_release_time) AS min_release,
+						MAX(lane_release_time) AS max_relaese 
+				FROM `order`
+				WHERE activate_time>='$stime' AND activate_time<'$etime'
+				GROUP BY board_number";
+		 
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$warehousePeriod = 0;
+		$transportPeriod = 0;
+		foreach($datas as &$data){
+			//获得每板的激活、完成、释放这三个周期时间点
+			$boardActivate = $data['min_activate'];
+			if($data['min_out'] === '0000-00-00 00:00:00'){
+				$boardOutFinish = date('Y-m-d H:i:s');
+			} else {
+				$boardOutFinish = $data['max_out'];
+			}
+			if($data['min_release'] === '0000-00-00 00:00:00'){
+				$boardRelease = date('Y-m-d H:i:s');
+			} else {
+				$boardRelease = $data['max_relaese'];
+			}
+
+			//计算成品库周期，出库完成时间-激活时间
+			$data['warehousePeriod'] = strtotime($boardOutFinish) - strtotime($boardActivate);
+			$warehousePeriod += $data['warehousePeriod'] ;
+			//计算储运周期，车道释放时间-完成时间
+			$data['transportPeriod'] = strtotime($boardRelease) - strtotime($boardOutFinish);
+			$transportPeriod += $data['transportPeriod'];
+		}
+		$totalPeriod = $warehousePeriod + $transportPeriod;
+		
+		//计算板板数
+		$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` WHERE activate_time>='$stime' AND activate_time<'$etime'";
+		$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		if($boardCount == 0){
+			$totalPeriodAvg = null;
+			$warehousePeriodAvg = null;
+			$transportPeriodAvg = null;
+		} else {
+			$totalPeriodAvg = round((($warehousePeriod + $transportPeriod) / $boardCount / 3600), 1);
+			$warehousePeriodAvg = round(($warehousePeriod / $boardCount / 3600), 1);
+			$transportPeriodAvg = round(($transportPeriod / $boardCount / 3600), 1);
 		}
 
-
-		$ret['WDI'] = $countRet['1'];
-		$ret['H'] = $countRet['200'];
-		$ret['Z'] = $countRet['999'];
-		$ret['X'] = $countRet['1000'];
-		$ret['Y'] = $countRet['1001'];
+		$ret = array(
+			"warehousePeriod" => $warehousePeriodAvg,
+			"transportPeriod" => $transportPeriodAvg,
+		);
 
 		return $ret;
 	}

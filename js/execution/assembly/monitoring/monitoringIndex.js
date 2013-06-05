@@ -455,17 +455,44 @@ function ajaxGetStock (argument) {
 	    		// $(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		// $(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 
-	    		//warehouse total 
-	    		$(".area-total-amount").html(response.data.warehourse_cars.all);
-	    		$(".area-h").html(response.data.area_quantity.H);
-	    		$(".area-x").html(response.data.area_quantity.X);
-	    		$(".area-y").html(response.data.area_quantity.Y);
-	    		$(".area-z").html(response.data.area_quantity.Z);
-
     			//refresh stock
     			$(".vq3-balance-data").html(response.data.balance.VQ3.all);
     			$(".vq2-road-data").html(response.data.balance.VQ2.all);
     			$(".stock-amount").html(response.data.balance.warehourse_cars);
+
+    			//capacity rate progress
+    			capacity = parseInt(response.data.capacity_rate.capacity_sum);
+    			quantity = parseInt(response.data.capacity_rate.quantity_sum);
+    			freeSeat = parseInt(response.data.capacity_rate.free_seat_sum);
+
+    			occupid = capacity - quantity - freeSeat;
+    			occupidRate = (occupid / capacity * 100) + "%";
+    			useRate = (quantity / capacity * 100) + "%";
+    			freeRate = (freeSeat / capacity * 100) + "%";
+
+    			var progress = $("<div />").addClass("progress");
+				var barOccupid = $("<div />").addClass("bar bar-warning").attr("style", "width:" + occupidRate).html(occupid);
+				var barUse = $("<div />").addClass("bar bar-info").attr("style", "width:" + useRate).html(quantity);
+				var barFree = $("<div />").addClass("bar bar-success").attr("style", "width:" + freeRate).html(freeSeat);
+				$("#capacityRate").html(progress.append(barOccupid).append(barUse).append(barFree));
+
+				//area quantity
+				$(".quantity-a").html(response.data.area_quantity.A);
+				$(".quantity-b").html(response.data.area_quantity.B);
+				$(".quantity-c").html(response.data.area_quantity.C);
+				$(".quantity-d").html(response.data.area_quantity.D);
+				$(".quantity-e").html(response.data.area_quantity.E);
+				$(".quantity-f").html(response.data.area_quantity.F);
+				$(".quantity-g").html(response.data.area_quantity.G);
+	    		$(".area-h").html(response.data.area_quantity.H);
+	    		$(".area-x").html(response.data.area_quantity.X);
+	    		// $(".area-y").html(response.data.area_quantity.Y);
+	    		// $(".area-z").html(response.data.area_quantity.Z);
+				$(".area-total-amount").html(response.data.warehourse_cars.all);
+
+				$("#warehousePeriod").html("<i class='icon-time'></i>" + response.data.period.warehousePeriod + "H");
+				$("#transportPeriod").html("<i class='icon-time'></i>" + response.data.period.transportPeriod + "H");
+
 	    	} else {
 	    		alert(response.message);
 	    	}

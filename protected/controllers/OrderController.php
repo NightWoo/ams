@@ -367,7 +367,9 @@ class OrderController extends BmsBaseController
 			$car = Car::create($data['vin']);
 			$car->throwMarkPrintData();
 			$car->enterNode('OutStandby', $driverId);
-			
+			$driverName = User::model()->findByPk($driverId)->display_name;
+			$data['driver_name'] = $driverName;
+
 			$transaction->commit();
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {

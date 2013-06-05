@@ -170,7 +170,7 @@
 		
 		<div id="summary" class="tile square">
 			<div class="title">
-				<h3>月度总结</h3>
+				<h3></h3>
 			</div>
 		</div>
 		

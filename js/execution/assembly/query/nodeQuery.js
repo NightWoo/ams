@@ -476,6 +476,8 @@ function getSeriesChecked () {
 					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
+					"component":$("#componentText").val(),
+					"mode":$("#faultModeText").val(),
 				},
 		    success:function (response) {
 		    	if(response.success){

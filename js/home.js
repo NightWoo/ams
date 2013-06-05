@@ -52,7 +52,7 @@ $(function () {
 	})
 
 	$("#summary").click(function(){
-		window.location.href='/bms/managementSystem/workSummaryAPD'
+		// window.location.href='/bms/managementSystem/workSummaryAPD'
 	})
 
 	function initPage() {

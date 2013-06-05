@@ -152,9 +152,9 @@ class Order
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         		$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND warehouse_id<>1000 AND series=? AND color=? AND cold_resistant=? AND special_property<>9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+				$matchCondition = "warehouse_id>1 AND warehouse_id<200 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 				if($order['order_type'] === '出口'){
-					$matchCondition .= " AND (UPPER(special_order)='{$order['order_number']}' OR UPPER(remark) LIKE '%{$order['order_number']}%')";
+					$matchCondition .= " AND special_property=1 AND (UPPER(special_order)='{$order['order_number']}' OR UPPER(remark) LIKE '%{$order['order_number']}%')";
 				}
 
 				$values = array($order->series, $order->color, $order->cold_resistant);

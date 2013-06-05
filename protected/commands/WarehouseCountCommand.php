@@ -21,7 +21,7 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$stime = $lastDate . " 08:00:00";
 		$etime = $curDate . " 08:00:00";
-		$undistributed = $this->countUndistributed();
+		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
@@ -61,7 +61,7 @@ class WarehouseCountCommand extends CConsoleCommand
 		$stime = $curDate . " 08:00:00";
 		$etime = $curDate . " 17:30:00";
 
-		$undistributed = $this->countUndistributed();
+		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
@@ -109,42 +109,47 @@ class WarehouseCountCommand extends CConsoleCommand
 		return $count;
 	}
 
-	private function countUndistributed() {
+	private function countUndistributed($etime) {
+		$seriesArray = array('F0', 'M6', '6B');
+
+		$stime = "2013-06-04 08:00:00";
+		//初始时间2013-06-04 08:00前的未发值
+		$count = array(
+	    	'F0' => 2829,
+	    	'M6' => 603,
+	    	'6B' => 382,
+	    );
+
+		////初始时间2013-06-04 08:00时的最大DATAK40_DGMXID为1746208
 		$sql = "SELECT SUM(DATAK40_DGSL) as sum,
 						DATAK40_CXMC as series 
 				FROM DATAK40_CLDCKMX 
-				WHERE DATAK40_DGMXID>1700000 AND DATAK40_SSDW=3 
+				WHERE DATAK40_DGMXID>1746208 AND DATAK40_SSDW=3 
 				GROUP BY DATAK40_CXMC";
 		$tdsSever = Yii::app()->params['tds_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
         $tdsUser = Yii::app()->params['tds_SELL_username'];
         $tdsPwd = Yii::app()->params['tds_SELL_password'];
 
-        $amount = array();
         $datas = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
         foreach($datas as &$data){
         	if($data['series'] == '思锐'){
         		$data['series'] = '6B';
 	        }
-	        $amount[$data['series']] = $data['sum'];
+	        $count[$data['series']] += $data['sum'];
 	    }
 
-	    $count = array();
-	    $sql = "SELECT SUM(count) as sum, series FROM `order` WHERE order_detail_id>1700000 GROUP BY series";
-	    $rets = Yii::app()->db->createCommand($sql)->queryAll();
+	    // $sql = "SELECT SUM(count) as sum, series FROM `order` WHERE order_detail_id>1746208 GROUP BY series";
+	    // $rets = Yii::app()->db->createCommand($sql)->queryAll();
 
-	    $revise = array(
-	    	'F0' => 0,
-	    	'M6' => 0,
-	    	'6B' => 0,
-	    );
-
-	    foreach($rets as $ret){
-	    	if(array_key_exists($ret['series'],$amount) ){
-		    	$count[$ret['series']] = $amount[$ret['series']] - $ret['sum'] + $revise[$ret['series']];
-	    	} else {
-	    		$count[$ret['series']] = 0;
-	    	}
+	    // foreach($rets as $ret){
+		   //  $count[$ret['series']] -= $ret['sum'];
+	    // }
+	    
+	    //计算从初始时间2013-06-04 08:00开始到目前的出库量，并从未发值中减去
+	    foreach($seriesArray as $series){
+	    	$checkout = $this->countCheckout($stime, $etime, $series);
+	    	$count[$series] -= $checkout;
 	    }
 
 	    return $count;

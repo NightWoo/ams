@@ -527,7 +527,10 @@ class ExecutionController extends BmsBaseController
             $onlyOnce = false;
             $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             
-            list($matched, $data) = $car->matchOrder($date);
+            $matched = false;
+            if($car->car->special_property<9){
+                list($matched, $data) = $car->matchOrder($date);
+            }
             if($matched) {
                 $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
                 $car->throwMarkPrintData();
@@ -601,7 +604,10 @@ class ExecutionController extends BmsBaseController
 			
 			$car->checkAlreadyOut();
 
-            list($matched, $data) = $car->matchOrder($date);
+            $matched = false;
+            if($car->car->special_property<9){
+                list($matched, $data) = $car->matchOrder($date);
+            }
             if($matched) {
                 $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
                 $car->throwMarkPrintData();
@@ -845,6 +851,16 @@ class ExecutionController extends BmsBaseController
         }
 	}
 
+    public function actionWarehouseAdjust() {
+        try{
+            Yii::app()->permitManager->check('ORDER_MAINTAIN');
+            $this->render('assembly/other/WarehouseAdjust');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     public function actionWarehousePrint() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
@@ -951,11 +967,12 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $test = 'aaa fff
-            bbb ccc,ddd';
-            $ret = preg_split ('[\s|,]',$test);
-            ArrayFunc::array_remove_empty($ret);
-			$this->renderJsonBms(true, $test , $ret);
+            $series='F0';
+            $sql = "SELECT id FROM order_config WHERE car_series='$series'";
+            $data = Yii::app()->db->createCommand($sql)->queryColumn();
+            $orderConfigs = join(',',$data);
+            $ret = "(series = '$series' OR order_config_id IN ($orderConfigs))";
+			$this->renderJsonBms(true, $ret , $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  
