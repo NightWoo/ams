@@ -155,6 +155,7 @@ class Warehouse
 
 		if(!empty($row)){
 			$row->free_seat = $row->capacity - $row->quantity;
+			$row->status = 0;
 			$row->save();
 		}
 

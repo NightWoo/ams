@@ -711,6 +711,31 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionReturnSubmit() {
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $vin = $this->validateStringVal('vin', '');
+            $driverId = $this->validateIntVal('driverId', 0);
+            $goTo = $this->validateStringVal('goTo', 'VQ3');
+            $remark = $this->validateStringVal('remark', '');
+
+            $car = Car::create($vin);
+            $data = $car->warehouseReturn($goTo, $remark);
+
+            if($goTo === "成品库") {
+                $message = $vin . "已成功退回库，请开往" . $data['row']; 
+            } else {
+                $message = $vin . "已成功退出库，请返回" . $goTo; 
+            }
+            
+            $transaction->commit();
+            $this->renderJsonBms(true, $message, $data);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
     public function actionQueryNodeTrace() {
         $series = $this->validateStringVal('series', '');
         $stime = $this->validateStringVal('stime', '');
@@ -853,7 +878,7 @@ class ExecutionController extends BmsBaseController
 
     public function actionWarehouseAdjust() {
         try{
-            Yii::app()->permitManager->check('ORDER_MAINTAIN');
+            Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/other/WarehouseAdjust');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
@@ -943,10 +968,20 @@ class ExecutionController extends BmsBaseController
         $this->render('assembly/dataInput/WarehouseRelocate');  
     }
 
+    public function actionWarehouseReturn() {
+        try{
+            Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
+            $this->render('assembly/other/WarehouseReturn');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     //added by wujun
     public function actionHoldRelease() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/dataInput/HoldRelease');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

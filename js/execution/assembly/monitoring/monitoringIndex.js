@@ -623,7 +623,7 @@ function ajaxBalance (node) {
 
 //block click handler
 	$(".area-a,.area-b,.area-c,.area-d,.area-e,.area-f,.area-g").live("click", function () {
-		var blockNumber = $(this).html();
+		var blockNumber = $.trim($(this).find("span").filter(".area-text").html());
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();
 			$("#blockDetail").data("currentBlock", "");

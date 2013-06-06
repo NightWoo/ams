@@ -256,6 +256,10 @@ class OrderController extends BmsBaseController
 			$order->modify_time = date('YmdHis');
 			$order->user_id = Yii::app()->user->id;
 
+			if($order->amount <= $order->hold && $order->standby_finish_time === '0000-00-00 00:00:00'){
+				$order->standby_finish_time = date("YmdHis");
+			}
+
 			if($order->status == 1){
 				$curDate = DateUtil::getCurDate();
 				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){

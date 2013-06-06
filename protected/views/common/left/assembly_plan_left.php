@@ -7,6 +7,7 @@
 		<li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li>
 		<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">发车计划</a></li>
 		<li id="leftWarehouseAdjustLi"><a href="/bms/execution/warehouseAdjust">库位整理</a></li>
+		<li id="leftWarehouseReturnLi"><a href="/bms/execution/warehouseReturn">成品库异常</a></li>
 		<li id="leftDataThrowLi"><a href="/bms/execution/dataThrow">数据抛送</a></li>
 	</ul>        
 </div><!-- end 侧边栏 -->

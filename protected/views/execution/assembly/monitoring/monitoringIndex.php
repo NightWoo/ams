@@ -178,13 +178,13 @@
 							<div class="outware-warehouse warehouse-node sub-flag"></div>
 				    		<div class="inware-warehouse warehouse-node sub-flag"></div>
 				    		<!-- <div class="vq3-warehouse warehouse-node"></div> -->
-				    		<div class="area-a">&nbsp;&nbsp;A-<span class="quantity quantity-a">0</span></div>
-				    		<div class="area-b">&nbsp;&nbsp;B-<span class="quantity quantity-b">0</span></div>
-				    		<div class="area-c">&nbsp;&nbsp;C-<span class="quantity quantity-c">0</span></div>
-				    		<div class="area-d">&nbsp;&nbsp;D-<span class="quantity quantity-d">0</span></div>
-				    		<div class="area-e">E-<span class="quantity quantity-e">0</span></div>
-				    		<div class="area-f">F-<span class="quantity quantity-f">0</span></div>
-				    		<div class="area-g">G-<span class="quantity quantity-g">0</span></div>
+				    		<div class="area-a">&nbsp;&nbsp;<span class="area-text">A</span>-<span class="quantity quantity-a">0</span></div>
+				    		<div class="area-b">&nbsp;&nbsp;<span class="area-text">B</span>-<span class="quantity quantity-b">0</span></div>
+				    		<div class="area-c">&nbsp;&nbsp;<span class="area-text">C</span>-<span class="quantity quantity-c">0</span></div>
+				    		<div class="area-d">&nbsp;&nbsp;<span class="area-text">D</span>-<span class="quantity quantity-d">0</span></div>
+				    		<div class="area-e"><span class="area-text">E</span>-<span class="quantity quantity-e">0</span></div>
+				    		<div class="area-f"><span class="area-text">F</span>-<span class="quantity quantity-f">0</span></div>
+				    		<div class="area-g"><span class="area-text">G</span>-<span class="quantity quantity-g">0</span></div>
 				    		<div class="area-total-amount"></div>
 				    		<div class="area-lane"></div>
 
