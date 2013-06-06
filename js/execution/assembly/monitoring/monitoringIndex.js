@@ -472,7 +472,7 @@ function ajaxGetStock (argument) {
 
     			var progress = $("<div />").addClass("progress");
 				var barOccupid = $("<div />").addClass("bar bar-warning").attr("style", "width:" + occupidRate).html(occupid);
-				var barUse = $("<div />").addClass("bar bar-info").attr("style", "width:" + useRate).html(quantity);
+				var barUse = $("<div />").addClass("bar bar-info").attr("style", "width:" + useRate).html(quantity+" / "+(quantity / capacity * 100).toFixed(0) + "%");
 				var barFree = $("<div />").addClass("bar bar-success").attr("style", "width:" + freeRate).html(freeSeat);
 				$("#capacityRate").html(progress.append(barOccupid).append(barUse).append(barFree));
 
