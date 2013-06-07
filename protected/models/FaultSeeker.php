@@ -997,7 +997,8 @@ class FaultSeeker
 			'CHECK_IN' => 18,
 			'CHECK_OUT' => 19,
 			'WDI'  => 95,
-			'VQ3_WAREHOUSE_RETURN'=>17,
+			'OutStandby'  => 96,
+			'WAREHOUSE_RETURN'=>97,
         );
 
 		if(empty($node) || $node === 'all') {

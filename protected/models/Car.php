@@ -153,7 +153,7 @@ class Car
 		return $seeker->getDetail($this->car, $node);
 	}
 
-	public function enterNode($nodeName,$driverId = 0, $onlyOnce = false) {
+	public function enterNode($nodeName,$driverId = 0, $onlyOnce = false, $remark = '') {
 		$node = Node::createByName($nodeName);
 		if(!$node->exist()){
 			throw new Exception('不存在名字为' . $nodeName . '的节点');
@@ -181,6 +181,7 @@ class Car
 			$trace->pass_time = $passtime;
 			$trace->car_id = $this->car->id;
 			$trace->car_series = $this->car->series;
+			$trace->remark = $remark;
 			$trace->save();
 
 
@@ -648,6 +649,9 @@ class Car
 				$trace['create_time'] = $trace['pass_time'];
 				$trace['node_name'] = $name;
 				$trace['fault'] = '-';
+				if(!empty($trace['remark'])){
+					$trace['fault'] = $trace['remark'];
+				}
 				$trace['fault_status'] = '-';
 				if(!empty($trace['driver_id'])){
 					$trace['user_name'] = $userInfos[$trace['driver_id']];
@@ -937,30 +941,73 @@ class Car
         return array($success, $data);
 	}
 
-	public function warehouseReturn($nodeName,$driverId = 0){
-		$node = Node::createByName($nodeName);
-		if(!$node->exist()){
-			throw new Exception('不存在名字为' . $nodeName . '的节点');
-		}
+	// public function warehouseReturn($nodeName,$driverId = 0){
+	// 	$node = Node::createByName($nodeName);
+	// 	if(!$node->exist()){
+	// 		throw new Exception('不存在名字为' . $nodeName . '的节点');
+	// 	}
 
-		$nodeId = $node->id;
+	// 	$nodeId = $node->id;
 
-		if(!empty($driverId)) {
-			$user = User::model()->findByPk($driverId);
-			if(empty($user)) {
-				throw new Exception($driverId . '的司机不存在');
+	// 	if(!empty($driverId)) {
+	// 		$user = User::model()->findByPk($driverId);
+	// 		if(empty($user)) {
+	// 			throw new Exception($driverId . '的司机不存在');
+	// 		}
+	// 	}
+
+	// 	$passtime = date('YmdHis');
+	// 	$trace = new WarehouseReturnTraceAR();
+	// 	$trace->node_id = $nodeId;
+	// 	$trace->user_id = Yii::app()->user->id;
+	// 	$trace->driver_id = $driverId;
+	// 	$trace->pass_time = $passtime;
+	// 	$trace->car_id = $this->car->id;
+	// 	$trace->car_series = $this->car->series;
+	// 	$trace->save();
+	// }
+
+	public function warehouseReturn($goTo, $remark, $driverId = 0){
+		//释放订单
+		$this->releaseOrder();
+
+		if($goTo === "成品库"){
+			$status = "成品库";
+			if($this->car->warehouse_id > 1){
+				$rowNow = WarehouseAR::model()->findByPk($this->car->warehouse_id)->row;
+				throw new Exception ('此车状态为成品库_'. $rowNow .'，不可退回成品库如，如需重新分配库位，请操作<重新分配库位>');
 			}
+			$warehouse = new Warehouse;
+            $data = $warehouse->checkin($this->car->vin);
+            $this->car->warehouse_id = $data['warehouse_id'];
+            $this->car->area = $data['area'];
+            $this->car->save();
+
+		} else {
+			$status = "退库" . $goTo;
+			if($this->car->warehouse_id>1){
+				$this->car->old_wh_id = $this->car->warehouse_id;
+				$row = WarehouseAR::model()->findByPk($this->car->warehouse_id);
+				$row->quantity -= 1;
+				$row->save();
+			}
+			$this->car->warehouse_id = 0;
+			$this->car->area = '';
+			$this->car->warehouse_time = "0000-00-00 00:00:00";
 		}
 
-		$passtime = date('YmdHis');
-		$trace = new WarehouseReturnTraceAR();
-		$trace->node_id = $nodeId;
-		$trace->user_id = Yii::app()->user->id;
-		$trace->driver_id = $driverId;
-		$trace->pass_time = $passtime;
-		$trace->car_id = $this->car->id;
-		$trace->car_series = $this->car->series;
-		$trace->save();
+		$onlyOnce=false;
+		$this->enterNode("WAREHOUSE_RETURN", $driverId, $onlyOnce, $remark);
+		$this->car->status = $status;
+
+		$this->car->save();
+
+		$ret = $this->car->getAttributes();
+		$ret['row'] = '';
+		if(!empty($ret['warehouse_id'])){
+			$ret['row'] = WarehouseAR::model()->findByPk($ret['warehouse_id'])->row;
+		}
+		return $ret;
 	}
 
 	public function checkAlreadyOut(){
@@ -969,6 +1016,37 @@ class Car
 		}
 	}
 	
+	public function releaseOrder(){
+		
+		if($this->car->order_id>0){
+			$order = OrderAR::model()->findByPk($this->car->order_id);
+			$order->hold -= 1;
+			$order->standby_date = DateUtil::getCurDate();
+			if($this->car->distribute_time>"0000-00-00 00:00:00"){
+				$order->count -=1;
+				//优先级置顶
+				$order->priority = 0;
+				$highers = OrderAR::model()->findAll('priority<? AND standby_date=? AND status=1', array($order->priority, $order->standby_date));
+				if(!empty($highers)) {
+					foreach($highers as $higher) {
+						$higher->priority = $higher->priority + 1;
+						$higher->save();
+					}
+					$order->save();
+				}
+				if($order->status == 2){
+					$order->status =1;
+				}
+			}
+			$this->car->order_id = 0;
+			$this->car->lane_id = 0;
+			$this->car->distributor_name='';
+			$this->car->distributor_code='';
+			$this->car->distribute_time = '0000-00-00 00:00:00';
+			$this->car->save();
+			$order->save();
+		}
+	}
 	
 	public function throwTestlineCarInfo(){
 

@@ -55,10 +55,11 @@ $("document").ready(function() {
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
-			url: ORDER_HOLD_RELEASE,
+			url: WAREHOUSE_RETURN_SUBMIT,
 			data: {
 				"vin": $("#vinText").val(),
 				"goTo": goTo,
+				"remark": $("#remark").val(),
 			},
 			success: function(response){
 				resetPage();
@@ -99,9 +100,8 @@ $("document").ready(function() {
 	*/
 	function resetPage () {
 		isOut = false;
-		$("#vinText").removeAttr("disabled");
-		$("#vinText").attr("value","");
-		$("#vinText").focus();
+		$("#vinText").removeAttr("disabled").attr("value","").focus();
+		$("#remark").val("");
 		toggleVinHint(true);
 		$(".btnSubmit").attr("disabled","disabled");
 	}
@@ -157,7 +157,7 @@ $("document").ready(function() {
 	$(".btnSubmit").click(function() {
 		if(!($("#btnSubmit").hasClass("disabled"))){
 			goTo = $(this).val();
-			if($.trim($("remark").val()) === ""){
+			if($.trim($("#remark").val()) === ""){
 				alert("必须注明退回原因");
 				return false;
 			}

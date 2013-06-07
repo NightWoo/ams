@@ -159,6 +159,34 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionValidateWarehouseReturn() {
+        $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', '');
+        try{
+            if(empty($nodeName)) {
+                throw new Exception('node cannot be empty');
+            }
+            $enterNode = Node::createByName($nodeName);
+            // $leftNode = $enterNode->getParentNode();
+            
+            $car = Car::create($vin);
+            //$car->leftNode($leftNode->name);
+            if($car->car->warehouse_time='0000-00-00 00:00:00'){
+                throw new Exception($vin . '未入库，无法操作退回');
+            }
+            
+            $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
 	public function actionMatchPlan() {
 		$vin = $this->validateStringVal('vin', '');
         try{

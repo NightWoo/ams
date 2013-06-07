@@ -75,10 +75,10 @@
                                     <option value="ROAD_TEST_FINISH">VQ2/路试</option>
                                     <option value="VQ2">VQ2/淋雨</option>
                                     <option value="VQ3">VQ3/面漆</option>
-                                    <option value="VQ3_WAREHOUSE_RETURN">VQ3/退库</option>
                                     <option value="CHECK_IN">WH/入库</option>
                                     <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
+                                    <option value="WAREHOUSE_RETURN">退库</option>
 								</select>
                                 
 							</td>

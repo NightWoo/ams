@@ -104,7 +104,7 @@
                             <th style="width:50px">容量</th>
                             <!-- <th style="width:50px">数量</th> -->
                             <!-- <th style="width:50px">空位</th> -->
-                            <th style="">不可用/实车数/空位数</th>
+                            <th style=""><span class="text-warning">不可用</span>/<span class="text-info">实车数</span>/<span class="text-success">空位数</span></th>
                             <th style="width:50px">车系 </th>
                             <th style="width:300px">配置</th>
                             <th style="width:60px">耐寒性</th>

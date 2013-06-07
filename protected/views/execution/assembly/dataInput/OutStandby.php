@@ -39,8 +39,6 @@
 		            	<legend>备车
 		            		<span class="pull-right">
 		            			<a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit"><i class="icon-link"></i>&nbsp;出成品库</a>
-		            			/
-		            			<a href="/bms/execution/holdRelease"><i class="icon-link"></i>&nbsp;释放订单占位</a>
 		            		</span>
 		            	</legend>
 		            </div>

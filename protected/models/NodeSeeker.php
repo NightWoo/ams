@@ -27,7 +27,8 @@ class NodeSeeker
 					"VQ3" =>17,
 					"CHECK_IN" =>18,
 					"CHECK_OUT" =>19,
-					'VQ3_WAREHOUSE_RETURN'=>17,
+					'OutStandby'=>96,
+					'WAREHOUSE_RETURN'=>97,
 				  );
 	
 	public function queryTrace($stime, $etime, $series, $node, $curPage, $perPage) {
