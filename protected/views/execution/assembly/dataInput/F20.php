@@ -380,7 +380,7 @@
                     <td class="tdList">后靠背锁环未装配到位</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">AMT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList"></td>
@@ -1138,7 +1138,7 @@
                     <td class="tdList">左翼子板与前门间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">DCT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList"></td>

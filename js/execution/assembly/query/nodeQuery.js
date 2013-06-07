@@ -1072,6 +1072,11 @@ function getSeriesChecked () {
 			$("<td />").html(value.dpu).appendTo(singleLackTr);
 		});
 	}
+
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });
 //-------------------END ajax query -----------------------
 
 });

@@ -175,6 +175,7 @@ class FaultSeeker
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
 		$cars = array();
+		$ret = array();
 		foreach($datas as &$data) {
 			$carId = $data['car_id'];
 			if(empty($data['fault_mode'])) {
@@ -218,13 +219,22 @@ class FaultSeeker
 			 }
 
 			$data['series'] = $name[$data['series']];
+
+			$data['pass_time'] = substr($data['pass_time'],0,16);
+			$data['create_time'] = substr($data['pass_time'],0,16);
+			$data['modify_time'] = substr($data['pass_time'],0,16);
+			
+			$key = join('_', $data);
+			$ret[$key] = $data;
 		}
 
 		$total = 0;
 		foreach($countSqls as $countSql) {
 			$total += Yii::app()->db->createCommand($countSql)->queryScalar();
 		}
-		return array($total, $datas);
+
+		$ret = array_values($ret);
+		return array($total, $ret);
 	}
 
 	public function queryNodeTrace($series, $stime, $etime, $node,$curPage, $perPage) {

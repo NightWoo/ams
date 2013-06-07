@@ -94,8 +94,11 @@ class WarehouseCountCommand extends CConsoleCommand
 		return $count;
 	}
 
-	private function countCheckout($stime,$etime,$series) {
+	private function countCheckout($stime,$etime,$series,$noExport=false) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND distribute_time>='$stime' AND distribute_time<'$etime'";
+		if($noExport){
+			$sql .= " AND special_property=0";
+		}
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;
 	}
@@ -103,7 +106,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	private function countBalance($series, $all=false) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND (`status`='成品库' OR `status`='WDI')";
 		if(!$all){
-			$sql .= " AND warehouse_id < 1000 AND special_property <> 9";
+			$sql .= " AND warehouse_id < 1000 AND special_property < 9";
 		}
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;
@@ -147,8 +150,9 @@ class WarehouseCountCommand extends CConsoleCommand
 	    // }
 	    
 	    //计算从初始时间2013-06-04 08:00开始到目前的出库量，并从未发值中减去
+	    $noExport=true;
 	    foreach($seriesArray as $series){
-	    	$checkout = $this->countCheckout($stime, $etime, $series);
+	    	$checkout = $this->countCheckout($stime, $etime, $series, $noExport);
 	    	$count[$series] -= $checkout;
 	    }
 

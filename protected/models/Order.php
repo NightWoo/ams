@@ -295,7 +295,7 @@ class Order
 
 	public function printByOrder($orderId){
 		$order = OrderAR::model()->findByPk($orderId);
-		$this->updateOrderSellInfo($order);
+		// $this->updateOrderSellInfo($order);
 
 		if($order->amount > $order->count){
 			throw new Exception("订单明细".$order->order_detail_id."_". $order->order_number. "_" . $order->distributor_name ."未完成，暂不可传输打印");
@@ -307,15 +307,21 @@ class Order
 			$outDate = $car->car->distribute_time;
             $clientIp = $_SERVER["REMOTE_ADDR"];
 			$retry = 5;
-            do{
-				$ret = $car->throwCertificateData($outDate, $clientIp);
-				if($ret === false){
-					$curTime = date("YmdHis");
-					BmsLogger::warning($vin . " throwCertificateData failed @ " . $curTime);
-				}
-				--$retry;
-            } while ($ret === false &&  $retry>0);
-            $car->throwInspectionSheetData();
+			if($car->car->special_property<1){
+	            do{
+					$ret = $car->throwCertificateData($outDate, $clientIp);
+					if($ret === false){
+						$curTime = date("YmdHis");
+						BmsLogger::warning($vin . " throwCertificateData failed @ " . $curTime);
+					}
+					--$retry;
+	            } while ($ret === false &&  $retry>0);
+			}
+			$markOnly=false;
+			if($car->car->special_property == 1){
+				$markOnly=true;
+			}
+            $car->throwInspectionSheetData($markOnly);
 		}
 		$order->is_printed = 1;
 		$order->save();

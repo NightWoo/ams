@@ -119,6 +119,7 @@ class NodeSeeker
         		$limit";
 
         $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+        $ret = array();
         foreach($datas as &$data){
         	if($data['series'] == '6B') $data['series'] = '思锐';
 
@@ -139,23 +140,17 @@ class NodeSeeker
 				$data['driver_name'] = $data['user_name'];
 			}
 
-        	if(!empty($data['config_id'])){
-        		$data['config_name'] = $configInfos[$data['config_id']];
-        	} else {
-        		$data['config_name'] = '-';
-        	}
-
         	if(!empty($data['type'])){
 	        	$data['car_model'] = $modelInfo[$data['type']];
         	} else {
         		$data['car_model'] ='';
         	}
         	if(!empty($data['config_id'])){
-        		$data['config_Name'] = $configInfos[$data['config_id']]['configName'];
+        		$data['config_name'] = $configInfos[$data['config_id']]['configName'];
 	        	$data['order_config_name'] = $configInfos[$data['config_id']]['orderConfigName'];
 	        	$data['type_config'] = $data['car_model'] . '/' . $data['order_config_name'];
         	}else {
-        		$data['config_Name'] = '';
+        		$data['config_name'] = '';
 	        	$data['order_config_name'] = '';
 	        	$data['type_config'] = $data['type'];
         	}
@@ -167,12 +162,18 @@ class NodeSeeker
         		$data['order_number']= $order_number;
         	}
         	$data['node_name'] = $nodeInfos[$data['node_id']];
+
+        	$data['pass_time'] = substr($data['pass_time'],0,16);
+			
+			$key = join('_', $data);
+			$ret[$key] = $data;
         }
 
         $countSql = "SELECT count(id) FROM $traceTable WHERE $condition";
         $total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
-		return array($total, $datas);
+        $ret = array_values($ret);
+		return array($total, $ret);
 	}
 
 	private function reviseSETime($stime,$etime) {

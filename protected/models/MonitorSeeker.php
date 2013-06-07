@@ -7,10 +7,10 @@ class MonitorSeeker
 {
 	private static $NODE_BALANCE_STATE = array(
 			'PBS' => array('彩车身库'),
-			'VQ1' => array('VQ1异常'),
+			'VQ1' => array('VQ1异常','退库VQ1'),
 			'VQ1-EXCEPTION' => array('VQ1异常'),
-			'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨'),
-			'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常','VQ3退库')
+			'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨','退库VQ2'),
+			'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常','退库VQ3')
 			);
 
 	public function __construct(){

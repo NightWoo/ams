@@ -981,6 +981,8 @@ class Car
             $data = $warehouse->checkin($this->car->vin);
             $this->car->warehouse_id = $data['warehouse_id'];
             $this->car->area = $data['area'];
+
+            $this->car->warehouse_time = date("YmdHis");
             $this->car->save();
 
 		} else {
@@ -1115,7 +1117,7 @@ class Car
 		return $flag;
 	}
 
-	public function throwInspectionSheetData() {
+	public function throwInspectionSheetData($markOnly=false) {
 		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
@@ -1135,8 +1137,13 @@ class Car
 
 		$cData = $this->getCertificateData($carId);
 
+		$reportPrinted = '待打印';
+		if($markOnly){
+			$reportPrinted = '已打印';
+		}
+
 		$insertsql = "INSERT INTO ShopPrint
-				SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}' ";
+				SET vin='{$vin}', Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}', ReportPrinted='{$reportPrinted}'";
 		// $updatesql = "UPDATE ShopPrint
 		// 				SET Order_ID='{$cData['order_number']}', VenName='{$cData['distributor_name']}', Clime='{$cData['country']}', `Path`='{$cData['lane_name']}', Series='{$series}', Type='{$carType}', Color='{$color}', EngineType='{$engineType}', engineCode='{$engineCode}'
 		// 				WHERE vin='{$vin}'";

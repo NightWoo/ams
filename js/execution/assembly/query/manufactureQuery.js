@@ -886,6 +886,11 @@ $(document).ready(function () {
         });
 	}
 
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });
+
 //-------------------END ajax query -----------------------
 
 });

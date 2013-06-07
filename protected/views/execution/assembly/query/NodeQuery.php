@@ -110,7 +110,7 @@
                             <!-- <li><a href="#statistic" data-toggle="tab">车辆统计</a></li> -->
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
-                                    <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
+                                    <li id="exportCars"><a href=""  rel="tooltip" data-toggle="tooltip" data-placement="top" title="精确到分钟删除重复项"><span id="totalCars"></span></a></li>
                                 </ul>
                                 <ul>
                                     <li id="firstCars"><a href="#">&lt;&lt;</a></li>

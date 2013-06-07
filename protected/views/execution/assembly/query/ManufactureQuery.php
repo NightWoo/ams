@@ -78,7 +78,7 @@
                                     <option value="CHECK_IN">WH/入库</option>
                                     <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
-                                    <option value="WAREHOUSE_RETURN">退库</option>
+                                    <option value="WAREHOUSE_RETURN">WH/退库</option>
 								</select>
                                 
 							</td>
@@ -134,7 +134,7 @@
                             <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
-                                    <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
+                                    <li id="exportCars"><a href="" rel="tooltip" data-toggle="tooltip" data-placement="top" title="精确到分钟删除重复项"><span id="totalCars"></span></a></li>
                                 </ul>
                                 <ul>
                                     <li id="firstCars"><a href="#">&laquo;</a></li>

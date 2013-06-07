@@ -1,7 +1,4 @@
-/* fdhsjf
-fdsf 
 
-*/
 var SERVER_ADDRESS = "";
 
 //获得车辆原始信息
@@ -110,7 +107,7 @@ var WAREHOUSE_CHECKIN_EXPORT = "/bms/warehouse/exportCheckinDetail";
 var WAREHOUSE_CHECKOUT_QUERY = "/bms/warehouse/checkoutDetail";
 var WAREHOUSE_CHECKOUT_EXPORT = "/bms/warehouse/exportCheckoutDetail";
 
-var WAREHOUSE_RETURN_VALIDATE = "/bms/car/validateNode";
+var WAREHOUSE_RETURN_VALIDATE = "/bms/car/validateWarehouseReturn";
 var WAREHOUSE_RETURN_SUBMIT = "/bms/execution/returnSubmit";
 
 var SHOW_TRACE = "/bms/car/showTrace";
