@@ -22,7 +22,7 @@ $(function () {
 	})
 
 	$("#warehouseMaintain").click(function(){
-		window.location.href='/bms/execution/orderMaintain'
+		window.location.href='/bms/execution/warehouseReturn'
 	})
 	
 	$("#maintain").click(function(){
@@ -31,6 +31,10 @@ $(function () {
 	
 	$("#basicDatabase").click(function(){
 		window.location.href='/bms/generalInformation/faultMaintain'
+	})
+
+	$("#orderMaintain").click(function(){
+		window.location.href='/bms/generalInformation/orderMaintain'
 	})
 	
 	

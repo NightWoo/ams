@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>订单查询</title>
+		<title>发车查询</title>
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/query/OrderCarQuery.css" rel="stylesheet">
@@ -42,17 +42,17 @@
                 <form class="well form-inline">
                         <div class="input-prepend input-append">
                             <span class="add-on">板号</span>
-                            <input type="text" class="input-small" placeholder="请输入备板号..." id="boardNumberText" />
+                            <input type="text" class="input-small" placeholder="备板号..." id="boardNumberText" style="width:70px"/>
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
                     	<div class="input-prepend input-append">
 							<span class="add-on">单号</span>
-							<input type="text" class="input-medium" placeholder="请输入订单号..." id="orderNumberText" />
+							<input type="text" class="input-medium" placeholder="订单号..." id="orderNumberText" />
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
                         <div class="input-prepend input-append">
                             <span class="add-on">商家</span>
-                            <input type="text" class="input-medium" placeholder="请输入经销商..." id="distributorText" />
+                            <input type="text" class="input-medium" placeholder="经销商..." id="distributorText" />
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
                         <!-- <input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input> -->
@@ -162,6 +162,37 @@
                     </div>
                 </div>
             </div><!-- END MAIN -->
+        </div>
+
+        <div class="modal" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4>#01_南京苏舜亚通汽车销售服务有限公司_ZCDG-20130327599959</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-condensed table-bordered table-hover" id="tableDetail">
+                    <thead>
+                        <tr>
+                            <!-- <th style="width:20px"></th> -->
+                            <th style="width:120px">VIN号</th>
+                            <th style="width:150px">备车时间</th>
+                            <th style="width:150px">出库时间</th>
+                            <th style="width:50px">原库道</th>
+                            <th style="width:30px">车系</th>
+                            <th style="width:200px">车型/配置</th>
+                            <th style="width:50px">耐寒性</th>
+                            <th style="width:50px">颜色</th>
+                            <th style="width:50px">发动机号</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <!-- <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint icon-print"></i>&nbsp;打印全部</button> -->
+            </div>
         </div>
     </body>
 </html>

@@ -5,6 +5,7 @@ Yii::import('application.models.AR.DistributorAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.AR.CarAR');
+Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.Order');
 
 class OrderSeeker
@@ -657,7 +658,7 @@ class OrderSeeker
 	}
 
 	public function queryCarsById($orderId){
-		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code 
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code, old_wh_id 
 				FROM car 
 				WHERE order_id=$orderId ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
@@ -665,6 +666,18 @@ class OrderSeeker
 		foreach($cars as &$car){
 			$car['type_config'] = $configName[$car['config_id']];
 			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+			$car['old_row'] = WarehouseAR::model()->findByPk($car['old_wh_id'])->row;
+			$car['standby_time'] = '-';
+			$traceSql = "SELECT pass_time FROM node_trace WHERE node_id=96 AND car_id = {$car['car_id']} ORDER BY pass_time DESC";
+			$car['standby_time'] = Yii::app()->db->createCommand($traceSql)->queryScalar();
+
+			$car['standby_last'] = 0;
+			if($car['distribute_time'] === '0000-00-00 00:00:00'){
+				$car['standby_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($car['standby_time'])) / 3600;
+			} else {
+				$car['standby_last'] = (strtotime($car['distribute_time']) - strtotime($car['standby_time'])) / 3600;
+			}
+			$car['standby_last'] = round($car['standby_last'],1);
 		}
 		return $cars;
 	}

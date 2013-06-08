@@ -37,3 +37,17 @@
 #tableOrderDetail .alignCenter{
 	text-align: center;
 }
+
+#detailModal {
+    width: 950px;
+	margin-left: -480px;
+}
+
+.modal-header h4 {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+
+#tableDetail {
+	font-size: 12px;
+}

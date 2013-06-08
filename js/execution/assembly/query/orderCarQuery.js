@@ -89,6 +89,15 @@ $(document).ready(function () {
 		}
 	);
 
+	$(".orderCars").live("click", function(e) {
+		tr = $(e.target).closest("tr");
+		queryOrderDetail(tr.data("orderId"));
+
+		$("#detailModal .modal-header h4").html("#" + tr.data("laneName") + "_" + tr.data("distributorName") + "_" + tr.data("orderNumber"));
+
+		$("#detailModal").modal("show");
+	})
+
 	$("#standbyDate, #standbyDateEnd").datetimepicker({
 	    format: 'yyyy-mm-dd',
 	    minView: 2,
@@ -216,7 +225,7 @@ $(document).ready(function () {
 	    			//以board为单位构造子表
 	    			var num = value.orders.length;
 	    			var tmp = $("<tbody />");
-	    			console.log(num);
+	    			// console.log(num);
 
 	    			amountSum += value.boardAmount;
 		    		holdSum += value.boardHold;
@@ -226,12 +235,13 @@ $(document).ready(function () {
 	    				$("<tr />").appendTo(tmp);
 	    				
 	    			};
-	    			console.log(tmp);
+	    			// console.log(tmp);
 
 	    			$.each(value.orders, function (index,order){
 	    				tr = tmp.children("tr:eq("+ index +")");
 	    				$("<td />").html(order.lane_name).appendTo(tr);
-	    				$("<td />").html(order.order_number).appendTo(tr);
+	    				aTd = "<a href='#' class='orderCars'>"+ order.order_number +"</a>"
+	    				$("<td />").html(aTd).appendTo(tr);
 	    				$("<td />").html(order.distributor_name).appendTo(tr);
 	    				if(order.series == '6B'){
 		    				$("<td />").html('思锐').appendTo(tr);
@@ -297,6 +307,11 @@ $(document).ready(function () {
 	    				}else if(order.status == 2){
 		    				$(tr).addClass('success');
 		    			}
+
+		    			tr.data("orderId", order.id);
+		    			tr.data("laneName" ,order.lane_name);
+		    			tr.data("distributorName" ,order.distributor_name);
+		    			tr.data("orderNumber" ,order.order_number);
 	    			})
 
 					//首行，被合并的单元格放在此行
@@ -311,8 +326,8 @@ $(document).ready(function () {
 	    			//合并的完成数量
 	    			boardCountTd = $("<td />").attr("rowspan", num).addClass("totalTd text-info rowSpanTd").html(value.boardCount).insertAfter(firstTr.children("td:eq(11)"));
 	    			
-	    			console.log(firstTr.children("td:eq(8)"));
-	    			console.log(tmp.children("tr"));
+	    			// console.log(firstTr.children("td:eq(8)"));
+	    			// console.log(tmp.children("tr"));
 	    			$("#tableOrderDetail tbody").append(tmp.children("tr"));
 	    		})
 
@@ -351,7 +366,54 @@ $(document).ready(function () {
 		});
 	}
 
-	
+	function queryOrderDetail(orderId) {
+		$.ajax({
+			url: QUERY_CARS_BY_ORDER_ID,
+			type: "get",
+			dataType: "json",
+			data: {
+				"orderId" : orderId,
+			},
+			success: function (response) {
+				$("#tableDetail tbody").html("");
+				cars = response.data;
+				$.each(cars, function (index, value) {
+					tr = $("<tr />");
+					$('<td />').html(value.vin).appendTo(tr);
+					$('<td />').html(value.standby_time).appendTo(tr);
+
+					if(value.distribute_time === '0000-00-00 00:00:00'){
+						lastTd = $('<td />').html("<i class='icon-time'></i>" + value.standby_last + "H").appendTo(tr);
+						if (value.standby_last > 24) {
+							lastTd.addClass("text-error");
+						} else if(value.standby_last > 12){
+							lastTd.addClass("text-warning");
+						}
+					} else {
+						$('<td />').html(value.distribute_time).appendTo(tr);
+					}
+
+					$('<td />').html(value.old_row).appendTo(tr);
+					if(value.series == "6B"){
+						$('<td />').html("思锐").appendTo(tr);
+					}{
+						$('<td />').html(value.series).appendTo(tr);
+					}
+					$('<td />').html(value.type_config).appendTo(tr);
+					$('<td />').html(value.cold).appendTo(tr);
+					$('<td />').html(value.color).appendTo(tr);
+					$('<td />').html(value.engine_code).appendTo(tr);
+
+					$("#tableDetail tbody").append(tr);
+
+					tr.data("carId", value.car_id);
+					tr.data("vin", value.vin);
+				})
+				$("#tabelDetail").show();
+			},
+			error: function(){alertError();}
+		})
+	}
 
 	function getStatusChecked () {
 		var activeChecked = $("#checkboxActive").attr("checked") === "checked";
