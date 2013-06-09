@@ -96,6 +96,7 @@ $(document).ready(function () {
 		} else if ($(e.target).is("button")) {
 			if ($(e.target).html() === "编辑") {
 				var siblings = $(e.target).parent("td").siblings();
+				var tr = $(e.target).closest("tr");
 
 				fillType($(e.target).parent("td").parent("tr").data("car_series"),"edit");
 				fillColor($(e.target).parent("td").parent("tr").data("car_series"),"edit");
@@ -109,21 +110,27 @@ $(document).ready(function () {
 				$("#editSeries").val($(e.target).parent("td").parent("tr").data("car_series"));
 				$("#editCarType").val($(e.target).parent("td").parent("tr").data("car_type"));
 				$("#editConfig").val(siblings[5].innerHTML);
-				$("#editCarBody").val(siblings[6].innerHTML);	//added by wujun
-				$("#editColor").attr("value",siblings[7].innerHTML);
-				if (siblings[8].innerHTML === '耐寒') {
+				$("#editCarBody").val(siblings[7].innerHTML);	//added by wujun
+				$("#editColor").attr("value",siblings[8].innerHTML);
+				if (siblings[9].innerHTML === '耐寒') {
 					$("#checkboxEditColdResistant").attr("checked", "checked");
 				} else {
 					$("#checkboxEditColdResistant").removeAttr("checked");
 				}
-				$("#editCarYear").attr("value",siblings[9].innerHTML);
-				$("#editOrderType").attr("value",siblings[10].innerHTML);
-				console.log(siblings[11].innerHTML);
+				$("#editCarYear").attr("value",siblings[10].innerHTML);
+				$("#editOrderType").attr("value",siblings[11].innerHTML);
+				console.log(siblings[12].innerHTML);
 				$("#editSpecialOrder").attr("value",$(e.target).parent("td").parent("tr").data("special_order"));
-				$("#editRemark").val(siblings[11].innerHTML);
-				console.log($("#editRemark").text());
+				$("#editRemark").val(siblings[12].innerHTML);
+				console.log(tr.data("isFrozen"));
+
+				if (tr.data("isFrozen") == 1) {
+					$("#checkboxEditFrozen").attr("checked", "checked");
+				} else {
+					$("#checkboxEditFrozen").removeAttr("checked");
+				}
 								
-				$('#editModal').data("id", $(e.target).parent("td").parent("tr").data("id"));
+				$('#editModal').data("id", tr.data("id"));
 				$("#editModal").modal("show");
 
 			} else {
@@ -197,17 +204,18 @@ $(document).ready(function () {
 		    			var tr = $("<tr />");
 		    			var thumbTd = $("<td />");
 		    			if(index == 0)
-		    				thumbTd.html('<a title="已至顶"><i class="icon-ban-circle"></i></a><a title="已至顶"><i class="icon-ban-circle"></i></a><a href="#" title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a title="已至顶"><i class="icon-ban-circle"></i></a><a title="已至顶"><i class="icon-ban-circle"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
 		    			else if(index+1 < length)
-		    				thumbTd.html('<a href="#" title="置顶"><i class="icon-thumbs-up"></i></a><a href="#" title="上调一位"><i class="icon-hand-up"></i></a><a href="#" title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
 		    			else
-		    				thumbTd.html('<a href="#" title="置顶"><i class="icon-thumbs-up"></i></a><a href="#" title="上调一位"><i class="icon-hand-up"></i></a><a title="已至底"><i class="icon-ban-circle"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="已至底"><i class="icon-ban-circle"></i></a>').appendTo(tr);
 		    			$("<td />").html(value.priority).appendTo(tr);
 						//$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
 		    			$("<td />").html(value.config_name).appendTo(tr);
+		    			$("<td />").html(value.car_type).appendTo(tr);		//added by wujun
 		    			$("<td />").html(value.car_body).appendTo(tr);		//added by wujun
 		    			$("<td />").html(value.color).appendTo(tr);
 		    			
@@ -225,8 +233,13 @@ $(document).ready(function () {
 		    			$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 		    			editTd.appendTo(tr);
 
+		    			if(value.is_frozen == 1){
+		    				tr.addClass("warning");
+		    			}
+
 		    			//record id
 		    			tr.data("id", value.id);
+		    			tr.data("isFrozen", value.is_frozen);
 		    			tr.data("plan_date", value.plan_date);
 		    			tr.data("assembly_line", value.assembly_line);
 		    			tr.data("car_series", value.car_series);
@@ -292,9 +305,12 @@ $(document).ready(function () {
 	}
 
 	function ajaxEdit (argument) {
+		var isFrozen = 0;
 		var isCold = 0;
 		var specialProperty = 0;
 		
+		if($("#checkboxEditFrozen").attr("checked") === "checked")
+			isFrozen = 1;
 		if($("#checkboxEditColdResistant").attr("checked") === "checked")
 			isCold = 1;
 		if($("#editOrderType").val() == "出口订单") 
@@ -321,6 +337,7 @@ $(document).ready(function () {
 				"special_order" : $("#editSpecialOrder").val(),
 				"remark" : $("#editRemark").val(),
 				"specialProperty" : specialProperty,
+				"isFrozen" : isFrozen,
 			},
 		    success:function (response) {
 		    	if (response.success) {
@@ -428,6 +445,7 @@ $(document).ready(function () {
 		$("#editSpecialOrder").val("");
 		$("#editRemark").val("");
 		$("#checkboxEditColdResistant").removeAttr("checked");	//added by wujun
+		$("#checkboxEditFrozen").removeAttr("checked");	//added by wujun
 		//$("#editPlanId").val("");									//added by wujun
 		//$("#editBatchNumber").val("");							//added by wujun
 	}

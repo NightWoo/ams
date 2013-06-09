@@ -34,7 +34,7 @@ $(function () {
 	})
 
 	$("#orderMaintain").click(function(){
-		window.location.href='/bms/generalInformation/orderMaintain'
+		window.location.href='/bms/execution/orderMaintain'
 	})
 	
 	

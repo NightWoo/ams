@@ -40,7 +40,7 @@ class Car
 		$data = $this->car->attributes;
 
 		$planSeeker = new PlanSeeker();
-		$plans = $planSeeker->search($date, $carSeries, '', false);
+		$plans = $planSeeker->search($date, $carSeries, '', false ,true);
 	
 		$plansArray = array();
 		foreach($plans as $plan) {

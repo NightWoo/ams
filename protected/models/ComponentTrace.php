@@ -14,6 +14,11 @@ class ComponentTrace
 	}
 	
 	public function query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, $curPage, $perPage) {
+		$last = strtotime($etime) -strtotime($stime);
+		if($last > 3600*24*31){
+			throw new Exception('查询时间跨度不能超过1个月');
+		}
+
 		$conditions = array();
 
 		if(!empty($series)) {
@@ -23,8 +28,9 @@ class ComponentTrace
         }
 		if(!empty($vin)) {
 			$car = Car::create($vin);
+			$vin = $car->car->vin;
 			$series = array($car->car->series);
-			$conditions[] = "vin LIKE '%$vin'";
+			$conditions[] = "vin = '$vin'";
 		}
 		
 		if(!empty($barcode)) {
@@ -36,10 +42,12 @@ class ComponentTrace
 		} 
 
 		if(!empty($stime)) {
-            $conditions[] = "modify_time >= '$stime'";
+            // $conditions[] = "modify_time >= '$stime'";
+            $conditions[] = "create_time >= '$stime'";
         }
         if(!empty($etime)) {
-            $conditions[] = "modify_time <= '$etime'";
+            // $conditions[] = "modify_time <= '$etime'";
+            $conditions[] = "create_time <= '$etime'";
         }
         if(!empty($provider)) {
             $conditions[] = "provider LIKE '%$provider%'";
@@ -63,9 +71,12 @@ class ComponentTrace
 		}
 		$sql = join(' UNION ALL ', $sqls);
 
-		$limit = $perPage;
-		$offset = ($curPage-1) * $perPage;
-		$sql .= " LIMIT $offset, $limit";
+		$limit = "";
+		if(!empty($perPage)) {
+			$offset = ($curPage - 1) * $perPage;
+			$limit = "LIMIT $offset, $perPage";
+		}
+		$sql .= $limit;
 		
 
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();

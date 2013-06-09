@@ -167,7 +167,7 @@
         <div class="modal" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4>#01_南京苏舜亚通汽车销售服务有限公司_ZCDG-20130327599959</h4>
+                <h4></h4>
             </div>
             <div class="modal-body">
                 <table class="table table-condensed table-bordered table-hover" id="tableDetail">

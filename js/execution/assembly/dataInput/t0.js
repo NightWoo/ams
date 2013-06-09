@@ -38,6 +38,10 @@ $("document").ready(function() {
 						var remark = "<td>" + plans[i].remark + "</td>";
 						//modified by wujun
 						$("#planTable tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + config_name + cold_resistant + color + car_year + /*order_type +*/ special_order + remark + "</tr>");
+						console.log($("#"+plans[i].id));
+						if(plans[i].is_frozen == 1){
+							$("#"+plans[i].id).addClass("warning");
+						}
 					});
 					$("#planDiv").show();
 					$("#infoCount").html(leftAll +" = " + totalAll + " - " + readyAll );

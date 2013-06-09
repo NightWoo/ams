@@ -55,16 +55,14 @@ class ComponentController extends BmsBaseController
         $series = $this->validateStringVal('series', '');
         $stime = $this->validateStringVal('stime', '');
         $etime = $this->validateStringVal('etime', '');
-
-        $perPage = $this->validateIntVal('perPage', 20);
-        $curPage = $this->validateIntVal('curPage', 1);
         try{
             $seeker = ComponentTrace::createSeeker();
-			list($total, $datas) = $seeker->query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, $curPage, $perPage);
+			list($total, $datas) = $seeker->query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, 0, 0);
 
 			$content = "车系,车型,VIN号,零部件名称,零部件条码,供应商,节点,录入人员,录入时间,备注\n";
 			foreach($datas as $data) {
 				$content .= "{$data['car_series']},";
+				$data['type'] = str_replace(",", "，",$data['car_type']);
 				$content .= "{$data['car_type']},";
 				$content .= "{$data['vin']},";
 				$content .= "{$data['component_name']},";

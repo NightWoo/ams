@@ -78,6 +78,7 @@
                             <th>数量</th>
                             <th>完成</th>
                             <th>配置</th>
+                            <th>车型</th>
                             <th>车身</th>
                             <th>颜色</th>
                             <th>耐寒性</th>
@@ -238,7 +239,13 @@
         <h3>编辑</h3>
     </div>
     <div class="modal-body">
-        <form id="  " class="form-horizontal">
+        <form id="" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="">冻结</label>
+                <div class="controls">
+                    <input type="checkbox" id="checkboxEditFrozen">
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;执行日期</label>
                 <div class="controls">

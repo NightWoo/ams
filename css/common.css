@@ -63,6 +63,17 @@ legend span {
   padding-top: 4px;
 }
 
+.divLoading{
+  display:none;
+  margin:50px auto;
+  width:50px;
+}
+
+a {
+  cursor: pointer;
+}
+
+
 /*below added by wujun modify bootstrap.css*/
 .icon-white{margin-top:4px;}
 [class^="icon-"],[class*=" icon-"]{margin-top:4px;}

@@ -7,7 +7,7 @@ class PlanSeeker
 	public function __construct() {
 	}
 
-	public function search($date, $series, $line, $exactly = true) {
+	public function search($date, $series, $line, $exactly = true, $matchSerach=false) {
         $datetime = strtotime($date);
         $date = date('Y-m-d',$datetime);
 
@@ -25,8 +25,11 @@ class PlanSeeker
             $condition .= " AND assembly_line=?";
 			$values[] = $line;
         }
+        if($matchSerach){
+	        $condition .= " AND is_frozen=0";
+        }
         //modifed by wujun
-        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority asc', $values);
+        $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority ASC', $values);
 
         $datas = array();
         $seeker = new ConfigSeeker();

@@ -49,7 +49,12 @@
 							<td><input type="text" class="span3" placeholder="请输入..." id="barText" /></td>
 							<td>
 								<input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
-								<input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input>
+								<!-- <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input> -->
+								<select name="" id="series" class="input-small">
+									<option value="f0">F0</option>
+									<option value="m6">M6</option>
+									<option value="6b">思锐</option>
+								</select>
 							</td>
 							
 						</tr>
@@ -59,7 +64,7 @@
 							<td class="alignRight"><label>供应商&nbsp;&nbsp;</label></td>
 							<td><input type="text" class="span3" placeholder="请输入..." id="providerText" /></td>
 							<td>
-								<label id="labelF0" class="checkbox">
+								<!-- <label id="labelF0" class="checkbox">
 									<input type="checkbox" id="checkboxF0" value="F0">F0</input>
 								</label>
 								<label class="checkbox">
@@ -67,7 +72,8 @@
 								</label>
 								<label class="checkbox">
 									<input type="checkbox" id="checkbox6B" value="6B">思锐</input>
-								</label>
+								</label> -->
+								
 							</td>
 						</tr>
 						<tr>
@@ -91,11 +97,26 @@
 							</td>
 						</tr>
 					</table>  
-                </form>     
+                </form>
+                <div class="divLoading">
+                	<span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                </div>   
                 <!--<div style="display:none">
                     <h5 class='pull-left'>查询结果:<span id='totalText'></span></h5>  
 				 </div>-->
-                    <table id="resultTable" class="table table-bordered">
+				 <div id="pagination" class="pagination" style="display: none;">
+                        <ul>
+                            <li id="export"><a href=""><span id="total"></span></a></li>
+                        </ul>
+                        <ul>
+                            <li id="firstPage"><a href="#"><span>&lt;&lt;</span></a></li>
+                            <li id="prePage" class="prePage"><a href="#"><span>&lt;</span></a></li>
+                            <li id="curPage" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
+                            <li id="nextPage" class="nextPage"><a href="#"><span>&gt;</span></a></li>
+                            <li id="lastPage"><a href="#"><span>&gt;&gt;</span></a></li>
+                        </ul>
+                    </div>
+                    <table id="resultTable" class="table table-bordered" style="display: none;">
                         <thead>
                             <tr>
                                 <th>车系</th>
@@ -114,11 +135,7 @@
                             
                         </tbody>
                     </table>
-                <ul class="pager">
-                    <li class="prePage"><a>上一页</a></li>
-                    <li class="curPage" page="1"> 第1页</li>
-                    <li class="nextPage"><a>下一页</a></li>
-                </ul>
+                    
             </div>
         </div>
 	</body>

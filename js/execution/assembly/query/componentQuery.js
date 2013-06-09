@@ -15,7 +15,8 @@ $(document).ready(function () {
 	}
 
 	function resetAll (argument) {
-		$(".pager").hide();
+		$("#pagination").hide();
+		$("#resultTable").hide();
 	}
 
 /*
@@ -33,29 +34,63 @@ $(document).ready(function () {
 	$("#btnQuery").bind("click",toQuery);
 	function toQuery() {
 		//clear last
-		$("#resultTable tbody").text("");
-		ajaxQuery(1);
-		return false;
-	}
+		vin = $.trim($("#vinText").val());
+		barCode = $.trim($("#barText").val());
+		component = $.trim($("#componentText").val());
+		provider = $.trim($("#providerText").val());
+		sTime = $.trim($("#startTime").val());
+		eTime = $.trim($("#endTime").val());
 
-	$("#btnExport").click(
-		function () {
-			ajaxExport();
+		if(vin == "" && barCode == "" && ((sTime == "" || eTime == "") || (component == "" && provider == ""))){
+			alert("查询条件如不包含VIN或物料条码，则必须有起止时间且零部件名称或供应商不能均为空");
+			return false;
+		} else {
+			ajaxQuery(1);
 			return false;
 		}
-	);
+	}
 
-	$(".prePage").click(
+	$("#prePage").click(
 		function (){
-			$("#resultTable tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) - 1);
+			if(parseInt($("#curPage").attr("page")) > 1){
+				$("#resultTable tbody").html("");
+				ajaxQuery(parseInt($("#curPage").attr("page")) - 1);
+			}
 		}
 	);
 
-	$(".nextPage").click(
+	$("#nextPage").click(
 		function (){
-			$("#resultTable tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
+			if(parseInt($("#curPage").attr("page")) * 20 < parseInt($("#total").attr("total")) ){
+			$("#resultTable tbody").html("");
+			ajaxQuery(parseInt($("#curPage").attr("page")) + 1);
+		}
+		}
+	);
+
+	$("#firstPage").click(
+		function () {
+			if(parseInt($("#curPage").attr("page")) > 1){
+				$("#resultTable tbody").html("");
+				ajaxQuery(parseInt(1));
+			}
+		}
+	);
+
+	$("#lastPage").click(
+		function () {
+			if(parseInt($("#curPage").attr("page")) * 20 < parseInt($("#total").attr("total")) ){
+				$("#resultTable tbody").html("");
+				totalPage = parseInt($("#total").attr("total"))%20 === 0 ? parseInt($("#total").attr("total"))/20 : parseInt($("#total").attr("total"))/20 + 1;
+				ajaxQuery(parseInt(totalPage));
+			}
+		}
+	)
+
+	$("#export").click(
+		function () {
+			ajaxExport ();
+			return false;
 		}
 	);
 
@@ -83,9 +118,8 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  * Ajax query
  * ----------------------------------------------------------------
- */
-	function ajaxQuery (targetPage) {
-
+ */	
+	 function getSeriesChecked () {
 		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
 		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
 		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
@@ -97,7 +131,15 @@ $(document).ready(function () {
 			temp.push($("#checkboxM6").val());
 		if (_6BChecked)
 			temp.push($("#checkbox6B").val());
+		return temp.join(",");
+	}
 
+	function ajaxQuery (targetPage) {
+		// series = getSeriesChecked();
+		$("#pagination").hide();
+		$("#resultTable").hide();
+		$("#resultTable tbody").html("");
+		$(".divLoading").show();
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -107,7 +149,7 @@ $(document).ready(function () {
 		    		"barcode":$("#barText").val(),
 		    		"provider":$("#providerText").val(),
 		    		"component":$("#componentText").val(),
-					"series": temp.join(","),
+					"series": $("#series").val(),
 					"stime":$("#startTime").val(),
 					"etime":$("#endTime").val(),
 					"perPage":20,
@@ -130,34 +172,48 @@ $(document).ready(function () {
 		    				providerTd + nodeNameTd + userNameTd + createTimeTd + memoTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 		    		});
-		    		//deal with pager
-		    		$(".pager").show();
-		    		if(response.data.pager.curPage == 1)
-		    			$(".prePage").hide();
-		    		else
-		    			$(".prePage").show();
-		    		if(response.data.pager.curPage * 20 >= response.data.pager.total )
-		    			$(".nextPage").hide();
-		    		else
-		    			$(".nextPage").show();
-		    		$(".curPage").attr("page", response.data.pager.curPage);
-		    		$(".curPage").html("第" + response.data.pager.curPage + "页");
-		    		$("#totalText").html("共" + response.data.pager.total + "条记录");
+		    		if(response.data.pager.curPage == 1) {
+						$("#prePage, #firstPage").addClass("disabled");
+						$("#prePage a, #firstPage a").removeAttr("href");
+					} else {
+						$("#prePage, #firstPage").removeClass("disabled");
+						$("#prePage a, #firstPage a").attr("href","#");
+					}
+	    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+	    				//$(".nextPage").hide();
+						$("#nextPage, #lastPage").addClass("disabled");
+						$("#nextPage a, #lastPage a").removeAttr("href");
+					} else {
+	    				//$(".nextPage").show();
+						$("#nextPage, #lastPage").removeClass("disabled");
+						$("#nextPage a, #lastPage a").attr("href","#");
+					}
+					$("#curPage").attr("page", response.data.pager.curPage);
+					$("#curPage a").html(response.data.pager.curPage);
+					$("#total").attr("total", response.data.pager.total);
+					$("#total").html("导出全部" + response.data.pager.total + "条记录");
+					
+					$(".divLoading").hide();
+					$("#pagination").show();
+					$("#resultTable").show();
 
-		    	}else
+		    	}else{
 		    		alert(response.message);
+		    	}
 		    },
 		    error:function(){alertError();}
 		});
 	}
 
 	function ajaxExport () {
-		window.open(COMPONENT_EXPORT + "?vin=" + $('#vinText').val() + 
+		// series = getSeriesChecked();
+		window.open(COMPONENT_EXPORT + 
+			"?vin=" + $('#vinText').val() + 
 			"&node=" + $("#selectNode").val() + 
 			"&barcode=" + $("#barText").val() +
     		"&provider=" + $("#providerText").val() +
     		"&component=" + $("#componentText").val() +
-			"&series=" + ($("#checkboxF0").val() + "," + $("#checkboxM6").val()) +
+			"&series=" + $("#series").val() +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
 		);

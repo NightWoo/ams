@@ -240,7 +240,7 @@ $(document).ready(function () {
 	    			$.each(value.orders, function (index,order){
 	    				tr = tmp.children("tr:eq("+ index +")");
 	    				$("<td />").html(order.lane_name).appendTo(tr);
-	    				aTd = "<a href='#' class='orderCars'>"+ order.order_number +"</a>"
+	    				aTd = "<a class='orderCars'>"+ order.order_number +"</a>"
 	    				$("<td />").html(aTd).appendTo(tr);
 	    				$("<td />").html(order.distributor_name).appendTo(tr);
 	    				if(order.series == '6B'){

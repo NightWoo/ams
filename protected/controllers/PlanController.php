@@ -44,6 +44,7 @@ class PlanController extends BmsBaseController
 		$coldResistant = $this->validateIntVal('cold_resistant', 0);
 		$remark = $this->validateStringVal('remark', '');
 		$specialProperty = $this->validateStringVal('specialProperty', '');
+		$isFrozen = $this->validateIntVal('isFrozen', 0);
 		//$batchNumber = $this->validateStringVal('batch_number', '');
 		try{
 			$config = CarConfigAR::model()->find('name=?', array($configName));
@@ -101,6 +102,7 @@ class PlanController extends BmsBaseController
 			$plan->cold_resistant = $coldResistant;
 			$plan->remark = $remark;
 			$plan->special_property = $specialProperty;
+			$plan->is_frozen = $isFrozen;
 			//$plan->batch_number = $batchNumber;
 			$plan->user_id = Yii::app()->user->id;
 			$plan->modify_time = date("YmdHis");

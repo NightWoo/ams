@@ -666,7 +666,11 @@ class OrderSeeker
 		foreach($cars as &$car){
 			$car['type_config'] = $configName[$car['config_id']];
 			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
-			$car['old_row'] = WarehouseAR::model()->findByPk($car['old_wh_id'])->row;
+			$car['old_row'] = '-';
+			$oldRow = WarehouseAR::model()->findByPk($car['old_wh_id']);
+			if(!empty($oldRow)){
+				$car['old_row'] = $oldRow->row;
+			}
 			$car['standby_time'] = '-';
 			$traceSql = "SELECT pass_time FROM node_trace WHERE node_id=96 AND car_id = {$car['car_id']} ORDER BY pass_time DESC";
 			$car['standby_time'] = Yii::app()->db->createCommand($traceSql)->queryScalar();
