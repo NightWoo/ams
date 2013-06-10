@@ -37,10 +37,13 @@
 									<td style="text-align: right;">VIN&nbsp;&nbsp;</td>
 									<td>
 										<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
-
-									    
+										<div class="btn-group" style="vertical-align:top;">
+											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ3" value ="VQ3">
+											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ2" value ="VQ2">
+											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ1" value ="VQ1">
+											<input type="button" class="btn btn-primary btnSubmit" disabled="disabled" id ="toWarehouse" value ="成品库">
+										</div>
 										<input type="button" class="btn" id ="reset" value ="清空">
-
 										<span class="help-inline" id="vinHint">请输入VIN后回车</span>
 										<div class="help-inline" id="carInfo">
 											<span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
@@ -53,16 +56,9 @@
 									</td>
 								</tr>
 								<tr>
-									<td  style="text-align: right; vertical-align: top;">退回原因&nbsp;&nbsp;</td>
-									<td>
-										<textarea rows="1" id="remark"></textarea>
-
-										<div class="btn-group" style="vertical-align:top;">
-											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ3" value ="VQ3">
-											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ2" value ="VQ2">
-											<input type="button" class="btn btn-danger btnSubmit" disabled="disabled" id ="toVQ1" value ="VQ1">
-											<input type="button" class="btn btn-primary btnSubmit" disabled="disabled" id ="toWarehouse" value ="成品库">
-										</div>
+									<td style="text-align: right; vertical-align: top; padding-top: 5px;">退回原因&nbsp;&nbsp;</td>
+									<td style="padding-top: 5px;">
+										<textarea rows="1" id="remark" style="width:495px;"></textarea>
 									</td>
 								</tr>
 							</table>

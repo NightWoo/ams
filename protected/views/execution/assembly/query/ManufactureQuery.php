@@ -79,6 +79,8 @@
                                     <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
                                     <option value="WAREHOUSE_RETURN">WH/退库</option>
+                                    <option value="DETECT_SHOP_LEAVE">检测间离开</option>
+                                    <option value="DETECT_SHOP_RETURN">检测间归还</option>
 								</select>
                                 
 							</td>
@@ -171,7 +173,7 @@
                                         <th>颜色</th>
                                         <th>耐寒性</th>
                                         <th>状态</th>
-                                        <th>备注</th>
+                                        <th>节点备注</th>
                                         <th>时间</th>
                                         <!-- <th>订单号</th> -->
                                     </tr>

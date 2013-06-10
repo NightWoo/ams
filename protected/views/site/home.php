@@ -65,9 +65,9 @@
 			</div>
 		</div>
 		
-		<div id="" class="tile square shortcut">
+		<div id="carAccessControl" class="tile square shortcut">
 			<div class="title">
-				<h3></h3>
+				<h3>车辆门禁</h3>
 			</div>
 		</div>
 		

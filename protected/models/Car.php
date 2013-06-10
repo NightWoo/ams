@@ -186,9 +186,12 @@ class Car
 
 
 			//car status 
-			if($nodeName !== 'WDI')
+			if($nodeName !== 'WDI' && $nodeName !== 'DETECT_SHOP_LEAVE' && $nodeName !== 'DETECT_SHOP_RETURN'){
 				$this->detectStatus($node);
+			}
 		//}
+		$node;
+		return $node; 
 	}
 
 	public function enterNodeWDI($passtime,$driverId = 0){

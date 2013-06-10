@@ -300,8 +300,8 @@ $(document).ready(function () {
 	    						$("<td />").addClass("alignCenter").html("-").appendTo(tr);
 	    					}
 	    				}
-	    				if(order.status ==1 && order.standby_finish_time === '0000-00-00 00:00:00'){
-	    					if(order.standby_last >= 12 || order.out_last >= 12 || order.lane_last >= 12){
+	    				if(order.status ==1 && order.out_finish_time === '0000-00-00 00:00:00'){
+	    					if(order.standby_last >= 12 || order.out_last >= 20 || order.lane_last >= 12){
 	    						$(tr).removeClass('warning').addClass('error');
 	    					}
 	    				}else if(order.status == 2){

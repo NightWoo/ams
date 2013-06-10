@@ -29,6 +29,8 @@ class NodeSeeker
 					"CHECK_OUT" =>19,
 					'OutStandby'=>96,
 					'WAREHOUSE_RETURN'=>97,
+					'DETECT_SHOP_LEAVE'=>98,
+					'DETECT_SHOP_RETURN'=>99,
 				  );
 	
 	public function queryTrace($stime, $etime, $series, $node, $curPage, $perPage) {
@@ -110,7 +112,7 @@ class NodeSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
+        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time,n.remark as node_remark, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
         		FROM $traceTable AS n 
         		LEFT JOIN car AS c
         		ON n.car_id=c.id

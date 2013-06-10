@@ -849,7 +849,7 @@ $("document").ready(function() {
 					$.each(data, function (index, value){
 						var tr = $("<tr />");
 
-						if(value.order_config_id != $("#manualModal").data("orderConfigId") || value.cold_resistant != $("#manualModal").data("coldResistant") || value.color != $("#manualModal").data("color")){
+						if(value.order_id > 0 || value.order_config_id != $("#manualModal").data("orderConfigId") || value.cold_resistant != $("#manualModal").data("coldResistant") || value.color != $("#manualModal").data("color")){
 							tdCheck ="<input class='choose' type='checkbox' disabled/>"
 						} else {
 							tdCheck = "<input class='choose' type='checkbox'/>";

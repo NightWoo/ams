@@ -509,7 +509,7 @@ class CarSeeker
         $conVin = join(' OR ', $conditions);
 
         $condition = "warehouse_time>'0000-00-00 00:00:00' AND ($conVin)"; 
-        $sql = "SELECT id, vin, serial_number, series, type, order_config_name, cold_resistant, config_id, order_config_id, color, engine_code, remark, warehouse_time
+        $sql = "SELECT id, vin, serial_number, series, type, order_config_name, cold_resistant, config_id, order_config_id, color, engine_code, remark, warehouse_time, order_id
         		FROM view_car_info_order_config
         		WHERE $condition";
         $datas = Yii::app()->db->createCommand($sql)->queryAll();

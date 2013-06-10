@@ -452,6 +452,7 @@ function ajaxGetStock (argument) {
 	    		$(".progressD").css("width", (response.data.area_rate.D * 100) + '%');
 	    		$(".progressE").css("width", (response.data.area_rate.E * 100) + '%');
 	    		$(".progressF").css("width", (response.data.area_rate.F * 100) + '%');
+	    		$(".progressG").css("width", (response.data.area_rate.G * 100) + '%');
 	    		// $(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		// $(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 

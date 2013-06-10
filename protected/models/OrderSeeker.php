@@ -217,9 +217,11 @@ class OrderSeeker
 			}else{
 				$detail['standby_last'] = (strtotime($detail['standby_finish_time']) - strtotime($detail['activate_time'])) / 3600;
 				if($detail['out_finish_time'] === '0000-00-00 00:00:00'){
-					$detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['standby_finish_time'])) / 3600;
+					// $detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['standby_finish_time'])) / 3600;
+					$detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
 				}else{
-					$detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['standby_finish_time'])) / 3600;
+					// $detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['standby_finish_time'])) / 3600;
+					$detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['activate_time'])) / 3600;
 					if($detail['lane_release_time'] === '0000-00-00 00:00:00'){
 						$detail['lane_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['out_finish_time'])) / 3600;
 					} else {
@@ -355,9 +357,11 @@ class OrderSeeker
 			} else {
 				$board['boardStandbyLast'] =(strtotime($board['boardStandbyFinishTime']) - strtotime($board['boardActivateTime'])) / 3600;
 				if($board['boardOutFinishTime'] === '0000-00-00 00:00:00'){
-					$board['boardOutLast'] =(strtotime(date('Y-m-d H:i:s')) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+					// $board['boardOutLast'] =(strtotime(date('Y-m-d H:i:s')) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+					$board['boardOutLast'] =(strtotime(date('Y-m-d H:i:s')) - strtotime($board['boardActivateTime'])) / 3600;
 				} else {
-					$board['boardOutLast'] =(strtotime($board['boardOutFinishTime']) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+					// $board['boardOutLast'] =(strtotime($board['boardOutFinishTime']) - strtotime($board['boardStandbyFinishTime'])) / 3600;
+					$board['boardOutLast'] =(strtotime($board['boardOutFinishTime']) - strtotime($board['boardActivateTime'])) / 3600;
 				}
 			}
 			$board['boardStandbyLast'] = round($board['boardStandbyLast'] ,1);

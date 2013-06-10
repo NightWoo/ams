@@ -50,6 +50,10 @@ $(function () {
 	$("#managementSystem").click(function(){
 		window.location.href='/bms/ManagementSystem/home?chapter=0'
 	})
+
+	$("#carAccessControl").click(function(){
+		window.location.href='/bms/execution/DetectShopAccess'
+	})
 	
 	$("#safety").click(function(){
 		window.location.href='#'

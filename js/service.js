@@ -110,6 +110,9 @@ var WAREHOUSE_CHECKOUT_EXPORT = "/bms/warehouse/exportCheckoutDetail";
 var WAREHOUSE_RETURN_VALIDATE = "/bms/car/validateWarehouseReturn";
 var WAREHOUSE_RETURN_SUBMIT = "/bms/execution/returnSubmit";
 
+var CAR_ACCESS_VALIDATE = "/bms/car/validateCarAccess";
+var CAR_ACCESS_SUBMIT = "/bms/execution/carAccessSubmit";
+
 var SHOW_TRACE = "/bms/car/showTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";
 var FAULT_QUERY = "/bms/fault/query";

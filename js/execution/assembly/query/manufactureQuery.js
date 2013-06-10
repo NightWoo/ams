@@ -310,7 +310,7 @@ $(document).ready(function () {
 		    			var colorTd = "<td>" + value.color + "</td>";
 		    			var coldTd = "<td>" + value.cold_resistant + "</td>";
 		    			var statusTd = "<td>" + value.status + "</td>";
-		    			var remarkTd = "<td>" + value.remark + "</td>";
+		    			var remarkTd = "<td>" + value.node_remark + "</td>";
 		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
 		    			// var orderNumberTd = "<td>" + value.order_number + "</td>";
 		    			var tr = "<tr>"

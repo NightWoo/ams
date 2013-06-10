@@ -187,6 +187,24 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionValidateCarAccess() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            
+            $car = Car::create($vin);
+            
+            $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
 	public function actionMatchPlan() {
 		$vin = $this->validateStringVal('vin', '');
         try{
