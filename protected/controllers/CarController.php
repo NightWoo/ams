@@ -331,6 +331,46 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionQueryTestlineRecord() {
+        $vin = $this->validateStringVal('vin', '');
+        $series = $this->validateStringVal('series', '');
+        $serialNumber = $this->validateStringVal('serialNumber', '');
+        try{
+            $seeker = new CarSeeker();
+            $vin = $seeker->queryCar($vin,$series,$serialNumber);
+            if(empty($vin)){
+                throw new Exception('查无车辆');
+            }
+            $record = $seeker->queryTestlineRecord($vin);
+            $car = Car::create($vin);
+            $status = $car->car->status;
+            if(!empty($car->car->warehouse_id)){
+                $status .= '-' . WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
+            }
+            if(!empty($car->car->lane_id)){
+                $status .= '-' . LaneAR::model()->findByPk($car->car->lane_id)->name;
+            }
+            if(!empty($car->car->distributor_name)){
+                $status .= '-' . $car->car->distributor_name;
+            }
+
+            $carData=$car->car->getAttributes();
+            if($carData['series']==='6B'){
+                $carData['series'] = '思锐';
+            }
+            $carData['config_name'] = '';
+            if(!empty($car->car->config_id)){
+                $carData['config_name'] = CarConfigAR::model()->findByPk($car->car->config_id)->name;
+            }
+
+
+
+            $this->renderJsonBms(true, 'OK', array('record' => $record, 'car'=> $carData, 'status' =>$status));
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
 	public function actionValidateLWS() {
         $vin = $this->validateStringVal('vin', '');
         try{

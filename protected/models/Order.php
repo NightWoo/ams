@@ -120,12 +120,14 @@ class Order
 		$order = $seeker->matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date);
 
 		if(!empty($order)) {
+			$order->is_locked = 1;
 			$order->hold += 1;
 			$order->save();
 
 			if($order->hold == $order->amount && $order->standby_finish_time == '0000-00-00 00:00:00'){
 				$order->standby_finish_time = date("YmdHis");
 			}
+			$order->is_locked = 0;
 			$order->save();
 			
 			$data['orderId'] = $order->id;
@@ -144,7 +146,7 @@ class Order
 		//$matchedOrder = new OrderAR;
 		$data = array();
 
-		$condition = "standby_date=? AND status=1 AND amount>hold ORDER BY priority ASC";
+		$condition = "standby_date=? AND status=1 AND amount>hold AND is_locked=0 ORDER BY priority ASC";
 		$orders = OrderAR::model()->findAll($condition, array($standbyDate));
 		if(!empty($orders)){
 			foreach($orders as $order) {
@@ -180,6 +182,14 @@ class Order
 		if(!empty($matchedCar)){
 			$warehouse = WarehouseAR::model()->findByPk($matchedCar->warehouse_id);
 			if(!empty($warehouse)){
+
+				$matchedOrder->hold += 1;
+				$matchedOrder->is_locked = 1;
+				$matchedOrder->save();
+				if($matchedOrder->hold == $matchedOrder->amount){
+					$matchedOrder->standby_finish_time = date('YmdHis');
+				}
+
 				$warehouse->quantity -= 1;
 				//$warehouse->status = 0;
 				if($warehouse->quantity == 0) {
@@ -192,13 +202,7 @@ class Order
 					$warehouse->free_seat = $warehouse->capacity;
 					$warehouse->status = 0;
 				}
-
-				$matchedOrder->hold += 1;
-				$matchedOrder->save();
-				if($matchedOrder->hold == $matchedOrder->amount){
-					$matchedOrder->standby_finish_time = date('YmdHis');
-				}
-
+				
 				$matchedCar->order_id = $matchedOrder->id;
 				// $matchedCar->lane_id = $matchedOrder->lane_id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
@@ -208,6 +212,8 @@ class Order
 
 				$warehouse->save();
 				$matchedCar->save();
+				
+				$matchedOrder->is_locked = 0;
 				$matchedOrder->save();
 				
 				$configName = CarConfigAR::model()->findByPk($matchedCar->config_id)->name;

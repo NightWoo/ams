@@ -314,16 +314,16 @@ $(document).ready(function () {
 		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
 		    			// var orderNumberTd = "<td>" + value.order_number + "</td>";
 		    			var tr = "<tr>"
+		    				+ serialTd 
 		    				+ vinTd 
 		    				+ seriesTd 
-		    				+ serialTd 
 		    				// + carTypeTd
 		    				+ configTd
-		    				+ colorTd
 		    				+ coldTd 
+		    				+ colorTd
 		    				+ statusTd 
-		    				+ remarkTd 
 		    				+ pTimeTd 
+		    				+ remarkTd 
 		    				// + orderNumberTd
 		    				+ "</tr>";
 

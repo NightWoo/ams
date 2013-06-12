@@ -115,6 +115,7 @@ var CAR_ACCESS_SUBMIT = "/bms/execution/carAccessSubmit";
 
 var SHOW_TRACE = "/bms/car/showTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";
+var QUERY_LESTLINE_RECORD = "/bms/car/queryTestlineRecord";
 var FAULT_QUERY = "/bms/fault/query";
 var FAULT_EXPORT = "/bms/fault/export";
 var FAULT_QUERY_DISTRIBUTE = "/bms/fault/queryDistribute";

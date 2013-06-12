@@ -507,7 +507,7 @@ class OrderSeeker
 		}
 
 		$conditions = array();
-		$conditions['order'] = "status=1 AND standby_date='$date' AND order_config_id='$orderConfigId' AND hold<amount";
+		$conditions['order'] = "status=1 AND standby_date='$date' AND order_config_id='$orderConfigId' AND hold<amount AND is_locked=0";
 		$conditions['car'] = "series='$series' AND color='$color' AND cold_resistant='$coldResistant'";
 
 		$condition = join(' AND ', $conditions);

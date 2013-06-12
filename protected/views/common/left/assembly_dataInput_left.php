@@ -15,7 +15,7 @@
 			<li id="leftNodeQueryLi"><a href="/bms/execution/query?type=NodeQuery">质量查询</a></li>
 			<li id="leftBalanceQueryLi"><a href="/bms/execution/query?type=BalanceQuery">结存查询</a></li>
 			<li id="leftOrderCarQueryLi"><a href="/bms/execution/query?type=OrderCarQuery">发车查询</a></li>
-			<!-- <li id="leftPauseQueryLi"><a href="/bms/execution/query?type=PauseQuery">停线查询</a></li> -->
+			<li id="leftWarehouseQueryLi"><a href="/bms/execution/query?type=WarehouseQuery">成品库查询</a></li>
 		<li class="nav-header">生产报表</li>
 			<li><a href="#">生产日报</a></li>
 			<li id="leftWarehouseReportLi"><a href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li>

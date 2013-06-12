@@ -69,21 +69,17 @@
         						<input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="5">
-                                <div id='carTag' class="help-inline">
-                                    <span class="label label-info" rel="tooltip" title="车系" id="series"></span>
-                                    <span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
-                                    <span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>
-                                    <span class="label label-info" rel="tooltip" title="车型" id="type"></span>
-                                    <span class="label label-info" rel="tooltip" title="配置" id="configName"></span>
-                                    <span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
-                                    <span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
-                                </div>
-                            </td>
-                        </tr>
                     </table>
                 </form>
+                <div id='carTag' class="help-inline" style="margin-bottom:10px;">
+                    <span class="label label-info" rel="tooltip" title="车系" id="series"></span>
+                    <span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
+                    <span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>
+                    <span class="label label-info" rel="tooltip" title="车型" id="type"></span>
+                    <span class="label label-info" rel="tooltip" title="配置" id="configName"></span>
+                    <span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
+                    <span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
+                </div>
                 <table id="resultTable" class="table table-bordered">
                     <thead>
                         <tr>
@@ -98,7 +94,282 @@
                     <tbody>
                             
                     </tbody>
-                    </table>
+                </table>
+                <div id="tabTestLine" class="tabbable tabs-left">
+                    <ul class="nav nav-tabs">
+                        <li><a href="#basic" data-toggle="tab">基本参数</a></li>
+                        <li class="active"><a href="#toe" data-toggle="tab">前束</a></li>
+                        <li><a href="#slide" data-toggle="tab">侧滑</a></li>
+                        <li><a href="#turn" data-toggle="tab">转角</a></li>
+                        <li><a href="#light" data-toggle="tab">前照灯</a></li>
+                        <li><a href="#brake" data-toggle="tab">制动</a></li>
+                        <li><a href="#speed" data-toggle="tab">速度表</a></li>
+                        <li><a href="#gas" data-toggle="tab">尾气</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="basic" class="tab-pane">
+                            <table id="tableBasic" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>燃料种类</td>
+                                        <td class="Fuel">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>发动机号 </td>
+                                        <td><span class="engine_type">-</span><span class="engine_code">-</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>外廓尺寸（长 × 宽 × 高）</td>
+                                        <td><span class="Length">-</span>mm × <span class="Width">-</span>mm × <span class="Height">-</span>mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>轴数</td>
+                                        <td class="Axles_No">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>轴距</td>
+                                        <td><span class="WheelBase">-</span>mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>轮胎数</td>
+                                        <td class="Tires_No">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>轮距（前 / 后）</td>
+                                        <td><span class="Track_F">-</span>mm / <span class="Track_R">-</span>mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>驱动形式</td>
+                                        <td class="Drive_type">前置前驱</td>
+                                    </tr>
+                                    <tr>
+                                        <td>最大设计质量</td>
+                                        <td colspan="3"><span class="Mass_Max">-</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>乘坐人数</td>
+                                        <td class="PersonLimit">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="toe" class="tab-pane active">
+                            <table id="tableToe" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>左</td>
+                                        <td>右</td>
+                                        <td>总</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td>前轮</td>
+                                        <td class="ToeLeft_F">-</td>
+                                        <td class="ToeRight_F">-</td>
+                                        <td class="ToeTotal_F">-</td>
+                                        <td class="ToeFlag_F">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>后轮</td>
+                                        <td class="ToeLeft_R">-</td>
+                                        <td class="ToeRight_R">-</td>
+                                        <td class="ToeTotal_R">-</td>
+                                        <td class="ToeFlag_R">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="slide" class="tab-pane">
+                            <table id="tableSlide" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>测值（m/km）</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Slide">0.28</td>
+                                        <td class="Slide_Flag">T</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="turn" class="tab-pane">
+                            <table id="tableTurn" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>左转角</td>
+                                        <td>右转角</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td>左轮</td>
+                                        <td class="Left_Turn_Left">--</td>
+                                        <td class="Right_Turn_Left">--</td>
+                                        <td class="Angle_Flag" rowspan="2">T</td>
+                                    </tr>
+                                    <tr>
+                                        <td>右轮</td>
+                                        <td class="Left_Turn_Right">--</td>
+                                        <td class="Right_Turn_Right">--</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="light" class="tab-pane">
+                            <table id="tableLight" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td colspan="2">发光强度（cd）</td>
+                                        <td colspan="2">上下偏角（cm/10m）</td>
+                                        <td colspan="2">左右偏角（cm/10m）</td>
+                                        <td colspan="2">照射高度（cm）</td>
+                                        <td rowspan="2">评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td>远光</td>
+                                        <td>近光</td>
+                                        <td>远光</td>
+                                        <td>近光</td>
+                                        <td>远光</td>
+                                        <td>近光</td>
+                                        <td>远光</td>
+                                        <td>近光</td>
+                                    </tr>
+                                    <tr>
+                                        <td>左灯</td>
+                                        <td class="LM_Inten">-</td>
+                                        <td class="LL_Inten">-</td>
+                                        <td class="LM_UDAngle">-</td>
+                                        <td class="LL_UDAngle">-</td>
+                                        <td class="LM_LRAngle">-</td>
+                                        <td class="LL_LRAngle">-</td>
+                                        <td class="LM_Height">-</td>
+                                        <td class="LL_Height">-</td>
+                                        <td class="Light_Flag_L">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>左灯</td>
+                                        <td class="RM_Inten">-</td>
+                                        <td class="RL_Inten">-</td>
+                                        <td class="RM_UDAngle">-</td>
+                                        <td class="RL_UDAngle">-</td>
+                                        <td class="RM_LRAngle">-</td>
+                                        <td class="RL_LRAngle">-</td>
+                                        <td class="RM_Height">-</td>
+                                        <td class="RL_Height">-</td>
+                                        <td class="Light_Flag_R">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="brake" class="tab-pane">
+                            <table id="tableBrake" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>轴荷（×10N）</td>
+                                        <td>左（×10N）</td>
+                                        <td>右（×10N）</td>
+                                        <td>和（%）</td>
+                                        <td>差（%）</td>
+                                        <td>左阻滞（%）</td>
+                                        <td>右阻滞（%）</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td>前轴</td>
+                                        <td class="AxleWeight_F">-</td>
+                                        <td class="Brake_FL">-</td>
+                                        <td class="Brake_FR">-</td>
+                                        <td class="BrakeSumPer_F">-</td>
+                                        <td class="BrakeDiffPer_F">-</td>
+                                        <td class="BrakeResistance_FL">-</td>
+                                        <td class="BrakeResistance_FR">-</td>
+                                        <td class="BrakeFlag_F">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>后轴</td>
+                                        <td class="AxleWeight_R">-</td>
+                                        <td class="Brake_RL">-</td>
+                                        <td class="Brake_RR">-</td>
+                                        <td class="BrakeSumPer_R">-</td>
+                                        <td class="BrakeDiffPer_R">-</td>
+                                        <td class="BrakeResistance_RL">-</td>
+                                        <td class="BrakeResistance_RR">-</td>
+                                        <td class="BrakeFlag_R">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>整车</td>
+                                        <td>制动力（×10N）</td>
+                                        <td class="BrakeSum">-</td>
+                                        <td>和（%）</td>
+                                        <td class="BrakeSumPer" colspan="4">-</td>
+                                        <td class="BrakeSum_Flag">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>驻车</td>
+                                        <td>制动力（×10N）</td>
+                                        <td class="ParkSum">-</td>
+                                        <td>和（%）</td>
+                                        <td class="ParkSumPer" colspan="4">-</td>
+                                        <td class="ParkSum_Flag">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="speed" class="tab-pane">
+                            <table id="tableSpeed" class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>标称值（km/h）</td>
+                                        <td>实测值（km/h）</td>
+                                        <td>误差（±）</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">40</td>
+                                        <td class="SpeedValue">-</td>
+                                        <td class="SpeedInaccuracy">-</td>
+                                        <td class="Speed_Flag">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="gas" class="tab-pane">
+                            <table id="tableGas" class="table table-bordered">
+                                <tbody>
+                                     <tr>
+                                        <td></td>
+                                        <td>HC（ppm）</td>
+                                        <td>CO（%）</td>
+                                        <td>评价</td>
+                                    </tr>
+                                    <tr>
+                                        <td>低怠速</td>
+                                        <td class="GasHC_Low">-</td>
+                                        <td class="GasCO_Low">-</td>
+                                        <td class="GasLow_Flag">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>高怠速</td>
+                                        <td class="GasHC_High">-</td>
+                                        <td class="GasCO_High">-</td>
+                                        <td class="GasHigh_Flag">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div><!-- END MAIN -->
         </div>

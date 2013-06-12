@@ -465,6 +465,22 @@ class CarSeeker
 		return $vin;
 	}
 
+	public function queryTestlineRecord($vin) {
+		$sql = "SELECT * FROM view_testline_summary WHERE vin='$vin'";
+		$record = Yii::app()->db->createCommand($sql)->queryRow();
+		$record['Light_Flag_L'] = 'F';
+		$record['Light_Flag_R'] = 'F';
+		if($record['LM_Flag'] === 'T' && $record['LL_Flag'] === 'T'){
+			$record['Light_Flag_L'] = 'T';
+		}
+
+		if($record['RM_Flag'] === 'T' && $record['RL_Flag'] === 'T'){
+			$record['Light_Flag_R'] = 'T';
+		}
+
+		return $record;
+	}
+
 	public function configColdArray($state, $series){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
