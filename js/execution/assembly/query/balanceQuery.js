@@ -298,12 +298,19 @@ $(document).ready(function () {
             },
             plotOptions: {
                 column: {
+                	stacking: 'normal',
                     pointPadding: 0.1,
                     borderWidth: 0,
                     pointWidth: 15
                 }
             },
             series: [],
+            navigation: {
+	            buttonOptions: {
+	                verticalAlign: 'bottom',
+	                y: -20,
+	            }
+	        }
 		},
 
 		updateDistributeTable: function() {

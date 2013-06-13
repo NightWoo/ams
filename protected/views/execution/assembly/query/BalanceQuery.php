@@ -42,7 +42,7 @@
                     <form id="form" class="well form-inline">
     					<table>
     						<tr>
-    							<td class="alignRight"><label>时间&nbsp;&nbsp;</label></td>
+    							<!-- <td class="alignRight"><label>时间&nbsp;&nbsp;</label></td>
                                 <td>
                                     <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                                 </td>
@@ -51,7 +51,7 @@
                                 </td>
                                 <td>
                                     <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
-                                </td>
+                                </td> -->
     							<td>
     								<select name="" id="selectState" class="input-medium">
                                         <option value="assembly">总装(除PBS)</option>
@@ -125,41 +125,40 @@
                         </div>
 
                         <div class="tab-pane" id="carsDistribute">
-                            
-                                <div class="tableContainer span10 pull-left">
-                                    <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
-                                        <thead>
+                            <div class="tableContainer span10 pull-left">
+                                <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
+                                    <thead>
 
-                                        </thead>
-                                        <tbody>
+                                    </thead>
+                                    <tbody>
 
-                                        </tbody>
-                                    </table>
-                                    <div id="divCheckbox">   
-                                        <label class="checkbox">
-                                          <input type="checkbox" name="optionsRadios" id="checkboxMerge" value="reycle_bar_data">
-                                          将VQ1、VQ2、VQ3结存合并为周转车
-                                        </label>
-                                    </div>                          
-                                </div>
-                                <div class="chartContainer offset10">
-                                    <!-- <div id="divRadio">   
-                                        <label class="radio inline">
-                                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
-                                          车型
-                                        </label>
-                                        <label class="radio inline">
-                                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="color_pie_data">
-                                          颜色
-                                        </label>
-                                    </div> -->
-                                    <div id="columnContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-                                </div>
-                                <div class="chartContainer offset9">
-                                    
-                                    <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-                                </div>
+                                    </tbody>
+                                </table>
+                                <div id="divCheckbox">   
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="optionsRadios" id="checkboxMerge" value="reycle_bar_data">
+                                      将VQ1、VQ2、VQ3结存合并为周转车
+                                    </label>
+                                </div>                          
                             </div>
+                            <div class="chartContainer offset10">
+                                <!-- <div id="divRadio">   
+                                    <label class="radio inline">
+                                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
+                                      车型
+                                    </label>
+                                    <label class="radio inline">
+                                      <input type="radio" name="optionsRadios" id="optionsRadios2" value="color_pie_data">
+                                      颜色
+                                    </label>
+                                </div> -->
+                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="chartContainer offset9">
+                                
+                                <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                            </div>
+                        </div>
 
                         <div class="tab-pane" id="balanceTrend">
 

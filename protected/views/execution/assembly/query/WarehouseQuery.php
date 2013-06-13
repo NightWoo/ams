@@ -119,7 +119,8 @@
                                     <li><a href="#tabBalanceCars" data-toggle="tab">结存明细</a></li>
                                 </ul>
                             </li>
-                            
+                            <li><a href="#statistic" data-toggle="tab">车辆统计</a></li>
+                            <li><a href="#balanceDistribute" data-toggle="tab">结存分布</a></li>
                             <li><a href="#tabOrderDetail" data-toggle="tab">订单明细</a></li>
                             <li><a href="#tabPeriod" data-toggle="tab">发车周期</a></li>
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
@@ -205,8 +206,41 @@
                             </table>
                         </div>
 
+                        <div class="tab-pane" id="statistic">
+                            <div id="statisticContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <table id="tableStatistic" class="table table-condensed table-bordered">
+                                <thead />
+                                <tbody />
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="balanceDistribute">
+                            <div class="tableContainer span10 pull-left">
+                                <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered detailTable">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                <div id="divCheckbox">   
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="optionsRadios" id="checkboxMerge" value="reycle_bar_data">
+                                      将VQ1、VQ2、VQ3结存合并为周转车
+                                    </label>
+                                </div>                          
+                            </div>
+                            <div class="chartContainer offset10">
+                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="chartContainer offset9">
+                                <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                            </div>
+                        </div>
+
                         <div class="tab-pane" id="tabOrderDetail">
-                            <table id="tableOrderDetail" class="table table-condensed table-bordered">
+                            <table id="tableOrderDetail" class="table table-condensed table-bordered detailTable">
                                 <thead>
                                     <th>备板编号</th>
                                 	<th style="width:30px">车道</th>
