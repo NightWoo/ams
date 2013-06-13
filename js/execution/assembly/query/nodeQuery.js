@@ -14,16 +14,19 @@ $(document).ready(function () {
 
 		$("#startTime").val(currentDate8());
 		$("#endTime").val(currentDate16());
+
 		resetAll();
 	}
 
 	$("#selectNode").change(function () {
 		var nV = this.value;
 
-		if (nV === "PBS" || nV === "T0" || nV === "CHECK_LINE" || nV === "CHECK_IN" || nV === "CHECK_OUT") {
-			$("#dpuTab,#passRateTab,#platoTab").hide();		//modified by wujun
+		if (nV === "CHECK_LINE") {
+			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").hide();
+			$("#selectItem").show();
 		} else {
-			$("#dpuTab,#passRateTab,#platoTab").show();		//modified by wujun
+			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").show();
+			$("#selectItem").hide();
 		}
 	});
 	function currentDate8 (argument) {
@@ -70,7 +73,8 @@ $(document).ready(function () {
 
 	function resetAll (argument) {
 		$(".pager").hide();
-		$("#resultTable").hide();
+		$(".tableTestline, #resultTable").hide();
+		$("#selectItem").hide();
 	}
 
 /*
@@ -104,17 +108,16 @@ $(document).ready(function () {
 			ajaxPassRate();
 		else if (index === 5)
 			ajaxStatistics();
-		else if (index === 0)
-			ajaxQuery(1);
+		else if (index === 0){
+			testlineItem = $("#selectItem").val();
+			if(testlineItem == ""){
+				ajaxQuery(1);
+			} else {
+				toQueryTestline(testlineItem, 1);
+			}
+		}
 		return false;
 	}
-
-	$("#btnExport").click(
-		function () {
-			ajaxExport();
-			return false;
-		}
-	);
 
 	//car pagination
 	$("#preCars").click(
@@ -161,11 +164,62 @@ $(document).ready(function () {
 		}
 	);
 
+	//testline pagination
+	$("#preTestline").click(
+		function (){
+			if(parseInt($("#curTestline").attr("page")) > 1){
+				$(".tableTestline tbody").html("");
+				item = $("#selectItem").val();
+				targetPage = parseInt($("#curTestline").attr("page")) - 1;
+				toQueryTestline(item,targetPage);
+			}
+		}
+	);
+
+	$("#nextTestline").click(
+		function (){
+			if(parseInt($("#curTestline").attr("page")) * 20 < parseInt($("#totalTestline").attr("total")) ){
+				$(".tableTestline tbody").html("");
+				item = $("#selectItem").val();
+				targetPage = parseInt($("#curTestline").attr("page")) + 1;
+				toQueryTestline(item,targetPage);
+			}
+		}
+	);
+
+	$("#firstTestline").click(
+		function () {
+			if(parseInt($("#curTestline").attr("page")) > 1){
+				$(".tableTestline tbody").html("");
+				item = $("#selectItem").val();
+				toQueryTestline(item,1);
+			}
+		}
+	);
+
+	$("#lastTestline").click(
+		function () {
+			if(parseInt($("#curTestline").attr("page")) * 20 < parseInt($("#totalTestline").attr("total")) ){
+				$(".tableTestline tbody").html("");
+				item = $("#selectItem").val();
+				totalPage = parseInt($("#totalTestline").attr("total"))%20 === 0 ? parseInt($("#totalTestline").attr("total"))/20 : parseInt($("#totalTestline").attr("total"))/20 + 1;
+				toQueryTestline(item,totalPage);
+			}
+		}
+	)
+
+	$("#exportTestline").click(
+		function () {
+			toExportTestline($(this).attr("export"));
+			return false;
+		}
+	);
+
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
 		if(index<5)
-			$("#paginationCars").hide();
+			$("#paginationCars, #paginationTestline").hide();
 		if (index == 1)
 			ajaxPlato();
 		else if (index === 2)
@@ -176,8 +230,14 @@ $(document).ready(function () {
 			ajaxPassRate();
 		// else if (index === 5)
 		// 	ajaxStatistics();
-		else if (index === 0)
-			setTimeout(toQuery, 0);
+		else if (index === 0){
+			testlineItem = $("#selectItem").val();
+			if(testlineItem == ""){
+				ajaxQuery(1);
+			} else {
+				toQueryTestline(testlineItem);
+			}
+		}
 	});
 
 	$('#divRadio :radio').change(function () {
@@ -230,6 +290,7 @@ function getSeriesChecked () {
  * ----------------------------------------------------------------
  */
 	function ajaxQuery (targetPage) {
+		$(".tableTestline, #resultTable").hide();
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
@@ -272,39 +333,149 @@ function getSeriesChecked () {
 		    				faultStatusTd + driverNameTd + createTimeTd + memoTd 
 		    				+ checkerTd + subCheckerTd+  "</tr>";
 		    			$("#resultTable tbody").append(tr);
-						$("#resultTable").show();
 		    		});
+					$("#resultTable").show();
 		    		//deal with pager
 		    		if(response.data.pager.curPage == 1) {
-		    			//$(".prePage").hide();
-							$("#preCars, #firstCars").addClass("disabled");
-							$("#preCars a, #firstCars a").removeAttr("href");
-						} else {
-		    				//$(".prePage").show();
-							$("#preCars, #firstCars").removeClass("disabled");
-							$("#preCars a, #firstCars a").attr("href","#");
-						}
-		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
-		    				//$(".nextPage").hide();
-							$("#nextCars, #lastCars").addClass("disabled");
-							$("#nextCars a, #lastCars a").removeAttr("href");
-						} else {
-		    				//$(".nextPage").show();
-							$("#nextCars, #lastCars").removeClass("disabled");
-							$("#nextCars a, #lastCars a").attr("href","#");
-						}
-						$("#curCars").attr("page", response.data.pager.curPage);
-						$("#curCars a").html(response.data.pager.curPage);
-						$("#totalCars").attr("total", response.data.pager.total);
-						$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
-					
-						$("#paginationCars").show();
+	    			//$(".prePage").hide();
+						$("#preCars, #firstCars").addClass("disabled");
+						$("#preCars a, #firstCars a").removeAttr("href");
+					} else {
+	    				//$(".prePage").show();
+						$("#preCars, #firstCars").removeClass("disabled");
+						$("#preCars a, #firstCars a").attr("href","#");
+					}
+	    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+	    				//$(".nextPage").hide();
+						$("#nextCars, #lastCars").addClass("disabled");
+						$("#nextCars a, #lastCars a").removeAttr("href");
+					} else {
+	    				//$(".nextPage").show();
+						$("#nextCars, #lastCars").removeClass("disabled");
+						$("#nextCars a, #lastCars a").attr("href","#");
+					}
+					$("#curCars").attr("page", response.data.pager.curPage);
+					$("#curCars a").html(response.data.pager.curPage);
+					$("#totalCars").attr("total", response.data.pager.total);
+					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
+				
+					$("#paginationCars").show();
 
 		    	}else
 		    		alert(response.message);
 		    },
 		    error:function(){alertError();}
 		});
+	}
+
+	function toExportTestline(item){
+		window.open(EXPORT_TESTLINE_RECORDS +
+			"?&item=" + item +
+			"&stime=" + $("#startTime").val() +
+			"&etime=" + $("#endTime").val() +
+			"&series=" + getSeriesChecked()
+		)
+	}
+
+	function toQueryTestline(item,targetPage) {
+		$(".tableTestline, #resultTable").hide();
+		$.ajax({
+			url: QUERY_TESTLINE_RECORDS,
+			type: "get",
+			dataType: "json",
+			data: {
+				"item" : item,
+				"stime": $("#startTime").val(),
+				"etime": $("#endTime").val(),
+				"series": getSeriesChecked(),
+				"perPage": 20,
+				"curPage":targetPage || 1
+			},
+			error: function(){alertError();},
+			success: function (response) {
+				if(response.success){
+					showResult(item, response.data.data);
+					//deal with pager	
+		    		if(response.data.pager.curPage == 1) {
+		    			//$(".prePage").hide();
+						$("#preTestline, #firstTestline").addClass("disabled");
+						$("#preTestline a, #firstTestline a").removeAttr("href");
+					} else {
+	    				//$(".prePage").show();
+						$("#preTestline, #firstTestline").removeClass("disabled");
+						$("#preTestline a, #firstTestline a").attr("href","#");
+					}
+	    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+	    				//$(".nextPage").hide();
+						$("#nextTestline, #lastTestline").addClass("disabled");
+						$("#nextTestline a, #lastTestline a").removeAttr("href");
+					} else {
+	    				//$(".nextPage").show();
+						$("#nextTestline, #lastTestline").removeClass("disabled");
+						$("#nextTestline a, #lastTestline a").attr("href","#");
+					}
+					$("#curTestline").attr("page", response.data.pager.curPage);
+					$("#curTestline a").html(response.data.pager.curPage);
+					$("#totalTestline").attr("total", response.data.pager.total);
+					$("#totalTestline").html("导出全部" + response.data.pager.total + "条记录");
+					$("#exportTestline").attr("export", item);
+
+					$("#paginationTestline").show();
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function showResult(item, data){
+		switch(item){
+			case "NCA" :
+				setTableNCA(data);
+				break;
+			case "Gas" :
+				setTableGas(data);
+			default: 
+				break;
+		}
+	}
+
+	function setTableNCA(data) {
+		$("#tableNCA tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html(value.ToeLeft_F).appendTo(tr);
+			$("<td />").html(value.ToeRight_F).appendTo(tr);
+			$("<td />").html(value.ToeTotal_F).appendTo(tr);
+			$("<td />").html(value.ToeFlag_F).appendTo(tr);
+			$("<td />").html(value.ToeLeft_R).appendTo(tr);
+			$("<td />").html(value.ToeRight_R).appendTo(tr);
+			$("<td />").html(value.ToeTotal_R).appendTo(tr);
+			$("<td />").html(value.ToeFlag_R).appendTo(tr);
+			$("<td />").html(value.Toe_Flag).appendTo(tr);
+			$("#tableNCA tbody").append(tr);
+		})
+		$("#tableNCA").show();
+	}
+
+	function setTableGas(data) {
+		$("#tableGas tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html(value.GasHC_Low).appendTo(tr);
+			$("<td />").html(value.GasCO_Low).appendTo(tr);
+			$("<td />").html(value.GasLow_Flag).appendTo(tr);
+			$("<td />").html(value.GasHC_High).appendTo(tr);
+			$("<td />").html(value.GasCO_High).appendTo(tr);
+			$("<td />").html(value.GasHigh_Flag).appendTo(tr);
+			$("<td />").html(value.Gas_Flag).appendTo(tr);
+			$("#tableGas tbody").append(tr);
+		})
+		$("#tableGas").show();
 	}
 	
 	function ajaxDpu (targetPage) {

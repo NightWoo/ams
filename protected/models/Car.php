@@ -1547,6 +1547,20 @@ class Car
 		return $result;
 	}
 
+	public function getIRemoteTestResult(){
+		
+		$vin = $this->car->vin;
+		$client = new SoapClient(Yii::app()->params['IRemote_test_result']);
+		// $client->soap_defencoding = 'utf-8';
+		// $client->decode_utf8 = false;
+		$params = array(
+			'vin'=>$vin, 
+		);
+		$result = $client -> GetIRemoteTestResult($params);
+
+		return $result;
+	}
+
 	private function cutCarType($type) {
 		$length = strlen($type);
         $typeName = '';

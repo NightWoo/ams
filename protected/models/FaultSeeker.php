@@ -221,8 +221,8 @@ class FaultSeeker
 			$data['series'] = $name[$data['series']];
 
 			$data['pass_time'] = substr($data['pass_time'],0,16);
-			$data['create_time'] = substr($data['pass_time'],0,16);
-			$data['modify_time'] = substr($data['pass_time'],0,16);
+			$data['create_time'] = substr($data['create_time'],0,16);
+			$data['modify_time'] = substr($data['modify_time'],0,16);
 			
 			$key = join('_', $data);
 			$ret[$key] = $data;
@@ -286,6 +286,13 @@ class FaultSeeker
 		foreach($traces as &$data) {
             $data['user_name'] = $userInfos[$data['updator']];
             $data['node_name'] = $nodeInfos[$data['node_id']];
+            if(!empty($data['driver_id'])) {
+				$data['driver_name'] = $userInfos[$data['driver_id']];
+			} else {
+				$data['driver_name'] = $data['user_name'];
+			}
+
+			$data['create_time'] = substr($data['create_time'],0,16);
         }
 
 		$sql = "SELECT count(*) FROM node_trace,car $condition";	

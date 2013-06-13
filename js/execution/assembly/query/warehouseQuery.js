@@ -775,7 +775,7 @@ $(document).ready(function () {
 				}
 				$("#divCheckbox").show()
 			} else {
-				ajaxQueryBalanceAssembly($("#selectState").val());
+				ajaxQueryBalanceAssembly('WH');
 				$("#checkboxMerge").removeAttr("checked");
 				$("#divCheckbox").hide();
 			}
@@ -811,7 +811,7 @@ $(document).ready(function () {
 			url: QUERY_BALANCE_DISTRIBUTE,
 			type: "get",
 			data: {
-				"state" : $("#selectState").val(),
+				"state" : "WH",
 				"series" : $("#selectSeries").val(), 
 			},
 			dataType: "json",

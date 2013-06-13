@@ -61,7 +61,7 @@
                                 <option value="WAREHOUSE_RETURN">退库</option>
                             </select>
                         </div>
-                        <div class="input-append input-prepend" style="clear: right">
+                        <!-- <div class="input-append input-prepend" style="clear: right">
                             <span class="add-on">区域</span>
                             <select name="" id="selectState" class="input-medium" style="width:130px">
                                 <option value="assembly">总装(除PBS)</option>
@@ -74,7 +74,7 @@
                                 <option value="onLine">I线</option>
                                 <option value="PBS">PBS</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="input-append input-prepend" style="clear: right">
                             <select name="" id="selectSeries" class="input-small">
                                 <option value="">全车系</option>

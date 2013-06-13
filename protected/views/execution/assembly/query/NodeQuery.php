@@ -63,16 +63,27 @@
                                     <option value="">所有节点</option>
 									<!-- <option value="PBS">PBS</option>
 									<option value="T0">T0</option> -->
-									<option value="VQ1" selected="true">VQ1静态</option>
-									<option value="CHECK_LINE">VQ2动态.检测线</option>
-									<option value="ROAD_TEST_FINISH">VQ2动态.路试</option>
-                                    <option value="VQ2">VQ2动态.淋雨</option>
+									<option value="VQ1">VQ1静态</option>
 									<option value="VQ2_ALL">VQ2动态检验</option>
+                                    <option value="CHECK_LINE">--VQ2动态.检测线</option>
+                                    <option value="ROAD_TEST_FINISH">--VQ2动态.路试</option>
+                                    <option value="VQ2">--VQ2动态.淋雨</option>
                                     <option value="VQ3">VQ3外观</option>
 									<option value="WDI">WDI</option>
 									<!-- <option value="CHECK_IN">入成品库</option>
 									<option value="CHECK_OUT">出成品库</option> -->
 								</select>
+
+                                <select name="" id="selectItem" class="input-small">
+                                    <option value="" selected="true">项目</option>
+                                    <option value="NCA">四轮定位</option>
+                                    <option value="Light">前照灯</option>
+                                    <!-- <option value="Angle">转角</option> -->
+                                    <option value="Slide">侧滑</option>
+                                    <option value="Brake">制动</option>
+                                    <option value="Speed">速度表</option>
+                                    <option value="Gas">废气</option>
+                                </select>
 							</td>
                             <!-- <td colspan="2">
                                 <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
@@ -104,7 +115,7 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li id="carsDetail"><a href="#dataList" data-toggle="tab"> 详细报表 </a></li>
                             <li id="platoTab"><a href="#plato" data-toggle="tab">柏拉图</a></li>
-                            <li><a href="#dutyDistribution" data-toggle="tab">责任分布</a></li>
+                            <li id="dutyDistributionTab"><a href="#dutyDistribution" data-toggle="tab">责任分布</a></li>
                             <li id="dpuTab"><a href="#dpu" data-toggle="tab">DPU趋势</a></li>
                             <li id="passRateTab"><a href="#passRate" data-toggle="tab">合格率趋势</a></li>
                             <!-- <li><a href="#statistic" data-toggle="tab">车辆统计</a></li> -->
@@ -118,6 +129,19 @@
                                     <li id="curCars" class="active curPage" page="1"><a href="#">1</a></li>
                                     <li id="nextCars" class="nextPage"><a href="#">&gt;</a></li>
                                     <li id="lastCars"><a href="#">&gt;&gt;</a></li>
+                                </ul>
+                            </div>
+
+                            <div id="paginationTestline" class="pagination pagination-small pagination-right" style="display: none;">
+                                <ul>
+                                    <li id="exportTestline"><a href=""><span id="totalTestline"></span></a></li>
+                                </ul>
+                                <ul>
+                                    <li id="firstTestline"><a href="#">&lt;&lt;</a></li>
+                                    <li id="preTestline" class="prePage"><a href="#">&lt;</a></li>
+                                    <li id="curTestline" class="active curPage" page="1"><a href="#">1</a></li>
+                                    <li id="nextTestline" class="nextPage"><a href="#">&gt;</a></li>
+                                    <li id="lastTestline"><a href="#">&gt;&gt;</a></li>
                                 </ul>
                             </div>
                         </ul>
@@ -140,6 +164,54 @@
                                         <th>确认时间</th>
                                         <th id="thChecker">初检人员</th>
                                         <th id="thSubChecker">复检人员</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
+                            <table id="tableNCA" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">车系</th>
+                                        <th rowspan="2">VIN</th>
+                                        <th colspan="4">前轮前束</th>
+                                        <th colspan="4">后轮前束</th>
+                                        <th rowspan="2">总评价</th>
+                                    </tr>
+                                    <tr>
+                                        <th>前左轮</th>
+                                        <th>前右轮</th>
+                                        <th>前总前束</th>
+                                        <th>前轮评价</th>
+                                        <th>后左轮</th>
+                                        <th>后右轮</th>
+                                        <th>后总前束</th>
+                                        <th>后轮评价</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
+                            <table id="tableGas" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">车系</th>
+                                        <th rowspan="2">VIN</th>
+                                        <th colspan="3">低怠速</th>
+                                        <th colspan="3">高怠速</th>
+                                        <th rowspan="2">总评价</th>
+                                    </tr>
+                                    <tr>
+                                        <th>HC(ppm)</th>
+                                        <th>CO(%)</th>
+                                        <th>评价</th>
+                                        <th>HC(ppm)</th>
+                                        <th>CO(%)</th>
+                                        <th>评价</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -60,6 +60,8 @@ return array(
 	'ams2vin_store_out' => "http://10.23.11.6/csvinm/WebServices/AMS2StoreOut.asmx?wsdl",
 	'ams2vin_note' => "http://10.23.11.6/csvinm/WebServices/AMS2NOTE.asmx?wsdl",
 
+	'IRemote_test_result' => "http://10.9.31.22/IRemoteControlWebService/IRemoteControl.asmx?wsdl",
+
 	'rpc.gate' => array('host' => '127.0.0.1' ,'port' => 60000),
 	
 );

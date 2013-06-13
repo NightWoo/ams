@@ -138,7 +138,7 @@ $(document).ready(function () {
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: QUERY_LESTLINE_RECORD,//ref:  /bms/js/service.js
+		    url: QUERY_TESTLINE_RECORD,//ref:  /bms/js/service.js
 		    data: {
 		    	"vin": $('#vinText').val(),
 		    	"series": $('#selectSeries').val(),

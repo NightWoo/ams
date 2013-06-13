@@ -115,7 +115,7 @@ var CAR_ACCESS_SUBMIT = "/bms/execution/carAccessSubmit";
 
 var SHOW_TRACE = "/bms/car/showTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";
-var QUERY_LESTLINE_RECORD = "/bms/car/queryTestlineRecord";
+var QUERY_TESTLINE_RECORD = "/bms/car/queryTestlineRecord";
 var FAULT_QUERY = "/bms/fault/query";
 var FAULT_EXPORT = "/bms/fault/export";
 var FAULT_QUERY_DISTRIBUTE = "/bms/fault/queryDistribute";
@@ -135,7 +135,8 @@ var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
 var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
 var QUERY_BALANCE_ASSEMBLY = "/bms/car/queryBalanceAssembly";
 var QUERY_BALANCE_DISTRIBUTE = "/bms/car/queryBalanceDistribute";
-
+var QUERY_TESTLINE_RECORDS  = "/bms/execution/queryTestlineRecords";
+var EXPORT_TESTLINE_RECORDS  = "/bms/execution/exportTestlineRecords";
 
 var SHOW_USER = "/bms/user/show";
 var INIT_PASSWORD = "/bms/user/initPassword";

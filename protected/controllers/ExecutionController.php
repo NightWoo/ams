@@ -1,6 +1,7 @@
 <?php
 Yii::import('application.models.Car');
 Yii::import('application.models.Fault');
+Yii::import('application.models.TestlineSeeker');
 Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderAR');
@@ -822,6 +823,85 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionQueryTestLineRecords() {
+        $item = $this->validateStringVal('item', 'NCA');
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $series = $this->validateStringVal('series', '');
+        $perPage = $this->validateIntVal('perPage', 20);
+        $curPage = $this->validateIntVal('curPage', 1);
+        try{
+            $seeker = new TestlineSeeker();
+            list($total, $data) = $seeker->queryFromTable($item, $stime, $etime, $series, $curPage, $perPage);
+            $ret = array(
+                        'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
+                        'data' => $data,
+                    );
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+        
+    }
+
+    public function actionExportTestLineRecords() {
+        $item = $this->validateStringVal('item', 'NCA');
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $series = $this->validateStringVal('series', '');
+        try{
+            $seeker = new TestlineSeeker();
+            list($total, $datas) = $seeker->queryFromTable($item, $stime, $etime, $series, 0, 0);
+            switch($item) {
+                case "NCA":
+                    $content = "carID,车系,VIN,前左轮,前右轮,前总前束,前轮评价,后左轮,后右轮,后总前束,后轮评价,总评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "{$data['ToeLeft_F']},";
+                        $content .= "{$data['ToeRight_F']},";
+                        $content .= "{$data['ToeTotal_F']},";
+                        $content .= "{$data['ToeFlag_F']},";
+                        $content .= "{$data['ToeLeft_R']},";
+                        $content .= "{$data['ToeRight_R']},";
+                        $content .= "{$data['ToeTotal_R']},";
+                        $content .= "{$data['ToeFlag_R']},";
+                        $content .= "{$data['Toe_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
+
+                case "Gas":
+                    $content = "carID,车系,VIN,低怠速HC(ppm),低怠速CO(%),低怠速评价,高怠速HC(ppm),高怠速CO(%),高怠速评价,总评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "{$data['GasHC_Low']},";
+                        $content .= "{$data['GasCO_Low']},";
+                        $content .= "{$data['GasLow_Flag']},";
+                        $content .= "{$data['GasHC_High']},";
+                        $content .= "{$data['GasCO_High']},";
+                        $content .= "{$data['GasHigh_Flag']},";
+                        $content .= "{$data['Gas_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
+                default:
+                    $content = "";
+                    break;
+            }
+
+            $export = new Export('检测线_'.$item .date('YmdHi'), $content);
+            $export->toCSV();
+
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+        
+    }
+
     public function actionMonitoringIndex() {
 		
         $this->render('assembly/monitoring/monitoringIndex');
@@ -1038,11 +1118,16 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $series='F0';
-            $sql = "SELECT id FROM order_config WHERE car_series='$series'";
-            $data = Yii::app()->db->createCommand($sql)->queryColumn();
-            $orderConfigs = join(',',$data);
-            $ret = "(series = '$series' OR order_config_id IN ($orderConfigs))";
+            // $vin = $this->validateStringVal('vin', '');
+            // $car = Car::create($vin);
+            // $ret = $car->getIRemoteTestResult();
+            $view = 'NCA';
+            $dateCol = $view . "_CheckDate";
+            $stime = '2013-03-29 02:25:46';
+            $etime = '2013-04-03 14:07:06';
+            $sql = "SELECT * FROM $view WHERE $dateCol>='$stime' AND $dateCol<='$etime'";
+            $ret = Yii::app()->dbTest->createCommand($sql)->queryAll();
+
 			$this->renderJsonBms(true, $ret , $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -1071,7 +1156,7 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             
             $row = '';
-            $driverName = '汪辉';
+            $driverName = '樊后来';
             $inDate = $car->car->warehouse_time;
 
             $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);

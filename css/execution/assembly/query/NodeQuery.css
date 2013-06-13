@@ -27,3 +27,12 @@
 	margin-right: 6px;
 	margin-left: 4px;
 }
+
+.tableTestline {
+	font-size: 12px;
+}
+
+.tableTestline thead th{
+	text-align: center;
+	vertical-align: middle;
+}
