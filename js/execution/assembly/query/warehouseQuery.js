@@ -69,8 +69,10 @@ $(document).ready(function () {
 	$("#preCars").click(
 		function (){
 			if(parseInt($("#curCars").attr("page")) > 1){
-				$("#tableCars tbody").html("");
-				ajaxQueryCars(parseInt($("#curCars").attr("page")) - 1);
+				$(".tableCars tbody").html("");
+				key = $("#exportCars").attr("export");
+				targetPage = parseInt($("#curCars").attr("page")) - 1;
+				goQuery(key, targetPage);
 			}
 		}
 	);
@@ -78,17 +80,21 @@ $(document).ready(function () {
 	$("#nextCars").click(
 		function (){
 			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
-			$("#tableCars tbody").html("");
-			ajaxQueryCars(parseInt($("#curCars").attr("page")) + 1);
-		}
+				$(".tableCars tbody").html("");
+				key = $("#exportCars").attr("export");
+				targetPage = parseInt($("#curCars").attr("page")) + 1;
+				goQuery(key, targetPage);
+			}
 		}
 	);
 
 	$("#firstCars").click(
 		function () {
 			if(parseInt($("#curCars").attr("page")) > 1){
-				$("#tableCars tbody").html("");
-				ajaxQueryCars(parseInt(1));
+				$(".tableCars tbody").html("");
+				key = $("#exportCars").attr("export");
+				targetPage = parseInt(1);
+				goQuery(key, targetPage);
 			}
 		}
 	);
@@ -97,8 +103,9 @@ $(document).ready(function () {
 		function () {
 			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
 				$("#tableCars tbody").html("");
+				key = $("#exportCars").attr("export");
 				totalPage = parseInt($("#totalCars").attr("total"))%20 === 0 ? parseInt($("#totalCars").attr("total"))/20 : parseInt($("#totalCars").attr("total"))/20 + 1;
-				ajaxQueryCars(parseInt(totalPage));
+				goQuery(key, totalPage);
 			}
 		}
 	)
@@ -143,6 +150,22 @@ $(document).ready(function () {
     		default:
     			break;
     	} 
+    }
+
+    function goQuery (key, targetPage) {
+    	switch(key){
+    		case "orderCars" :
+    			ajaxQueryCars(targetPage);
+    			break;
+    		case "nodeCars" :
+    			ajaxQueryNodeCars(targetPage);
+    			break;
+    		case "balanceCars" :
+    			ajaxQueryBalanceCars(targetPage);
+    			break;
+    		default:
+    			break;
+    	}
     }
 
 

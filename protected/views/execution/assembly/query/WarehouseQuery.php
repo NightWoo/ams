@@ -139,7 +139,7 @@
                     </div>
                     <div id="tabContent" class="tab-content">
                         <div class="tab-pane" id="tabOrderCars">
-                            <table id="tableOrderCars" class="table table-bordered detailTable">
+                            <table id="tableOrderCars" class="table table-bordered detailTable tableCars">
                                 <thead>
                                     <tr>
                                     	<th>车道</th>
@@ -163,7 +163,7 @@
                         </div>
 
                         <div class="tab-pane" id="tabNodeCars">
-                            <table id="tableNodeCars" class="table table-bordered detailTable">
+                            <table id="tableNodeCars" class="table table-bordered detailTable tableCars">
                                 <thead>
                                     <tr>
                                         <th>流水号</th>
@@ -185,7 +185,7 @@
                         </div>
 
                         <div class="tab-pane active" id="tabBalanceCars">
-                            <table id="tableBalanceCars" class="table table-bordered detailTable">
+                            <table id="tableBalanceCars" class="table table-bordered detailTable tableCars">
                                 <thead>
                                     <tr>
                                         <th>流水号</th>

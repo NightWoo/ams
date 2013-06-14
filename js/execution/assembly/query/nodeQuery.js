@@ -433,8 +433,21 @@ function getSeriesChecked () {
 			case "NCA" :
 				setTableNCA(data);
 				break;
+			case "Light" :
+				setTableLight(data);
+				break;
+			case "Slide" :
+				setTableSlide(data);
+				break;
+			case "Brake" :
+				setTableBrake(data);
+				break;
+			case "Speed" :
+				setTableSpeed(data);
+				break;
 			case "Gas" :
 				setTableGas(data);
+				break;
 			default: 
 				break;
 		}
@@ -458,6 +471,100 @@ function getSeriesChecked () {
 			$("#tableNCA tbody").append(tr);
 		})
 		$("#tableNCA").show();
+	}
+
+	function setTableLight(data) {
+		$("#tableLight tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html(value.LM_Inten).appendTo(tr);
+			$("<td />").html(value.LM_UDAngle).appendTo(tr);
+			$("<td />").html(value.LM_LRAngle).appendTo(tr);
+			$("<td />").html(value.LM_Height).appendTo(tr);
+			$("<td />").html(value.LM_Flag).appendTo(tr);
+			$("<td />").html(value.LL_Inten).appendTo(tr);
+			$("<td />").html(value.LL_UDAngle).appendTo(tr);
+			$("<td />").html(value.LL_LRAngle).appendTo(tr);
+			$("<td />").html(value.LL_Height).appendTo(tr);
+			$("<td />").html(value.LL_Flag).appendTo(tr);
+			$("<td />").html(value.RM_Inten).appendTo(tr);
+			$("<td />").html(value.RM_UDAngle).appendTo(tr);
+			$("<td />").html(value.RM_LRAngle).appendTo(tr);
+			$("<td />").html(value.RM_Height).appendTo(tr);
+			$("<td />").html(value.RM_Flag).appendTo(tr);
+			$("<td />").html(value.RL_Inten).appendTo(tr);
+			$("<td />").html(value.RL_UDAngle).appendTo(tr);
+			$("<td />").html(value.RL_LRAngle).appendTo(tr);
+			$("<td />").html(value.RL_Height).appendTo(tr);
+			$("<td />").html(value.RL_Flag).appendTo(tr);
+			$("<td />").html(value.Light_Flag).appendTo(tr);
+			$("#tableLight tbody").append(tr);
+		})
+		$("#tableLight").show();
+	}
+
+	function setTableSlide(data) {
+		$("#tableSlide tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html(value.Slide).appendTo(tr);
+			$("<td />").html(value.Slide_Flag).appendTo(tr);
+			$("#tableSlide tbody").append(tr);
+		})
+		$("#tableSlide").show();
+	}
+
+	function setTableBrake(data) {
+		$("#tableBrake tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html(value.AxleWeight_F).appendTo(tr);
+			$("<td />").html(value.Brake_FL).appendTo(tr);
+			$("<td />").html(value.Brake_FR).appendTo(tr);
+			$("<td />").html(value.BrakeSumPer_F).appendTo(tr);
+			$("<td />").html(value.BrakeDiffPer_F).appendTo(tr);
+			$("<td />").html(value.BrakeResistance_FL).appendTo(tr);
+			$("<td />").html(value.BrakeResistance_FR).appendTo(tr);
+			$("<td />").html(value.BrakeFlag_F).appendTo(tr);
+			$("<td />").html(value.AxleWeight_R).appendTo(tr);
+			$("<td />").html(value.Brake_RL).appendTo(tr);
+			$("<td />").html(value.Brake_RR).appendTo(tr);
+			$("<td />").html(value.BrakeSumPer_R).appendTo(tr);
+			$("<td />").html(value.BrakeDiffPer_R).appendTo(tr);
+			$("<td />").html(value.BrakeResistance_RL).appendTo(tr);
+			$("<td />").html(value.BrakeResistance_RR).appendTo(tr);
+			$("<td />").html(value.BrakeFlag_R).appendTo(tr);
+			$("<td />").html(value.BrakeSum).appendTo(tr);
+			$("<td />").html(value.BrakeSumPer).appendTo(tr);
+			$("<td />").html(value.BrakeSum_Flag).appendTo(tr);
+			$("<td />").html(value.ParkSum).appendTo(tr);
+			$("<td />").html(value.ParkSumPer).appendTo(tr);
+			$("<td />").html(value.ParkSum_Flag).appendTo(tr);
+			$("<td />").html(value.Brake_Flag).appendTo(tr);
+			$("#tableBrake tbody").append(tr);
+		})
+		$("#tableBrake").show();
+	}
+
+	function setTableSpeed(data) {
+		$("#tableSpeed tbody").html("");
+		$.each(data, function(index, value){
+			tr = $("<tr />");
+			$("<td />").html(value.series_name).appendTo(tr);
+			$("<td />").html(value.vin).appendTo(tr);
+			$("<td />").html("40").appendTo(tr);
+			$("<td />").html(value.SpeedValue).appendTo(tr);
+			$("<td />").html(value.SpeedInaccuracy).appendTo(tr);
+			$("<td />").html(value.Speed_Flag).appendTo(tr);
+			$("#tableSpeed tbody").append(tr);
+		})
+		$("#tableSpeed").show();
 	}
 
 	function setTableGas(data) {

@@ -871,6 +871,99 @@ class ExecutionController extends BmsBaseController
                         $content .= "\n";
                     }
                     break;
+                
+                case "Light":
+                    $content = "单位：发光强度(cd)、上下/左右偏角(cm/10m)、照射高度(cm)\n";
+                    $content .= "carID,车系,VIN,左远发光强度,左远上下偏角,左远左右偏角,左远照射高度,左远评价,左近发光强度,左近上下偏角,左近左右偏角,左近照射高度,左近评价,右远发光强度,右远上下偏角,右远左右偏角,右远照射高度,右远评价,右近发光强度,右近上下偏角,右近左右偏角,右近照射高度,右近评价,总评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "{$data['LM_Inten']},";
+                        $content .= "{$data['LM_UDAngle']},";
+                        $content .= "{$data['LM_LRAngle']},";
+                        $content .= "{$data['LM_Height']},";
+                        $content .= "{$data['LM_Flag']},";
+                        $content .= "{$data['LL_Inten']},";
+                        $content .= "{$data['LL_UDAngle']},";
+                        $content .= "{$data['LL_LRAngle']},";
+                        $content .= "{$data['LL_Height']},";
+                        $content .= "{$data['LL_Flag']},";
+                        $content .= "{$data['RM_Inten']},";
+                        $content .= "{$data['RM_UDAngle']},";
+                        $content .= "{$data['RM_LRAngle']},";
+                        $content .= "{$data['RM_Height']},";
+                        $content .= "{$data['RM_Flag']},";
+                        $content .= "{$data['RL_Inten']},";
+                        $content .= "{$data['RL_UDAngle']},";
+                        $content .= "{$data['RL_LRAngle']},";
+                        $content .= "{$data['RL_Height']},";
+                        $content .= "{$data['RL_Flag']},";
+                        $content .= "{$data['Light_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
+
+                case "Slide":
+                    $content = "carID,车系,VIN,侧滑(m/km),评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "{$data['Slide']},";
+                        $content .= "{$data['Slide_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
+
+                case "Brake":
+                    $content = "carID,车系,VIN,前轴轴荷(×10N),前轴左制动力(×10N),前轴右制动力(×10N),前轴和(%),前轴差(%),前轴左阻滞(%),前轴右阻滞(%),前轴阻滞评价,前轴评价,后轴轴荷(×10N),后轴左制动力(×10N),后轴右制动力(×10N),后轴和(%),后轴差(%),后轴左阻滞(%),后轴右阻滞(%),后轴阻滞评价,后轴评价,整车制动力(×10N),整车和(%),整车评价,驻车制动力(×10N),驻车和(%),驻车评价,总评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "{$data['AxleWeight_F']},";
+                        $content .= "{$data['Brake_FL']},";
+                        $content .= "{$data['Brake_FR']},";
+                        $content .= "{$data['BrakeSumPer_F']},";
+                        $content .= "{$data['BrakeDiffPer_F']},";
+                        $content .= "{$data['BrakeResistance_FL']},";
+                        $content .= "{$data['BrakeResistance_FR']},";
+                        $content .= "{$data['BrakeResistanceFlag_F']},";
+                        $content .= "{$data['BrakeFlag_F']},";
+                        $content .= "{$data['AxleWeight_R']},";
+                        $content .= "{$data['Brake_RL']},";
+                        $content .= "{$data['Brake_RR']},";
+                        $content .= "{$data['BrakeSumPer_R']},";
+                        $content .= "{$data['BrakeDiffPer_R']},";
+                        $content .= "{$data['BrakeResistance_RL']},";
+                        $content .= "{$data['BrakeResistance_RR']},";
+                        $content .= "{$data['BrakeResistanceFlag_R']},";
+                        $content .= "{$data['BrakeFlag_R']},";
+                        $content .= "{$data['BrakeSum']},";
+                        $content .= "{$data['BrakeSumPer']},";
+                        $content .= "{$data['BrakeSum_Flag']},";
+                        $content .= "{$data['ParkSum']},";
+                        $content .= "{$data['ParkSumPer']},";
+                        $content .= "{$data['ParkSum_Flag']},";
+                        $content .= "{$data['Brake_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
+
+                case "Speed":
+                    $content = "carID,车系,VIN,标称值(km/h),实测值(km/h),误差(±),评价\n";
+                    foreach($datas as $data) {
+                        $content .= "{$data['car_id']},";
+                        $content .= "{$data['series_name']},";
+                        $content .= "{$data['vin']},";
+                        $content .= "40,";
+                        $content .= "{$data['SpeedValue']},";
+                        $content .= "{$data['SpeedInaccuracy']},";
+                        $content .= "{$data['Speed_Flag']},";
+                        $content .= "\n";
+                    }
+                    break;
 
                 case "Gas":
                     $content = "carID,车系,VIN,低怠速HC(ppm),低怠速CO(%),低怠速评价,高怠速HC(ppm),高怠速CO(%),高怠速评价,总评价\n";

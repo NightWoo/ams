@@ -196,6 +196,125 @@
                                 </tbody>
                             </table>
 
+                            <table id="tableLight" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <td colspan="29" >
+                                            单位：发光强度(cd)、上下/左右偏角(cm/10m)、照射高度(cm)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="3">车系</th>
+                                        <th rowspan="3">VIN</th>
+                                        <th colspan="10">左灯</th>
+                                        <th colspan="10">右灯</th>
+                                        <th rowspan="3">总评</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5">远光</th>
+                                        <th colspan="5">近光</th>
+                                        <th colspan="5">远光</th>
+                                        <th colspan="5">近光</th>
+                                    </tr>
+                                    <tr>
+                                        <th>光强(</th>
+                                        <th>上下</th>
+                                        <th>左右</th>
+                                        <th>高度</th>
+                                        <th>评价</th>
+                                        <th>光强(</th>
+                                        <th>上下</th>
+                                        <th>左右</th>
+                                        <th>高度</th>
+                                        <th>评价</th>
+                                        <th>光强(</th>
+                                        <th>上下</th>
+                                        <th>左右</th>
+                                        <th>高度</th>
+                                        <th>评价</th>
+                                        <th>光强(</th>
+                                        <th>上下</th>
+                                        <th>左右</th>
+                                        <th>高度</th>
+                                        <th>评价</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
+                            <table id="tableSlide" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <th>车系</th>
+                                        <th>VIN</th>
+                                        <th>侧滑(m/km)</th>
+                                        <th>评价</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
+                            <table id="tableBrake" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">车系</th>
+                                        <th rowspan="2">VIN</th>
+                                        <th colspan="8">前轴</th>
+                                        <th colspan="8">后轴</th>
+                                        <th colspan="3">整车</th>
+                                        <th colspan="3">驻车</th>
+                                        <th rowspan="2">总评</th>
+                                    </tr>
+                                    <tr>
+                                        <th>轴荷(×10N)</th>
+                                        <th>左(×10N)</th>
+                                        <th>右(×10N)</th>
+                                        <th>和(%)</th>
+                                        <th>差(%)</th>
+                                        <th>左阻滞(%)</th>
+                                        <th>右阻滞(%)</th>
+                                        <th>评价</th>
+                                        <th>轴荷(×10N)</th>
+                                        <th>左(×10N)</th>
+                                        <th>右(×10N)</th>
+                                        <th>和(%)</th>
+                                        <th>差(%)</th>
+                                        <th>左阻滞(%)</th>
+                                        <th>右阻滞(%)</th>
+                                        <th>评价</th>
+                                        <th>总制动力(×10N)</th>
+                                        <th>和(%)</th>
+                                        <th>评价</th>
+                                        <th>总制动力(×10N)</th>
+                                        <th>和(%)</th>
+                                        <th>评价</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
+                            <table id="tableSpeed" class="table table-bordered table-condensed tableTestline">
+                                <thead>
+                                    <tr>
+                                        <th>车系</th>
+                                        <th>VIN</th>
+                                        <th>标称值(km/h)</th>
+                                        <th>实测值(km/h)</th>
+                                        <th>误差(±)</th>
+                                        <th>评价</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+
                             <table id="tableGas" class="table table-bordered table-condensed tableTestline">
                                 <thead>
                                     <tr>
@@ -203,7 +322,7 @@
                                         <th rowspan="2">VIN</th>
                                         <th colspan="3">低怠速</th>
                                         <th colspan="3">高怠速</th>
-                                        <th rowspan="2">总评价</th>
+                                        <th rowspan="2">总评</th>
                                     </tr>
                                     <tr>
                                         <th>HC(ppm)</th>
