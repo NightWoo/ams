@@ -363,10 +363,11 @@ class OrderController extends BmsBaseController
 	public function actionGetCarStandby() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			$driverId = $this->validateIntVal('driverId', 0); 
+			$driverId = $this->validateIntVal('driverId', 0);
+			$standbyArea = $this->validateIntVal('standbyArea', 0);
 			$curDate = DateUtil::getCurDate();
 			$order = new Order;
-			$data = $order->getCarStandby($curDate);
+			$data = $order->getCarStandby($curDate, $standbyArea);
 
 			$car = Car::create($data['vin']);
 			$car->throwMarkPrintData();

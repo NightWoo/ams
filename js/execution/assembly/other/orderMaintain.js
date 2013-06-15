@@ -285,7 +285,11 @@ $("document").ready(function() {
 					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						// $("<td />").html(value.order_detail_id).appendTo(tr);
-						tdCheck =  "<input class='choose' type='checkbox' checked='checked' />";
+						if(value.amount>0){
+							tdCheck =  "<input class='choose' type='checkbox' checked='checked' />";
+						} else {
+							tdCheck =  "<input class='choose' type='checkbox' disabled/>";
+						}
 						$("<td />").html(tdCheck).appendTo(tr);
 						distributor = value.distributor
 						$("<td />").html(distributor).appendTo(tr);

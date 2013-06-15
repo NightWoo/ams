@@ -190,10 +190,10 @@
 
 				    		<div id="extraArea" class="">
 	      					    <dl class="dl-horizontal">
-								    <dt>27#厂房</dt><dd class="area-h">-</dd>
-								    <dt>特殊区X</dt><dd class="area-x">-</dd>
-								    <!-- <dt>临时区Y</dt><dd class="area-y">-</dd>
-								    <dt>临时区Z</dt><dd class="area-z">-</dd> -->
+								    <dt>X</dt><dd class="area-x">-</dd>
+								    <dt>27#H</dt><dd class="area-h">-</dd>
+								    <dt>27#Z</dt><dd class="area-z">-</dd>
+								    <dt>35#Y</dt><dd class="area-y">-</dd>
 							    </dl>
 		      				</div>
 

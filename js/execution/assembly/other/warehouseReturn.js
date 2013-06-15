@@ -7,10 +7,10 @@ $("document").ready(function() {
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: CHECKOUT_VALIDATE,		//借用出库的校验
+		    url: WAREHOUSE_RETURN_VALIDATE,		
 		    data: {
 		    	"vin": $('#vinText').val(),
-		    	"currentNode": "WAREHOUSE_RETURN",		//借用出库的校验
+		    	"currentNode": "WAREHOUSE_RETURN",		
 		    },	
 		    success: function(response){
 			    if(response.success){

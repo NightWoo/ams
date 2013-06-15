@@ -102,6 +102,9 @@ var CHECKOUT_VALIDATE = "/bms/car/validateNode";
 //var CHECKOUT_SUBMIT = "/bms/execution/enterCO";
 var CHECKOUT_SUBMIT = "/bms/execution/warehouseCheckout";
 
+var WAREHOUSE_LABEL_VALIDATE = "/bms/car/validateWarehouseLabel";
+var WAREHOUSE_LEBEL_PRINT = "/bms/execution/getWarehouseLabel"; 
+
 var WAREHOUSE_CHECKIN_QUERY = "/bms/warehouse/checkinDetail";
 var WAREHOUSE_CHECKIN_EXPORT = "/bms/warehouse/exportCheckinDetail";
 var WAREHOUSE_CHECKOUT_QUERY = "/bms/warehouse/checkoutDetail";

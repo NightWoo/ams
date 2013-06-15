@@ -7,7 +7,7 @@
 	margin-bottom: 10px;
 }
 
-#cardNumber {
+#cardNumber,#vinText {
 	height: 50px;
 	width: 450px;
 	font-size: 40px;
@@ -32,7 +32,7 @@
     padding-left: 0;
 }
 
- #hint{
+ #vinHint{
 	font-size: 23px;
 	line-height: 40px;
 }

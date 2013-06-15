@@ -88,6 +88,7 @@ $("document").ready(function() {
 					resetPage();
 				}
 				else{
+					resetPage();
 					fadeMessageAlert(response.message,"alert-error");
 				}
 			},

@@ -36,10 +36,6 @@ class Warehouse
 		if(empty($row)) {
 			//查找空车列，并生成同型车列
 			$voidRow = WarehouseAR::model()->find("status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC", array($car->series, $car->special_property));
-			//E区是F0、6B混合区
-			// if(empty($voidRow) && ($car->series === 'F0' || $car->series === '6B')){
-			// 	$voidRow = WarehouseAR::model()->find("status=0 AND quantity=0 AND area='E' AND series='' AND special_property=? AND free_seat>0 ORDER BY id ASC", array($car->special_property));
-			// } 
 
 			if(!empty($voidRow) && !empty($orderConfigId)){
 				$row = $voidRow;
@@ -49,7 +45,7 @@ class Warehouse
 				$row->order_config_id = $orderConfigId;
 				$row->save();
 			} else {
-				//如果连空车列都没有就扔到周转区Z
+				//根据特殊属性找到合适车列
 				if($car->special_property == 1){
 					// $row = WarehouseAR::model()->find('area=? AND series=?', array('G', ''));
 					$row = WarehouseAR::model()->findByPk(200);
@@ -75,7 +71,7 @@ class Warehouse
 			$row->save();
 			
 			//原库位数量减1
-			if($car->warehouse_id>200){
+			if($car->warehouse_id>900){
 				$oldRow = WarehouseAR::model()->findByPk($car->warehouse_id);
 				$oldRow->quantity -=1;
 				$oldRow->save();

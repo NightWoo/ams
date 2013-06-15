@@ -122,7 +122,10 @@ class Order
 		if(!empty($order)) {
 			$order->is_locked = 1;
 			$order->hold += 1;
-			$order->save();
+			$saveSuccess = $order->save();
+			if(!$saveSuccess){
+				throw new Exception('匹配订单处于占用状态，占用而匹配失败，请稍后重试');
+			}
 
 			if($order->hold == $order->amount && $order->standby_finish_time == '0000-00-00 00:00:00'){
 				$order->standby_finish_time = date("YmdHis");
@@ -142,7 +145,7 @@ class Order
 		return array($success, $data);
 	}
 
-	public function getCarStandby($standbyDate) {
+	public function getCarStandby($standbyDate, $standbyArea=0) {
 		//$matchedOrder = new OrderAR;
 		$data = array();
 
@@ -154,7 +157,17 @@ class Order
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         		$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND warehouse_id<=200 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        		switch($standbyArea){
+        			case 0 :
+        				$matchCondition = "warehouse_id>1 AND warehouse_id<300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        				break;
+        			case 35 :	
+						$matchCondition = "warehouse_id>=600 AND warehouse_id<700 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+						break;
+					default :
+        				$matchCondition = "warehouse_id>1 AND warehouse_id<300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        		}
+
 				if($order['order_type'] === '出口'){
 					$matchCondition .= " AND special_property=1 AND (UPPER(special_order)='{$order['order_number']}' OR UPPER(remark) LIKE '%{$order['order_number']}%')";
 				}
@@ -185,7 +198,11 @@ class Order
 
 				$matchedOrder->hold += 1;
 				$matchedOrder->is_locked = 1;
-				$matchedOrder->save();
+				$saveSuccess = $matchedOrder->save();
+				if(!$saveSuccess){
+					throw new Exception('备车因订单占用而匹配失败，请稍后重试');
+				}
+
 				if($matchedOrder->hold == $matchedOrder->amount){
 					$matchedOrder->standby_finish_time = date('YmdHis');
 				}

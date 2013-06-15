@@ -1561,6 +1561,38 @@ class Car
 		return $result;
 	}
 
+	public function getWarehouseLabel(){
+		$data = $this->car->getAttributes();
+		$data['row'] = '---';
+		$data['driver_name'] = '';
+        $data['order_number'] = '-------------------';
+		$data['lane'] = '--';
+		if(!empty($data['order_id'])){
+			$order = OrderAR::model()->findByPk($data['order_id']);
+			$data['order_number'] = $order->order_number;
+			$data['distributor_name'] = $order->distributor_name;
+			if(!empty($order->lane_id)){
+				$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
+			}
+		}
+		if($data['warehouse_id'] == 1){
+			$trace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,96));
+			if(!empty($trace)){
+				$driverId = $trace->driver_id;
+				if(!empty($driverId)) {$data['driver_name'] = '-'. User::model()->findByPk($driverId)->display_name;}
+			}
+			if(!empty($data['old_wh_id'])){
+				$data['row'] = WarehouseAR::model()->findByPk($data['old_wh_id'])->row;
+			}else{
+				$data['row'] = 'WDI';
+			}
+		} else if($data['warehouse_id'] > 1){
+			$data['row'] = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+		}
+
+		return $data;
+	}
+
 	private function cutCarType($type) {
 		$length = strlen($type);
         $typeName = '';

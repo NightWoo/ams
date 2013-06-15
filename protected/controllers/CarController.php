@@ -171,8 +171,28 @@ class CarController extends BmsBaseController
             
             $car = Car::create($vin);
             //$car->leftNode($leftNode->name);
-            if($car->car->warehouse_time='0000-00-00 00:00:00'){
+            if($car->car->warehouse_time === '0000-00-00 00:00:00'){
                 throw new Exception($vin . '未入库，无法操作退回');
+            }
+            
+            $data = $car->car;
+            if(!empty($data['warehouse_id'])){
+                $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+                $data['status'] .= '_' . $row ;
+            }
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
+    public function actionValidateWarehouseLabel() {
+        $vin = $this->validateStringVal('vin', '');
+        try{            
+            $car = Car::create($vin);
+            if($car->car->warehouse_time == '0000-00-00 00:00:00'){
+                throw new Exception($vin . '未入库，无法打印标贴');
             }
             
             $data = $car->car;

@@ -71,6 +71,7 @@ $(document).ready(function() {
 			data: {
 				//"standbyDate": workDate(),
 				"driverId" : $("#cardNumber").attr("driverid"),
+				"standbyArea" : $("#standbyArea").val(),
 			},
 			async:false,
 			success: function(response) {
@@ -94,6 +95,7 @@ $(document).ready(function() {
 					window.print();
 					resetPage();
 				} else {
+					resetPage();
 					fadeMessageAlert(response.message,"alert-error");
 				}
 			},

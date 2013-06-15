@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>出库备车</title>
+		<title>35#厂房备车</title>
     	<!-- Le styles -->
     	<link rel="stylesheet" type="text/css" href="/bms/css/bootstrap.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="/bms/css/execution/assembly/dataInput/OutStandby.css" media="screen">
@@ -36,10 +36,10 @@
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
-		            	<legend>备车
-		            		<span class="pull-right">
-		            			<a href="/bms/execution/warehouseLabel"><i class="icon-link"></i>&nbsp;成品库标签</a>
-		            		</span>
+		            	<legend>35#厂房备车
+		            		<!-- <span class="pull-right">
+		            			<a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit"><i class="icon-link"></i>&nbsp;出成品库</a>
+		            		</span> -->
 		            	</legend>
 		            </div>
 					<div><!-- 内容主体 -->
@@ -48,9 +48,9 @@
 								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">
 							</div>
-							<input type="button" class="btn btn-primary" id='btnSubmit' value='备车'>
+							<input type="button" class="btn btn-warning" id='btnSubmit' value='35#厂房备车'>
 							<input type="button" class="btn" id ="reset" value ="清空">
-							<input type="hidden" id='standbyArea' name='standbyArea' value="0"></input>
+							<input type="hidden" id='standbyArea' name='standbyArea' value="35"></input>
 							<span class="help-inline" id="hint">未获得任何可备车辆</span>
 							<div class="help-inline" id="carInfo">
 								<span class="label label-info" rel="tooltip" title="车列" id="rowInfo"></span>

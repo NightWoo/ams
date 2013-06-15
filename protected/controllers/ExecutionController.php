@@ -738,6 +738,19 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionGetWarehouseLabel() {
+        try {
+            $vin = $this->validateStringVal('vin', '');
+
+            $car = Car::create($vin);
+            $data = $car->getWarehouseLabel();
+
+            $this->renderJsonBms(true, '打印成功', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
     public function actionCarAccessSubmit() {
         $transaction = Yii::app()->db->beginTransaction();
         try {
@@ -1161,6 +1174,14 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  
+    }
+
+    public function actionOutStandby35() {
+        $this->render('assembly/dataInput/OutStandby35');  
+    }
+
+    public function actionWarehouseLabel() {
+        $this->render('assembly/dataInput/WarehouseLabel');  
     }
 	
 	public function actionWarehouseRelocate() {
