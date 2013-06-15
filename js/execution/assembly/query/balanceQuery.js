@@ -240,15 +240,43 @@ $(document).ready(function () {
 			},
 			dataType: "json",
 			success: function (response) {
-				balanceQuery.distribute.ajaxData = response.data;
-				balanceQuery.distribute.updateDistributeTable();
-				$("#tableCarsDistribute").show();
-				$("#columnContainer").hide();
+				if(response.success){
+					balanceQuery.distribute.ajaxData = response.data;
+					balanceQuery.distribute.updateDistributeTable();
+					$("#tableCarsDistribute").show();
+					$("#columnContainer").hide();
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function(){
+				alertError();
+			}
+		})
+	}
+
+	function ajaxQueryCars(orderConfigId,coldResistant,color) {
+		$.ajax({
+			url: SHOW_BALANCE_CARS,
+			type: "get",
+			dataType: "json",
+			success: function (response) {
+				if(response.success){
+
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function(){
+				alertError();
 			}
 		})
 	}
 	
-
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });
 //-------------------END ajax query -----------------------
 
 });
@@ -408,14 +436,25 @@ $(document).ready(function () {
 			$.each(detail, function (index, value) {
 				$("<td />").html(value.color).appendTo(colorTr);
 				$.each(configName, function (index, configName) {
-					$("<td />").html(value[configName]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+					aCount = $("<a />").addClass("queryCars").attr("rel", "tooltip").attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", value.color);
+					aCount.html(value[configName]['count']);
+					aCount.attr("orderConfigId", value[configName]['orderConfigId']);
+					aCount.attr("coldResistant", value[configName]['coldResistant']);
+					aCount.attr("color", value.color);
+					$("<td />").html(aCount).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
 				});
 			});
 
 			//config total
 			$("<td />").html('总计').appendTo(colorTr)
 			$.each(configName, function (index, configName) {
-				$("<td />").html(configTotal[configName]).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
+				aCount = $("<a />").addClass("queryCars").attr("rel", "tooltip").attr("data-toggle", "tooltip").attr("data-placement", "top");
+				aCount.html(configTotal[configName]['count']);
+				aCount.attr("orderConfigId", configTotal[configName]['orderConfigId']);
+				aCount.attr("coldResistant", configTotal[configName]['coldResistant']);
+				aCount.attr("color", "");
+				console.log(aCount.attr("color"));
+				$("<td />").html(aCount).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
 			});
 
 			//color total

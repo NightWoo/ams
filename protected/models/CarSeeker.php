@@ -267,7 +267,9 @@ class CarSeeker
 		$configTotal = array();
 		foreach($configColdArray as $configCold){
 			$configNameArray[] = $configCold['name']; 
-			$configTotal[$configCold['name']] = 0;
+			$configTotal[$configCold['name']]['count'] = 0;
+			$configTotal[$configCold['name']]['orderConfigId'] = $configCold['order_config_id'];
+			$configTotal[$configCold['name']]['coldResistant'] = $configCold['cold_resistant'];
 		}
 		$dataPie = array();
 
@@ -287,9 +289,12 @@ class CarSeeker
 				if(!empty($configCount)){					
 					$drilldownCategories[] = $configCold['name'];
 					$drilldownData[] = $configCount;					
-					$configTotal[$configCold['name']] += $configCount;
+					$configTotal[$configCold['name']]['count'] += $configCount;
 				}
-				$temp[$configCold['name']] = $configCount;
+				// $temp[$configCold['name']] = $configCount;
+				$temp[$configCold['name']]['count'] = $configCount;
+				$temp[$configCold['name']]['orderConfigId'] = $configCold['order_config_id'];
+				$temp[$configCold['name']]['coldResistant'] = $configCold['cold_resistant'];
 
 			}
 			$data['drilldown'] = array(
@@ -339,12 +344,16 @@ class CarSeeker
 		foreach($cars as &$car){
 			$car['type_info'] = $car['car_model'] . "/" . $car['order_config_name'];
 			if($car['cold_resistant'] == 1){
-				$car['type_info'] .= "/耐寒型";
+				$car['type_info'] .= "/耐寒";
 			} else {
 				$car['type_info'] .= "/非耐寒";
 			}
 		}
 		return $cars;
+	}
+
+	public function getBalanceCars($orderConfigId,$coldResistant,$color){
+		
 	}
 
 	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2) {

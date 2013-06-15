@@ -138,6 +138,7 @@ var BALANCE_Detail_QUERY ="/bms/car/queryBalanceDetail";
 var BALANCE_Detail_EXPORT ="/bms/car/exportBalanceDetail";
 var QUERY_BALANCE_ASSEMBLY = "/bms/car/queryBalanceAssembly";
 var QUERY_BALANCE_DISTRIBUTE = "/bms/car/queryBalanceDistribute";
+var SHOW_BALANCE_CARS = "/bms/car/showBalanceCars";
 var QUERY_TESTLINE_RECORDS  = "/bms/execution/queryTestlineRecords";
 var EXPORT_TESTLINE_RECORDS  = "/bms/execution/exportTestlineRecords";
 

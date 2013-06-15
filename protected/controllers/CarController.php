@@ -644,6 +644,19 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionShowBalanceCars() {
+        try{
+            $orderConfigId = $this->validateIntVal('orderConfigId', 0);
+            $coldResistant = $this->validateIntVal('coldResistant', 0);
+            $color = $this->validateIntVal('color', '');
+            $seeker = new CarSeeker();
+            $data = $seeker->getBalanceCars($orderConfigId,$coldResistant,$color);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionExportBalanceDetail() {
         $state = $this->validateStringVal('state', 'WH');
         $series = $this->validateStringVal('series', '');
