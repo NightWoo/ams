@@ -34,13 +34,13 @@ class Car
 	}
 
 	//fill extend info
-	public function matchPlan($date) {
+	public function matchPlan($date,$line) {
 		$configId = $this->car->config_id;
 		$carSeries = $this->car->series;		//added by wujun
 		$data = $this->car->attributes;
 
 		$planSeeker = new PlanSeeker();
-		$plans = $planSeeker->search($date, $carSeries, '', false ,true);
+		$plans = $planSeeker->search($date, $carSeries, $line, false ,true);
 	
 		$plansArray = array();
 		foreach($plans as $plan) {

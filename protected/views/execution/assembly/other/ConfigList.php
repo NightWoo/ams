@@ -63,12 +63,12 @@
 							<td>
 								<select id="node" class="input-medium">
 									<option value="" selected>所有节点</option>
-									<option value="3">A线_T11</option>
-									<option value="4">A线_T21</option>
-									<option value="5">A线_T32</option>
-									<option value="6">A线_C10</option>
-									<option value="7">A线_C21</option>
-									<option value="8">A线_F10</option>
+									<option value="3">I线_T11</option>
+									<option value="4">I线_T21</option>
+									<option value="5">I线_T32</option>
+									<option value="6">I线_C10</option>
+									<option value="7">I线_C21</option>
+									<option value="8">I线_F10</option>
 									<option value="15">路试完成</option>
 								</select>
 							</td>
@@ -136,12 +136,12 @@
 			    <div class="controls">
 			      	<select id="newNode" class="input-medium">
 						<option value="" selected>请选择</option>
-						<option value="3">A线_T11</option>
-						<option value="4">A线_T21</option>
-						<option value="5">A线_T32</option>
-						<option value="6">A线_C10</option>
-						<option value="7">A线_C21</option>
-						<option value="8">A线_F10</option>
+						<option value="3">I线_T11</option>
+						<option value="4">I线_T21</option>
+						<option value="5">I线_T32</option>
+						<option value="6">I线_C10</option>
+						<option value="7">I线_C21</option>
+						<option value="8">I线_F10</option>
 						<option value="15">路试完成</option>
 					</select>
 			    </div>
@@ -201,12 +201,12 @@
 			    <div class="controls">
 			      	<select id="editNode" class="input-medium">
 						<option value="" selected>请选择</option>
-						<option value="3">A线_T11</option>
-						<option value="4">A线_T21</option>
-						<option value="5">A线_T32</option>
-						<option value="6">A线_C10</option>
-						<option value="7">A线_C21</option>
-						<option value="8">A线_F10</option>
+						<option value="3">I线_T11</option>
+						<option value="4">I线_T21</option>
+						<option value="5">I线_T32</option>
+						<option value="6">I线_C10</option>
+						<option value="7">I线_C21</option>
+						<option value="8">I线_F10</option>
 						<option value="15">路试完成</option>
 					</select>
 			    </div>

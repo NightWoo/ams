@@ -314,7 +314,14 @@ class ExecutionController extends BmsBaseController
 			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
-			
+
+			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,13));
+            if(!empty($testlineTrace)){
+                $testlineTime = $testlineTrace->pass_time;
+                $shift='总装1线A班';
+                $vinMessage = $car->throwVinAssembly($car->vin, '检测线', $shift, $testlineTime);
+            }
+            
 			$vinMessage = $car->throwVinAssembly($car->vin, '路试');
 			
 			$fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);

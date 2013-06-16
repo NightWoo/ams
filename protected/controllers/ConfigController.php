@@ -169,13 +169,13 @@ class ConfigController extends BmsBaseController
 				throw new Exception('零部件不能为空');
 			}
 			if(empty($id)){
-				$exist = CarConfigListAR::model()->find('config_id=? AND component_id=?', array($configId, $componentId));
-				if(!empty($exist)){
-					throw new Exception('此零部件已经存在于本配置明细中');
-				} else {
+				// $exist = CarConfigListAR::model()->find('config_id=? AND component_id=?', array($configId, $componentId));
+				// if(!empty($exist)){
+				// 	throw new Exception('此零部件已经存在于本配置明细中');
+				// } else {
 					$configDetail = new CarConfigListAR;
 					$configDetail->create_time = date("YmdHis");
-				}
+				// }
 			} else {
 				$configDetail = CarConfigListAR::model()->findByPk($id);
 			}

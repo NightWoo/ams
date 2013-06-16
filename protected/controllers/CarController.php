@@ -226,7 +226,8 @@ class CarController extends BmsBaseController
     }
 
 	public function actionMatchPlan() {
-		$vin = $this->validateStringVal('vin', '');
+        $vin = $this->validateStringVal('vin', '');
+		$line = $this->validateStringVal('line', 'I');
         try{
             $car = Car::create($vin);
 			//$car->leftNode('PBS');
@@ -234,7 +235,7 @@ class CarController extends BmsBaseController
 			//“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
 			//
 			$curDate = DateUtil::getCurDate();
-            $data = $car->matchPlan($curDate);
+            $data = $car->matchPlan($curDate,$line);
             if($data['adapt_plan'] === false) {
                 throw new Exception($vin . '对应的车辆没匹配到合适的生产计划');
             }

@@ -103,8 +103,11 @@ $("document").ready(function() {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: T0_MATCH_PLAN,//ref:  /bms/js/service.js
-			data: {"vin": $('#vinText').attr("value"),
-				"currentNode": $('#currentNode').attr("value")},//vin and node
+			data: {
+				"vin": $('#vinText').attr("value"),
+				"currentNode": $('#currentNode').attr("value"),
+				"line" : $("#line").attr("value"),
+			},//vin and node
 			success: function(response) {
 				if(response.success){
 					$("#vinText").val(response.data.vin);		//added by wujun
