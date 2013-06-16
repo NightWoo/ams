@@ -602,6 +602,7 @@ class CarController extends BmsBaseController
         try{
             $state = $this->validateStringVal('state', 'WH');
             $series = $this->validateStringVal('series', '');
+            $area = $this->validateStringVal('area', '');
             $curPage = $this->validateIntVal('curPage', 1);
             $perPage = $this->validateIntVal('perPage', 20);
             
@@ -610,10 +611,11 @@ class CarController extends BmsBaseController
             if($state === 'WHin'){
                 $whAvailableOnly = true;
             }
-            list($total, $data) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage, $whAvailableOnly);
+            list($total, $data, $areaArray) = $seeker->queryBalanceDetail($state, $series, $curPage, $perPage, $whAvailableOnly, $area);
             $ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
                         'data' => $data,
+                        'areaArray' =>$areaArray,
                     );
             $this->renderJsonBms(true, 'OK', $ret);
         } catch(Exception $e) {
@@ -646,11 +648,16 @@ class CarController extends BmsBaseController
 
     public function actionShowBalanceCars() {
         try{
+            $state = $this->validateStringVal('state', 'WH');
             $orderConfigId = $this->validateIntVal('orderConfigId', 0);
             $coldResistant = $this->validateIntVal('coldResistant', 0);
-            $color = $this->validateIntVal('color', '');
+            $color = $this->validateStringVal('color', '');
             $seeker = new CarSeeker();
-            $data = $seeker->getBalanceCars($orderConfigId,$coldResistant,$color);
+            $whAvailableOnly = false;
+            if($state === 'WHin'){
+                $whAvailableOnly = true;
+            }
+            $data = $seeker->getBalanceCars($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e){
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -660,13 +667,14 @@ class CarController extends BmsBaseController
     public function actionExportBalanceDetail() {
         $state = $this->validateStringVal('state', 'WH');
         $series = $this->validateStringVal('series', '');
+        $area = $this->validateStringVal('area', '');
         try{
             $seeker = new CarSeeker();
             $whAvailableOnly = false;
             if($state === 'WHin'){
                 $whAvailableOnly = true;
             }
-            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0, $whAvailableOnly);
+            list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0, $whAvailableOnly, $area);
             
             $title = "carID,流水号,VIN,车系,颜色,车型,车型/配置,耐寒性,状态,下线时间,入库时间,特殊订单号,备注,库区\n";
             $content = "";

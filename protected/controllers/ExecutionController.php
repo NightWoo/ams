@@ -1235,14 +1235,17 @@ class ExecutionController extends BmsBaseController
             // $vin = $this->validateStringVal('vin', '');
             // $car = Car::create($vin);
             // $ret = $car->getIRemoteTestResult();
-            $view = 'NCA';
-            $dateCol = $view . "_CheckDate";
-            $stime = '2013-03-29 02:25:46';
-            $etime = '2013-04-03 14:07:06';
-            $sql = "SELECT * FROM $view WHERE $dateCol>='$stime' AND $dateCol<='$etime'";
-            $ret = Yii::app()->dbTest->createCommand($sql)->queryAll();
+            // $view = 'NCA';
+            // $dateCol = $view . "_CheckDate";
+            // $stime = '2013-03-29 02:25:46';
+            // $etime = '2013-04-03 14:07:06';
+            // $sql = "SELECT * FROM $view WHERE $dateCol>='$stime' AND $dateCol<='$etime'";
+            // $ret = Yii::app()->dbTest->createCommand($sql)->queryAll();
 
-			$this->renderJsonBms(true, $ret , $ret);
+            $my_array = array("a" => "Dog", "c" => "Horse", "b" => "Cat");
+            $ret =ksort($my_array);
+
+			$this->renderJsonBms(true, $my_array , $my_array);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

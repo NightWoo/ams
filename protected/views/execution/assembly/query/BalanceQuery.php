@@ -103,17 +103,22 @@
                         </ul>
                     </div>
                     <div id="tabContent" class="tab-content">
-                        <div class="tab-pane  active" id="dataList">
+                        <div class="tab-pane" id="dataList">
                             <table id="resultTable" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>车系</th>
+                                        <th>流水号</th>
                                         <th>VIN</th>
-                                        <th>颜色</th>
+                                        <th>车系</th>
                                         <th>车型/配置</th>
                                         <th>耐寒性</th>
+                                        <th>颜色</th>
                                         <th>状态</th>
-                                        <th>库区</th>
+                                        <th>
+                                            <select id="area" class="input-mini">
+                                                <option value=''>库区</option>
+                                            </select>
+                                        </th>
                                         <th>下线时间</th>
                                         <th>入库时间</th>
                                     </tr>
@@ -178,5 +183,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal" id="carsModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4>-</h4>
+            </div>
+            <div class="modal-body">
+
+                <table id="resultCars" class="table table-condensed table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>流水号</th>
+                            <th>VIN</th>
+                            <th>车系</th>
+                            <th>车型/配置</th>
+                            <th>耐寒性</th>
+                            <th>颜色</th>
+                            <th>状态</th>
+                            <th>库区</th>
+                            <th>下线时间</th>
+                            <th>入库时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+
 	</body>
 </html>

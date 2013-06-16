@@ -98,12 +98,15 @@ $(document).ready(function () {
 
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
-		if(index<3)
+		if(index<3){
 			$("#paginationCars").hide();
-		if (index == 0)
+		}
+		if (index == 0){
+			$("#area").val("");
 			ajaxDetailQuery();
-		else if (index === 1)
+		}else if (index === 1){
 			carsDistribute();
+		}
 	});
 
 	$("#checkboxMerge").change(function () {
@@ -112,6 +115,24 @@ $(document).ready(function () {
 		} else {
 			ajaxQueryBalanceAssembly();
 		}
+	})
+
+	$(".queryCars").live("click", function(e){
+		orderConfigId = $(this).attr("orderConfigId");
+		coldResistant = $(this).attr("coldResistant");
+		color = $(this).attr("color");
+		headInfo =$("#selectState option:selected").html() + "-" + $("#selectSeries").val() + "-" + $(this).attr("configName");
+		if(color !=""){
+			headInfo = headInfo + "-" + color
+		}
+		$("#carsModal .modal-header h4").html(headInfo);
+		ajaxQueryCars(orderConfigId,coldResistant,color);
+		$("#carsModal").modal("show");
+
+	})
+
+	$("#area").change(function(){
+		ajaxDetailQuery();
 	})
 
 //-------------------END event bindings -----------------------
@@ -124,13 +145,15 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  */
 	function ajaxDetailQuery (targetPage) {
+		areaVal = $("#area").val();
 		$.ajax({
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: BALANCE_Detail_QUERY,//ref:  /bms/js/service.js
+		    url: BALANCE_DETAIL_QUERY,//ref:  /bms/js/service.js
 		    data: { 
 		    	"state" : $("#selectState").val(),
 		    	"series" : $("#selectSeries").val(),
+		    	"area" : areaVal,
 				"curPage":targetPage || 1,
 		    	"perPage":20,
 		    },
@@ -138,6 +161,7 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		$("#resultTable tbody").html("");
 		    		$.each(response.data.data,function (index,value) {
+		    			var serialTd = "<td>" + value.serial_number + "</td>";
 		    			var seriesTd = "<td>" + value.series + "</td>";
 		    			var vinTd = "<td>" + value.vin + "</td>";
 		    			var colorTd = "<td>" + value.color + "</td>";
@@ -147,36 +171,47 @@ $(document).ready(function () {
 		    			var rowTd = "<td>" + value.row + "</td>";
 		    			var finishTimeTd = "<td>" + value.finish_time + "</td>";
 		    			var warehouseTimeTd = "<td>" + value.warehouse_time + "</td>";
-		    			var tr = "<tr>" + seriesTd + vinTd + colorTd + typeInfoTd + 
-		    				coldTd + statusTd + rowTd + finishTimeTd + warehouseTimeTd + "</tr>";
+		    			var tr = "<tr>" + serialTd + vinTd + seriesTd + typeInfoTd + 
+		    				coldTd + colorTd + statusTd + rowTd + finishTimeTd + warehouseTimeTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();
 		    		});
 		    		//deal with pager
 		    		if(response.data.pager.curPage == 1) {
-		    			//$(".prePage").hide();
-							$("#preCars, #firstCars").addClass("disabled");
-							$("#preCars a, #firstCars a").removeAttr("href");
-						} else {
-		    				//$(".prePage").show();
-							$("#preCars, #firstCars").removeClass("disabled");
-							$("#preCars a, #firstCars a").attr("href","#");
-						}
-		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
-		    				//$(".nextPage").hide();
-							$("#nextCars, #lastCars").addClass("disabled");
-							$("#nextCars a, #lastCars a").removeAttr("href");
-						} else {
-		    				//$(".nextPage").show();
-							$("#nextCars, #lastCars").removeClass("disabled");
-							$("#nextCars a, #lastCars a").attr("href","#");
-						}
-						$("#curCars").attr("page", response.data.pager.curPage);
-						$("#curCars a").html(response.data.pager.curPage);
-						$("#totalCars").attr("total", response.data.pager.total);
-						$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
+	    			//$(".prePage").hide();
+						$("#preCars, #firstCars").addClass("disabled");
+						$("#preCars a, #firstCars a").removeAttr("href");
+					} else {
+	    				//$(".prePage").show();
+						$("#preCars, #firstCars").removeClass("disabled");
+						$("#preCars a, #firstCars a").attr("href","#");
+					}
+	    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+	    				//$(".nextPage").hide();
+						$("#nextCars, #lastCars").addClass("disabled");
+						$("#nextCars a, #lastCars a").removeAttr("href");
+					} else {
+	    				//$(".nextPage").show();
+						$("#nextCars, #lastCars").removeClass("disabled");
+						$("#nextCars a, #lastCars a").attr("href","#");
+					}
+					$("#curCars").attr("page", response.data.pager.curPage);
+					$("#curCars a").html(response.data.pager.curPage);
+					$("#totalCars").attr("total", response.data.pager.total);
+					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
 					
-						$("#paginationCars").show();
+					//area condition
+					$("#area").html("");
+					$("<option />").val("").html("库区").appendTo($("#area"));
+					$.each(response.data.areaArray, function (key, area){
+						if(area !=''){
+							$("<option />").val(area).html(area).appendTo($("#area"));
+						}
+					})
+					$("#area").val(areaVal);
+
+
+					$("#paginationCars").show();
 
 		    	}else
 		    		alert(response.message);
@@ -186,7 +221,12 @@ $(document).ready(function () {
 	}
 
 	function ajaxExportBalanceDetail(){
-		window.open(BALANCE_Detail_EXPORT + "?state=" + $("#selectState").val() +"&series="+ $("#selectSeries").val());
+		areaVal = $("#area").val();
+		window.open(BALANCE_DETAIL_EXPORT 
+			+ "?state=" + $("#selectState").val() 
+			+ "&series="+ $("#selectSeries").val()
+			+ "&area=" + areaVal
+			);
 	}
 
 	function carsDistribute() {
@@ -203,13 +243,18 @@ $(document).ready(function () {
 				$("#checkboxMerge").removeAttr("checked");
 				$("#divCheckbox").hide();
 			}
+			$("#carsDistribute .tableContainer").addClass("span10");
+			$(".chartContainer").show();
 		} else {
 			$("#divCheckbox").hide();
+			$("#carsDistribute .tableContainer").removeClass("span10");
+			$(".chartContainer").hide();
 			ajaxQueryBalanceDistribute();
 		}
 	}
 
 	function ajaxQueryBalanceAssembly(state) {
+		$("#carsDistribute").hide();
 		$.ajax({
 			url: QUERY_BALANCE_ASSEMBLY,
 			type: "get",
@@ -223,6 +268,7 @@ $(document).ready(function () {
 				balanceQuery.AssemblyAll.drawColumn();
 				$("#tableCarsDistribute").show();
 				$("#columnContainer").show();
+				$("#carsDistribute").show();
 			},
 			error: function(){
 				alertError();
@@ -231,6 +277,7 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryBalanceDistribute() {
+		$("#carsDistribute").hide();
 		$.ajax({
 			url: QUERY_BALANCE_DISTRIBUTE,
 			type: "get",
@@ -245,6 +292,7 @@ $(document).ready(function () {
 					balanceQuery.distribute.updateDistributeTable();
 					$("#tableCarsDistribute").show();
 					$("#columnContainer").hide();
+					$("#carsDistribute").show();
 				} else {
 					alert(response.message);
 				}
@@ -256,13 +304,36 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryCars(orderConfigId,coldResistant,color) {
+		$("#resultCars>tbody").html("");
 		$.ajax({
 			url: SHOW_BALANCE_CARS,
 			type: "get",
 			dataType: "json",
+			data: {
+				"state" : $("#selectState").val(),
+				"orderConfigId" : orderConfigId,
+				"coldResistant" : coldResistant,
+				"color" : color || "",
+			},
 			success: function (response) {
 				if(response.success){
+					cars = response.data
+					$.each(cars, function (index, car){
+						tr = $("<tr />");
+						$("<td />").html(car.serial_number).appendTo(tr);
+						$("<td />").html(car.vin).appendTo(tr);
+						$("<td />").html(car.series).appendTo(tr);
+						$("<td />").html(car.type_info).appendTo(tr);
+						$("<td />").html(car.cold).appendTo(tr);
+						$("<td />").html(car.color).appendTo(tr);
+						$("<td />").html(car.status).appendTo(tr);
+						$("<td />").html(car.row).appendTo(tr);
+						$("<td />").html(car.finish_time.substring(0,16)).appendTo(tr);
+						$("<td />").html(car.warehouse_time.substring(0,16)).appendTo(tr);
 
+						$("#resultCars>tbody").append(tr);
+					})
+					$("#resultCars").show();
 				} else {
 					alert(response.message);
 				}
@@ -441,6 +512,7 @@ $(document).ready(function () {
 					aCount.attr("orderConfigId", value[configName]['orderConfigId']);
 					aCount.attr("coldResistant", value[configName]['coldResistant']);
 					aCount.attr("color", value.color);
+					aCount.attr("configName", configName);
 					$("<td />").html(aCount).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
 				});
 			});
@@ -453,7 +525,7 @@ $(document).ready(function () {
 				aCount.attr("orderConfigId", configTotal[configName]['orderConfigId']);
 				aCount.attr("coldResistant", configTotal[configName]['coldResistant']);
 				aCount.attr("color", "");
-				console.log(aCount.attr("color"));
+				aCount.attr("configName", configName);
 				$("<td />").html(aCount).appendTo($("#tableCarsDistribute tr:eq("+ (index+1) +")"));
 			});
 

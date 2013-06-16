@@ -29,30 +29,34 @@
 }
 
 #tableCarsDistribute .configNameTd {
-	min-width: 160px;
+	min-width: 260px;
 	text-align: left;
 }
-/*.form-search .checkbox {
-	margin-left: 15px;
-}
-
-#btnQuery {
-	margin-left: 1px;
-}
-
-#tabs {
-	margin-bottom: 0;
-}
-
-.alignRight {
-	text-align:right;
-}
-
-#resultTable, #tablePlato, #tableDpu {
-	font-size:12px;	
-}*/
 
 .checkbox {
 	margin-right: 6px;
 	margin-left: 4px;
+}
+
+#carsModal {
+    width: 950px;
+	margin-left: -480px;
+}
+
+.modal-header h4 {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+
+#resultCars {
+	font-size: 12px;
+}
+
+#area {
+	margin: 0;
+	width: 80px;
+}
+
+#resultTable thead th{
+	vertical-align: middle;
 }

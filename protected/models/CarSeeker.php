@@ -23,6 +23,12 @@ class CarSeeker
 		'recycle' => array('VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2检测线检验','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常', 'VQ3退库'),
 		'WH' => array('成品库','WDI'),
 		'WHin' => array('成品库'),
+		'WH-0' =>array('成品库'),
+		'WH-27-export' =>array('成品库'),
+		'WH-27-normal' =>array('成品库'),
+		'WH-35' =>array('成品库'),
+		'WH-X' =>array('成品库'),
+		'WH-WDI' =>array('WDI'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','整车下线', '出生产车间', '检测线缓冲','VQ2检测线检验','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ3检验' ,'VQ3合格', 'VQ3异常','成品库'),
 	);
 
@@ -117,7 +123,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0, $whAvailableOnly = false){
+	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0, $whAvailableOnly = false, $area=''){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -160,7 +166,11 @@ class CarSeeker
 		}
 
 		if($whAvailableOnly){
-			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
+			$condition .= " AND warehouse_id > 1 AND warehouse_id < 1000 AND special_property=0";
+		}
+		if(!empty($area)){
+			$areaIds = $this->getWarehoseAreaIds($area);
+			$condition .= " AND warehouse_id>={$areaIds['areaMin']} AND warehouse_id<={$areaIds['areaMax']}";
 		}
 
 		$limit = "";
@@ -168,8 +178,9 @@ class CarSeeker
 			$offset = ($curPage - 1) * $perPage;
 			$limit = "LIMIT $offset, $perPage";
 		}
-		$sql = "SELECT id as car_id, series,serial_number, vin, type, color, cold_resistant, status, config_id, modify_time,warehouse_id, assembly_line, finish_time, warehouse_time, distribute_time,special_order, remark FROM car $condition ORDER BY finish_time ASC $limit";
+		$sql = "SELECT id as car_id, series,serial_number, vin, type, color, cold_resistant, status, config_id, modify_time,warehouse_id,area, assembly_line, finish_time, warehouse_time, distribute_time,special_order, remark FROM car $condition ORDER BY finish_time ASC $limit";
         $cars = Yii::app()->db->createCommand($sql)->queryAll();
+
         foreach($cars as &$car){
         	if($car['series'] == '6B') $car['series'] = '思锐';
         	if(!empty($car['type'])){
@@ -199,7 +210,10 @@ class CarSeeker
         $sql = "SELECT count(*) FROM car $condition";	
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 
-        return  array($total, $cars);
+		$sql = "SELECT DISTINCT(area) FROM car $condition ORDER BY area ASC";
+        $areaArray = Yii::app()->db->createCommand($sql)->queryColumn();
+
+        return  array($total, $cars, $areaArray);
 	}
 
 	public function queryAssemblyBalance($state){ 
@@ -334,7 +348,7 @@ class CarSeeker
 			$condition .= " AND series='$series'";
 		}
 		if($whAvailableOnly){
-			$condition .= " AND warehouse_id > 0 AND warehouse_id < 1000 AND special_property=0";
+			$condition .= " AND warehouse_id > 1 AND warehouse_id < 1000 AND special_property=0";
 		}
 
 		$sql = "SELECT car_id,, `status`, vin, series, color, type, car_model, config_id, config_name, order_config_name,
@@ -352,8 +366,51 @@ class CarSeeker
 		return $cars;
 	}
 
-	public function getBalanceCars($orderConfigId,$coldResistant,$color){
+	public function getBalanceCars($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly=false){
+		$conditions = array();
+		if(!is_array($state)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
+				$states = self::$NODE_BALANCE_STATE[$state];
+			} else {
+				$states = array($state);
+			}
+		} else {
+			$states = $state;
+		}
+
+		$str = "'" . join("','", $states) . "'";
+		$conditions[] = "status IN ($str)";
+
+		if(!empty($orderConfigId)){
+			$conditions[] = "order_config_id = $orderConfigId";
+		}
+		if($coldResistant != 2){
+			$conditions[] = "cold_resistant = $coldResistant";
+		}
+		if(!empty($color)){
+			$conditions[] = "color = '$color'";
+		}
+		if($whAvailableOnly){
+			$conditions[] = "warehouse_id > 1 AND warehouse_id < 1000 AND special_property=0";
+		}
+
+		$condition = join(" AND ", $conditions);
+
+		$sql = "SELECT car_id, `status`, vin, serial_number, series, color, car_type, car_model, config_id, config_name, order_config_name, finish_time, warehouse_time, warehouse_id, cold_resistant
+				FROM view_car_info_main
+				WHERE $condition
+				ORDER BY finish_time ASC" ;
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($cars as &$car){
+			$car['type_info'] = $car['car_model'] . "/" . $car['order_config_name'];
+			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+			$car['row'] = "-";
+			if(!empty($car["warehouse_id"])){
+				$car['row'] = WarehouseAR::model()->findByPk($car['warehouse_id'])->row;
+			}
+		}
 		
+		return $cars;
 	}
 
 	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2) {
@@ -387,12 +444,23 @@ class CarSeeker
 			$condition .= " AND cold_resistant=$coldResistant";
 		}
 
-		$whAvailableOnly = false;
         if($state === 'WHin'){
-            $whAvailableOnly = true;
-        }
-		if($whAvailableOnly){
-			$condition .= " AND warehouse_id>1 AND warehouse_id<>1000 AND special_property=0";
+			$condition .= " AND warehouse_id>1 AND warehouse_id< 1000 AND special_property=0";
+		}
+		if($state === 'WH-0'){
+			$condition .= " AND warehouse_id>1 AND warehouse_id< 200";
+		}
+		if($state === 'WH-27-export'){
+			$condition .= " AND warehouse_id>=200 AND warehouse_id< 300 AND special_property=1";
+		}
+		if($state === 'WH-27-normal'){
+			$condition .= " AND warehouse_id>=500 AND warehouse_id< 600";
+		}
+		if($state === 'WH-35'){
+			$condition .= " AND warehouse_id>=600 AND warehouse_id< 1000";
+		}
+		if($state === 'WH-X'){
+			$condition .= "AND warehouse_id=1000";
 		}
 
 		$sql = "SELECT count(*) FROM car $condition";	
@@ -572,7 +640,8 @@ class CarSeeker
 			'VQ2' => array('VQ2-NORMAL', 'VQ2-RETURN'),
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
-			'WH' => array('WH'),
+			// 'WH' => array('WH'),
+			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-X','WH-WDI'),
 			'WHin' => array('WHin'),
 			'assembly' => array('onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
 			'mergeRecyle' => array('onLine','recycle', 'WH'),
@@ -597,6 +666,12 @@ class CarSeeker
 			'WH' => '成品库',
 			'WHin' => '成品库可备',
 			'assembly' => '总装',
+			'WH-0' => '成品库区',
+			'WH-27-export' => '27#出口',
+			'WH-27-normal' => '27#普通',
+			'WH-35' => '35#厂房',
+			'WH-X' => '异常X',
+			'WH-WDI' => 'WDI',
 		);
 
 		return $stateName;
@@ -643,6 +718,13 @@ class CarSeeker
 			$configs[] = $data['id'];
 		}
 		return $configs;
+	}
+
+	private function getWarehoseAreaIds($area) {
+		$sql = "SELECT MIN(id) AS areaMin, MAX(id) AS areaMax FROM warehouse WHERE area='$area'";
+		$data = Yii::app()->db->createCommand($sql)->queryRow();
+
+		return array("areaMin"=>$data['areaMin'], "areaMax"=>$data['areaMax']);
 	}
 
 }
