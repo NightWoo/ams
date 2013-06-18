@@ -71,7 +71,8 @@ class ExecutionController extends BmsBaseController
     }
 	
 	public function actionChild() {
-		$nodeName = $this->validateStringVal('node','NodeSelect');
+        $nodeName = $this->validateStringVal('node','NodeSelect');
+		$line = $this->validateStringVal('line','I');
 		$view = $this->validateStringVal('view','NodeSelect');
 		$type = $this->validateStringVal('type','subInstrument');
 		if(in_array($nodeName, self::$NODE_MAP)) {
@@ -79,7 +80,7 @@ class ExecutionController extends BmsBaseController
 		}
 		
 		$node = Node::createByName($nodeName); 
-		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName));	
+		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line));	
 	}
 
 	//进入彩车身库
@@ -315,7 +316,7 @@ class ExecutionController extends BmsBaseController
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
-			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,13));
+			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($car->car->id,13));
             if(!empty($testlineTrace)){
                 $testlineTime = $testlineTrace->pass_time;
                 $shift='总装1线A班';

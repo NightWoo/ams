@@ -40,7 +40,7 @@
 						title="PBS节点">
 						PBS
 					</div>
-					<div class="node-rgl node-T0" onclick="window.location.href='/bms/execution/child?view=T0&node=T0'">
+					<div class="node-rgl node-T0" onclick="window.location.href='/bms/execution/child?view=T0&node=T0&line=I'">
 						T0
 					</div>
 					<div class="node-rgl node-T11" onclick="window.location.href='/bms/execution/child?view=T11&node=T11'">

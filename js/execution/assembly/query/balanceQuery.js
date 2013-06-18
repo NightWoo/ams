@@ -21,7 +21,7 @@ $(document).ready(function () {
 	function resetAll (argument) {
 		$(".pager").hide();
 		$("#resultTable").hide();
-		$("#tableCarsDistribute").hide();
+		// $("#tableCarsDistribute").hide();
 		$("#divCheckbox").hide();
 	}
 
@@ -201,13 +201,15 @@ $(document).ready(function () {
 					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
 					
 					//area condition
-					$("#area").html("");
-					$("<option />").val("").html("库区").appendTo($("#area"));
-					$.each(response.data.areaArray, function (key, area){
-						if(area !=''){
-							$("<option />").val(area).html(area).appendTo($("#area"));
-						}
-					})
+					if(areaVal == ""){
+						$("#area").html("");
+						$("<option />").val("").html("库区").appendTo($("#area"));
+						$.each(response.data.areaArray, function (key, area){
+							if(area !=''){
+								$("<option />").val(area).html(area).appendTo($("#area"));
+							}
+						})
+					}
 					$("#area").val(areaVal);
 
 
@@ -244,17 +246,15 @@ $(document).ready(function () {
 				$("#divCheckbox").hide();
 			}
 			$("#carsDistribute .tableContainer").addClass("span10");
-			$(".chartContainer").show();
 		} else {
 			$("#divCheckbox").hide();
 			$("#carsDistribute .tableContainer").removeClass("span10");
-			$(".chartContainer").hide();
 			ajaxQueryBalanceDistribute();
 		}
 	}
 
 	function ajaxQueryBalanceAssembly(state) {
-		$("#carsDistribute").hide();
+		$(".carsDistributeContainer").hide();
 		$.ajax({
 			url: QUERY_BALANCE_ASSEMBLY,
 			type: "get",
@@ -266,9 +266,8 @@ $(document).ready(function () {
 				balanceQuery.AssemblyAll.ajaxData = response.data;
 				balanceQuery.AssemblyAll.updateDistributeTable();
 				balanceQuery.AssemblyAll.drawColumn();
-				$("#tableCarsDistribute").show();
 				$("#columnContainer").show();
-				$("#carsDistribute").show();
+				$(".carsDistributeContainer").show();
 			},
 			error: function(){
 				alertError();
@@ -277,7 +276,7 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryBalanceDistribute() {
-		$("#carsDistribute").hide();
+		$(".carsDistributeContainer").hide();
 		$.ajax({
 			url: QUERY_BALANCE_DISTRIBUTE,
 			type: "get",
@@ -290,9 +289,8 @@ $(document).ready(function () {
 				if(response.success){
 					balanceQuery.distribute.ajaxData = response.data;
 					balanceQuery.distribute.updateDistributeTable();
-					$("#tableCarsDistribute").show();
 					$("#columnContainer").hide();
-					$("#carsDistribute").show();
+					$(".carsDistributeContainer").show();
 				} else {
 					alert(response.message);
 				}

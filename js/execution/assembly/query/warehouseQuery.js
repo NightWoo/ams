@@ -27,6 +27,7 @@ $(document).ready(function () {
 
 
 	$("#tabs li").click(function () {
+		$("#balanceDistribute").hide();
 		var index = $("#tabs li").index(this);
 		if(index<7 || $(this).hasClass("dropdown"))
 			$("#paginationCars").hide();
@@ -643,13 +644,15 @@ $(document).ready(function () {
 					
 
 					//area condition
-					$("#area").html("");
-					$("<option />").val("").html("库区").appendTo($("#area"));
-					$.each(response.data.areaArray, function (key, area){
-						if(area !=''){
-							$("<option />").val(area).html(area).appendTo($("#area"));
-						}
-					})
+					if(areaVal == ""){
+						$("#area").html("");
+						$("<option />").val("").html("库区").appendTo($("#area"));
+						$.each(response.data.areaArray, function (key, area){
+							if(area !=''){
+								$("<option />").val(area).html(area).appendTo($("#area"));
+							}
+						})
+					}
 					$("#area").val(areaVal);
 
 					$("#tableBalanceCars").show();

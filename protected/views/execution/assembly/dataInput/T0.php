@@ -52,8 +52,8 @@ td,th{border:none;}
 							<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText" />
 							<input type="button" class="btn btn-primary" id='btnSubmit' value='上线并打印配置单'></input>   
 							<input type="button" class="btn" id ="reset" value ="清空"></input>
-							<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
-							<input type="hidden" id='line' name='currentNode' value='I'></input>
+							<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node ?>'></input>
+							<input type="hidden" id='line' name='currentNode' value='<?php echo $line ?>'></input>
 							<span class="help-inline" id="vinHint">未输入VIN</span>
 							<div class="help-inline" id="carInfo">
 								<span class="label label-info" rel="tooltip" title="车系" id="infoSeries"></span>

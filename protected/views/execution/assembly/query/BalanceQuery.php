@@ -59,6 +59,7 @@
                                         <option value="WHin">成品库可备</option>
                                         <option value="recycle">周转车</option>
                                         <option value="VQ3">VQ3</option>
+                                        <option value="VQ3-OK">VQ3合格</option>
                                         <option value="VQ2">VQ2</option>
                                         <option value="VQ1">VQ1</option>
                                         <option value="onLine">I线</option>
@@ -130,7 +131,7 @@
                         </div>
 
                         <div class="tab-pane" id="carsDistribute">
-                            <div class="tableContainer span10 pull-left">
+                            <div class="tableContainer carsDistributeContainer span10 pull-left">
                                 <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
                                     <thead>
 
@@ -146,22 +147,8 @@
                                     </label>
                                 </div>                          
                             </div>
-                            <div class="chartContainer offset10">
-                                <!-- <div id="divRadio">   
-                                    <label class="radio inline">
-                                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="car_type_pie_data" checked>
-                                      车型
-                                    </label>
-                                    <label class="radio inline">
-                                      <input type="radio" name="optionsRadios" id="optionsRadios2" value="color_pie_data">
-                                      颜色
-                                    </label>
-                                </div> -->
+                            <div class="chartContainer carsDistributeContainer offset10">
                                 <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
-                            </div>
-                            <div class="chartContainer offset9">
-                                
-                                <div id="barContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                             </div>
                         </div>
 
