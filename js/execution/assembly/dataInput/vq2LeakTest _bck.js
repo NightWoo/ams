@@ -55,17 +55,16 @@ $(document).ready(function  () {
 		    	$("#tableGeneral tbody").text("");
 				$.each(response.data,function(index,comp){
 					var indexTd = "<td>" + (index + 1) + "</td>";
+					var checkTd = "<td> <input type='checkbox' value='" + comp.fault_id + "'/> </td>";
 					var nameTd = "<td>" + comp.component_name + "<input type='hidden' value='" + comp.component_id + "' />" + "</td>";
-					var options = "";
-					$.each(comp.leak_fault_model,function (ind,value) {
-						options += '<option value="' + value.id + '">' + value.mode + '</option>';
-					});
-					var optionTd = "<td>" + '<select class="fault-type"><option value="">-请选择故障-</option>' + options + "</td>";
+					
 					// var checkTd = '<td><input type="checkbox" value=""></td>';
-					$("#tableGeneral tbody").append("<tr>" + indexTd + nameTd + optionTd + dutyOption + "</tr>");
+					$("#tableGeneral tbody").append("<tr>" + indexTd + checkTd + nameTd + dutyOption + "</tr>");
+
+
 				});
 		    },
-		    error:function(){alertError();}
+		     error:function(){alertError();}
         });
 	}
 
@@ -131,34 +130,8 @@ $(document).ready(function  () {
 					options += '<option value="' + value.id + '">' + value.name + '</option>';
 				});
 				dutyOption = "<td>" + '<select class="duty"><option value="">-请选择责任部门-</option>' + options + "</td>";
-				$("#tableOther tbody").text("");
-				//初始化  ‘其他’栏
-				for (var i = 0; i < 10; i++) {
-					var indexTd = "<td>" + (i + 1) + "</td>";
-					var nameTd = "<td><input type='text' /></td>";
-					var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
-					var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-					$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + dutyOption + "</tr>");
-				};
 				//初始化第一栏
 				ajaxGetComponents("VQ2_leak_test");
-				$("#tableOther input[type='text']").typeahead({
-				    source: function (input, process) {
-				    	disableTr(currentOtherFocusIndex);
-				        $.get(VQ1_SEARCH_PART, {"component":input,"series":$("#divDetail").data("series")}, function (data) {
-				        	return process(data.data);
-				        },'json');
-				    },
-				    updater:function (item) {
-				     	ajaxViewParts(item);//根据part的名字查找故障模式
-			        	return item;
-			    	}
-				});
-
-				currentOtherFocusIndex = -1;
-				$("#tableOther input[type='text']").focus(function () {
-					currentOtherFocusIndex = $("#tableOther tbody tr").index($(this).parent().parent());
-				});
 			}
 		})
 	}
@@ -196,21 +169,8 @@ $(document).ready(function  () {
 		//disable submit button
 		$("#btnSubmit, #driver").attr("disabled","disabled");
 		$("#tableGeneral tbody").text("");
-		
-		$("#divDetail").hide();
-		if (dutyOption != "") {
-			//初始化  ‘其他’栏
-			$("#tableOther tbody").text("");
-			for (var i = 0; i < 10; i++) {
-				var indexTd = "<td>" + (i + 1) + "</td>";
-				var nameTd = "<td><input type='text' /></td>";
-				var optionTd = "<td>" + '<select disabled="disabled" class="fault-type"><option value="">-请选择故障-</option></select>' + "</td>";
-				//注释掉，路试结束没有checkbox
-				// var checkTd = '<td><input type="checkbox"  value="" disabled="disabled"></td>';
-				$("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd  + dutyOption + "</tr>");
-				// $("#tableOther tbody").append("<tr>" + indexTd + nameTd + optionTd + checkTd + "</tr>");
-			};
-		}
+
+		$("#tableGeneral input[type='checkbox']").removeAttr("checked");
 		
 	}
 
@@ -278,28 +238,20 @@ $(document).ready(function  () {
 		//vin号，和故障数组
 		var sendData = {};
 		sendData.vin = $('#vinText').val();
-		sendData.bag = $("#inputBag").val();
-		sendData.driver = $("#driver").val();
+		sendData.driver = $('#driver').val();
 		sendData.fault = [];
-		console.log($("#tabContent tr").length);
-		var selects = $("#tabContent tr select").filter(".fault-type");
+		var selects = $("#tableGeneral tbody tr");
 
 		$.each(selects,function (index,value) {
-			value = $(value).find("option:selected");
-			if($(value).val() != ""){
+			if($(value).find("input[type='checkbox']").attr("checked") == "checked"){
 				var obj = {};
-				obj.faultId = $(value).val();
-				console.log($(value).parent().parent().parent().html());
-				var tr = $(value).parent().parent().parent();
-				console.log($(tr).find("input[type='checkbox']").attr("checked"));
-				// obj.fixed = false;
-				// if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
-				// 	obj.fixed = true;
-				obj.componentId = $(tr).find("input[type='hidden']").val();
-				obj.dutyDepartment = $(tr).find(".duty").val();
+				obj.faultId = $(value).find("input[type='checkbox']").attr("value");
+				obj.componentId = $(value).find("input[type='hidden']").val();
+				obj.dutyDepartment = $(value).find(".duty").val();
 				console.log(obj.componentId);
 				sendData.fault.push(obj);
 			}
+			
 		})
 		sendData.fault = JSON.stringify(sendData.fault);
 		ajaxSubmit(sendData);
@@ -311,37 +263,5 @@ $(document).ready(function  () {
 		resetPage();
 		return false;
 	});
-
-	//自动补全
-	$("#tableOther input[type='text']").typeahead({
-	    source: function (input, process) {
-	    	disableTr(currentOtherFocusIndex);
-	        $.get(VQ1_SEARCH_PART, {"component":input,"series" : $("#divDetail").data("series")}, function (data) {
-	        	return process(data.data);
-	        },'json');
-	    },
-	    updater:function (item) {
-	     	ajaxViewParts(item);//根据part的名字查找故障模式
-        	return item;
-    	}
-	});
-
-	var currentOtherFocusIndex = -1;
-	$("#tableOther input[type='text']").focus(function () {
-		currentOtherFocusIndex = $("#tableOther tbody tr").index($(this).parent().parent());
-	});
-
-	function disableTr (index) {
-		var tr = $("#tableOther tbody tr").eq(index);
-		var select = tr.find("select").filter(".fault-type");
-		select.text('');
-		select.append('<option value="">-请选择故障-</option>');
-		select.attr("disabled","disabled");
-	}
-	function enableTr (index) {
-		var tr = $("#tableOther tbody tr").eq(index);
-		var select = tr.find("select").filter(".fault-type");
-		select.removeAttr("disabled");
-	}
 //-------------------END event bindings -----------------------
 });

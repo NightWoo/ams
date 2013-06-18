@@ -111,6 +111,7 @@ class ExecutionController extends BmsBaseController
 
             //$car->leftNode('PBS');
 			$car->enterNode('T0', 0 ,true);
+            $car->assemblyTime();
 			$car->generateSerialNumber();
 			$car->addToPlan($date, $planId);
             $serial_number = $car->car->serial_number;      //added by wujun
@@ -1240,20 +1241,11 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            // $vin = $this->validateStringVal('vin', '');
-            // $car = Car::create($vin);
-            // $ret = $car->getIRemoteTestResult();
-            // $view = 'NCA';
-            // $dateCol = $view . "_CheckDate";
-            // $stime = '2013-03-29 02:25:46';
-            // $etime = '2013-04-03 14:07:06';
-            // $sql = "SELECT * FROM $view WHERE $dateCol>='$stime' AND $dateCol<='$etime'";
-            // $ret = Yii::app()->dbTest->createCommand($sql)->queryAll();
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $ret = $car->getIRemoteTestResult();
 
-            $my_array = array("a" => "Dog", "c" => "Horse", "b" => "Cat");
-            $ret =ksort($my_array);
-
-			$this->renderJsonBms(true, $my_array , $my_array);
+			$this->renderJsonBms(true, $vin, $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

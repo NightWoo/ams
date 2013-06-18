@@ -116,6 +116,23 @@ class ConfigController extends BmsBaseController
 		}	
 	}
 
+	public function actionGetOrderCarType() {
+		$carSeries = $this->validateStringVal('carSeries','');
+		try {
+			$condition = "";
+			if(!empty($carSeries)){
+				$condition = "WHERE series='$carSeries'";
+			}
+			$sql = "SELECT order_type_name FROM car_type_map $condition";
+			$data = Yii::app()->db->createCommand($sql)->queryColumn();
+			$data = array_unique($data);
+
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}	
+	}
+
 	public function actionGetCarColor() {
 		$carSeries = $this->validateStringVal('carSeries','');
 		try {

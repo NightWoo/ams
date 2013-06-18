@@ -212,6 +212,7 @@ var DELETE_CONFIG = "/bms/config/delete";
 var QUERY_CONFIG_LIST = "/bms/config/searchConfigList";
 var FILL_CONFIG = "/bms/config/getConfig";
 var FILL_CAR_TYPE = "/bms/config/getCarType";
+var FILL_ORDER_CAR_TYPE = "/bms/config/getOrderCarType";
 var FILL_CAR_COLOR = "/bms/config/getCarColor";
 var SAVE_CONFIG_DETAIL = "/bms/config/saveDetail";
 var COPY_CONFIG_LIST = "/bms/config/copyList";

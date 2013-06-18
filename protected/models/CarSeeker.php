@@ -636,7 +636,7 @@ class CarSeeker
 	private function stateArray($state){
 		$stateMap=array(
 			'PBS' => array('PBS'),
-			'onLine' => array('PBS'),
+			'onLine' => array('online'),
 			'VQ1' => array('VQ1-NORMAL', 'VQ1-RETURN'),
 			'VQ2' => array('VQ2-NORMAL', 'VQ2-RETURN'),
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
@@ -645,8 +645,8 @@ class CarSeeker
 			// 'WH' => array('WH'),
 			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-X','WH-WDI'),
 			'WHin' => array('WHin'),
-			'assembly' => array('onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
-			'mergeRecyle' => array('onLine','recycle', 'WH'),
+			'assembly' => array('PBS', 'onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
+			'mergeRecyle' => array('PBS','onLine','recycle', 'WH'),
 		);
 		return $stateMap[$state];
 	}

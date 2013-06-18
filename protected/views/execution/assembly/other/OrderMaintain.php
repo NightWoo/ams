@@ -161,6 +161,7 @@
 	                            <th id="thAmount">数量</th>
 	                            <th id="thHold">已备</th>
 	                            <th id="thCount">出库</th>
+	                            <th id="thToCount"></th>
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
 	                            <!-- <th id="thEdit"></th> -->
@@ -315,6 +316,12 @@
     <div class="modal-body">
         <form id="editForm" class="form-horizontal">
         	<div class="control-group">
+                <label class="control-label" for="">参与待备统计</label>
+                <div class="controls">
+                    <input id="editToCount" type="checkbox">
+                </div>
+            </div>
+        	<div class="control-group">
                 <label class="control-label" for="editBoardNumber">*&nbsp;备板编号</label>
                 <div class="controls">
                     <input id="editBoardNumber"  type="text" class="input-small" placeholder="备板编号..."/>
@@ -426,6 +433,12 @@
     </div>
     <div class="modal-body">
         <form id="internalForm" class="form-horizontal">
+        	<div class="control-group">
+                <label class="control-label" for="">参与待备统计</label>
+                <div class="controls">
+                    <input id="internalToCount" type="checkbox">
+                </div>
+            </div>
         	<div class="control-group">
                 <label class="control-label" for="internalBoardNumber">*&nbsp;备板编号</label>
                 <div class="controls">

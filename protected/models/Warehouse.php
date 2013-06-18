@@ -52,6 +52,9 @@ class Warehouse
 				} else if ($car->special_property == 0) {
 					//$row = WarehouseAR::model()->find('area=?', array('Z'));
 					// $row = WarehouseAR::model()->findByPk(1001);
+					if($car->series == '6B'){
+						$row = WarehouseAR::model()->findByPk(600);
+					}
 				} else if ($car->special_property == 9) {
 					// $row = WarehouseAR::model()->find('area=?', array('X'));
 					$row = WarehouseAR::model()->findByPk(1000);

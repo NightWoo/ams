@@ -137,6 +137,13 @@ $("document").ready(function() {
 				emptyEditModal();
 				carSeries = tr.data("series");
 				carType = tr.data("carType");
+
+				if (tr.data("toCount") == '1') {
+					$("#editToCount").attr("checked", "checked");
+				} else {
+					$("#editToCount").removeAttr("checked");
+				}
+
 				$("#editCarType").html("").append(fillType(carSeries));
 				$("#editOrderConfig").html("").append(fillOrderConfig(carSeries, carType));
 				$("#editColor").html("").append(fillColor(carSeries));
@@ -639,6 +646,11 @@ $("document").ready(function() {
 						$("<td />").html(value.amount).appendTo(tr);
 						$("<td />").html(value.hold).appendTo(tr);
 						$("<td />").html(value.count).appendTo(tr);
+						if(value.to_count == "1"){
+							$("<td />").html("<i class='icon-pushpin'></i>").appendTo(tr);
+						} else {
+							$("<td />").html("-").appendTo(tr);
+						}
 
 						// $("<td />").html(value.remark).appendTo(tr);
 
@@ -670,6 +682,7 @@ $("document").ready(function() {
 						tr.data("configDescription", value.config_description);
 						tr.data("remark", value.remark);
 						tr.data("boardNumber", value.board_number);
+						tr.data("toCount", value.to_count);
 
 						$("#tableResult>tbody").append(tr);
 
@@ -688,6 +701,10 @@ $("document").ready(function() {
 	}
 
 	function ajaxEdit() {
+		var toCount = 0;
+		if($("#editToCount").attr("checked") === "checked")
+			toCount = 1;
+
 		var isCold = 0;
 		if($("#editColdResistant").attr("checked") === "checked")
 			isCold = 1;
@@ -709,7 +726,8 @@ $("document").ready(function() {
 				"orderConfigId": $("#editOrderConfig").val(),
 				"color": $("#editColor").val(),
 				"coldResistant": isCold,
-				"remark": $("#editRemark").val()
+				"remark": $("#editRemark").val(),
+				"toCount": toCount,
 			},
 			success: function(response) {
 				if(response.success) {
@@ -724,8 +742,12 @@ $("document").ready(function() {
 	}
 
 	function ajaxAddInternalOrder() {
+		var toCount = 0;
+		if($("#internalToCount").attr("checked") === "checked")
+			toCount = 1;
+
 		var isCold = 0;
-		if($("#internalColdResistant").attr("checked") === "checked")
+		if($("#internalToCount").attr("checked") === "checked")
 			isCold = 1;
 
 		$.ajax({
@@ -744,7 +766,8 @@ $("document").ready(function() {
 				"orderConfigId": $("#internalOrderConfig").val(),
 				"color": $("#internalColor").val(),
 				"coldResistant": isCold,
-				"remark": $("#internalRemark").val()
+				"remark": $("#internalRemark").val(),
+				"toCount": toCount,
 			},
 			success: function(response) {
 				if(response.success) {
@@ -1001,7 +1024,7 @@ $("document").ready(function() {
 	function fillType(carSeries) {
 		var options = '<option value="" selected>请选择</option>';
 		$.ajax({
-			url: FILL_CAR_TYPE,
+			url: FILL_ORDER_CAR_TYPE,
 			type: "get",
 			dataType: "json",
 			data: {
@@ -1011,7 +1034,7 @@ $("document").ready(function() {
 			success: function(response) {
 				if(response.success){
 					$.each(response.data, function(index, value){
-						options += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+						options += '<option value="'+ value +'">'+ value +'</option>';
 					});
 				}
 			},

@@ -54,7 +54,7 @@
                                 </td> -->
     							<td>
     								<select name="" id="selectState" class="input-medium">
-                                        <option value="assembly">总装(除PBS)</option>
+                                        <option value="assembly">总装</option>
                                         <option value="WH">成品库</option>
                                         <option value="WHin">成品库可备</option>
                                         <option value="recycle">周转车</option>

@@ -31,6 +31,7 @@ class Order
 		if(empty($orders)){
 			return;
 		}
+		$orderCarType = $this->orderCarType();
 		foreach($orders as $order){
 			$ar = new OrderAR();
 			$ar->order_number = $order['orderNumber'];
@@ -39,7 +40,7 @@ class Order
 			$ar->standby_date = $order['standbyDate'];
 			$ar->amount = $order['amount'];
 			$ar->series = $order['series'];
-			$ar->car_type = $order['carType'];
+			$ar->car_type = $orderCarType[$order['carType']];
 			$ar->color = $order['color'];
 			$ar->cold_resistant = $order['coldResistant'];
 			$ar->order_config_id = $order['orderConfigId'];
@@ -52,6 +53,7 @@ class Order
 			$ar->board_number = $order['boardNumber'];
 			$ar->lane_id = $order['laneId'];
 			$ar->order_type = $order['orderType'];
+			$ar->to_count = 1;
 			if(!empty($order['country'])){
 				$ar->country = $order['country'];
 			}
@@ -100,6 +102,7 @@ class Order
 			$new->config_description = $old->config_description;
 			$new->modify_time = date('YmdHis');
 			$new->user_id = Yii::app()->user->id;
+			$new->to_count = 1;
 
 			$new->save();
 			$old->save();
@@ -477,5 +480,19 @@ class Order
 			"certificateFailures" => $certificateFailures,
 			"inspectionFailures" => $inspectionFailures
 		);
+	}
+
+	private function orderCarType($series = ""){
+		$orderCarType = array();
+		$condition = "";
+		if(!empty($series)){
+			$condition = "WHERE series ='$series'";
+		}
+		$sql = "SELECT car_type, order_type_name FROM car_type_map $condition";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($datas as $data){
+			$orderCarType[$data['car_type']] = $data['order_type_name'];
+		}
+		return $orderCarType;
 	}
 }

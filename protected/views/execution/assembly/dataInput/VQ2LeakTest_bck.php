@@ -81,20 +81,14 @@
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 -->                   
 							<div id="divDetail">
-								<div>
-									<ul id="tabs" class="nav nav-pills">
-										<li class="active"><a href="#general" data-toggle="tab">常见</a></li>
-										<li><a href="#other" data-toggle="tab">其他</a></li>
-									</ul>
-								</div>
 								<div id="tabContent" class="tab-content">
 									<div class="tab-pane active" id="general">
 										<table id="tableGeneral" class="table">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
-													<td class="span2">故障零部件</td>
-													<td class="span3">故障模式</td>
+													<td class="span1">漏水</td>
+													<td class="span3">故障零部件</td>
 													<td class="">责任部门</td>
 												</tr>
 											</thead>
@@ -103,22 +97,7 @@
 											</tbody>
 										</table>
 									</div>
-
-									<div class="tab-pane" id="other">
-										<table id="tableOther" class="table">
-											<thead>
-												<tr>
-													<td class="span1">序号</td>
-													<td class="span2">故障零部件</td>
-													<td class="span3">故障模式</td>
-													<td class="">责任部门</td>
-												</tr>
-											</thead>
-											<tbody>
-												
-											</tbody>
-										</table>
-									</div>
+	
 								</div>
 							</div>
 						</form>                                          

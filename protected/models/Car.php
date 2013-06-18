@@ -83,6 +83,13 @@ class Car
 		return array($this->car->type);
 	}
 
+	public function assemblyTime() {
+		if($this->car->assembly_time == '0000-00-00 00:00:00') {
+			$this->car->assembly_time = date('YmdHis');
+			$this->car->save();
+		}
+	}
+
 	public function finish() {
 		if($this->car->finish_time == '0000-00-00 00:00:00') {
 			$this->car->finish_time = date('YmdHis');

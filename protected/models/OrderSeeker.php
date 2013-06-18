@@ -180,7 +180,7 @@ class OrderSeeker
 			$condition .= " AND board_number LIKE '%$boardNumber'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -211,21 +211,23 @@ class OrderSeeker
 			$detail['standby_last'] = 0;
 			$detail['out_last'] = 0;
 			$detail['lane_last'] = 0;
-			if($detail['standby_finish_time'] === '0000-00-00 00:00:00'){
-				$detail['standby_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
+			if($detail['activate_time'] > '0000-00-00 00:00:00'){
+				if($detail['standby_finish_time'] === '0000-00-00 00:00:00'){
+					$detail['standby_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
 
-			}else{
-				$detail['standby_last'] = (strtotime($detail['standby_finish_time']) - strtotime($detail['activate_time'])) / 3600;
-				if($detail['out_finish_time'] === '0000-00-00 00:00:00'){
-					// $detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['standby_finish_time'])) / 3600;
-					$detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
 				}else{
-					// $detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['standby_finish_time'])) / 3600;
-					$detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['activate_time'])) / 3600;
-					if($detail['lane_release_time'] === '0000-00-00 00:00:00'){
-						$detail['lane_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['out_finish_time'])) / 3600;
-					} else {
-						$detail['lane_last'] = (strtotime($detail['lane_release_time']) - strtotime($detail['out_finish_time'])) / 3600;
+					$detail['standby_last'] = (strtotime($detail['standby_finish_time']) - strtotime($detail['activate_time'])) / 3600;
+					if($detail['out_finish_time'] === '0000-00-00 00:00:00'){
+						// $detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['standby_finish_time'])) / 3600;
+						$detail['out_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['activate_time'])) / 3600;
+					}else{
+						// $detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['standby_finish_time'])) / 3600;
+						$detail['out_last'] = (strtotime($detail['out_finish_time']) - strtotime($detail['activate_time'])) / 3600;
+						if($detail['lane_release_time'] === '0000-00-00 00:00:00'){
+							$detail['lane_last'] = (strtotime(date('Y-m-d H:i:s')) - strtotime($detail['out_finish_time'])) / 3600;
+						} else {
+							$detail['lane_last'] = (strtotime($detail['lane_release_time']) - strtotime($detail['out_finish_time'])) / 3600;
+						}
 					}
 				}
 			}
@@ -246,11 +248,15 @@ class OrderSeeker
         	$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         	$configId = "(" . join(',', $configId) . ")";
 
-			$matchCondition = "warehouse_id>1 AND warehouse_id<1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+			$matchCondition = "((warehouse_id>1 AND warehouse_id< 1000) OR `status`='VQ3合格') AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
 			$values = array($order['series'], $order['color'], $order['cold_resistant']);
-
 			$matchCount = CarAR::model()->count($matchCondition, $values);
-			$order['short'] = $matchCount - ($order['amount'] - $order['hold']);
+			
+			$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` < 2 AND to_count=1 AND priority<={$order['priority']} AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']} AND id<>{$order['id']}";
+			$same = Yii::app()->db->createCommand($sameSql)->queryRow();
+			$alreadyHold = $same['amount_sum'] - $same['hold_sum'];
+
+			$order['short'] = $matchCount - $alreadyHold - ($order['amount'] - $order['hold']);
 
 			if(empty($boards[$order['board_number']])){
 				$boards[$order['board_number']] = array(
@@ -838,6 +844,20 @@ class OrderSeeker
 			$flag = true;
 		
 		return $flag;
+	}
+
+	private function orderCarType($series = ""){
+		$orderCarType = array();
+		$condition = "";
+		if(!empty($series)){
+			$condition = "WHERE series ='$series'";
+		}
+		$sql = "SELECT car_type, order_type_name FROM car_type_map $condition";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($datas as $data){
+			$orderCarType[$data['car_type']] = $data['order_type_name'];
+		}
+		return $orderCarType;
 	}
 
 	private function parseQueryTime($stime,$etime) {

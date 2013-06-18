@@ -14,12 +14,13 @@ label {
 	vertical-align: middle;
 }
 
-.table {
-	margin-top: 10px;
-	margin-bottom: 0;
-}
-
 input[type="checkbox"] {
 	margin-top:0px;
 	margin-bottom:2px;
+}
+
+#tabs {
+	height: 37px;
+	margin-top: 20px;
+	margin-bottom: 0px;
 }

@@ -188,6 +188,7 @@ class OrderController extends BmsBaseController
 		$coldResistant = $this->validateIntVal('coldResistant', 0);
 		$remark = $this->validateStringVal('remark', '');
 		$boardNumber = $this->validateStringVal('boardNumber', '');
+		$toCount = $this->validateIntVal('toCount', 0);
 		try {
 			if(empty($standbyDate)) {
 				throw new Exception('备车日期不能为空');
@@ -252,6 +253,7 @@ class OrderController extends BmsBaseController
 			$order->cold_resistant = $coldResistant;
 			$order->remark = $remark;
 			$order->board_number = $boardNumber;
+			$order->to_count = $toCount;
 
 			$order->modify_time = date('YmdHis');
 			$order->user_id = Yii::app()->user->id;
@@ -274,20 +276,21 @@ class OrderController extends BmsBaseController
 				}
 				if($order->out_finish_time === '0000-00-00 00:00:00' && $order->amount === $order->count){
 					$order->out_finish_time = date("YmdHis");
-				}	
+				}
+				$order->to_count = 0;	
 			}
 
 			//update from sell order
-			$seeker = new OrderSeeker();
-			$sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
-			if(!empty($sellOrder)){
-				$order->sell_car_type = $sellOrder['sell_car_type'];
-				$order->car_type = $sellOrder['car_type'];
-				$order->color = $sellOrder['color'];
-				$order->sell_color = $sellOrder['sell_color'];
-				// $order->cold_resistant = $sellOrder['cold_resistant'];
+			// $seeker = new OrderSeeker();
+			// $sellOrder = $seeker->getSellOrderDetail($order->order_detail_id);
+			// if(!empty($sellOrder)){
+			// 	$order->sell_car_type = $sellOrder['sell_car_type'];
+			// 	$order->car_type = $sellOrder['car_type'];
+			// 	$order->color = $sellOrder['color'];
+			// 	$order->sell_color = $sellOrder['sell_color'];
+			// 	// $order->cold_resistant = $sellOrder['cold_resistant'];
 
-			}
+			// }
 
 			$order->save();
 

@@ -48,8 +48,10 @@ class FaultSeeker
 
 
 			} else if($mode === 'leak') {
-				$sql = "SELECT id FROM fault_standard WHERE component_id={$component['component_id']} AND mode = '漏水'";
+				// $sql = "SELECT id FROM fault_standard WHERE component_id={$component['component_id']} AND mode LIKE '%漏水%'";
+				$sql = "SELECT id,level,mode FROM fault_standard WHERE component_id={$component['component_id']} AND mode LIKE '%漏水%'";
 				$component['fault_id'] = Yii::app()->db->createCommand($sql)->queryScalar();
+				$component['leak_fault_model'] = Yii::app()->db->createCommand($sql)->queryAll();
 			}
 		}
 
