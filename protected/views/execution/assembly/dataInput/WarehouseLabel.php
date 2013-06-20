@@ -38,7 +38,9 @@
 					<div>
 		            	<legend>成品库标签打印
 		            		<span class="pull-right">
-		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;备车</a>
+		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;成品库备车</a>
+		            			/
+		            			<a href="/bms/execution/outStandby35"><i class="icon-link"></i>&nbsp;35#厂房备车</a>
 		            		</span>
 		            	</legend>
 		            </div>

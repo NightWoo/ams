@@ -489,6 +489,7 @@ function ajaxGetStock (argument) {
 	    		$(".area-x").html(response.data.area_quantity.X);
 	    		$(".area-y").html(response.data.area_quantity.Y);
 	    		$(".area-z").html(response.data.area_quantity.Z);
+	    		$(".area-wdi").html(response.data.area_quantity.WDI);
 				$(".area-total-amount").html(response.data.warehourse_cars.all);
 
 				$("#warehousePeriod").html("<i class='icon-time'></i>" + response.data.period.warehousePeriod + "H");

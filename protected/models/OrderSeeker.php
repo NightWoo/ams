@@ -248,15 +248,23 @@ class OrderSeeker
         	$configId = Yii::app()->db->createCommand($sql)->queryColumn();
         	$configId = "(" . join(',', $configId) . ")";
 
-			$matchCondition = "((warehouse_id>1 AND warehouse_id< 1000) OR `status`='VQ3合格') AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
-			$values = array($order['series'], $order['color'], $order['cold_resistant']);
-			$matchCount = CarAR::model()->count($matchCondition, $values);
-			
-			$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` < 2 AND to_count=1 AND priority<={$order['priority']} AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']} AND id<>{$order['id']}";
-			$same = Yii::app()->db->createCommand($sameSql)->queryRow();
-			$alreadyHold = $same['amount_sum'] - $same['hold_sum'];
+			$need = $order['amount'] - $order['hold'];
+			$order['short'] = 0;
+			if($need > 0){
+				// $matchCondition = "((warehouse_id>1 AND warehouse_id< 1000) OR `status`='VQ3合格') AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
+				$matchCondition = "warehouse_id>1 AND warehouse_id< 1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
+				$values = array($order['series'], $order['color'], $order['cold_resistant']);
+				$matchCount = CarAR::model()->count($matchCondition, $values);
+				
+				$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` < 2 AND to_count=1 AND priority<={$order['priority']} AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']} AND id<>{$order['id']}";
+				$same = Yii::app()->db->createCommand($sameSql)->queryRow();
+				$alreadyNeed = $same['amount_sum'] - $same['hold_sum'];
 
-			$order['short'] = $matchCount - $alreadyHold - ($order['amount'] - $order['hold']);
+				$order['short'] = $matchCount - $alreadyNeed - $need;
+				if($order['short']<(-$need)){
+					$order['short'] = -$need;
+				}
+			}
 
 			if(empty($boards[$order['board_number']])){
 				$boards[$order['board_number']] = array(

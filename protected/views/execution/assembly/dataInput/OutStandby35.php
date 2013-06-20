@@ -37,9 +37,11 @@
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
 		            	<legend>35#厂房备车
-		            		<!-- <span class="pull-right">
-		            			<a href="/bms/execution/child?node=CHECK_OUT&view=WarehouseExit"><i class="icon-link"></i>&nbsp;出成品库</a>
-		            		</span> -->
+		            		<span class="pull-right">
+				            	<a href="/bms/execution/warehouseLabel"><i class="icon-link"></i>&nbsp;成品库标签</a>
+			            		/
+			            		<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;成品库备车</a>
+		            		</span>
 		            	</legend>
 		            </div>
 					<div><!-- 内容主体 -->

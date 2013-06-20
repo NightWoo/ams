@@ -64,41 +64,64 @@
 					<div class="node-rgl node-F20" onclick="window.location.href='/bms/execution/child?view=F20&node=F20'">
 						F20
 					</div>
-					<div class="node-rgl node-VQ1" onclick="window.location.href='/bms/execution/child?view=VQ1&node=VQ1'">
+					<div class="node-qg node-VQ1" onclick="window.location.href='/bms/execution/child?view=VQ1&node=VQ1'">
 						VQ1
 					</div>
+					<div class="node-rgl node-CSCJ" onclick="window.location.href='/bms/execution/child?view=LoadExit&node=LEFT_WORK_SHOP'">
+						出生<br>
+						产间
+					</div>
+					<div class="node-rgl node-JJCJ" onclick="window.location.href='/bms/execution/child?node=ENTER_CHECK_SHOP&view=TestEntry'">
+						进检<br>
+						测间
+					</div>
 					<div class="node-rgl node-JCX" onclick="window.location.href='/bms/execution/child?node=CHECK_LINE&view=VQ2TestLineRegister'">
-						VQ2<br>
-						检
+						检测<br>
+						线
+					</div>
+					<div class="node-rgl node-LSKS" onclick="window.location.href='/bms/execution/child?node=ROAD_TEST_START&view=VQ2RoadTestEntry'">
+						路试<br>
+						开始
 					</div>
 					<div class="node-rgl node-LSWC" onclick="window.location.href='/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished'">
-						VQ2<br>
-						路
+						路试<br>
+						完成
 					</div>
-					<div class="node-rgl node-VQ2" onclick="window.location.href='/bms/execution/child?node=VQ2&view=VQ2LeakTest'">
-						VQ2<br>
-						雨
+					<div class="node-qg node-VQ2" onclick="window.location.href='/bms/execution/child?node=VQ2&view=VQ2LeakTest'">
+						VQ2
 					</div>
-					<div class="node-rgl node-VQ3" onclick="window.location.href='/bms/execution/child?node=VQ3&view=VQ3'">
+					<div class="node-qg node-VQ3" onclick="window.location.href='/bms/execution/child?node=VQ3&view=VQ3'">
 						VQ3
 					</div>
 					<div class="node-rgl node-RK" onclick="window.location.href='/bms/execution/child?node=CHECK_IN&view=WarehouseEntry'">
 						入库
 					</div>
-					<div class="node-rgl node-standby" onclick="window.location.href='/bms/execution/outStandby'">
-						备车
-					</div>
-					<div class="node-rgl node-WDI" onclick="window.location.href='/bms/execution/child?node=WDI&view=WDI'">
-						WDI
-					</div>
 					<div class="node-rgl node-CK" onclick="window.location.href='/bms/execution/child?node=CHECK_OUT&view=WarehouseExit'">
 						出库
 					</div>
-					<div class="node-rect node-FCD" onclick="window.location.href='/bms/execution/laneManage'">发车道</div>
-					<div class="node-rect node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&node=仪表分装&type=subInstrument'">仪表</div>
-					<!-- <div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&node=后桥分装&type=subRearAxle'">后桥分装</div> -->
-					<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&node=前桥分装&type=subFrontAxle'">前桥</div>
-					<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&node=发动机分装&type=subEngine'">发动机</div>
+					<div class="node-fz0 node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&node=仪表分装&type=subInstrument'">仪表分装</div>
+					<div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&node=后桥分装&type=subRearAxle'">后桥分装</div>
+					<div class="node-fz0 node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&node=前桥分装&type=subFrontAxle'">前桥分装</div>
+					<div class="node-fz1 node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&node=发动机分装&type=subEngine'">发动机分装</div>
+					<div class="node-VQ1YC" onclick="window.location.href='/bms/execution/child?node=VQ1异常&view=VQ1Exception'">VQ1异常</div>
+					<!-- <div class="node-HJ">备件库9月20以后</div> -->
+					<div class="node-vq3yc node-VQ3YC1" onclick="window.location.href='/bms/execution/child?node=VQ3异常&view=VQ3Exception'">
+						<div class='yc-text'>VQ3</div>
+						<div>异常</div>
+					</div>
+					<div class="node-vq3yc node-VQ3YC2" onclick="window.location.href='/bms/execution/child?node=VQ3异常&view=VQ3Exception'">
+						<div class='yc-text'>VQ3</div>
+						<div>异常</div>
+					</div>
+					<div class="node-vq2yc node-LYYC" onclick="window.location.href='/bms/execution/child?node=漏雨&view=VQ2LeakTestException'">
+							漏雨
+					</div>
+					<div class="node-vq2yc node-LSYC" onclick="window.location.href='/bms/execution/child?node=路试&view=VQ2RoadTestException'">
+							路试
+					</div>
+					<div class="node-qg node-WDI" onclick="window.location.href='/bms/execution/child?node=WDI&view=WDI'">
+						WDI
+					</div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->
 		</div><!-- end offhead -->

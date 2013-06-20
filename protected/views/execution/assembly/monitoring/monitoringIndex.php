@@ -192,8 +192,9 @@
 	      					    <dl class="dl-horizontal">
 								    <dt>特殊区X</dt><dd class="area-x">-</dd>
 								    <dt>27#临时区H</dt><dd class="area-h">-</dd>
-								    <dt>27#出库车Z</dt><dd class="area-z">-</dd>
+								    <dt>27#出口车Z</dt><dd class="area-z">-</dd>
 								    <dt>35#附加区Y</dt><dd class="area-y">-</dd>
+								    <dt>WDI</dt><dd class="area-wdi">-</dd>
 							    </dl>
 		      				</div>
 

@@ -117,13 +117,23 @@ class FaultController extends BmsBaseController
 
 	
 	public function actionSaveVQ1() {
-		$vin = $this->validateStringVal('vin', '');
-		$faults = $this->validateStringVal('fault', '[]'); 
+        $vin = $this->validateStringVal('vin', '');
+        $faults = $this->validateStringVal('fault', '[]'); 
+        $transaction = Yii::app()->db->beginTransaction();
         try{
+            $car = Car::create($vin);
+            // if($car->car->series == "6B"){
+            //     $IRemote = $car->getIRemoteTestResult();
+            //     if(!($IRemote->Result) || $IRemote->TestState != "2"){
+            //         throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
+            //     }
+            // }
 			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);	
 			$fault->save('离线');
             $this->renderJsonBms(true, 'OK');
+            $transaction->commit();
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false , $e->getMessage());
         }
 

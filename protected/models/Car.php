@@ -929,9 +929,9 @@ class Car
 		$order = new Order;            
         list($success, $data) = $order->match($series, $carType, $config, $color, $coldResistant, $date);
         if($success) {
-            $warehouse = WarehouseAR::model()->find('area=?', array('WDI'));
-            // $warehouse->quantity += 1;
-            $warehouse->save();
+            $rowWDI = WarehouseAR::model()->findByPk(1);
+			$rowWDI->quantity += 1;
+			$rowWDI->save();
 
             $this->car->order_id = $data['orderId'];
             $this->car->old_wh_id = $this->car->warehouse_id;
@@ -1554,6 +1554,12 @@ class Car
 		return $result;
 	}
 
+
+	/**
+	 * @return array
+	 *   Result:bool, 有无记录
+	 *	 TestState:string, 0:有记录未测试，1:有记录测试失败，2：有记录测试成功，“XXXX”: 无记录具体的消息字符串
+	 */
 	public function getIRemoteTestResult(){
 		
 		$vin = $this->car->vin;
@@ -1565,7 +1571,7 @@ class Car
 		);
 		$result = $client -> GetIRemoteTestResult($params);
 
-		return $result;
+		return $result->GetIRemoteTestResultResult;
 	}
 
 	public function getWarehouseLabel(){

@@ -230,6 +230,10 @@ class Order
 				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';
 
+				$rowWDI = WarehouseAR::model()->findByPk(1);
+				$rowWDI->quantity += 1;
+				$rowWDI->save();
+
 				$warehouse->save();
 				$matchedCar->save();
 				

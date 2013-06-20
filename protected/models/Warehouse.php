@@ -122,11 +122,9 @@ class Warehouse
 				}
 			}
 
-			//重复了···，备车匹配订单getCarStandby已经减过一次了
-			// if(!empty($row)){
-			// 	$row->quantity -= 1;
-			// 	$row->save();
-			// }
+			$rowWDI = WarehouseAR::model()->findByPk(1);
+			$rowWDI->quantity -= 1;
+			$rowWDI->save();
 
 			$lane = LaneAR::model()->findByPk($order->lane_id)->name;
 			$laneName='';

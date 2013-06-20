@@ -36,9 +36,11 @@
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
-		            	<legend>备车
+		            	<legend>成品库备车
 		            		<span class="pull-right">
 		            			<a href="/bms/execution/warehouseLabel"><i class="icon-link"></i>&nbsp;成品库标签</a>
+		            			/
+		            			<a href="/bms/execution/outStandby35"><i class="icon-link"></i>&nbsp;35#厂房备车</a>
 		            		</span>
 		            	</legend>
 		            </div>

@@ -636,7 +636,7 @@ class CarSeeker
 	private function stateArray($state){
 		$stateMap=array(
 			'PBS' => array('PBS'),
-			'onLine' => array('online'),
+			'onLine' => array('onLine'),
 			'VQ1' => array('VQ1-NORMAL', 'VQ1-RETURN'),
 			'VQ2' => array('VQ2-NORMAL', 'VQ2-RETURN'),
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
