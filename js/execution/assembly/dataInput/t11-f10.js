@@ -112,7 +112,7 @@ $("document").ready(function() {
 				  	$("#vinHint").html("上一辆" + carInfo.vinCode);	//added by wujun
 				  	recordArray = [];		//added by wujun
 
-				  	if($("#currentNode").val() == 'C21'){
+				  	if($("#currentNode").val() == 'C21' || $("#currentNode").val() == 'C21_2'){
 					  	$("#carSeriesInfo").html(carInfo.series);
 					  	$("#carTypeShort").html(carInfo.typeShort);
 					  	$(".vinBarcode").attr("src",carInfo.vinBarCode);

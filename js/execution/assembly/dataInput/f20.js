@@ -45,7 +45,10 @@ $("document").ready(function() {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: F20_PRINT_CHECK_LIST,//ref:  /bms/js/service.js
-			data: {"vin": $('#vinText').attr("value")},
+			data: {
+				"vin": $('#vinText').attr("value"),
+				"currentNode": $('#currentNode').attr("value"),
+			},
 			success: function(response) 
 			{
 				resetPage();

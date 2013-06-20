@@ -70,6 +70,12 @@
 									<option value="7">I线_C21</option>
 									<option value="8">I线_F10</option>
 									<option value="15">路试完成</option>
+									<option value="202">II线_T11</option>
+									<option value="203">II线_T21</option>
+									<option value="204">II线_T32</option>
+									<option value="205">II线_C10</option>
+									<option value="206">II线_C21</option>
+									<option value="207">II线_F10</option>
 								</select>
 							</td>
 							<td>
@@ -143,6 +149,12 @@
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>
 						<option value="15">路试完成</option>
+						<option value="202">II线_T11</option>
+						<option value="203">II线_T21</option>
+						<option value="204">II线_T32</option>
+						<option value="205">II线_C10</option>
+						<option value="206">II线_C21</option>
+						<option value="207">II线_F10</option>
 					</select>
 			    </div>
 			</div>
@@ -208,6 +220,12 @@
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>
 						<option value="15">路试完成</option>
+						<option value="202">II线_T11</option>
+						<option value="203">II线_T21</option>
+						<option value="204">II线_T32</option>
+						<option value="205">II线_C10</option>
+						<option value="206">II线_C21</option>
+						<option value="207">II线_F10</option>
 					</select>
 			    </div>
 			</div>

@@ -11,6 +11,7 @@ class ExecutionController extends BmsBaseController
 {
 	public static $NODE_MAP = array(
 		'T11','T21','T32','C10','C21','F10',
+        'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2',
 	);
 	public static $MERGED_VIEW = "T11-F10";
 
@@ -103,6 +104,8 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$planId = $this->validateIntVal('planId', 0);
 			$date = $this->validateStringVal('date', date('Y-m-d'));
+            $currentNode = $this->validateStringVal('currentNode' , 'T0');
+            $line = $this->validateStringVal('line', 'I');
 			if(empty($planId)) {
 				throw new Exception('the car must fit a plan!!');
 			}
@@ -110,19 +113,21 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOut();
 
             //$car->leftNode('PBS');
-			$car->enterNode('T0', 0 ,true);
+            // $car->enterNode('T0', 0 ,true);
+			$car->enterNode($currentNode, 0 ,true);
             $car->assemblyTime();
-			$car->generateSerialNumber();
-			$car->addToPlan($date, $planId);
+            $car->addToPlan($date, $planId);
+			$car->generateSerialNumber($line);
             $serial_number = $car->car->serial_number;      //added by wujun
 
-            $subTypes = array('subEngine','subFrontAxle','subInstrument');
-            $car->addSubConfig($subTypes);
+            if($currentNode === 'T0'){
+                $subTypes = array('subEngine','subFrontAxle','subInstrument');
+                $car->addSubConfig($subTypes);
+            }
 
 			$transaction->commit();
 
-			
-			$data = $car->generateConfigData();
+    		$data = $car->generateConfigData();
 
 
             $this->renderJsonBms(true, $vin . '成功录入T0', $data);   //modifed by wujun
@@ -134,6 +139,7 @@ class ExecutionController extends BmsBaseController
 
 
 	//T11,T21,T32,C10,C21,F10
+    //T11_2,T21_2,T32_2,C10_2,C21_2,F10_2
 	public function actionEnterNode() {
 		$transaction = Yii::app()->db->beginTransaction();
         try{
@@ -151,17 +157,12 @@ class ExecutionController extends BmsBaseController
 			$car->enterNode($enterNode->name);
 
             //throw T32 data to vinm
-			if($nodeName == 'T32'){
+			if($nodeName == 'T32' || $nodeName == 'T32_2'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
             }
 
 			//save component trace
 			$car->addTraceComponents($enterNode, $componentCode);
-
-            // if($enterNode->id == 4){
-            //     $subTypes = array('subEngine','subFrontAxle');
-            //     $car->addSubConfig($subTypes);
-            // }
 
             $data = $car->generateInfoPaperData();
 			$transaction->commit();
@@ -176,13 +177,15 @@ class ExecutionController extends BmsBaseController
 		$transaction = Yii::app()->db->beginTransaction();
         try{
             $vin = $this->validateStringVal('vin', '');
+            $nodeName = $this->validateStringVal('currentNode', 'F20');
             $car = Car::create($vin);
             $car->checkAlreadyOut();
 
             //$car->leftNode('F10');
-            $car->enterNode('F20');
-
-            $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
+            $car->enterNode($nodeName);
+            if($nodeName == 'F20'){
+                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
+            }
 			//print check trace 
 			$data = $car->generateCheckTraceData();
 			$transaction->commit();
@@ -198,13 +201,18 @@ class ExecutionController extends BmsBaseController
 		$transaction = Yii::app()->db->beginTransaction();
         try{
             $vin = $this->validateStringVal('vin', '');
+            $nodeName = $this->validateStringVal('currentNode', 'VQ1');
 		    $faults = $this->validateStringVal('fault', '[]');
 
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-            $car->leftNode('F20');
+
+            $enterNode = Node::createByName($nodeName);
+            $leftNode = $enterNode->getParentNode();
+            $car->leftNode($leftNode->name);
+
 			$car->passNode('LEFT_WORK_SHOP');
-            $car->enterNode('VQ1');
+            $car->enterNode($nodeName);
 			$car->finish();
 
             // if($car->car->series == "6B"){

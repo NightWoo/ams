@@ -9,7 +9,10 @@ $("document").ready(function() {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: T0_GET_PLAN,//ref:  /bms/js/service.js
-			data: {"vin": $('#vinText').attr("value")},
+			data: {
+				"vin": $('#vinText').attr("value"),
+				"assembly_line" : $("#line").attr("value"),
+			},
 			success: function(response) {
 				if(response.success){
 					var plans = response.data;
@@ -62,7 +65,8 @@ $("document").ready(function() {
         	dataType: "json",//返回json格式的数据
 			url: T0_GET_PLAN,//ref:  /bms/js/service.js
 			data: {
-				"plan_date": nextWorkDate()
+				"plan_date": nextWorkDate(),
+				"assembly_line" : $("#line").attr("value"),
 			},
 			success: function(response) {
 				if(response.success){
@@ -161,7 +165,12 @@ $("document").ready(function() {
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
 			url: T0_ENTER_AND_PRINT,//ref:  /bms/js/service.js
-			data: {"vin": $('#vinText').attr("value"),"planId":planId},
+			data: {
+				"vin": $('#vinText').attr("value"),
+				"planId":planId,
+				"currentNode": $('#currentNode').attr("value"),
+				"line" : $("#line").attr("value"),
+			},
 			async: false,
 			success: function(response) {
 				if(response.success){
@@ -179,12 +188,15 @@ $("document").ready(function() {
 					}
 					$(".printSerialNumber").html(response.data.serialNumber);
 					$(".printRemark").html("备注：" + response.data.remark);
-					
-					if (response.data.frontImage == "" || response.data.backImage == "") {
-						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+					if($("#currentNode").val() == 'T0'){
+						if (response.data.frontImage == "" || response.data.backImage == "") {
+							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+						} else {
+							$(".printable").addClass("toPrint");
+							setTimeout(function (){window.print();},500);
+							fadeMessageAlert(response.message,"alert-success");
+						}
 					} else {
-						$(".printable").addClass("toPrint");
-						setTimeout(function (){window.print();},500);
 						fadeMessageAlert(response.message,"alert-success");
 					}
 					resetPage();

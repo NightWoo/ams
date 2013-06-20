@@ -96,10 +96,13 @@ class CarController extends BmsBaseController
 
 	public function actionValidateVQ1() {
         $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', 'VQ1');
         try{
             $car = Car::create($vin);
-			$car->leftNode('F20');
-			$car->passNode('LEFT_WORK_SHOP');
+			$enterNode = Node::createByName($nodeName);
+            $leftNode = $enterNode->getParentNode();
+            $car->leftNode($leftNode->name);
+			// $car->passNode('LEFT_WORK_SHOP');
             $data = $car->car;
 
             $this->renderJsonBms(true, 'OK', $data);

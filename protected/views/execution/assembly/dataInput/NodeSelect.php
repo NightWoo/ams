@@ -19,25 +19,11 @@
 			<?php
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
-			<div id="bodyright" class="offset2"><!-- Main -->				
-				<div>
-					<ul class="breadcrumb"><!-- 面包屑 -->
-						<li>
-							<a href="#">生产执行</a><span class="divider">&gt;</span>
-						</li>
-						<li>
-							<a href="#">总装</a><span class="divider">&gt;</span>
-						</li>
-						<li class="active">
-							数据录入
-						</li>
-					</ul>
-				</div><!-- end 面包屑 -->				
+			<div id="bodyright" class="offset2"><!-- Main -->
+				<legend>节点选择
+            	</legend>				
 				<div class="main"><!-- 内容主体 -->
-					<div class="node-rgl node-PBS" 
-						onclick="window.location.href='/bms/execution/child?view=PBS&node=PBS'"
-						rel="tooltip"
-						title="PBS节点">
+					<div class="node-rgl node-PBS" onclick="window.location.href='/bms/execution/child?view=PBS&node=PBS'"	rel="tooltip" title="PBS节点">
 						PBS
 					</div>
 					<div class="node-rgl node-T0" onclick="window.location.href='/bms/execution/child?view=T0&node=T0&line=I'">
@@ -99,9 +85,39 @@
 					<!-- <div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&node=后桥分装&type=subRearAxle'">后桥分装</div> -->
 					<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&node=前桥分装&type=subFrontAxle'">前桥</div>
 					<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&node=发动机分装&type=subEngine'">发动机</div>
-				</div><!-- end 内容主体 -->
-			</div><!-- end Main -->
+
+					<!-- II线 -->
+					<div class="node-rgl node-T0_2" onclick="window.location.href='/bms/execution/child?view=T0&node=T0_2&line=II'">
+						T0
+					</div>
+					<div class="node-rgl node-T11_2" onclick="window.location.href='/bms/execution/child?view=T11_2&node=T11_2'">
+						T11
+					</div>
+					<div class="node-rgl node-T21_2" onclick="window.location.href='/bms/execution/child?view=T21_2&node=T21_2'">
+						T21
+					</div>
+					<div class="node-rgl node-T32_2" onclick="window.location.href='/bms/execution/child?view=T32_2&node=T32_2'">
+						T32
+					</div>
+					<div class="node-rgl node-C10_2" onclick="window.location.href='/bms/execution/child?view=C10_2&node=C10_2'">
+						C10
+					</div>
+					<div class="node-rgl node-C21_2" onclick="window.location.href='/bms/execution/child?view=C21_2&node=C21_2'">
+						C21
+					</div>
+					<div class="node-rgl node-F10_2" onclick="window.location.href='/bms/execution/child?view=F10_2&node=F10_2'">
+						F10
+					</div>
+					<div class="node-rgl node-F20_2" onclick="window.location.href='/bms/execution/child?view=F20&node=F20_2'">
+						F20
+					</div>
+					<div class="node-rgl node-VQ1_2" onclick="window.location.href='/bms/execution/child?view=VQ1&node=VQ1_2'">
+						VQ1
+					</div>
+				</div><!-- end main -->
+			</div><!-- end offset-->
 		</div><!-- end offhead -->
+    </body>
 		<script type="text/javascript">
 		$(document).ready(function () {
 			//add head class
@@ -109,5 +125,4 @@
 			$("#leftNodeSelectLi").addClass("active");
 		});
 		</script>    
-    </body>
 </html>

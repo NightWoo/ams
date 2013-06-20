@@ -77,7 +77,7 @@ $(document).ready(function  () {
 		$.ajax({
 			url : QUERY_DUTY_DEPARTMENT,
 			dataType : "json",
-			data : {"node" : $("#currentNode").val()},
+			data : {"node" : 'VQ1'},
 			success : function  (response) {
 				var options = "";
 				$.each(response.data, function(index, value) {
@@ -374,6 +374,7 @@ $(document).ready(function  () {
 			//vin号，和故障数组
 			var sendData = {};
 			sendData.vin = $('#vinText').val();
+			sendData.currentNode = $('#currentNode').val();
 			sendData.fault = [];
 			console.log($("#tabContent tr").length);
 			var selects = $("#tabContent tr select").filter(".fault-type");

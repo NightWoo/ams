@@ -111,9 +111,12 @@ class Car
 		}
 	}
 
-	public function generateSerialNumber() {
+	public function generateSerialNumber($line) {
 		$series = $this->car->series;
 		$snClass = "SerialNumber" . strtoupper($series) . "AR";
+		if($line === 'II'){
+			$snClass = "SerialNumber" . strtoupper($series) . "_2AR";
+		}
 		
 		$curYear = date('Y');
 		$logYear = CurrentYearAR::model()->find('series=? AND cur_year=?', array($series, $curYear));

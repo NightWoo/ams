@@ -27,6 +27,9 @@
 				<legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
                         <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="icon-link"></i>&nbsp;VQ1静态检验</a>
+                        /
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="icon-link"></i>&nbsp;II_VQ1</a>
+
                     </span>
                 </legend>
 				

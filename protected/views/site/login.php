@@ -93,7 +93,7 @@
 							<li class="title"><i class="icon-download"></i>&nbsp;浏览器下载</li>
 							<li>
 								<ul>
-									<li class="text-info"><a href="/bms/download/browser/firefox.rar">firefox浏览器</a></li>
+									<li class="text-info"><a href="/bms/download/browser/firefox.zip">firefox浏览器</a></li>
 								</ul>
 							</li>
                         </ul>   
@@ -106,7 +106,7 @@
 	<div class="span12 row">
 	    <div class="row">	    	    
 		<div class="span6"><p class="muted">Copyright&nbsp;&copy;&nbsp;2012&nbsp;&nbsp;第十一事业部</p></div>
-		<div class="span6"><p class="muted pull-right">更新于2012-12-28</p></div>
+		<div class="span6"><p class="muted pull-right">更新于2013-06-01</p></div>
 		</div>
 	</div>
 </body>
