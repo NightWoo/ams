@@ -41,7 +41,7 @@
 			    <div class="accordion span4" id="accordionOrderInBoard">
 			    	<div class="accordion-group" id="group1">
 			    		<div class="accordion-heading">
-			    			<a href="#" id="refresh"><i class="icon-refresh pull-right"></i></a>
+			    			<a href="#" id="refresh" class="pull-right"><i class="icon-refresh"></i></a>
 			    			<p class="text-success" id="totalOK">0</p>
 			    		</div>
 			    		<div id="collapse1" class="accordion-body collapse in" style="overflow-y: scroll; height:460px">

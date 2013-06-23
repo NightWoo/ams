@@ -370,7 +370,22 @@ $(document).ready(function  () {
 	//构造提交的json，包括以下 vin 和fault，fault如下
 	// fault:[{"componentId":1,"faultId":1,"fixed":false},{}]
 	$("#btnSubmit").click(function() {	
-		if(!($("#btnSubmit").hasClass("disabled"))){	
+		if(!($("#btnSubmit").hasClass("disabled"))){
+			var flag = false;
+			$.each($(".tableFault tr"), function (index, value){
+				var faultId = $(value).find(".fault-type").val();
+				if(faultId != ""){
+					fixed = $(value).find("input[type='checkbox']").attr("checked") == "checked" ? true : false;
+					unDuty =  $(value).find(".duty").val() == "" ? true : false;
+					if(fixed && unDuty){
+						alert("在线修复故障需选择\"责任部门\"，请确认选择后再进行提交");
+						flag = true;
+						return false;
+					}
+				}
+			})
+			if(flag) return false; //stop from submitting
+
 			//vin号，和故障数组
 			var sendData = {};
 			sendData.vin = $('#vinText').val();

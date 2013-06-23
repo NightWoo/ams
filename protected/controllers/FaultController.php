@@ -122,12 +122,12 @@ class FaultController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try{
             $car = Car::create($vin);
-            // if($car->car->series == "6B"){
-            //     $IRemote = $car->getIRemoteTestResult();
-            //     if(!($IRemote->Result) || $IRemote->TestState != "2"){
-            //         throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
-            //     }
-            // }
+            if($car->car->series == "6B"){
+                $IRemote = $car->getIRemoteTestResult();
+                if(!($IRemote->Result) || $IRemote->TestState != "2"){
+                    throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
+                }
+            }
 			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);	
 			$fault->save('离线');
             $this->renderJsonBms(true, 'OK');

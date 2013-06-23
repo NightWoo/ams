@@ -938,13 +938,13 @@ class Car
 
             $this->car->order_id = $data['orderId'];
             $this->car->old_wh_id = $this->car->warehouse_id;
-            $this->car->warehouse_id = $warehouse->id;
+            $this->car->warehouse_id = $rowWDI->id;
             $this->car->status = 'WDI';
             $this->car->area = 'WDI';
             $this->car->save();
 
-            $data['area'] = $warehouse->area;
-            $data['row'] = $warehouse->row;
+            $data['area'] = $rowWDI->area;
+            $data['row'] = $rowWDI->row;
             $data['vin'] = $this->car->vin;
             $data['type'] = $this->car->type;
             $data['color'] = $this->car->color;
@@ -988,7 +988,11 @@ class Car
 			$status = "成品库";
 			if($this->car->warehouse_id > 1){
 				$rowNow = WarehouseAR::model()->findByPk($this->car->warehouse_id)->row;
-				throw new Exception ('此车状态为成品库_'. $rowNow .'，不可退回成品库如，如需重新分配库位，请操作<重新分配库位>');
+				throw new Exception ('此车状态为成品库_'. $rowNow .'，不可退回成品库，如需重新分配库位，请操作<重新分配库位>');
+			} else if($this->car->warehouse_id == 1){
+				$rowWDI = WarehouseAR::model()->findByPk(1);
+				$rowWDI->quantity -= 1;
+				$rowWDI->save();
 			}
 			$warehouse = new Warehouse;
             $data = $warehouse->checkin($this->car->vin);
@@ -1000,8 +1004,10 @@ class Car
 
 		} else {
 			$status = "退库" . $goTo;
-			if($this->car->warehouse_id>1){
+			if($this->car->warehouse_id > 1){
 				$this->car->old_wh_id = $this->car->warehouse_id;
+			}
+			if($this->car->warehouse_id >= 1){
 				$row = WarehouseAR::model()->findByPk($this->car->warehouse_id);
 				$row->quantity -= 1;
 				$row->save();

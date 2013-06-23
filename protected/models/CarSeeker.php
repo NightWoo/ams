@@ -321,6 +321,8 @@ class CarSeeker
 			$detail[] = array_merge(array('color' => $color), $temp);
 		}
 
+		sort($configNameArray);
+
 		return array(
 			'colorArray' => $colorArray,
 			'configNameArray' =>$configNameArray,
@@ -367,7 +369,7 @@ class CarSeeker
 		return $cars;
 	}
 
-	public function getBalanceCars($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly=false){
+	public function getBalanceCars($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly=false,$recyclePeriod=""){
 		$conditions = array();
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
@@ -395,6 +397,21 @@ class CarSeeker
 			$conditions[] = "warehouse_id > 1 AND warehouse_id < 1000 AND special_property=0";
 		}
 
+		if(!empty($recyclePeriod)){
+			$periodArray = $this->periodArray();
+			$lowRP = $periodArray[$recyclePeriod]['low'];
+			$highRP = $periodArray[$recyclePeriod]['high'];
+			$cc = array();
+			if(!empty($lowRP)){
+				$cc[] = "finish_time>'0000-00-00 00:00:00' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) > $lowRP";
+			}
+			if(!empty($highRP)){
+				$cc[] = "TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) <= $highRP";
+			}
+			$con = join(" AND ", $cc);
+			if(!empty($cc))	$conditions[] = $con;
+		}
+
 		$condition = join(" AND ", $conditions);
 
 		$sql = "SELECT car_id, `status`, vin, serial_number, series, color, car_type, car_model, config_id, config_name, order_config_name, finish_time, warehouse_time, warehouse_id, cold_resistant
@@ -409,12 +426,148 @@ class CarSeeker
 			if(!empty($car["warehouse_id"])){
 				$car['row'] = WarehouseAR::model()->findByPk($car['warehouse_id'])->row;
 			}
+
+			$car['recycle_last'] = 0;
+			if($car['finish_time'] > "0000-00-00 00:00:00"){
+				$warehouseTime = $car['warehouse_time'] > "0000-00-00 00:00:00" ? $warehouseTime = $car['warehouse_time'] : date("Y-m-d H:i:s");
+				$car['recycle_last'] = (strtotime($warehouseTime) - strtotime($car['finish_time'])) / 3600;
+				$car['recycle_last'] = round($car['recycle_last'], 1);
+			}
 		}
 		
 		return $cars;
 	}
 
-	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2) {
+	public function queryRecycleBalancePeriod($state, $series){
+		$seriesArray = $this->parseSeries($series);
+		$seriesName = $this->seriesName();
+		$stateArray = $this->stateArray($state);
+		$stateName = $this->stateName();
+		$periodArray = $this->periodArray();
+
+		$detail = array();
+		$stateTotal = array();
+		$periodTotal = array();
+		$dataDonut = array();
+		foreach($stateArray as $state){
+			$stateTotal[$stateName[$state]]['countSum'] = 0;
+			foreach($seriesArray as $series){
+				$stateTotal[$stateName[$state]][$seriesName[$series]]=0;
+			}
+		}
+		foreach($periodArray as $periodName => $period){
+			$periodTotal[$periodName]['countSum'] = 0;
+			foreach($seriesArray as $series){
+				$periodTotal[$periodName][$seriesName[$series]]=0;
+			}
+		}
+
+		$iColor = 0;
+		foreach($stateArray as $state){
+			$temp = array();
+			$data = array();
+			$drilldownCategories = array();
+			$drilldownData = array();
+			
+			foreach($periodArray as $periodName => $period){
+				$countSum = 0;
+				foreach($seriesArray as $series){
+					$count = $this->countStateCars($state, $series, $color='', $orderConfigId=0, $coldResistant=2, $period['low'],$period['high']);
+					$temp[$periodName][$seriesName[$series]] = $count;
+					$periodTotal[$periodName][$seriesName[$series]] += $count;
+					$stateTotal[$stateName[$state]][$seriesName[$series]] =+ $count;
+					$countSum += $count;
+				}
+				$drilldownCategories[] = $periodName;
+				$drilldownData[] = $countSum;
+
+				$temp[$periodName]['countSum'] = $countSum;
+				$periodTotal[$periodName]['countSum'] += $countSum;
+				$stateTotal[$stateName[$state]]['countSum'] += $countSum;
+				$data['y'] = $stateTotal[$stateName[$state]]['countSum'];
+			}
+			$data['colorIndex'] = $iColor++;
+			$data['drilldown'] = array(
+				'name' => $stateName[$state],
+				'categories' => $drilldownCategories,
+				'data' => $drilldownData,
+			);
+
+			$dataDonut[$stateName[$state]] = $data;
+			$detail[] = array_merge(array('state' => $stateName[$state]), $temp);
+		}
+
+		$recyclePeriod = array_keys($periodArray);
+		return  array(
+			'recyclePeriod' => $recyclePeriod,
+			'detail' => $detail,
+			'stateTotal'=> $stateTotal,
+			'periodTotal'=> $periodTotal,
+			'dataDonut' => $dataDonut,
+		);
+	}
+
+	public function getRecycleCars($state,$series,$recyclePeriod){
+		$conditions = array();
+		if(!is_array($state)) {
+			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
+				$states = self::$NODE_BALANCE_STATE[$state];
+			} else {
+				$states = array($state);
+			}
+		} else {
+			$states = $state;
+		}
+
+		$str = "'" . join("','", $states) . "'";
+		$conditions[] = "status IN ($str)";
+
+		if(!empty($series)){
+			$conditions[] = "series='$series'";
+		};
+
+		if(!empty($recyclePeriod)){
+			$periodArray = $this->periodArray();
+			$lowRP = $periodArray[$recyclePeriod]['low'];
+			$highRP = $periodArray[$recyclePeriod]['high'];
+			$cc = array();
+			if(!empty($lowRP)){
+				$cc[] = "finish_time>'0000-00-00 00:00:00' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) > $lowRP";
+			}
+			if(!empty($highRP)){
+				$cc[] = "TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) <= $highRP";
+			}
+			$con = join(" AND ", $cc);
+			if(!empty($cc))	$conditions[] = $con;
+		}
+
+		$condition = join(" AND ", $conditions);
+
+		$sql = "SELECT car_id, `status`, vin, serial_number, series, color, car_type, car_model, config_id, config_name, order_config_name, finish_time, warehouse_time, warehouse_id, cold_resistant
+				FROM view_car_info_main
+				WHERE $condition
+				ORDER BY finish_time ASC" ;
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($cars as &$car){
+			$car['type_info'] = $car['car_model'] . "/" . $car['order_config_name'];
+			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
+			$car['row'] = "-";
+			if(!empty($car["warehouse_id"])){
+				$car['row'] = WarehouseAR::model()->findByPk($car['warehouse_id'])->row;
+			}
+
+			$car['recycle_last'] = 0;
+			if($car['finish_time'] > "0000-00-00 00:00:00"){
+				$warehouseTime = $car['warehouse_time'] > "0000-00-00 00:00:00" ? $warehouseTime = $car['warehouse_time'] : date("Y-m-d H:i:s");
+				$car['recycle_last'] = (strtotime($warehouseTime) - strtotime($car['finish_time'])) / 3600;
+				$car['recycle_last'] = round($car['recycle_last'], 1);
+			}
+		}
+		
+		return $cars;
+	}
+
+	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2, $lowRP=0, $highRP=0) {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -461,7 +614,15 @@ class CarSeeker
 			$condition .= " AND warehouse_id>=600 AND warehouse_id< 1000";
 		}
 		if($state === 'WH-X'){
-			$condition .= "AND warehouse_id=1000";
+			$condition .= " AND warehouse_id=1000";
+		}
+
+		//recyclePeriod = now - assembly_time, or recyclePeriod = assembly_time - warehouse_time
+		if(!empty($lowRP)){
+			$condition .= " AND finish_time>'0000-00-00 00:00:00' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) > $lowRP";
+		}
+		if(!empty($highRP)){
+			$condition .= " AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) <= $highRP";
 		}
 
 		$sql = "SELECT count(*) FROM car $condition";	
@@ -678,6 +839,16 @@ class CarSeeker
 		);
 
 		return $stateName;
+	}
+
+	private function periodArray(){
+		$periodArray = array(
+			'&lt;8H' => array('low'=>0,'high'=>8),
+			'8-20H' => array('low'=>8,'high'=>20),
+			'>20H' => array('low'=>20,'high'=>0),
+		);
+
+		return $periodArray;
 	}
 
 	private function configNameList(){

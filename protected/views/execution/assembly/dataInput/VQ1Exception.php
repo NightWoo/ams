@@ -55,7 +55,7 @@
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 -->                   
 							<div id="divDetail">
-								<table id="tableConfirmation" class="table">
+								<table id="tableConfirmation" class="table tableFault">
 									<thead>
 										<tr>
 											<th class="span1">序号</th>

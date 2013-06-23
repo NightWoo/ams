@@ -21,14 +21,18 @@ return array(
 
 	//mailer
 	'mail_enable' => true,
-	'mail_from' => 'wu.jun9@byd.com',
-	'mail_fromName' => 'AMS.CS',
+	// 'mail_from' => 'wu.jun9@byd.com',
+	'mail_from' => 'AMS.ASF@byd.com',
+	'mail_fromName' => 'AMS.ASF',
 	'mail_host' => 'smtp11.byd.com',
 	'mail_port' => 25,
 	'mailer' => 'smtp',
-	'smtp_username' => 'wu.jun9@byd.com',
-	'smtp_password' => 'byd@user',
-	'SEND_ALL_MAIL_TO' => 'wu.jun9@byd.com',
+	// 'smtp_username' => 'wu.jun9@byd.com',
+	// 'smtp_password' => 'byd@user',
+	// 'SEND_ALL_MAIL_TO' => 'wu.jun9@byd.com',
+	'smtp_username' => 'AMS.ASF@byd.com',
+	'smtp_password' => 'xwmn#n50m',
+	'SEND_ALL_MAIL_TO' => 'AMS.ASF@byd.com',
 
 
 	//vinm db config

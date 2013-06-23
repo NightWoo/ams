@@ -710,6 +710,32 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionQueryRecycleBalancePeriod() {
+        try{
+            $state = $this->validateStringVal('state', 'recycle');
+            $series = $this->validateStringVal('series', '');
+            $seeker = new CarSeeker();
+            $data = $seeker->queryRecycleBalancePeriod($state, $series);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionShowRecycleCars() {
+        try{
+            $state = $this->validateStringVal('state', 'recycle');
+            $series = $this->validateStringVal('series', '');
+            $recyclePeriod = $this->validateStringVal('recyclePeriod', '');
+            $seeker = new CarSeeker();
+            $whAvailableOnly = false;
+            $data = $seeker->getRecycleCars($state,$series,$recyclePeriod);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e){
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionThrowOutPrintDataOne() {
         try{
             $vin = $this->validateStringVal('vin', '');

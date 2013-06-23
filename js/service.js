@@ -141,6 +141,8 @@ var QUERY_BALANCE_DISTRIBUTE = "/bms/car/queryBalanceDistribute";
 var SHOW_BALANCE_CARS = "/bms/car/showBalanceCars";
 var QUERY_TESTLINE_RECORDS  = "/bms/execution/queryTestlineRecords";
 var EXPORT_TESTLINE_RECORDS  = "/bms/execution/exportTestlineRecords";
+var QUERY_RECYCLE_BALANCE_PERIOD = "/bms/car/queryRecycleBalancePeriod";
+var SHOW_RECYCLE_CARS = "/bms/car/showRecycleCars";
 
 var SHOW_USER = "/bms/user/show";
 var INIT_PASSWORD = "/bms/user/initPassword";

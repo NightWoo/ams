@@ -205,6 +205,18 @@ $("document").ready(function() {
 
 	//进入彩车身库事件，发ajax，根据响应做提示
 	$("#btnSubmit").click(function() {
+		var flag = false;
+		$.each($(".tableFault tr"), function (index, value){
+			fixed = $(value).find("input[type='checkbox']").attr("checked") == "checked" ? true : false;
+			unDuty = $(value).find(".duty").val()=="" ? true : false;
+			if(fixed && unDuty){
+				alert("所有故障均需选择\"责任部门\"，请确认选择后再进行提交");
+				flag = true;
+				return false;
+			}
+		})
+		if(flag) return false; //stop from submitting
+		
 		var sendData = {};
 		sendData.vin = $("#vinText").val();
 		sendData.fault = [];

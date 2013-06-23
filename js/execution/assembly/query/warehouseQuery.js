@@ -147,7 +147,7 @@ $(document).ready(function () {
 			headInfo = headInfo + "-" + color
 		}
 		$("#carsModal .modal-header h4").html(headInfo);
-		ajaxQueryCars(orderConfigId,coldResistant,color);
+		ajaxQueryBalanceCarsShotcut(orderConfigId,coldResistant,color);
 		$("#carsModal").modal("show");
 
 	})
@@ -236,26 +236,26 @@ $(document).ready(function () {
 		    			$("#tableOrderCars tbody").append(tr);
 		    		});
 					if(response.data.pager.curPage == 1) {
-							$("#preCars, #firstCars").addClass("disabled");
-							$("#preCars a, #firstCars a").removeAttr("href");
-						} else {
-							$("#preCars, #firstCars").removeClass("disabled");
-							$("#preCars a, #firstCars a").attr("href","#");
-						}
-		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
-							$("#nextCars, #lastCars").addClass("disabled");
-							$("#nextCars a, #lastCars a").removeAttr("href");
-						} else {
-							$("#nextCars, #lastCars").removeClass("disabled");
-							$("#nextCars a, #lastCars a").attr("href","#");
-						}
-						$("#curCars").attr("page", response.data.pager.curPage);
-						$("#curCars a").html(response.data.pager.curPage);
-						$("#totalCars").attr("total", response.data.pager.total);
-						$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
-						$("#exportCars").attr("export", "orderCars");
-						$("#paginationCars").show();
-						$("#tableOrderCars").show();	
+						$("#preCars, #firstCars").addClass("disabled");
+						$("#preCars a, #firstCars a").removeAttr("href");
+					} else {
+						$("#preCars, #firstCars").removeClass("disabled");
+						$("#preCars a, #firstCars a").attr("href","#");
+					}
+	    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+						$("#nextCars, #lastCars").addClass("disabled");
+						$("#nextCars a, #lastCars a").removeAttr("href");
+					} else {
+						$("#nextCars, #lastCars").removeClass("disabled");
+						$("#nextCars a, #lastCars a").attr("href","#");
+					}
+					$("#curCars").attr("page", response.data.pager.curPage);
+					$("#curCars a").html(response.data.pager.curPage);
+					$("#totalCars").attr("total", response.data.pager.total);
+					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
+					$("#exportCars").attr("export", "orderCars");
+					$("#paginationCars").show();
+					$("#tableOrderCars").show();	
 		    	}else{
 		    		alert(response.message);
 
@@ -895,7 +895,7 @@ $(document).ready(function () {
 		})
 	}
 
-	function ajaxQueryCars(orderConfigId,coldResistant,color) {
+	function ajaxQueryBalanceCarsShotcut(orderConfigId,coldResistant,color) {
 		$("#resultCars>tbody").html("");
 		$.ajax({
 			url: SHOW_BALANCE_CARS,

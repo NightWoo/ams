@@ -13,193 +13,203 @@
 .node-rgl {
 	position:relative;
 	z-index:20;
-	height:27px;
-	width:27px;
-	line-height:25px;
+	height:35px;
+	width:35px;
+	line-height:33px;
 	font-size: 10px;
 	cursor:pointer;
 	border-radius: 20px;
-	border: 3px solid transparent;
 }  
 .node-rgl:hover {
-	border: 3px solid #9966FF;	
+	background: #9966FF;
+	opacity: 1;
+}
+
+.node-rgl p {
+	margin: 0;
+	padding-top: 0;
+}
+
+.node-rgl p:first-child {
+	margin: 0px;
+	padding-top: 5px;
 }
 		  
 .node-PBS {
-	top:162px;
-	left:20px;
+	top:161px;
+	left:19px;
 }
 		 
 .node-T0 {
-	top:129px;
-	left:88px;
+	top:126px;
+	left:87px;
 }
 		 
 .node-T11 {
-	left: 141px;
-    top: 96px;
+	left: 140px;
+    top: 91px;
 }
 
 .node-T21 {
 	left: 180px;
-   	top: 63px;
+   	top: 56px;
 }
 
 .node-T32 {
     left: 219px;
-    top: 30px;
+    top: 21px;
 }
 
 .node-C10 {
-	left: 273px;
-    top: -3px;
+	left: 272px;
+    top: -14px;
 }
 
 .node-C21 {
-	left: 312px;
-    top: -36px;
+	left: 311px;
+    top: -49px;
 }
 
 .node-F10 {
-	left: 365px;
-    top: -69px;
+	left: 364px;
+    top: -84px;
 }
 
 .node-F20 {
-	left: 404px;
-	top: -102px;
+	left: 403px;
+	top: -119px;
 }
 
 .node-VQ1 {
-	left: 457px;
-    top: -135px;
+	left: 456px;
+    top: -154px;
 }
 	   
 .node-JCX {
 	font-size: 10px;
     line-height:12px;
-    left: 538px;
-    top: -168px;
+    left: 536px;
+    top: -189px;
 }
 
 .node-LSWC {
 	font-size: 10px;
     line-height:12px;
-    left: 576px;
-    top: -201px;
+    left: 575px;
+    top: -224px;
 }
 
 .node-VQ2 {
 	font-size: 10px;
     line-height:12px;
-    left: 615px;
-    top: -234px;
+    left: 614px;
+    top: -259px;
 }
 
 .node-VQ3 {
 	left: 668px;
-    top: -267px;
+    top: -294px;
 }
 
 .node-RK {
-    left: 726px;
-    top: -300px;
+    left: 725px;
+    top: -329px;
 }
 
 
 .node-standby {
     left: 765px;
-    top: -333px;
+    top: -364px;
 }
 
 .node-WDI {
-	left: 805px;
-    top: -366px;
+	left: 804px;
+    top: -399px;
 }
 
 .node-CK {
-    left: 844px;
-    top: -399px;
+    left: 843px;
+    top: -434px;
 }
 
 .node-rect{
 	position:relative;
 	z-index:20;
-	height:13px;
-	width:40px;
-	line-height: 13px;
+	height:18px;
+	width:46px;
+	line-height: 18px;
 	font-size: 11px;
 	cursor:pointer;
 	border-radius: 2px;
-	border: 3px solid transparent;
 }  
 .node-rect:hover{
-	border: 3px solid #9966FF;
+	background: #9966FF;
+	opacity: 1;
 }
 
 .node-FCD {
 	left: 882px;
-    top: -425px;
+    top: -461px;
 }
 
 .node-YBFZ {
 	left: 148px;
-    top: -409px;
-    width: 29px;
+    top: -444px;
+    width: 36px;
 }
 
 .node-QQFZ {
-	left: 232px;
-    top: -428px;
-    width: 29px;
+	left: 231px;
+    top: -462px;
+    width: 36px;
 }
 
 .node-FDJFZ {
 	left: 270px;
-    top: -447px;
+    top: -480px;
 }
 
 .node-T0_2 {
-	top: -566px;
-	left: 88px;
+	top: -598px;
+	left: 87px;
 }
 		 
 .node-T11_2 {
 	left: 141px;
-    top: -599px;
+    top: -633px;
 }
 
 .node-T21_2 {
 	left: 180px;
-   	top: -632px;
+   	top: -668px;
 }
 
 .node-T32_2 {
     left: 219px;
-    top: -665px;
+    top: -703px;
 }
 
 .node-C10_2 {
-	left: 273px;
-    top: -698px;
+	left: 272px;
+    top: -738px;
 }
 
 .node-C21_2 {
-	left: 312px;
-    top: -731px;
+	left: 311px;
+    top: -773px;
 }
 
 .node-F10_2 {
-	left: 365px;
-    top: -764px;
+	left: 364px;
+    top: -808px;
 }
 
 .node-F20_2 {
-	left: 404px;
-	top: -797px;
+	left: 403px;
+	top: -843px;
 }
 
 .node-VQ1_2 {
 	left: 457px;
-    top: -830px;
+    top: -878px;
 }

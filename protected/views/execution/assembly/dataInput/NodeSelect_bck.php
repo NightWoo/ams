@@ -5,7 +5,7 @@
         <title>总装录入节点</title>
 		<!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <link href="/bms/css/execution/assembly/dataInput/NodeSelect.css" rel="stylesheet">
+        <link href="/bms/css/execution/assembly/dataInput/NodeSelect_bck.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>

@@ -88,7 +88,8 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li id="carsDetail"><a href="#dataList" data-toggle="tab">结存明细</a></li>
                             <li><a href="#carsDistribute" data-toggle="tab">车辆分布</a></li>
-                            <li><a href="#balanceTrendLine" data-toggle="tab">区域趋势</a></li>
+                            <li id="recyclePeriodLi"><a href="#recyclePeriod" data-toggle="tab">VQ周期</a></li>
+                            <!-- <li><a href="#balanceTrendLine" data-toggle="tab">区域趋势</a></li> -->
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
                                     <li id="exportCars"><a href=""><span id="totalCars"></span></a></li>
@@ -152,7 +153,24 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane" id="balanceTrend">
+                        <div class="tab-pane" id="recyclePeriod">
+                            <div class="tableContainer span8 pull-left">
+                                <table id="tableRecyclePeriod" class="table table-condensed table-hover table-bordered">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                <div><p class="text-info">VQ周期(小时) = 当前时间 - 下线时间</p></div>
+                            </div>
+                            <div class="chartContainer carsDistributeContainer offset8">
+                                <div id="recycleDonutContainer" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="tab-pane" id="balanceTrend">
 
                             <div id="balanceTrendContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
                             
@@ -165,7 +183,7 @@
                                     <tr></tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

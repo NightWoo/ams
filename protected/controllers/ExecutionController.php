@@ -215,25 +215,25 @@ class ExecutionController extends BmsBaseController
             $car->enterNode($nodeName);
 			$car->finish();
 
-            // if($car->car->series == "6B"){
-            //     $checkIRemote = true;
-            //     $ff = CJSON::decode($faults);
-            //     if(!empty($ff)){
-            //         foreach($ff as $f){
-            //             //如果有离线修复故障，则不校验云系统
-            //             if(!$f['fixed']){
-            //                 $checkIRemote = false;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     if($checkIRemote){
-            //         $IRemote = $car->getIRemoteTestResult();
-            //         if(!($IRemote->Result) || $IRemote->TestState != "2"){
-            //             throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
-            //         }
-            //     }
-            // }
+            if($car->car->series == "6B"){
+                $checkIRemote = true;
+                $ff = CJSON::decode($faults);
+                if(!empty($ff)){
+                    foreach($ff as $f){
+                        //如果有离线修复故障，则不校验云系统
+                        if(!$f['fixed']){
+                            $checkIRemote = false;
+                            break;
+                        }
+                    }
+                }
+                if($checkIRemote){
+                    $IRemote = $car->getIRemoteTestResult();
+                    if(!($IRemote->Result) || $IRemote->TestState != "2"){
+                        throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
+                    }
+                }
+            }
 
             //throw data to vinm
 			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');

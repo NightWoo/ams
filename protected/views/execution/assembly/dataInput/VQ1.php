@@ -65,7 +65,7 @@
 								</div>
 								<div id="tabContent" class="tab-content">
 									<div class="tab-pane  active" id="engienRoom">
-										<table id="tableEngine" class="table table-condensed">
+										<table id="tableEngine" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
@@ -81,7 +81,7 @@
 										</table>
 									</div>
 									<div class="tab-pane" id="performance">
-										<table id="tablePerformance" class="table table-condensed">
+										<table id="tablePerformance" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
@@ -97,7 +97,7 @@
 										</table>
 									</div>
 									<div class="tab-pane" id="left">
-										<table id="tableLeft" class="table table-condensed">
+										<table id="tableLeft" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
@@ -112,7 +112,7 @@
 										</table>
 									</div>
 									<div class="tab-pane" id="right">
-										<table id="tableRight" class="table table-condensed">
+										<table id="tableRight" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
@@ -127,7 +127,7 @@
 										</table>
 									</div>
 									<div class="tab-pane" id="baggageRoom">
-										<table id="tableBaggage" class="table table-condensed">
+										<table id="tableBaggage" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
@@ -142,7 +142,7 @@
 										</table>
 									</div>
 									<div class="tab-pane" id="other">
-										<table id="otherTable" class="table table-condensed">
+										<table id="otherTable" class="table table-condensed tableFault">
 											<thead>
 												<tr>
 													<td class="span1">序号</td>
