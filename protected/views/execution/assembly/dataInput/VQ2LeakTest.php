@@ -62,6 +62,35 @@
 									<option value="154">赵松</option>
                                     <option value="227">顾善军</option>
                                     <option value="234">单炯</option>
+                                    <option value="276">刘琪</option>
+									<option value="277">苏新胜</option>
+									<option value="278">简成伟</option>
+									<option value="279">周超</option>
+									<option value="280">谢文强</option>
+									<option value="281">王安</option>
+									<option value="282">黄兴</option>
+									<option value="283">刘斌</option>
+									<option value="284">艾梅彬</option>
+									<option value="215">朱志鹏</option>
+									<option value="285">黎江</option>
+									<option value="286">毛光玉</option>
+									<option value="169">汪辉</option>
+									<option value="287">彭鹭云</option>
+									<option value="288">尹彦德</option>
+									<option value="289">贺锦</option>
+									<option value="290">刘山东</option>
+									<option value="291">熊闯</option>
+									<option value="292">周思来</option>
+									<option value="293">刘嘉伟</option>
+									<option value="294">谌勇</option>
+									<option value="295">周颂雄</option>
+									<option value="296">赵鑫鹏</option>
+									<option value="297">田双全</option>
+									<option value="298">王文明</option>
+									<option value="299">黄双喜</option>
+									<option value="300">蒋其名</option>
+									<option value="301">王定钊</option>
+									<option value="302">鄢佳斌</option>
 								</select>
 								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
 								<button id="reset" type="reset" class="btn">清空</button>

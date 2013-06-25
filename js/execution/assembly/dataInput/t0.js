@@ -173,6 +173,7 @@ $("document").ready(function() {
 			},
 			async: false,
 			success: function(response) {
+				resetPage();
 				if(response.success){
 				  	$("#vinHint").html(response.data.vinCode + "整车编号" + response.data.serialNumber);	//added by wujun
 					//fill data to print
@@ -199,11 +200,9 @@ $("document").ready(function() {
 					} else {
 						fadeMessageAlert(response.message,"alert-success");
 					}
-					resetPage();
 				}
 				else{
 					fadeMessageAlert(response.message,"alert-error");
-					resetPage();
 				}
 
 				//added by wujun

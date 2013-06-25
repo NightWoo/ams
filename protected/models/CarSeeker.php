@@ -844,8 +844,9 @@ class CarSeeker
 	private function periodArray(){
 		$periodArray = array(
 			'&lt;8H' => array('low'=>0,'high'=>8),
-			'8-20H' => array('low'=>8,'high'=>20),
-			'>20H' => array('low'=>20,'high'=>0),
+			'8-16H' => array('low'=>8,'high'=>16),
+			'16-24H' => array('low'=>16,'high'=>24),
+			'>24H' => array('low'=>24,'high'=>0),
 		);
 
 		return $periodArray;

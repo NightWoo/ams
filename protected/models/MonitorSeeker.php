@@ -361,6 +361,12 @@ class MonitorSeeker
 			$ret[$data['area']] = $data['quantity'];
 		}
 
+		//WDI & Y quantity
+		$sql = "SELECT COUNT(id) FROM car WHERE warehouse_id=1 OR warehouse_id=600 GROUP BY area";
+		$dataSpecial = Yii::app()->db->createCommand($sql)->queryColumn();
+		$ret['WDI'] = $dataSpecial[0];	//WDI
+		$ret['Y'] = $dataSpecial[1];	//Y
+
 		return $ret;
 	}
 

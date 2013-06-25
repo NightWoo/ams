@@ -359,7 +359,7 @@ $(document).ready(function () {
 						$("<td />").html(car.finish_time.substring(0,16)).appendTo(tr);
 						if(car.warehouse_time == "0000-00-00 00:00:00"){
 							lastTd = $("<td />").html("<i class='icon-time'></i>" + car.recycle_last + "H").appendTo(tr);
-							if (car.recycle_last > 20) {
+							if (car.recycle_last > 24) {
 								lastTd.addClass("text-error");
 							} else if(car.recycle_last > 8){
 								lastTd.addClass("text-warning");

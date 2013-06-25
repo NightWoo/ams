@@ -85,13 +85,16 @@ class FaultBaseSeeker
 		if(count($codes) >= 2) {
 			foreach($codes as $code){
 				if(strlen($code) >=7){
-					$ret .= substr($codes[1], 0, 7);
-					break;
+					$codeString = substr($code, 0, 7);
+					//must be number
+                    if(preg_match("/^[0-9]+$/",$codeString)){
+                        $ret .= $codeString; 
+                        break;
+                    }
 				}
 			}
 		}
 
-		
 		//$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
 		$sql = "SELECT fault_code FROM fault_standard WHERE fault_code LIKE '$ret%' ORDER by fault_code DESC";
 

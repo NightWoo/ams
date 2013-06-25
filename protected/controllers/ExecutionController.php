@@ -6,6 +6,7 @@ Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarAR');
 Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.AR.ComponentAR');
 Yii::import('application.models.Rpc.RpcService');
 class ExecutionController extends BmsBaseController
 {
@@ -1269,30 +1270,44 @@ class ExecutionController extends BmsBaseController
     //added by wujun
     public function actionTest() {
 		 try{
-            $vin = $this->validateStringVal('vin', '');
-            $car = Car::create($vin);
-            if($car->car->series == "6B"){
-                $checkIRemote = true;
-                // $ff = CJSON::decode($faults);
-                // if(!empty($ff)){
-                //     foreach($ff as $f){
-                //         //如果有离线修复故障，则不校验云系统
-                //         if(!$f['fixed']){
-                //             $checkIRemote = false;
-                //             break;
-                //         }
-                //     }
-                // }
-                if($checkIRemote){
-                    $IRemote = $car->getIRemoteTestResult();
-                    if(!($IRemote->Result) || $IRemote->TestState != "2"){
-                        throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
-                    }
-                }
-                $ret='OK';
+            // $vin = $this->validateStringVal('vin', '');
+            $series = "M6";
+            $componentName = "483QB发动机总成";
+            $component = ComponentAR::model()->find('car_series = ? AND display_name=? AND is_fault=1', array($series,$componentName)); 
+
+            if(empty($component)) {
+                throw new Exception("error @ $series, $componentName");
             }
 
-			$this->renderJsonBms(true, $vin, $ret);
+            $code = trim($component->code);
+
+            $ret = strtoupper($series);
+
+            $codes = explode('-', $code);
+            if(count($codes) >= 2) {
+                foreach($codes as $code){
+                    if(strlen($code) >=7){
+                        $codeString = substr($code, 0, 7);
+                    // if(preg_match("/^[0-9]+$/",$codeString)){
+                        $ret .= $codeString; 
+                        break;
+                    // }
+                    }
+                }
+            }
+
+            
+            //$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
+            $sql = "SELECT fault_code FROM fault_standard WHERE fault_code LIKE '$ret%' ORDER by fault_code DESC";
+
+            $lastCode = Yii::app()->db->createCommand($sql)->queryScalar();
+        
+            $lastKey = intval(substr($lastCode, strlen($lastCode) - 3, 3)); 
+            
+            $ret .= sprintf("%03d", (($lastKey + 1) % 1000));
+
+
+			$this->renderJsonBms(true, $codeString, $ret);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }  

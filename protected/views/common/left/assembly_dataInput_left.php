@@ -5,9 +5,9 @@
 			<li id="leftNodeSelectLi"><a href="/bms/execution/index">录入节点</a></li>
 			<li id="leftPauseEditLi"><a href="/bms/execution/pauseEdit">停线编辑</a></li>
 			<li id="leftWarehousePrintLi"><a href="/bms/execution/warehousePrint">出库打印</a></li>
-			<li id="leftLaneManageLi"><a href="/bms/execution/laneManage">发车道管理</a></li>
+			<!-- <li id="leftLaneManageLi"><a href="/bms/execution/laneManage">发车道管理</a></li>
 			<li id="leftLaneManageLi"><a href="/bms/execution/outStandby">备车</a></li>
-			<li id="leftLaneManageLi"><a href="/bms/execution/outStandby35">35#厂房备车</a></li>
+			<li id="leftLaneManageLi"><a href="/bms/execution/outStandby35">35#厂房备车</a></li> -->
 		<li class="nav-header">生产监控</li>
 			<li id="leftMonitoringLi"><a href="/bms/execution/monitoringIndex">监控面板</a></li>
 		<li class="nav-header">数据查询</li>
