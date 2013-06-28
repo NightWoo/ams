@@ -67,7 +67,6 @@ class Warehouse
 			//进入车列
 			$row->quantity += 1;
 			$row->free_seat -= 1;
-			// if($row->quantity == $row->capacity) {
 			if($row->free_seat == 0) {
 				$row->status = 1;
 			}
@@ -76,8 +75,7 @@ class Warehouse
 			//原库位数量减1
 			if($car->warehouse_id>900){
 				$oldRow = WarehouseAR::model()->findByPk($car->warehouse_id);
-				$oldRow->quantity -=1;
-				$oldRow->save();
+				$oldRow->saveCounters(array('quantity'=>-1));
 			}
 		} else {
 			throw new Exception('库区已满，无法完成入库');
@@ -101,8 +99,7 @@ class Warehouse
 		if(empty($order)){
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
-			$order->count += 1;
-			$order->save();
+			$order->saveCounters(array('count'=>1));
 			if($order->amount == $order->count){
 				$boardNumber = $order->board_number;
 				$sql = "SELECT board_number, amount,hold,count FROM `order` WHERE board_number='$boardNumber'";
@@ -114,17 +111,16 @@ class Warehouse
 					$countSum += $data['count'];
 				}
 				if($amountSum == $countSum){
-					$sql = "UPDATE `order` SET `status`=2, out_finish_time=CURRENT_TIMESTAMP WHERE board_number='$boardNumber' AND `status`=1";
+					$out_finish_time=date("YmdHis");
+					$sql = "UPDATE `order` SET `status`=2, out_finish_time='$out_finish_time' WHERE board_number='$boardNumber' AND `status`=1";
 					Yii::app()->db->createCommand($sql)->execute();
-					$order->status = 2;
-					$order->out_finish_time=date("YmdHis");
-					$order->save();
+
+					$order->saveAttributes(array("out_finish_time"=>"$out_finish_time","status"=>2));
 				}
 			}
 
 			$rowWDI = WarehouseAR::model()->findByPk(1);
-			$rowWDI->quantity -= 1;
-			$rowWDI->save();
+			$rowWDI->saveCounters(array('quantity'=>-1));
 
 			$lane = LaneAR::model()->findByPk($order->lane_id)->name;
 			$laneName='';

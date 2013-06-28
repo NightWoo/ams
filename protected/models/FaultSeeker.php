@@ -1007,6 +1007,7 @@ class FaultSeeker
 		$nodeIds = array(
 			'PBS' => 1,
 			'T0'  => 2,
+			'T0_2'  => 201,
             'VQ1' => 10,
 			'CHECK_LINE' => 13,
             'ROAD_TEST_FINISH' => 15,

@@ -72,6 +72,7 @@ $(document).ready(function() {
 				//"standbyDate": workDate(),
 				"driverId" : $("#cardNumber").attr("driverid"),
 				"standbyArea" : $("#standbyArea").val(),
+				"series" : getSeriesChecked(),
 			},
 			async:false,
 			success: function(response) {
@@ -137,6 +138,21 @@ $(document).ready(function() {
 			$("#hint").hide();
 			$("#carInfo").fadeIn(1000);
 		}
+	}
+
+	function getSeriesChecked () {
+		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
+		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
+		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
+		
+		var temp = [];
+		if (f0Checked)
+			temp.push($("#checkboxF0").val());
+		if (m6Checked)
+			temp.push($("#checkboxM6").val());
+		if (_6BChecked)
+			temp.push($("#checkbox6B").val());
+		return temp.join(",");
 	}
 
 

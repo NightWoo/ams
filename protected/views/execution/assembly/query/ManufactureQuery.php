@@ -62,7 +62,8 @@
 								<select name="" id="selectNode" class="input-small">
                                     <option value="" selected>全部工段</option>
                                     <option value="PBS">PBS/入库</option>
-                                    <option value="T0">PBS/上线</option>
+                                    <option value="T0">PBS/上I线</option>
+                                    <option value="T0_2">PBS/上II线</option>
                                     <option value="T1">T1/T11</option>
                                     <option value="T2">T2/T21</option>
                                     <option value="T3">T3/T32</option>

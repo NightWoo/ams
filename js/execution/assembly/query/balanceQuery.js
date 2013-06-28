@@ -580,9 +580,10 @@ $(document).ready(function () {
 				}
 			})
 
-            console.log(this);
+            // console.log(this);
 			this.columnData.xAxis.categories = columnSeriesData.x;
 			this.columnData.series = columnSeries;
+			console.log(this.columnData.series);
 			var chart;
 			chart = new Highcharts.Chart(this.columnData);
 		}

@@ -13,6 +13,7 @@ class NodeSeeker
 	public static $SECTION_NODEID_MAP = array(
 					"PBS" => 1,
 					"T0" =>2,
+					"T0_2" =>201,
 					"T1" =>3,
 					"T2" =>4,
 					"T3" =>5,

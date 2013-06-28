@@ -933,7 +933,8 @@ class Car
         list($success, $data) = $order->match($series, $carType, $config, $color, $coldResistant, $date);
         if($success) {
             $rowWDI = WarehouseAR::model()->findByPk(1);
-			$rowWDI->quantity += 1;
+			// $rowWDI->quantity += 1;
+			$rowWDI->saveCounters(array('quantity'=>1));
 			$rowWDI->save();
 
             $this->car->order_id = $data['orderId'];
@@ -991,8 +992,7 @@ class Car
 				throw new Exception ('此车状态为成品库_'. $rowNow .'，不可退回成品库，如需重新分配库位，请操作<重新分配库位>');
 			} else if($this->car->warehouse_id == 1){
 				$rowWDI = WarehouseAR::model()->findByPk(1);
-				$rowWDI->quantity -= 1;
-				$rowWDI->save();
+				$rowWDI->saveCounters(array('quantity'=>-1));
 			}
 			$warehouse = new Warehouse;
             $data = $warehouse->checkin($this->car->vin);
@@ -1009,8 +1009,7 @@ class Car
 			}
 			if($this->car->warehouse_id >= 1){
 				$row = WarehouseAR::model()->findByPk($this->car->warehouse_id);
-				$row->quantity -= 1;
-				$row->save();
+				$row->saveCounters(array('quantity'=>-1));
 			}
 			$this->car->warehouse_id = 0;
 			$this->car->area = '';
@@ -1041,22 +1040,23 @@ class Car
 		
 		if($this->car->order_id>0){
 			$order = OrderAR::model()->findByPk($this->car->order_id);
-			$order->hold -= 1;
-			$order->standby_date = DateUtil::getCurDate();
+			$order->saveCounters(array('hold'=>-1));
+			$standby_date = DateUtil::getCurDate();
+			$order->saveAttributes(array("standby_date"=>"$standby_date"));
 			if($this->car->distribute_time>"0000-00-00 00:00:00"){
-				$order->count -=1;
+				$order->saveCounters(array('count'=>-1));
 				//优先级置顶
-				$order->priority = 0;
 				$highers = OrderAR::model()->findAll('priority<? AND standby_date=? AND status=1', array($order->priority, $order->standby_date));
 				if(!empty($highers)) {
 					foreach($highers as $higher) {
 						$higher->priority = $higher->priority + 1;
 						$higher->save();
 					}
-					$order->save();
 				}
+				$order->saveAttributes(array("priority"=>0));
+				
 				if($order->status == 2){
-					$order->status =1;
+					$order->saveAttributes(array("status"=>1));
 				}
 			}
 			$this->car->order_id = 0;
@@ -1065,7 +1065,6 @@ class Car
 			$this->car->distributor_code='';
 			$this->car->distribute_time = '0000-00-00 00:00:00';
 			$this->car->save();
-			$order->save();
 		}
 	}
 	
@@ -1310,10 +1309,10 @@ class Car
 		$gearboxCode = '';
 		$absInfo = '';
 		if(($this->car->series == 'F0')){
-			$gearboxTrace = $this->checkTraceGearBox() ;
-			if(!empty($gearboxTrace)){
-				$gearboxCode = $gearboxTrace->bar_code;
-			}
+			// $gearboxTrace = $this->checkTraceGearBox() ;
+			// if(!empty($gearboxTrace)){
+			// 	$gearboxCode = $gearboxTrace->bar_code;
+			// }
 
 			$absTrace = $this->checkTraceABS();
 			if(!empty($absTrace) && ($this->car->series == 'F0')){

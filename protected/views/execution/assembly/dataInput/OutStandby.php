@@ -46,6 +46,11 @@
 		            </div>
 					<div><!-- 内容主体 -->
 						<form id="form" class="well form-search">
+							<div id="seriesDiv">
+		            			<label class="checkbox"><input type="checkbox" id="checkboxF0" value="F0">F0</input></label>
+	                            <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
+	                            <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
+		            		</div>
 							<div class="input-prepend">
 								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">

@@ -65,7 +65,7 @@ class ExecutionController extends BmsBaseController
     public function actionReport(){
         $reportPanel = $this->validateStringVal('type','WarehouseReport');
         try{
-            $this->render('assembly/query/' . $reportPanel);
+            $this->render('assembly/report/' . $reportPanel);
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -336,7 +336,7 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $car->checkAlreadyOut();
 			
-			$car->leftNode('VQ1');
+			$car->leftNode('CHECK_LINE');
             
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -697,7 +697,7 @@ class ExecutionController extends BmsBaseController
             }
 
             if($car->car->series == 'F0'){
-                $gearboxTrace = $car->checkTraceGearBox();
+                // $gearboxTrace = $car->checkTraceGearBox();
                 $absTrace = $car->checkTraceABS();
             }
 
@@ -1269,48 +1269,15 @@ class ExecutionController extends BmsBaseController
 
     //added by wujun
     public function actionTest() {
+        $transaction = Yii::app()->db->beginTransaction();
 		 try{
-            // $vin = $this->validateStringVal('vin', '');
-            $series = "M6";
-            $componentName = "483QB发动机总成";
-            $component = ComponentAR::model()->find('car_series = ? AND display_name=? AND is_fault=1', array($series,$componentName)); 
-
-            if(empty($component)) {
-                throw new Exception("error @ $series, $componentName");
-            }
-
-            $code = trim($component->code);
-
-            $ret = strtoupper($series);
-
-            $codes = explode('-', $code);
-            if(count($codes) >= 2) {
-                foreach($codes as $code){
-                    if(strlen($code) >=7){
-                        $codeString = substr($code, 0, 7);
-                    // if(preg_match("/^[0-9]+$/",$codeString)){
-                        $ret .= $codeString; 
-                        break;
-                    // }
-                    }
-                }
-            }
-
-            
-            //$sql = "SELECT fault_code FROM fault_standard WHERE component_id = {$component->id} ORDER by fault_code DESC";
-            $sql = "SELECT fault_code FROM fault_standard WHERE fault_code LIKE '$ret%' ORDER by fault_code DESC";
-
-            $lastCode = Yii::app()->db->createCommand($sql)->queryScalar();
-        
-            $lastKey = intval(substr($lastCode, strlen($lastCode) - 3, 3)); 
-            
-            $ret .= sprintf("%03d", (($lastKey + 1) % 1000));
-
-
-			$this->renderJsonBms(true, $codeString, $ret);
+            $vin = $this->validateStringVal('vin', '');
+            $transaction->commit();
+            $this->renderJsonBms(true, $ret, $ret);
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
-        }  
+        }
     }
 
     public function actionThrowOutDataOne() {

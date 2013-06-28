@@ -1,0 +1,29 @@
+#startTime {
+	height: 15px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 6px;
+}
+
+#headText {
+	font-size: 20px;
+	margin-top:5px;	
+	margin-right:20px;
+}
+
+.tab-pane{
+	min-height: 400px;
+}
+
+.manufactureDailyChart {
+	height: 300px;
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+#recycleDonutContainer{
+	margin-left: 10px;
+}

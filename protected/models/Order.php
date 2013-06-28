@@ -123,18 +123,12 @@ class Order
 		$order = $seeker->matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date);
 
 		if(!empty($order)) {
-			$order->is_locked = 1;
-			$order->hold += 1;
-			$saveSuccess = $order->save();
-			if(!$saveSuccess){
-				throw new Exception('匹配订单处于占用状态，占用而匹配失败，请稍后重试');
-			}
+			$order->saveCounters(array('hold'=>1));
 
 			if($order->hold == $order->amount && $order->standby_finish_time == '0000-00-00 00:00:00'){
-				$order->standby_finish_time = date("YmdHis");
+				$standby_finish_time = date('YmdHis');
+				$saveSuccess=$order->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
 			}
-			$order->is_locked = 0;
-			$order->save();
 			
 			$data['orderId'] = $order->id;
 			$data['orderNumber'] = $order->order_number;
@@ -148,11 +142,22 @@ class Order
 		return array($success, $data);
 	}
 
-	public function getCarStandby($standbyDate, $standbyArea=0) {
+	public function getCarStandby($standbyDate, $standbyArea=0, $series="") {
 		//$matchedOrder = new OrderAR;
 		$data = array();
 
-		$condition = "standby_date=? AND status=1 AND amount>hold AND is_locked=0 ORDER BY priority ASC";
+		$condition = "standby_date=? AND status=1 AND amount>hold";
+
+		if(!empty($series)){
+	        $arraySeries = $this->parseSeries($series);
+	        $cTmp = array(); 
+	        foreach($arraySeries as $series){
+	        	$cTmp[] = "series='$series'";
+	        }
+	        $condition .= " AND (" . join(' OR ', $cTmp) . ")";
+        };
+
+        $condition .= " ORDER BY priority ASC";
 		$orders = OrderAR::model()->findAll($condition, array($standbyDate));
 		if(!empty($orders)){
 			foreach($orders as $order) {
@@ -177,20 +182,12 @@ class Order
 
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				
-				//先看库里面有没这么多一个单需要的车，如果不够，不备此单
-				// $count = CarAR::model()->count($matchCondition, $values);
-				// $need = $order->amount - $order->hold;
-				// if($count<$need) continue;
-
 				$matchCondition .= "  ORDER BY warehouse_time ASC";
 				$car = CarAR::model()->find($matchCondition, $values);
 				 if(!empty($car)){
-				 	//$carYear = CarYear::getCarYear($car->vin);
-					//if($carYear == $order->car_year) {
-				 		$matchedOrder = $order;
-				 		$matchedCar = $car;
-				 		break;
-				 	//}
+			 		$matchedOrder = $order;
+			 		$matchedCar = $car;
+			 		break;
 				 }
 			}
 		}
@@ -199,19 +196,14 @@ class Order
 			$warehouse = WarehouseAR::model()->findByPk($matchedCar->warehouse_id);
 			if(!empty($warehouse)){
 
-				$matchedOrder->hold += 1;
-				$matchedOrder->is_locked = 1;
-				$saveSuccess = $matchedOrder->save();
-				if(!$saveSuccess){
-					throw new Exception('备车因订单占用而匹配失败，请稍后重试');
-				}
+				$matchedOrder->saveCounters(array('hold'=>1));
 
 				if($matchedOrder->hold == $matchedOrder->amount){
-					$matchedOrder->standby_finish_time = date('YmdHis');
+					$standby_finish_time = date('YmdHis');
+					$matchedOrder->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
 				}
 
 				$warehouse->quantity -= 1;
-				//$warehouse->status = 0;
 				if($warehouse->quantity == 0) {
 					$warehouse->car_type = '';
 					$warehouse->color = '';
@@ -224,21 +216,18 @@ class Order
 				}
 				
 				$matchedCar->order_id = $matchedOrder->id;
-				// $matchedCar->lane_id = $matchedOrder->lane_id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
 				$matchedCar->warehouse_id = 1;		//WDI
 				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
-				$rowWDI->quantity += 1;
-				$rowWDI->save();
+				$rowWDI->saveCounters(array('quantity'=>1));
+				// $rowWDI->quantity += 1;
+				// $rowWDI->save();
 
 				$warehouse->save();
 				$matchedCar->save();
-				
-				$matchedOrder->is_locked = 0;
-				$matchedOrder->save();
 				
 				$configName = CarConfigAR::model()->findByPk($matchedCar->config_id)->name;
 				$carModel = CarTypeMapAR::model()->find('car_type=?', array($matchedCar->type))->car_model;
@@ -291,12 +280,14 @@ class Order
 
 				$warehouseId = $car->car->warehouse_id;
 				$row = WarehouseAR::model()->findByPk($warehouseId);
-				$row->quantity -= 1;
-				$row->save();
+				$row->saveCounters(array('quantity'=>-1));
+				// $row->quantity -= 1;
+				// $row->save();
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
-				$rowWDI->quantity += 1;
-				$rowWDI->save();
+				$rowWDI->saveCounters(array('quantity'=>1));
+				// $rowWDI->quantity += 1;
+				// $rowWDI->save();
 
 				$car->enterNode('OutStandby');
 				$car->car->order_id = $order->id;
@@ -306,19 +297,20 @@ class Order
 				$car->car->save();
 				$successVins[] = $vin;
 
-				$order->hold += 1;
-
+				$order->saveCounters(array('hold'=>1));
 				if($order->hold == $order->amount){
 					if($order->activate_time == '0000-00-00 00:00:00'){
-						$order->activate_time = date("YmdHis");
+						$activate_time = date("YmdHis");
+						$order->saveAttributes(array("activate_time"=>"$activate_time"));
 					}
-					$order->standby_finish_time = date("YmdHis");
+					$standby_finish_time = date("YmdHis");
+					$order->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
 					break;
 				}
 			}
 		}
 
-		$order->save();
+		// $order->save();
 
 		return array($order->order_number, $successVins);
 	}
@@ -498,5 +490,14 @@ class Order
 			$orderCarType[$data['car_type']] = $data['order_type_name'];
 		}
 		return $orderCarType;
+	}
+
+	private function parseSeries($series) {
+		if(empty($series) || $series === 'all') {
+            $series = array('F0', 'M6', '6B');
+        } else {
+            $series = explode(',', $series);
+        }
+		return $series;
 	}
 }

@@ -58,6 +58,12 @@
 									<option value="207">徐文超</option>
 									<option value="208">田士爱</option>
 									<option value="209">彭辉成</option>
+									<option value="304">陈柯屹</option>
+									<option value="305">谭成春</option>
+									<option value="306">姚兴</option>
+									<option value="307">周义</option>
+									<option value="308">魏克</option>
+									<option value="309">刘辉</option>
 								</select>
 								<select name="" id="subChecker" class="input-small" disalbled='disabled'>
 									<option value="" selected>复检员</option>
@@ -76,6 +82,12 @@
 									<option value="207">徐文超</option>
 									<option value="208">田士爱</option>
 									<option value="209">彭辉成</option>
+									<option value="304">陈柯屹</option>
+									<option value="305">谭成春</option>
+									<option value="306">姚兴</option>
+									<option value="307">周义</option>
+									<option value="308">魏克</option>
+									<option value="309">刘辉</option>
 								</select>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 								

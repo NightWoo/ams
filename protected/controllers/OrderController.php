@@ -368,9 +368,10 @@ class OrderController extends BmsBaseController
 		try {
 			$driverId = $this->validateIntVal('driverId', 0);
 			$standbyArea = $this->validateIntVal('standbyArea', 0);
+			$series = $this->validateStringVal('series', '');
 			$curDate = DateUtil::getCurDate();
 			$order = new Order;
-			$data = $order->getCarStandby($curDate, $standbyArea);
+			$data = $order->getCarStandby($curDate, $standbyArea, $series);
 
 			$car = Car::create($data['vin']);
 			$car->throwMarkPrintData();

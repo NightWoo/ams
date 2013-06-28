@@ -111,11 +111,11 @@ class OrderSeeker
 				GROUP BY series, type,order_config_id, order_config_name,cold_resistant, color";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
-		foreach($orders as $order){
+		foreach($orders as &$order){
 			$sumSql = "SELECT SUM(amount)
 						FROM `order` 
 						WHERE UPPER(order_number)='$specialNumber' AND series='{$order['series']}' AND car_type='{$order['car_type']}' AND order_config_id='{$order['order_config_id']}' AND cold_resistant='{$order['cold_resistant']}' AND color='{$order['color']}'";
-			$amountSum = Yii::app()->db->createCommand($sql)->queryScalar();
+			$amountSum = Yii::app()->db->createCommand($sumSql)->queryScalar();
 			$order['amount'] -= $amountSum;
 			if($order['amount']<0) $order['amount'] = 0;
 		}

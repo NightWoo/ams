@@ -297,6 +297,9 @@ var CERTIFICATE_THROW_ONE = "/bms/car/throwOutPrintDataOne";
 var ROLE_SHOW_ALL = "/bms/role/showAll";
 var ROLE_ADD_TO_USER = "/bms/role/addToUser";
 
+var QUERY_MANUFACTURE_DAILY = "/bms/report/queryManufactureDaily";
+var MANUFACTURE_REPORT_EXPORT_CARS = "/bms/report/exportCars";
+
 function alertError (message) {
 	message = 'ajax error'
 	// alert(message);
