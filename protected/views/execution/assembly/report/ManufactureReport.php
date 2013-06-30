@@ -52,9 +52,9 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="daily">
+                        <div class="tab-pane" id="daily">
                             <ul class="nav nav-pills">
-                                <li id="queryManufactureDaily" class="active"><a href="#manufactureDaily" data-toggle="tab">生产日报</a></li>
+                                <li id="queryManufactureDaily"><a href="#manufactureDaily" data-toggle="tab">生产日报</a></li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                         导出
@@ -69,8 +69,8 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="manufactureDaily">
-                                    <div class="container row-fluid">
+                                <div class="tab-pane container" id="manufactureDaily">
+                                    <div class="row-fluid">
                                         <div id="manufacureDailyColumnContainer" class="manufactureDailyChart span6"></div>
                                         <div id="recycleDonutContainer" class="manufactureDailyChart span6"></div>
                                     </div>
@@ -86,11 +86,11 @@
 
                         <div class="tab-pane" id="monthly">
                             <ul class="nav nav-pills">
-                                <li class="active"><a href="#completeMonthly" data-toggle="tab">计划完成</a></li>
-                                <li><a href="#manufactureUseMonthly" data-toggle="tab">生产利用</a></li>
-                                <li><a href="#warehouseInMonthly" data-toggle="tab">入库</a></li>
-                                <li><a href="#warehouseOutMonthly" data-toggle="tab">出库</a></li>
-                                <li><a href="#distributePeriodMonthly" data-toggle="tab">发车周期</a></li>
+                                <li><a class="queryCompletion" href="#completionMonthly" data-toggle="tab" timespan='monthly'>计划完成</a></li>
+                                <li class="disabled"><a href="#manufactureUseMonthly" timespan='monthly'>生产利用</a></li>
+                                <li class="disabled"><a href="#warehouseInMonthly" timespan='monthly'>入库</a></li>
+                                <li class="disabled"><a href="#warehouseOutMonthly" timespan='monthly'>出库</a></li>
+                                <li class="disabled"><a href="#distributePeriodMonthly" timespan='monthly'>发车周期</a></li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                         导出
@@ -105,8 +105,16 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="completeMonthly">
-                                    <p>月计划完成</p>
+                                <div class="tab-pane active" id="completionMonthly">
+                                    <div class="">
+                                        <div id="completionMonthlyChart" class="completionChart" timespan="monthly"></div>
+                                    </div>
+                                    <div>
+                                        <table id="completionMonthlyTable" class="table table-bordered table-condensed initHide completionTable" timespan="monthly">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="manufactureUseMonthly">
                                     <p>月生产利用</p>
@@ -125,11 +133,11 @@
 
                         <div class="tab-pane" id="yearly">
                             <ul class="nav nav-pills">
-                                <li class="active"><a href="#completeYearly" data-toggle="tab">计划完成</a></li>
-                                <li><a href="#manufactureUseYearly" data-toggle="tab">生产利用</a></li>
-                                <li><a href="#warehouseInYearly" data-toggle="tab">入库</a></li>
-                                <li><a href="#warehouseOutYearly" data-toggle="tab">出库</a></li>
-                                <li><a href="#distributePeriodYearly" data-toggle="tab">发车周期</a></li>
+                                <li><a class="queryCompletion" href="#completionYearly" data-toggle="tab" timespan='yearly'>计划完成</a></li>
+                                <li class="disabled"><a href="#manufactureUseYearly" timespan='yearly'>生产利用</a></li>
+                                <li class="disabled"><a href="#warehouseInYearly" timespan='yearly'>入库</a></li>
+                                <li class="disabled"><a href="#warehouseOutYearly" timespan='yearly'>出库</a></li>
+                                <li class="disabled"><a href="#distributePeriodYearly" timespan='yearly'>发车周期</a></li>
                                 <!-- <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                         导出
@@ -144,8 +152,16 @@
                                 </li> -->
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="completeYearly"
-                                    <p>年计划完成</p>
+                                <div class="tab-pane" id="completionYearly">
+                                    <div class="">
+                                        <div id="completionYearlyChart" class="completionChart" timespan="yearly"></div>
+                                    </div>
+                                    <div>
+                                        <table id="completionYearlyTable" class="table table-bordered table-condensed initHide completionTable" timespan="yearly">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="manufactureUseYearly">
                                     <p>年生产利用</p>

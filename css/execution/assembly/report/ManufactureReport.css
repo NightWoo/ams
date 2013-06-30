@@ -27,3 +27,19 @@
 #recycleDonutContainer{
 	margin-left: 10px;
 }
+
+.alignCenter {
+	width: 120px;
+}
+
+.completionTable th {
+	min-width: 50px;
+}
+
+.completionTable{
+	font-size: 12px;
+}
+
+.completionChart {
+	height: 280px;
+}

@@ -54,17 +54,12 @@ class ReportSeeker
 
 	public function queryManufactureDaily($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
-		$assemblyCount = $this->countCarByPoint($stime, $etime, "assembly");
-		$finishCount = $this->countCarByPoint($stime, $etime, "finish");
-		$warehouseCount = $this->countCarByPoint($stime, $etime, "warehouse");
-		$distributeCount = $this->countCarByPoint($stime, $etime, "distribute");
+		$countArray = array();
+		$countArray["assemblyCount"] = $this->countCarByPoint($stime, $etime, "assembly");
+		$countArray["finishCount"] = $this->countCarByPoint($stime, $etime, "finish");
+		$countArray["warehouseCount"] = $this->countCarByPoint($stime, $etime, "warehouse");
+		$countArray["distributeCount"] = $this->countCarByPoint($stime, $etime, "distribute");
 
-		$countArray = array(
-				"assemblyCount" => $assemblyCount,
-				"finishCount" => $finishCount,
-				"warehouseCount" => $warehouseCount,
-				"distributeCount" => $distributeCount,
-		);
 		$dataSeriesX = array();
 		$dataSeriesY = array();
 		foreach($countArray as $point => $count){
@@ -75,15 +70,22 @@ class ReportSeeker
 		}
 		$columnSeries = array("x"=>$dataSeriesX,"y"=>$dataSeriesY);
 
-		$recycleBalance = "-";
-		$warehouseBalance = "-";
+		$countArray["recycleBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
+		$countArray["warehouseBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
 		$curDate = DateUtil::getCurDate();
 		if($date == $curDate){
 			$countArray["recycleBalance"] = $this->countCarByState("recycle");
 			$countArray["warehouseBalance"] = $this->countCarByState("WH");
 		}
 
-		
+		foreach($countArray as &$count){
+			$sum = "";
+			foreach($count as &$seriesCount){
+				$sum += $seriesCount;
+				if($seriesCount === "") $seriesCount = "-";
+			}
+			$count['sum'] = $sum === "" ? "-" : $sum;
+		}
 
 		$carSeeker = new CarSeeker();
 		$recyclePeriod = $carSeeker->queryRecycleBalancePeriod("recycle", "all");
@@ -102,6 +104,107 @@ class ReportSeeker
 		);
 
 		return $ret;
+	}
+
+	public function queryCompletion($date, $timespan){
+		switch($timespan) {
+			case "monthly":
+				list($stime, $etime) = $this->reviseMonthlyTime($date);
+				break;
+			case "yearly":
+				list($stime, $etime) = $this->reviseYearlyTime($date);
+				break;
+			default:
+				list($stime, $etime) = $this->reviseDailyTime($date);
+		}
+		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
+		$seriesArray = self::$SERIES_NAME;
+		$countDetail = array();
+		$countTotal = array();
+		$completionDetail = array();
+		$completionTotal =array(
+			"totalSum" => 0,
+			"readySum" => 0,
+			"completion" => 0,
+		);
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$lineSeriesY = array();
+		foreach($seriesArray as $series => $seriesName){
+			$countTotal[$seriesName] = 0;
+			$columnSeriesY[$seriesName] = array();
+		}
+
+		foreach($timeArray as $queryTime){
+			//count assembly cars
+			$countTmp = array();
+			$completionTmp = array();
+
+			$sDate = substr($queryTime['stime'], 0, 10);
+			$eDate = substr($queryTime['etime'], 0, 10);
+			$completionArray = $this->queryPlanCompletion($sDate,$eDate);
+			$readySum = 0;
+			$totalSum = 0;
+			foreach($completionArray as $series => $count){
+				$columnSeriesY[$seriesArray[$series]][] = $count['ready'];
+				$countTmp[$seriesArray[$series]] =  $count['ready'];
+				$countTotal[$seriesArray[$series]] += $count['ready'];
+
+				$readySum += $count['ready'];
+				$totalSum += $count['total'];
+			}
+					
+			$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
+			$lineSeriesY[] = $rate;
+			$completionTmp['completion'] = $rate;
+			$completionTmp['totalSum'] = $totalSum;
+			$completionTmp['readySum'] = $readySum;
+
+			$completionTotal['totalSum'] += $totalSum;
+			$completionTotal['readySum'] += $readySum;
+			$columnSeriesX[] = $queryTime['point'];
+			$countDetail[] = array_merge(array('time' => $queryTime['point']), $countTmp);
+			$completionDetail[] = array_merge(array('time' => $queryTime['point']), $completionTmp);
+		}
+		$completionTotal['completion'] = empty($completionTotal['totalSum']) ? null : round(($completionTotal['readySum']/$completionTotal['totalSum']) , 2);
+
+		$ret = array(
+			"carSeries" => array_values(self::$SERIES_NAME),
+			"countDetail" => $countDetail,
+			"completionDetail" => $completionDetail,
+			"countTotal" => $countTotal,
+			"completionTotal" => $completionTotal,
+			"series" => array(
+				'x' => $columnSeriesX,
+				'column' => $columnSeriesY,
+				'line' => $lineSeriesY,
+			),
+		);
+
+		return $ret;
+	}
+
+	public function queryPlanCompletion($sDate, $eDate){
+		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate' GROUP BY series";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$count = array(
+			"F0"=>array(),
+			"M6"=>array(),
+			"6B"=>array(),
+		);
+		foreach($count as $key => &$one){
+			$one = array('total'=>0, 'ready'=>0, 'completion'=>null);
+		}
+		foreach($datas as $data){
+			$totalValue = intval($data['total']);
+			$readyValue = intval($data['ready']);
+			$count[$data['series']]['total'] = isset($data['total']) ? $totalValue : 0;
+			$count[$data['series']]['ready'] = isset($data['ready']) ? $readyValue : 0;
+			$count[$data['series']]['completion'] = empty($totalValue) ? null : round(($readyValue/$totalValue) , 2);
+		}
+
+		return $count;
 	}
 
 	public function queryCarDetail($date, $point, $timeSpan="daily"){
@@ -133,11 +236,9 @@ class ReportSeeker
 			"F0"=>0,
 			"M6"=>0,
 			"6B"=>0,
-			"sum"=>0,
 		);
 		foreach($datas as $data){
 			$count[$data['series']] = intval($data['count']);
-			$count['sum'] += $data['count'];
 		}
 
 		return $count;
@@ -163,11 +264,9 @@ class ReportSeeker
 			"F0"=>0,
 			"M6"=>0,
 			"6B"=>0,
-			"sum"=>0,
 		);
 		foreach($datas as $data){
 			$count[$data['series']] = intval($data['count']);
-			$count['sum'] += $data['count'];
 		}
 
 		return $count;
@@ -269,5 +368,53 @@ class ReportSeeker
 			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
 		}
 		return $configName;
+	}
+
+	public function parseQueryTime($stime, $etime, $timespan){
+		$s = strtotime($stime);
+		$e = strtotime($etime);
+
+		$ret = array();
+
+		switch($timespan) {
+			case "monthly":
+				$pointFormat = 'm-d';
+				$format = 'Y-m-d H:i:s';
+				$slice = 86400;
+				break;
+			case "yearly":
+				$pointFormat = 'Y-m';
+				$format = 'Y-m-d H:i:s';
+				break;
+			default:
+				$pointFormat = 'm-d';
+				$format = 'Y-m-d H:i:s';
+				$slice = 86400;
+		}
+
+		$t = $s;
+		while($t<$e) {
+			$point = date($pointFormat, $t);
+			if($pointFormat === 'Y-m') {
+				// $slice = 86400 * intval(date('t' ,$t));
+				$eNextM = strtotime('+1 month', $t);			//next month			//added by wujun
+				$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
+				$etmp = strtotime($ee);	//next month firstday	//added by wujun
+			} else {
+				$etmp = $t+$slice;
+			}
+			if($etmp>=$e){
+				$etmp=$e;
+			} 
+
+			$ret[] = array(
+				'stime' => date($format, $t),
+				'etime' => date($format, $etmp),
+				'point' => $point,
+			);	
+			$t = $etmp;
+		}
+
+		return $ret;
 	}
 }

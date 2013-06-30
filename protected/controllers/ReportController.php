@@ -6,18 +6,23 @@ class ReportController extends  BmsBaseController
 
 	public function actionDebug(){
 		$seeker= new ReportSeeker();
-		$count = $seeker->countCarByPoint("2013-05-01 08:00:00","2013-05-30 08:00:00", "assembly");
-		print_r($count);
+        $date = "2013-05-11 09:00:00";
+        // $ret = $seeker->queryPlanCompletion("2013-05-11", "2013-05-12");
+		$ret= $seeker->queryComplete($date, "yearly");
+		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
 	public function actionQueryManufactureDaily() {
 		$date = $this->validateStringVal("date", "");
 		if(empty($date)) $date = DateUtil::getCurDate();
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryManufactureDaily($date);
 
-		$seeker = new ReportSeeker();
-		$data = $seeker->queryManufactureDaily($date);
-
-		$this->renderJsonBms(true, 'OK', $data);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
 	}
 
 	public function actionExportCars() {
@@ -61,4 +66,16 @@ class ReportController extends  BmsBaseController
         }
 	}
 
+    public function actionQueryCompletion() {
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryCompletion($date, $timespan);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
 }

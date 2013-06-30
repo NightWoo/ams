@@ -299,6 +299,7 @@ var ROLE_ADD_TO_USER = "/bms/role/addToUser";
 
 var QUERY_MANUFACTURE_DAILY = "/bms/report/queryManufactureDaily";
 var MANUFACTURE_REPORT_EXPORT_CARS = "/bms/report/exportCars";
+var QUERY_COMPLETION_REPORT = "/bms/report/queryCompletion";
 
 function alertError (message) {
 	message = 'ajax error'
