@@ -223,9 +223,7 @@ class Order
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
 				$rowWDI->saveCounters(array('quantity'=>1));
-				// $rowWDI->quantity += 1;
-				// $rowWDI->save();
-
+				
 				$warehouse->save();
 				$matchedCar->save();
 				
@@ -281,13 +279,9 @@ class Order
 				$warehouseId = $car->car->warehouse_id;
 				$row = WarehouseAR::model()->findByPk($warehouseId);
 				$row->saveCounters(array('quantity'=>-1));
-				// $row->quantity -= 1;
-				// $row->save();
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
 				$rowWDI->saveCounters(array('quantity'=>1));
-				// $rowWDI->quantity += 1;
-				// $rowWDI->save();
 
 				$car->enterNode('OutStandby');
 				$car->car->order_id = $order->id;

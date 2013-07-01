@@ -6,9 +6,9 @@ class ReportController extends  BmsBaseController
 
 	public function actionDebug(){
 		$seeker= new ReportSeeker();
-        $date = "2013-05-11 09:00:00";
-        // $ret = $seeker->queryPlanCompletion("2013-05-11", "2013-05-12");
-		$ret= $seeker->queryComplete($date, "yearly");
+        // $date = "2013-05-11";
+        $ret = $seeker->queryManufactureUse("2013-05-11", "monthly");
+		// $ret= $seeker->queryComplete($date, "yearly");
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
@@ -72,6 +72,19 @@ class ReportController extends  BmsBaseController
         try{
             $seeker = new ReportSeeker();
             $data = $seeker->queryCompletion($date, $timespan);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryUse() {
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryManufactureUse($date, $timespan);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

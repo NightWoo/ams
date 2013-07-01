@@ -32,14 +32,18 @@
 	width: 120px;
 }
 
-.completionTable th {
+.completionTable th, .useTable th, #manufactureDailyTable th {
 	min-width: 50px;
 }
 
-.completionTable{
+.completionTable, .useTable{
 	font-size: 12px;
 }
 
 .completionChart {
 	height: 280px;
+}
+
+#manufactureDailyTable .countMonth{
+	background-color: #D9EDF7;
 }

@@ -3,6 +3,7 @@ Yii::import('application.models.AR.NodeAR');
 Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.AR.WarehouseAR');
+Yii::import('application.models.AR.monitor.LinePauseAR');
 Yii::import('application.models.CarSeeker');
 
 class ReportSeeker
@@ -37,9 +38,13 @@ class ReportSeeker
 
 	private static $COUNT_POINT_DAILY = array(
 		"assemblyCount" => "上线",
+		"assemblyMonth" => "月上线",
 		"finishCount" => "下线",
+		"finishMonth" => "月下线",
 		"warehouseCount" => "入库",
+		"warehouseMonth" => "月入库",
 		"distributeCount" => "出库",
+		"distributeMonth" => "月出库",
 		"recycleBalance" => "周转车",
 		"warehouseBalance" => "库存",
 	);
@@ -50,10 +55,15 @@ class ReportSeeker
 			'6B' => '思锐'
 	);
 
+	private static $PAUSE_CAUSE_TYPE = array(
+		"生产组织","品质异常","物料供给","设备故障","其他"
+	);
+
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
 
 	public function queryManufactureDaily($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
+		list($sMonth, $eDate) = $this->reviseDailyMonth($date);
 		$countArray = array();
 		$countArray["assemblyCount"] = $this->countCarByPoint($stime, $etime, "assembly");
 		$countArray["finishCount"] = $this->countCarByPoint($stime, $etime, "finish");
@@ -69,6 +79,11 @@ class ReportSeeker
 			}
 		}
 		$columnSeries = array("x"=>$dataSeriesX,"y"=>$dataSeriesY);
+
+		$countArray["assemblyMonth"] = $this->countCarByPoint($sMonth, $eDate, "assembly");
+		$countArray["finishMonth"] = $this->countCarByPoint($sMonth, $eDate, "finish");
+		$countArray["warehouseMonth"] = $this->countCarByPoint($sMonth, $eDate, "warehouse");
+		$countArray["distributeMonth"] = $this->countCarByPoint($sMonth, $eDate, "distribute");
 
 		$countArray["recycleBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
 		$countArray["warehouseBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
@@ -92,7 +107,7 @@ class ReportSeeker
 
 		$countSeries = $seriesName = self::$SERIES_NAME;
 
-		$countSeries['sum'] = "合计";
+		$countSeries['sum'] = "总计";
 
 		$ret = array(
 			"countPoint" => self::$COUNT_POINT_DAILY,
@@ -207,6 +222,179 @@ class ReportSeeker
 		return $count;
 	}
 
+	public function queryManufactureUse($date, $timespan){
+		switch($timespan) {
+			case "monthly":
+				list($stime, $etime) = $this->reviseMonthlyTime($date);
+				break;
+			case "yearly":
+				list($stime, $etime) = $this->reviseYearlyTime($date);
+				break;
+			default:
+				list($stime, $etime) = $this->reviseDailyTime($date);
+		}
+		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
+		$causeArray = self::$PAUSE_CAUSE_TYPE;
+		$pauseDetail = array();
+		$pauseTotal = array();
+		$useDetail = array();
+		$useTotal = array(
+			"runTime" => 0,
+			"useRate" => 0,
+			"capacity" => 0,
+			"prodution" => 0,
+		);
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$lineSeriesY = array();
+		foreach($causeArray as $cause){
+			$pauseTotal[$cause] = 0;
+			$columnSeriesY[$cause] = array();
+		}
+		$pauseTotal['总计'] = 0;
+
+		foreach($timeArray as $queryTime){
+			$pauseTmp = array();
+			$useTmp = array();
+			$howlongSum = 0;
+
+			$causeDistribute = $this->queryPauseCauseDistribute($queryTime['stime'], $queryTime['etime']);
+			$useTmp = $this->queryUseRate($queryTime['stime'], $queryTime['etime']);
+			foreach($causeDistribute as $causeType => $howlong){
+				$columnSeriesY[$causeType][] = $howlong;
+				$pauseTmp[$causeType] = round($howlong / 60);
+				$pauseTotal[$causeType] += $howlong;
+				$howlongSum += $howlong;
+				$pauseTotal['总计'] += $howlong;
+			}
+			$pauseTmp['总计'] = round($howlongSum/60);
+
+			$columnSeriesX[] = $queryTime['point'];
+			$pauseDetail[] = array_merge(array('time'=> $queryTime['point']), $pauseTmp);
+
+			$lineSeriesY[] = $useTmp['useRate'];
+			$useTotal['runTime'] += $useTmp['runTime'];
+			$useTotal['capacity'] += $useTmp['capacity'];
+			$useTotal['prodution'] += $useTmp['prodution'];
+			$useTmp['useRate'] = empty($useTmp['capacity']) ? "-" : round($useTmp['useRate'],2)*100 . "%";
+			$useTmp['runTime'] = round($useTmp['runTime'] / 60);
+			$useDetail[] = array_merge(array('time'=>$queryTime['point']), $useTmp);
+		}
+		$useTotal['useRate'] = empty($useTotal['capacity']) ? '-' : round($useTotal['prodution'] / $useTotal['capacity'], 2) * 100 . '%';
+		$useTotal['runTime'] = round($useTotal['runTime'] / 60);
+		foreach($pauseTotal as &$causeTotal){
+			$causeTotal = round($causeTotal / 60);
+		}
+
+		$ret = array(
+			"causeArray" => $causeArray,
+			"pauseDetail" => $pauseDetail,
+			"useDetail" => $useDetail,
+			"pauseTotal" => $pauseTotal,
+			"useTotal" => $useTotal,
+			"series" => array(
+				'x' => $columnSeriesX,
+				'column' => $columnSeriesY,
+				'line' => $lineSeriesY,
+			),
+		);
+
+		return $ret;
+	}
+
+	public function queryPauseRecourd($stime, $etime){
+		$sql = "SELECT id, cause_type, pause_time, recover_time FROM pause WHERE pause_time>='$stime' AND pause_time<'$etime'";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($datas as &$data) {
+			if(($data['recover_time']) == '0000-00-00 00:00:00'){
+				$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
+			}else {
+				$data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+			}
+		}
+
+		return $datas;
+	}
+
+	public function queryPauseCauseDistribute($stime, $etime){
+		$datas = $this->queryPauseRecourd($stime, $etime);
+
+		$causeDistribute = array();
+		foreach(self::$PAUSE_CAUSE_TYPE as $causeType){
+			$causeDistribute[$causeType] = 0;
+		}
+		foreach($datas as $data){
+			if($data['cause_type'] == ""){
+				$causeDistribute['其他'] += $data['howlong'];
+			} else {
+				$causeDistribute[$data['cause_type']] += $data['howlong'];
+			}
+		}
+
+		return $causeDistribute;
+	}
+
+	public function queryUseRate($stime, $etime){
+		$datas = $this->queryShiftRecord($stime, $etime);
+		$use = array();
+		
+		$capacity = 0;
+		$prodution = 0;
+		$runTime = 0;
+		foreach($datas as $data){
+			$capacity += $data['capacity'];
+			$prodution += $data['prodution'];
+			$runTime += $data['run_time'];
+		}
+
+		$rate = empty($capacity)? null : round($prodution / $capacity, 2);
+
+		$use['runTime'] = $runTime;
+		$use['useRate'] = $rate;
+		$use['capacity'] = $capacity;
+		$use['prodution'] = $prodution;
+
+		return $use;
+	}
+
+	public function queryShiftRecord($stime, $etime, $line=""){
+		$sDate = substr($stime, 0, 10);
+		$eDate = substr($etime, 0, 10);
+
+		$condition = " shift_date>='$sDate' AND shift_date<'$eDate'";
+		if(!empty($line)){
+			$condition .= " AND line='$line'";
+		}
+
+		$sql = "SELECT * FROM shift_record WHERE $condition";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($datas as &$data){
+			$runTime = strtotime($data['end_time']) - strtotime($data['start_time']) - 7199;
+			$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
+			$planPauseTime = 0;
+			foreach($linePauses as $linePause) {
+				if($linePause->status == 1) {
+					$planPauseTime += (time() - strtotime($linePause->pause_time));
+				} else {
+					$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
+				}
+			}
+			$data['run_time'] = intval($runTime - $planPauseTime);
+			$data['capacity'] = intval($runTime / $data['line_speed']);
+			$data['prodution'] = $this->countOnline($data['start_time'], $data['end_time']);
+		}
+
+		return $datas;
+	}
+
+	public function countOnline($stime, $etime){
+		$sql = "SELECT COUNT(id) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
+		$data = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $data;
+	}
+
 	public function queryCarDetail($date, $point, $timeSpan="daily"){
 		switch($timeSpan) {
 			case "daily":
@@ -310,18 +498,20 @@ class ReportSeeker
 
 	private function reviseDailyTime($date) {
 		$d = strtotime($date);
-		$Hnow = intval(date("H"));
-		if($Hnow>=0 && $Hnow<8){
-			$lastDay = strtotime('-1 day', $d);
-			$stime = date("Y-m-d 08:00:00", $lastDay);
-			$etime = date("Y-m-d 08:00:00", $d);
-		} else {
-			$nextDay = strtotime('+1 day', $d);
-			$stime = date("Y-m-d 08:00:00", $d);
-			$etime = date("Y-m-d 08:00:00", $nextDay);
-		}
+		$nextDay = strtotime('+1 day', $d);
+		$stime = date("Y-m-d 08:00:00", $d);
+		$etime = date("Y-m-d 08:00:00", $nextDay);
 
 		return array($stime, $etime);
+	}
+
+	private function reviseDailyMonth($date) {
+		$d = strtotime($date);
+		$sMonth = date("Y-m-01 08:00:00", $d);
+		$nextDay = strtotime('+1 day', $d);
+		$eDate = date("Y-m-d 08:00:00", $nextDay);
+
+		return array($sMonth, $eDate);
 	}
 
 	private function reviseMonthlyTime($date) {

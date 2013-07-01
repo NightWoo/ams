@@ -52,9 +52,9 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane" id="daily">
+                        <div class="tab-pane active" id="daily">
                             <ul class="nav nav-pills">
-                                <li id="queryManufactureDaily"><a href="#manufactureDaily" data-toggle="tab">生产日报</a></li>
+                                <li id="queryManufactureDaily" class="active"><a href="#manufactureDaily" data-toggle="tab">生产日报</a></li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                         导出
@@ -69,7 +69,7 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane container" id="manufactureDaily">
+                                <div class="tab-pane active container" id="manufactureDaily">
                                     <div class="row-fluid">
                                         <div id="manufacureDailyColumnContainer" class="manufactureDailyChart span6"></div>
                                         <div id="recycleDonutContainer" class="manufactureDailyChart span6"></div>
@@ -87,7 +87,7 @@
                         <div class="tab-pane" id="monthly">
                             <ul class="nav nav-pills">
                                 <li><a class="queryCompletion" href="#completionMonthly" data-toggle="tab" timespan='monthly'>计划完成</a></li>
-                                <li class="disabled"><a href="#manufactureUseMonthly" timespan='monthly'>生产利用</a></li>
+                                <li><a class="queryUse" href="#manufactureUseMonthly" data-toggle="tab" timespan='monthly'>生产利用</a></li>
                                 <li class="disabled"><a href="#warehouseInMonthly" timespan='monthly'>入库</a></li>
                                 <li class="disabled"><a href="#warehouseOutMonthly" timespan='monthly'>出库</a></li>
                                 <li class="disabled"><a href="#distributePeriodMonthly" timespan='monthly'>发车周期</a></li>
@@ -117,7 +117,16 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="manufactureUseMonthly">
-                                    <p>月生产利用</p>
+                                    <div class="">
+                                        <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
+                                    </div>
+                                    <div>
+                                        <p class="text-info">&nbsp;(1)单位：分钟&nbsp;&nbsp;(2)生产利用率 = 上线车辆 / 生产能力 × 100%</p>
+                                        <table id="useMonthlyTable" class="table table-bordered table-condensed initHide useTable" timespan="monthly">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="warehouseInMonthly">
                                     <p>月入库</p>
@@ -134,7 +143,7 @@
                         <div class="tab-pane" id="yearly">
                             <ul class="nav nav-pills">
                                 <li><a class="queryCompletion" href="#completionYearly" data-toggle="tab" timespan='yearly'>计划完成</a></li>
-                                <li class="disabled"><a href="#manufactureUseYearly" timespan='yearly'>生产利用</a></li>
+                                <li><a class="queryUse" href="#manufactureUseYearly" data-toggle="tab" timespan='yearly'>生产利用</a></li>
                                 <li class="disabled"><a href="#warehouseInYearly" timespan='yearly'>入库</a></li>
                                 <li class="disabled"><a href="#warehouseOutYearly" timespan='yearly'>出库</a></li>
                                 <li class="disabled"><a href="#distributePeriodYearly" timespan='yearly'>发车周期</a></li>
@@ -164,7 +173,16 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="manufactureUseYearly">
-                                    <p>年生产利用</p>
+                                    <div class="">
+                                        <div id="useYearlyChart" class="useChart" timespan="yearly"></div>
+                                    </div>
+                                    <div>
+                                        <p class="text-info">&nbsp;(1)单位：分钟&nbsp;&nbsp;(2)生产利用率 = 上线车辆 / 生产能力 × 100%</p>
+                                        <table id="useYearlyTable" class="table table-bordered table-condensed initHide useTable" timespan="yearly">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="warehouseInYearly">
                                     <p>年入库</p>

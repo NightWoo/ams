@@ -28,6 +28,11 @@ $(document).ready(function () {
     	timespan = $(this).attr("timespan");
     	ajaxQueryCompletion(timespan);
     })
+
+    $(".queryUse").click(function(){
+    	timespan = $(this).attr("timespan");
+    	ajaxQueryUse(timespan);
+    })
 //END event bindings -------------------------
 
 
@@ -39,6 +44,7 @@ $(document).ready(function () {
 		$("#leftManufactureReportLi").addClass("active");
 
 		$("#startTime").val(window.byd.DateUtil.workDate());
+		ajaxQueryManufactureDaily();
 		resetAll();
 	}
 
@@ -97,6 +103,27 @@ $(document).ready(function () {
 					report.completion.ajaxData = response.data;
 					report.completion.drawColumnLine(timespan);
 					report.completion.updateTable(timespan);
+				}
+			}
+		})
+	}
+
+	function ajaxQueryUse(timespan){
+		$(".useTable").hide();
+		$.ajax({
+			url: QUERY_USE_REPORT,
+			type: "get",
+			dataType: "json",
+			data: {
+				"date": $("#startTime").val(),
+				"timespan" : timespan,
+			},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success){
+					report.use.ajaxData = response.data;
+					report.use.drawColumnLine(timespan);
+					report.use.updateTable(timespan);
 				}
 			}
 		})
@@ -233,16 +260,22 @@ $(document).ready(function () {
 
 			//first column description
 			var pointTr = $("#manufactureDailyTable tr:eq(0)");
-			$("<td />").html("车系").appendTo(pointTr);
+			$("<th />").html("车系").appendTo(pointTr);
 			$.each(countSeries, function (series, seriesName) {
 				$("<td />").html(seriesName).appendTo($("#manufactureDailyTable tr[series=" + series + "]"));
 			})
 
 			//detail data
 			$.each(countPoint, function (key, name) {
-				$("<td />").addClass("alignCenter").html(name).appendTo(pointTr);
+				th = $("<th />").addClass("alignCenter").html(name).appendTo(pointTr);
+				if(key.indexOf("Month")>0){
+					th.addClass("countMonth");
+				}
 				$.each(count[key], function (series, value){
-					$("<td />").html(value).appendTo($("#manufactureDailyTable tr[series=" + series + "]"));
+					td = $("<td />").html(value).appendTo($("#manufactureDailyTable tr[series=" + series + "]"));
+					if(key.indexOf("Month")>0){
+						td.addClass("countMonth");
+					}
 				})
 			})
 
@@ -312,7 +345,6 @@ $(document).ready(function () {
 				shared: true,
 				useHTML: true,
 				formatter: function() {
-					console.log(this);
 	                var s = this.x +'<table>';
 	                var sRate = '';
 	                var sCar = '';
@@ -374,7 +406,7 @@ $(document).ready(function () {
 						}
 					},
 					min: 0,
-					endOnTick: false,
+					// endOnTick: false,
 					
 				},{		// Secondary yAxis
 					title: {
@@ -493,7 +525,6 @@ $(document).ready(function () {
 
 			this.chartData.series = columnSeries;
 			this.chartData.xAxis.categories = this.ajaxData.series.x;
-			console.log(this.chartData.series);
 
 			$(".completionChart[timespan="+ timespan +"]").highcharts(this.chartData);
 		},
@@ -539,6 +570,277 @@ $(document).ready(function () {
 			})
 
 			$(".completionTable[timespan="+ timespan +"]").show();
+		},
+	}
+
+	window.report.use = {
+		ajaxData: {},
+
+		chartData: {
+			chart: {
+				renderTo: '',
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				shared: true,
+				useHTML: true,
+				formatter: function() {
+	                var s = this.x +'<table>';
+	                var sRate = '';
+	                var sCar = '';
+	                total = 0;
+	                $.each(this.points, function(i, point) {
+	                	if(point.series.name === "生产利用率"){
+	                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
+	                	} else {
+	                		hh = parseInt(this.y / 3600);
+	                		mm = parseInt((this.y%3600) / 60);
+            				ss = (this.y % 60);
+
+            				mm = mm<10 ? '0'+mm : mm;
+            				ss = ss<10 ? '0'+ss : ss;
+
+	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ hh + ':' +  mm + '\'' + ss + '\"' +'</b></td></tr>';
+            				total += this.y;
+	                	}
+	                });
+	                s += sCar;
+
+	                hht = parseInt(total / 3600);
+            		mmt = parseInt((total%3600) / 60);
+    				sst = (total % 60);
+
+    				mmt = mmt<10 ? '0'+mmt : mmt;
+    				sst = sst<10 ? '0'+sst : sst;
+
+	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ hht + ':' +  mmt + '\'' + sst + '\"' +'</b></td></tr>';
+	                s += sRate;
+	                s += '</table>';
+	                return s;
+            },
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
+			xAxis: {
+				categories: [],
+				labels: {
+					rotation: -45,
+					align: 'right',
+					style: {
+						fontSize: '12px',	
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					} 
+				}
+			},
+			yAxis: [
+				{		// Primary yAxis
+					labels: {
+						style: {
+							color: Highcharts.getOptions().colors[4],
+						}
+					},
+					stackLabels: {
+	                    enabled: true,
+	                    style: {
+	                        fontWeight: 'bold',
+	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+	                    },
+	                    formatter: function() {
+	                    	hh = parseInt(this.total / 3600);
+		            		mm = ((this.total%3600) / 60).toFixed(0);
+		            		mm = mm<10 ? '0'+mm : mm;
+		                    return hh + ':' +  mm + '\'';
+		                }
+	                },
+					title: {
+						text: '停线时长',
+						text: null,
+						style: {
+							color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					min: 0,
+					// endOnTick: false,
+					
+				},{		// Secondary yAxis
+					title: {
+						// enabled: false,
+						text: '生产利用率',
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						// enabled: false,
+						formatter: function() {
+							return Math.round(this.value * 100) + '%'
+						},
+						style: {
+							color: Highcharts.getOptions().colors[5],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					// plotBands: [{
+	    //             	from: 0.6,
+	    //                 to: 0.8,
+	    //                 color: '#FCFFC5',
+	    //                 // label: {
+	    //                 // 	text: '50-80%',
+	    //                 // 	align: 'right',
+	    //                 // 	x: -10,
+	    //                 // 	style: {
+		   //                 //      color: 'white',
+		   //                 //      fontWeight: 'bold'
+		   //                 //  }
+	    //                 // }
+	    //             },{ 
+	    //                 from: 0.8,
+	    //                 to: 1,
+	    //                 color: '#d0e9c6',
+	    //                 label: {
+	    //                 	text: '80%',
+	    //                 	align: 'right',
+	    //                 	x: -10,
+	    //                 	style: {
+		   //                      color: '#492970',
+		   //                      fontWeight: 'bold'
+		   //                  },
+		   //                  verticalAlign: 'bottom',
+	    //                 }
+	    //             },{
+	    //             	from: 0,
+	    //                 to: 0.6,
+	    //                 color: '#ebcccc',
+	    //                 label: {
+	    //                 	text: '60%',
+	    //                 	align: 'right',
+	    //                 	x: -10,
+	    //                 	style: {
+		   //                      color: '#492970',
+		   //                      fontWeight: 'bold',
+		   //                  },
+		   //                  verticalAlign: 'top',
+	    //                 }
+	    //             }],
+					max: 1,
+					min: 0,
+					opposite: true,
+					// gridLineWidth: 0,
+				},
+
+			],
+
+			plotOptions: {
+                column: {
+                	stacking: 'normal',
+                    pointPadding: 0.1,
+                    borderWidth: 0,
+                    pointWidth: 15,
+                }
+            },
+
+			series: []
+		},
+
+		drawColumnLine: function(timespan) {
+			columnSeries = [];
+			causeArray = this.ajaxData.causeArray;
+			columnSeriesData = this.ajaxData.series.column;
+			i=0;
+			$.each(causeArray, function (index, cause) {
+				columnSeries[index] = {
+					type: 'column',
+					name: cause,
+					data: columnSeriesData[cause]
+				}
+				i=index;
+			})
+			columnSeries[++i] ={
+				type: 'line',
+				yAxis: 1,
+				showInLegend: false,
+				name: '生产利用率',
+				data: this.ajaxData.series.line,
+				dataLabels:{
+					enabled: true,
+					style: {
+						fontSize: '14px',
+						fontWeight: 'bold',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					},
+					align: 'center',
+        			color: Highcharts.getOptions().colors[i],
+        			formatter: function() {
+        				return (this.y * 100).toFixed(0) + '%';
+        			}
+				},
+			}
+
+			this.chartData.series = columnSeries;
+			this.chartData.xAxis.categories = this.ajaxData.series.x;
+
+			$(".useChart[timespan="+ timespan +"]").highcharts(this.chartData);
+		},
+
+		updateTable: function(timespan) {
+			var causeArray = this.ajaxData.causeArray;
+			var pauseDetail = this.ajaxData.pauseDetail;
+			var pauseTotal = this.ajaxData.pauseTotal;
+			var useDetail = this.ajaxData.useDetail;
+			var useTotal = this.ajaxData.useTotal;
+
+			thead = $(".useTable[timespan="+ timespan +"] thead").html("<tr />");
+			tbody = $(".useTable[timespan="+ timespan +"] tbody").html("");
+			$.each(causeArray, function (index, cause) {
+				$("<tr />").appendTo(tbody);
+			})
+			trPauseSum = $("<tr />").appendTo(tbody);
+
+			var thTr = thead.children("tr:eq(0)");
+			$("<th />").html("类别").attr("style", "min-width:60px").appendTo(thTr);
+			$("<th />").html("合计").appendTo(thTr);
+
+			$.each(causeArray, function (index, cause) {
+				$("<td />").html(cause).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
+				$("<td />").html(pauseTotal[cause]).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
+			});
+			$("<td />").html('停线总计').appendTo(trPauseSum);
+			$("<td />").html(pauseTotal['总计']).appendTo(trPauseSum);
+
+			$.each(pauseDetail, function (index, value) {
+				$("<td />").html(value.time).appendTo(thTr);
+				$.each(causeArray, function (index, cause) {
+					$("<td />").html(value[cause]).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
+				})
+				$("<td />").html(value['总计']).appendTo(trPauseSum);
+			})
+
+			trRunTime = $("<tr />").appendTo(tbody);
+			trUseRate = $("<tr />").appendTo(tbody);
+			$("<td />").html("总工时").appendTo(trRunTime);
+			$("<td />").html("利用率").appendTo(trUseRate);
+			$("<td />").html(useTotal.runTime).appendTo(trRunTime);
+			$("<td />").html(useTotal.useRate).appendTo(trUseRate);
+			$.each(useDetail, function (index, value) {
+				$("<td />").html(value.runTime).appendTo(trRunTime);
+				$("<td />").html(value.useRate).appendTo(trUseRate);
+			})
+
+			$(".useTable[timespan="+ timespan +"]").show();
 		},
 	}
 })

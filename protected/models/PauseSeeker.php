@@ -202,7 +202,7 @@ class PauseSeeker
 				$dSeriesX[] = $temp['name'];
 
 				$temp['percentage'] = $temp['percentage'] * 100 . "%";
-				$detail['dutyDepartment'] = $temp;
+				$detail['dutyDepartment'][] = $temp;
 				++ $totalDepartments;
 				if($totalDepartments >= 15) {
 					break;
