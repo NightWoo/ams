@@ -554,7 +554,7 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
             $car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id > 0){
@@ -592,19 +592,19 @@ class ExecutionController extends BmsBaseController
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
-			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
-			
+            
             $car->warehouseTime();
-			
-			//open gate
-			$rpc = new RpcService();
-            $clientIp = $_SERVER["REMOTE_ADDR"];
-			$data['clientIp'] = $clientIp;
-            $host='10.23.86.172';
-			$ret = $rpc->openGate($host);
-			
-
+            
             $transaction->commit();
+
+            //open gate
+            $rpc = new RpcService();
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $data['clientIp'] = $clientIp;
+            $host='10.23.86.172';
+            $ret = $rpc->openGate($host);
+            
+			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
             $transaction->rollback();
@@ -696,12 +696,12 @@ class ExecutionController extends BmsBaseController
                 throw new Exception($car->car->vin . "系统未记录发动机号，无法出库");
             }
 
-            if($car->car->series == 'F0'){
-                // $gearboxTrace = $car->checkTraceGearBox();
-                $absTrace = $car->checkTraceABS();
-            }
+            // if($car->car->series == 'F0'){
+            //     // $gearboxTrace = $car->checkTraceGearBox();
+            //     $absTrace = $car->checkTraceABS();
+            // }
 
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();
             $onlyOnce = false;
             $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
 
@@ -719,19 +719,6 @@ class ExecutionController extends BmsBaseController
             $car->car->save();
             $car->distributeTime();
 			
-			//open gate
-            $clientIp = $_SERVER["REMOTE_ADDR"];
-            $data['clientIp'] = $clientIp;
-            $rpc = new RpcService();
-            $host='10.23.86.3';
-            $ret = $rpc->openGate($host);
-            
-            //no need to throw one by one
-            //$outDate = date("Y-m-d h:m:s");
-            // $clientIp = $_SERVER["REMOTE_ADDR"];
-            //$car->throwCertificateData($outDate, $clientIp);
-            //$car->throwInspectionSheetData();
-			
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;
 			} else {
@@ -741,9 +728,14 @@ class ExecutionController extends BmsBaseController
 			$orderNumber = $order->order_number;
 			$orderDetailId = $order->order_detail_id;
 			
-			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
-
             $transaction->commit();
+            //open gate
+            $clientIp = $_SERVER["REMOTE_ADDR"];
+            $data['clientIp'] = $clientIp;
+            $rpc = new RpcService();
+            $host='10.23.86.3';
+            $ret = $rpc->openGate($host);
+			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
             $transaction->rollback();
@@ -1272,8 +1264,17 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
+
+            $order = OrderAR::model()->findByPk(6);
+
+            $order2 = $order;
+
+            $order->hold +=1;
+
+            $order2->hold +=2;
+
             $transaction->commit();
-            $this->renderJsonBms(true, $ret, $ret);
+            $this->renderJsonBms(true, $order, $order2);
         } catch(Exception $e) {
             $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);

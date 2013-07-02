@@ -177,11 +177,14 @@ $("document").ready(function() {
 				if(response.success){
 				  	$("#vinHint").html(response.data.vinCode + "整车编号" + response.data.serialNumber);	//added by wujun
 					//fill data to print
+					$(".printVin").html(response.data.vinCode+"["+ response.data.serialNumber +"]");
 					$(".printBarCode").attr("src", response.data.vinBarCode);
 					$(".printFrontImage").attr("src", response.data.frontImage);
 					$(".printBackImage").attr("src", response.data.backImage);
 					$(".printType").html(response.data.type);
+					$(".printModel").html(response.data.carModel);
 					$(".printSeries").html(response.data.series);
+					$(".printGlass").html(response.data.sideGlass);
 					if(response.data.coldResistant == "1"){
 						$(".printConfig").html(response.data.config +'/'+ '耐寒');							
 					}else{
@@ -193,11 +196,13 @@ $("document").ready(function() {
 						if (response.data.frontImage == "" || response.data.backImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
-							$(".printable").addClass("toPrint");
+							$("#configPaper").addClass("toPrint");
 							setTimeout(function (){window.print();},500);
 							fadeMessageAlert(response.message,"alert-success");
 						}
-					} else {
+					} else if($("#currentNode").val() == 'T0_2') {
+						$("#M6Glass").addClass("toPrint");
+						setTimeout(function (){window.print();},500);
 						fadeMessageAlert(response.message,"alert-success");
 					}
 				}

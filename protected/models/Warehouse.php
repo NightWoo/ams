@@ -99,7 +99,8 @@ class Warehouse
 		if(empty($order)){
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
-			$order->saveCounters(array('count'=>1));
+			// $order->saveCounters(array('count'=>1));
+			$order->count += 1;
 			if($order->amount == $order->count){
 				$boardNumber = $order->board_number;
 				$sql = "SELECT board_number, amount,hold,count FROM `order` WHERE board_number='$boardNumber'";
@@ -114,8 +115,10 @@ class Warehouse
 					$out_finish_time=date("YmdHis");
 					$sql = "UPDATE `order` SET `status`=2, out_finish_time='$out_finish_time' WHERE board_number='$boardNumber' AND `status`=1";
 					Yii::app()->db->createCommand($sql)->execute();
-
-					$order->saveAttributes(array("out_finish_time"=>"$out_finish_time","status"=>2));
+					$order->out_finish_time = $out_finish_time;
+					$order->status = 2;
+					$order->save();
+					// $order->saveAttributes(array("out_finish_time"=>"$out_finish_time","status"=>2));
 				}
 			}
 

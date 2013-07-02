@@ -134,7 +134,23 @@ td,th{border:none;}
 				</div><!-- end Main体 -->
 			</div><!-- end offhead --> 
 		</div>
-		<div class="printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt">
+
+		<div id="M6Glass" class="printable" style="width:220pt;height:100pt; padding: 7pt 5pt; font-family: Microsoft YaHei;">
+			<div>
+				<p class="printVin" style="font-size:16px; margin:5px 0">-</p>
+			</div>
+			<div>
+				<p class="printModel" style="font-size:16px; margin:5px 0">-</p>
+			</div>
+			<div>
+				<p class="printConfig" style="font-size:16px; margin:5px 0">-</p>
+			</div>
+			<div>
+				<p class="printGlass" style="font-size:50px; margin:5px auto;text-align: center">-</p>
+			</div>
+		</div>
+
+		<div id="configPaper" class="printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>

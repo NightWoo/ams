@@ -745,6 +745,9 @@ class Car
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
 		$config = CarConfigAR::model()->findByPk($this->car->config_id);
+		$sideGlass = $config->side_glass;
+		$carType = CarTypeMapAR::model()->find('car_type=?', array($this->car->type));
+        $carModel = $carType->car_model;
 
 		$types = array('front','back');
 		$images = array();
@@ -767,6 +770,8 @@ class Car
 			'series' => $this->car->series,
             'date' => date('Y-m-d'),
             'color' => $this->car->color,
+            'carModel' => $carModel,
+            'sideGlass' => $sideGlass,
 			'config' => $config->name,
             'remark'  => $this->car->remark,
             'vinCode' => $this->car->vin,

@@ -119,7 +119,7 @@ class Order
 			$orderConfigId = $config->order_config_id;
 		}
 		
-		$seeker =new OrderSeeker;
+		$seeker = new OrderSeeker();
 		$order = $seeker->matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date);
 
 		if(!empty($order)) {
@@ -183,10 +183,10 @@ class Order
 				$values = array($order->series, $order->color, $order->cold_resistant);
 				
 				$matchCondition .= "  ORDER BY warehouse_time ASC";
-				$car = CarAR::model()->find($matchCondition, $values);
-				 if(!empty($car)){
+				$matchedCar = CarAR::model()->find($matchCondition, $values);
+				if(!empty($matchedCar)){
 			 		$matchedOrder = $order;
-			 		$matchedCar = $car;
+			 		// $matchedCar = $car;
 			 		break;
 				 }
 			}
@@ -199,8 +199,10 @@ class Order
 				$matchedOrder->saveCounters(array('hold'=>1));
 
 				if($matchedOrder->hold == $matchedOrder->amount){
-					$standby_finish_time = date('YmdHis');
-					$matchedOrder->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
+					// $standby_finish_time = date('YmdHis');
+					// $matchedOrder->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
+					$matchedOrder->standby_finish_time = date('YmdHis');
+					$matchedOrder->save();
 				}
 
 				$warehouse->quantity -= 1;
@@ -214,18 +216,17 @@ class Order
 					$warehouse->free_seat = $warehouse->capacity;
 					$warehouse->status = 0;
 				}
+				$warehouse->save();
 				
 				$matchedCar->order_id = $matchedOrder->id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
 				$matchedCar->warehouse_id = 1;		//WDI
 				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';
+				$matchedCar->save();
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
 				$rowWDI->saveCounters(array('quantity'=>1));
-				
-				$warehouse->save();
-				$matchedCar->save();
 				
 				$configName = CarConfigAR::model()->findByPk($matchedCar->config_id)->name;
 				$carModel = CarTypeMapAR::model()->find('car_type=?', array($matchedCar->type))->car_model;

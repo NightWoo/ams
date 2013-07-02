@@ -2,7 +2,7 @@ $(document).ready(function() {
 	initPage();
 
 	$("#btnSubmit").click(function() {
-		
+		$("#btnSubmit").attr("disabled", "disabled");
 		ajaxGetStandbyCar();
 		return false;
 	});
