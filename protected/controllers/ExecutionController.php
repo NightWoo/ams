@@ -158,15 +158,16 @@ class ExecutionController extends BmsBaseController
 			$car->enterNode($enterNode->name);
 
             //throw T32 data to vinm
+
+            //save component trace
+            $car->addTraceComponents($enterNode, $componentCode);
+
+            $data = $car->generateInfoPaperData();
+            $transaction->commit();
+
 			if($nodeName == 'T32' || $nodeName == 'T32_2'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
             }
-
-			//save component trace
-			$car->addTraceComponents($enterNode, $componentCode);
-
-            $data = $car->generateInfoPaperData();
-			$transaction->commit();
             $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
         } catch(Exception $e) {
 			$transaction->rollback();
@@ -184,12 +185,13 @@ class ExecutionController extends BmsBaseController
 
             //$car->leftNode('F10');
             $car->enterNode($nodeName);
+            //print check trace 
+            $data = $car->generateCheckTraceData();
+            $transaction->commit();
+
             if($nodeName == 'F20'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
             }
-			//print check trace 
-			$data = $car->generateCheckTraceData();
-			$transaction->commit();
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
 			$transaction->rollback();
@@ -212,7 +214,7 @@ class ExecutionController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
 
-			$car->passNode('LEFT_WORK_SHOP');
+			// $car->passNode('LEFT_WORK_SHOP');
             $car->enterNode($nodeName);
 			$car->finish();
 
@@ -237,12 +239,13 @@ class ExecutionController extends BmsBaseController
             }
 
             //throw data to vinm
-			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
 
-			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
+            $fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
             $fault->save('在线');
-			$car->throwTestlineCarInfo();
-			$transaction->commit();
+            $transaction->commit();
+
+            $car->throwTestlineCarInfo();
+			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
             $this->renderJsonBms(true, 'OK');
 
         } catch(Exception $e) {
@@ -345,6 +348,12 @@ class ExecutionController extends BmsBaseController
 			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
+            
+            $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
+            $fault->save('在线');
+
+            $car->addGasBagTraceCode($bagCode);
+            $transaction->commit();
 
 			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($car->car->id,13));
             if(!empty($testlineTrace)){
@@ -352,14 +361,8 @@ class ExecutionController extends BmsBaseController
                 $shift='总装1线A班';
                 $vinMessage = $car->throwVinAssembly($car->vin, '检测线', $shift, $testlineTime);
             }
-            
-			$vinMessage = $car->throwVinAssembly($car->vin, '路试');
-			
-			$fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
-            $fault->save('在线');
 
-			$car->addGasBagTraceCode($bagCode);
-			$transaction->commit();
+			$vinMessage = $car->throwVinAssembly($car->vin, '路试');
             $this->renderJsonBms(true, 'OK', null);
         } catch(Exception $e) {
 			$transaction->rollback();
@@ -395,11 +398,11 @@ class ExecutionController extends BmsBaseController
 			$car->passNode('VQ3');
             $car->enterNode('VQ2', $driverId);
 			
-			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
-
-			$fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
+            $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
             $fault->save('在线');
-			$transaction->commit();
+            $transaction->commit();
+
+			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
 			$transaction->rollback();
@@ -413,9 +416,9 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '');
+            $driverId = $this->validateStringVal('driver', 0);
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
 
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
@@ -432,17 +435,19 @@ class ExecutionController extends BmsBaseController
             }
 			
 			//只要进入VQ2，则可以多次进入VQ3
-			
 			$car->leftNode('VQ2');
             
 			$car->passNode('CHECK_IN');
-            $car->enterNode('VQ3');
-			
-			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
-			
-			$fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults);
+            $car->enterNode('VQ3', $driverId);
+            $others = array(
+                'checker' => $driverId,
+            );
+            
+            $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults, $others);
             $fault->save('在线');
-			$transaction->commit();
+            $transaction->commit();
+
+			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
 			$transaction->rollback();

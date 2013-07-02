@@ -209,14 +209,19 @@ class FaultController extends BmsBaseController
 	public function actionSaveVQ3() {
         $vin = $this->validateStringVal('vin', '');
         $faults = $this->validateStringVal('fault', '[]');
+        $driverId = $this->validateStringVal('driver', 0);
         try{
-            $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults);
+            $others = array(
+                'checker' => $driverId,
+            );
+
+            $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults, $others);
             $fault->save('离线');
 			
 			$car = Car::create($vin);
-			$vinMessage = $car->throwVinAssembly($car->vin, '面漆修正');
-			
+            
             $this->renderJsonBms(true, 'OK');
+			$vinMessage = $car->throwVinAssembly($car->vin, '面漆修正');
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }

@@ -14,7 +14,8 @@ $("document").ready(function() {
 			    	$("#vinText").val(response.data.car.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					// $("#btnSubmit").removeAttr("disabled");
+					$("#driver").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -117,13 +118,14 @@ $("document").ready(function() {
 	function resetPage () {
 		//empty vinText
 		$("#vinText").removeAttr("disabled");
-		$("#vinText").attr("value","");
+		$("#vinText, #driver").attr("value","");
 		//聚焦到vin输入框上
 		$("#vinText").focus();
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
 		$("#btnSubmit").attr("disabled","disabled");
+		$("#btnSubmit, #driver").attr("disabled","disabled");
 		$("#tableConfirmation tbody").text("");
 	}
 
@@ -180,6 +182,7 @@ $("document").ready(function() {
 	$("#btnSubmit").click(function() {
 		var sendData = {};
 		sendData.vin = $("#vinText").val();
+		sendData.driver = $("#driver").val();
 		sendData.fault = [];
 		//遍历tr，将故障id，零部件id整到  data中来
 		var trs = $("#tableConfirmation tbody tr");
@@ -203,6 +206,14 @@ $("document").ready(function() {
 		resetPage();
 		return false;
 	});
+
+	$('#driver').change(function(){
+		if($('#driver').val() === ''){
+			$('#btnSubmit').attr('disabled', 'disabled');
+		} else {
+			$('#btnSubmit').removeAttr('disabled');
+		}
+	})
 
 	//全选，清空
 	$("#btnPickAll").click(function () {

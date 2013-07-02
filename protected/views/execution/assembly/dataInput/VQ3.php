@@ -38,6 +38,38 @@
            	  			<div>
                         	<label>VIN</label>
            	  				<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
+                            <select name="" id="driver" class="input-small" disalbled='disabled'>
+                                    <option value="" selected>检验员</option>
+                                    <option value="312">孙国富</option>
+                                    <option value="313">周凯</option>
+                                    <option value="314">何文丽</option>
+                                    <option value="315">张勇</option>
+                                    <option value="316">方焯宁</option>
+                                    <option value="317">宋令泽</option>
+                                    <option value="318">林文铸</option>
+                                    <option value="319">张赟飞</option>
+                                    <option value="320">向华</option>
+                                    <option value="321">舒波</option>
+                                    <option value="322">黄志敏</option>
+                                    <option value="323">刘雨</option>
+                                    <option value="324">王昆</option>
+                                    <option value="325">熊峰</option>
+                                    <option value="326">黄敏</option>
+                                    <option value="327">彭斌</option>
+                                    <option value="328">任驰</option>
+                                    <option value="329">游志平</option>
+                                    <option value="330">李亚娟</option>
+                                    <option value="331">谢鹏</option>
+                                    <option value="332">游波</option>
+                                    <option value="333">周迎春</option>
+                                    <option value="334">张潇</option>
+                                    <option value="335">欧阳成龙</option>
+                                    <option value="336">张毅</option>
+                                    <option value="337">邹友财</option>
+                                    <option value="338">陈建陆</option>
+                                    <option value="339">彭宏光</option>
+                                    <option value="340">彭攀</option>
+                            </select>
                         	<button id="btnSubmit" type="submit" class="btn btn-danger">提交故障记录</button>
                        		<button id="reset" type="reset" class="btn">清空</button>
                             <input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>

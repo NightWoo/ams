@@ -102,7 +102,8 @@ class Fault
 					if(isset($fault['newDutyDepartment'])){
 						$exist->duty_department = $fault['newDutyDepartment'];
 					}
-					$exist->updator = $userId;
+					// $exist->updator = $userId;
+					$exist->updator = empty($this->others['checker']) ? $userId : $this->others['checker'];
 					$exist->modify_time = date('YmdHis');
 					$exist->save();
 					continue;
@@ -123,8 +124,10 @@ class Fault
 			$ar->fault_mode = $standard->mode;
 			$ar->fault_description = $standard->description;
 			$ar->status = $status;
-			$ar->creator = $userId;
-			$ar->updator = $userId;
+			// $ar->creator = $userId;
+			$ar->creator = empty($this->others['checker']) ? $userId : $this->others['checker'];
+			// $ar->updator = $userId;
+			$ar->updator = empty($this->others['checker']) ? $userId : $this->others['checker'];
 
 			if($iswdi) {
 				$ar->modify_time = $curtime;
