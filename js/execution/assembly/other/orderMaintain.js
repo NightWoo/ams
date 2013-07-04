@@ -153,6 +153,7 @@ $("document").ready(function() {
 
 				$("#editLane").val(tr.data("laneId"));
 				$("#editBoardNumber").val(tr.data("boardNumber"));
+				$("#editCarrier").val(tr.data("carrier"));
 				$("#editDistributorName").val(tr.data("distributorName"));
 				$("#editAmount").val(tr.data("amount"));
 				$("#editSeries").val(carSeries);
@@ -377,9 +378,11 @@ $("document").ready(function() {
 			thisConfig = $(tr).find("select").filter(".newOrderConfig").val();
 			// thisDate = $(tr).find("input").filter(".newStandbyDate").val();
 			thisDate = $("#newStandbyDate").val();
+			thisCarrier = $("#newCarrier").val();
 			thisLane = $(tr).find("select").filter(".selectLane").val();
 			$(tr).data("orderConfigId", thisConfig);
 			$(tr).data("standbyDate", thisDate);
+			$(tr).data("carrier", thisCarrier);
 			$(tr).data("amount", thisAmount);
 			$(tr).data("boardNumber", thisBoard);
 			$(tr).data("laneId", thisLane);
@@ -497,6 +500,7 @@ $("document").ready(function() {
 			$(tr).data("amount", thisAmount);
 			$(tr).data("boardNumber", thisBoard);
 			$(tr).data("laneId", thisLane);
+			$(tr).data("carrier", "");
 			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
 			
 			console.log(chosen);
@@ -682,6 +686,7 @@ $("document").ready(function() {
 						tr.data("configDescription", value.config_description);
 						tr.data("remark", value.remark);
 						tr.data("boardNumber", value.board_number);
+						tr.data("carrier", value.carrier);
 						tr.data("toCount", value.to_count);
 
 						$("#tableResult>tbody").append(tr);
@@ -716,6 +721,7 @@ $("document").ready(function() {
 			data: {
 				"id": $("#editModal").data("id"),
 				"boardNumber": $("#editBoardNumber").val(),
+				"carrier": $("#editCarrier").val(),
 				"standbyDate": $("#editStandbyDate").val(),
 				"status": $("#editStatus").val(),
 				"laneId": $("#editLane").val(),
@@ -747,7 +753,7 @@ $("document").ready(function() {
 			toCount = 1;
 
 		var isCold = 0;
-		if($("#internalToCount").attr("checked") === "checked")
+		if($("#internalColdResistant").attr("checked") === "checked")
 			isCold = 1;
 
 		$.ajax({

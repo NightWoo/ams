@@ -188,6 +188,7 @@ class OrderController extends BmsBaseController
 		$coldResistant = $this->validateIntVal('coldResistant', 0);
 		$remark = $this->validateStringVal('remark', '');
 		$boardNumber = $this->validateStringVal('boardNumber', '');
+		$carrier = $this->validateStringVal('carrier', '');
 		$toCount = $this->validateIntVal('toCount', 0);
 		try {
 			if(empty($standbyDate)) {
@@ -253,6 +254,7 @@ class OrderController extends BmsBaseController
 			$order->cold_resistant = $coldResistant;
 			$order->remark = $remark;
 			$order->board_number = $boardNumber;
+			$order->carrier = $carrier;
 			$order->to_count = $toCount;
 
 			$order->modify_time = date('YmdHis');

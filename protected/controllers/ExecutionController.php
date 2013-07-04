@@ -189,9 +189,9 @@ class ExecutionController extends BmsBaseController
             $data = $car->generateCheckTraceData();
             $transaction->commit();
 
-            if($nodeName == 'F20'){
+            // if($nodeName == 'F20'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
-            }
+            // }
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
 			$transaction->rollback();
@@ -238,9 +238,10 @@ class ExecutionController extends BmsBaseController
                 }
             }
 
-            //throw data to vinm
+            $tablePrefix = "VQ1_STATIC_TEST";
+            if($nodeName == "VQ1_2") $tablePrefix .= "_2";
 
-            $fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);
+            $fault = Fault::create($tablePrefix, $vin, $faults);
             $fault->save('在线');
             $transaction->commit();
 

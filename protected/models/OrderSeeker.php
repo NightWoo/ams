@@ -180,7 +180,7 @@ class OrderSeeker
 			$condition .= " AND board_number LIKE '%$boardNumber'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count, carrier FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -525,7 +525,7 @@ class OrderSeeker
 		}
 
 		$conditions = array();
-		$conditions['order'] = "status=1 AND standby_date='$date' AND order_config_id='$orderConfigId' AND hold<amount AND is_locked=0";
+		$conditions['order'] = "status=1 AND standby_date='$date' AND order_config_id='$orderConfigId' AND hold<amount AND count<amount";
 		$conditions['car'] = "series='$series' AND color='$color' AND cold_resistant='$coldResistant'";
 
 		$condition = join(' AND ', $conditions);

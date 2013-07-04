@@ -25,15 +25,13 @@ $(document).ready(function () {
     })
 
     $(".queryCompletion").click(function(){
-    	// timespan = $(this).attr("timespan");
-    	ajaxQueryCompletion("monthly");
-    	ajaxQueryCompletion("yearly");
+    	timespan = $(this).attr("timespan");
+    	ajaxQueryCompletion(timespan);
     })
 
     $(".queryUse").click(function(){
     	timespan = $(this).attr("timespan");
-    	ajaxQueryUse("monthly");
-    	ajaxQueryUse("yearly");
+    	ajaxQueryUse(timespan);
     })
 //END event bindings -------------------------
 
@@ -47,8 +45,6 @@ $(document).ready(function () {
 
 		$("#startTime").val(window.byd.DateUtil.workDate());
 		ajaxQueryManufactureDaily();
-		ajaxQueryCompletion("monthly");
-    	ajaxQueryCompletion("yearly");
 		resetAll();
 	}
 
@@ -75,8 +71,8 @@ $(document).ready(function () {
 				if(response.success){
 					report.manufactureDaily.ajaxData = response.data;
 					report.manufactureDaily.updateDailyTable();
-					// report.manufactureDaily.drawColumn();
-					// report.manufactureDaily.drawDonut();
+					report.manufactureDaily.drawColumn();
+					report.manufactureDaily.drawDonut();
 				}
 			}
 		})
@@ -106,7 +102,7 @@ $(document).ready(function () {
 				if(response.success){
 					report.completion.ajaxData = response.data;
 					report.completion.drawColumnLine(timespan);
-					// report.completion.updateTable(timespan);
+					report.completion.updateTable(timespan);
 				}
 			}
 		})
@@ -127,7 +123,7 @@ $(document).ready(function () {
 				if(response.success){
 					report.use.ajaxData = response.data;
 					report.use.drawColumnLine(timespan);
-					// report.use.updateTable(timespan);
+					report.use.updateTable(timespan);
 				}
 			}
 		})

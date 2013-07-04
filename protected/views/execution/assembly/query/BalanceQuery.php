@@ -63,6 +63,7 @@
                                         <option value="VQ2">VQ2</option>
                                         <option value="VQ1">VQ1</option>
                                         <option value="onLine">I线</option>
+                                        <option value="onLine-2">II线</option>
                                         <option value="PBS">PBS</option>
     								</select>
     							</td>

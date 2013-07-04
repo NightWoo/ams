@@ -21,6 +21,12 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#btnFinish").click(function() {
+		vinText = $(this).siblings().children().filter(".vinText");
+		url = ASSEMBLY_FINISH_DATA_THROW;
+		ajaxSubmit(vinText, url);
+	})
+
 	$("#btnIn").click(function() {
 		vinText = $(this).siblings().children().filter(".vinText");
 		url = WAREHOUSE_IN_DATA_THROW;
@@ -53,7 +59,7 @@ $(document).ready(function() {
 	}
 
 	function resetPage() {
-		$("#btnIn, #btnOut, #btnMark, #btnCertificate").attr("disabled", "disabled");
+		$(".vinText").attr("disabled", "disabled");
 	}
 
 	function validateVin(vinText) {

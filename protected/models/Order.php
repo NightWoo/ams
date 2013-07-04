@@ -53,6 +53,7 @@ class Order
 			$ar->board_number = $order['boardNumber'];
 			$ar->lane_id = $order['laneId'];
 			$ar->order_type = $order['orderType'];
+			$ar->carrier = $order['carrier'];
 			$ar->to_count = 1;
 			if(!empty($order['country'])){
 				$ar->country = $order['country'];
@@ -146,7 +147,7 @@ class Order
 		//$matchedOrder = new OrderAR;
 		$data = array();
 
-		$condition = "standby_date=? AND status=1 AND amount>hold";
+		$condition = "standby_date=? AND status=1 AND amount>hold AND amount>count";
 
 		if(!empty($series)){
 	        $arraySeries = $this->parseSeries($series);

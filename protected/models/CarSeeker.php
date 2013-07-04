@@ -11,6 +11,7 @@ class CarSeeker
 	private static $NODE_BALANCE_STATE = array(
 		'PBS' => array('彩车身库'),
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
+		'onLine-2' => array('II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验'),
 		'VQ1' => array('VQ1异常','退库VQ1'),
 		'VQ1-NORMAL' => array('VQ1异常'),
 		'VQ1-RETURN'=> array('退库VQ1'),
@@ -798,6 +799,7 @@ class CarSeeker
 		$stateMap=array(
 			'PBS' => array('PBS'),
 			'onLine' => array('onLine'),
+			'onLine-2' => array('onLine-2'),
 			'VQ1' => array('VQ1-NORMAL', 'VQ1-RETURN'),
 			'VQ2' => array('VQ2-NORMAL', 'VQ2-RETURN'),
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
@@ -806,8 +808,8 @@ class CarSeeker
 			// 'WH' => array('WH'),
 			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-X','WH-WDI'),
 			'WHin' => array('WHin'),
-			'assembly' => array('PBS', 'onLine','VQ1', 'VQ2', 'VQ3', 'WH'),
-			'mergeRecyle' => array('PBS','onLine','recycle', 'WH'),
+			'assembly' => array('PBS', 'onLine', 'onLine-2', 'VQ1', 'VQ2', 'VQ3', 'WH'),
+			'mergeRecyle' => array('PBS','onLine', 'onLine-2','recycle', 'WH'),
 		);
 		return $stateMap[$state];
 	}
@@ -816,6 +818,7 @@ class CarSeeker
 		$stateName = array(
 			'PBS' => 'PBS',
 			'onLine' => 'I线',
+			'onLine-2' => 'II线',
 			'VQ1' => 'VQ1',
 			'VQ1-NORMAL' => '正常VQ1',
 			'VQ1-RETURN' => '退库VQ1',

@@ -63,7 +63,8 @@
                                     <option value="">所有节点</option>
 									<!-- <option value="PBS">PBS</option>
 									<option value="T0">T0</option> -->
-									<option value="VQ1">VQ1静态</option>
+                                    <option value="VQ1">I线VQ1静态</option>
+									<option value="VQ1_2">II线VQ1静态</option>
 									<option value="VQ2_ALL">VQ2动态检验</option>
                                     <option value="CHECK_LINE">--VQ2动态.检测线</option>
                                     <option value="ROAD_TEST_FINISH">--VQ2动态.路试</option>

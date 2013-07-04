@@ -289,6 +289,7 @@ var SUB_CONFIG_VALIDATE = "/bms/car/validateSubConfig";
 var SUB_CONFIG_SAVE = "/bms/config/saveSub";
 
 var VALIDATE_DATA_THROW = "/bms/car/validateDataThrow";
+var ASSEMBLY_FINISH_DATA_THROW = "/bms/car/throwAssemblyFinish"
 var WAREHOUSE_IN_DATA_THROW = "/bms/car/throwStoreIn";
 var WAREHOUSE_OUT_DATA_THROW = "/bms/car/throwStoreOut";
 var MARK_PRINT_THROW = "/bms/car/throwMarkPrint";

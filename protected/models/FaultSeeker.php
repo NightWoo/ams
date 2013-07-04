@@ -63,6 +63,7 @@ class FaultSeeker
 		$series = $car->car->series;
 		$default_tablePrefixs = array(
 			'VQ1_STATIC_TEST_',
+			'VQ1_STATIC_TEST_2_',
 			'VQ2_ROAD_TEST_',
 			'VQ2_LEAK_TEST_',
 			'VQ3_FACADE_TEST_',
@@ -967,6 +968,7 @@ class FaultSeeker
 			'VQ2_LEAK_TEST' => 16,
 			'VQ3_FACADE_TEST' => 17,
 			'WDI_TEST' => 95,
+			'VQ1_STATIC_TEST_2' => 209,
 		);
 		$nodeTables = array(
 			'VQ1' => 'VQ1_STATIC_TEST',
@@ -974,6 +976,7 @@ class FaultSeeker
 			'VQ2' => 'VQ2_LEAK_TEST',
 			'VQ3' => 'VQ3_FACADE_TEST',
 			'WDI' => 'WDI_TEST',
+			'VQ1_2' => 'VQ1_STATIC_TEST_2',
 		);
 
 		$temps = array();
@@ -1009,6 +1012,7 @@ class FaultSeeker
 			'T0'  => 2,
 			'T0_2'  => 201,
             'VQ1' => 10,
+            'VQ1_2' => 209,
 			'CHECK_LINE' => 13,
             'ROAD_TEST_FINISH' => 15,
             'VQ2' => 16,

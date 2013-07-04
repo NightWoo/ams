@@ -194,10 +194,16 @@ class Car
 			$trace->remark = $remark;
 			$trace->save();
 
-
-			//car status 
+			$onlineNodes = array(
+				'T11','T21','T32','C10','C21','F10','F20',
+	        	'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2','F20_2'
+	       	);
+			//car status
 			if($nodeName !== 'WDI' && $nodeName !== 'DETECT_SHOP_LEAVE' && $nodeName !== 'DETECT_SHOP_RETURN'){
-				$this->detectStatus($node);
+				//如果已经下线，录入线上节点不改变车辆状态
+				if(!(in_array($nodeName, $onlineNodes) && $this->car->finish_time>'0000-00-00 00:00:00')){
+					$this->detectStatus($node);
+				}
 			}
 		//}
 		$node;
@@ -239,10 +245,19 @@ class Car
 			}		
 			$node = Node::create($nodeId);
 		}
+		
 		$zone = $node->main_zone;
 		if($node->name === 'VQ1') {
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($this, '未修复', array('VQ1_STATIC_TEST_'));
+			if(!empty($exist)) {
+				$zone = $node->slave_zone;
+			}	
+		}
+
+		if($node->name == 'VQ1_2') {
+			$fault = Fault::createSeeker();
+            $exist = $fault->exist($this, '未修复', array('VQ1_STATIC_TEST_2_'));
 			if(!empty($exist)) {
 				$zone = $node->slave_zone;
 			}	
@@ -938,9 +953,9 @@ class Car
         list($success, $data) = $order->match($series, $carType, $config, $color, $coldResistant, $date);
         if($success) {
             $rowWDI = WarehouseAR::model()->findByPk(1);
-			// $rowWDI->quantity += 1;
 			$rowWDI->saveCounters(array('quantity'=>1));
-			$rowWDI->save();
+			// $rowWDI->quantity += 1;
+			// $rowWDI->save();
 
             $this->car->order_id = $data['orderId'];
             $this->car->old_wh_id = $this->car->warehouse_id;

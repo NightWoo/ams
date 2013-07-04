@@ -107,7 +107,10 @@ class FaultController extends BmsBaseController
 	public function actionShowVQ1() {
         $vin = $this->validateStringVal('vin', '');
 		try{
-            $fault = Fault::create('VQ1_STATIC_TEST',$vin, '[]');
+            $car = Car::create($vin);
+            $tablePrefix = "VQ1_STATIC_TEST";
+            if($car->car->assembly_line == "II") $tablePrefix = "VQ1_STATIC_TEST_2";
+            $fault = Fault::create($tablePrefix, $vin, '[]');
             $data = $fault->show();
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -128,7 +131,10 @@ class FaultController extends BmsBaseController
                     throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
                 }
             }
-			$fault = Fault::create('VQ1_STATIC_TEST',$vin, $faults);	
+
+            $tablePrefix = "VQ1_STATIC_TEST";
+            if($car->car->assembly_line == "II")  $tablePrefix = "VQ1_STATIC_TEST_2";
+			$fault = Fault::create($tablePrefix, $vin, $faults);	
 			$fault->save('离线');
             $this->renderJsonBms(true, 'OK');
             $transaction->commit();

@@ -26,6 +26,21 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
    	   		<div><!-- 主体 -->
+   	   			<div>
+	            	<legend>VINM下线
+	            		<span class="pull-right">
+	            		</span>
+	            	</legend>
+					<div id="formWarehouse" class="well form-inline">
+						<div class="input-prepend  input-append">
+							<span class="add-on">VIN</span>
+							<input type="text" class="vinText span3" placeholder="请扫描/输入VIN..." id="vinAssembly" />
+							<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+						</div>
+						<input type="button" class="btn btn-primary" id="btnFinish" value="下线抛送"></input>
+					</div>
+	            </div>
+
 	            <div>
 	            	<legend>VINM入库/出库
 	            		<span class="pull-right">

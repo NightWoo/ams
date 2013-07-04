@@ -51,8 +51,9 @@ class CarController extends BmsBaseController
 			if(empty($nodeName)) {
 				throw new Exception('node cannot be empty');
 			}
+            
             $enterNode = Node::createByName($nodeName);
-			$leftNode = $enterNode->getParentNode();
+            $leftNode = $enterNode->getParentNode();
             
             $car = Car::create($vin);
 			//$car->leftNode($leftNode->name);
@@ -72,8 +73,13 @@ class CarController extends BmsBaseController
 	
 	public function actionValidateF20() {
         $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', 'F20');
         try{
             $car = Car::create($vin);
+            $line = $car->car->assembly_line;
+            if( ($line == "I" && strpos($nodeName,"_2")) || ($line == "II" && !strpos($nodeName,"_2")) ){
+                throw new Exception($car->car->vin . "是" . $line ."线车辆，无法录入该节点，请确认车辆或录入节点是否正确");
+            }
 			//$car->leftNode('F10');
 			$car->checkTraceGasolineEngine();
 			
@@ -99,6 +105,10 @@ class CarController extends BmsBaseController
         $nodeName = $this->validateStringVal('currentNode', 'VQ1');
         try{
             $car = Car::create($vin);
+            $line = $car->car->assembly_line;
+            if( ($line == "I" && strpos($nodeName,"_2")) || ($line == "II" && !strpos($nodeName,"_2")) ){
+                throw new Exception($car->car->vin . "是" . $line ."线车辆，无法录入该节点，请确认车辆或录入节点是否正确");
+            }
 			$enterNode = Node::createByName($nodeName);
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
@@ -260,6 +270,10 @@ class CarController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
 
             $car = Car::create($vin);
+            $line = $car->car->assembly_line;
+            if( ($line == "I" && strpos($nodeName,"_2")) || ($line == "II" && !strpos($nodeName,"_2")) ){
+                throw new Exception($car->car->vin . "是" . $line ."线车辆，无法录入该节点，请确认车辆或录入节点是否正确");
+            }
             //$car->leftNode($leftNode->name);
 			if(empty($car->config->name)){
 				throw new Exception($vin . '无配置');
@@ -765,6 +779,21 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionThrowAssemblyFinish(){
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            
+            $shift = '总装1线A班';
+            $time = $car->car->finish_time;
+            $vinMessage = $car->throwVinAssembly($car->vin, '总装下线', $shift, $time);
+
+            $this->renderJsonBms(true, '操作完成，'. $vinMessage['AssemblyResult'], $vinMessage);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionThrowStoreIn(){
         try{
             $vin = $this->validateStringVal('vin', '');
@@ -776,7 +805,7 @@ class CarController extends BmsBaseController
             }else if(!empty($car->car->old_wh_id)){
                 $row = WarehouseAR::model()->findByPk($car->car->old_wh_id)->row;
             }
-            $driverName = '汪辉';
+            $driverName = '樊后来';
             $inDate = $car->car->warehouse_time;
 
             $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);

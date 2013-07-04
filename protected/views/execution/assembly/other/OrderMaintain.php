@@ -204,10 +204,17 @@
 					</div>
 			    </div>
 			</div> 	  
-  			<!-- <div class="control-group">
-                <label class="control-label" for="">&nbsp;承运</label>
+  			<div class="control-group">
+                <label class="control-label" for="">&nbsp;承运商</label>
                 <div class="controls">
-                    <input id="newCarrier" type="text" class="input-medium" disabled="disabled" placeholder="输入承运商..."/>
+                	<select id="newCarrier" class="input-small">
+                        <option value="" selected></option>
+                        <option value="安吉">安吉</option>
+                        <option value="华秦">华秦</option>
+                        <option value="銮通">銮通</option>
+                        <option value="兴达">兴达</option>
+                        <option value="远志达">远志达</option>
+                    </select>
                 </div>
             </div>
             <div class="control-group">
@@ -215,7 +222,7 @@
                 <div class="controls">
                     <input id="newCity" type="text" class="input-medium" disabled="disabled" placeholder="输入城市..."/>
                 </div>
-            </div>  --> 
+            </div>  
 		</form>
 		<legend></legend>
 		<table id="tableNewOrder" class="table table-condensed table-hover" style="display:none">
@@ -325,6 +332,19 @@
                 <label class="control-label" for="editBoardNumber">*&nbsp;备板编号</label>
                 <div class="controls">
                     <input id="editBoardNumber"  type="text" class="input-small" placeholder="备板编号..."/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="">&nbsp;承运商</label>
+                <div class="controls">
+                	<select id="editCarrier" class="input-small">
+                        <option value="" selected></option>
+                        <option value="安吉">安吉</option>
+                        <option value="华秦">华秦</option>
+                        <option value="銮通">銮通</option>
+                        <option value="兴达">兴达</option>
+                        <option value="远志达">远志达</option>
+                    </select>
                 </div>
             </div>
             <div class="control-group">
