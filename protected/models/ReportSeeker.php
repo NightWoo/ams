@@ -49,6 +49,8 @@ class ReportSeeker
 		"warehouseBalance" => "库存",
 	);
 
+	private static $COLD_RESISTANT = array('非耐寒','耐寒');
+
 	private static $SERIES_NAME = array(
 			'F0' => 'F0',
 			'M6' => 'M6',
@@ -59,7 +61,13 @@ class ReportSeeker
 		"生产组织","品质异常","物料供给","设备故障","其他"
 	);
 
-	private static $COLD_RESISTANT = array('非耐寒','耐寒');
+	private static $RECYCLE_BALANCE_STATE = array(
+		"onLine" => "I线",
+		"VQ1" => "VQ1",
+		"VQ2" => "VQ2",
+		"VQ3" => "VQ3",
+	);
+
 
 	public function queryManufactureDaily($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
@@ -209,7 +217,7 @@ class ReportSeeker
 			"6B"=>array(),
 		);
 		foreach($count as $key => &$one){
-			$one = array('total'=>0, 'ready'=>0, 'completion'=>null);
+			$one = array('total'=>null, 'ready'=>null, 'completion'=>null);
 		}
 		foreach($datas as $data){
 			$totalValue = intval($data['total']);
@@ -239,10 +247,10 @@ class ReportSeeker
 		$pauseTotal = array();
 		$useDetail = array();
 		$useTotal = array(
-			"runTime" => 0,
-			"useRate" => 0,
-			"capacity" => 0,
-			"prodution" => 0,
+			"runTime" => null,
+			"useRate" => null,
+			"capacity" => null,
+			"prodution" => null,
 		);
 		$columnSeriesX = array();
 		$columnSeriesY = array();
@@ -322,7 +330,7 @@ class ReportSeeker
 
 		$causeDistribute = array();
 		foreach(self::$PAUSE_CAUSE_TYPE as $causeType){
-			$causeDistribute[$causeType] = 0;
+			$causeDistribute[$causeType] = null;
 		}
 		foreach($datas as $data){
 			if($data['cause_type'] == ""){
@@ -339,9 +347,9 @@ class ReportSeeker
 		$datas = $this->queryShiftRecord($stime, $etime);
 		$use = array();
 		
-		$capacity = 0;
-		$prodution = 0;
-		$runTime = 0;
+		$capacity = null;
+		$prodution = null;
+		$runTime = null;
 		foreach($datas as $data){
 			$capacity += $data['capacity'];
 			$prodution += $data['prodution'];
@@ -389,10 +397,132 @@ class ReportSeeker
 		return $datas;
 	}
 
+	public function queryRecycle($date, $timespan) {
+		switch($timespan) {
+			case "monthly":
+				list($stime, $etime) = $this->reviseMonthlyTime($date);
+				break;
+			case "yearly":
+				list($stime, $etime) = $this->reviseYearlyTime($date);
+				break;
+			default:
+				list($stime, $etime) = $this->reviseDailyTime($date);
+		}
+
+		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
+		$stateArray= self::$RECYCLE_BALANCE_STATE;
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$lineSeriesY = array();
+		foreach(self::$RECYCLE_BALANCE_STATE as $state => $stateName){
+			$columnSeriesY[$stateName] = array();
+		}
+
+		foreach($timeArray as $queryTime) {
+			$sDate = substr($queryTime['stime'], 0, 10);
+			$eDate = substr($queryTime['etime'], 0, 10);
+			$balanceArray = $this->queryRecycleBalance($sDate, $eDate);
+			foreach($balanceArray as $state => $count){
+				$columnSeriesY[$stateArray[$state]][] = $count;
+			}
+			$period = $this->queryAssemblyPeriod($queryTime['stime'], $queryTime['etime']);
+			$lineSeriesY[] = $period;
+			$columnSeriesX[] = $queryTime['point'];
+		}
+
+		$ret = array(
+			"stateArray" => array_values(self::$RECYCLE_BALANCE_STATE),
+			"series" => array(
+				"x" => $columnSeriesX,
+				"column" => $columnSeriesY,
+				"line" => $lineSeriesY,
+			),
+		);
+
+		return $ret;
+	}
+
+	public function queryRecycleBalance($sDate, $eDate) {
+		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' GROUP BY series,state";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$count = array();
+		foreach(self::$RECYCLE_BALANCE_STATE as $state => $stateName){
+			$count[$state] = null;
+		}
+
+		foreach($datas as $data){
+			$count[$data['state']] += ceil($data['count']);
+		}
+
+		return $count;
+	}
+
+	public function queryAssemblyPeriod($stime, $etime){
+		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
+		$sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time FROM car WHERE $condition";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		$countSql = "SELECT COUNT(DISTINCT id) FROM car WHERE $condition";
+		$count = intval(Yii::app()->db->createCommand($countSql)->queryScalar());
+
+		$howlong = null;
+		foreach($cars as $car){
+			$warehouseTime = $car['warehouse_time']>'0000-00-00 00:00:00' ? $car['warehouse_time'] : date("Y-m-d H:i:s");
+			$howlong += (strtotime($warehouseTime) - strtotime($car['assembly_time']));
+		}
+		$period = empty($count) ? null : $howlong / $count;
+		$period = empty($period) ? null : round(($period / 3600), 1);
+
+		return $period;
+	}
+
 	public function countOnline($stime, $etime){
 		$sql = "SELECT COUNT(id) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
 		$data = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $data;
+	}
+
+	public function queryOvertimeCars(){
+		$sql = "SELECT id as car_id,serial_number, vin, series, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS last_hour, `status` 
+				FROM car 
+				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72 
+				ORDER BY last_hour DESC";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$tablePrefixMap=array(
+			"VQ1异常" => "VQ1_STATIC_TEST",
+			"VQ2异常.路试" => "VQ2_ROAD_TEST",
+			"VQ2异常.漏雨" => "VQ2_LEAK_TEST",
+			"VQ3异常" => "VQ3_FACADE_TEST",
+		);
+
+		$lineSuffix = array(
+			"I" => "",
+			"II" => "_2",
+		);
+
+		foreach($cars as &$car) {
+			$car['faults'] = "";
+			if(!array_key_exists($car['status'], $tablePrefixMap)) continue;
+			if($car['status'] == "VQ1异常") {
+				$table = "VQ1_STATIC_TEST" . $lineSuffix[$car['assembly_line']] . "_" . $car['series'];
+			} else {
+				$table = $tablePrefixMap[$car['status']] . "_" . $car['series'];
+			}
+			$faults = $this->queryUnsolvedFaults($carId,$table);
+			$car['faults'] = join("、", $faults);
+		}
+
+		return $cars;
+	}
+
+	public function queryUnsolvedFaults($carId, $table) {
+		$sql = "SELECT CONCAT(component_name,fault_mode) AS fault
+				FROM $table
+				WHERE car_id=$carId AND status='未修复'";
+		$faults = Yii::app()->db->createCommand($sql)->queryColumn();
+		$faults = array_unique($faults);
+		return $faults;
 	}
 
 	public function queryCarDetail($date, $point, $timeSpan="daily"){

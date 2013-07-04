@@ -662,10 +662,14 @@ $(document).ready(function () {
 	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
 	                    },
 	                    formatter: function() {
-	                    	hh = parseInt(this.total / 3600);
-		            		mm = ((this.total%3600) / 60).toFixed(0);
-		            		mm = mm<10 ? '0'+mm : mm;
-		                    return hh + ':' +  mm + '\'';
+	                    	if(this.total > 0){
+		                    	hh = parseInt(this.total / 3600);
+			            		mm = ((this.total%3600) / 60).toFixed(0);
+			            		mm = mm<10 ? '0'+mm : mm;
+			                    return hh + ':' +  mm + '\'';
+	                    	} else {
+	                    		return null;
+	                    	}
 		                }
 	                },
 					title: {

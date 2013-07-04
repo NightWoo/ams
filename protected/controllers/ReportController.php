@@ -6,9 +6,8 @@ class ReportController extends  BmsBaseController
 
 	public function actionDebug(){
 		$seeker= new ReportSeeker();
-        // $date = "2013-05-11";
-        $ret = $seeker->queryManufactureUse("2013-05-11", "monthly");
-		// $ret= $seeker->queryComplete($date, "yearly");
+        $ret = $seeker->queryUnsolvedFaults(29077, "VQ2_ROAD_TEST_6B");
+
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
