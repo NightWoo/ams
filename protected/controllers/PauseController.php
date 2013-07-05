@@ -168,6 +168,7 @@ class PauseController extends BmsBaseController
 		$startTime = $this->validateStringVal('startTime', '');
 		$endTime = $this->validateStringVal('endTime', '');
 		$remark = $this->validateStringVal('remark', '');
+		$line = $this->validateStringVal('line', 'I');
 		try{
 			if(empty($startTime) || empty($endTime)){
 				throw new Exception ('起止时间均不可为空');
@@ -184,6 +185,7 @@ class PauseController extends BmsBaseController
 				$pause->pause_type = "计划停线";
 				$pause->status = 0;
 			}
+			$pause->line = $line;
 			$pause->pause_time = $startTime;
 			$pause->recover_time = $endTime;
 			$pause->remark = $remark;

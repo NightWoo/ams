@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.AR.ShiftRecordAR');
+Yii::import('application.models.AR.PauseAR');
 class ShiftRecordCommand extends CConsoleCommand
 {
 	public function run($args) {
@@ -28,6 +29,43 @@ class ShiftRecordCommand extends CConsoleCommand
 
 			$ar->save();
 		}
+
+		//早例行休息
+		$stime = $lastDate . " 09:50:00";
+		$etime = $lastDate . " 10:00:00";
+		$this->addPlanPause($stime, $etime, "早例行休息");
+
+		//白班午休增加半小时
+		$stime = $lastDate . " 12:30:00";
+		$etime = $lastDate . " 13:00:00";
+		$this->addPlanPause($stime, $etime, "午休增加30分钟");
+
+		//午例行休息
+		$stime = $lastDate . " 15:50:00";
+		$etime = $lastDate . " 16:00:00";
+		$this->addPlanPause($stime, $etime, "午例行休息");
+
+		//夜例行休息
+		$stime = $lastDate . " 22:50:00";
+		$etime = $lastDate . " 23:00:00";
+		$this->addPlanPause($stime, $etime, "夜例行休息");
+
+		//凌晨例行休息
+		$stime = $curDate . " 03:50:00";
+		$etime = $curDate . " 04:00:00";
+		$this->addPlanPause($stime, $etime, "凌晨例行休息");
 	}
 
+	public function addPlanPause($stime, $etime, $remark=""){
+		$pause = new PauseAR();
+		$pause->line = "I";
+		$pause->pause_type = "计划停线";
+		$pause->status = 0;
+		$pause->pause_time = $stime;
+		$pause->recover_time = $etime;
+		$pause->remark = $remark;
+		$pause->editor = 2;
+		$pause->edit_time = date('YmdHis');
+		$pause->save();
+	}
 }

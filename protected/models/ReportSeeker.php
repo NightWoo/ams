@@ -316,7 +316,7 @@ class ReportSeeker
 
 		foreach($datas as &$data) {
 			if(($data['recover_time']) == '0000-00-00 00:00:00'){
-				$data['howlong'] = (strtotime($etime) - strtotime($data['pause_time']));
+				$data['howlong'] = (strtotime(date("Y-m-d H:i:s")) - strtotime($data['pause_time']));
 			}else {
 				$data['howlong'] = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
 			}
@@ -486,7 +486,7 @@ class ReportSeeker
 		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS recycle_period, `status` 
 				FROM car 
 				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>'' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72 
-				ORDER BY recycle_period DESC";
+				ORDER BY recycle_period DESC LIMIT 0,10";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$tablePrefixMap=array(
