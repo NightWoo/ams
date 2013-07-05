@@ -127,7 +127,7 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
 
 			//if($car->car->series != 'M6'){
-				 $car->leftNode('VQ1');
+				 $car->leftNode('CHECK_LINE');
 			//}
 
 			$car->checkTestLinePassed();

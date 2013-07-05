@@ -150,6 +150,25 @@ $(function () {
 			return(uom);
 		},
 
+		dayBeforYesterday: function () {			
+			//获取系统时间 
+			var now = new Date();
+			var nowYear = now.getFullYear();
+			var nowMonth = now.getMonth();
+			var nowDate = now.getDate();
+			//处理
+			var uom = new Date(nowYear,nowMonth, nowDate);
+			uom.setDate(uom.getDate()-2);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
+			var LINT_MM = uom.getMonth();
+			LINT_MM++;
+			var LSTR_MM = LINT_MM > 10?LINT_MM:("0"+LINT_MM)
+			var LINT_DD = uom.getDate();
+			var LSTR_DD = LINT_DD > 10?LINT_DD:("0"+LINT_DD)
+			//得到最终结果
+			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
+			return(uom);
+		},
+
 		workDate: function () {
 			var now = new Date();
 			var hh = now.getHours();
@@ -159,6 +178,20 @@ $(function () {
 				workDate = self.byd.DateUtil.currentDate();
 			} else {
 				workDate = self.byd.DateUtil.yesterday();
+			}
+
+			return(workDate);
+		},
+
+		lastWorkDate: function () {
+			var now = new Date();
+			var hh = now.getHours();
+			var lastWorkDate;
+
+			if(hh>=8 && hh<24) {
+				workDate = self.byd.DateUtil.yesterday();
+			} else {
+				workDate = self.byd.DateUtil.dayBeforYesterday();
 			}
 
 			return(workDate);

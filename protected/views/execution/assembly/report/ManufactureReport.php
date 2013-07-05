@@ -64,10 +64,10 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabCompletion">
                             <div class="row-fluid">
-                                <div class="span8">
+                                <div class="span7">
                                     <div id="completionMonthlyChart" class="completionChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span4">
+                                <div class="span5">
                                     <div id="completionYearlyChart" class="completionChart" timespan="yearly"></div>
                                 </div>
                             </div>
@@ -82,20 +82,20 @@
                         </div>
                         <div class="tab-pane" id="tabManufactureUse">
                             <div class="row-fluid">
-                                <div class="span8">
+                                <div class="span7">
                                     <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span4">
+                                <div class="span5">
                                     <div id="useYearlyChart" class="useChart" timespan="yearly"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="tabRecycle">
                             <div class="row-fluid">
-                                <div class="span8">
+                                <div class="span7">
                                     <div id="recycleMonthlyChart" class="recycleChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span4">
+                                <div class="span5">
                                     <div id="recycleYearlyChart" class="recycleChart" timespan="yearly"></div>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                                 <th style="min-width:200px">配置</th>
                                                 <th style="min-width:60px">颜色</th>
                                                 <th style="min-width:80px">状态</th>
-                                                <th>故障</th>
+                                                <th>未修复故障</th>
                                                 <th style="min-width:60px">周转周期</th>
                                             </tr>
                                         </thead>

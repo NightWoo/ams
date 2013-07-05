@@ -52,7 +52,7 @@ $(document).ready(function () {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftManufactureReportLi").addClass("active");
 
-		$("#startTime").val(window.byd.DateUtil.workDate());
+		$("#startTime").val(window.byd.DateUtil.lastWorkDate());
 		ajaxQueryManufactureDaily();
 		ajaxQueryCompletion("monthly");
     	ajaxQueryCompletion("yearly");
@@ -453,7 +453,7 @@ $(document).ready(function () {
 						}
 					},
 					min: 0,
-					// endOnTick: false,
+					endOnTick: false,
 					
 				},{		// Secondary yAxis
 					title: {
@@ -520,6 +520,7 @@ $(document).ready(function () {
 					min: 0,
 					opposite: true,
 					gridLineWidth: 0,
+					endOnTick: false,
 				},
 
 			],
@@ -696,7 +697,11 @@ $(document).ready(function () {
 					labels: {
 						style: {
 							color: Highcharts.getOptions().colors[4],
-						}
+						},
+						formatter: function() {
+		                    	hh = parseInt(this.value / 3600).toFixed(0);
+			                    return hh + "H";
+		                }
 					},
 					stackLabels: {
 	                    enabled: true,
@@ -724,7 +729,7 @@ $(document).ready(function () {
 						}
 					},
 					min: 0,
-					// endOnTick: false,
+					endOnTick: false,
 					
 				},{		// Secondary yAxis
 					title: {
@@ -790,7 +795,8 @@ $(document).ready(function () {
 					max: 1,
 					min: 0,
 					opposite: true,
-					// gridLineWidth: 0,
+					gridLineWidth: 0,
+					endOnTick: false,
 				},
 
 			],
