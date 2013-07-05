@@ -302,6 +302,8 @@ var QUERY_MANUFACTURE_DAILY = "/bms/report/queryManufactureDaily";
 var MANUFACTURE_REPORT_EXPORT_CARS = "/bms/report/exportCars";
 var QUERY_COMPLETION_REPORT = "/bms/report/queryCompletion";
 var QUERY_USE_REPORT = "/bms/report/queryUse";
+var QUERY_RECYCLE_REPROT_CHART = "/bms/report/queryRecycleChart";
+var QUERY_OVERTIME_CARS = "/bms/report/queryOvertimeCars";
 
 function alertError (message) {
 	message = 'ajax error'

@@ -1,12 +1,12 @@
 <?php
 Yii::import('application.models.ReportSeeker');
 
-class ReportController extends  BmsBaseController
+class ReportController extends BmsBaseController
 {
 
 	public function actionDebug(){
 		$seeker= new ReportSeeker();
-        $ret = $seeker->queryUnsolvedFaults(29077, "VQ2_ROAD_TEST_6B");
+        $ret = $seeker->queryOvertimeCars();
 
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
@@ -85,6 +85,29 @@ class ReportController extends  BmsBaseController
             $seeker = new ReportSeeker();
             $data = $seeker->queryManufactureUse($date, $timespan);
 
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryRecycleChart() {
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryRecycleChart($date, $timespan);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryOvertimeCars() {
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryOvertimeCars();
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());

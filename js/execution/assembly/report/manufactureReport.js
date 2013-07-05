@@ -35,6 +35,13 @@ $(document).ready(function () {
     	ajaxQueryUse("monthly");
     	ajaxQueryUse("yearly");
     })
+
+    $(".queryRecycle").click(function(){
+    	timespan = $(this).attr("timespan");
+    	ajaxQueryRecycle("monthly");
+    	ajaxQueryRecycle("yearly");
+    	ajaxQueryOvertimeCars();
+    })
 //END event bindings -------------------------
 
 
@@ -128,6 +135,42 @@ $(document).ready(function () {
 					report.use.ajaxData = response.data;
 					report.use.drawColumnLine(timespan);
 					// report.use.updateTable(timespan);
+				}
+			}
+		})
+	}
+
+	function ajaxQueryRecycle(timespan){
+		$("#overtimeCarsTable").hide();
+		$.ajax({
+			url: QUERY_RECYCLE_REPROT_CHART,
+			type: "get",
+			dataType: "json",
+			data: {
+				"date": $("#startTime").val(),
+				"timespan" : timespan,
+			},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success){
+					report.recycle.ajaxData = response.data;
+					report.recycle.drawColumnLine(timespan);
+				}
+			}
+		})
+	}
+
+	function ajaxQueryOvertimeCars(){
+		$.ajax({
+			url: QUERY_OVERTIME_CARS,
+			type: "get",
+			dataType: "json",
+			data: {},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success){
+					report.recycle.ajaxOvertimeData = response.data;
+					report.recycle.updateTable();
 				}
 			}
 		})
@@ -453,7 +496,7 @@ $(document).ready(function () {
 	                    	align: 'right',
 	                    	x: -10,
 	                    	style: {
-		                        color: '#492970',
+		                        color: '#910000',
 		                        fontWeight: 'bold'
 		                    },
 		                    verticalAlign: 'bottom',
@@ -467,7 +510,7 @@ $(document).ready(function () {
 	                    	align: 'right',
 	                    	x: -10,
 	                    	style: {
-		                        color: '#492970',
+		                        color: '#910000',
 		                        fontWeight: 'bold',
 		                    },
 		                    verticalAlign: 'top',
@@ -685,7 +728,7 @@ $(document).ready(function () {
 					
 				},{		// Secondary yAxis
 					title: {
-						// enabled: false,
+						enabled: false,
 						text: '生产利用率',
 						style: {
 							color: Highcharts.getOptions().colors[5],
@@ -849,6 +892,185 @@ $(document).ready(function () {
 			})
 
 			$(".useTable[timespan="+ timespan +"]").show();
+		},
+	}
+
+	window.report.recycle = {
+		ajaxData: {},
+		ajaxOvertimeData: {},
+
+		chartData: {
+			chart: {
+				renderTo: '',
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				shared: true,
+				useHTML: true,
+				formatter: function() {
+	                var s = this.x +'<table>';
+	                var sPeriod = '';
+	                var sCar = '';
+	                total = 0;
+	                $.each(this.points, function(i, point) {
+	                	if(point.series.name === "总装周期"){
+	                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+	                	} else {
+	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'</b></td></tr>';
+            				total += this.y;
+	                	}
+	                });
+	                s += sCar;
+	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+	                s += sPeriod;
+	                s += '</table>';
+	                return s;
+            },
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
+			xAxis: {
+				categories: [],
+				labels: {
+					rotation: -45,
+					align: 'right',
+					style: {
+						fontSize: '12px',	
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					} 
+				}
+			},
+			yAxis: [
+				{		// Primary yAxis
+					labels: {
+						style: {
+							// color: Highcharts.getOptions().colors[0],
+						}
+					},
+					stackLabels: {
+	                    enabled: true,
+	                    style: {
+	                        fontWeight: 'bold',
+	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+	                    },
+	                },
+					title: {
+						enabled: false,
+						text: '结存车辆',
+						style: {
+							// color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					min: 0,
+					// endOnTick: false,
+					
+				},{		// Secondary yAxis
+					title: {
+						enabled: false,
+						text: '总装周期(Hour)',
+						style: {
+							color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						// enabled: false,
+						style: {
+							color: Highcharts.getOptions().colors[4],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+		
+					min: 0,
+					opposite: true,
+					// gridLineWidth: 0,
+				},
+
+			],
+
+			plotOptions: {
+                column: {
+                	stacking: 'normal',
+                    pointPadding: 0.1,
+                    borderWidth: 0,
+                    pointWidth: 15,
+                }
+            },
+
+			series: []
+		},
+
+		drawColumnLine: function(timespan) {
+			columnSeries = [];
+			stateArray = this.ajaxData.stateArray;
+			columnSeriesData = this.ajaxData.series.column;
+			i=0;
+			$.each(stateArray, function (index, state) {
+				columnSeries[index] = {
+					type: 'column',
+					name: state,
+					data: columnSeriesData[state]
+				}
+				i=index;
+			})
+			columnSeries[++i] ={
+				type: 'line',
+				yAxis: 1,
+				showInLegend: false,
+				name: '总装周期',
+				data: this.ajaxData.series.line,
+				dataLabels:{
+					enabled: true,
+					style: {
+						fontSize: '14px',
+						fontWeight: 'bold',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					},
+					align: 'center',
+        			color: Highcharts.getOptions().colors[i],
+        			formatter: function() {
+        				ret = this.y == null ? null : this.y + 'H';
+        				return ret;
+        			}
+				},
+			}
+
+			this.chartData.series = columnSeries;
+			this.chartData.xAxis.categories = this.ajaxData.series.x;
+
+			$(".recycleChart[timespan="+ timespan +"]").highcharts(this.chartData);
+		},
+
+		updateTable: function(timespan) {
+			cars = this.ajaxOvertimeData;
+			tbody = $("#overtimeCarsTable tbody").html("");
+			$.each(cars, function (index, car){
+				tr = $("<tr />");
+				$("<td />").html(byd.SeriesName[car.series]).appendTo(tr);
+				$("<td />").html(car.serial_number).appendTo(tr);
+				$("<td />").html(car.vin).appendTo(tr);
+				$("<td />").html(car.config_name).appendTo(tr);
+				$("<td />").html(car.color).appendTo(tr);
+				$("<td />").html(car.status).appendTo(tr);
+				$("<td />").html(car.faults).appendTo(tr);
+				$("<td />").html(car.recycle_period + "H").appendTo(tr);
+
+				tr.appendTo(tbody);
+			})
+			$("#overtimeCarsTable").show();
 		},
 	}
 })

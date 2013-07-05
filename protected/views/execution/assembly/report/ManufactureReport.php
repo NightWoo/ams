@@ -45,8 +45,8 @@
                 <div>
                     <ul class="nav nav-pills">
                         <li class="active"><a class="queryCompletion" href="#tabCompletion" data-toggle="tab">计划完成</a></li>
-                        <li><a class="queryUse" href="#tabManufactureUse" data-toggle="tab" >生产利用</a></li>
-                        <li class="disabled"><a href="#tabRecycle">周转车</a></li>
+                        <li><a class="queryUse" href="#tabManufactureUse" data-toggle="tab">生产利用</a></li>
+                        <li><a class="queryRecycle" href="#tabRecycle" data-toggle="tab">周转车</a></li>
                         <li class="disabled"><a href="#tabWarehouse" timespan='monthly'>成品库发车</a></li>
                         <!-- <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -64,38 +64,60 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabCompletion">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div id="completionMonthlyChart" class="completionChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div id="completionYearlyChart" class="completionChart" timespan="yearly"></div>
                                 </div>
                             </div>
                             <div>
                                 <div>
-                                    <table id="manufactureDailyTable" class="table table-bordered initHide">
+                                    <table id="manufactureDailyTable" class="table table-bordered table-condensed initHide">
                                         <thead></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                                <table id="completionMonthlyTable" class="table table-bordered table-condensed initHide completionTable" timespan="monthly">
-                                    <thead></thead>
-                                    <tbody></tbody>
-                                </table>
                             </div>
                         </div>
                         <div class="tab-pane" id="tabManufactureUse">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div id="useYearlyChart" class="useChart" timespan="yearly"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="tabRecycle">
-                            <p>周转车</p>
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <div id="recycleMonthlyChart" class="recycleChart" timespan="monthly"></div>
+                                </div>
+                                <div class="span4">
+                                    <div id="recycleYearlyChart" class="recycleChart" timespan="yearly"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <table id="overtimeCarsTable" class="table table-bordered table-condensed initHide">
+                                        <thead>
+                                            <tr>
+                                                <th style="min-width:40px">车系</th>
+                                                <th>流水号</th>
+                                                <th>VIN号</th>
+                                                <th style="min-width:200px">配置</th>
+                                                <th style="min-width:60px">颜色</th>
+                                                <th style="min-width:80px">状态</th>
+                                                <th>故障</th>
+                                                <th style="min-width:60px">周转周期</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane" id="tabWarehouse">
                             <p>成品库</p>

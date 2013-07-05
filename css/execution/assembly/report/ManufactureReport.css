@@ -37,12 +37,12 @@
 	min-width: 50px;
 }
 
-.completionTable, .useTable{
+.completionTable, .useTable, #overtimeCarsTable{
 	font-size: 12px;
 }
 
-.completionChart {
-	height: 280px;
+.completionChart, .recycleChart {
+	height: 320px;
 }
 
 #manufactureDailyTable .countMonth{

@@ -397,7 +397,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryRecycle($date, $timespan) {
+	public function queryRecycleChart($date, $timespan) {
 		switch($timespan) {
 			case "monthly":
 				list($stime, $etime) = $this->reviseMonthlyTime($date);
@@ -483,10 +483,10 @@ class ReportSeeker
 	}
 
 	public function queryOvertimeCars(){
-		$sql = "SELECT id as car_id,serial_number, vin, series, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS last_hour, `status` 
+		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS recycle_period, `status` 
 				FROM car 
-				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72 
-				ORDER BY last_hour DESC";
+				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>'' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72 
+				ORDER BY recycle_period DESC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$tablePrefixMap=array(
@@ -501,7 +501,10 @@ class ReportSeeker
 			"II" => "_2",
 		);
 
+		$configName = $this->configNameList();
+
 		foreach($cars as &$car) {
+			$car['config_name'] = empty($car['config_id']) ? $car['type'] : $configName[$car['config_id']];
 			$car['faults'] = "";
 			if(!array_key_exists($car['status'], $tablePrefixMap)) continue;
 			if($car['status'] == "VQ1异常") {
@@ -509,7 +512,7 @@ class ReportSeeker
 			} else {
 				$table = $tablePrefixMap[$car['status']] . "_" . $car['series'];
 			}
-			$faults = $this->queryUnsolvedFaults($carId,$table);
+			$faults = $this->queryUnsolvedFaults($car['car_id'],$table);
 			$car['faults'] = join("、", $faults);
 		}
 
