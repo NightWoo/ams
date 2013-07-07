@@ -24,7 +24,7 @@ class ShiftRecordCommand extends CConsoleCommand
 				$ar->end_time = $lastDate . ' 19:59:59';
 			}else if($shift === 1){
 				$ar->start_time = $lastDate . ' 20:00:00';
-				$ar->end_time = $curDate . ' 05:59:59';
+				$ar->end_time = $curDate . ' 06:59:59';
 			}
 
 			$ar->save();

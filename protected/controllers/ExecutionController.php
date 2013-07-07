@@ -796,7 +796,7 @@ class ExecutionController extends BmsBaseController
             $remark = $this->validateStringVal('remark', '');
 
             $car = Car::create($vin);
-            $nodeAr = $car->enterNode($node,$driverId,false,$remark);
+            list($nodeAr, $traceId) = $car->enterNode($node,$driverId,false,$remark);
 
             $nodeDisName = $nodeAr->display_name;
             $message = $car->car->vin. '成功录入' . $nodeDisName;
@@ -837,7 +837,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,节点备注,录入员,用户名,订单号,发动机号\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入员,用户名,订单号,发动机号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -856,6 +856,7 @@ class ExecutionController extends BmsBaseController
                 $data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
                 $content .= "{$data['remark']},";
                 $content .= "{$data['node_name']},";
+                $content .= "{$data['return_to']},";
                 $data['node_remark'] = str_replace(",", "，",$data['node_remark']);
                 $data['node_remark'] = str_replace(PHP_EOL, '', $data['node_remark']);
                 $content .= "{$data['node_remark']},";

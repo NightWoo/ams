@@ -28,7 +28,9 @@ $(document).ready(function () {
 		//if validate passed
 		var index = $("#tabs li").index($('#tabs .active'));
 		console.log(index);
-		if (index === 1)
+		if (index === 0)
+			ajaxQuery(1);
+		else if (index === 1)
 			ajaxStatistics();
 		else if (index === 3)
 			ajaxQueryPause(1);
@@ -40,8 +42,7 @@ $(document).ready(function () {
 			ajaxQueryPlan(1);
 		else if (index === 8)
 			ajaxCompletionRate();
-		else if (index === 0)
-			ajaxQuery(1);
+		
 		return false;
 	}
 
@@ -301,6 +302,11 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		$("#tableCars tbody").html("");
+		    		if ($("#selectNode").val() == "WAREHOUSE_RETURN") {
+		    			$("#returnTo").show();
+		    		} else {
+		    			$("#returnTo").hide();
+		    		}
 		    		$.each(response.data.data,function (index,value) {
 		    			var vinTd = "<td>" + value.vin + "</td>";
 		    			var seriesTd = "<td>" + value.series + "</td>";
@@ -312,7 +318,11 @@ $(document).ready(function () {
 		    			var statusTd = "<td>" + value.status + "</td>";
 		    			var remarkTd = "<td>" + value.node_remark + "</td>";
 		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
-		    			// var orderNumberTd = "<td>" + value.order_number + "</td>";
+		    			var returnToTd = "";
+		    			if($("#selectNode").val() == "WAREHOUSE_RETURN") {
+		    				returnToVal = value.return_to == null ? "-" : value.return_to; 
+		    				returnToTd = "<td>" + returnToVal + "</td>";
+		    			}
 		    			var tr = "<tr>"
 		    				+ serialTd 
 		    				+ vinTd 
@@ -324,7 +334,7 @@ $(document).ready(function () {
 		    				+ statusTd 
 		    				+ pTimeTd 
 		    				+ remarkTd 
-		    				// + orderNumberTd
+		    				+ returnToTd
 		    				+ "</tr>";
 
 		    			$("#tableCars tbody").append(tr);

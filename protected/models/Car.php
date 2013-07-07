@@ -206,8 +206,7 @@ class Car
 				}
 			}
 		//}
-		$node;
-		return $node; 
+		return array($node, $trace->id); 
 	}
 
 	public function enterNodeWDI($passtime,$driverId = 0){
@@ -299,6 +298,14 @@ class Car
 
 		$this->car->status = $zone;
 		$this->car->save();
+	}
+
+	public function recordWarehouseReturnTrace($nodeTraceId, $returnTo) {
+		$ar = new WarehouseReturnTraceAR();
+		$ar->trace_id = $nodeTraceId;
+		$ar->return_to = $returnTo;
+		$ar->car_id = $this->car->id;
+		$ar->save();
 	}
 
 	public function leftNode($nodeName) {
@@ -975,32 +982,6 @@ class Car
         return array($success, $data);
 	}
 
-	// public function warehouseReturn($nodeName,$driverId = 0){
-	// 	$node = Node::createByName($nodeName);
-	// 	if(!$node->exist()){
-	// 		throw new Exception('不存在名字为' . $nodeName . '的节点');
-	// 	}
-
-	// 	$nodeId = $node->id;
-
-	// 	if(!empty($driverId)) {
-	// 		$user = User::model()->findByPk($driverId);
-	// 		if(empty($user)) {
-	// 			throw new Exception($driverId . '的司机不存在');
-	// 		}
-	// 	}
-
-	// 	$passtime = date('YmdHis');
-	// 	$trace = new WarehouseReturnTraceAR();
-	// 	$trace->node_id = $nodeId;
-	// 	$trace->user_id = Yii::app()->user->id;
-	// 	$trace->driver_id = $driverId;
-	// 	$trace->pass_time = $passtime;
-	// 	$trace->car_id = $this->car->id;
-	// 	$trace->car_series = $this->car->series;
-	// 	$trace->save();
-	// }
-
 	public function warehouseReturn($goTo, $remark, $driverId = 0){
 		//释放订单
 		$this->releaseOrder();
@@ -1037,7 +1018,8 @@ class Car
 		}
 
 		$onlyOnce=false;
-		$this->enterNode("WAREHOUSE_RETURN", $driverId, $onlyOnce, $remark);
+		list($node, $traceId) = $this->enterNode("WAREHOUSE_RETURN", $driverId, $onlyOnce, $remark);
+		$this->recordWarehouseReturnTrace($traceId, $goTo);
 		$this->car->status = $status;
 
 		$this->car->save();

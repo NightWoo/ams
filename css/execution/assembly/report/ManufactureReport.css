@@ -5,12 +5,8 @@
 
 #headText {
 	font-size: 20px;
-	margin-top:5px;	
+	margin-top:5px;
 	margin-right:20px;
-}
-
-.row-fluid .span6 {
-    width: 48%;
 }
 
 .tab-pane{

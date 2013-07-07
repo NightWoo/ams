@@ -5,8 +5,11 @@ class ReportController extends BmsBaseController
 {
 
 	public function actionDebug(){
-		$seeker= new ReportSeeker();
-        $ret = $seeker->queryOvertimeCars();
+		// $seeker= new ReportSeeker();
+  //       $ret = $seeker->queryRecycleBalanceGroupBySeries('2013-07-04', '2013-07-05');
+        $date = '2013-07-05';
+        $curDate = DateUtil::getCurDate();
+        if(strtotime($date) < strtotime($curDate)) $ret="OK";
 
 		$this->renderJsonBms(true, 'OK', $ret);
 	}

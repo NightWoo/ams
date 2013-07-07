@@ -2,14 +2,14 @@
 Yii::import('application.models.AR.BalanceDailyAR');
 Yii::import('application.models.CarSeeker');
 class BalanceDailyCommand extends CConsoleCommand
-{	
+{
 	private static $SERIES = array(
 		'F0' => 'F0',
 		'M6' => 'M6',
 		'6B' => '思锐',
 	);
 
-	private static $STATES=array('onLine','VQ1','VQ2','VQ3');
+	private static $STATES=array('onLine','VQ1','VQ2','VQ3','WH');
 
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();
@@ -25,8 +25,6 @@ class BalanceDailyCommand extends CConsoleCommand
 			}
 		}
 	}
-
-	
 
 	private function countBalance($state, $series) {
 		$seeker = new CarSeeker();

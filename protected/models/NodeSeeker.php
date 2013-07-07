@@ -33,7 +33,7 @@ class NodeSeeker
 					'DETECT_SHOP_LEAVE'=>98,
 					'DETECT_SHOP_RETURN'=>99,
 				  );
-	
+
 	public function queryTrace($stime, $etime, $series, $node, $curPage, $perPage) {
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);
 		if(empty($node)){
@@ -43,9 +43,9 @@ class NodeSeeker
 		}
 
 		$traceTable = 'node_trace';
-		if($node === 'VQ3_WAREHOUSE_RETURN'){
-			$traceTable = 'warehouse_return_trace';
-		}
+		// if($node === 'VQ3_WAREHOUSE_RETURN'){
+		// 	$traceTable = 'warehouse_return_trace';
+		// }
 
         $sql = "SELECT id,display_name FROM user";
         $users = Yii::app()->db->createCommand($sql)->queryAll();
@@ -98,7 +98,7 @@ class NodeSeeker
 
         if(!empty($series)){
 	        $arraySeries = $this->parseSeries($series);
-	        $cTmp = array(); 
+	        $cTmp = array();
 	        foreach($arraySeries as $series){
 	        	$cTmp[] = "car_series='$series'";
 	        }
@@ -113,10 +113,18 @@ class NodeSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT n.node_id, n.car_id, n.user_id, n.pass_time,n.remark as node_remark, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
-        		FROM $traceTable AS n 
+        $returnParam = "'' as return_to, ";
+        $joinTraceTable = "";
+        if($nodeId == 97){
+        	$returnParam = " r.return_to,";
+        	$joinTraceTable ="LEFT JOIN warehouse_return_trace AS r ON r.trace_id = n.id";
+        }
+
+        $dataSql = "SELECT $returnParam n.node_id, n.car_id, n.user_id, n.pass_time,n.remark as node_remark, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code
+        		FROM $traceTable AS n
         		LEFT JOIN car AS c
         		ON n.car_id=c.id
+        		$joinTraceTable
         		WHERE $condition
         		ORDER BY n.pass_time DESC
         		$limit";
@@ -157,7 +165,7 @@ class NodeSeeker
 	        	$data['order_config_name'] = '';
 	        	$data['type_config'] = $data['type'];
         	}
-        	
+
         	$data['order_number']='-';
         	if(!empty($data['order_id'])){
         		$sql = "SELECT order_number FROM `order` WHERE id = '{$data['order_id']}'";
@@ -167,7 +175,7 @@ class NodeSeeker
         	$data['node_name'] = $nodeInfos[$data['node_id']];
 
         	$data['pass_time'] = substr($data['pass_time'],0,16);
-			
+
 			$key = join('_', $data);
 			$ret[$key] = $data;
         }
@@ -185,10 +193,10 @@ class NodeSeeker
 
 		$s = strtotime($stime);
 		$e = strtotime($etime);
-	
+
 		$sd = date('Ymd', $s);
 		$ed = date('Ymd', $e);
-		
+
 		$sm = date('m', $s);
 		$em = date('m', $e);
 
@@ -203,7 +211,7 @@ class NodeSeeker
 			$etime = date($format, $eNextH) . ":00:00";
 		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
-			//$stime = date($format, $s) . " 00:00:00";				
+			//$stime = date($format, $s) . " 00:00:00";
 			//$etime = date($format, $e) . " 23:59:59";
 			$stime = date($format, $s) . " 08:00:00";								//added by wujun
 			$eNextD = strtotime('+1 day', $e);		//next day						//added by wujun

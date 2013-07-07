@@ -26,6 +26,7 @@ $(document).ready(function () {
 
     $(".queryCompletion").click(function(){
     	// timespan = $(this).attr("timespan");
+    	ajaxQueryManufactureDaily();
     	ajaxQueryCompletion("monthly");
     	ajaxQueryCompletion("yearly");
     })
@@ -422,8 +423,8 @@ $(document).ready(function () {
 			xAxis: {
 				categories: [],
 				labels: {
-					rotation: -45,
-					align: 'right',
+					// rotation: -45,
+					align: 'center',
 					style: {
 						fontSize: '12px',	
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -557,7 +558,7 @@ $(document).ready(function () {
 				name: '计划完成率',
 				data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: true,
+					enabled: false,
 					style: {
 						fontSize: '14px',
 						fontWeight: 'bold',
@@ -684,8 +685,8 @@ $(document).ready(function () {
 			xAxis: {
 				categories: [],
 				labels: {
-					rotation: -45,
-					align: 'right',
+					// rotation: -45,
+					align: 'center',
 					style: {
 						fontSize: '12px',	
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -833,7 +834,7 @@ $(document).ready(function () {
 				name: '生产利用率',
 				data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: true,
+					enabled: false,
 					style: {
 						fontSize: '14px',
 						fontWeight: 'bold',
@@ -950,8 +951,8 @@ $(document).ready(function () {
 			xAxis: {
 				categories: [],
 				labels: {
-					rotation: -45,
-					align: 'right',
+					// rotation: -45,
+					align: 'center',
 					style: {
 						fontSize: '12px',	
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -1039,7 +1040,7 @@ $(document).ready(function () {
 				name: '总装周期',
 				data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: true,
+					enabled: false,
 					style: {
 						fontSize: '14px',
 						fontWeight: 'bold',

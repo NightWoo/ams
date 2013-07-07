@@ -38,12 +38,12 @@ class ReportSeeker
 
 	private static $COUNT_POINT_DAILY = array(
 		"assemblyCount" => "上线",
-		"assemblyMonth" => "月上线",
-		"finishCount" => "下线",
-		"finishMonth" => "月下线",
+		// "finishCount" => "下线",
 		"warehouseCount" => "入库",
-		"warehouseMonth" => "月入库",
 		"distributeCount" => "出库",
+		"assemblyMonth" => "月上线",
+		// "finishMonth" => "月下线",
+		"warehouseMonth" => "月入库",
 		"distributeMonth" => "月出库",
 		"recycleBalance" => "周转车",
 		"warehouseBalance" => "库存",
@@ -74,7 +74,7 @@ class ReportSeeker
 		list($sMonth, $eDate) = $this->reviseDailyMonth($date);
 		$countArray = array();
 		$countArray["assemblyCount"] = $this->countCarByPoint($stime, $etime, "assembly");
-		$countArray["finishCount"] = $this->countCarByPoint($stime, $etime, "finish");
+		// $countArray["finishCount"] = $this->countCarByPoint($stime, $etime, "finish");
 		$countArray["warehouseCount"] = $this->countCarByPoint($stime, $etime, "warehouse");
 		$countArray["distributeCount"] = $this->countCarByPoint($stime, $etime, "distribute");
 
@@ -89,14 +89,18 @@ class ReportSeeker
 		$columnSeries = array("x"=>$dataSeriesX,"y"=>$dataSeriesY);
 
 		$countArray["assemblyMonth"] = $this->countCarByPoint($sMonth, $eDate, "assembly");
-		$countArray["finishMonth"] = $this->countCarByPoint($sMonth, $eDate, "finish");
+		// $countArray["finishMonth"] = $this->countCarByPoint($sMonth, $eDate, "finish");
 		$countArray["warehouseMonth"] = $this->countCarByPoint($sMonth, $eDate, "warehouse");
 		$countArray["distributeMonth"] = $this->countCarByPoint($sMonth, $eDate, "distribute");
 
 		$countArray["recycleBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
 		$countArray["warehouseBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
 		$curDate = DateUtil::getCurDate();
-		if($date == $curDate){
+		if(strtotime($date) < strtotime($curDate)){
+			$nextDay = date("Y-m-d", strtotime('+1 day', strtotime($date)));
+			$countArray["recycleBalance"] = $this->queryRecycleBalanceGroupBySeries($date, $nextDay);
+			$countArray["warehouseBalance"] = $this->queryWarehouseBalanceGroupBySeries($date, $nextDay);
+		} else {
 			$countArray["recycleBalance"] = $this->countCarByState("recycle");
 			$countArray["warehouseBalance"] = $this->countCarByState("WH");
 		}
@@ -176,7 +180,7 @@ class ReportSeeker
 				$readySum += $count['ready'];
 				$totalSum += $count['total'];
 			}
-					
+
 			$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
 			$lineSeriesY[] = $rate;
 			$completionTmp['completion'] = $rate;
@@ -210,7 +214,7 @@ class ReportSeeker
 	public function queryPlanCompletion($sDate, $eDate){
 		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate' GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$count = array(
 			"F0"=>array(),
 			"M6"=>array(),
@@ -346,7 +350,7 @@ class ReportSeeker
 	public function queryUseRate($stime, $etime){
 		$datas = $this->queryShiftRecord($stime, $etime);
 		$use = array();
-		
+
 		$capacity = null;
 		$prodution = null;
 		$runTime = null;
@@ -380,15 +384,17 @@ class ReportSeeker
 
 		foreach($datas as &$data){
 			$runTime = strtotime($data['end_time']) - strtotime($data['start_time']) - 7199;
-			$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
-			$planPauseTime = 0;
-			foreach($linePauses as $linePause) {
-				if($linePause->status == 1) {
-					$planPauseTime += (time() - strtotime($linePause->pause_time));
-				} else {
-					$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
-				}
-			}
+			$sql = "SELECT SUM(TIMESTAMPDIFF(second,pause_time,recover_time)) AS plan_pause_time FROM pause WHERE pause_time>='{$data['start_time']}' AND pause_time<='{$data['end_time']}' AND pause_type='计划停线'";
+			$planPauseTime = Yii::app()->db->createCommand($sql)->queryScalar();
+			// $linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
+			// $planPauseTime = 0;
+			// foreach($linePauses as $linePause) {
+			// 	if($linePause->status == 1) {
+			// 		$planPauseTime += (time() - strtotime($linePause->pause_time));
+			// 	} else {
+			// 		$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
+			// 	}
+			// }
 			$data['run_time'] = intval($runTime - $planPauseTime);
 			$data['capacity'] = intval($runTime / $data['line_speed']);
 			$data['prodution'] = $this->countOnline($data['start_time'], $data['end_time']);
@@ -445,7 +451,7 @@ class ReportSeeker
 	public function queryRecycleBalance($sDate, $eDate) {
 		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' GROUP BY series,state";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$count = array();
 		foreach(self::$RECYCLE_BALANCE_STATE as $state => $stateName){
 			$count[$state] = null;
@@ -453,6 +459,38 @@ class ReportSeeker
 
 		foreach($datas as $data){
 			$count[$data['state']] += ceil($data['count']);
+		}
+
+		return $count;
+	}
+
+	public function queryRecycleBalanceGroupBySeries($sDate, $eDate) {
+		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('VQ1','VQ2','VQ3')  GROUP BY series";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$count = array();
+		foreach(self::$SERIES_NAME as $series => $seriesName){
+			$count[$series] = null;
+		}
+
+		foreach($datas as $data){
+			$count[$data['series']] += ceil($data['count']);
+		}
+
+		return $count;
+	}
+
+	public function queryWarehouseBalanceGroupBySeries($sDate, $eDate) {
+		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state ='WH'  GROUP BY series";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$count = array();
+		foreach(self::$SERIES_NAME as $series => $seriesName){
+			$count[$series] = null;
+		}
+
+		foreach($datas as $data){
+			$count[$data['series']] += ceil($data['count']);
 		}
 
 		return $count;
@@ -483,9 +521,9 @@ class ReportSeeker
 	}
 
 	public function queryOvertimeCars(){
-		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS recycle_period, `status` 
-				FROM car 
-				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>'' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72 
+		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) AS recycle_period, `status`
+				FROM car
+				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>'' AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP)>=72
 				ORDER BY recycle_period DESC LIMIT 0,10";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -579,7 +617,7 @@ class ReportSeeker
 		$str = "'" . join("','", $states) . "'";
 		$condition = " WHERE status IN ($str)";
 
-		$sql = "SELECT series, COUNT(id) as `count` FROM car $condition GROUP BY  series";	
+		$sql = "SELECT series, COUNT(id) as `count` FROM car $condition GROUP BY  series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$count = array(
 			"F0"=>0,
@@ -596,7 +634,7 @@ class ReportSeeker
 	public function queryDetailByPoint($stime, $etime, $point="assembly"){
 		$point .= "_time";
 		$sql = "SELECT id as car_id, vin, assembly_line, serial_number, series, type, config_id, cold_resistant, color,status, engine_code, assembly_time, finish_time, warehouse_time, distribute_time, warehouse_id, order_id, lane_id, distributor_name, remark, special_order
-				FROM car 
+				FROM car
 				WHERE $point>='$stime' AND $point<'$etime' ORDER BY assembly_time";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -701,16 +739,16 @@ class ReportSeeker
 
 		switch($timespan) {
 			case "monthly":
-				$pointFormat = 'm-d';
+				$pointFormat = 'd';
 				$format = 'Y-m-d H:i:s';
 				$slice = 86400;
 				break;
 			case "yearly":
-				$pointFormat = 'Y-m';
+				$pointFormat = 'm';
 				$format = 'Y-m-d H:i:s';
 				break;
 			default:
-				$pointFormat = 'm-d';
+				$pointFormat = 'd';
 				$format = 'Y-m-d H:i:s';
 				$slice = 86400;
 		}
@@ -718,7 +756,7 @@ class ReportSeeker
 		$t = $s;
 		while($t<$e) {
 			$point = date($pointFormat, $t);
-			if($pointFormat === 'Y-m') {
+			if($pointFormat === 'm') {
 				// $slice = 86400 * intval(date('t' ,$t));
 				$eNextM = strtotime('+1 month', $t);			//next month			//added by wujun
 				$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
@@ -728,13 +766,13 @@ class ReportSeeker
 			}
 			if($etmp>=$e){
 				$etmp=$e;
-			} 
+			}
 
 			$ret[] = array(
 				'stime' => date($format, $t),
 				'etime' => date($format, $etmp),
 				'point' => $point,
-			);	
+			);
 			$t = $etmp;
 		}
 
