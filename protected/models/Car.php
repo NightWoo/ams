@@ -636,6 +636,8 @@ class Car
         $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ3_FACADE_TEST_$series WHERE car_id={$this->car->id}";
         $vq3s = Yii::app()->db->createCommand($sql)->queryAll();
 
+        $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_2_$series WHERE car_id={$this->car->id}";
+        $vq1_2s = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$datas = array();
 		$processed = array();
@@ -677,6 +679,13 @@ class Car
 						}
 					}
                     break;
+                case 209:
+					foreach($vq1_2s as $vq1_2){
+						if(strtotime($vq1_2['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1_2['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+							$values[] = $vq1_2;
+						}
+					}
+					break;    
 				default:
 					;
 			} 

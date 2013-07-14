@@ -1,16 +1,16 @@
 <?php
 Yii::import('application.models.ReportSeeker');
+Yii::import('application.models.PlanSeeker');
+Yii::import('application.models.AR.ManufactureCapacityDailyAR');
 
 class ReportController extends BmsBaseController
 {
 
 	public function actionDebug(){
-		// $seeker= new ReportSeeker();
-  //       $ret = $seeker->queryRecycleBalanceGroupBySeries('2013-07-04', '2013-07-05');
-        $date = '2013-07-05';
-        $curDate = DateUtil::getCurDate();
-        if(strtotime($date) < strtotime($curDate)) $ret="OK";
-
+        $seeker= new ReportSeeker();
+        $date = "2013-06-18";
+        $timespan = "yearly";
+        $ret = $seeker->queryOvertimeOrders();
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
@@ -107,11 +107,60 @@ class ReportController extends BmsBaseController
         }
     }
 
+    public function actionQueryWarehouseChart() {
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        if(empty($date)) $date = DateUtil::getCurDate();
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryWarehouseReport($date, $timespan);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryOvertimeOrders() {
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryOvertimeOrders();
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+
     public function actionQueryOvertimeCars() {
         try{
             $seeker = new ReportSeeker();
             $data = $seeker->queryOvertimeCars();
             $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionUpdateCapacityMonthly() {
+        try{
+            $date = $this->validateStringVal("date", "");
+            $seeker = new ReportSeeker();
+            list($stime, $etime) = $seeker->reviseMonthlyTime($date);
+            $timespan = "monthly";
+            $timeArray = $seeker->parseQueryTime($stime, $etime, $timespan);
+            foreach($timeArray as $queryTime){
+                $use = $seeker->queryUseRateBase($queryTime['stime'], $queryTime['etime']);
+                $workDate = date("Y-m-d", strtotime($queryTime['stime']));
+                $capacityAR = ManufactureCapacityDailyAR::model()->find("work_date='$workDate'");
+                if(empty($capacityAR)) $capacityAR = new ManufactureCapacityDailyAR();
+                $capacityAR->work_date = $workDate;
+                $capacityAR->capacity = $use['capacity'];
+                $capacityAR->run_time = $use['runTime'];
+                $capacityAR->save();
+            }
+
+            $this->renderJsonBms(true, 'OK', $timeArray);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }

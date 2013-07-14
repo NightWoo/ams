@@ -1,10 +1,18 @@
-.screenHide {
+.notPrintable{
 	display: none;
+}
+
+.offhead {
+	margin-top: 10px;
 }
 
 #startTime {
 	height: 15px;
     margin: 0 10px 5px 10px
+}
+
+#headText {
+	font-size: : 14px;
 }
 
 #btnGroupPrint {
@@ -45,7 +53,7 @@ legend {
 }
 
 .alignCenterDaily {
-	width: 110px;
+	width: 120px;
 }
 
 .alignRight {

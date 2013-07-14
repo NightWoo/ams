@@ -21,7 +21,7 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$stime = $lastDate . " 08:00:00";
 		$etime = $curDate . " 08:00:00";
-		$undistributed = $this->countUndistributed($etime);
+		// $undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
@@ -29,6 +29,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
+
+			$reviseMonthCheckin = $this->getReviseCount($series, '已入');
+			$monthCheckin += $reviseMonthCheckin;
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
@@ -37,6 +40,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
+
+			$reviseCheckout = $this->getReviseCount($series, '已发');
+			$monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
 			
 			$balance = $this->countBalance($series);
@@ -69,6 +75,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
+
+			$reviseMonthCheckin = $this->getReviseCount($series, '已入');
+			$monthCheckin += $reviseMonthCheckin;
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
@@ -77,6 +86,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
+			
+			$reviseCheckout = $this->getReviseCount($series, '已发');
+			$monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
 			
 			$balance = $this->countBalance($series);
@@ -86,6 +98,12 @@ class WarehouseCountCommand extends CConsoleCommand
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
 		}
+	}
+
+	private function getReviseCount($series, $countType){
+		$sql = "SELECT count FROM warehouse_count_revise WHERE series='$series' AND count_type='$countType'";
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
 	}
 
 	private function countCheckin($stime,$etime,$series) {

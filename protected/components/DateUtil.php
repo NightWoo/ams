@@ -19,4 +19,11 @@ class DateUtil
 		$lastDate = date("Y-m-d", strtotime($curDate) - 86400);
         return $lastDate;
     }
+
+    public static function workDate($timestamp) {
+        $datetime = strtotime($timestamp);
+        $hour = date("H", $datetime);
+        $workDate = $hour < 8 ? $today = date("Y-m-d", strtotime("-1 day", $datetime)) : date("Y-m-d", $datetime);
+        return $workDate;
+    }
 }

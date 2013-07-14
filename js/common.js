@@ -15,11 +15,11 @@ $(function () {
 *  get firstDayOfTheMonth   1999-01-01 22:22
 *  get current time         1999-01-01 22:22
   * ========================= */
-	
+
 	window.byd.DateUtil = {
 
 		firstDayOfTheMonth : function () {
-			return new Date().getFullYear() + '-' + (new Date().getMonth() + 1) 
+			return new Date().getFullYear() + '-' + (new Date().getMonth() + 1)
 				+ '-01 00:00';
 		},
 
@@ -30,7 +30,7 @@ $(function () {
 	        var day = now.getDate();            //日
 	        var hh = now.getHours();            //时
 	        var mm = now.getMinutes();          //分
-	       
+
 	        var clock = year + '-';
 
 	        if(month < 10) clock += '0';
@@ -39,7 +39,7 @@ $(function () {
 	        if(day < 10) clock += '0';
 	        clock += day;
 
-	        return(clock); 
+	        return(clock);
 		},
 
 		currentTime : function () {
@@ -49,7 +49,7 @@ $(function () {
 	        var day = now.getDate();            //日
 	        var hh = now.getHours();            //时
 	        var mm = now.getMinutes();          //分
-	       
+
 	        var clock = year + '-';
 
 	        if(month < 10) clock += '0';
@@ -61,18 +61,18 @@ $(function () {
 	        if(hh < 10) clock += '0';
 	        clock += hh + ':';
 
-	        if (mm < 10) clock += '0'; 
-	        clock += mm; 
+	        if (mm < 10) clock += '0';
+	        clock += mm;
 
-	        return(clock); 
+	        return(clock);
 		},
-		
+
 		todayBeginTime : function () {
 			var now = new Date();
 	        var year = now.getFullYear();       //年
 	        var month = now.getMonth() + 1;     //月
 	        var day = now.getDate();            //日
-	       
+
 	        var clock = year + '-';
 
 	        if(month < 10) clock += '0';
@@ -83,7 +83,7 @@ $(function () {
 
 	        clock += "08:00";
 
-	        return(clock); 
+	        return(clock);
 		},
 
 		todayEndTime : function () {
@@ -91,7 +91,7 @@ $(function () {
 	  //       var year = now.getFullYear();       //年
 	  //       var month = now.getMonth() + 1;     //月
 	  //       var day = now.getDate();            //日
-	       
+
 	  //       var clock = year + '-';
 
 	  //       if(month < 10) clock += '0';
@@ -109,11 +109,11 @@ $(function () {
 			console.log(self);
 	        endClock += " 07:59";
 
-	        return(endClock); 
+	        return(endClock);
 		},
 
 		tomorrowDate: function () {
-			//获取系统时间 
+			//获取系统时间
 			var now = new Date();
 			var nowYear = now.getFullYear();
 			var nowMonth = now.getMonth();
@@ -127,12 +127,12 @@ $(function () {
 			var LINT_DD = uom.getDate();
 			var LSTR_DD = LINT_DD >= 10?LINT_DD:("0"+LINT_DD)
 			//得到最终结果
-			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
-			return(uom); 
+			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD;
+			return(uom);
 		},
 
-		yesterday: function () {			
-			//获取系统时间 
+		yesterday: function () {
+			//获取系统时间
 			var now = new Date();
 			var nowYear = now.getFullYear();
 			var nowMonth = now.getMonth();
@@ -142,16 +142,16 @@ $(function () {
 			uom.setDate(uom.getDate()-1);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
 			var LINT_MM = uom.getMonth();
 			LINT_MM++;
-			var LSTR_MM = LINT_MM > 10?LINT_MM:("0"+LINT_MM)
+			var LSTR_MM = LINT_MM >= 10?LINT_MM:("0"+LINT_MM)
 			var LINT_DD = uom.getDate();
-			var LSTR_DD = LINT_DD > 10?LINT_DD:("0"+LINT_DD)
+			var LSTR_DD = LINT_DD >= 10?LINT_DD:("0"+LINT_DD)
 			//得到最终结果
-			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
+			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD;
 			return(uom);
 		},
 
-		dayBeforYesterday: function () {			
-			//获取系统时间 
+		dayBeforYesterday: function () {
+			//获取系统时间
 			var now = new Date();
 			var nowYear = now.getFullYear();
 			var nowMonth = now.getMonth();
@@ -161,11 +161,11 @@ $(function () {
 			uom.setDate(uom.getDate()-2);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
 			var LINT_MM = uom.getMonth();
 			LINT_MM++;
-			var LSTR_MM = LINT_MM > 10?LINT_MM:("0"+LINT_MM)
+			var LSTR_MM = LINT_MM >= 10?LINT_MM:("0"+LINT_MM)
 			var LINT_DD = uom.getDate();
-			var LSTR_DD = LINT_DD > 10?LINT_DD:("0"+LINT_DD)
+			var LSTR_DD = LINT_DD >= 10?LINT_DD:("0"+LINT_DD)
 			//得到最终结果
-			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
+			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD;
 			return(uom);
 		},
 
@@ -216,7 +216,7 @@ $(function () {
 
 	        clock += " 08:00";
 
-	        return(clock); 
+	        return(clock);
 		},
 
 		currentDate16: function () {
@@ -226,7 +226,7 @@ $(function () {
 		        var day = now.getDate();            //日
 		        var hh = now.getHours();            //时
 		        var mm = now.getMinutes();          //分
-		       
+
 		        var clock = year + '-';
 
 		        if(month < 10) clock += '0';
@@ -237,8 +237,8 @@ $(function () {
 
 		        clock += "16:00";
 
-		        return(clock); 
-		}	
+		        return(clock);
+		}
 
 	};/* END DataUtil CLASS DEFINITION */
 
@@ -248,7 +248,7 @@ $(function () {
 		"6B" : "思锐",
 	}
 /* Constants
-  * ========================= */	
+  * ========================= */
 
    window.BYD = window.BYD || {};
    window.BYD = {

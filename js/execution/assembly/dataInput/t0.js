@@ -196,8 +196,8 @@ $("document").ready(function() {
 						if (response.data.frontImage == "" || response.data.backImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
-							$("#configPaper").addClass("toPrint");
-							setTimeout(function (){window.print();},500);
+							$(".configPaper").addClass("toPrint");
+							setTimeout(function (){window.print();},1500);
 							fadeMessageAlert(response.message,"alert-success");
 						}
 					} else if($("#currentNode").val() == 'T0_2') {

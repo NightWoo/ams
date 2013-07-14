@@ -71,7 +71,8 @@
                                     <option value="C2">C2/C21</option>
                                     <option value="F1">F1/F10</option>
                                     <option value="F2">F2/F20</option>
-                                    <option value="VQ1">VQ1/下线</option>
+                                    <option value="VQ1">VQ1/下I线</option>
+                                    <option value="VQ1_2">VQ1/下II线</option>
                                     <option value="CHECK_LINE">VQ2/检测线</option>
                                     <option value="ROAD_TEST_FINISH">VQ2/路试</option>
                                     <option value="VQ2">VQ2/淋雨</option>

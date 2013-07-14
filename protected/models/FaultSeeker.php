@@ -28,7 +28,7 @@ class FaultSeeker
 					'welding' => '6,7,8,9',
 			);
 		}
-		
+
 		//falut mode
 		foreach($components as &$component) {
 			if(empty($mode)) {
@@ -56,7 +56,7 @@ class FaultSeeker
 		}
 
 		return $components;
-	
+
 	}
 
 	public function exist($car, $status, $tablePrefixs = array()) {
@@ -81,13 +81,13 @@ class FaultSeeker
 		return !empty($total);
 	}
 
-		
+
 
 	public function query($component, $mode, $series, $stime, $etime, $nodeName,$curPage, $perPage) {
 
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		$arraySeries = $this->parseSeries($series);
-		$tables = $this->parseTables($nodeName,$series);	
+		$tables = $this->parseTables($nodeName,$series);
 		if(empty($tables)) {//
 			return $this->queryNodeTrace($series, $stime, $etime, $nodeName,$curPage, $perPage);
 		}
@@ -103,14 +103,14 @@ class FaultSeeker
 			$userInfos[$user['id']] = $user['display_name'];
 		}
 		$userInfos[0] = '-';
-		
+
 		$nodeInfos = array();
 		foreach($nodes as $node) {
 			$nodeInfos[$node['id']] = $node['display_name'];
 		}
 
 		$dutyList = $this->dutyList();
-		
+
 		$conditions = array();
 		$validConditions = array();
 		if(!empty($component)) {
@@ -138,7 +138,7 @@ class FaultSeeker
 		if(!empty($validCondition)) {
 			$condition .= ' OR (' . $validCondition ;
 		}
-		
+
 		$limit = "";
 		if(!empty($perPage)) {
 			$offset = ($curPage - 1) * $perPage;
@@ -162,7 +162,7 @@ class FaultSeeker
 			if(!empty($condition)) {
 				$curCondition = $condition . " AND n.node_id=$nodeId ". $traceSeriesConditon .")";
 			} else {
-				$curCondition = "AND n.node_id=$nodeId AND ". $traceSeriesConditon ; 
+				$curCondition = "AND n.node_id=$nodeId AND ". $traceSeriesConditon ;
 			}
 
 			//wdi need checker1 checker2
@@ -226,8 +226,19 @@ class FaultSeeker
 			$data['pass_time'] = substr($data['pass_time'],0,16);
 			$data['create_time'] = substr($data['create_time'],0,16);
 			$data['modify_time'] = substr($data['modify_time'],0,16);
-			
-			$key = join('_', $data);
+
+			// $key = join('_', $data);
+			$key =  $data['series']
+					.$data['vin']
+					.$data['component_name']
+					.$data['fault_mode']
+					.$data['fault_status']
+					.$data['duty_department']
+					.$data['node_name']
+					.$data['driver_name']
+					.$data['user_name']
+					.$data['create_time']
+					.$data['modify_time'];
 			$ret[$key] = $data;
 		}
 
@@ -248,7 +259,7 @@ class FaultSeeker
             $nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
             $conditions[] = "node_id=$nodeId";
         }
-		
+
 		if(!empty($stime)) {
             $conditions[] = "pass_time >= '$stime'";
         }
@@ -284,8 +295,8 @@ class FaultSeeker
 
 		$sql = "SELECT car_id, vin, series, pass_time as create_time, '-' as modify_time, node_id,node_trace.user_id as updator, '-' as component_name, '-' as fault_mode, '合格' as fault_status FROM node_trace,car $condition $limit";
         $traces = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		
+
+
 		foreach($traces as &$data) {
             $data['user_name'] = $userInfos[$data['updator']];
             $data['node_name'] = $nodeInfos[$data['node_id']];
@@ -298,19 +309,19 @@ class FaultSeeker
 			$data['create_time'] = substr($data['create_time'],0,16);
         }
 
-		$sql = "SELECT count(*) FROM node_trace,car $condition";	
+		$sql = "SELECT count(*) FROM node_trace,car $condition";
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 
 		return array($total, $traces);
 	}
 
 	//distribute chart
-		
+
 	public function queryDistribute($component, $mode, $series, $stime, $etime, $node) {
 
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
-		
-		$tables = $this->parseTables($node,$series);	
+
+		$tables = $this->parseTables($node,$series);
 		if(empty($tables)) {
 			return array(0, array());
 		}
@@ -342,7 +353,7 @@ class FaultSeeker
 		if(!empty($condition)) {
 			$condition = 'WHERE ' . $condition;
 		}
-		
+
 		$dataSqls = array();
 		$countSqls = array();
 		foreach($tables as $table=>$nodeId) {
@@ -368,7 +379,7 @@ class FaultSeeker
 			}
 			$data['vin'] = $cars[$carId]->vin;
 			$data['series'] = $cars[$carId]->series;
-			
+
 			if(empty($componentChartData[$data['component_id']])) {
 				$componentChartData[$data['component_id']] = array(
 					'id'    => $data['component_id'],
@@ -382,8 +393,8 @@ class FaultSeeker
                     'id'    => $data['fault_id'],
                     'name'  => $data['fault_mode'],
                     'count' => 0,
-                );  
-            } 
+                );
+            }
 
 			if(empty($seriesChartData[$name[$data['series']]])) {
                 $seriesChartData[$name[$data['series']]] = array(
@@ -392,7 +403,7 @@ class FaultSeeker
                     'count' => 0,
                 );
             }
-			
+
 			if(empty($nodeChartData[$data['node_id']])) {
                 $nodeChartData[$data['node_id']] = array(
                     'id'    => $data['node_id'],
@@ -401,8 +412,8 @@ class FaultSeeker
                 );
             }
 
-			
-			
+
+
 			++ $componentChartData[$data['component_id']]['count'];
 			++ $faultModeChartData[$data['fault_mode']]['count'];
 			++ $seriesChartData[$name[$data['series']]]['count'];
@@ -433,7 +444,7 @@ class FaultSeeker
             $chartData['percentage'] = $percentage * 100 . "%";
 			$nSeries[] = array($chartData['name'], $percentage);
         }
-		
+
 		return array(
 			'component_chart_data' => array('detail' => array_values($componentChartData), 'series' => $cSeries),
 			'fault_mode_chart_data' => array('detail' => array_values($faultModeChartData), 'series' => $fSeries),
@@ -443,7 +454,7 @@ class FaultSeeker
 	}
 
 	public function queryDutyDistribution($component, $mode, $series, $stime, $etime, $node) {
-		$tables = $this->parseTables($node,$series);	
+		$tables = $this->parseTables($node,$series);
 		if(empty($tables)) {
 			return array(0, array());
 		}
@@ -485,7 +496,7 @@ class FaultSeeker
 		if(!empty($condition)) {
 			$condition = 'WHERE ' . $condition;
 		}
-		
+
 		$dataSqls = array();
 		$countSqls = array();
 		foreach($tables as $table=>$nodeId) {
@@ -563,7 +574,7 @@ class FaultSeeker
 
 	public function queryDPU($component, $mode, $series, $stime, $etime, $node) {
 		$tables = $this->parseTables($node,$series);
-		$name = $this->seriesName();	
+		$name = $this->seriesName();
 		if(empty($tables)) {
 			return array();
 		}
@@ -583,7 +594,7 @@ class FaultSeeker
 		$retTotal = array();
 
 		$arraySeries = $this->parseSeries($series);
-		
+
 		foreach($arraySeries as $series){
 				$retTotal[$name[$series]] = array(
 									'faultTotal' => 0,
@@ -598,10 +609,10 @@ class FaultSeeker
 			$cc = $conditions;
 	        if(!empty($ss)) {
 				$cc[] = "create_time >= '$ss'";
-			}   
+			}
 			if(!empty($ee)) {
-				$cc[] = "create_time < '$ee'";		
-			}   
+				$cc[] = "create_time < '$ee'";
+			}
 			$condition = join(' AND ', $cc);
 			if(!empty($condition)) {
 				$condition = 'WHERE ' . $condition;
@@ -616,7 +627,7 @@ class FaultSeeker
 				}
 				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time < '$ee' AND node_id IN ($nodeIdStr) AND car_series= '$series'";
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
-				
+
 					$temp[$name[$series]] = array(
 							'series' => $name[$series],
 							'faults' => $total,
@@ -627,7 +638,7 @@ class FaultSeeker
 					$dataSeriesY[$name[$series]][] = empty($cars) ? null : round($total / $cars, 2);
 					// $retTotal[$name[$series]]['faultTotal'] += $total;
 					// $retTotal[$name[$series]]['carTotal'] += $cars;
-				
+
 
 			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
@@ -638,10 +649,10 @@ class FaultSeeker
         $con = $conditions;
         if(!empty($stime)) {
 			$con[] = "create_time>='$stime'";
-		}   
+		}
 		if(!empty($etime)) {
-			$con[] = "create_time<'$etime'";		
-		}   
+			$con[] = "create_time<'$etime'";
+		}
 		$totalCondition = join(' AND ', $con);
 		if(!empty($totalCondition)) {
 			$totalCondition = 'WHERE ' . $totalCondition;
@@ -670,10 +681,10 @@ class FaultSeeker
 
 
 	public function queryPlaton($series, $stime, $etime, $node, $component, $mode) {
-		
+
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 
-		$tables = $this->parseTables($node,$series);	
+		$tables = $this->parseTables($node,$series);
 		if(empty($tables)) {
 			return array();
 		}
@@ -700,12 +711,12 @@ class FaultSeeker
 		if(!empty($mode)) {
             $conditions[] = "fault_mode LIKE '%$mode%'";
         }
-        
+
         $condition = join(' AND ', $conditions);
         if(!empty($condition)) {
             $condition = 'WHERE ' . $condition;
         }
-  		 
+
         $dataSqls = array();
         foreach($tables as $table=>$nodeName) {
             $dataSqls[] = "(SELECT car_id, component_id,component_name, fault_id, fault_mode, status as fault_status, '$nodeName' as 'node_name' FROM $table $condition)";
@@ -725,7 +736,7 @@ class FaultSeeker
 				$faultModes[$fault] = array(
 					'name' => $fault,
 					'count' => 0,
-				);	
+				);
 			}
 			++ $faultModes[$fault]['count'];
 		}
@@ -735,7 +746,7 @@ class FaultSeeker
 		$faultModes = array_values($faultModes);
 		$modes = count($faultModes);
 		$temps = array();
-		
+
 		for($i = 0; $i < $modes; $i ++) {
 			$max = 1 - PHP_INT_MAX;
 			$curIndex = -1;
@@ -779,7 +790,7 @@ class FaultSeeker
 	}
 
 	public function queryQualified($series, $stime, $etime, $node) {
-		$tables = $this->parseTables($node,$series);	
+		$tables = $this->parseTables($node,$series);
 		if(empty($tables)) {
 			return array();
 		}
@@ -807,10 +818,10 @@ class FaultSeeker
 			$cc = array("status != '在线修复'");
 	        if(!empty($ss)) {
 				$cc[] = "create_time >= '$ss'";
-			}   
+			}
 			if(!empty($ee)) {
 				$cc[] = "create_time < '$ee'";
-			}   
+			}
 			$condition = join(' AND ', $cc);
 			if(!empty($condition)) {
 				$condition = 'WHERE ' . $condition;
@@ -823,15 +834,15 @@ class FaultSeeker
 				foreach($tables as $table=>$nodeName) {
 					$dataSqls[] = "(SELECT car_id FROM $table $condition)";
 				}
-				$sql = join(' UNION ALL ', $dataSqls);			
+				$sql = join(' UNION ALL ', $dataSqls);
 				$datas = Yii::app()->db->createCommand($sql)->queryColumn();
 				$datas = array_unique($datas);
 				$faults = count($datas);
 
 				$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$ss' AND pass_time < '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
-			
-				$rate = empty($cars) ? null : round(($cars - $faults) / $cars, 3);	
+
+				$rate = empty($cars) ? null : round(($cars - $faults) / $cars, 3);
 				$temp[$name[$series]] = array(
 					'qualified' => $cars - $faults,
 					'total' => $cars,
@@ -840,7 +851,7 @@ class FaultSeeker
 				$dataSeriesY[$name[$series]][] = $rate;
 				$retTotal[$name[$series]]['qualifiedTotal'] += $temp[$name[$series]]['qualified'];
 				$retTotal[$name[$series]]['carTotal'] += $cars;
-			}	
+			}
 			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
 
@@ -850,10 +861,10 @@ class FaultSeeker
         $con = array("status != '在线修复' AND status != '合格'");
         if(!empty($stime)) {
 			$con[] = "create_time>='$stime'";
-		}   
+		}
 		if(!empty($etime)) {
-			$con[] = "create_time<'$etime'";		
-		}   
+			$con[] = "create_time<'$etime'";
+		}
 		$totalCondition = join(' AND ', $con);
 		if(!empty($totalCondition)) {
 			$totalCondition = 'WHERE ' . $totalCondition;
@@ -865,7 +876,7 @@ class FaultSeeker
 			foreach($tables as $table=>$nodeName) {
 				$dataSqls[] = "SELECT car_id FROM $table $totalCondition";
 			}
-			$sql = join(' UNION ALL ', $dataSqls);			
+			$sql = join(' UNION ALL ', $dataSqls);
 			$datas = Yii::app()->db->createCommand($sql)->queryColumn();
 			$datas = array_unique($datas);
 			$totalFaults = count($datas);
@@ -914,7 +925,7 @@ class FaultSeeker
 				$sql = "SELECT count(DISTINCT car_id) FROM $traceTable WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
-				
+
 				if($series == '6B'){
 					$temp['思锐'] = $cars;
 					$dataSeriesY['思锐'][] = intval($cars);
@@ -924,11 +935,11 @@ class FaultSeeker
 					$dataSeriesY[$series][] = intval($cars);
 					$retTotal[$series] += intval($cars);
 				}
-			}	
+			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
-        
+
         foreach($arraySeries as $key => $series){
         	if($series == '6B') $arraySeries[$key] = '思锐';
         }
@@ -954,7 +965,7 @@ class FaultSeeker
 				$temp[$series] = $cars;
 				$dataSeriesY[$series][] = intval($cars);
 				$retTotal[$series] += intval($cars);
-			}	
+			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
@@ -1024,6 +1035,8 @@ class FaultSeeker
 			'WDI'  => 95,
 			'OutStandby'  => 96,
 			'WAREHOUSE_RETURN'=>97,
+			'DETECT_SHOP_LEAVE'=>98,
+			'DETECT_SHOP_RETURN'=>99,
         );
 
 		if(empty($node) || $node === 'all') {
@@ -1045,14 +1058,14 @@ class FaultSeeker
 
 	//modified by wujun
 	public function parseQueryTime($stime,$etime) {
-		
+
 		// list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
 		$s = strtotime($stime);
 		$e = strtotime($etime);
-	
+
 		$sd = date('Ymd', $s);
 		$ed = date('Ymd', $e);
-		
+
 		$lastHour = ($e - $s) / 3600;
 		$lastDay = (strtotime($ed) - strtotime($sd)) / 86400;//days
 
@@ -1073,19 +1086,21 @@ class FaultSeeker
 
 		//首个分割段
 		$t0 = $s;
-		
+
 		if($pointFormat === 'H'){
 			// $t = $t0 + ($slice - ($t0%$slice));
 			$eNextH = strtotime('+1 hour', $t0);			//next hour
-			$ee = date('Y-m-d H', $eNextH) . ":00:00";	
+			$ee = date('Y-m-d H', $eNextH) . ":00:00";
 			$t = strtotime($ee);
 		} else if($pointFormat === 'm-d'){
-			$eNextD = strtotime('+1 day', $t0);		//next day						
+			$eNextD = strtotime('+1 day', $t0);		//next day
 			$ee = date(('Y-m-d'), $eNextD) . " 08:00:00";
 			$t = strtotime($ee);
 		} else if($pointFormat === 'Y-m'){
-			$eNextM = strtotime('+1 month', $t0);			//next month
-			$ee = date('Y-m', $eNextM) . "-01 08:00:00";	
+			$lastDay = strtotime(date("Y-m-t", $t0));
+			$eNextM = strtotime('+1 day', $lastDay);
+			// $eNextM = strtotime('+1 month', $t0);			//next month
+			$ee = date('Y-m', $eNextM) . "-01 08:00:00";
 			$t = strtotime($ee);
 		}
 
@@ -1099,7 +1114,7 @@ class FaultSeeker
 				'etime' => date($format, $t),
 				'point' => $point,
 		);
-		
+
 		// $t = $s;
 		while($t < $e) {
 			if($pointFormat === 'H') {
@@ -1110,23 +1125,23 @@ class FaultSeeker
 
 			//added by wujun
 			if($pointFormat === 'Y-m') {
-				// $slice = 86400 * intval(date('t' ,$t));
-				$eNextM = strtotime('+1 month', $t);			//next month			//added by wujun
-				$ee = date('Y-m', $eNextM) . "-01 08:00:00";	//next month firstday	//added by wujun
+				$eNextM = strtotime('first day of next month', $t);
+				// $eNextM = strtotime('+1 month', $t);			//next month			//added by wujun
+				$ee = date('Y-m-d', $eNextM) . " 08:00:00";	//next month firstday	//added by wujun
 				$etmp = strtotime($ee);	//next month firstday	//added by wujun
 			} else {
 				$etmp = $t+$slice;
 			}
 			if($etmp>=$e){
 				$etmp=$e;
-			} 
+			}
 
 			$ret[] = array(
 				'stime' => date($format, $t),
 				'etime' => date($format, $etmp),
 				'point' => $point,
-			);	
-			$t = $etmp;			
+			);
+			$t = $etmp;
 		}
 
 		return $ret;
@@ -1138,10 +1153,10 @@ class FaultSeeker
 
 		$s = strtotime($stime);
 		$e = strtotime($etime);
-	
+
 		$sd = date('Ymd', $s);
 		$ed = date('Ymd', $e);
-		
+
 		$sm = date('m', $s);
 		$em = date('m', $e);
 
@@ -1156,7 +1171,7 @@ class FaultSeeker
 			$etime = date($format, $eNextH) . ":00:00";
 		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
-			//$stime = date($format, $s) . " 00:00:00";				
+			//$stime = date($format, $s) . " 00:00:00";
 			//$etime = date($format, $e) . " 23:59:59";
 			$stime = date($format, $s) . " 08:00:00";								//added by wujun
 			$eNextD = strtotime('+1 day', $e);		//next day						//added by wujun

@@ -1,12 +1,13 @@
 <?php
 Yii::import('application.models.PauseSeeker');
 Yii::import('application.models.DepartmentSeeker');
+Yii::import('application.models.Shift');
 Yii::import('application.models.AR.monitor.LinePauseAR');
 Yii::import('application.models.AR.DutyDepartmentAR');
 Yii::import('application.models.AR.PauseAR');
 
 
-class PauseController extends BmsBaseController 
+class PauseController extends BmsBaseController
 {
 	/**
 	 * Declares class-based actions.
@@ -16,7 +17,7 @@ class PauseController extends BmsBaseController
 		return array(
 		);
 	}
-		
+
 	//added by wujun
 	public function actionQuery() {
 		$startTime = $this->validateStringVal('startTime', '');
@@ -30,7 +31,7 @@ class PauseController extends BmsBaseController
 		$curPage = $this->validateIntVal('curPage', 1);
 		$orderBy = $this->validateStringVal('orderBy', '');
 		try{
-			$orderBy = empty($orderBy) ? 'ASC' : 'DESC';
+			$orderBy = empty($orderBy) ? 'ORDER BY pause_time ASC' : $orderBy;
 			$seeker = new PauseSeeker();
 			list($total, $data) = $seeker->query($startTime, $endTime, $section,$pauseType, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy);
 			$ret = array(
@@ -47,10 +48,10 @@ class PauseController extends BmsBaseController
 			}
 
 			$this->renderJsonBms(true, 'OK', $ret);
-			
+
 		}catch(Exception $e) {
-			$this->renderJsonBms(false, $e->getMessage());	
-		}	
+			$this->renderJsonBms(false, $e->getMessage());
+		}
 	}
 
 	public function actionQueryDistribute() {
@@ -66,10 +67,10 @@ class PauseController extends BmsBaseController
 			$data = $seeker->queryDistribute($stime, $etime, $section,$pauseType, $causeType, $dutyDepartment, $pauseReason);
 			$this->renderJsonBms(true, 'OK', $data);
 		}catch(Exception $e) {
-			$this->renderJsonBms(false, $e->getMessage());	
-		}	
+			$this->renderJsonBms(false, $e->getMessage());
+		}
 	}
-	
+
 	public function actionEditSave() {
 		$id = $this->validateIntVal('id', 0);
 		$causeType = $this->validateStringVal('causeType', '');
@@ -90,10 +91,10 @@ class PauseController extends BmsBaseController
 				$pause->remark = $remark;
 				$pause->editor = Yii::app()->user->id;
 				$pause->edit_time = date('YmdHis');
-				
+
 				$pause->save();
-				
-				$this->renderJsonBms(true, 'OK', '');	
+
+				$this->renderJsonBms(true, 'OK', '');
 			}else {
 				throw new Exception('the pause record is not exist');
 			}
@@ -139,7 +140,7 @@ class PauseController extends BmsBaseController
 		$orderBy = $this->validateStringVal('orderBy', '');
 
 		try{
-			$orderBy = empty($orderBy) ? 'ASC' : 'DESC';
+			$orderBy = empty($orderBy) ? 'ORDER BY pause_time ASC' : $orderBy;
 			$seeker = new PauseSeeker();
 			list($total, $datas) = $seeker->query($startTime, $endTime, $section, '', $causeType, $dutyDepartment, $pauseReason, 0, 0, $orderBy);
 			$content = "recordID,停线类型,工位,责任部门,原因,时长,停线时刻,恢复时刻,编辑人\n";
@@ -159,7 +160,7 @@ class PauseController extends BmsBaseController
 			$export = new Export('停线明细_' . date('YmdHi'), $content);
 			$export->toCSV();
 		} catch(Exception $e) {
-			echo $e->getMessage();	
+			echo $e->getMessage();
 		}
 	}
 
@@ -174,10 +175,10 @@ class PauseController extends BmsBaseController
 				throw new Exception ('起止时间均不可为空');
 			}
 
-			if(strtotime($endTime) <=strtotime($startTime)){
-				throw new Exception("结束时间不能大于起始时间", 1);
-				
-			}
+			// if(strtotime($endTime) <=strtotime($startTime)){
+			// 	throw new Exception("结束时间不能大于起始时间", 1);
+
+			// }
 
 			$pause = PauseAR::model()->findByPk($id);
 			if(empty($pause)){
@@ -192,6 +193,10 @@ class PauseController extends BmsBaseController
 			$pause->editor = Yii::app()->user->id;
 			$pause->edit_time = date('YmdHis');
 			$pause->save();
+
+			$workDate = DateUtil::workDate($pause->pause_time);
+			$shift = new Shift();
+			$shift->updateCapacityDaily($workDate);
 
 			$this->renderJsonBms(true, 'OK', '');
 		} catch(Exception $e) {

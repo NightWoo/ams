@@ -1,6 +1,15 @@
 /* CSS Document */
-#tableResult {
+#tabUl{
+	margin-bottom: 5px;
+}
+
+legend {
+	margin-bottom: 5px;
+}
+
+#tableResult, #tableShiftResult {
 	font-size: 12px;
+	margin-bottom: 5px;
 }
 
 .btn-primary {
@@ -21,26 +30,18 @@
 	width:80px;
 }
 
-#thSeat {
-	width:80px;
-}
-
-#thDuty {
-	min-width:100px;
-}
-
-#thReason {
+.thReason {
 	min-width:200px;
 }
 
-#thHowlong {
+.thHowlong {
 	width:80px;
 }
 
-#thPauseTime, #thRecoverTime {
-	width: 120px;
+.thTime {
+	width: 150px;
 }
 
-#thEditor {
+.thEditor {
 	width:120px;
 }

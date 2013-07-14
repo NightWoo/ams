@@ -153,7 +153,7 @@
                 <div class="controls">
                     <!--<input type="text" class="input-medium"  id="newCarType"/>-->
                     <select name="" id="newCarType" class="input-large">
-                        <option value="" selected>请选择</option>
+                        <option value="" selected>请先选择车系</option>
                     </select> 
                 </div>
             </div>
@@ -163,7 +163,7 @@
                 <div class="controls">
                     <!--<input type="text" class="input-medium"  id="newConfig"/>-->
                     <select name="" id="newConfig" class="input-large">
-                        <option value="" selected>请选择配置</option>
+                        <option value="" selected>请先选择车系</option>
                     </select>
                 </div>
             </div>

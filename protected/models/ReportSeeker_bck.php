@@ -4,7 +4,7 @@ Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.monitor.LinePauseAR');
-Yii::import('application.models.PauseSeeker');
+Yii::import('application.models.CarSeeker');
 
 class ReportSeeker
 {
@@ -238,11 +238,9 @@ class ReportSeeker
 		switch($timespan) {
 			case "monthly":
 				list($stime, $etime) = $this->reviseMonthlyTime($date);
-				$pauseDetail = $this->queryPauseDetail($date);
 				break;
 			case "yearly":
 				list($stime, $etime) = $this->reviseYearlyTime($date);
-				$pauseDetail = array();
 				break;
 			default:
 				list($stime, $etime) = $this->reviseDailyTime($date);
@@ -302,7 +300,7 @@ class ReportSeeker
 
 		$ret = array(
 			"causeArray" => $causeArray,
-			"pauseDetail" => $pauseDetail,
+			// "pauseDetail" => $pauseDetail,
 			// "useDetail" => $useDetail,
 			// "pauseTotal" => $pauseTotal,
 			// "useTotal" => $useTotal,
@@ -317,7 +315,7 @@ class ReportSeeker
 	}
 
 	public function queryPauseRecourd($stime, $etime){
-		$sql = "SELECT id, cause_type, pause_time, recover_time, TIMESTAMPDIFF(second,pause_time,recover_time) AS howlong FROM pause WHERE pause_type!='计划停线' AND pause_time>='$stime' AND pause_time<'$etime' AND recover_time>'0000-00-00 00:00:00'";
+		$sql = "SELECT id, cause_type, pause_time, recover_time, TIMESTAMPDIFF(second,pause_time,recover_time) AS howlong FROM pause WHERE pause_time>='$stime' AND pause_time<'$etime' AND recover_time>'0000-00-00 00:00:00'";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		// foreach($datas as &$data) {
@@ -349,7 +347,7 @@ class ReportSeeker
 		return $causeDistribute;
 	}
 
-	public function queryUseRateBase($stime, $etime){
+	public function queryUseRate($stime, $etime){
 
 		$datas = $this->queryShiftRecord($stime, $etime);
 		$use = array();
@@ -373,46 +371,6 @@ class ReportSeeker
 		return $use;
 	}
 
-	public function queryUseRate($stime, $etime){
-
-		$data = $this->queryCapacityDaily($stime, $etime);
-		$use = array();
-
-		$capacity = null;
-		$prodution = null;
-		$runTime = null;
-		if(!empty($data)){
-			$capacity = $data['capacity'];
-			$prodution = $data['prodution'];
-			$runTime = $data['run_time'];
-		}
-
-		$rate = empty($capacity)? null : round($prodution / $capacity, 2);
-
-		$use['useRate'] = $rate;
-		$use['runTime'] = $runTime;
-		$use['capacity'] = $capacity;
-		$use['prodution'] = $prodution;
-
-		return $use;
-	}
-
-	public function queryCapacityDaily($stime, $etime, $line=""){
-		$sDate = substr($stime, 0, 10);
-		$eDate = substr($etime, 0, 10);
-
-		$condition = " work_date>='$sDate' AND work_date<'$eDate'";
-		if(!empty($line)){
-			$condition .= " AND line='$line'";
-		}
-
-		$sql = "SELECT SUM(capacity) AS capacity, SUM(run_time) AS run_time FROM manufacture_capacity_daily WHERE $condition";
-		$datas = Yii::app()->db->createCommand($sql)->queryRow();
-		$datas['prodution'] = $this->countOnline($stime, $etime);
-
-		return $datas;
-	}
-
 	public function queryShiftRecord($stime, $etime, $line=""){
 		$sDate = substr($stime, 0, 10);
 		$eDate = substr($etime, 0, 10);
@@ -433,18 +391,6 @@ class ReportSeeker
 			$data['capacity'] = intval($data['run_time'] / $data['line_speed']);
 			$data['prodution'] = $this->countOnline($data['start_time'], $data['end_time']);
 		}
-
-		return $datas;
-	}
-
-	public function queryPauseDetail($date) {
-		list($stime, $etime) = $this->reviseDailyTime($date);
-
-		$seeker = new PauseSeeker();
-		$curPage = 1;
-		$perPage = 10;
-		$orderBy = "ORDER BY howlong DESC";
-		list($total, $datas) = $seeker->query($stime, $etime, "", "", "", "", "", $curPage, $perPage, $orderBy);
 
 		return $datas;
 	}
@@ -495,7 +441,7 @@ class ReportSeeker
 	}
 
 	public function queryRecycleBalance($sDate, $eDate) {
-		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine', 'VQ1','VQ2','VQ3') GROUP BY series,state";
+		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' GROUP BY series,state";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$count = array();
@@ -560,8 +506,8 @@ class ReportSeeker
 		return $period;
 	}
 
-	public function countOnline($stime, $etime, $line='I'){
-		$sql = "SELECT COUNT(id) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime' AND assembly_line='$line'";
+	public function countOnline($stime, $etime){
+		$sql = "SELECT COUNT(id) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
 		$data = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $data;
 	}
@@ -612,103 +558,20 @@ class ReportSeeker
 		return $faults;
 	}
 
-	public function queryWarehouseReport($date, $timespan) {
-		list($stime, $etime) = $this->reviseTime($date, $timespan);
-		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
-		$seriesArray = self::$SERIES_NAME;
-		$columnSeriesX = array();
-		$columnSeriesY = array();
-		$lineSeriesY = array();
-		foreach($seriesArray as $series => $seriesName){
-			$columnSeriesY[$seriesName] = array();
-		}
-
-		foreach($timeArray as $queryTime){
-			$count = $this->countCarByPoint($queryTime['stime'], $queryTime['etime'], 'distribute');
-			foreach($seriesArray as $series => $seriesName){
-				$columnSeriesY[$seriesName][] = $count[$series];
-			}
-			$lineSeriesY[] = $this->queryWarehousePeriod($queryTime['stime'], $queryTime['etime']);
-
-			$columnSeriesX[] = $queryTime['point'];
-		}
-
-		$ret = array(
-			"carSeries" => array_values(self::$SERIES_NAME),
-			"series" => array(
-				'x' => $columnSeriesX,
-				'column' => $columnSeriesY,
-				'line' => $lineSeriesY,
-			),
-		);
-
-		return $ret;
-	}
-
-	public function queryWarehousePeriod($stime, $etime){
-		$condition = " `status`>0 AND activate_time>='$stime' AND activate_time<'$etime'";
-		$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` WHERE $condition";
-		$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
-		if(empty($boardCount)) return null;
-
-		$sql = "SELECT 	board_number, 
-						MIN(activate_time) AS min_activate, 
-						MAX(activate_time) AS max_activate, 
-						MIN(out_finish_time) AS min_out, 
-						MAX(out_finish_time) AS max_out
-				FROM 	`order`
-				WHERE $condition
-				GROUP BY board_number";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		$warehousePeriod = null;
-		foreach($datas as &$data){
-			//获得每板的激活、完成、释放这三个周期时间点
-			$boardActivate = $data['min_activate'];
-			if($data['min_out'] === '0000-00-00 00:00:00'){
-				$boardOutFinish = date('Y-m-d H:i:s');
-			} else {
-				$boardOutFinish = $data['max_out'];
-			}
-
-			//计算成品库周期，出库完成时间-激活时间
-			$data['warehousePeriod'] = strtotime($boardOutFinish) - strtotime($boardActivate);
-			$warehousePeriod += $data['warehousePeriod'] ;
-		}
-		$warehousePeriodAvg = empty($warehousePeriod) ? 0 : round(($warehousePeriod / $boardCount / 3600), 1);
-
-		return $warehousePeriodAvg;
-	}
-
-	public function queryOvertimeOrders() {
-		$sql = "SELECT id, order_number, board_number, TIMESTAMPDIFF(second,activate_time,CURRENT_TIMESTAMP) AS warehouse_period, standby_date, amount, hold, count, series, car_type, car_model, color, cold_resistant, order_config_id, config_name, distributor_name, lane_id,lane_name, status, activate_time, out_finish_time 
-				FROM view_order 
-				WHERE `status` = 1 AND amount>count AND activate_time>'0000-00-00 00:00:00' AND out_finish_time='0000-00-00 00:00:00'
-				ORDER BY warehouse_period DESC";
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$boards = array();
-		foreach($orders as &$order){
-			$order['series_name'] = self::$SERIES_NAME[$order['series']];
-			$order['cold'] = self::$COLD_RESISTANT[$order['cold_resistant']];
-			$order['car_type_config'] = $order['car_model'] . "/" . $order['config_name'] . "/" . $order['cold'];
-			$order['warehouse_period'] = round($order['warehouse_period']/3600, 1);
-
-			if(empty($boards[$order['board_number']])){
-				$boards[$order['board_number']] = array(
-					'boardNumber' => $order['board_number'],
-					'boardWarehousePeriod' => $order['warehouse_period'],
-					'orders' => array(),
-				);
-			}
-			$boards[$order['board_number']]['orders'][]=$order;
-		}
-
-		array_splice($boards, 5);
-		return $boards;
-	}
-
 	public function queryCarDetail($date, $point, $timeSpan="daily"){
-		list($stime, $etime) = $this->reviseTime($date, $time);
+		switch($timeSpan) {
+			case "daily":
+				list($stime, $etime) = $this->reviseDailyTime($date);
+				break;
+			case "monthly":
+				list($stime, $etime) = $this->reviseMonthlyTime($date);
+				break;
+			case "yearly":
+				list($stime, $etime) = $this->reviseYearlyTime($date);
+				break;
+			default:
+				list($stime, $etime) = $this->reviseDailyTime($date);
+		}
 
 		$data = $this->queryDetailByPoint($stime, $etime, $point);
 
@@ -794,25 +657,6 @@ class ReportSeeker
 		}
 
 		return $datas;
-	}
-
-	public function reviseTime($date, $timespan){
-		switch($timespan) {
-			case "daily":
-				list($stime, $etime) = $this->reviseDailyTime($date);
-				break;
-			case "monthly":
-				list($stime, $etime) = $this->reviseMonthlyTime($date);
-				$pauseDetail = $this->queryPauseDetail($date);
-				break;
-			case "yearly":
-				list($stime, $etime) = $this->reviseYearlyTime($date);
-				$pauseDetail = array();
-				break;
-			default:
-				list($stime, $etime) = $this->reviseDailyTime($date);
-		}
-		return array($stime, $etime);
 	}
 
 	public function reviseDailyTime($date) {

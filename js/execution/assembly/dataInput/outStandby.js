@@ -89,7 +89,8 @@ $(document).ready(function() {
 					$("#colorInfo").html(data.color);
 					$("#orderNumberInfo, #orderNumberPrint").html(data.order_number);
 					$("#distributorInfo, #distributorPrint").html(data.distributor_name);
-					$("#laneInfo, #lanePrint").html(data.lane + "道");
+					$("#laneInfo").html(data.lane + "道");
+					$("#lanePrint").html(data.lane + "道-" + byd.DateUtil.currentTime());
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);
@@ -245,66 +246,4 @@ $(document).ready(function() {
 		});
 	}
 
-	// function ajaxGetOrder() {
-	// 	$.ajax({
-	// 		url: ORDER_SEARCH,
-	// 		type: "get",
-	// 		dataType: "json",
-	// 		data: {
-	// 			//"standbyDate": workDate(), 
-	// 			"status": 1,
-	// 		},
-	// 		success: function(response) {
-	// 			if(response.success){
-	// 				$("#tableOrder>tbody").html("");
-	// 				var orders = response.data;
-	// 				var amountAll = 0;
-	// 				var countAll = 0;
-	// 				var remainAll = 0;
-	// 				var holdAll = 0;
-	// 				$.each(orders, function (index,value) {
-	// 					var tr =$("<tr />");
-
-	// 					$("<td />").html(value.priority).appendTo(tr);
-	// 					$("<td />").html(value.remain).appendTo(tr);
-	// 					$("<td />").html(value.order_number).appendTo(tr);
-	// 					$("<td />").html(value.amount).appendTo(tr);
-	// 					$("<td />").html(value.count).appendTo(tr);
-	// 					$("<td />").html(value.series).appendTo(tr);
-	// 					$("<td />").html(value.color).appendTo(tr);
-	// 					$("<td />").html(value.order_config_name).appendTo(tr);
-	// 					$("<td />").html(value.car_type).appendTo(tr);
-	// 					if(value.cold_resistant == "1"){
-	// 						$("<td />").html("耐寒").appendTo(tr);
-	// 					} else {
-	// 						$("<td />").html("非耐寒").appendTo(tr);
-	// 					}
-	// 					//$("<td />").html(value.car_year).appendTo(tr);
-	// 					$("<td />").html(value.lane).appendTo(tr);
-	// 					$("<td />").html(value.carrier).appendTo(tr);
-	// 					$("<td />").html(value.distributor_name).appendTo(tr);
-	// 					$("<td />").html(value.city).appendTo(tr);
-	// 					$("<td />").html(value.remark).appendTo(tr);
-
-	// 					countAll += parseInt(value.count);
-	// 					amountAll += parseInt(value.amount);
-	// 					remainAll = amountAll - countAll;
-	// 					amountAll += parseInt(value.hold);
-
-	// 					tr.data("id", value.id);
-	// 					tr.data("distributerId", value.distributer_id);
-	// 					if(value.id == $("#carInfo").attr("orderId")){
-	// 						tr.addClass("info")
-	// 					}
-	// 					$("#tableOrder>tbody").append(tr);
-	// 					$("#infoCount").html(remainAll +" = " + amountAll + " - " + countAll + " (" + holdAll + ")");						
-	// 				});
-						
-	// 			}
-	// 		},
-	// 		error: function() {
-	// 			alertError();
-	// 		}
-	// 	})
-	// }
 })

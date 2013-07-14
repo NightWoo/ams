@@ -49,17 +49,17 @@ class PlanSeeker
 		$year = date("Y", $date);
 		$yearCode = CarYear::getYearCode($year);
 		$monthDay = date("md", $date);
-		
+
 		$ret = $yearCode . $monthDay;
-		
+
 		$sql = "SELECT batch_number FROM plan_assembly WHERE batch_number LIKE '$ret%' ORDER BY batch_number DESC";
 		$lastSerial = Yii::app()->db->createCommand($sql)->queryScalar();
 		$lastKey = intval(substr($lastSerial, 5 , 3));
-		
+
 		$ret .= sprintf("%03d", (($lastKey + 1) % 1000));
-		
+
 		return $ret;
-		
+
 	}
 
 	//added by wujun
@@ -112,7 +112,7 @@ class PlanSeeker
 			$data['car_type_name'] = $this->cutCarType($data['car_type']);
 		}
 
-        return array($total,  $datas); 
+        return array($total,  $datas);
 	}
 
 	public function queryCompletion($stime, $etime, $series, $line) {
@@ -166,7 +166,7 @@ class PlanSeeker
 				$rate = empty($totalSum) ? null : round($readySum/$totalSum , 2);
 				if($series == '6B'){
 					$temp['思锐'] = array(
-						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
+						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%",
 						'readySum' => empty($readySum) ? 0 : $readySum,
 						'totalSum' => empty($totalSum) ? 0 : $totalSum,
 					);
@@ -175,7 +175,7 @@ class PlanSeeker
 					$retTotal['思锐']['readyTotal'] += $totalSum;
 				}else {
 					$temp[$series] = array(
-						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%", 
+						'completion' => empty($totalSum) ? '-' : $rate * 100 ."%",
 						'readySum' => empty($readySum) ? 0 : $readySum,
 						'totalSum' => empty($totalSum) ? 0 : $totalSum,
 					);
@@ -198,7 +198,7 @@ class PlanSeeker
 		foreach($arraySeries as $key => $series){
         	if($series == '6B') $arraySeries[$key] = '思锐';
         }
-        
+
 		return  array(
 					'carSeries' => $arraySeries,
 					'detail' => $detail,
@@ -233,16 +233,16 @@ class PlanSeeker
 		$ret = array();
 		if($lastDay <= 31) {
 			$pointFormat = 'm-d';
-		} else {	
+		} else {
 			$format = 'Y-m';
 			$stime = date($format, $s);
 			$etime = date($format, $e);
 			$pointFormat = 'Y-m';
 		}
-		
+
 		$t = $s;
 		while($t <= $e) {
-			
+
 			$point = date($pointFormat, $t);
 
 			if($pointFormat === 'm-d'){
@@ -252,16 +252,16 @@ class PlanSeeker
 					'etime' => date($format, $nextD),
 					'point' => $point,
 				);
-				$t = $nextD;	
+				$t = $nextD;
 			} else {
-				$nextM = strtotime('+1 month', $t);
+				$nextM = strtotime('first day of next month', $t);
 				$ret[] = array(
 					'stime' => date($format, $t),
 					'etime' => date($format, $nextM),
 					'point' => $point,
 				);
 				$t = $nextM;
-			}		
+			}
 		}
 
 		return $ret;
@@ -292,7 +292,7 @@ class PlanSeeker
         while($i < $length){
             if($type[$i] === '(' || $i === stripos($type, '（')){
             	break;
-            } else {	
+            } else {
             	$typeName .= $type[$i];
             	$i++;
             }
@@ -302,5 +302,5 @@ class PlanSeeker
         }
 
         return $typeName;
-	}		
+	}
 }

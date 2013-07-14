@@ -66,23 +66,41 @@ $(document).ready(function () {
 		if(!($(this).val()==="")){
 			fillType($(this).val(),"new");
 			fillColor($(this).val(),"new");
-			fillConfig($(this).val(),"","new");
+			// fillConfig($(this).val(),"","new");
+			$("#newConfig").html('<option value="">请先选择车型</option>');
 		} else {
-			$("#newCarType,#editCarType").html('<option value="">请先选择车系</option>');
+			$("#newCarType").html('<option value="">请先选择车系</option>');
+			$("#newConfig").html('<option value="">请先选择车系</option>');
 		}		
+	})
+
+	$("#newCarType").change(function() {
+		if(!($(this).val()==="")){
+			fillConfig($("#newSeries").val(), $(this).val(),"new");
+		} else {
+			$("#newConfig").html('<option value="">请先选择车型</option>');
+		}
 	})
 
 	$("#editSeries").change(function () {
 		if(!($(this).val()==="")){
 			fillType($(this).val(),"edit");
 			fillColor($(this).val(),"edit");
-			fillConfig($(this).val(),"","edit");
+			// fillConfig($(this).val(),"","edit");
+			$("#editConfig").html('<option value="">请先选择车型</option>');
 		} else {
-			$("#newCarType,#editCarType").html('<option value="">请先选择车系</option>');
+			$("#editCarType").html('<option value="">请先选择车系</option>');
+			$("#editConfig").html('<option value="">请先选择车系</option>');
 		}		
 	})
 
-	
+	$("#editCarType").change(function() {
+		if(!($(this).val()==="")){
+			fillConfig($("#editSeries").val(), $(this).val(),"edit");
+		} else {
+			$("#editConfig").html('<option value="">请先选择车型</option>');
+		}
+	})
 
 	$("#tablePlanAssembly").live("click", function (e) {
 		if ($(e.target).is("i")) {
@@ -98,9 +116,9 @@ $(document).ready(function () {
 				var siblings = $(e.target).parent("td").siblings();
 				var tr = $(e.target).closest("tr");
 
-				fillType($(e.target).parent("td").parent("tr").data("car_series"),"edit");
-				fillColor($(e.target).parent("td").parent("tr").data("car_series"),"edit");
-				fillConfig($(e.target).parent("td").parent("tr").data("car_series"),"","edit");
+				fillType(tr.data("car_series"),"edit");
+				fillColor(tr.data("car_series"),"edit");
+				fillConfig(tr.data("car_series"), tr.data("car_type"), "edit");
 				
 				$("#editPlanDate").val($(e.target).parent("td").parent("tr").data("plan_date"));
 				//$("#editPlanId").val($(e.target).parent("td").parent("tr").data("id"));		//added by wujun

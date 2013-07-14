@@ -232,35 +232,35 @@ class MonitorSeeker
 	}
 
 	public function queryWareHousePassCars($stime = null, $etime = null) {
-		// $condition = '';
-		$conditionIn = '';
-		$conditionOut = '';
+		$condition = '';
+		// $conditionIn = '';
+		// $conditionOut = '';
 		if(!empty($stime)) {
-			// $condition .= " AND pass_time >= '$stime'";
-			$conditionIn .= "warehouse_time >= '$stime'";
-			$conditionOut .= "distribute_time >= '$stime'";
+			$condition .= " AND pass_time >= '$stime'";
+			// $conditionIn .= "warehouse_time >= '$stime'";
+			// $conditionOut .= "distribute_time >= '$stime'";
 		}
 		if(!empty($etime)) {
-			// $condition .= " AND pass_time <= '$etime'";
-			$conditionIn .= " AND warehouse_time <= '$etime'";
-			$conditionOut .= " AND distribute_time <= '$etime'";
+			$condition .= " AND pass_time <= '$etime'";
+			// $conditionIn .= " AND warehouse_time <= '$etime'";
+			// $conditionOut .= " AND distribute_time <= '$etime'";
 		}
 		$seriesArray = SeriesSeeker::findAllCode();
         $seriesArray[] = 'all';
 
 		$ret = array();
 		foreach($seriesArray as $series) {
-			// $sqlIn = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
-			$sqlIn = "SELECT count(*) FROM car WHERE $conditionIn";
+			$sqlIn = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=18 $condition";
+			// $sqlIn = "SELECT count(*) FROM car WHERE $conditionIn";
 
-			// $sqlOut = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
-			$sqlOut = "SELECT count(*) FROM car WHERE $conditionOut";
+			$sqlOut = "SELECT count(distinct car_id) FROM node_trace WHERE node_id=19 $condition";
+			// $sqlOut = "SELECT count(*) FROM car WHERE $conditionOut";
 
 			if($series !== 'all') {
-				// $sqlIn .= " AND car_series = '$series'";
-				$sqlIn .= " AND series = '$series'";
-				// $sqlOut .= " AND car_series = '$series'";
-				$sqlOut .= " AND series = '$series'";
+				$sqlIn .= " AND car_series = '$series'";
+				// $sqlIn .= " AND series = '$series'";
+				$sqlOut .= " AND car_series = '$series'";
+				// $sqlOut .= " AND series = '$series'";
 			}
 
 			

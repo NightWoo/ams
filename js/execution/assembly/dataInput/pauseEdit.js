@@ -83,7 +83,7 @@ $(document).ready(function(e) {
 				"section": $("#section").val(),	
 				"perPage": 10,
 				"curPage": targetPage || 1,
-				"orderBy": 'DESC',
+				"orderBy": 'ORDER BY pause_time DESC',
 			},
 			success: function(response) {
 				if(response.success) {

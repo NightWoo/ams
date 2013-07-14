@@ -7,7 +7,7 @@ class PauseSeeker
 {
 	public function __construct(){
 	}
-	
+
 	public function query($startTime, $endTime, $section, $pauseType, $causeType, $dutyDepartment, $pauseReason, $curPage, $perPage, $orderBy) {
 		$conditions = array();
 		if(!empty($startTime)){
@@ -20,7 +20,7 @@ class PauseSeeker
 			$sql = "SELECT id FROM node WHERE section='$section'";
 			$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
 			if(empty($nodeIds)) {
-				return 0;	
+				return 0;
 			}
 			$nodeIdStr = join(',', $nodeIds);
 			$conditions[] = "node_id IN ($nodeIdStr)";
@@ -39,9 +39,9 @@ class PauseSeeker
 		if(!empty($pauseReason)){
 			$conditions[] = "remark LIKE '%$pauseReason%'";
 		}
-		
+
 		$condition = join(' AND ', $conditions);
-		
+
 		// $limit = $perPage;
 		// $offset = ($curPage - 1) * $perPage;
 
@@ -50,14 +50,14 @@ class PauseSeeker
             $offset = ($curPage - 1) * $perPage;
             $limit = "LIMIT $offset, $perPage";
         }
-		
-		$sql = "SELECT * FROM pause WHERE $condition ORDER BY pause_time $orderBy $limit";
+
+		$sql = "SELECT *,TIMESTAMPDIFF(second,pause_time,recover_time) as howlong FROM pause WHERE $condition $orderBy $limit";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$countSql = "SELECT count(*) FROM pause WHERE $condition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
-		
-		
+
+
 		foreach($datas as &$data) {
 			$editor = User::model()->findByPk($data['editor']);
 			if(!empty($editor)){
@@ -67,29 +67,31 @@ class PauseSeeker
 			}
 			$node = NodeAR::model()->findByPk($data['node_id']);
 			if(!empty($node)){
-				$data['node_name'] = $node->display_name; 
+				$data['node_name'] = $node->display_name;
 			}else{
-				$data['node_name'] = '-'; 
+				$data['node_name'] = '-';
 			}
-			
-			if(($data['recover_time'] == 0)){
+
+			$howlong = is_null($data['howlong']) ? (gettimeofday("YmdHis") - strtotime($data['pause_time'])) : $data['howlong'];
+
+			// if(($data['recover_time'] == 0)){
 				//$howlong = (gettimeofday("YmdHis") - strtotime($data['pause_time'])) / 60;
 				//$data['howlong'] = intval($howlong);
-				$howlong = (gettimeofday("YmdHis") - strtotime($data['pause_time']));
+				// $howlong = (gettimeofday("YmdHis") - strtotime($data['pause_time']));
 				$howlongMM = intval($howlong / 60);
 				$howlongSS = intval($howlong % 60);
 				$data['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
-			}else {
-				//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
-				//$data['howlong'] = intval($howlong);
-				$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
-				$data['howlong'] = intval($howlong);
-				$howlongMM = intval($howlong / 60);
-				$howlongSS = intval($howlong % 60);
-				$data['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
-			}
+			// }else {
+			// 	//$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time'])) / 60;
+			// 	//$data['howlong'] = intval($howlong);
+			// 	$howlong = (strtotime($data['recover_time']) - strtotime($data['pause_time']));
+			// 	$data['howlong'] = intval($howlong);
+			// 	$howlongMM = intval($howlong / 60);
+			// 	$howlongSS = intval($howlong % 60);
+			// 	$data['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
+			// }
 		}
-		
+
 		return array($total, $datas);
 	}
 
@@ -105,7 +107,7 @@ class PauseSeeker
 			$sql = "SELECT id FROM node WHERE section='$section'";
 			$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
 			if(empty($nodeIds)) {
-				return 0;	
+				return 0;
 			}
 			$nodeIdStr = join(',', $nodeIds);
 			$conditions[] = "node_id IN ($nodeIdStr)";
@@ -125,7 +127,7 @@ class PauseSeeker
 		if(!empty($pauseReason)){
 			$conditions[] = "remark LIKE '%$pauseReason%'";
 		}
-		
+
 		$condition = join(' AND ', $conditions);
 
 		$dataSql = "SELECT id, node_id, cause_type, duty_department, pause_time, recover_time FROM pause WHERE $condition";
@@ -223,13 +225,13 @@ class PauseSeeker
 		}
 
 		return array(
-				'detail'=> $detail, 
+				'detail'=> $detail,
 				'series'=> array(
 							'x' => $dSeriesX,
 							'y' => $dSeriesY,
 							'p' => $dSeriesP,
 							'column' => $dColumnY,
-							'cSeries' => $cSeries,			
+							'cSeries' => $cSeries,
 						   ),
 			   );
 	}
@@ -279,7 +281,7 @@ class PauseSeeker
 
 				$capacity = 0;
 				$production = 0;
-				
+
 				foreach($datas as &$data){
 					$runTime = strtotime($data['end_time']) - strtotime($data['start_time']) - 7199;
 					$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($data['start_time'], $data['end_time'], '计划停线'));
@@ -330,7 +332,7 @@ class PauseSeeker
 
 	}
 
-	
+
 
 	public function queryFinishCars($stime, $etime, $nodeId) {
 		//$sql = "SELECT id FROM node WHERE name='$node'";
@@ -354,16 +356,16 @@ class PauseSeeker
 		$ret = array();
 		if($lastDay <= 31) {
 			$pointFormat = 'm-d';
-		} else {	
+		} else {
 			$format = 'Y-m';
 			$stime = date($format, $s);
 			$etime = date($format, $e);
 			$pointFormat = 'Y-m';
 		}
-		
+
 		$t = $s;
 		while($t <= $e) {
-			
+
 			$point = date($pointFormat, $t);
 
 			if($pointFormat === 'm-d'){
@@ -373,16 +375,17 @@ class PauseSeeker
 					'etime' => date($format, $nextD),
 					'point' => $point,
 				);
-				$t = $nextD;	
+				$t = $nextD;
 			} else {
-				$nextM = strtotime('+1 month', $t);
+				$nextM = strtotime('first day of next month', $t);
+				// $nextM = strtotime('+1 month', $t);
 				$ret[] = array(
 					'stime' => date($format, $t),
 					'etime' => date($format, $nextM),
 					'point' => $point,
 				);
 				$t = $nextM;
-			}		
+			}
 		}
 
 		return $ret;

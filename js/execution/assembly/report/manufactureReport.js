@@ -29,12 +29,14 @@ $(document).ready(function () {
     	ajaxQueryManufactureDaily();
     	ajaxQueryCompletion("monthly");
     	ajaxQueryCompletion("yearly");
+    	$("#headText").html("计划完成情况");
     })
 
     $(".queryUse").click(function(){
     	timespan = $(this).attr("timespan");
     	ajaxQueryUse("monthly");
     	ajaxQueryUse("yearly");
+    	$("#headText").html("生产利用");
     })
 
     $(".queryRecycle").click(function(){
@@ -42,6 +44,18 @@ $(document).ready(function () {
     	ajaxQueryRecycle("monthly");
     	ajaxQueryRecycle("yearly");
     	ajaxQueryOvertimeCars();
+    	$("#headText").html("周转车");
+    })
+
+    $(".queryWarehouse").click(function(){
+    	ajaxQueryWarehouse("monthly");
+    	ajaxQueryWarehouse("yearly");
+    	ajaxQueryOvertimeOrders();
+    	$("#headText").html("成品库发车");
+    })
+
+    $(".print").click(function() {
+    	window.print();
     })
 //END event bindings -------------------------
 
@@ -53,8 +67,12 @@ $(document).ready(function () {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftManufactureReportLi").addClass("active");
 
+		$("#divLeft,#divHead").addClass("notPrintable");
+
+
 		$("#startTime").val(window.byd.DateUtil.lastWorkDate());
 		ajaxQueryManufactureDaily();
+		$("#headText").html("计划完成情况");
 		ajaxQueryCompletion("monthly");
     	ajaxQueryCompletion("yearly");
 		resetAll();
@@ -100,7 +118,8 @@ $(document).ready(function () {
 
 	function ajaxQueryCompletion(timespan){
 		$(".completionTable").hide();
-		$
+		$(".completionChart[timespan="+ timespan +"]").hide();
+		$("#tabCompletion .divLoading[timespan="+ timespan +"]").show();
 		$.ajax({
 			url: QUERY_COMPLETION_REPORT,
 			type: "get",
@@ -122,6 +141,8 @@ $(document).ready(function () {
 
 	function ajaxQueryUse(timespan){
 		$(".useTable").hide();
+		$(".useChart[timespan="+ timespan +"]").hide();
+		$("#tabManufactureUse .divLoading[timespan="+ timespan +"]").show();
 		$.ajax({
 			url: QUERY_USE_REPORT,
 			type: "get",
@@ -135,14 +156,17 @@ $(document).ready(function () {
 				if(response.success){
 					report.use.ajaxData = response.data;
 					report.use.drawColumnLine(timespan);
-					// report.use.updateTable(timespan);
+					if(timespan == "monthly"){
+						report.use.updateTable();
+					}
 				}
 			}
 		})
 	}
 
 	function ajaxQueryRecycle(timespan){
-		$("#overtimeCarsTable").hide();
+		$(".recycleChart[timespan="+ timespan +"]").hide();
+		$("#tabRecycle .divLoading[timespan="+ timespan +"]").show();
 		$.ajax({
 			url: QUERY_RECYCLE_REPROT_CHART,
 			type: "get",
@@ -162,6 +186,7 @@ $(document).ready(function () {
 	}
 
 	function ajaxQueryOvertimeCars(){
+		$("#overtimeCarsTable").hide();
 		$.ajax({
 			url: QUERY_OVERTIME_CARS,
 			type: "get",
@@ -172,6 +197,44 @@ $(document).ready(function () {
 				if(response.success){
 					report.recycle.ajaxOvertimeData = response.data;
 					report.recycle.updateTable();
+				}
+			}
+		})
+	}
+
+	function ajaxQueryWarehouse(timespan){
+		$(".warehouseChart[timespan="+ timespan +"]").hide();
+		$("#tabWarehouse .divLoading[timespan="+ timespan +"]").show();
+		$.ajax({
+			url: QUERY_WAREHOUSE_CHART,
+			type: "get",
+			dataType: "json",
+			data: {
+				"date": $("#startTime").val(),
+				"timespan" : timespan,
+			},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success){
+					report.warehouse.ajaxData = response.data;
+					report.warehouse.drawColumnLine(timespan);
+				}
+			}
+		})
+	}
+
+	function ajaxQueryOvertimeOrders() {
+		$("#overtimeOrdersTable").hide();
+		$.ajax({
+			url: QUERY_OVERTIME_ORDERS,
+			type: "get",
+			dataType: "json",
+			data: {},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success){
+					report.warehouse.ajaxOvertimeData = response.data;
+					report.warehouse.updateTable();
 				}
 			}
 		})
@@ -300,34 +363,34 @@ $(document).ready(function () {
 			var count = this.ajaxData.count;
 
 			//clear table and initialize it
-			$("#manufactureDailyTable thead").html("<tr />");
-			$("#manufactureDailyTable tbody").html("");
+			$(".manufactureDailyTable thead").html("<tr />");
+			$(".manufactureDailyTable tbody").html("");
 			$.each(countSeries, function (series, seriesName){
-				$("<tr />").attr("series", series).appendTo($("#manufactureDailyTable tbody"));
+				$("<tr />").attr("series", series).appendTo($(".manufactureDailyTable tbody"));
 			})
 
 			//first column description
-			var pointTr = $("#manufactureDailyTable tr:eq(0)");
+			var pointTr = $(".manufactureDailyTable tr:eq(0)");
 			$("<th />").html("车系").appendTo(pointTr);
 			$.each(countSeries, function (series, seriesName) {
-				$("<td />").html(seriesName).appendTo($("#manufactureDailyTable tr[series=" + series + "]"));
+				$("<td />").html(seriesName).appendTo($(".manufactureDailyTable tr[series=" + series + "]"));
 			})
 
 			//detail data
 			$.each(countPoint, function (key, name) {
-				th = $("<th />").addClass("alignCenter").html(name).appendTo(pointTr);
+				th = $("<th />").addClass("alignCenterDaily").html(name).appendTo(pointTr);
 				if(key.indexOf("Month")>0){
 					th.addClass("countMonth");
 				}
 				$.each(count[key], function (series, value){
-					td = $("<td />").html(value).appendTo($("#manufactureDailyTable tr[series=" + series + "]"));
+					td = $("<td />").html(value).appendTo($(".manufactureDailyTable tr[series=" + series + "]"));
 					if(key.indexOf("Month")>0){
 						td.addClass("countMonth");
 					}
 				})
 			})
 
-			$("#manufactureDailyTable").show();
+			$(".manufactureDailyTable").show();
 		},
 
 		drawColumn: function() {
@@ -357,7 +420,7 @@ $(document).ready(function () {
 	                y: value.y,
 	                color: colors[value.colorIndex],
 	            });
-	    
+
 	            // add version data
 	            for (var j = 0; j < value.drilldown.data.length; j++) {
 	                var brightness = 0.2 - (j / value.drilldown.data.length) / 5 ;
@@ -412,7 +475,7 @@ $(document).ready(function () {
 	                s += sRate;
 	                s += '</table>';
 	                return s;
-            },
+	            },
 			},
 			legend: {
 				layout: 'horizontal',
@@ -426,9 +489,9 @@ $(document).ready(function () {
 					// rotation: -45,
 					align: 'center',
 					style: {
-						fontSize: '12px',	
+						fontSize: '12px',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					} 
+					}
 				}
 			},
 			yAxis: [
@@ -455,7 +518,7 @@ $(document).ready(function () {
 					},
 					min: 0,
 					endOnTick: false,
-					
+
 				},{		// Secondary yAxis
 					title: {
 						enabled: false,
@@ -488,7 +551,7 @@ $(document).ready(function () {
 		                   //      fontWeight: 'bold'
 		                   //  }
 	                    // }
-	                },{ 
+	                },{
 	                    from: 0.8,
 	                    to: 1,
 	                    color: '#d0e9c6',
@@ -575,7 +638,8 @@ $(document).ready(function () {
 			this.chartData.series = columnSeries;
 			this.chartData.xAxis.categories = this.ajaxData.series.x;
 
-			$(".completionChart[timespan="+ timespan +"]").highcharts(this.chartData);
+			$("#tabCompletion .divLoading[timespan="+ timespan +"]").hide();
+			$(".completionChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
 		},
 
 		updateTable: function(timespan) {
@@ -688,9 +752,9 @@ $(document).ready(function () {
 					// rotation: -45,
 					align: 'center',
 					style: {
-						fontSize: '12px',	
+						fontSize: '12px',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					} 
+					}
 				}
 			},
 			yAxis: [
@@ -731,7 +795,7 @@ $(document).ready(function () {
 					},
 					min: 0,
 					endOnTick: false,
-					
+
 				},{		// Secondary yAxis
 					title: {
 						enabled: false,
@@ -764,7 +828,7 @@ $(document).ready(function () {
 		   //                 //      fontWeight: 'bold'
 		   //                 //  }
 	    //                 // }
-	    //             },{ 
+	    //             },{
 	    //                 from: 0.8,
 	    //                 to: 1,
 	    //                 color: '#d0e9c6',
@@ -850,55 +914,40 @@ $(document).ready(function () {
 
 			this.chartData.series = columnSeries;
 			this.chartData.xAxis.categories = this.ajaxData.series.x;
-
+			
+			$("#tabManufactureUse .divLoading[timespan="+ timespan +"]").hide();
+			$(".useChart[timespan="+ timespan +"]").show();
 			$(".useChart[timespan="+ timespan +"]").highcharts(this.chartData);
+			// $(".useChartPrint[timespan="+ timespan +"]").highcharts(this.chartData);
+			
 		},
 
 		updateTable: function(timespan) {
-			var causeArray = this.ajaxData.causeArray;
 			var pauseDetail = this.ajaxData.pauseDetail;
-			var pauseTotal = this.ajaxData.pauseTotal;
-			var useDetail = this.ajaxData.useDetail;
-			var useTotal = this.ajaxData.useTotal;
-
-			thead = $(".useTable[timespan="+ timespan +"] thead").html("<tr />");
-			tbody = $(".useTable[timespan="+ timespan +"] tbody").html("");
-			$.each(causeArray, function (index, cause) {
-				$("<tr />").appendTo(tbody);
-			})
-			trPauseSum = $("<tr />").appendTo(tbody);
-
-			var thTr = thead.children("tr:eq(0)");
-			$("<th />").html("类别").attr("style", "min-width:60px").appendTo(thTr);
-			$("<th />").html("合计").appendTo(thTr);
-
-			$.each(causeArray, function (index, cause) {
-				$("<td />").html(cause).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
-				$("<td />").html(pauseTotal[cause]).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
+			$(".tablePause>tbody").html("");
+			$.each(pauseDetail, function(index, value) {
+				var tr = $("<tr />");
+				$("<td />").html(value.id).appendTo(tr);
+				$("<td />").html(value.cause_type).appendTo(tr);
+				$("<td />").html(value.node_name).appendTo(tr);
+				$("<td />").html(value.duty_department).appendTo(tr);
+				$("<td />").html(value.remark).appendTo(tr);
+				$("<td />").addClass("alignRight").html(value.howlong).appendTo(tr);
+				$("<td />").html(value.pause_time.substr(0,16)).appendTo(tr);
+				if(value.recover_time === "0000-00-00 00:00:00"){
+					$("<td />").html("未恢复").appendTo(tr);
+				}else{
+					$("<td />").html(value.recover_time.substring(0,16)).appendTo(tr);
+				}
+				$("<td />").html(value.editor_name).appendTo(tr);
+				
+				tr.data("id",value.id);
+				
+				$(".tablePause tbody").append(tr);
+				
 			});
-			$("<td />").html('停线总计').appendTo(trPauseSum);
-			$("<td />").html(pauseTotal['总计']).appendTo(trPauseSum);
-
-			$.each(pauseDetail, function (index, value) {
-				$("<td />").html(value.time).appendTo(thTr);
-				$.each(causeArray, function (index, cause) {
-					$("<td />").html(value[cause]).appendTo($(".useTable[timespan="+ timespan +"] tr:eq("+ (index*1+1) +")"));
-				})
-				$("<td />").html(value['总计']).appendTo(trPauseSum);
-			})
-
-			trRunTime = $("<tr />").appendTo(tbody);
-			trUseRate = $("<tr />").appendTo(tbody);
-			$("<td />").html("总工时").appendTo(trRunTime);
-			$("<td />").html("利用率").appendTo(trUseRate);
-			$("<td />").html(useTotal.runTime).appendTo(trRunTime);
-			$("<td />").html(useTotal.useRate).appendTo(trUseRate);
-			$.each(useDetail, function (index, value) {
-				$("<td />").html(value.runTime).appendTo(trRunTime);
-				$("<td />").html(value.useRate).appendTo(trUseRate);
-			})
-
-			$(".useTable[timespan="+ timespan +"]").show();
+	
+			$(".tablePause").show();
 		},
 	}
 
@@ -954,9 +1003,9 @@ $(document).ready(function () {
 					// rotation: -45,
 					align: 'center',
 					style: {
-						fontSize: '12px',	
+						fontSize: '12px',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					} 
+					}
 				}
 			},
 			yAxis: [
@@ -983,7 +1032,7 @@ $(document).ready(function () {
 					},
 					min: 0,
 					// endOnTick: false,
-					
+
 				},{		// Secondary yAxis
 					title: {
 						enabled: false,
@@ -1000,7 +1049,7 @@ $(document).ready(function () {
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						}
 					},
-		
+
 					min: 0,
 					opposite: true,
 					// gridLineWidth: 0,
@@ -1058,12 +1107,14 @@ $(document).ready(function () {
 			this.chartData.series = columnSeries;
 			this.chartData.xAxis.categories = this.ajaxData.series.x;
 
-			$(".recycleChart[timespan="+ timespan +"]").highcharts(this.chartData);
+			$("#tabRecycle .divLoading[timespan="+ timespan +"]").hide();
+			// $(".recycleChart[timespan="+ timespan +"]").show();
+			$(".recycleChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
 		},
 
 		updateTable: function(timespan) {
 			cars = this.ajaxOvertimeData;
-			tbody = $("#overtimeCarsTable tbody").html("");
+			tbody = $(".overtimeCarsTable tbody").html("");
 			$.each(cars, function (index, car){
 				tr = $("<tr />");
 				$("<td />").html(byd.SeriesName[car.series]).appendTo(tr);
@@ -1077,7 +1128,244 @@ $(document).ready(function () {
 
 				tr.appendTo(tbody);
 			})
-			$("#overtimeCarsTable").show();
+			$(".overtimeCarsTable").show();
 		},
+	}
+
+	window.report.warehouse = {
+		ajaxData: {},
+		ajaxOvertimeData: {},
+		chartData: {
+			chart: {
+				renderTo: '',
+			},
+			title: {
+				text: ''
+			},
+			credits: {
+				href: '',
+				text: ''
+			},
+			tooltip: {
+				shared: true,
+				useHTML: true,
+				formatter: function() {
+	                var s = this.x +'<table>';
+	                var sRate = '';
+	                var sCar = '';
+	                total = 0;
+	                $.each(this.points, function(i, point) {
+	                	if(point.series.name === "成品库周期平均"){
+	                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+	                	} else {
+	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
+            				total += this.y;
+	                	}
+	                });
+	                s += sCar;
+	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+	                s += sRate;
+	                s += '</table>';
+	                return s;
+	            },
+			},
+			legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
+			xAxis: {
+				categories: [],
+				labels: {
+					// rotation: -45,
+					align: 'center',
+					style: {
+						fontSize: '12px',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					}
+				}
+			},
+			yAxis: [
+				{		// Primary yAxis
+					labels: {
+						style: {
+							color: Highcharts.getOptions().colors[0],
+						}
+					},
+					stackLabels: {
+	                    enabled: true,
+	                    style: {
+	                        fontWeight: 'bold',
+	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+	                    }
+	                },
+					title: {
+						text: '车辆数',
+						text: null,
+						style: {
+							color: Highcharts.getOptions().colors[0],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					min: 0,
+					endOnTick: true,
+
+				},{		// Secondary yAxis
+					title: {
+						enabled: false,
+						text: '平均周期',
+						style: {
+							color: Highcharts.getOptions().colors[3],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					labels: {
+						enabled: true,
+						formatter: function() {
+							return this.value + 'H'
+						},
+						style: {
+							color: Highcharts.getOptions().colors[3],
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					},
+					// plotBands: [{
+	    //             	from: 0.6,
+	    //                 to: 0.8,
+	    //                 color: '#FCFFC5',
+	    //                 // label: {
+	    //                 // 	text: '50-80%',
+	    //                 // 	align: 'right',
+	    //                 // 	x: -10,
+	    //                 // 	style: {
+		   //                 //      color: 'white',
+		   //                 //      fontWeight: 'bold'
+		   //                 //  }
+	    //                 // }
+	    //             },{
+	    //                 from: 0.8,
+	    //                 to: 1,
+	    //                 color: '#d0e9c6',
+	    //                 label: {
+	    //                 	text: '80%',
+	    //                 	align: 'right',
+	    //                 	x: -10,
+	    //                 	style: {
+		   //                      color: '#910000',
+		   //                      fontWeight: 'bold'
+		   //                  },
+		   //                  verticalAlign: 'bottom',
+	    //                 }
+	    //             },{
+	    //             	from: 0,
+	    //                 to: 0.6,
+	    //                 color: '#ebcccc',
+	    //                 label: {
+	    //                 	text: '60%',
+	    //                 	align: 'right',
+	    //                 	x: -10,
+	    //                 	style: {
+		   //                      color: '#910000',
+		   //                      fontWeight: 'bold',
+		   //                  },
+		   //                  verticalAlign: 'top',
+	    //                 }
+	    //             }],
+					min: 0,
+					opposite: true,
+					gridLineWidth: 0,
+					endOnTick: true,
+				},
+
+			],
+
+			plotOptions: {
+                column: {
+                	stacking: 'normal',
+                    pointPadding: 0.1,
+                    borderWidth: 0,
+                    pointWidth: 15,
+                }
+            },
+
+			series: []
+		},
+
+		drawColumnLine: function(timespan) {
+			columnSeries = [];
+			carSeries = this.ajaxData.carSeries;
+			columnSeriesData = this.ajaxData.series.column;
+			i=0;
+			$.each(carSeries, function (index, series) {
+				columnSeries[index] = {
+					type: 'column',
+					name: series,
+					data: columnSeriesData[series]
+				}
+				i=index;
+			})
+			columnSeries[++i] ={
+				type: 'line',
+				yAxis: 1,
+				showInLegend: false,
+				name: '成品库周期平均',
+				data: this.ajaxData.series.line,
+				dataLabels:{
+					enabled: false,
+					style: {
+						fontSize: '14px',
+						fontWeight: 'bold',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					},
+					align: 'center',
+        			color: Highcharts.getOptions().colors[i],
+        			formatter: function() {
+        				return this.y +'H';
+        			}
+				},
+			}
+
+			this.chartData.series = columnSeries;
+			this.chartData.xAxis.categories = this.ajaxData.series.x;
+
+			$("#tabWarehouse .divLoading[timespan="+ timespan +"]").hide();
+			$(".warehouseChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
+		},
+
+		updateTable: function() {
+			boards = this.ajaxOvertimeData;
+			tbody = $(".overtimeOrdersTable tbody").html("");
+			$.each(boards, function (board, value) {
+				var num = value.orders.length;
+				var tmp = $("<tbody />");
+				for(var i=0; i<num; i++){
+					$("<tr />").appendTo(tmp);
+				}
+
+				$.each(value.orders, function (index, order) {
+					tr = tmp.children("tr:eq("+ index +")");
+					$("<td />").html(order.lane_name).appendTo(tr);
+					$("<td />").html(order.order_number).appendTo(tr);
+					$("<td />").html(order.distributor_name).appendTo(tr);
+					$("<td />").html(order.series_name).appendTo(tr);
+					$("<td />").html(order.car_type_config).appendTo(tr);
+					$("<td />").html(order.color).appendTo(tr);
+					$("<td />").html(order.amount).addClass('alignRight').appendTo(tr);
+    				$("<td />").html(order.hold).addClass('alignRight').appendTo(tr);
+    				$("<td />").html(order.count).addClass('alignRight').appendTo(tr);
+    				$("<td />").html(order.activate_time).appendTo(tr);
+				})
+				var firstTr = tmp.children("tr:eq(0)");
+	    		firstTr.addClass("thickBorder");
+	    		boardTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardNumber).prependTo(firstTr);
+	    		periodTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardWarehousePeriod + "H").appendTo(firstTr);
+	    		$(".overtimeOrdersTable tbody").append(tmp.children("tr"));
+			})
+
+			$(".overtimeOrdersTable").show();
+		}
 	}
 })

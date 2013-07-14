@@ -235,6 +235,10 @@ var GET_PAUSE_DUTY_DEPARTMENT_LIST = "/bms/pause/getDutyDepartment";
 var PLAN_PAUSE_SAVE = "/bms/pause/planPauseSave";
 var PAUSE_DELETE = "/bms/pause/delete";
 
+var QUERY_SHIFT_RECORD = "/bms/shift/query";
+var SHIFT_RECORD_SAVE = "/bms/shift/save";
+var SHIFT_RECORD_DELETE = "/bms/shift/delete";
+
 //added by wujun
 //order maintain
 var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";
@@ -304,6 +308,8 @@ var QUERY_COMPLETION_REPORT = "/bms/report/queryCompletion";
 var QUERY_USE_REPORT = "/bms/report/queryUse";
 var QUERY_RECYCLE_REPROT_CHART = "/bms/report/queryRecycleChart";
 var QUERY_OVERTIME_CARS = "/bms/report/queryOvertimeCars";
+var QUERY_WAREHOUSE_CHART = "/bms/report/queryWarehouseChart";
+var QUERY_OVERTIME_ORDERS = "/bms/report/queryOvertimeOrders";
 
 function alertError (message) {
 	message = 'ajax error'

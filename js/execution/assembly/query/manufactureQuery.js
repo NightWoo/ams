@@ -561,7 +561,7 @@ $(document).ready(function () {
 				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
 				"curPage": targetPage || 1,
-				"orderBy": 'DESC'
+				"orderBy": 'ORDER BY pause_time DESC'
 			},
 			success: function(response) {
 				if(response.success) {
@@ -595,7 +595,7 @@ $(document).ready(function () {
 							$("#prePause, #firstPause").removeClass("disabled");
 							$("#prePause a, #firstPause a").attr("href","#");
 						}
-		    			if(response.data.pager.curPage * 20 >= response.data.pager.total ) {
+		    			if(response.data.pager.curPage * 10 >= response.data.pager.total ) {
 		    				//$(".nextPage").hide();
 							$("#nextPause, #lastPause").addClass("disabled");
 							$("#nextPause a, #lastPause a").removeAttr("href");

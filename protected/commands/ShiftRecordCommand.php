@@ -1,10 +1,12 @@
 <?php
 Yii::import('application.models.AR.ShiftRecordAR');
 Yii::import('application.models.AR.PauseAR');
+Yii::import('application.models.Shift');
+Yii::import('application.models.AR.ShiftRecordAR');
 class ShiftRecordCommand extends CConsoleCommand
 {
-	public function run($args) {
-		
+	public function actionAddShiftDaily() {
+
 		$lineSpeed = array(
 			'0' => 120,
 			'1' => 120
@@ -12,7 +14,7 @@ class ShiftRecordCommand extends CConsoleCommand
 
 		$curDate = DateUtil::getCurDate();
 		$lastDate = DateUtil::getLastDate();
-		
+
 		foreach($lineSpeed as $shift => $value){
 			$ar = new ShiftRecordAR();
 			$ar->line = 'I';
@@ -56,6 +58,12 @@ class ShiftRecordCommand extends CConsoleCommand
 		$this->addPlanPause($stime, $etime, "凌晨例行休息");
 	}
 
+	public function actionAddCapacityDaily() {
+		$workDate = DateUtil::getLastDate();
+		$shift = new Shift();
+		$shift->updateCapacityDaily($workDate);
+	}
+
 	public function addPlanPause($stime, $etime, $remark=""){
 		$pause = new PauseAR();
 		$pause->line = "I";
@@ -67,5 +75,6 @@ class ShiftRecordCommand extends CConsoleCommand
 		$pause->editor = 2;
 		$pause->edit_time = date('YmdHis');
 		$pause->save();
+
 	}
 }

@@ -22,6 +22,7 @@ class NodeSeeker
 					"F1" =>8,
 					"F2" =>9,
 					"VQ1" =>10,
+					"VQ1_2" =>209,
 					"CHECK_LINE" =>13,
 					"ROAD_TEST_FINISH" =>15,
 					"VQ2" =>16,
@@ -211,17 +212,15 @@ class NodeSeeker
 			$etime = date($format, $eNextH) . ":00:00";
 		} elseif($lastDay <= 31) {//day
 			$format = 'Y-m-d';
-			//$stime = date($format, $s) . " 00:00:00";
-			//$etime = date($format, $e) . " 23:59:59";
 			$stime = date($format, $s) . " 08:00:00";								//added by wujun
 			$eNextD = strtotime('+1 day', $e);		//next day						//added by wujun
 			$etime = date($format, $eNextD) . " 07:59:59";	//befor next workday	//added by wujun
 		} else {//month
 			$format = 'Y-m';
-			//$stime = date($format, $s) . "-01 00:00:00";
-			//$etime = date('Y-m-t', $e) . " 23:59:59";
 			$stime = date($format, $s) . "-01 08:00:00";	//firstday				//added by wujun
-			$eNextM = strtotime('+1 month', $e);			//next month			//added by wujun
+			$lastDay = strtotime(date("Y-m-t", $s));
+			$eNextM = strtotime('+1 day', $lastDay);		//next month
+			// $eNextM = strtotime('+1 month', $e);			//next month			//added by wujun
 			$etime = date('Y-m', $eNextM) . "-01 07:59:59";	//next month firstday	//added by wujun
 		}
 

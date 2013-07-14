@@ -66,7 +66,7 @@ $("document").ready(function() {
 					if (response.data.frontImage == "" || response.data.backImage == "") {
 						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
-						setTimeout(function (){window.print();},500);
+						setTimeout(function (){window.print();},800);
 						fadeMessageAlert(response.message,"alert-success");
 					}
 				} else {
