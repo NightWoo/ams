@@ -90,7 +90,8 @@ $(document).ready(function() {
 					$("#orderNumberInfo, #orderNumberPrint").html(data.order_number);
 					$("#distributorInfo, #distributorPrint").html(data.distributor_name);
 					$("#laneInfo").html(data.lane + "道");
-					$("#lanePrint").html(data.lane + "道-" + byd.DateUtil.currentTime());
+					// $("#lanePrint").html(data.lane + "道-" + byd.DateUtil.currentTime());
+					$("#lanePrint").html(data.lane + "道 @ " + data.activate_time);
 					$("#carInfo").attr("orderId", data.order_id);
 					$("#carInfo").hide();
 					toggleHint(false);

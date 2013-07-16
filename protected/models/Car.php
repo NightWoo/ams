@@ -1599,6 +1599,7 @@ class Car
 		$data['driver_name'] = '';
         $data['order_number'] = '-------------------';
 		$data['lane'] = '--';
+		$data['activate_time'] = '----';
 		if(!empty($data['order_id'])){
 			$order = OrderAR::model()->findByPk($data['order_id']);
 			$data['order_number'] = $order->order_number;
@@ -1606,6 +1607,7 @@ class Car
 			if(!empty($order->lane_id)){
 				$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
 			}
+			$data['activate_time'] = $order->activate_time;
 		}
 		if($data['warehouse_id'] == 1){
 			$trace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,96));

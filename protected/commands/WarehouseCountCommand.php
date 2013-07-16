@@ -21,7 +21,7 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$stime = $lastDate . " 08:00:00";
 		$etime = $curDate . " 08:00:00";
-		// $undistributed = $this->countUndistributed($etime);
+		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);

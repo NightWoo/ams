@@ -134,6 +134,7 @@ class Order
 			$data['orderId'] = $order->id;
 			$data['orderNumber'] = $order->order_number;
 			$data['distributorName'] = $order->distributor_name;
+			$data['activateTime'] = $order->activate_time;
 			$data['laneId'] = $order->lane_id;
 			$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
 
@@ -239,6 +240,7 @@ class Order
 				$data['color'] = $matchedCar->color;
 				$data['order_number'] = $matchedOrder->order_number;
 				$data['distributor_name'] = $matchedOrder->distributor_name;
+				$data['activate_time'] = $matchedOrder->activate_time;
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
 				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';

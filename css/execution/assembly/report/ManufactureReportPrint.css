@@ -67,6 +67,10 @@ legend {
 
 .completionTable th, .useTable th, #manufactureDailyTable th {
 	min-width: 50px;
+	vertical-align: middle;
+}
+#manufactureDailyTable tr:first-child th{
+	text-align: center;
 }
 
 .completionTable, .useTable, .overtimeCarsTable, .tablePause, .overtimeOrdersTable {

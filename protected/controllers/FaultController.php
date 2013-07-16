@@ -133,9 +133,17 @@ class FaultController extends BmsBaseController
             }
 
             $tablePrefix = "VQ1_STATIC_TEST";
-            if($car->car->assembly_line == "II")  $tablePrefix = "VQ1_STATIC_TEST_2";
+            $nodeName = "VQ1";
+            if($car->car->assembly_line == "II"){
+                $tablePrefix = "VQ1_STATIC_TEST_2";
+                $nodeName = "VQ1_2";
+            }  
 			$fault = Fault::create($tablePrefix, $vin, $faults);	
 			$fault->save('离线');
+
+            $node = Node::createByName($nodeName);
+            $car->detectStatus($node);
+
             $this->renderJsonBms(true, 'OK');
             $transaction->commit();
         } catch(Exception $e) {
@@ -161,11 +169,19 @@ class FaultController extends BmsBaseController
 	public function actionSaveVQ2Road() {
         $vin = $this->validateStringVal('vin', '');
         $faults = $this->validateStringVal('fault', '[]');
+        $transaction = Yii::app()->db->beginTransaction();
         try{
             $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('离线');
+
+            $car = Car::create($vin);
+            $node = Node::createByName("ROAD_TEST_FINISH");
+            $car->detectStatus($node);
+
+            $transaction->commit();
             $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false , $e->getMessage());
         }
 
@@ -188,11 +204,19 @@ class FaultController extends BmsBaseController
 	public function actionSaveVQ2Leak() {
         $vin = $this->validateStringVal('vin', '');
         $faults = $this->validateStringVal('fault', '[]');
+        $transaction = Yii::app()->db->beginTransaction();
         try{
             $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
             $fault->save('离线');
+
+            $car = Car::create($vin);
+            $node = Node::createByName("VQ2");
+            $car->detectStatus($node);
+
+            $transaction->commit();
             $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false , $e->getMessage());
         }
 
@@ -216,6 +240,7 @@ class FaultController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         $faults = $this->validateStringVal('fault', '[]');
         $driverId = $this->validateStringVal('driver', 0);
+        $transaction = Yii::app()->db->beginTransaction();
         try{
             $others = array(
                 'checker' => $driverId,
@@ -225,10 +250,14 @@ class FaultController extends BmsBaseController
             $fault->save('离线');
 			
 			$car = Car::create($vin);
-            
+            $node = Node::createByName("VQ3");
+            $car->detectStatus($node);
+
+            $transaction->commit();
             $this->renderJsonBms(true, 'OK');
 			$vinMessage = $car->throwVinAssembly($car->vin, '面漆修正');
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false , $e->getMessage());
         }
 

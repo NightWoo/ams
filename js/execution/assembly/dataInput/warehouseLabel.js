@@ -94,7 +94,7 @@ $(document).ready(function() {
 					$("#vinPrint").html(data.vin + '-' + data.color);
 					$("#orderNumberPrint").html(data.order_number);
 					$("#distributorPrint").html(data.distributor_name);
-					$("#lanePrint").html(data.lane + "道");
+					$("#lanePrint").html(data.lane + "道 @ " + data.activate_time);
 				  	setTimeout(function (){window.print();},500);
 					fadeMessageAlert(response.message,"alert-success");
 					resetPage();

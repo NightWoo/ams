@@ -113,7 +113,7 @@
 			<div style="text-align:center;font-size:10pt;margin: 0 5pt;">
 				<p id="orderNumberPrint" style="margin:2pt 5pt;"></p>
 			</div>
-			<div style="text-align:center;font-size:14pt;margin: 0 5pt;">
+			<div style="text-align:center;font-size:12pt;margin: 0 5pt;">
 				<p id="lanePrint" style="margin:2pt 5pt;"></p>
 			</div>
 		</div>   	

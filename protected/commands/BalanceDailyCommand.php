@@ -9,7 +9,7 @@ class BalanceDailyCommand extends CConsoleCommand
 		'6B' => '思锐',
 	);
 
-	private static $STATES=array('onLine','VQ1','VQ2','VQ3','WH');
+	private static $STATES=array('onLine','onLine-2','VQ1','VQ2','VQ3','WH');
 
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();

@@ -58,7 +58,6 @@
                                 <li><a class="printWarehouse" point='distribute' timespan='monthly'>成品库发车</a></li>
                               </ul>
                         </div> -->
-                        <span id="headText" class="screenHide"></span>
                     </span>
                     <span class="pull-right">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
@@ -66,12 +65,12 @@
                 </legend>
             </div >
                 <div style="width:820pt;margin: 0px auto;">
-                    <ul id="tabUl" class="nav nav-pills notPrintable">
-                        <li class="active"><a class="queryCompletion" href="#tabCompletion" data-toggle="tab">计划完成</a></li>
-                        <li><a class="queryUse" href="#tabManufactureUse" data-toggle="tab">生产利用</a></li>
-                        <li><a class="queryRecycle" href="#tabRecycle" data-toggle="tab">周转车</a></li>
-                        <li><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab">成品库发车</a></li>
-                        <li><a class="print" href="#"><i class="icon-print"></i></a></li>
+                    <ul id="tabUl" class="nav nav-pills">
+                        <li class="active"><a class="queryCompletion" href="#tabCompletion" data-toggle="tab">上线与计划完成率</a></li>
+                        <li class="notPrintable"><a class="queryUse" href="#tabManufactureUse" data-toggle="tab">停线时间与生产利用率</a></li>
+                        <li class="notPrintable"><a class="queryRecycle" href="#tabRecycle" data-toggle="tab">周转车与生产周期</a></li>
+                        <li class="notPrintable"><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab">发车与成品库周期</a></li>
+                        <li class="notPrintable"><a class="print" href="#"><i class="icon-print"></i></a></li>
                         <!-- <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 导出
@@ -88,13 +87,13 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabCompletion">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="completionMonthlyChart" class="completionChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
@@ -112,13 +111,13 @@
                         </div>
                         <div class="tab-pane printable" id="tabManufactureUse">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
@@ -126,18 +125,18 @@
                                 </div>
                             </div>
                             <div>
-                                <table id="tablePause" class="table table-condensed table-hover tablePause" style="display: none;">
+                                <table id="tablePause" class="table table-condensed table-bordered tablePause" style="display: none;">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <!-- <th>ID</th> -->
                                             <th class="thType">停线类型</th>
-                                            <th class="thSeat">工位</th>
                                             <th class="thDuty">责任部门</th>
                                             <th class="thReason">原因</th>
+                                            <th class="thHowlong alignRight">总时长</th>
                                             <th class="thHowlong alignRight">时长</th>
                                             <th class="thPauseTime">停线时刻</th>
                                             <th class="thRecoverTime">恢复时刻</th>
-                                            <th class="thEditor">编辑人</th>
+                                            <th class="thSeat">工位</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -148,13 +147,13 @@
                         </div>
                         <div class="tab-pane" id="tabRecycle">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="recycleMonthlyChart" class="recycleChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
@@ -166,14 +165,14 @@
                                     <table id="overtimeCarsTable" class="table table-bordered table-condensed initHide overtimeCarsTable">
                                         <thead>
                                             <tr>
+                                                <th style="min-width:60px">周转周期</th>
                                                 <th style="min-width:40px">车系</th>
                                                 <th>流水号</th>
                                                 <th>VIN号</th>
-                                                <th style="min-width:200px">配置</th>
+                                                <th style="min-width:160px">配置</th>
                                                 <th style="min-width:60px">颜色</th>
-                                                <th style="min-width:80px">状态</th>
-                                                <th>未修复故障</th>
-                                                <th style="min-width:60px">周转周期</th>
+                                                <th style="min-width:60px">状态</th>
+                                                <th>备注</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -183,13 +182,13 @@
                         </div>
                         <div class="tab-pane" id="tabWarehouse">
                             <div class="row-fluid">
-                                <div class="span7">
+                                <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="warehouseMonthlyChart" class="warehouseChart" timespan="monthly"></div>
                                 </div>
-                                <div class="span5">
+                                <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
@@ -203,14 +202,14 @@
                                             <th>备板编号</th>
                                             <th style="min-width:40px">车道</th>
                                             <th>订单号</th>
-                                            <th style="min-width:160px">经销商</th>
+                                            <!-- <th style="min-width:160px">经销商</th> -->
                                             <th style="min-width:40px">车系</th>
                                             <th style="min-width:160px">车型/配置/耐寒性</th>
                                             <th style="min-width:60px">颜色</th>
                                             <th style="min-width:30px">数量</th>
                                             <th style="min-width:30px">已备</th>
                                             <th style="min-width:30px">出库</th>
-                                            <th style="min-width:70px">指令激活</th>
+                                            <th style="min-width:120px">指令激活</th>
                                             <th><i class="icon-time"></i></th>
                                         </tr>
                                     </thead>

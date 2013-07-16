@@ -29,14 +29,16 @@ $(document).ready(function () {
     	ajaxQueryManufactureDaily();
     	ajaxQueryCompletion("monthly");
     	ajaxQueryCompletion("yearly");
-    	$("#headText").html("计划完成情况");
+    	$("#tabUl>li").addClass("notPrintable");
+    	$(this).parent("li").removeClass("notPrintable");
     })
 
     $(".queryUse").click(function(){
     	timespan = $(this).attr("timespan");
     	ajaxQueryUse("monthly");
     	ajaxQueryUse("yearly");
-    	$("#headText").html("生产利用");
+    	$("#tabUl>li").addClass("notPrintable");
+    	$(this).parent("li").removeClass("notPrintable");
     })
 
     $(".queryRecycle").click(function(){
@@ -44,14 +46,16 @@ $(document).ready(function () {
     	ajaxQueryRecycle("monthly");
     	ajaxQueryRecycle("yearly");
     	ajaxQueryOvertimeCars();
-    	$("#headText").html("周转车");
+    	$("#tabUl>li").addClass("notPrintable");
+    	$(this).parent("li").removeClass("notPrintable");
     })
 
     $(".queryWarehouse").click(function(){
     	ajaxQueryWarehouse("monthly");
     	ajaxQueryWarehouse("yearly");
     	ajaxQueryOvertimeOrders();
-    	$("#headText").html("成品库发车");
+    	$("#tabUl>li").addClass("notPrintable");
+    	$(this).parent("li").removeClass("notPrintable");
     })
 
     $(".print").click(function() {
@@ -131,8 +135,8 @@ $(document).ready(function () {
 			error: function() {alertError();},
 			success: function(response) {
 				if(response.success){
-					report.completion.ajaxData = response.data;
-					report.completion.drawColumnLine(timespan);
+					report["completion"].ajaxData = response.data;
+					report["completion"].drawColumnLine(timespan);
 					// report.completion.updateTable(timespan);
 				}
 			}
@@ -154,8 +158,8 @@ $(document).ready(function () {
 			error: function() {alertError();},
 			success: function(response) {
 				if(response.success){
-					report.use.ajaxData = response.data;
-					report.use.drawColumnLine(timespan);
+					report["use"].ajaxData = response.data;
+					report["use"].drawColumnLine(timespan);
 					if(timespan == "monthly"){
 						report.use.updateTable();
 					}
@@ -363,15 +367,24 @@ $(document).ready(function () {
 			var count = this.ajaxData.count;
 
 			//clear table and initialize it
-			$(".manufactureDailyTable thead").html("<tr />");
-			$(".manufactureDailyTable tbody").html("");
+			headTr = "<tr>"
+					+"<th rowspan='2'>车系</th>"
+					+"<th colspan='3'>当日上线-I线</th>"
+					+"<th colspan='3'>当日上线-II线</th>"
+					+"<th colspan='2'>当日成品库</th>"
+					+"<th colspan='2'>当日结存</th>"
+					+"<th colspan='3'>当月完成</th>"
+					+"</tr>"
+					+"<tr></tr>";
+			$(".manufactureDailyTable>thead").html(headTr);
+			$(".manufactureDailyTable>tbody").html("");
 			$.each(countSeries, function (series, seriesName){
 				$("<tr />").attr("series", series).appendTo($(".manufactureDailyTable tbody"));
 			})
 
 			//first column description
-			var pointTr = $(".manufactureDailyTable tr:eq(0)");
-			$("<th />").html("车系").appendTo(pointTr);
+			var pointTr = $(".manufactureDailyTable tr:eq(1)");
+			// $("<th />").html("车系").appendTo(pointTr);
 			$.each(countSeries, function (series, seriesName) {
 				$("<td />").html(seriesName).appendTo($(".manufactureDailyTable tr[series=" + series + "]"));
 			})
@@ -379,14 +392,14 @@ $(document).ready(function () {
 			//detail data
 			$.each(countPoint, function (key, name) {
 				th = $("<th />").addClass("alignCenterDaily").html(name).appendTo(pointTr);
-				if(key.indexOf("Month")>0){
-					th.addClass("countMonth");
-				}
+				// if(key.indexOf("Month")>0){
+				// 	th.addClass("countMonth");
+				// }
 				$.each(count[key], function (series, value){
 					td = $("<td />").html(value).appendTo($(".manufactureDailyTable tr[series=" + series + "]"));
-					if(key.indexOf("Month")>0){
-						td.addClass("countMonth");
-					}
+					// if(key.indexOf("Month")>0){
+					// 	td.addClass("countMonth");
+					// }
 				})
 			})
 
@@ -439,166 +452,413 @@ $(document).ready(function () {
 	}
 
 	window.report.completion = {
+		// timespan : 'monthly',
 		ajaxData: {},
 
 		chartData: {
-			chart: {
-				renderTo: '',
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				href: '',
-				text: ''
-			},
-			tooltip: {
-				shared: true,
-				useHTML: true,
-				formatter: function() {
-	                var s = this.x +'<table>';
-	                var sRate = '';
-	                var sCar = '';
-	                total = 0;
-	                $.each(this.points, function(i, point) {
-	                	if(point.series.name === "计划完成率"){
-	                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
-	                	} else {
-	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
-            				total += this.y;
-	                	}
-	                });
-	                s += sCar;
-	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
-	                s += sRate;
-	                s += '</table>';
-	                return s;
-	            },
-			},
-			legend: {
-				layout: 'horizontal',
-				align: 'center',
-				verticalAlign: 'top',
-				borderWidth: 0,
-			},
-			xAxis: {
-				categories: [],
-				labels: {
-					// rotation: -45,
+			"monthly" : {
+				chart: {
+					renderTo: '',
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				title: {
+					text: ''
+				},
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "计划完成率"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+		            },
+				},
+				legend: {
+					layout: 'horizontal',
 					align: 'center',
-					style: {
-						fontSize: '12px',
-						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					}
-				}
-			},
-			yAxis: [
-				{		// Primary yAxis
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
 					labels: {
+						// rotation: -45,
+						align: 'center',
 						style: {
-							color: Highcharts.getOptions().colors[4],
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[4],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							text: '车辆数',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: false,
+
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '计划完成率',
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							enabled: false,
+							formatter: function() {
+								return Math.round(this.value * 100) + '%'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						plotBands: [{
+		                	from: 0.6,
+		                    to: 0.8,
+		                    color: '#FCFFC5',
+		                    // label: {
+		                    // 	text: '50-80%',
+		                    // 	align: 'right',
+		                    // 	x: -10,
+		                    // 	style: {
+			                   //      color: 'white',
+			                   //      fontWeight: 'bold'
+			                   //  }
+		                    // }
+		                },{
+		                    from: 0.8,
+		                    to: 1,
+		                    color: '#d0e9c6',
+		                    label: {
+		                    	text: '80%',
+		                    	align: 'right',
+		                    	x: -10,
+		                    	style: {
+			                        color: '#910000',
+			                        fontWeight: 'bold'
+			                    },
+			                    verticalAlign: 'bottom',
+		                    }
+		                },{
+		                	from: 0,
+		                    to: 0.6,
+		                    color: '#ebcccc',
+		                    label: {
+		                    	text: '60%',
+		                    	align: 'right',
+		                    	x: -10,
+		                    	style: {
+			                        color: '#910000',
+			                        fontWeight: 'bold',
+			                    },
+			                    verticalAlign: 'top',
+		                    }
+		                }],
+						max: 1,
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: false,
 					},
-					stackLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold',
-	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                        	// console.log(this.point);
+	                            if(!this.point.show)
+	                                return '';
+	                            return Math.round(this.y * 100) + '%';
+	                        }
 	                    }
 	                },
-					title: {
-						text: '车辆数',
-						text: null,
-						style: {
-							color: Highcharts.getOptions().colors[4],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					min: 0,
-					endOnTick: false,
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        // console.log(this.series.name);
+			                        console.log(this);
+	                        		console.log("len:" + this.series.chart.series.length);
+	                        		console.log(this.series.chart.series);
+			                        console.log(this.x + ":" + this.y);
+			                        report.completion.toggleClickPointData("monthly", this.x, this.y, this.series.index);
 
-				},{		// Secondary yAxis
-					title: {
-						enabled: false,
-						text: '计划完成率',
-						style: {
-							color: Highcharts.getOptions().colors[5],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					labels: {
-						enabled: false,
-						formatter: function() {
-							return Math.round(this.value * 100) + '%'
-						},
-						style: {
-							color: Highcharts.getOptions().colors[5],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					plotBands: [{
-	                	from: 0.6,
-	                    to: 0.8,
-	                    color: '#FCFFC5',
-	                    // label: {
-	                    // 	text: '50-80%',
-	                    // 	align: 'right',
-	                    // 	x: -10,
-	                    // 	style: {
-		                   //      color: 'white',
-		                   //      fontWeight: 'bold'
-		                   //  }
-	                    // }
-	                },{
-	                    from: 0.8,
-	                    to: 1,
-	                    color: '#d0e9c6',
-	                    label: {
-	                    	text: '80%',
-	                    	align: 'right',
-	                    	x: -10,
-	                    	style: {
-		                        color: '#910000',
-		                        fontWeight: 'bold'
-		                    },
-		                    verticalAlign: 'bottom',
-	                    }
-	                },{
-	                	from: 0,
-	                    to: 0.6,
-	                    color: '#ebcccc',
-	                    label: {
-	                    	text: '60%',
-	                    	align: 'right',
-	                    	x: -10,
-	                    	style: {
-		                        color: '#910000',
-		                        fontWeight: 'bold',
-		                    },
-		                    verticalAlign: 'top',
-	                    }
-	                }],
-					max: 1,
-					min: 0,
-					opposite: true,
-					gridLineWidth: 0,
-					endOnTick: false,
+			      					$(".completionChart[timespan=monthly]").highcharts(report.completion.chartData['monthly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
+
+				series: []
+			},
+			"yearly" : {
+				chart: {
+					renderTo: '',
+					spacingTop: 48,
 				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				title: {
+					text: ''
+				},
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "计划完成率"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+		            },
+				},
+				legend: {
+					enabled: false,
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[4],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							text: '车辆数',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: false,
 
-			],
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '计划完成率',
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							enabled: false,
+							formatter: function() {
+								return Math.round(this.value * 100) + '%'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						plotBands: [{
+		                	from: 0.6,
+		                    to: 0.8,
+		                    color: '#FCFFC5',
+		                    // label: {
+		                    // 	text: '50-80%',
+		                    // 	align: 'right',
+		                    // 	x: -10,
+		                    // 	style: {
+			                   //      color: 'white',
+			                   //      fontWeight: 'bold'
+			                   //  }
+		                    // }
+		                },{
+		                    from: 0.8,
+		                    to: 1,
+		                    color: '#d0e9c6',
+		                    label: {
+		                    	text: '80%',
+		                    	align: 'right',
+		                    	x: -10,
+		                    	style: {
+			                        color: '#910000',
+			                        fontWeight: 'bold'
+			                    },
+			                    verticalAlign: 'bottom',
+		                    }
+		                },{
+		                	from: 0,
+		                    to: 0.6,
+		                    color: '#ebcccc',
+		                    label: {
+		                    	text: '60%',
+		                    	align: 'right',
+		                    	x: -10,
+		                    	style: {
+			                        color: '#910000',
+			                        fontWeight: 'bold',
+			                    },
+			                    verticalAlign: 'top',
+		                    }
+		                }],
+						max: 1,
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: false,
+					},
 
-			plotOptions: {
-                column: {
-                	stacking: 'normal',
-                    pointPadding: 0.1,
-                    borderWidth: 0,
-                    pointWidth: 15,
-                }
-            },
+				],
 
-			series: []
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                        	// console.log(this.point);
+	                            if(!this.point.show)
+	                                return '';
+	                            return Math.round(this.y * 100) + '%';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        // console.log(this.series.name);
+			                        console.log(this);
+	                        		console.log("len:" + this.series.chart.series.length);
+	                        		console.log(this.series.chart.series);
+			                        console.log(this.x + ":" + this.y);
+			                        report.completion.toggleClickPointData("yearly", this.x, this.y, this.series.index);
+
+			      					$(".completionChart[timespan=yearly]").highcharts(report.completion.chartData['yearly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
+
+				series: []
+			},
 		},
 
 		drawColumnLine: function(timespan) {
@@ -619,27 +879,28 @@ $(document).ready(function () {
 				yAxis: 1,
 				showInLegend: false,
 				name: '计划完成率',
-				data: this.ajaxData.series.line,
+				data: report.completion.prepare(this.ajaxData.series.line),
+				// data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: false,
+					enabled: true,
 					style: {
-						fontSize: '14px',
+						fontSize: '12px',
 						fontWeight: 'bold',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 					},
 					align: 'center',
         			color: Highcharts.getOptions().colors[i],
-        			formatter: function() {
-        				return (this.y * 100).toFixed(0) + '%';
-        			}
+        			// formatter: function() {
+        			// 	return (this.y * 100).toFixed(0) + '%';
+        			// }
 				},
 			}
 
-			this.chartData.series = columnSeries;
-			this.chartData.xAxis.categories = this.ajaxData.series.x;
+			this.chartData[timespan].series = columnSeries;
+			this.chartData[timespan].xAxis.categories = this.ajaxData.series.x;
 
 			$("#tabCompletion .divLoading[timespan="+ timespan +"]").hide();
-			$(".completionChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
+			$(".completionChart[timespan="+ timespan +"]").show().highcharts(this.chartData[timespan]);
 		},
 
 		updateTable: function(timespan) {
@@ -684,198 +945,384 @@ $(document).ready(function () {
 
 			$(".completionTable[timespan="+ timespan +"]").show();
 		},
+
+		toggleClickPointData : function (timespan, x, y, index) {
+			console.log(this.chartData);
+			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
+				if(value.y == y && value.x == x) {
+					value.show = !value.show;
+					return false;
+				}
+			})
+		},
+
+		prepare : function  (dataArray) {
+            return $(dataArray).map(function (index, item) {                
+                return { x: index, y: item, show: false};
+            });  
+        },
 	}
 
 	window.report.use = {
 		ajaxData: {},
 
 		chartData: {
-			chart: {
-				renderTo: '',
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				href: '',
-				text: ''
-			},
-			tooltip: {
-				shared: true,
-				useHTML: true,
-				formatter: function() {
-	                var s = this.x +'<table>';
-	                var sRate = '';
-	                var sCar = '';
-	                total = 0;
-	                $.each(this.points, function(i, point) {
-	                	if(point.series.name === "生产利用率"){
-	                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
-	                	} else {
-	                		hh = parseInt(this.y / 3600);
-	                		mm = parseInt((this.y%3600) / 60);
-            				ss = (this.y % 60);
-
-            				mm = mm<10 ? '0'+mm : mm;
-            				ss = ss<10 ? '0'+ss : ss;
-
-	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ hh + ':' +  mm + '\'' + ss + '\"' +'</b></td></tr>';
-            				total += this.y;
-	                	}
-	                });
-	                s += sCar;
-
-	                hht = parseInt(total / 3600);
-            		mmt = parseInt((total%3600) / 60);
-    				sst = (total % 60);
-
-    				mmt = mmt<10 ? '0'+mmt : mmt;
-    				sst = sst<10 ? '0'+sst : sst;
-
-	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ hht + ':' +  mmt + '\'' + sst + '\"' +'</b></td></tr>';
-	                s += sRate;
-	                s += '</table>';
-	                return s;
-            },
-			},
-			legend: {
-				layout: 'horizontal',
-				align: 'center',
-				verticalAlign: 'top',
-				borderWidth: 0,
-			},
-			xAxis: {
-				categories: [],
-				labels: {
-					// rotation: -45,
-					align: 'center',
-					style: {
-						fontSize: '12px',
-						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					}
-				}
-			},
-			yAxis: [
-				{		// Primary yAxis
-					labels: {
-						style: {
-							color: Highcharts.getOptions().colors[4],
-						},
-						formatter: function() {
-		                    	hh = parseInt(this.value / 3600).toFixed(0);
-			                    return hh + "H";
-		                }
-					},
-					stackLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold',
-	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-	                    },
-	                    formatter: function() {
-	                    	if(this.total > 0){
-		                    	hh = parseInt(this.total / 3600);
-			            		mm = ((this.total%3600) / 60).toFixed(0);
-			            		mm = mm<10 ? '0'+mm : mm;
-			                    return hh + ':' +  mm + '\'';
-	                    	} else {
-	                    		return null;
-	                    	}
-		                }
-	                },
-					title: {
-						text: '停线时长',
-						text: null,
-						style: {
-							color: Highcharts.getOptions().colors[4],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					min: 0,
-					endOnTick: false,
-
-				},{		// Secondary yAxis
-					title: {
-						enabled: false,
-						text: '生产利用率',
-						style: {
-							color: Highcharts.getOptions().colors[5],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					labels: {
-						// enabled: false,
-						formatter: function() {
-							return Math.round(this.value * 100) + '%'
-						},
-						style: {
-							color: Highcharts.getOptions().colors[5],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					// plotBands: [{
-	    //             	from: 0.6,
-	    //                 to: 0.8,
-	    //                 color: '#FCFFC5',
-	    //                 // label: {
-	    //                 // 	text: '50-80%',
-	    //                 // 	align: 'right',
-	    //                 // 	x: -10,
-	    //                 // 	style: {
-		   //                 //      color: 'white',
-		   //                 //      fontWeight: 'bold'
-		   //                 //  }
-	    //                 // }
-	    //             },{
-	    //                 from: 0.8,
-	    //                 to: 1,
-	    //                 color: '#d0e9c6',
-	    //                 label: {
-	    //                 	text: '80%',
-	    //                 	align: 'right',
-	    //                 	x: -10,
-	    //                 	style: {
-		   //                      color: '#492970',
-		   //                      fontWeight: 'bold'
-		   //                  },
-		   //                  verticalAlign: 'bottom',
-	    //                 }
-	    //             },{
-	    //             	from: 0,
-	    //                 to: 0.6,
-	    //                 color: '#ebcccc',
-	    //                 label: {
-	    //                 	text: '60%',
-	    //                 	align: 'right',
-	    //                 	x: -10,
-	    //                 	style: {
-		   //                      color: '#492970',
-		   //                      fontWeight: 'bold',
-		   //                  },
-		   //                  verticalAlign: 'top',
-	    //                 }
-	    //             }],
-					max: 1,
-					min: 0,
-					opposite: true,
-					gridLineWidth: 0,
-					endOnTick: false,
+			"monthly": {
+				chart: {
+					renderTo: '',
 				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				title: {
+					text: ''
+				},
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "生产利用率"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
+		                	} else {
+		                		hh = parseInt(this.y / 3600);
+		                		mm = parseInt((this.y%3600) / 60);
+	            				ss = (this.y % 60);
 
-			],
+	            				mm = mm<10 ? '0'+mm : mm;
+	            				ss = ss<10 ? '0'+ss : ss;
 
-			plotOptions: {
-                column: {
-                	stacking: 'normal',
-                    pointPadding: 0.1,
-                    borderWidth: 0,
-                    pointWidth: 15,
-                }
-            },
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ hh + ':' +  mm + '\'' + ss + '\"' +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
 
-			series: []
+		                hht = parseInt(total / 3600);
+	            		mmt = parseInt((total%3600) / 60);
+	    				sst = (total % 60);
+
+	    				mmt = mmt<10 ? '0'+mmt : mmt;
+	    				sst = sst<10 ? '0'+sst : sst;
+
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ hht + ':' +  mmt + '\'' + sst + '\"' +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+	            },
+				},
+				legend: {
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[4],
+							},
+							formatter: function() {
+			                    	hh = parseInt(this.value / 3600).toFixed(0);
+				                    return hh + "H";
+			                }
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+			                    	hh = parseInt(this.total / 3600);
+				            		mm = ((this.total%3600) / 60).toFixed(0);
+				            		mm = mm<10 ? '0'+mm : mm;
+				                    return hh + ':' +  mm + '\'';
+		                    	} else {
+		                    		return null;
+		                    	}
+			                }
+		                },
+						title: {
+							text: '停线时长',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: false,
+
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '生产利用率',
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							// enabled: false,
+							formatter: function() {
+								return Math.round(this.value * 100) + '%'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						max: 1,
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: false,
+					},
+
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                        	// console.log(this.point);
+	                            if(!this.point.show)
+	                                return '';
+	                            return Math.round(this.y * 100) + '%';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.use.toggleClickPointData("monthly", this.x, this.y, this.series.index);
+
+			      					$(".useChart[timespan=monthly]").highcharts(report.use.chartData['monthly'])
+			                    }
+			                }
+			            }
+	            	},
+	            },
+
+				series: []
+			},
+			"yearly": {
+				chart: {
+					renderTo: '',
+					spacingTop: 48,
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				title: {
+					text: ''
+				},
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "生产利用率"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ Math.round(this.y * 100) +'%</b></td></tr>';
+		                	} else {
+		                		hh = parseInt(this.y / 3600);
+		                		mm = parseInt((this.y%3600) / 60);
+	            				ss = (this.y % 60);
+
+	            				mm = mm<10 ? '0'+mm : mm;
+	            				ss = ss<10 ? '0'+ss : ss;
+
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ hh + ':' +  mm + '\'' + ss + '\"' +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+
+		                hht = parseInt(total / 3600);
+	            		mmt = parseInt((total%3600) / 60);
+	    				sst = (total % 60);
+
+	    				mmt = mmt<10 ? '0'+mmt : mmt;
+	    				sst = sst<10 ? '0'+sst : sst;
+
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ hht + ':' +  mmt + '\'' + sst + '\"' +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+	            },
+				},
+				legend: {
+					enabled: false,
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[4],
+							},
+							formatter: function() {
+			                    	hh = parseInt(this.value / 3600).toFixed(0);
+				                    return hh + "H";
+			                }
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+			                    	hh = parseInt(this.total / 3600);
+				            		// mm = ((this.total%3600) / 60).toFixed(0);
+				            		// mm = mm<10 ? '0'+mm : mm;
+				                    return hh;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                }
+		                },
+						title: {
+							text: '停线时长',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: false,
+
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '生产利用率',
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							// enabled: false,
+							formatter: function() {
+								return Math.round(this.value * 100) + '%'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[5],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						max: 1,
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: false,
+					},
+
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                        	// console.log(this.point);
+	                            if(!this.point.show)
+	                                return '';
+	                            return Math.round(this.y * 100) + '%';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.use.toggleClickPointData("yearly", this.x, this.y, this.series.index);
+
+			      					$(".useChart[timespan=yearly]").highcharts(report.use.chartData['yearly'])
+			                    }
+			                }
+			            }
+	            	},
+	            },
+
+				series: []
+			},
 		},
 
 		drawColumnLine: function(timespan) {
@@ -896,28 +1343,29 @@ $(document).ready(function () {
 				yAxis: 1,
 				showInLegend: false,
 				name: '生产利用率',
-				data: this.ajaxData.series.line,
+				data: report.use.prepare(this.ajaxData.series.line),
+				// data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: false,
+					enabled: true,
 					style: {
-						fontSize: '14px',
+						fontSize: '12px',
 						fontWeight: 'bold',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 					},
 					align: 'center',
         			color: Highcharts.getOptions().colors[i],
-        			formatter: function() {
-        				return (this.y * 100).toFixed(0) + '%';
-        			}
+        			// formatter: function() {
+        			// 	return (this.y * 100).toFixed(0) + '%';
+        			// }
 				},
 			}
 
-			this.chartData.series = columnSeries;
-			this.chartData.xAxis.categories = this.ajaxData.series.x;
+			this.chartData[timespan].series = columnSeries;
+			this.chartData[timespan].xAxis.categories = this.ajaxData.series.x;
 			
 			$("#tabManufactureUse .divLoading[timespan="+ timespan +"]").hide();
 			$(".useChart[timespan="+ timespan +"]").show();
-			$(".useChart[timespan="+ timespan +"]").highcharts(this.chartData);
+			$(".useChart[timespan="+ timespan +"]").highcharts(this.chartData[timespan]);
 			// $(".useChartPrint[timespan="+ timespan +"]").highcharts(this.chartData);
 			
 		},
@@ -926,29 +1374,54 @@ $(document).ready(function () {
 			var pauseDetail = this.ajaxData.pauseDetail;
 			$(".tablePause>tbody").html("");
 			$.each(pauseDetail, function(index, value) {
-				var tr = $("<tr />");
-				$("<td />").html(value.id).appendTo(tr);
-				$("<td />").html(value.cause_type).appendTo(tr);
-				$("<td />").html(value.node_name).appendTo(tr);
-				$("<td />").html(value.duty_department).appendTo(tr);
-				$("<td />").html(value.remark).appendTo(tr);
-				$("<td />").addClass("alignRight").html(value.howlong).appendTo(tr);
-				$("<td />").html(value.pause_time.substr(0,16)).appendTo(tr);
-				if(value.recover_time === "0000-00-00 00:00:00"){
-					$("<td />").html("未恢复").appendTo(tr);
-				}else{
-					$("<td />").html(value.recover_time.substring(0,16)).appendTo(tr);
+				var num = value.details.length;
+				var tmp = $("<tbody />");
+				for(var i=0; i<num; i++){
+					$("<tr />").appendTo(tmp);
 				}
-				$("<td />").html(value.editor_name).appendTo(tr);
+				var firstTr = tmp.children("tr:eq(0)");
+				firstTr.addClass("thickBorder");
+				causeTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.cause_type).appendTo(firstTr);
+				dutyTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.duty_department).appendTo(firstTr);
+				reasonTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.pause_reason).appendTo(firstTr);
+				totalTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").addClass("alignRight").html(value.howlong).appendTo(firstTr);
+				$.each(value.details,  function (index, detail){
+					var tr = tmp.children("tr:eq("+ index +")");
+					$("<td />").addClass("alignRight").html(detail.howlong).appendTo(tr);
+					$("<td />").html(detail.pause_time.substr(0,16)).appendTo(tr);
+					if(detail.recover_time === "0000-00-00 00:00:00"){
+						$("<td />").html("未恢复").appendTo(tr);
+					}else{
+						$("<td />").html(detail.recover_time.substring(0,16)).appendTo(tr);
+					}
+					$("<td />").html(detail.node_name).appendTo(tr);
+					
+					tr.data("id",detail.id);
+				})
 				
-				tr.data("id",value.id);
 				
-				$(".tablePause tbody").append(tr);
+				$(".tablePause tbody").append(tmp.children("tr"));
 				
 			});
 	
 			$(".tablePause").show();
 		},
+
+		toggleClickPointData : function (timespan, x, y, index) {
+			console.log(this.chartData);
+			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
+				if(value.y == y && value.x == x) {
+					value.show = !value.show;
+					return false;
+				}
+			})
+		},
+
+		prepare : function  (dataArray) {
+            return $(dataArray).map(function (index, item) {                
+                return { x: index, y: item, show: false};
+            });  
+        },
 	}
 
 	window.report.recycle = {
@@ -956,117 +1429,305 @@ $(document).ready(function () {
 		ajaxOvertimeData: {},
 
 		chartData: {
-			chart: {
-				renderTo: '',
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				href: '',
-				text: ''
-			},
-			tooltip: {
-				shared: true,
-				useHTML: true,
-				formatter: function() {
-	                var s = this.x +'<table>';
-	                var sPeriod = '';
-	                var sCar = '';
-	                total = 0;
-	                $.each(this.points, function(i, point) {
-	                	if(point.series.name === "总装周期"){
-	                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
-	                	} else {
-	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'</b></td></tr>';
-            				total += this.y;
-	                	}
-	                });
-	                s += sCar;
-	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
-	                s += sPeriod;
-	                s += '</table>';
-	                return s;
-            },
-			},
-			legend: {
-				layout: 'horizontal',
-				align: 'center',
-				verticalAlign: 'top',
-				borderWidth: 0,
-			},
-			xAxis: {
-				categories: [],
-				labels: {
-					// rotation: -45,
-					align: 'center',
-					style: {
-						fontSize: '12px',
-						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					}
-				}
-			},
-			yAxis: [
-				{		// Primary yAxis
-					labels: {
-						style: {
-							// color: Highcharts.getOptions().colors[0],
-						}
-					},
-					stackLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold',
-	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-	                    },
-	                },
-					title: {
-						enabled: false,
-						text: '结存车辆',
-						style: {
-							// color: Highcharts.getOptions().colors[4],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					min: 0,
-					// endOnTick: false,
-
-				},{		// Secondary yAxis
-					title: {
-						enabled: false,
-						text: '总装周期(Hour)',
-						style: {
-							color: Highcharts.getOptions().colors[4],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					labels: {
-						// enabled: false,
-						style: {
-							color: Highcharts.getOptions().colors[4],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-
-					min: 0,
-					opposite: true,
-					// gridLineWidth: 0,
+			"monthly": {
+				chart: {
+					renderTo: '',
 				},
+				title: {
+					text: ''
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sPeriod = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "总装周期"){
+		                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sPeriod;
+		                s += '</table>';
+		                return s;
+	            },
+				},
+				legend: {
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								// color: Highcharts.getOptions().colors[0],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							enabled: false,
+							text: '结存车辆',
+							style: {
+								// color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						// endOnTick: false,
 
-			],
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '总装周期(Hour)',
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							// enabled: false,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
 
-			plotOptions: {
-                column: {
-                	stacking: 'normal',
-                    pointPadding: 0.1,
-                    borderWidth: 0,
-                    pointWidth: 15,
-                }
-            },
+						min: 0,
+						opposite: true,
+						// gridLineWidth: 0,
+					},
 
-			series: []
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                            if(!this.point.show)
+	                                return '';
+	                            return this.y + 'H';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.recycle.toggleClickPointData("monthly", this.x, this.y, this.series.index);
+			      					$(".recycleChart[timespan=monthly]").highcharts(report.recycle.chartData['monthly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
+
+				series: []
+			},
+			"yearly":{
+				chart: {
+					renderTo: '',
+					spacingTop: 47,
+				},
+				title: {
+					text: ''
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sPeriod = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "总装周期"){
+		                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +':&nbsp&nbsp</td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sPeriod;
+		                s += '</table>';
+		                return s;
+	            },
+				},
+				legend: {
+					enabled: false,
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								// color: Highcharts.getOptions().colors[0],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							enabled: false,
+							text: '结存车辆',
+							style: {
+								// color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						// endOnTick: false,
+
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '总装周期(Hour)',
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							// enabled: false,
+							style: {
+								color: Highcharts.getOptions().colors[4],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+
+						min: 0,
+						opposite: true,
+						// gridLineWidth: 0,
+					},
+
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                            if(!this.point.show)
+	                                return '';
+	                            return this.y + 'H';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.recycle.toggleClickPointData("yearly", this.x, this.y, this.series.index);
+			      					$(".recycleChart[timespan=yearly]").highcharts(report.recycle.chartData['yearly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
+
+				series: []
+			},
 		},
 
 		drawColumnLine: function(timespan) {
@@ -1087,29 +1748,29 @@ $(document).ready(function () {
 				yAxis: 1,
 				showInLegend: false,
 				name: '总装周期',
-				data: this.ajaxData.series.line,
+				data: report.recycle.prepare(this.ajaxData.series.line),
+				// data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: false,
+					enabled: true,
 					style: {
-						fontSize: '14px',
+						fontSize: '12px',
 						fontWeight: 'bold',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 					},
 					align: 'center',
         			color: Highcharts.getOptions().colors[i],
-        			formatter: function() {
-        				ret = this.y == null ? null : this.y + 'H';
-        				return ret;
-        			}
+        			// formatter: function() {
+        			// 	ret = this.y == null ? null : this.y + 'H';
+        			// 	return ret;
+        			// }
 				},
 			}
 
-			this.chartData.series = columnSeries;
-			this.chartData.xAxis.categories = this.ajaxData.series.x;
+			this.chartData[timespan].series = columnSeries;
+			this.chartData[timespan].xAxis.categories = this.ajaxData.series.x;
 
 			$("#tabRecycle .divLoading[timespan="+ timespan +"]").hide();
-			// $(".recycleChart[timespan="+ timespan +"]").show();
-			$(".recycleChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
+			$(".recycleChart[timespan="+ timespan +"]").show().highcharts(this.chartData[timespan]);
 		},
 
 		updateTable: function(timespan) {
@@ -1117,181 +1778,348 @@ $(document).ready(function () {
 			tbody = $(".overtimeCarsTable tbody").html("");
 			$.each(cars, function (index, car){
 				tr = $("<tr />");
+				$("<td />").html(car.recycle_period + "H").appendTo(tr);
 				$("<td />").html(byd.SeriesName[car.series]).appendTo(tr);
 				$("<td />").html(car.serial_number).appendTo(tr);
 				$("<td />").html(car.vin).appendTo(tr);
 				$("<td />").html(car.config_name).appendTo(tr);
 				$("<td />").html(car.color).appendTo(tr);
 				$("<td />").html(car.status).appendTo(tr);
-				$("<td />").html(car.faults).appendTo(tr);
-				$("<td />").html(car.recycle_period + "H").appendTo(tr);
+				remark = car.node_remark == "" ? car.faults : car.node_remark + "。" + car.faults
+				$("<td />").html(remark).appendTo(tr);
 
 				tr.appendTo(tbody);
 			})
 			$(".overtimeCarsTable").show();
 		},
+
+		toggleClickPointData : function (timespan, x, y, index) {
+			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
+				if(value.y == y && value.x == x) {
+					value.show = !value.show;
+					return false;
+				}
+			})
+		},
+
+		prepare : function  (dataArray) {
+            return $(dataArray).map(function (index, item) {                
+                return { x: index, y: item, show: false};
+            });  
+        },
 	}
 
 	window.report.warehouse = {
 		ajaxData: {},
 		ajaxOvertimeData: {},
 		chartData: {
-			chart: {
-				renderTo: '',
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				href: '',
-				text: ''
-			},
-			tooltip: {
-				shared: true,
-				useHTML: true,
-				formatter: function() {
-	                var s = this.x +'<table>';
-	                var sRate = '';
-	                var sCar = '';
-	                total = 0;
-	                $.each(this.points, function(i, point) {
-	                	if(point.series.name === "成品库周期平均"){
-	                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
-	                	} else {
-	                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
-            				total += this.y;
-	                	}
-	                });
-	                s += sCar;
-	                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
-	                s += sRate;
-	                s += '</table>';
-	                return s;
-	            },
-			},
-			legend: {
-				layout: 'horizontal',
-				align: 'center',
-				verticalAlign: 'top',
-				borderWidth: 0,
-			},
-			xAxis: {
-				categories: [],
-				labels: {
-					// rotation: -45,
+			"monthly":{
+				chart: {
+					renderTo: '',
+				},
+				title: {
+					text: ''
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "成品库周期平均"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+		            },
+				},
+				legend: {
+					enabled: true,
+					layout: 'horizontal',
 					align: 'center',
-					style: {
-						fontSize: '12px',
-						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					}
-				}
-			},
-			yAxis: [
-				{		// Primary yAxis
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
 					labels: {
+						// rotation: -45,
+						align: 'center',
 						style: {
-							color: Highcharts.getOptions().colors[0],
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[0],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							text: '车辆数',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[0],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: true,
+
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '平均周期',
+							style: {
+								color: Highcharts.getOptions().colors[3],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							enabled: true,
+							formatter: function() {
+								return this.value + 'H'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[3],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: true,
 					},
-					stackLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold',
-	                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+
+				],
+
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                            if(!this.point.show)
+	                                return '';
+	                            return this.y + 'H';
+	                        }
 	                    }
 	                },
-					title: {
-						text: '车辆数',
-						text: null,
-						style: {
-							color: Highcharts.getOptions().colors[0],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					min: 0,
-					endOnTick: true,
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.warehouse.toggleClickPointData("monthly", this.x, this.y, this.series.index);
+			      					$(".warehouseChart[timespan=monthly]").highcharts(report.warehouse.chartData['monthly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
 
-				},{		// Secondary yAxis
-					title: {
-						enabled: false,
-						text: '平均周期',
-						style: {
-							color: Highcharts.getOptions().colors[3],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					labels: {
-						enabled: true,
-						formatter: function() {
-							return this.value + 'H'
-						},
-						style: {
-							color: Highcharts.getOptions().colors[3],
-							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-						}
-					},
-					// plotBands: [{
-	    //             	from: 0.6,
-	    //                 to: 0.8,
-	    //                 color: '#FCFFC5',
-	    //                 // label: {
-	    //                 // 	text: '50-80%',
-	    //                 // 	align: 'right',
-	    //                 // 	x: -10,
-	    //                 // 	style: {
-		   //                 //      color: 'white',
-		   //                 //      fontWeight: 'bold'
-		   //                 //  }
-	    //                 // }
-	    //             },{
-	    //                 from: 0.8,
-	    //                 to: 1,
-	    //                 color: '#d0e9c6',
-	    //                 label: {
-	    //                 	text: '80%',
-	    //                 	align: 'right',
-	    //                 	x: -10,
-	    //                 	style: {
-		   //                      color: '#910000',
-		   //                      fontWeight: 'bold'
-		   //                  },
-		   //                  verticalAlign: 'bottom',
-	    //                 }
-	    //             },{
-	    //             	from: 0,
-	    //                 to: 0.6,
-	    //                 color: '#ebcccc',
-	    //                 label: {
-	    //                 	text: '60%',
-	    //                 	align: 'right',
-	    //                 	x: -10,
-	    //                 	style: {
-		   //                      color: '#910000',
-		   //                      fontWeight: 'bold',
-		   //                  },
-		   //                  verticalAlign: 'top',
-	    //                 }
-	    //             }],
-					min: 0,
-					opposite: true,
-					gridLineWidth: 0,
-					endOnTick: true,
+				series: []
+			},
+			"yearly":{
+				chart: {
+					renderTo: '',
+					spacingTop: 48,
 				},
+				title: {
+					text: ''
+				},
+				navigation: {
+		            buttonOptions: {
+		                enabled: false
+		            }
+		        },
+				credits: {
+					href: '',
+					text: ''
+				},
+				tooltip: {
+					shared: true,
+					useHTML: true,
+					formatter: function() {
+		                var s = this.x +'<table>';
+		                var sRate = '';
+		                var sCar = '';
+		                total = 0;
+		                $.each(this.points, function(i, point) {
+		                	if(point.series.name === "成品库周期平均"){
+		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
+		                	} else {
+		                		sCar += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
+	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ point.y +'</b></td></tr>';
+	            				total += this.y;
+		                	}
+		                });
+		                s += sCar;
+		                s += '<tr><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-top-style:solid;border-top-width: 1px;"><b>'+ total +'</b></td></tr>';
+		                s += sRate;
+		                s += '</table>';
+		                return s;
+		            },
+				},
+				legend: {
+					enabled: false,
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'top',
+					floating: false,
+					backgroundColor: "white",
+					borderRadius: 2,
+					borderWidth: 0,
+				},
+				xAxis: {
+					categories: [],
+					labels: {
+						// rotation: -45,
+						align: 'center',
+						style: {
+							fontSize: '12px',
+							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+						}
+					}
+				},
+				yAxis: [
+					{		// Primary yAxis
+						labels: {
+							style: {
+								color: Highcharts.getOptions().colors[0],
+							}
+						},
+						stackLabels: {
+		                    enabled: true,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+		                    },
+		                    formatter: function() {
+		                    	if(this.total > 0){
+				                    return this.total;
+		                    	} else {
+		                    		return null;
+		                    	}
+			                },
+		                },
+						title: {
+							text: '车辆数',
+							text: null,
+							style: {
+								color: Highcharts.getOptions().colors[0],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						endOnTick: true,
 
-			],
+					},{		// Secondary yAxis
+						title: {
+							enabled: false,
+							text: '平均周期',
+							style: {
+								color: Highcharts.getOptions().colors[3],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						labels: {
+							enabled: true,
+							formatter: function() {
+								return this.value + 'H'
+							},
+							style: {
+								color: Highcharts.getOptions().colors[3],
+								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+							}
+						},
+						min: 0,
+						opposite: true,
+						gridLineWidth: 0,
+						endOnTick: true,
+					},
 
-			plotOptions: {
-                column: {
-                	stacking: 'normal',
-                    pointPadding: 0.1,
-                    borderWidth: 0,
-                    pointWidth: 15,
-                }
-            },
+				],
 
-			series: []
+				plotOptions: {
+	                column: {
+	                	stacking: 'normal',
+	                    pointPadding: 0.1,
+	                    borderWidth: 0,
+	                    pointWidth: 15,
+	                },
+	                line:{
+	                    dataLabels: { 
+	                        enabled: true,
+	                        formatter: function() {
+	                            if(!this.point.show)
+	                                return '';
+	                            return this.y + 'H';
+	                        }
+	                    }
+	                },
+	                series: {
+	            		cursor: 'pointer',
+	            		point: {
+			                events: {
+			                    click: function() {
+			                        report.warehouse.toggleClickPointData("yearly", this.x, this.y, this.series.index);
+			      					$(".warehouseChart[timespan=yearly]").highcharts(report.warehouse.chartData['yearly'])
+			                    }
+			                }
+			            }
+	            	}
+	            },
+
+				series: []
+			},
 		},
 
 		drawColumnLine: function(timespan) {
@@ -1312,27 +2140,28 @@ $(document).ready(function () {
 				yAxis: 1,
 				showInLegend: false,
 				name: '成品库周期平均',
-				data: this.ajaxData.series.line,
+				data: report.warehouse.prepare(this.ajaxData.series.line),
+				// data: this.ajaxData.series.line,
 				dataLabels:{
-					enabled: false,
+					enabled: true,
 					style: {
-						fontSize: '14px',
+						fontSize: '12px',
 						fontWeight: 'bold',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 					},
 					align: 'center',
         			color: Highcharts.getOptions().colors[i],
-        			formatter: function() {
-        				return this.y +'H';
-        			}
+        			// formatter: function() {
+        			// 	return this.y +'H';
+        			// }
 				},
 			}
 
-			this.chartData.series = columnSeries;
-			this.chartData.xAxis.categories = this.ajaxData.series.x;
+			this.chartData[timespan].series = columnSeries;
+			this.chartData[timespan].xAxis.categories = this.ajaxData.series.x;
 
 			$("#tabWarehouse .divLoading[timespan="+ timespan +"]").hide();
-			$(".warehouseChart[timespan="+ timespan +"]").show().highcharts(this.chartData);
+			$(".warehouseChart[timespan="+ timespan +"]").show().highcharts(this.chartData[timespan]);
 		},
 
 		updateTable: function() {
@@ -1349,7 +2178,7 @@ $(document).ready(function () {
 					tr = tmp.children("tr:eq("+ index +")");
 					$("<td />").html(order.lane_name).appendTo(tr);
 					$("<td />").html(order.order_number).appendTo(tr);
-					$("<td />").html(order.distributor_name).appendTo(tr);
+					// $("<td />").html(order.distributor_name).appendTo(tr);
 					$("<td />").html(order.series_name).appendTo(tr);
 					$("<td />").html(order.car_type_config).appendTo(tr);
 					$("<td />").html(order.color).appendTo(tr);
@@ -1366,6 +2195,21 @@ $(document).ready(function () {
 			})
 
 			$(".overtimeOrdersTable").show();
-		}
+		},
+
+		toggleClickPointData : function (timespan, x, y, index) {
+			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
+				if(value.y == y && value.x == x) {
+					value.show = !value.show;
+					return false;
+				}
+			})
+		},
+
+		prepare : function  (dataArray) {
+            return $(dataArray).map(function (index, item) {                
+                return { x: index, y: item, show: false};
+            });  
+        },
 	}
 })

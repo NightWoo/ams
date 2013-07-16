@@ -1134,7 +1134,7 @@ $(document).ready(function () {
 		},
 
 		toggleClickPointData : function (x, y, index) {
-			// console.log(this.dpuChartData);
+			console.log(this.useRateChartData);
 			$(this.useRateChartData.series[index].data).each(function (index, value) {
 				if(value.y == y && value.x == x) {
 					value.show = !value.show;
