@@ -27,6 +27,8 @@
             <div>
             	<legend>配置明细
             		<span class="pull-right">
+            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;配置维护</a>
+            			/
             			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
             		</span>
             	</legend>

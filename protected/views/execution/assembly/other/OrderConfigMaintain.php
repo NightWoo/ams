@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>配置维护</title>
+	<title>订单配置维护</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
-	<link href="/bms/css/execution/assembly/other/ConfigMaintain.css" rel="stylesheet">	
+	<link href="/bms/css/execution/assembly/other/OrderConfigMaintain.css" rel="stylesheet">	
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
-	<script type="text/javascript" src="/bms/js/execution/assembly/other/configMaintain.js"></script>
+	<script type="text/javascript" src="/bms/js/execution/assembly/other/orderConfigMaintain.js"></script>
 </head>
 <body>
 		
@@ -26,13 +26,9 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>配置维护
+            	<legend>订单配置维护
             		<span class="pull-right">
-            			<a href="/bms/execution/orderConfigMaintain"><i class="icon-link"></i>&nbsp;订单配置</a>
-            			/
-            			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
-            			/
-            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细 </a>
+            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;配置维护</a>
             		</span>
             	</legend>
             </div>
@@ -41,8 +37,8 @@
 					<table>
 						<tr>
 							<td>车系</td>
-							<td>车型</td>
-							<td>配置名称</td>
+							<td>订单车型</td>
+							<td>订单配置名称</td>
 							<td></td>
 						</tr>
 						<tr>
@@ -100,7 +96,7 @@
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
-			      	<select id="newCarSeries" class="input-small">
+			      	<select id="newCarSeries" class="input-medium">
 						<option value="" selected>请选择</option>
 						<option value="F0" selected>F0</option>
 						<option value="M6">M6</option>
@@ -112,68 +108,25 @@
 				<label class="control-label" for="">*&nbsp;车型</label>
 				<div class="controls">
 					<select name="" id="newCarType" class="input-xlarge">
+						<!-- <option value="" selected>请选择</option> -->
+						<!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+						<option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
+						<option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
+						<option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
+						<option value="QCJ7100L5(1.0排量舒适型北京)">QCJ7100L5(1.0排量舒适型北京)</option>
+						<option value="BYD7100L3(1.0排量实用型)">BYD7100L3(1.0排量实用型)</option>
+						<option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option> -->
 					</select>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">*&nbsp;配置</label>
 				<div class="controls">
-					<input type="text" id="newConfigName" class="input-xlarge" placeholder="请输入配置名称...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;订单配置</label>
-				<div class="controls">
-					<select name="" id="newOrderConfig" class="input-large">
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;地区</label>
-				<div class="controls">
-					<select name="" id="newClime" class="input-small">
-						<option selected value="国内">国内</option>
-						<option value="出口">出口</option>
-						<option value="阿拉伯">阿拉伯</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">出口国家</label>
-				<div class="controls">
-					<input type="text" id="newExportCountry" class="input-medium" placeholder="出口国家...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;侧门玻璃</label>
-				<div class="controls">
-					<input type="text" id="newSideGlass" class="input-medium" placeholder="侧门玻璃...">
-					<span class="help-inline">针对M6</span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;轮胎规格</label>
-				<div class="controls">
-					<input type="text" id="newTyre" class="input-medium" placeholder="请输入配置名称...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;转向助力</label>
-				<div class="controls">
-					<select name="" id="newSteering" class="input-small">
-						<option selected value="液压">液压</option>
-						<option value="机械">机械</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;合格证备注</label>
-				<div class="controls">
-					<textarea class="input-xlarge" id="newCertificateNote" rows="6"></textarea>
+					<input type="text" id="newConfigName" class="input-medium" placeholder="请输入配置名称...">
 				</div>
 			</div>
   			<div class="control-group">
-				<label class="control-label" for="">配置备注</label>
+				<label class="control-label" for="">备注</label>
 				<div class="controls">
 					<textarea class="input-xlarge" id="newRemark" rows="2"></textarea>
 				</div>
@@ -208,64 +161,21 @@
 				<label class="control-label" for="">*&nbsp;车型</label>
 				<div class="controls">
 					<select name="" id="editCarType" class="input-xlarge">
+						<!-- <option value="" selected>请选择</option> -->
+						<!-- <option value="QCJ7100L(1.0排量实用型)">QCJ7100L(1.0排量实用型)</option>
+						<option value="QCJ7100L(1.0排量舒适型)">QCJ7100L(1.0排量舒适型)</option>
+						<option value="QCJ7100L(1.0排量尊贵型)">QCJ7100L(1.0排量尊贵型)</option>
+						<option value="QCJ7100L5(1.0排量实用型北京)">QCJ7100L5(1.0排量实用型北京)</option>
+						<option value="QCJ7100L5(1.0排量舒适型北京)">QCJ7100L5(1.0排量舒适型北京)</option>
+						<option value="BYD7100L3(1.0排量实用型)">BYD7100L3(1.0排量实用型)</option>
+						<option value="BYD7100L3(1.0排量舒适型)">BYD7100L3(1.0排量舒适型)</option> -->
 					</select>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">*&nbsp;配置</label>
 				<div class="controls">
-					<input type="text" id="editConfigName" class="input-xlarge" placeholder="请输入配置名称...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;订单配置</label>
-				<div class="controls">
-					<select name="" id="editOrderConfig" class="input-xlarge">
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;地区</label>
-				<div class="controls">
-					<select name="" id="editClime" class="input-small">
-						<option selected value="国内">国内</option>
-						<option value="出口">出口</option>
-						<option value="阿拉伯">阿拉伯</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">出口国家</label>
-				<div class="controls">
-					<input type="text" id="editExportCountry" class="input-medium" placeholder="出口国家...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;侧门玻璃</label>
-				<div class="controls">
-					<input type="text" id="editSideGlass" class="input-medium" placeholder="侧门玻璃...">
-					<span class="help-inline">针对M6</span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;轮胎规格</label>
-				<div class="controls">
-					<input type="text" id="editTyre" class="input-medium" placeholder="请输入配置名称...">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;转向助力</label>
-				<div class="controls">
-					<select name="" id="editSteering" class="input-small">
-						<option selected value="液压">液压</option>
-						<option value="机械">机械</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="">*&nbsp;合格证备注</label>
-				<div class="controls">
-					<textarea class="input-xlarge" id="editCertificateNote" rows="6"></textarea>
+					<input type="text" id="editConfigName" class="input-medium" placeholder="请输入配置名称...">
 				</div>
 			</div>
   			<div class="control-group">

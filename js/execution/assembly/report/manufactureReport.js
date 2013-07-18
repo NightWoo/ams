@@ -371,8 +371,8 @@ $(document).ready(function () {
 					+"<th rowspan='2'>车系</th>"
 					+"<th colspan='3'>当日上线-I线</th>"
 					+"<th colspan='3'>当日上线-II线</th>"
-					+"<th colspan='2'>当日成品库</th>"
-					+"<th colspan='2'>当日结存</th>"
+					+"<th colspan='2'>当日成品库完成</th>"
+					+"<th colspan='3'>当日结存</th>"
 					+"<th colspan='3'>当月完成</th>"
 					+"</tr>"
 					+"<tr></tr>";
@@ -630,7 +630,6 @@ $(document).ready(function () {
 	                    dataLabels: { 
 	                        enabled: true,
 	                        formatter: function() {
-	                        	// console.log(this.point);
 	                            if(!this.point.show)
 	                                return '';
 	                            return Math.round(this.y * 100) + '%';
@@ -642,11 +641,6 @@ $(document).ready(function () {
 	            		point: {
 			                events: {
 			                    click: function() {
-			                        // console.log(this.series.name);
-			                        console.log(this);
-	                        		console.log("len:" + this.series.chart.series.length);
-	                        		console.log(this.series.chart.series);
-			                        console.log(this.x + ":" + this.y);
 			                        report.completion.toggleClickPointData("monthly", this.x, this.y, this.series.index);
 
 			      					$(".completionChart[timespan=monthly]").highcharts(report.completion.chartData['monthly'])
@@ -831,7 +825,6 @@ $(document).ready(function () {
 	                    dataLabels: { 
 	                        enabled: true,
 	                        formatter: function() {
-	                        	// console.log(this.point);
 	                            if(!this.point.show)
 	                                return '';
 	                            return Math.round(this.y * 100) + '%';
@@ -843,11 +836,6 @@ $(document).ready(function () {
 	            		point: {
 			                events: {
 			                    click: function() {
-			                        // console.log(this.series.name);
-			                        console.log(this);
-	                        		console.log("len:" + this.series.chart.series.length);
-	                        		console.log(this.series.chart.series);
-			                        console.log(this.x + ":" + this.y);
 			                        report.completion.toggleClickPointData("yearly", this.x, this.y, this.series.index);
 
 			      					$(".completionChart[timespan=yearly]").highcharts(report.completion.chartData['yearly'])
@@ -877,7 +865,7 @@ $(document).ready(function () {
 			columnSeries[++i] ={
 				type: 'line',
 				yAxis: 1,
-				showInLegend: false,
+				showInLegend: true,
 				name: '计划完成率',
 				data: report.completion.prepare(this.ajaxData.series.line),
 				// data: this.ajaxData.series.line,
@@ -947,7 +935,6 @@ $(document).ready(function () {
 		},
 
 		toggleClickPointData : function (timespan, x, y, index) {
-			console.log(this.chartData);
 			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
 				if(value.y == y && value.x == x) {
 					value.show = !value.show;
@@ -1121,7 +1108,6 @@ $(document).ready(function () {
 	                    dataLabels: { 
 	                        enabled: true,
 	                        formatter: function() {
-	                        	// console.log(this.point);
 	                            if(!this.point.show)
 	                                return '';
 	                            return Math.round(this.y * 100) + '%';
@@ -1300,7 +1286,6 @@ $(document).ready(function () {
 	                    dataLabels: { 
 	                        enabled: true,
 	                        formatter: function() {
-	                        	// console.log(this.point);
 	                            if(!this.point.show)
 	                                return '';
 	                            return Math.round(this.y * 100) + '%';
@@ -1341,7 +1326,7 @@ $(document).ready(function () {
 			columnSeries[++i] ={
 				type: 'line',
 				yAxis: 1,
-				showInLegend: false,
+				showInLegend: true,
 				name: '生产利用率',
 				data: report.use.prepare(this.ajaxData.series.line),
 				// data: this.ajaxData.series.line,
@@ -1408,7 +1393,6 @@ $(document).ready(function () {
 		},
 
 		toggleClickPointData : function (timespan, x, y, index) {
-			console.log(this.chartData);
 			$(this.chartData[timespan].series[index].data[x]).each(function (index, value) {
 				if(value.y == y && value.x == x) {
 					value.show = !value.show;
@@ -1454,7 +1438,7 @@ $(document).ready(function () {
 		                var sCar = '';
 		                total = 0;
 		                $.each(this.points, function(i, point) {
-		                	if(point.series.name === "总装周期"){
+		                	if(point.series.name === "生产周期"){
 		                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
 	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
 		                	} else {
@@ -1525,7 +1509,7 @@ $(document).ready(function () {
 					},{		// Secondary yAxis
 						title: {
 							enabled: false,
-							text: '总装周期(Hour)',
+							text: '生产周期(Hour)',
 							style: {
 								color: Highcharts.getOptions().colors[4],
 								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -1604,7 +1588,7 @@ $(document).ready(function () {
 		                var sCar = '';
 		                total = 0;
 		                $.each(this.points, function(i, point) {
-		                	if(point.series.name === "总装周期"){
+		                	if(point.series.name === "生产周期"){
 		                		sPeriod += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
 	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
 		                	} else {
@@ -1676,7 +1660,7 @@ $(document).ready(function () {
 					},{		// Secondary yAxis
 						title: {
 							enabled: false,
-							text: '总装周期(Hour)',
+							text: '生产周期(Hour)',
 							style: {
 								color: Highcharts.getOptions().colors[4],
 								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -1746,8 +1730,8 @@ $(document).ready(function () {
 			columnSeries[++i] ={
 				type: 'line',
 				yAxis: 1,
-				showInLegend: false,
-				name: '总装周期',
+				showInLegend: true,
+				name: '生产周期',
 				data: report.recycle.prepare(this.ajaxData.series.line),
 				// data: this.ajaxData.series.line,
 				dataLabels:{
@@ -1838,7 +1822,7 @@ $(document).ready(function () {
 		                var sCar = '';
 		                total = 0;
 		                $.each(this.points, function(i, point) {
-		                	if(point.series.name === "成品库周期平均"){
+		                	if(point.series.name === "成品库周期"){
 		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
 	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
 		                	} else {
@@ -1910,7 +1894,7 @@ $(document).ready(function () {
 					},{		// Secondary yAxis
 						title: {
 							enabled: false,
-							text: '平均周期',
+							text: '成品库周期',
 							style: {
 								color: Highcharts.getOptions().colors[3],
 								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -1992,7 +1976,7 @@ $(document).ready(function () {
 		                var sCar = '';
 		                total = 0;
 		                $.each(this.points, function(i, point) {
-		                	if(point.series.name === "成品库周期平均"){
+		                	if(point.series.name === "成品库周期"){
 		                		sRate += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
 	            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ this.y +'H</b></td></tr>';
 		                	} else {
@@ -2064,7 +2048,7 @@ $(document).ready(function () {
 					},{		// Secondary yAxis
 						title: {
 							enabled: false,
-							text: '平均周期',
+							text: '成品库周期',
 							style: {
 								color: Highcharts.getOptions().colors[3],
 								fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
@@ -2138,8 +2122,8 @@ $(document).ready(function () {
 			columnSeries[++i] ={
 				type: 'line',
 				yAxis: 1,
-				showInLegend: false,
-				name: '成品库周期平均',
+				showInLegend: true,
+				name: '成品库周期',
 				data: report.warehouse.prepare(this.ajaxData.series.line),
 				// data: this.ajaxData.series.line,
 				dataLabels:{

@@ -54,18 +54,10 @@ class ConfigSeeker
                         'name' => $config->{$column},
                     );
 			} else {
-				$data = array();
+				$data = $config->getAttributes();
 				$user = User::model()->findByPk($config->user_id);
 				$user_name = empty($user) ? '' : $user->display_name;
 				$data['user_name']= $user_name;
-				$data['id']= $config->id;
-				$data['name']= $config->name;
-				$data['car_series']= $config->car_series;
-				$data['car_type']= $config->car_type;
-				$data['modify_time']= $config->modify_time;
-				$data['create_time']= $config->create_time;
-				$data['user_id']= $config->user_id;
-				$data['remark']= $config->remark;
 			}
 			if(!in_array($data, $datas)) {
 				$datas[]=$data;	

@@ -18,55 +18,21 @@ $(document).ready(function() {
 		} else {
 			$("#btnAdd, #btnQuery").removeAttr("disabled");
 		}
-		$("#carType").html(fillType($("#carSeries").val()));
-
+		$("#carType").html(fillOrderCarType($("#carSeries").val()));
 	})
 	
 	$("#newCarSeries").change(function () {
-		$("#newCarType").html(fillType($("#newCarSeries").val()));
-		$("#newOrderConfig").html(fillOrderConfig($("#newCarSeries").val()));
-		if($("#newCarSeries").val() == "M6"){
-			$("#newSideGlass").removeAttr("disabled");
-		} else {
-			$("#newSideGlass").attr("disabled", "disabled").val("");
-		}
+		$("#newCarType").html(fillCarType($("#newCarSeries").val()));
 	})
 
 	$("#editCarSeries").change(function () {
-		$("#editCarType").html(fillType($("#editCarSeries").val()));
-		$("#editOrderConfig").html(fillOrderConfig($("#editCarSeries").val()));
-		if($("#editCarSeries").val() == "M6"){
-			$("#editSideGlass").removeAttr("disabled");
-		} else {
-			$("#editSideGlass").attr("disabled", "disabled").val("");
-		}
-	})
-
-	$("#newClime").change(function(){
-		if($(this).val() == "国内"){
-			$("#newExportCountry").attr("disabled", "disabbled").val("");
-		} else {
-			$("#newExportCountry").removeAttr("disabled", "disabbled");
-		};
-	})
-
-	$("#editClime").change(function(){
-		if($(this).val() == "国内"){
-			$("#editExportCountry").attr("disabled", "disabbled").val("");
-		} else {
-			$("#editExportCountry").removeAttr("disabled", "disabbled");
-		};
+		$("#editCarType").html(fillOrderCarType($("#editCarSeries").val()));
 	})
 
 	$("#btnAdd").click(function (argument){
-		emptyNewModal();
 		$("#newModal").modal("show");
 		$("#newCarSeries").val($("#carSeries").val());
-		$("#newCarType").html(fillType($("#newCarSeries").val()));
-		$("#newOrderConfig").html(fillOrderConfig($("#newCarSeries").val()));
-		if($("#newCarSeries").val() == "M6"){
-			$("#newSideGlass").removeAttr("disabled");
-		}
+		$("#newCarType").html(fillCarType($("#newCarSeries").val()))
 	})
 	
 	$("#btnQuery").click(function (){
@@ -95,26 +61,12 @@ $(document).ready(function() {
 	
 	$("#tableConfig").live("click", function(e) {
 		if($(e.target).html()==="编辑"){
-			emptyEditModal();
+			//var siblings = $(e.target).parent("td").siblings();
 			var tr = $(e.target).closest("tr");
-			$("#editCarType").html(fillType(tr.data("car_series")));
-			$("#editOrderConfig").html(fillOrderConfig(tr.data("car_series")));
+			$("#editCarType").html(fillOrderCarType(tr.data("car_series")));
 			$("#editCarSeries").val(tr.data("car_series"));
 			$("#editCarType").val(tr.data("car_type"));
-			$("#editConfigName").val(tr.data("name"));
-			$("#editOrderConfig").val(tr.data("order_config_id"));
-			$("#editClime").val(tr.data("mark_clime"));
-			if($("#editClime").val() != "国内"){
-				$("#editExportCountry").removeAttr("disabled");
-			}
-			$("#editExportCountry").val(tr.data("export_country"));
-			if($("#editCarSeries").val() == "M6"){
-				$("#editSideGlass").removeAttr("disabled");
-			}
-			$("#editSideGlass").val(tr.data("side_glass"));
-			$("#editTyre").val(tr.data("tyre"));
-			$("#editSteering").val(tr.data("assisted_steering"));
-			$("#editCertificateNote").val(tr.data("certificate_note"));
+			$("#editConfigName").val(tr.data("config_name"));
 			$("#editRemark").val(tr.data("remark"));
 			
 			$("#editModal").data("id",tr.data("id"));
@@ -131,7 +83,7 @@ $(document).ready(function() {
 		$.ajax({
 			type:"get",
 			dataType:"json",
-			url: SEARCH_CONFIG,
+			url: SEARCH_ORDER_CONFIG,
 			data: {
 				"config_name" : $("#configName").val(),
 				"car_series" : $("#carSeries").val(),
@@ -154,15 +106,11 @@ $(document).ready(function() {
 						$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 						editTd.appendTo(tr);
 						
-						// tr.data("id", value.id);
-						// tr.data("car_series", value.car_series);
-						// tr.data("car_type", value.car_type);
-						// tr.data("config_name", value.name);
-						// tr.data("remark", value.remark);
-
-						$.each(value, function	(key, val) {
-							tr.data(key, val);
-						})
+						tr.data("id", value.id);
+						tr.data("car_series", value.car_series);
+						tr.data("car_type", value.car_type);
+						tr.data("config_name", value.name);
+						tr.data("remark", value.remark);
 						
 						$("#tableConfig tbody").append(tr);
 					})
@@ -178,18 +126,11 @@ $(document).ready(function() {
 		$.ajax({
 			type: "get",
 			dataType: "json",
-			url: SAVE_CONFIG,
+			url: SAVE_ORDER_CONFIG,
 			data: {
 				"car_series": $("#newCarSeries").val(),
 				"car_type": $("#newCarType").val(),
 				"config_name": $("#newConfigName").val(),
-				"order_config_id" : $("#newOrderConfig").val(),
-				"mark_clime" : $("#newClime").val(),
-				"export_country" : $("#newExportCountry").val(),
-				"side_glass" : $("#newSideGlass").val(),
-				"tyre" : $("#newTyre").val(),
-				"assisted_steering" : $("#newSteering").val(),
-				"certificate_note" : $("#newCertificateNote").val(),
 				"remark": $("#newRemark").val()
 			},
 			success: function (response) {
@@ -211,19 +152,12 @@ $(document).ready(function() {
 		$.ajax({
 			type: "get",
 			dataType:"json",
-			url: SAVE_CONFIG,
+			url: SAVE_ORDER_CONFIG,
 			data: {
 				"id" : $("#editModal").data("id"),
 				"car_series" : $("#editCarSeries").val(),
 				"car_type" : $("#editCarType").val(),
 				"config_name" : $("#editConfigName").val(),
-				"order_config_id" : $("#editOrderConfig").val(),
-				"mark_clime" : $("#editClime").val(),
-				"export_country" : $("#editExportCountry").val(),
-				"side_glass" : $("#editSideGlass").val(),
-				"tyre" : $("#editTyre").val(),
-				"assisted_steering" : $("#editSteering").val(),
-				"certificate_note" : $("#editCertificateNote").val(),
 				"remark" : $("#editRemark").val(),
 			},
 			success: function (response) {
@@ -245,7 +179,7 @@ $(document).ready(function() {
 		$.ajax({
 			type: "get",
 			dataType:"json",
-			url: DELETE_CONFIG,
+			url: DELETE_ORDER_CONFIG,
 			data: {"id" : configId},
 			success: function (response) {
 				if(response.success){
@@ -265,36 +199,45 @@ $(document).ready(function() {
 		$("#editCarSeries").val("");
 		$("#editCarType").val("");
 		$("#editConfigName").val("");
-		$("#editOrderConfig").val("");
-		$("#editClime").val("");
-		$("#editExportCountry").val("");
-		$("#editSideGlass").attr("disabled", "disabled").val("");
-		$("#editTyre").val("");
-		$("#editSteering").val("");
-		$("#editCertificateNote").val("");
-		$("#editRemark").text("");
-		$("#editExportCountry").attr("disabled", "disabled").val("");	
+		$("#editRemark").text("");	
 	}
 	
 	function emptyNewModal (argument) {
 		$("#newCarSeries").val("");
 		$("#newtCarType").val("");
 		$("#newConfigName").val("");
-		$("#newOrderConfig").val("");
-		$("#newClime").val("");
-		$("#newExportCountry").val("");
-		$("#newSideGlass").attr("disabled", "disabled").val("");
-		$("#newTyre").val("");
-		$("#newSteering").val("");
-		$("#newCertificateNote").val("");
-		$("#newRemark").text("");
-		$("#newExportCountry").attr("disabled", "disabled").val("");
 		$("#newRemark").text("");	
 	}
 
 });
 
-function fillType(carSeries) {
+function fillOrderCarType(carSeries) {
+	ret=""
+	$.ajax({
+		url: FILL_CAR_TYPE,
+		type: "get",
+		dataType: "json",
+		data: {
+			"carSeries" : carSeries	
+		},
+		async: false,
+		success: function(response) {
+			if(response.success){
+				var option = '<option value="" selected>请选择</option>'
+				$.each(response.data, function(index, value){
+					option += '<option value="'+ value.order_type_name +'">'+ value.order_type_name +'</option>';
+				});
+			}
+			ret = option;
+		},
+		error: function() { 
+	    	alertError(); 
+	    }
+	})
+	return ret;
+}
+
+function fillCarType(carSeries) {
 	ret=""
 	$.ajax({
 		url: FILL_CAR_TYPE,
@@ -319,30 +262,3 @@ function fillType(carSeries) {
 	})
 	return ret;
 }
-
-function fillOrderConfig(carSeries, carType){
-		var options = '<option value="0" selected>请选择</option>';
-		$.ajax({
-			url: FILL_ORDER_CONFIG,
-			type: "get",
-			dataType: "json",
-			data: {
-				"carSeries" : carSeries,
-				"carType" : carType,	
-			},
-			async: false,
-			success: function(response) {
-				if(response.success){						
-					$.each(response.data, function(index,value){
-						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
-						options +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
-					});
-				}
-			},
-			error: function() { 
-		    	alertError(); 
-		    }
-		})
-		return options;
-	}
-//changed

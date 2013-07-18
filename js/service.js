@@ -198,6 +198,7 @@ var GET_YEAR_CODE = "/bms/plan/getYearCode";
 
 //added by wujun
 var SEARCH_CONFIG = "/bms/config/search";
+var SEARCH_ORDER_CONFIG = "/bms/config/searchOrderConfig";
 var SAVE_CONFIG = "/bms/config/save";
 var DELETE_CONFIG = "/bms/config/delete";
 
@@ -210,7 +211,9 @@ var GET_BATCH_NUMBER = "/bms/plan/getBatchNumber";
 //config
 var SEARCH_CONFIG = "/bms/config/search";
 var SAVE_CONFIG = "/bms/config/save";
+var SAVE_ORDER_CONFIG = "/bms/config/saveOrderConfig";
 var DELETE_CONFIG = "/bms/config/delete";
+var DELETE_ORDER_CONFIG = "/bms/config/deleteOrderConfig";
 var QUERY_CONFIG_LIST = "/bms/config/searchConfigList";
 var FILL_CONFIG = "/bms/config/getConfig";
 var FILL_CAR_TYPE = "/bms/config/getCarType";

@@ -970,8 +970,10 @@ class Car
         if($success) {
             $rowWDI = WarehouseAR::model()->findByPk(1);
 			$rowWDI->saveCounters(array('quantity'=>1));
-			// $rowWDI->quantity += 1;
-			// $rowWDI->save();
+			if($this->car->warehouse_id > 0){
+				$row = WarehouseAR::model()->findByPk($this->car->warehouse_id);
+				$row->saveCounters(array('quantity'=>-1));
+			}
 
             $this->car->order_id = $data['orderId'];
             $this->car->old_wh_id = $this->car->warehouse_id;
@@ -1046,6 +1048,12 @@ class Car
 			throw new Exception($this->car->vin . '已出库');
 		}
 	}
+
+	public function checkAlreadyWarehouse(){
+		if($this->car->warehouse_time > '0000-00-00 00:00:00'){
+			throw new Exception($this->car->vin . '已入库');
+		}
+	}
 	
 	public function releaseOrder(){
 		
@@ -1116,9 +1124,9 @@ class Car
 	}
 	
 	public function checkTestLinePassed() {
-		// if(YII_DEBUG) {
-		// 	return;
-		// }
+		if($this->car->config_id == 45) {
+			return;
+		}
 		$vin = $this->car->vin;
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";

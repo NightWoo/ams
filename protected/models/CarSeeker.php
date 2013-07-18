@@ -322,7 +322,7 @@ class CarSeeker
 			$detail[] = array_merge(array('color' => $color), $temp);
 		}
 
-		sort($configNameArray);
+		// sort($configNameArray);
 
 		return array(
 			'colorArray' => $colorArray,
@@ -631,11 +631,11 @@ class CarSeeker
 		return $total;
 	}
 
-	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber=''){
+	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier=''){
 		$configNames = $this->configNameList();
 		$orderNumberArray = array();
 		$orderSeeker = new OrderSeeker(); 
-		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series,$orderBy, $standbyDateEnd, $boardNumber);
+		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series,$orderBy, $standbyDateEnd, $boardNumber, $carrier);
 		
 		$contConditions = array();
 		foreach($orders as $order){
@@ -735,7 +735,7 @@ class CarSeeker
 		$str = "'" . join("','", $states) . "'";
 		$condition = " WHERE status IN ($str) AND series='$series'";
 
-		$sql = "SELECT DISTINCT order_config_id, cold_resistant, order_config_name FROM view_car_info_main $condition";
+		$sql = "SELECT DISTINCT order_config_id, cold_resistant, order_config_name,mark_clime FROM view_car_info_order_config $condition ORDER BY mark_clime DESC,order_config_name ASC";
 		$configColdArray = Yii::app()->db->createCommand($sql)->queryAll();
 
 		foreach($configColdArray as &$configCold){

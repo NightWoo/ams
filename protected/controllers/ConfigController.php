@@ -2,6 +2,7 @@
 Yii::import('application.models.Config');
 Yii::import('application.models.ConfigSeeker');
 Yii::import('application.models.AR.CarConfigAR');
+Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.AR.CarColorMapAR');
 Yii::import('application.models.AR.CarConfigListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
@@ -39,6 +40,13 @@ class ConfigController extends BmsBaseController
 		$series = $this->validateStringVal('car_series','');
 		$type = $this->validateStringVal('car_type','');
 		$configName = $this->validateStringVal('config_name','');
+		$orderConfigId = $this->validateIntVal('order_config_id',0);
+		$markClime = $this->validateStringVal('mark_clime','国内');
+		$exportCountry = $this->validateStringVal('export_country','');
+		$sideGlass = $this->validateStringVal('side_glass','');
+		$tyre = $this->validateStringVal('tyre','');
+		$steering = $this->validateStringVal('assisted_steering','液压');
+		$certificateNote = $this->validateStringVal('certificate_note','');
 		$remark = $this->validateStringVal('remark','');
 		
 		try {
@@ -66,6 +74,13 @@ class ConfigController extends BmsBaseController
 			$config->car_series = $series;
 			$config->car_type = $type;
 			$config->name = $configName;
+			$config->order_config_id = $orderConfigId;
+			$config->mark_clime = $markClime;
+			$config->export_country = $exportCountry;
+			$config->side_glass = $sideGlass;
+			$config->tyre = $tyre;
+			$config->assisted_steering = $steering;
+			$config->certificate_note = $certificateNote;
 			$config->remark = $remark;
 			$config->user_id = Yii::app()->user->id;
 			$config->modify_time = date("YmdHis");
@@ -77,6 +92,49 @@ class ConfigController extends BmsBaseController
 		}
 	}
 	
+	public function actionSaveOrderConfig() {
+		$id = $this->validateIntVal('id',0);
+		$series = $this->validateStringVal('car_series','');
+		$type = $this->validateStringVal('car_type','');
+		$configName = $this->validateStringVal('config_name','');
+		$remark = $this->validateStringVal('remark','');
+		
+		try {
+			if(empty($series)) {
+				throw new Exception("车系不能为空");
+			}
+			if(empty($type)) {
+				throw new Exception("车型不能为空");
+			}
+			if(empty($configName)) {
+				throw new Exception("配置名称不能为空");
+			} else if(empty($id)) {
+				$exist = OrderConfigAR::model()->find('name=?', array($configName));
+				if(!empty($exist)){
+					throw new Exception("配置名称 '$configName' 已经存在，请重新命名");
+				}
+			}
+			if(empty($id)) {
+				$config = new OrderConfigAR();
+				$config->create_time = date("YmdHis");
+			} else {
+				$config = OrderConfigAR::model()->findByPk($id);
+			}
+			
+			$config->car_series = $series;
+			$config->car_type = $type;
+			$config->name = $configName;
+			$config->remark = $remark;
+			$config->user_id = Yii::app()->user->id;
+			$config->modify_time = date("YmdHis");
+			
+			$config->save();
+			$this->renderJsonBms(true, 'OK', '');
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionDelete() {
 		$id = $this->validateIntval('id', 0);
 		try{
@@ -324,6 +382,20 @@ class ConfigController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
+
+    public function actionSearchOrderConfig() {
+		$configName = $this->validateStringVal('config_name','');
+		$series = $this->validateStringVal('car_series','');
+		$type = $this->validateStringVal('car_type','');
+		$column = $this->validateStringVal('column','');
+		try{
+			$config = new OrderConfigSeeker();
+			$data = $config->search($series, $type, $configName, $column);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this-> renderJsonBms(false , $e->getMessage());
+		}
+	}
 
 	protected function reloadSession() {
 		$session_name = session_name();

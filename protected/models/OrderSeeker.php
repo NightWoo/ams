@@ -152,7 +152,7 @@ class OrderSeeker
         return $datas;
 	}
 
-	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='') {
+	public function query($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier='') {
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
@@ -178,6 +178,10 @@ class OrderSeeker
 
 		if(!empty($boardNumber)){
 			$condition .= " AND board_number LIKE '%$boardNumber'";
+		}
+
+		if(!empty($carrier)){
+			$condition .= " AND carrier LIKE '%$carrier'";
 		}
 		
 		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count, carrier FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
@@ -239,8 +243,8 @@ class OrderSeeker
 		return $orderList;
 	}
 
-	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber=''){
-		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber);
+	public function queryBoardOrders($standbyDate, $orderNumber, $distributor, $status='all', $series='', $orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier=''){
+		$orders = $this->query($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber, $carrier);
 		$boards = array();
 
 		foreach($orders as &$order){
@@ -577,11 +581,13 @@ class OrderSeeker
 	public function queryByBoard($boardNumber){
 		$sql = "SELECT board_number,id as order_id,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
 				FROM `order`
-				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND is_printed=0";
+				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND is_printed=0
+				ORDER BY lane_id,distributor_name,series";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$countSum = 0;
 		$amountSum = 0;
+		$group = array();
 		foreach($orders as &$order) {
 			if(!empty($order['order_config_id'])){
 				$order['order_config_name'] = OrderConfigAR::model()->findByPk($order['order_config_id'])->name;
@@ -601,16 +607,30 @@ class OrderSeeker
 			} else {
 				$order['cold'] = '非耐寒';
 			}
-
 			$order['remain'] = $order['amount']; - $order['hold'];
 
 			$countSum += $order['count'];
 			$amountSum += $order['amount'];
+
+			$key = $order['lane_id'] . $order['distributor_name'] . $order['series'];
+			if(empty($group[$key])){
+				$group[$key] = array(
+					'orderIds' => array(),
+					'orders' => array(),
+				);
+			}
+			$group[$key]['orderIds'][] = $order['order_id'];
+			$group[$key]['orders'][] = $order;
 		}
 
 		$remainTotal = $amountSum - $countSum;
 
-		return array($orders, $remainTotal);
+		$ret = array(
+			"group" => $group,
+			"orders" => $orders,
+			"remainTotal" => $remainTotal,
+		);
+		return $ret;
 	}
 
 	public function queryBoardInfo(){

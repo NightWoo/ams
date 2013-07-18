@@ -100,12 +100,13 @@ class OrderController extends BmsBaseController
 			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
+			$carrier = $this->validateStringVal('carrier', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');		
 			$orderBy = $this->validateStringVal('orderBy', 'board_number,lane_id,priority,`status`');		
 
 			$seeker = new OrderSeeker();
-			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber);
+			$data = $seeker-> queryBoardOrders($standbyDate, $orderNumber, $distributor, $status, $series, $orderBy, $standbyDateEnd, $boardNumber, $carrier);
 
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
@@ -517,6 +518,7 @@ class OrderController extends BmsBaseController
 			$orderNumber = $this->validateStringVal('orderNumber', '');
 			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$distributor = $this->validateStringVal('distributor', '');
+			$carrier = $this->validateStringVal('carrier', '');
 			$status = $this->validateStringVal('status', '0');
 			$series = $this->validateStringVal('series', '');
 			$curPage = $this->validateIntVal('curPage', 1);
@@ -524,7 +526,7 @@ class OrderController extends BmsBaseController
 			$orderBy = $this->validateStringVal('orderBy', 'lane_id,priority,`status`');
 
 			$seeker = new CarSeeker();
-			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage,$orderBy, $standbyDateEnd, $boardNumber);
+			list($total, $data) = $seeker-> queryOrderCar($standbyDate, $orderNumber, $distributor, $status, $series, $curPage, $perPage,$orderBy, $standbyDateEnd, $boardNumber, $carrier);
 
 			$ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
@@ -597,11 +599,7 @@ class OrderController extends BmsBaseController
 		try{
 			$boardNumber = $this->validateStringVal('boardNumber', '');
 			$seeker = new OrderSeeker();
-			list($orders, $remainTotal) = $seeker->queryByBoard($boardNumber);
-			$data = array(
-				'orders' => $orders,
-				'remainTotal' => $remainTotal,
-			);
+			$data = $seeker->queryByBoard($boardNumber);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());

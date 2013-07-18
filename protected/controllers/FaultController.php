@@ -125,7 +125,7 @@ class FaultController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try{
             $car = Car::create($vin);
-            if($car->car->series == "6B"){
+            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
                 $IRemote = $car->getIRemoteTestResult();
                 if(!($IRemote->Result) || $IRemote->TestState != "2"){
                     throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');

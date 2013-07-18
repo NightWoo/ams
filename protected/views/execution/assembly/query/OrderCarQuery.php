@@ -55,7 +55,21 @@
                             <input type="text" class="input-medium" placeholder="经销商..." id="distributorText" />
                             <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
                         </div>
+                        <div class="help-inline"  style="padding-left:0; margin-top:5px ">
+                            <!-- <span class="add-on">物流</span> -->
+                            <!-- <input type="text" class="input-small" placeholder="承运商..." id="carrierText" /> -->
+                            <select id="carrier" class="input-small">
+                                <option value="" selected>所有物流</option>
+                                <option value="安吉">安吉</option>
+                                <option value="华秦">华秦</option>
+                                <option value="銮通">銮通</option>
+                                <option value="兴达">兴达</option>
+                                <option value="远志达">远志达</option>
+                            </select>
+                            <!-- <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a> -->
+                        </div>
                         <!-- <input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input> -->
+                        <br>
                         <div class="input-append input-prepend" style="clear: right">
                             <span class="add-on">日期</span>
                             <!-- <input id="standbyDate"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/> -->

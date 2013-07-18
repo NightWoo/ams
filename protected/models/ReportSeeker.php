@@ -14,6 +14,9 @@ class ReportSeeker
 	private static $NODE_BALANCE_STATE = array(
 		'PBS' => array('彩车身库'),
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
+		'onLine-2' => array('II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验'),
+		'onLine-all' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
+		'onLine-2' => array('II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验', 'II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验'),
 		'VQ1' => array('VQ1异常','退库VQ1'),
 		'VQ1-NORMAL' => array('VQ1异常'),
 		'VQ1-RETURN'=> array('退库VQ1'),
@@ -45,6 +48,7 @@ class ReportSeeker
 		"completion2" => "完成率",
 		"warehouseCount" => "入库",
 		"distributeCount" => "出库",
+		"onlineBalance" => "在制车",
 		"recycleBalance" => "周转车",
 		"warehouseBalance" => "库存",
 		"assemblyMonth" => "上线",
@@ -100,9 +104,11 @@ class ReportSeeker
 		$curDate = DateUtil::getCurDate();
 		if(strtotime($date) < strtotime($curDate)){
 			$nextDay = date("Y-m-d", strtotime('+1 day', strtotime($date)));
+			$countArray["onlineBalance"] = $this->queryOnlineBalanceGroupBySeries($date, $nextDay);
 			$countArray["recycleBalance"] = $this->queryRecycleBalanceGroupBySeries($date, $nextDay);
 			$countArray["warehouseBalance"] = $this->queryWarehouseBalanceGroupBySeries($date, $nextDay);
 		} else {
+			$countArray["onlineBalance"] = $this->countCarByState("online-all");
 			$countArray["recycleBalance"] = $this->countCarByState("recycle");
 			$countArray["warehouseBalance"] = $this->countCarByState("WH");
 		}
@@ -171,32 +177,35 @@ class ReportSeeker
 		}
 
 		foreach($timeArray as $queryTime){
-			//count assembly cars
-			$countTmp = array();
-			$completionTmp = array();
+			$curDate = DateUtil::getCurDate() . " 08:00:00";
+			if($queryTime['stime']<$curDate){
+				$sDate = substr($queryTime['stime'], 0, 10);
+				$eDate = substr($queryTime['etime'], 0, 10);
+				$completionArray = $this->queryPlanCompletion($sDate,$eDate);
+				$assemblyCount = $this->countCarByPoint($queryTime['stime'], $queryTime['etime'], 'assembly');
+				$readySum = 0;
+				$totalSum = 0;
+				foreach($completionArray as $series => $count){
+					// $columnSeriesY[$seriesArray[$series]][] = $count['ready'];
+					// $countTmp[$seriesArray[$series]] =  $count['ready'];
+					// $countTotal[$seriesArray[$series]] += $count['ready'];
 
-			$sDate = substr($queryTime['stime'], 0, 10);
-			$eDate = substr($queryTime['etime'], 0, 10);
-			$completionArray = $this->queryPlanCompletion($sDate,$eDate);
-
-			$readySum = 0;
-			$totalSum = 0;
-			foreach($completionArray as $series => $count){
-				// $columnSeriesY[$seriesArray[$series]][] = $count['ready'];
-				// $countTmp[$seriesArray[$series]] =  $count['ready'];
-				// $countTotal[$seriesArray[$series]] += $count['ready'];
-
-				$readySum += $count['ready'];
-				$totalSum += $count['total'];
+					$readySum += $count['ready'];
+					$totalSum += $count['total'];
+				}
+				foreach($seriesArray as $series => $seriesName){
+					$columnSeriesY[$seriesName][] = $assemblyCount[$series];
+				}
+				$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
+				$lineSeriesY[] = $rate;
+			} else {
+				foreach($seriesArray as $series => $seriesName){
+					$columnSeriesY[$seriesName][] = null;
+				}
+				$lineSeriesY[] = null;
 			}
 
-			$assemblyCount = $this->countCarByPoint($queryTime['stime'], $queryTime['etime'], 'assembly');
-			foreach($seriesArray as $series => $seriesName){
-				$columnSeriesY[$seriesName][] = $assemblyCount[$series];
-			}
-
-			$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
-			$lineSeriesY[] = $rate;
+			$columnSeriesX[] = $queryTime['point'];
 		}
 
 		$ret = array(
@@ -251,19 +260,25 @@ class ReportSeeker
 		$pauseTotal['总计'] = 0;
 
 		foreach($timeArray as $queryTime){
-			$pauseTmp = array();
-			$useTmp = array();
-			$howlongSum = 0;
-
-			$causeDistribute = $this->queryPauseCauseDistribute($queryTime['stime'], $queryTime['etime']);
-			$useTmp = $this->queryUseRate($queryTime['stime'], $queryTime['etime']);
-			foreach($causeDistribute as $causeType => $howlong){
-				$columnSeriesY[$causeType][] = $howlong;
+			$curDate = DateUtil::getCurDate() . " 08:00:00";
+			if($queryTime['stime']<$curDate){
+				$pauseTmp = array();
+				$useTmp = array();
+				$howlongSum = 0;
+				$causeDistribute = $this->queryPauseCauseDistribute($queryTime['stime'], $queryTime['etime']);
+				$useTmp = $this->queryUseRate($queryTime['stime'], $queryTime['etime']);
+				foreach($causeDistribute as $causeType => $howlong){
+					$columnSeriesY[$causeType][] = $howlong;
+				}
+				$lineSeriesY[] = $useTmp['useRate'];
+			} else {
+				foreach($causeArray as $causeType){
+					$columnSeriesY[$causeType][] = null;
+				}
+				$lineSeriesY[] = null;
 			}
 
 			$columnSeriesX[] = $queryTime['point'];
-
-			$lineSeriesY[] = $useTmp['useRate'];
 		}
 
 		$pauseDetail = array();
@@ -444,15 +459,22 @@ class ReportSeeker
 		}
 
 		foreach($timeArray as $queryTime) {
-			$sDate = substr($queryTime['stime'], 0, 10);
-			$eDate = substr($queryTime['etime'], 0, 10);
-			$balanceArray = $this->queryRecycleBalance($sDate, $eDate);
-			foreach($balanceArray as $state => $count){
-				$columnSeriesY[$stateArray[$state]][] = $count;
-			}
 			$curDate = DateUtil::getCurDate() . " 08:00:00";
-			$period = $queryTime['stime']<$curDate ? $this->queryAssemblyPeriod($queryTime['stime'], $queryTime['etime']) : null;
-			$lineSeriesY[] = $period;
+			if($queryTime['stime']<$curDate){
+				$sDate = substr($queryTime['stime'], 0, 10);
+				$eDate = substr($queryTime['etime'], 0, 10);
+				$balanceArray = $this->queryRecycleBalance($sDate, $eDate);
+				foreach($balanceArray as $state => $count){
+					$columnSeriesY[$stateArray[$state]][] = $count;
+				}
+				$period = $this->queryAssemblyPeriod($queryTime['stime'], $queryTime['etime']);
+				$lineSeriesY[] = $period;
+			} else {
+				foreach($balanceArray as $state => $count){
+					$columnSeriesY[$stateArray[$state]][] = null;
+				}
+				$lineSeriesY[] = null;
+			}
 			$columnSeriesX[] = $queryTime['point'];
 		}
 
@@ -469,7 +491,7 @@ class ReportSeeker
 	}
 
 	public function queryRecycleBalance($sDate, $eDate) {
-		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine','onLine', 'VQ1','VQ2','VQ3') GROUP BY series,state";
+		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine','onLine-2', 'VQ1','VQ2','VQ3') GROUP BY series,state";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$count = array();
@@ -479,6 +501,22 @@ class ReportSeeker
 
 		foreach($datas as $data){
 			$count[$data['state']] += ceil($data['count']);
+		}
+
+		return $count;
+	}
+
+	public function queryOnlineBalanceGroupBySeries($sDate, $eDate) {
+		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine','onLine-2')  GROUP BY series";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$count = array();
+		foreach(self::$SERIES_NAME as $series => $seriesName){
+			$count[$series] = null;
+		}
+
+		foreach($datas as $data){
+			$count[$data['series']] += ceil($data['count']);
 		}
 
 		return $count;
@@ -597,7 +635,7 @@ class ReportSeeker
 		return $remarks;
 	}
 
-	public function queryWarehouseReport($date, $timespan) {
+	public function queryWarehouseChart($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$seriesArray = self::$SERIES_NAME;
@@ -609,11 +647,19 @@ class ReportSeeker
 		}
 
 		foreach($timeArray as $queryTime){
-			$count = $this->countCarByPoint($queryTime['stime'], $queryTime['etime'], 'distribute');
-			foreach($seriesArray as $series => $seriesName){
-				$columnSeriesY[$seriesName][] = $count[$series];
+			$curDate = DateUtil::getCurDate() . " 08:00:00";
+			if($queryTime['stime']<$curDate){
+				$count = $this->countCarByPoint($queryTime['stime'], $queryTime['etime'], 'distribute');
+				foreach($seriesArray as $series => $seriesName){
+					$columnSeriesY[$seriesName][] = $count[$series];
+				}
+				$lineSeriesY[] = $this->queryWarehousePeriod($queryTime['stime'], $queryTime['etime']);
+			} else {
+				foreach($seriesArray as $series => $seriesName){
+					$columnSeriesY[$seriesName][] = null;
+				}
+				$lineSeriesY[] = null;
 			}
-			$lineSeriesY[] = $this->queryWarehousePeriod($queryTime['stime'], $queryTime['etime']);
 
 			$columnSeriesX[] = $queryTime['point'];
 		}

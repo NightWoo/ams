@@ -113,7 +113,7 @@ class ReportController extends BmsBaseController
         if(empty($date)) $date = DateUtil::getCurDate();
         try{
             $seeker = new ReportSeeker();
-            $data = $seeker->queryWarehouseReport($date, $timespan);
+            $data = $seeker->queryWarehouseChart($date, $timespan);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

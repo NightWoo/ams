@@ -6,6 +6,10 @@
 	margin-top: 5px;
 }
 
+#standbyDate, #standbyDateEnd{
+	width: 94px;
+}
+
 #tableOrderCars, #tableOrderDetail {
 	font-size:12px;	
 }

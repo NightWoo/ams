@@ -59,7 +59,7 @@ $(document).ready(function() {
 	}
 
 	function resetPage() {
-		$(".vinText").attr("disabled", "disabled");
+		$(".btn-commit").attr("disabled", "disabled");
 	}
 
 	function validateVin(vinText) {

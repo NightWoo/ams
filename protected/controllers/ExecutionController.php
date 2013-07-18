@@ -91,6 +91,7 @@ class ExecutionController extends BmsBaseController
 			$vin = $this->validateStringVal('vin', '');
 			$car = Car::create($vin);
             $car->checkAlreadyOut();
+            $car->checkAlreadyWarehouse();
         	$car->enterNode('PBS', 0 , true);
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {
@@ -112,7 +113,7 @@ class ExecutionController extends BmsBaseController
 			}
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             //$car->leftNode('PBS');
             // $car->enterNode('T0', 0 ,true);
 			$car->enterNode($currentNode, 0 ,true);
@@ -153,7 +154,7 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 
@@ -182,7 +183,7 @@ class ExecutionController extends BmsBaseController
             $nodeName = $this->validateStringVal('currentNode', 'F20');
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             //$car->leftNode('F10');
             $car->enterNode($nodeName);
             //print check trace 
@@ -209,13 +210,13 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             $enterNode = Node::createByName($nodeName);
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
             // $car->passNode('LEFT_WORK_SHOP');
 
-            if($car->car->series == "6B"){
+            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
                 $checkIRemote = true;
                 $ff = CJSON::decode($faults);
                 if(!empty($ff)){
@@ -260,7 +261,7 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 			$car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
@@ -280,7 +281,7 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             $car->leftNode('LEFT_WORK_SHOP');
             $car->enterNode('ENTER_CHECK_SHOP', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -294,7 +295,7 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
             $car->leftNode('ENTER_CHECK_SHOP');
             $car->enterNode('CHECK_LINE', 0);
             $this->renderJsonBms(true, 'OK', $vin);
@@ -312,6 +313,7 @@ class ExecutionController extends BmsBaseController
 			}
             $car = Car::create($vin);
             $car->checkAlreadyOut();
+            $car->checkAlreadyWarehouse();
             $car->leftNode('CHECK_LINE');
 			$car->passNode('VQ3');
             $car->enterNode('ROAD_TEST_START', $driverId);
@@ -339,7 +341,7 @@ class ExecutionController extends BmsBaseController
 
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-			
+			$car->checkAlreadyWarehouse();
 			$car->leftNode('CHECK_LINE');
             
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_','VQ1_STATIC_TEST_2_'));
@@ -386,7 +388,7 @@ class ExecutionController extends BmsBaseController
 			
             $car = Car::create($vin);
 			$car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
 			$car->leftNode('ROAD_TEST_FINISH');
 			$car->passNode('VQ3');
             
@@ -420,7 +422,7 @@ class ExecutionController extends BmsBaseController
             $driverId = $this->validateStringVal('driver', 0);
             $car = Car::create($vin);
             $car->checkAlreadyOut();
-
+            $car->checkAlreadyWarehouse();
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
             if(!empty($exist)) {
@@ -1080,6 +1082,16 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
         }
 	}
+
+    public function actionOrderConfigMaintain() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/OrderConfigMaintain');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
 	
 	//added by wujun
 	public function actionConfigList() {
@@ -1215,6 +1227,10 @@ class ExecutionController extends BmsBaseController
 
     public function actionOutStandby35() {
         $this->render('assembly/dataInput/OutStandby35');  
+    }
+
+    public function actionOutStandby27() {
+        $this->render('assembly/dataInput/OutStandby27');  
     }
 
     public function actionWarehouseLabel() {

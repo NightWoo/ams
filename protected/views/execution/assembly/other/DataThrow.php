@@ -37,7 +37,7 @@
 							<input type="text" class="vinText span3" placeholder="请扫描/输入VIN..." id="vinAssembly" />
 							<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 						</div>
-						<input type="button" class="btn btn-primary" id="btnFinish" value="下线抛送"></input>
+						<input type="button" class="btn btn-primary btn-commit" id="btnFinish" value="下线抛送"></input>
 					</div>
 	            </div>
 
@@ -52,8 +52,8 @@
 							<input type="text" class="vinText span3" placeholder="请扫描/输入VIN..." id="vinWarehouse" />
 							<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 						</div>
-						<input type="button" class="btn btn-primary" id="btnIn" value="入库抛送"></input>
-						<input type="button" class="btn btn-primary" id="btnOut" value="出库抛送"></input>
+						<input type="button" class="btn btn-primary btn-commit" id="btnIn" value="入库抛送"></input>
+						<input type="button" class="btn btn-primary btn-commit" id="btnOut" value="出库抛送"></input>
 					</div>
 	            </div>
 
@@ -68,7 +68,7 @@
 							<input type="text" class="vinText span3" placeholder="请扫描/输入VIN..." id="vinMark" />
 							<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 						</div>
-						<input type="button" class="btn btn-primary" id ="btnMark" value ="抛送"></input>
+						<input type="button" class="btn btn-primary btn-commit" id ="btnMark" value ="抛送"></input>
 					</div>
 				</div>
 
@@ -83,7 +83,7 @@
 							<input type="text" class="vinText span3" placeholder="请扫描/输入VIN..." id="vinCertificate" />
 							<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
 						</div>
-						<input type="button" class="btn btn-primary" id ="btnCertificate" value ="抛送"></input>
+						<input type="button" class="btn btn-primary btn-commit" id ="btnCertificate" value ="抛送"></input>
 					</div>
 				</div>
 

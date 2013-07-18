@@ -66,10 +66,10 @@
             </div >
                 <div style="width:820pt;margin: 0px auto;">
                     <ul id="tabUl" class="nav nav-pills">
-                        <li class="active"><a class="queryCompletion" href="#tabCompletion" data-toggle="tab">上线与计划完成率</a></li>
-                        <li class="notPrintable"><a class="queryUse" href="#tabManufactureUse" data-toggle="tab">停线时间与生产利用率</a></li>
-                        <li class="notPrintable"><a class="queryRecycle" href="#tabRecycle" data-toggle="tab">周转车与生产周期</a></li>
-                        <li class="notPrintable"><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab">发车与成品库周期</a></li>
+                        <li class="active"><a class="queryCompletion" href="#tabCompletion" data-toggle="tab"><span class="screenHide">1.&nbsp;</span>上线与计划完成率</a></li>
+                        <li class="notPrintable"><a class="queryUse" href="#tabManufactureUse" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>停线时间与生产利用率</a></li>
+                        <li class="notPrintable"><a class="queryRecycle" href="#tabRecycle" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>周转车与生产周期</a></li>
+                        <li class="notPrintable"><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>发车与成品库周期</a></li>
                         <li class="notPrintable"><a class="print" href="#"><i class="icon-print"></i></a></li>
                         <!-- <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -165,7 +165,7 @@
                                     <table id="overtimeCarsTable" class="table table-bordered table-condensed initHide overtimeCarsTable">
                                         <thead>
                                             <tr>
-                                                <th style="min-width:60px">周转周期</th>
+                                                <th style="min-width:60px">生产周期</th>
                                                 <th style="min-width:40px">车系</th>
                                                 <th>流水号</th>
                                                 <th>VIN号</th>

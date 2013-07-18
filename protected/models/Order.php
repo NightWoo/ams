@@ -174,6 +174,9 @@ class Order
         			case 35 :	
 						$matchCondition = "warehouse_id>=600 AND warehouse_id<700 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 						break;
+					case 27 :	
+						$matchCondition = "warehouse_id>=500 AND warehouse_id<600 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+						break;
 					default :
         				$matchCondition = "warehouse_id>1 AND warehouse_id<300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
         		}
