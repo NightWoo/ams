@@ -617,10 +617,16 @@ class OrderSeeker
 				$group[$key] = array(
 					'orderIds' => array(),
 					'orders' => array(),
+					'lane' => $order['lane_name'],
+					'distributor' => $order['distributor_name'],
+					'amount' => 0,
+					'count' => 0,
 				);
 			}
 			$group[$key]['orderIds'][] = $order['order_id'];
 			$group[$key]['orders'][] = $order;
+			$group[$key]['amount'] = $order['amount'];
+			$group[$key]['count'] = $order['count'];
 		}
 
 		$remainTotal = $amountSum - $countSum;
@@ -638,25 +644,20 @@ class OrderSeeker
 		$boardInfo = array();
 		$totalToPrint = 0;
 
-		$sql = "SELECT board_number, id,amount,hold,count,lane_id,`status`,is_printed
-				 FROM `order`
-				 WHERE is_printed=0 AND (`status`=1 OR `status`=2)
-				 ORDER BY board_number ASC";
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		foreach($orders as $order){
-			if(!in_array($order['board_number'], $boardArray)){
-				$boardArray[] = $order['board_number'];
-				$boardInfo[$order['board_number']] = array(
-					'toPrint' => 0,
-					'countSum' => 0,
-					'amountSum' => 0,
-				);
-			}
-			$boardInfo[$order['board_number']]['countSum'] += $order['count'];
-			$boardInfo[$order['board_number']]['amountSum'] += $order['amount'];
-			if($order['count'] == $order['amount']){
-				++$boardInfo[$order['board_number']]['toPrint'];
-				++$totalToPrint;
+		$sql  = "SELECT DISTINCT(board_number) FROM `order` WHERE is_printed = 0 AND `status`>0 ORDER BY board_number ASC";
+		$boardArray = Yii::app()->db->createCommand($sql)->queryColumn();
+
+		foreach($boardArray as $board){
+			$boardInfo[$board] = array("toPrint"=>0,"countSum"=>0,"amountSum"=>0);
+			$sql = "SELECT SUM(amount) as amount, SUM(count) as count FROM `order` WHERE board_number='$board' AND is_printed = 0 AND `status`>0 GROUP BY CONCAT(lane_id,distributor_name,series)";
+			$datas = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach($datas as $data){
+				$boardInfo[$board]["countSum"] += $data["count"];
+				$boardInfo[$board]["amountSum"] += $data["amount"];
+				if($data["count"] == $data["amount"]){
+					++$boardInfo[$board]["toPrint"];
+					++$totalToPrint;
+				}
 			}
 		}
 

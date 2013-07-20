@@ -99,3 +99,15 @@
 	font-size: 14px;
 	padding: 0 2px;
 }
+
+#tableOrders td{
+	border-top-width: 1px;
+}
+
+#tableOrders .thickBoarder td{
+	border-top-width: 3px;
+}
+
+#tableOrders .rowSpanTd{
+	background-color: white; 
+}

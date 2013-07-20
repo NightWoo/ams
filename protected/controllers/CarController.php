@@ -84,7 +84,7 @@ class CarController extends BmsBaseController
 			$car->checkTraceGasolineEngine();
 			
             if($car->car->series === 'F0'){
-                $car->checkTraceGearBox();
+                // $car->checkTraceGearBox();
 				$absTrace = $car->checkTraceABS();
 				if(!empty($absTrace)){
 					$barCode = $absTrace->bar_code;
@@ -193,6 +193,21 @@ class CarController extends BmsBaseController
                 $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
                 $data['status'] .= '_' . $row ;
             }
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
+    public function actionValidateCheckPaper() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            $car = Car::create($vin);
+            $line = $car->car->assembly_line;
+            $car->checkTraceGasolineEngine();
+            
+            $data = $car->car;
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

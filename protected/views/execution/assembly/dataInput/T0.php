@@ -22,6 +22,7 @@ td,th{border:none;}
 		<link href="/bms/css/execution/assembly/dataInput/T0.css" rel="stylesheet"> -->
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
+        <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
 
 		<script type="text/javascript" src="/bms/js/bootstrap-collapse.js"></script>

@@ -73,7 +73,7 @@ class PauseSeeker
 			}
 
 			$howlong = is_null($data['howlong']) ? (gettimeofday("YmdHis") - strtotime($data['pause_time'])) : $data['howlong'];
-
+			$data['howlong_min'] = round($howlong/60, 2);
 			// if(($data['recover_time'] == 0)){
 				//$howlong = (gettimeofday("YmdHis") - strtotime($data['pause_time'])) / 60;
 				//$data['howlong'] = intval($howlong);

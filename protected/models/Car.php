@@ -1015,7 +1015,7 @@ class Car
             $this->car->save();
 
 		} else {
-			$status = "退库" . $goTo;
+			$status = $goTo . "退库" ;
 			if($this->car->warehouse_id > 1){
 				$this->car->old_wh_id = $this->car->warehouse_id;
 			}
@@ -1093,6 +1093,7 @@ class Car
 		$vin = $this->car->vin;
 		$series = $this->car->series;
 		$color = $this->car->color;
+		$carId = $this->car->id;
 		
 		$carType = $this->car->type;
 		$carType = str_replace("（", "(",$carType);
@@ -1108,9 +1109,9 @@ class Car
 		$engineCode = substr($engineTrace->bar_code, -$engine->code_digit);
 		
 		$insertsql = "INSERT INTO testline_car_info
-				SET vin='{$vin}', series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}'";
+				SET car_id=$carId, vin='{$vin}', series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}'";
 		$updatesql = "UPDATE testline_car_info
-						SET series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}' 
+						SET car_id=$carId, series='{$series}', series_name='{$seriesName}', car_model='{$carModel}', `car_type`='{$carType}', engine_type = '{$engineType}', engine_code='{$engineCode}', color='{$color}' 
 						WHERE vin='{$vin}'";
 		$existsql = "SELECT vin FROM testline_car_info WHERE vin='{$vin}'";				
 		

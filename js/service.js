@@ -42,6 +42,8 @@ var VQ1_VIEW_PART = "/bms/fault/view";
 var VQ1_SHOW_EXCEPTION = "/bms/fault/showVQ1";
 var VQ1_SUBMIT_EXCEPTION = "/bms/fault/saveVQ1";
 
+var CHECKPAPER_VALIDATE = "/bms/car/validateCheckPaper";
+var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 
 //work shop
 var LWS_VALIDATE = "/bms/car/validateLWS";

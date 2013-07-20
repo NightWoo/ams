@@ -143,7 +143,7 @@ class PauseController extends BmsBaseController
 			$orderBy = empty($orderBy) ? 'ORDER BY pause_time ASC' : $orderBy;
 			$seeker = new PauseSeeker();
 			list($total, $datas) = $seeker->query($startTime, $endTime, $section, '', $causeType, $dutyDepartment, $pauseReason, 0, 0, $orderBy);
-			$content = "recordID,停线类型,工位,责任部门,原因,时长,停线时刻,恢复时刻,编辑人\n";
+			$content = "recordID,停线类型,工位,责任部门,原因,时长(min),停线时刻,恢复时刻,编辑人\n";
 			foreach($datas as $data) {
 				$content .= "{$data['id']},";
 				$content .= "{$data['cause_type']},";
@@ -152,7 +152,7 @@ class PauseController extends BmsBaseController
 				$data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
 				$data['remark'] = str_replace(",", "，",$data['remark']);
 				$content .= "{$data['remark']},";
-				$content .= "{$data['howlong']},";
+				$content .= "{$data['howlong_min']},";
 				$content .= "{$data['pause_time']},";
 				$content .= "{$data['recover_time']},";
 				$content .= "{$data['editor_name']}\n";

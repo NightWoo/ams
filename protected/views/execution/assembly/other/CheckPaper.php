@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $nodeDisplayName;?></title>
+		<title>检验跟单</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="/bms/css/execution/assembly/dataInput/F20.css" rel="stylesheet" media="screen">
+	<link href="/bms/css/execution/assembly/other/CheckPaper.css" rel="stylesheet" media="screen">
 	<link href="/bms/css/common.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
 	<style type="text/css" media="screen">
@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
     <script type="text/javascript" src="/bms/js/common.js"></script>
-    <script type="text/javascript" src="/bms/js/execution/assembly/dataInput/f20.js"></script>
+    <script type="text/javascript" src="/bms/js/execution/assembly/other/checkPaper.js"></script>
 	</head>
 	<body>
 		<div class="notPrintable">
@@ -31,7 +31,7 @@
 			?>
 			<div id="bodyright" class="offset2"><!-- Main体 -->
                 <div>
-                    <legend><?php echo $nodeDisplayName;?>
+                    <legend>检验跟单打印
                     </legend>
                 </div>
             			           
@@ -42,7 +42,6 @@
 						<input type="button" class="btn btn-primary" id ="btnSubmit" 
 							disabled="disabled" value ="打印检验跟单"></input>
 						<input type="button" class="btn" id ="reset" value ="清空"></input>
-						<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 						<span class="help-inline" id="vinHint">请输入VIN后回车</span>
 						<div class="help-inline" id="carInfo">
 							<span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>

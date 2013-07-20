@@ -25,7 +25,7 @@ $("document").ready(function() {
 	$("#printAll").click(function(e) {
 		orderIds = $(this).data("orderIds");
 		if($(e.target).attr("disabled") == "disabled"){
-					return false;
+			return false;
 		} else {
 			if(confirm('是否传输打印？')){
 				$("#spinModal").modal("show");

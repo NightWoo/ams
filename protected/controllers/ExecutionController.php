@@ -776,6 +776,18 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionCheckPaperPrint() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $data = $car->generateCheckTraceData();
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionGetWarehouseLabel() {
         try {
             $vin = $this->validateStringVal('vin', '');
@@ -1220,7 +1232,6 @@ class ExecutionController extends BmsBaseController
         }
     }
 
-    //added by wujun
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  
     }
@@ -1245,6 +1256,16 @@ class ExecutionController extends BmsBaseController
         try{
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/other/WarehouseReturn');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    public function actionCheckPaper() {
+        try{
+            Yii::app()->permitManager->check('CHECKPAPER_PRINT');
+            $this->render('assembly/other/CheckPaper');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');

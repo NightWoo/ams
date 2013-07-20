@@ -382,7 +382,7 @@
 
                         <div class="tab-pane" id="dpu">
                             <div id="lineContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <div><p class="text-info">注：由于车辆可能在不同的时间多次进入经过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
+                            <div><p class="text-info">注：由于车辆可能在不同的时间多次通过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
                             <table id="tableDpu" class="table table-condensed  table-bordered">
                                 <thead>
                                     <tr></tr>
@@ -398,7 +398,7 @@
 
                         <div class="tab-pane" id="passRate">
                             <div id="passRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <div><p class="text-info">注：由于车辆可能在不同的时间多次进入经过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
+                            <div><p class="text-info">注：由于车辆可能在不同的时间多次通过VQ节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
                             <table id="tablePassRate" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />

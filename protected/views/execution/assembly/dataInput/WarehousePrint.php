@@ -30,8 +30,8 @@
             <div>
             	<legend>出库打印
             		<span class="pull-right">
-            			<a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
-            			/
+            			<!-- <a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
+            			/ -->
             			<a href="/bms/execution/warehousePrintExport"><i class="icon-link"></i>&nbsp;出口车批量传输</a>
             		</span>
             	</legend>
@@ -71,22 +71,22 @@
 			    </div>
 
 			    <div class="offset4">
-	                
-	                <table id="tableOrders" class="table table-condensed table-hover" style="font-size:12px; display:none">
+	                <table id="tableOrders" class="table table-condensed" style="font-size:12px; display:none">
 	                    <thead>
 	                        <tr>
-	                            <th style="width:40px"></th>
-	                            <th style="width:50px">#</th>
+	                            <th style="width:100px;font-size:14px;" >#<span id="boardNumber"></span></th>
+	                            <!-- <th style="width:50px">板号</th> -->
 	                            <th style="width:30px">车道</th>
+	                            <th style="min-width:120px">经销商</th>
 	                            <th>订单号</th>
-	                            <th style="width:150px">经销商</th>
-	                            <th style="width:30px">车系</th>
-	                            <th style="width:180px">车型/配置</th>
-	                            <th style="width:40px">耐寒性</th>
-	                            <th style="width:40px">颜色</th>
-	                            <th style="width:30px">数量</th>
-	                            <th style="width:30px">已备</th>
-	                            <th style="width:30px">出库</th>
+	                            <th style="min-width:30px">车系</th>
+	                            <th style="min-width:180px">车型/配置</th>
+	                            <th style="min-width:40px">耐寒性</th>
+	                            <th style="min-width:60px">颜色</th>
+	                            <th style="min-width:30px">数量</th>
+	                            <th style="min-width:30px">已备</th>
+	                            <th style="min-width:30px">出库</th>
+	                            <th style="min-width:40px"></th>
 	                            <!-- <th id="thStandbyDate">备车日期</th> -->
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
@@ -94,17 +94,6 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                        	<!-- <td>34</td>
-	                        	<td>ZCDG-20130327599959</td>
-	                        	<td>南京苏舜亚通汽车销售服务有限公司</td>
-	                        	<td>M6</td>
-	                        	<td>QCJ6480MJ/2.4L尊贵/4G69</td>
-	                        	<td>非耐寒</td>
-	                        	<td>瑞亚银</td>
-	                        	<td>3</td>
-	                        	<td>2</td>
-	                        	<td>1</td> -->
-	                        	<!-- <td>2013-04-19</td> -->
 	                        	<td>
 	                        		<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="车辆明细"><i class="btnDetail icon-list"></i></a>
 		            				<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印" disabled><i class="btnPrint icon-print"></i></a>

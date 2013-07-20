@@ -22,9 +22,9 @@
 			<li id="leftManufactureReportLi"><a href="/bms/execution/report?type=ManufactureReport">生产报表</a></li>
 			<li id="leftWarehouseReportLi"><a href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li>
 			<!-- <li><a href="#">追溯零部件换件</a></li> -->
-		<!-- <li class="nav-header">维护与帮助</li>
-			<li id="leftConfigLi"><a href="/bms/execution/configPlan">生产计划</a></li>
-			<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
+		<li class="nav-header">异常操作</li>
+			<li id="leftCheckPaperLi"><a href="/bms/execution/checkPaper">检验跟单</a></li>
+			<!-- <li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
 			<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">发车计划</a></li>
 			<li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li>
 			<li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li> -->

@@ -53,19 +53,6 @@ $("document").ready(function() {
 	    			div.append(divContainer);
 	    			$("#boardBar").append(div);
 				})
-
-				// var laneInfo = response.data.laneInfo;
-				// $.each(laneInfo, function(lane, value){
-				// 	$(".laneOK[laneid='"+ lane +"']").html(value.toPrint);
-				// 	if(value.toPrint > 0){
-				// 		$(".laneOK[laneid='"+ lane +"']").addClass("label-success");
-				// 	}else{
-				// 		$(".laneOK[laneid='"+ lane +"']").removeClass("label-success");
-				// 	}
-				// 	progressWidth = (parseInt(value.countSum) / parseInt(value.amountSum)*100);
-				// 	$(".bar[laneid='"+ lane +"']").attr("style", "width:" + progressWidth + "%");
-				// 	$(".bar[laneid='"+ lane +"']").html(value.countSum + "/" + value.amountSum);
-				// })
 			},
 			error: function(){alertError();}
 		})
@@ -82,44 +69,66 @@ $("document").ready(function() {
 				"boardNumber" : boardNumber,
 			},
 			success: function (response) {
-				$("#tableOrders tbody").html("");
-				orders = response.data.orders;
-				$.each(orders, function (index, value) {
-					tr = $("<tr />");
-					tdBtn = $("<td />");
-					tdBtn.html("<a class='btn btn-link goDetail' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='车辆明细'><i class='btnDetail icon-list'></i></a><a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印'' disabled><i class='btnPrint icon-print'></i></a>");
-					tdBtn.appendTo(tr);
-					$("<td />").html(value.board_number).appendTo(tr);
-					$("<td />").html(value.lane_name).appendTo(tr);
-					$("<td />").html(value.order_number).appendTo(tr);
-					$("<td />").html(value.distributor_name).appendTo(tr);
-					$("<td />").html(value.series).appendTo(tr);
-					$("<td />").html(value.car_type_config).appendTo(tr);
-					$("<td />").html(value.cold).appendTo(tr);
-					$("<td />").html(value.color).appendTo(tr);
-					$("<td />").html(value.amount).appendTo(tr);
-					$("<td />").html(value.hold).appendTo(tr);
-					$("<td />").html(value.count).appendTo(tr);
-					if(value.count == value.amount){
-						tdBtn.children(".goPrint").removeAttr("disabled");
-						tr.addClass("success");
+				$("#boardNumber").html(boardNumber);
+				$("#tableOrders>tbody").html("");
+				$.each(response.data.group, function (laneDistributorSeries, one) {
+					var num = one.orders.length;
+					var tmp = $("<tbody />");
+
+					for(var i=0;i<num;i++){
+						$("<tr />").appendTo(tmp);
 					}
-					$("#tableOrders tbody").append(tr);
 
-					tr.data("orderId", value.order_id);
-					tr.data("boardNumber", value.board_number);
-					tr.data("amount", value.amount);
-					tr.data("hold", value.hold);
-					tr.data("count", value.count);
-					tr.data("orderNumber", value.order_number);
-					tr.data("distributorName", value.distributor_name);
-					tr.data("laneName", value.lane_name);
+					$.each(one.orders, function (index, order) {
+						tr = tmp.children("tr:eq("+ index +")");
+						$("<td />").html(order.order_number).appendTo(tr);
+						$("<td />").html(order.series).appendTo(tr);
+						$("<td />").html(order.car_type_config).appendTo(tr);
+						$("<td />").html(order.cold).appendTo(tr);
+						$("<td />").html(order.color).appendTo(tr);
+						$("<td />").html(order.amount).appendTo(tr);
+						$("<td />").html(order.hold).appendTo(tr);
+						$("<td />").html(order.count).appendTo(tr);
+						tdBtn = $("<td />");
+						tdBtn.html("<a class='btn btn-link goDetail' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='车辆明细'><i class='btnDetail icon-list'></i></a><a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印此单' disabled><i class='btnPrint icon-print'></i></a>");
+						tdBtn.appendTo(tr);
+						if(order.count == order.amount){
+							tdBtn.children(".goPrint").removeAttr("disabled");
+							tr.addClass("success");
+						}
+						// $("#tableOrders tbody").append(tr);
 
+						tr.data("orderId", order.order_id);
+						tr.data("boardNumber", order.board_number);
+						tr.data("amount", order.amount);
+						tr.data("hold", order.hold);
+						tr.data("count", order.count);
+						tr.data("orderNumber", order.order_number);
+						tr.data("distributorName", order.distributor_name);
+						tr.data("laneName", order.lane_name);
+					})
+					var firstTr = tmp.children("tr:eq(0)");
+					firstTr.addClass("thickBoarder");
+
+					boardTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.distributor).prependTo(firstTr);
+					boardTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.lane).prependTo(firstTr);
+
+					printTd = $("<td />").attr("rowspan", num).attr("style", "text-align:center;").addClass("rowSpanTd")
+					a = $("<button />").addClass("btn printGroup").attr("disabled", "disabled").html("<i class='btnPrint icon-print'></i>&nbsp;打印此组");
+					a.data("orderIds", one.orderIds);
+					a.appendTo(printTd);
+					printTd.prependTo(firstTr);
+					if(one.amount == one.count){
+						a.removeAttr("disabled").addClass("btn-success");
+					}
+		
+					$("#tableOrders tbody").append(tmp.children("tr"));
 				})
+				
 				trPrintAll = $("<tr />");
 				$("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary printAllByBoard' id='boardPrintAll' disabled><i class='btnPrint icon-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
 				if(response.data.remainTotal == '0'){
-					trPrintAll.children("td").children(".btn").removeAttr("disabled");
+					trPrintAll.children("td").children(".printAllByBoard").removeAttr("disabled");
 				}
 
 				$("#tableOrders tbody").append(trPrintAll);
@@ -171,7 +180,7 @@ $("document").ready(function() {
 		})
 	}
 
-	function printAll(orderId) {
+	function printOne(orderId) {
 		$.ajax({
 			url: WAREHOUSE_PRINT_BY_ORDER,
 			type: "get",
@@ -184,6 +193,29 @@ $("document").ready(function() {
 				getBoardInfo();
 				$("#spinModal").modal("hide");
 				alert("打印传输完成!");
+			},
+			error: function(){alertError();}
+		})
+	}
+
+	function printGroup(orderIds) {
+		$.ajax({
+			url: WAREHOUSE_PRINT_BY_ORDERS,
+			type: "get",
+			dataType: "json",
+			data: {
+				"orderIds" : orderIds,
+			},
+			success: function(response){
+				if(response.success){
+					getBoardInfo();
+					queryOrdersByBoardNumber(curBoard);
+					$("#spinModal").modal("hide");
+					alert("打印传输完成!");
+					fadeMessageAlert(response.message,"alert-success");
+				} else {
+					fadeMessageAlert(response.message,"alert-error");
+				}
 			},
 			error: function(){alertError();}
 		})
@@ -203,7 +235,7 @@ $("document").ready(function() {
 					$("#spinModal").modal("hide");
 					alert("打印传输完成!");
 					$("#tableOrders tbody").html("");
-					curboard = '';
+					curBoard = '';
 				} else {
 					alert(response.message);
 					getBoardInfo();
@@ -213,10 +245,6 @@ $("document").ready(function() {
 			},
 			error: function(){alertError();}
 		})
-	}
-
-	function printOne(vin) {
-
 	}
 
 	$("#refreshLane").click(function(){
@@ -236,7 +264,7 @@ $("document").ready(function() {
 
 	$("#boardPrintAll").live("click", function(e){
 		if($(e.target).attr("disabled") == "disabled"){
-					return false;
+			return false;
 		} else {
 			if(confirm('是否传输打印？')){
 				$("#spinModal").modal("show");
@@ -245,11 +273,23 @@ $("document").ready(function() {
 		}
 	})
 
+	$(".printGroup").live("click", function(e) {
+		orderIds = $(e.target).data("orderIds");
+		if($(e.target).attr("disabled") == "disabled"){
+			return false;
+		} else {
+			if(confirm("是否传输打印此组？")){
+				$("#spinModal").modal("show");
+				orderIds = $(e.target).data("orderIds");
+				printGroup(orderIds);
+			}
+		}
+	})
+
 	$("#tableOrders").live('click', function(e) {
 		if($(e.target).is('i')) {
 			var tr = $(e.target).closest("tr");
 			if($(e.target).hasClass("btnDetail")){
-				console.log(tr.data("orderId"));
 				queryOrderDetail(tr.data("orderId"));
 				$("#detailModal").data("orderId", tr.data('orderId'));
 				$("#detailModal").data("amount", tr.data('amount'));
@@ -257,8 +297,8 @@ $("document").ready(function() {
 				$("#detailModal").data("count", tr.data('count'));
 				modalHead = "#" + tr.data("laneName") + "_" + tr.data("orderNumber") + "_" + tr.data("distributorName");
 				$("#detailModal .modal-header h4").html(modalHead);
-				$("#detailModal").modal('show');
 
+				$("#detailModal").modal('show');
 				if($("#detailModal").data("amount") == $("#detailModal").data("count")){
 					$("#detailPrintAll").removeAttr("disabled");
 				}else{
@@ -270,20 +310,9 @@ $("document").ready(function() {
 				if($(e.target).closest("a").attr("disabled") == "disabled"){
 					return false;
 				} else {
-					if(confirm('是否传输打印？')){
+					if(confirm('是否传输打印此单？')){
 						$("#spinModal").modal("show");
-						printAll(tr.data("orderId"));
-					}
-				}
-			}
-
-			if($(e.target).hasClass("printAllByBoard")){
-				if($(e.target).attr("disabled") == "disabled"){
-					return false;
-				} else {
-					if(confirm('是否传输打印？')){
-						$("#spinModal").modal("show");
-						printAllByBoard(curBoard);
+						printOne(tr.data("orderId"));
 					}
 				}
 			}
@@ -294,7 +323,7 @@ $("document").ready(function() {
 		if(confirm('是否传输打印？')){
 			$("#detailModal").modal("hide");
 			$("#spinModal").modal("show");
-			printAll($("#detailModal").data("orderId"));
+			printOne($("#detailModal").data("orderId"));
 		}
 	})
 

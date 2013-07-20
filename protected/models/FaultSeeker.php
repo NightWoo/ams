@@ -922,26 +922,31 @@ class FaultSeeker
 			$ee = $queryTime['etime'];
 			$temp = array();
 			foreach($arraySeries as $series) {
-				$sql = "SELECT count(DISTINCT car_id) FROM $traceTable WHERE pass_time >= '$ss' AND pass_time <= '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
+				$sql = "SELECT count(DISTINCT car_id) FROM $traceTable WHERE pass_time >= '$ss' AND pass_time < '$ee' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 
 				$cars = Yii::app()->db->createCommand($sql)->queryScalar();
 
 				if($series == '6B'){
 					$temp['思锐'] = $cars;
 					$dataSeriesY['思锐'][] = intval($cars);
-					$retTotal['思锐'] += intval($cars);
+					// $retTotal['思锐'] += intval($cars);
 				}else {
 					$temp[$series] = $cars;
 					$dataSeriesY[$series][] = intval($cars);
-					$retTotal[$series] += intval($cars);
+					// $retTotal[$series] += intval($cars);
 				}
 			}
 			$ret[] = array_merge(array('time' => $queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
         }
 
-        foreach($arraySeries as $key => $series){
-        	if($series == '6B') $arraySeries[$key] = '思锐';
+
+        foreach($arraySeries as $key => &$series){
+	        $totalSql = "SELECT count(DISTINCT car_id) FROM $traceTable WHERE pass_time >= '$stime' AND pass_time < '$etime' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
+        	$countTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
+        	// if($series == '6B') $arraySeries[$key] = '思锐';
+        	if($series == '6B') $series = '思锐';
+        	$retTotal[$series] = intval($countTotal);
         }
 		return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}

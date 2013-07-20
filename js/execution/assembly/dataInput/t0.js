@@ -26,7 +26,8 @@ $("document").ready(function() {
 						readyAll += parseInt(plans[i].ready);
 						totalAll += parseInt(plans[i].total);
 						leftAll = totalAll - readyAll;
-						var car_series = "<td>" + plans[i].car_series + "</td>";
+						// var car_series = "<td>" + plans[i].car_series + "</td>";
+						var car_series = "<td>" + byd.SeriesName[plans[i].car_series] + "</td>";
 						var car_type = "<td>" + plans[i].car_type_name + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {
@@ -41,7 +42,7 @@ $("document").ready(function() {
 						var remark = "<td>" + plans[i].remark + "</td>";
 						//modified by wujun
 						$("#planTable tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + config_name + cold_resistant + color + car_year + /*order_type +*/ special_order + remark + "</tr>");
-						console.log($("#"+plans[i].id));
+						// console.log($("#"+plans[i].id));
 						if(plans[i].is_frozen == 1){
 							$("#"+plans[i].id).addClass("warning");
 						}
@@ -75,7 +76,8 @@ $("document").ready(function() {
 					$.each(plans,function (i) {
 						var num = "<td>" + (i + 1) + "</td>";
 						var left = "<td>" + (plans[i].total - plans[i].ready) + "</td>";
-						var car_series = "<td>" + plans[i].car_series + "</td>";
+						// var car_series = "<td>" + plans[i].car_series + "</td>";
+						var car_series = "<td>" + byd.SeriesName[plans[i].car_series] + "</td>";
 						var car_type = "<td>" + plans[i].car_type_name + "</td>";
 						var config_name = "<td>" + plans[i].config_name + "</td>";
 						if(plans[i].cold_resistant == "1") {

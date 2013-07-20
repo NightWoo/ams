@@ -41,7 +41,7 @@
 
         	<div id="bodyright" class="offset2">
                 <div>
-                    <legend>车辆查询
+                    <legend>生产查询
                     </legend>
                 </div>
                 <form id="form" class="well form-inline">
@@ -188,6 +188,7 @@
 
                         <div class="tab-pane" id="statistic">
                             <div id="statisticContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <div><p class="text-info">注：由于车辆可能在不同的时间多次通过同一节点，所以结果中，合计值≠各时间段数据的和值或求和后相乘/除的结果</p></div>
                             <table id="tableStatistic" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />

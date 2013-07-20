@@ -7,13 +7,12 @@ $("document").ready(function() {
 		$.ajax({
 		    type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
-		    url: F20_GET_INFO,//ref:  /bms/js/service.js
-		    data: {"vin": $('#vinText').attr("value"),
-		    	"currentNode": $('#currentNode').attr("value")},//vin and node
+		    url: CHECKPAPER_VALIDATE,//ref:  /bms/js/service.js
+		    data: {"vin": $('#vinText').attr("value")},
 		    success: function(response) 
 		    {
 			    if(response.success){
-			    	$("#vinText").val(response.data.vin);	//added by wujun
+			    	$("#vinText").val(response.data.vin);	
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
 					$("#btnSubmit").removeAttr("disabled").focus();
@@ -44,7 +43,7 @@ $("document").ready(function() {
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
-			url: F20_PRINT_CHECK_LIST,//ref:  /bms/js/service.js
+			url: CHECKPAPER_SUBMIT,//ref:  /bms/js/service.js
 			data: {
 				"vin": $('#vinText').attr("value"),
 				"currentNode": $('#currentNode').attr("value"),
@@ -63,16 +62,6 @@ $("document").ready(function() {
 					$(".printRemark").html(data.remark);
 					$(".vinBarcode").attr("src",data.vinBarCode);
 					$(".engineBarcode").attr("src",data.engineBarCode);
-					//$("#vinBarcode").html(data.vinCode);
-					//$("#engineBarcode").html(data.engineCode);
-
-					// var theLocation = top.location.href;
-					// var locations = theLocation.split("/");
-				 //  	console.log("response.data: http://" + locations[2] + '/' + locations[3] + '/' + response.data);
-				 //  	window.open("http://" + locations[2] + '/' + locations[3] + '/' + response.data);
-				 	//while(!($("#vinBarcode").readyState==="complete" && $("#engineBarcode").readyState==="complete")) {
-					//	;
-					//}
 					$("#print" + series).addClass("toPrint");
 					setTimeout(function (){window.print();},500);
 				  	fadeMessageAlert(response.message,"alert-success");
@@ -155,7 +144,6 @@ $("document").ready(function() {
 //-------------------END common functions -----------------------
 
 //------------------- event bindings -----------------------
-	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
 	$('#vinText').bind('keydown', function(event) {
 		//if vinText disable,stop propogation
 		if($(this).attr("disabled") == "disabled")
@@ -169,7 +157,6 @@ $("document").ready(function() {
 		}
 	});
 
-	//进入彩车身库事件，发ajax，根据响应做提示
 	$("#btnSubmit").click(function() {
 		if(!($("#btnSubmit").hasClass("disabled"))){
 			$("#btnSubmit").attr("disabled","disabled");
