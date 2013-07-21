@@ -27,8 +27,6 @@ $(document).ready(function() {
 	})
 	
 	$("#carType").change(function() {
-		//$("#tableConfigList>tbody").html("");
-		//$("#config").html("");
 		fillConfig($("#carSeries").val(), $(this).val());
 	})
 	
@@ -52,16 +50,22 @@ $(document).ready(function() {
 	
 	$("#tableConfigList").live("click",function(e) {
 		if($(e.target).html()==="编辑"){
+			emptyEditModal();
 			var siblings = $(e.target).parent("td").siblings();
 			var thisTr = $(e.target).closest("tr");
 			$("#editIsTrace").val(thisTr.data("istrace"));
 			$("#editNode").val(thisTr.data("nodeId"));
-			$("#editComponentName").val(siblings[1].innerHTML);
-			//$("#editComponentCode").html('<option value="'+ thisTr.data("componentId") +'">'+ thisTr.data("componentCode") +'</option>');
-			//fill editComponentCode dropdown list with codes of components which have same name
+			$("#editComponentName").val(thisTr.data("componentName"));
 			$("#editComponentCode").html("");
-			$("#editComponentCode").html(fillComponentCode(siblings[1].innerHTML));
+			$("#editComponentCode").html(fillComponentCode(thisTr.data("componentName")));
 			$("#editComponentCode").val(thisTr.data("componentId"));
+			if(thisTr.data("replacementId") > 0){
+				$("#editHaveReplacement").attr("checked", "checked");
+				$("#editReplacementName").val(thisTr.data("replacementName")).removeAttr("disabled");
+				$("#editReplacementCode").html("");
+				$("#editReplacementCode").html(fillComponentCode(thisTr.data("replacementName"))).removeAttr("disabled");
+				$("#editReplacementCode").val(thisTr.data("replacementId"));
+			}
 
 			$("#editProviderName").val(siblings[4].innerHTML);
 			$("#editProviderCode").html(thisTr.data("providerCode"));
@@ -82,15 +86,21 @@ $(document).ready(function() {
 	})
 		
 	$("#btnAddMore").click(function() {
-		ajaxAdd();
-		emptyNewModal();
+		configId = $("#config").val();
+		replacementId = $("#newReplacementCode").val();
+		if(ajaxCheckReplacement(configId,replacementId)){
+			ajaxAdd();
+			emptyNewModal();
+		}
 	})
 	
 	$("#btnNewConfirm").click(function() {
-		if(ajaxAdd()){
+		configId = $("#config").val();
+		replacementId = $("#newReplacementCode").val();
+		if(ajaxCheckReplacement(configId,replacementId)){
+			ajaxAdd();
 			emptyNewModal();
 			$("#newModal").modal("hide");
-			ajaxQuery();
 		}
 	})
 	
@@ -99,10 +109,15 @@ $(document).ready(function() {
 	})
 	
 	$("#btnEditConfirm").click(function() {
-		ajaxEdit();
-		emptyEditModal();
-		$("#editModal").modal("hide");
-		ajaxQuery();
+		configId = $("#editModal").data("configId");
+		replacementId = $("#editReplacementCode").val();
+
+		if(ajaxCheckReplacement(configId,replacementId)){
+			ajaxEdit();
+			emptyEditModal();
+			$("#editModal").modal("hide");
+			ajaxQuery();
+		}
 	})
 
 	$("#btnCopyConfirm").click(function() {
@@ -125,6 +140,33 @@ $(document).ready(function() {
 			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
 		}
 	})
+
+	$("#newHaveReplacement").change(function() {
+		if($("#newHaveReplacement").attr("checked") == "checked"){
+			$("#newReplacementName").removeAttr("disabled");
+			$("#newReplacementCode").removeAttr("disabled");
+		} else {
+			$("#newReplacementName").attr("disabled", "disabled").val("");
+			$("#newReplacementCode").attr("disabled" ,"disabled").html("");
+		}
+	})
+
+	$("#editHaveReplacement").change(function() {
+		if($("#editHaveReplacement").attr("checked") == "checked"){
+			$("#editReplacementName").removeAttr("disabled");
+			$("#editReplacementCode").removeAttr("disabled");
+		} else {
+			$("#editReplacementName").attr("disabled", "disabled").val("");
+			$("#editReplacementCode").attr("disabled" ,"disabled").html("");
+		}
+	})
+
+	if ($.browser.msie) {
+		$('input:checkbox').click(function () {
+			this.blur();  
+	   		this.focus();
+	  	});  
+	};
 	
 	function initPage() {
 		$("#headPlanLi").addClass("active");
@@ -201,7 +243,11 @@ $(document).ready(function() {
 						//record data
 						tr.data("configListId", value.id);
 						tr.data("componentId", value.component_id);
+						tr.data("componentName", value.component_name);
 						tr.data("componentCode", value.component_code);
+						tr.data("replacementId", value.replacement_id);
+						tr.data("replacementName", value.replacement_name);
+						tr.data("replacementCode", value.replacement_code);
 						tr.data("providerId", value.provider_id);
 						tr.data("providerCode", value.provider_code);
 						tr.data("istrace", value.istrace);
@@ -314,12 +360,13 @@ $(document).ready(function() {
 				"configId":  $("#config").val(),
 				"istrace": $("#newIsTrace").val(),
 				"nodeId": $("#newNode").val(),
-				"componentId": $("#newComponentCode").val(),	//option text is componentCode, option value is componentId
+				"componentId": $("#newComponentCode").val(),
+				"replacementId": $("#newReplacementCode").val(),
 				"providerId": $("#newProviderId").val(),	
 				"remark": $("#newRemark").val()
 			},
 			success: function (response) {
-				//ajaxQuery();
+				ajaxQuery();
 				if(!response.success){
 					alert(response.message);
 				}
@@ -342,17 +389,23 @@ $(document).ready(function() {
 				"configId": $("#editModal").data("configId"),
 				"istrace": $("#editIsTrace").val(),
 				"nodeId": $("#editNode").val(),
-				"componentId": $("#editComponentCode").val(),	//option text is componentCode, option value is componentId
+				"componentId": $("#editComponentCode").val(),
+				"replacementId": $("#editReplacementCode").val(),
 				"providerId": $("#editProviderId").val(),
 				"remark": $("#editRemark").val()
 			},
 			success: function (response) {
-				//ajaxQuery();
+				ajaxQuery();
+				if(!response.success){
+					alert(response.message);
+				}
+				bol = response.success;
 			},
 			error: function() { 
 		    	alertError(); 
 		    }
 		})
+		return bol;
 	}
 	
 	function ajaxCopy() {
@@ -392,12 +445,38 @@ $(document).ready(function() {
 		    }	
 		})
 	}
+
+	function ajaxCheckReplacement(configId,replacementId){
+		bol = false;
+		$.ajax({
+			url: CHECK_REPLACEMENT,
+			type: "get",
+			dataType: "json",
+			data: {
+				"configId" : configId,
+				"replacementId": replacementId,
+			},
+			async: false,
+			success: function(response){
+				if(response.success){
+					bol = true;
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function(){alertError();}
+		});
+		return bol;
+	}
 	
 	function emptyNewModal() {
 		$("#newIsTrace").val("1"),
 		$("#newNode").val(""),
 		$("#newComponentName").val(""),
 		$("#newComponentCode").html(""),
+		$("#newReplacementName").val(""),
+		$("#newReplacementCode").html(""),
+		$("#newHaveReplacement").removeAttr("checked"),
 		$("#newProviderName").val(""),
 		$("#newProviderCode").html(""),
 		$("#newProviderId").val(""),	
@@ -409,6 +488,9 @@ $(document).ready(function() {
 		$("#editNode").val(""),
 		$("#editComponentName").val(""),
 		$("#editComponentCode").html(""),
+		$("#editReplacementName").val("").attr("disabled", "disabled"),
+		$("#editReplacementCode").html("").attr("disabled", "disabled"),
+		$("#editHaveReplacement").removeAttr("checked"),
 		$("#editProviderName").val(""),
 		$("#editProviderCode").html(""),
 		$("#editProviderId").val(""),	
@@ -511,6 +593,20 @@ $(document).ready(function() {
 			return item;			
     	}
 	});
+
+	$("#newReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#newReplacementCode").html("");
+			$("#newReplacementCode").html(fillComponentCode(item));
+			$("#newReplacementCode>option:first-child").select();
+			return item;			
+    	}
+	});
 	
 	$("#editComponentName").typeahead({
 	    source: function (input, process) {
@@ -522,6 +618,20 @@ $(document).ready(function() {
 			$("#editComponentCode").html("");
 			$("#editComponentCode").html(fillComponentCode(item));
 			$("#editComponentCode>option:first-child").select();
+			return item;			
+    	}
+	});
+
+	$("#editReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#editReplacementCode").html("");
+			$("#editReplacementCode").html(fillComponentCode(item));
+			$("#editReplacementCode>option:first-child").select();
 			return item;			
     	}
 	});

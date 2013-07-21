@@ -45,6 +45,9 @@ var VQ1_SUBMIT_EXCEPTION = "/bms/fault/saveVQ1";
 var CHECKPAPER_VALIDATE = "/bms/car/validateCheckPaper";
 var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 
+var SHOW_CAR_FAULTS = "/bms/car/showFaults";
+var SAVE_FAULT_DUTY_DEPARTMENT = "/bms/fault/saveDutyDepartment";
+
 //work shop
 var LWS_VALIDATE = "/bms/car/validateLWS";
 var LWS_SUBMIT = "/bms/execution/enterLWS";
@@ -221,6 +224,7 @@ var FILL_CONFIG = "/bms/config/getConfig";
 var FILL_CAR_TYPE = "/bms/config/getCarType";
 var FILL_ORDER_CAR_TYPE = "/bms/config/getOrderCarType";
 var FILL_CAR_COLOR = "/bms/config/getCarColor";
+var CHECK_REPLACEMENT = "/bms/config/checkReplacement";
 var SAVE_CONFIG_DETAIL = "/bms/config/saveDetail";
 var COPY_CONFIG_LIST = "/bms/config/copyList";
 var DELETE_CONFIG_DETAIL = "/bms/config/deleteDetail";

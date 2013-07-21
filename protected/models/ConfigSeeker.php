@@ -96,7 +96,7 @@ class ConfigSeeker
 		$limit = $perPage;
 		$offset = ($curPage - 1) * $perPage;
 		
-		$sql = "SELECT id, config_id, istrace, provider_id, component_id, node_id, remark, modify_time, user_id 
+		$sql = "SELECT id, config_id, istrace, provider_id, component_id,replacement_id, node_id, remark, modify_time, user_id 
 				  FROM car_config_list 
 				 WHERE $condition 
 				 ORDER BY id ASC 
@@ -108,17 +108,23 @@ class ConfigSeeker
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
 		$detail = array();			
 		foreach($list as &$detail) {
-			//user name
 			$detail['user_name'] = User::model()->findByPk($detail['user_id'])->display_name;
 			
-			//component
 			$component = ComponentAR::model()->findByPk($detail['component_id']);
 			if(!empty($component)){
 				$detail['component_name'] = $component->display_name;
 				$detail['component_code'] = $component->code;
 			}			
 			
-			//provider
+			$replacement = ComponentAR::model()->findByPk($detail['replacement_id']);
+			if(!empty($replacement)){
+				$detail['replacement_name'] = $replacement->display_name;
+				$detail['replacement_code'] = $replacement->code;
+			} else {
+				$detail['replacement_name'] = "";
+				$detail['replacement_code'] = "";
+			}
+
 			$provider = ProviderAR::model()->findByPk($detail['provider_id']);
 			if(!empty($provider)){
 				$detail['provider_name'] = $provider->display_name;
@@ -128,7 +134,6 @@ class ConfigSeeker
 				$detail["provider_code"] = '';
 			}
 			
-			//node
 			$node = NodeAR::model()->findByPk($detail['node_id']);
 			if(!empty($node)){
 				$detail['node_name'] = $node->display_name;

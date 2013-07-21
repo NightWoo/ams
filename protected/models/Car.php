@@ -722,7 +722,13 @@ class Car
 		return $sortDatas;
 	}
 
-	function multi_array_sort($multi_array,$sort_key,$sort=SORT_ASC){  
+	public function getFaults($node){
+		$seeker = Fault::createSeeker();
+		$faults = $seeker->queryCarFaults($this->car->id,$node,$this->car->series);
+		return $faults;
+	}
+
+	public function multi_array_sort($multi_array,$sort_key,$sort=SORT_ASC){  
         if(is_array($multi_array)){  
             foreach ($multi_array as $row_array){  
                 if(is_array($row_array)){  

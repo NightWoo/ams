@@ -170,6 +170,15 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label" for=""><input type="checkbox" id="newHaveReplacement" value="" style="margin:0 5px 2px 0;">同种零部件</input></label>
+				<div class="controls">
+					<input type="text" id="newReplacementName" class="input-medium" placeholder="请输入零部件名称" disabled>
+					<select id="newReplacementCode" class="input-xlarge" disabled>
+						<option value="" selected></option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label" for="">供应商</label>
 				<div class="controls">
 					<input type="text" id="newProviderName" class="input-medium" placeholder="请输入供应商">
@@ -236,6 +245,15 @@
 				<div class="controls">
 					<input type="text" id="editComponentName" class="input-medium" placeholder="请输入零部件名称">
 					<select id="editComponentCode" class="input-xlarge">
+						<option value="" selected></option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for=""><input type="checkbox" id="editHaveReplacement" value="" style="margin:0 5px 2px 0;">同种零部件</input></label>
+				<div class="controls">
+					<input type="text" id="editReplacementName" class="input-medium" placeholder="请输入零部件名称" disabled>
+					<select id="editReplacementCode" class="input-xlarge" disabled>
 						<option value="" selected></option>
 					</select>
 				</div>

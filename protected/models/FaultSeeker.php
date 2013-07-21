@@ -977,22 +977,44 @@ class FaultSeeker
         return array('carSeries' => $arraySeries, 'detail'=>$ret, 'total'=>$retTotal, 'series' => array('x' => $dataSeriesX, 'y' => $dataSeriesY));
 	}
 
+	public function queryCarFaults($carId,$nodeName,$series){
+		$tables = $this->parseTables($nodeName, $series);
+		$dutyList = $this->dutyList();
+		$dutyType = $this->dutyType();
+		$faults = array();
+		foreach($tables as $table => $nodeId){
+			$sql = "SELECT id, car_id, component_name, fault_mode, `status`, create_time, updator, duty_department
+					FROM $table 
+					WHERE car_id = $carId";
+			$datas = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach($datas as &$data){
+				$data['duty'] = $dutyList[$data['duty_department']];
+				$data['user_name'] = empty($data['updator']) ? "-" : User::model()->findByPk($data['updator'])->display_name;
+				$data['node_name'] = NodeAR::model()->findByPk($nodeId)->display_name;
+				$data['duty_type'] = $dutyType[$table];
+			}
+			$faultClass = $this->getFaultClass($table);
+			$faults[$faultClass] = $datas;
+		}
+		return $faults;
+	}
+
 	protected function parseTables($node, $series) {
 		$tablePrefixs = array(
 			'VQ1_STATIC_TEST' => 10,
+			'VQ1_STATIC_TEST_2' => 209,
 			'VQ2_ROAD_TEST' => 15,
 			'VQ2_LEAK_TEST' => 16,
 			'VQ3_FACADE_TEST' => 17,
 			'WDI_TEST' => 95,
-			'VQ1_STATIC_TEST_2' => 209,
 		);
 		$nodeTables = array(
 			'VQ1' => 'VQ1_STATIC_TEST',
+			'VQ1_2' => 'VQ1_STATIC_TEST_2',
 			'ROAD_TEST_FINISH' => 'VQ2_ROAD_TEST',
 			'VQ2' => 'VQ2_LEAK_TEST',
 			'VQ3' => 'VQ3_FACADE_TEST',
 			'WDI' => 'WDI_TEST',
-			'VQ1_2' => 'VQ1_STATIC_TEST_2',
 		);
 
 		$temps = array();
@@ -1002,6 +1024,11 @@ class FaultSeeker
 			$temps = array(
 				'VQ2_ROAD_TEST' => 15,
             	'VQ2_LEAK_TEST' => 16,
+			);
+		} elseif($node === 'VQ1_ALL') {
+			$temps = array(
+				'VQ1_STATIC_TEST' => 10,
+            	'VQ1_STATIC_TEST_2' => 209,
 			);
 		} elseif(!empty($nodeTables[$node])) {
 			$temps = array($nodeTables[$node]=>$tablePrefixs[$nodeTables[$node]]);
@@ -1217,5 +1244,41 @@ class FaultSeeker
 		$list[''] = '-';
 
 		return $list;
+	}
+
+	public function dutyType() {
+		$list = array(
+			'VQ1_STATIC_TEST_F0' => 'VQ1',
+			'VQ1_STATIC_TEST_M6' => 'VQ1',
+			'VQ1_STATIC_TEST_6B' => 'VQ1',
+			'VQ1_STATIC_TEST_2_F0' => 'VQ1',
+			'VQ1_STATIC_TEST_2_M6' => 'VQ1',
+			'VQ1_STATIC_TEST_2_6B' => 'VQ1',
+			'VQ2_ROAD_TEST_F0' => 'VQ2',
+			'VQ2_ROAD_TEST_M6' => 'VQ2',
+			'VQ2_ROAD_TEST_6B' => 'VQ2',
+			'VQ2_LEAK_TEST_F0' => 'VQ2',
+			'VQ2_LEAK_TEST_M6' => 'VQ2',
+			'VQ2_LEAK_TEST_6B' => 'VQ2',
+			'VQ3_FACADE_TEST_F0' => 'VQ3',
+			'VQ3_FACADE_TEST_M6' => 'VQ3',
+			'VQ3_FACADE_TEST_6B' => 'VQ3',
+			'WDI_TEST_F0' => 'WDI',
+			'WDI_TEST_M6' => 'WDI',
+			'WDI_TEST_6B' => 'WDI',
+		);
+		return $list;
+	}
+
+	public function getFaultClass($tableName) {
+		$splits = explode('_', $tableName);
+
+		$cls = ucwords($splits[0]);
+		$total = count($splits);
+		for($i = 1; $i < $total; ++ $i) {
+			$cls .= ucFirst(strtolower($splits[$i]));
+		}
+
+		return $cls . "AR";
 	}
 }

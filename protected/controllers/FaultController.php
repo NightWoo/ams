@@ -622,4 +622,19 @@ class FaultController extends BmsBaseController
             $this->renderJsonBms(false , $e->getMessage());
         }
     }
+
+    public function actionSaveDutyDepartment() {
+        try{
+            $id = $this->validateIntVal('id', 0);
+            $faultClass = $this->validateStringVal('faultClass', 0);
+            $dutyDepartment = $this->validateIntVal('duty', 0);
+            $fault = $faultClass::model()->findByPk($id);
+            $data = $fault->duty_department = $dutyDepartment;
+            $fault->updator = Yii::app()->user->id;
+            $fault->save();
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
 }

@@ -24,10 +24,10 @@
 			<!-- <li><a href="#">追溯零部件换件</a></li> -->
 		<li class="nav-header">异常操作</li>
 			<li id="leftCheckPaperLi"><a href="/bms/execution/checkPaper">检验跟单</a></li>
-			<!-- <li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
-			<li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">发车计划</a></li>
-			<li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li>
-			<li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li> -->
+			<li id="leftFaultDutyLi"><a href="/bms/execution/FaultDutyEdit">故障责任编辑</a></li>
+			<!-- <li id="leftOrderMaintainLi"><a href="/bms/execution/orderMaintain">发车计划</a></li> -->
+			<!-- <li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li> -->
+			<!-- <li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li> -->
 			<!-- <li><a href="#">操作手册.总装</a></li>    -->
 	   <!--  <li class="divider"></li>      
 			<li><a href="#">帮助</a></li>     -->

@@ -60,7 +60,7 @@
                                     <option value="">所有节点</option>
                                     <option value="VQ1">VQ1静态</option>
                                     <option value="CHECK_LINE">VQ2动态.检测线</option>
-                                    <option value="ROAD_TEST_FINISH">VQ2动态.路试结束</option>
+                                    <option value="ROAD_TEST_FINISH">VQ2动态.路试</option>
                                     <option value="VQ2">VQ2动态.淋雨</option>
                                     <option value="VQ3">VQ3外观</option>
                                 </select>

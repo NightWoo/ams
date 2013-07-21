@@ -92,6 +92,7 @@ class Config
 				$ar->istrace = $detail['istrace'];
 				$ar->provider_id = $detail['provider_id'];
 				$ar->component_id = $detail['component_id'];
+				$ar->replacement_id = $detail['replacement_id'];
 				$ar->node_id = $detail['node_id'];
 				$ar->remark = $detail['remark'];
 				$ar->save();

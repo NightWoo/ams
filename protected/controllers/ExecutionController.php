@@ -1272,6 +1272,16 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionFaultDutyEdit() {
+        try{
+            Yii::app()->permitManager->check('FAULT_DUTY_EDIT');
+            $this->render('assembly/other/FaultDutyEdit');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     public function actionDetectShopAccess() {
         try{
             Yii::app()->permitManager->check('CAR_ACCESS_CONTROL');

@@ -232,10 +232,12 @@ class ConfigController extends BmsBaseController
 		$configId = $this->validateIntVal('configId', 0);
 		$istrace = $this->validateIntVal('istrace', 0);
 		$componentId = $this->validateIntVal('componentId',0);
+		$replacementId = $this->validateIntVal('replacementId',0);
 		$nodeId = $this->validateIntVal('nodeId',0);
 		$providerId = $this->validateIntVal('providerId',0);
 		$remark = $this->validateStringVal('remark','');
 		
+		$transaction = Yii::app()->db->beginTransaction();
 		try{
 			if(empty($configId)){
 				throw new Exception('需先选择配置，请返回配置明细页面');
@@ -243,6 +245,7 @@ class ConfigController extends BmsBaseController
 			if(empty($componentId)){
 				throw new Exception('零部件不能为空');
 			}
+			
 			if(empty($id)){
 				// $exist = CarConfigListAR::model()->find('config_id=? AND component_id=?', array($configId, $componentId));
 				// if(!empty($exist)){
@@ -253,22 +256,55 @@ class ConfigController extends BmsBaseController
 				// }
 			} else {
 				$configDetail = CarConfigListAR::model()->findByPk($id);
+				$oldReplacement = CarConfigListAR::model()->find("config_id=? AND component_id=?", array($configId,$configDetail->replacement_id));
+				if(!empty($oldReplacement)){
+					$oldReplacement->replacement_id = 0;
+					$oldReplacement->save();
+				}
+			}
+			if(!empty($replacementId)){
+				$replacement = CarConfigListAR::model()->find("config_id=? AND component_id=?", array($configId,$replacementId));
+				if(empty($replacement)) {
+					throw new Exception("所选同种零部件不是本配置零部件");
+				} else {
+					$replacement->replacement_id = $componentId;
+					$replacement->save();
+				}
 			}
 			
 			$configDetail->config_id = $configId;
 			$configDetail->istrace = $istrace;
 			$configDetail->node_id = $nodeId;
 			$configDetail->component_id = $componentId;
+			$configDetail->replacement_id = $replacementId;
 			$configDetail->provider_id = $providerId;
 			$configDetail->remark = $remark;
 			$configDetail->user_id = Yii::app()->user->id;
 			$configDetail->modify_time = date("YmdHis");
 			
 			$configDetail->save();
+			$transaction->commit();
 			$this->renderJsonBms(true, 'saved');
 		} catch (Exception $e) {
+			$transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage());	
 		}
+	}
+
+	public function actionCheckReplacement() {
+		$configId = $this->validateIntVal('configId', 0);
+		$replacementId = $this->validateIntVal('replacementId',0);
+		try{
+			if(!empty($replacementId)){
+				$replacement = CarConfigListAR::model()->find("config_id=? AND component_id=?", array($configId,$replacementId));
+				if(empty($replacement)) {
+					throw new Exception("所选同种零部件不是本配置零部件");
+				}
+			}
+			$this->renderJsonBms(true, 'OK', '');
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}	
 	}
 	
 	//added by wujun
