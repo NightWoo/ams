@@ -86,5 +86,25 @@ class OrderConfigSeeker
 		}
 		return $datas;
 	}
+
+	public function getAccessoryList ($orderConfigId) {
+		$sql = "SELECT id, order_config_id, component_id, remark, modify_time, user_id 
+				  FROM car_accessory_list 
+				 WHERE order_config_id = $orderConfigId 
+				 ORDER BY id ASC";
+		$list = Yii::app()->db->createCommand($sql)->queryAll();
+
+		foreach($list as &$detail) {
+			$detail['user_name'] = User::model()->findByPk($detail['user_id'])->display_name;
+			
+			$component = ComponentAR::model()->findByPk($detail['component_id']);
+			if(!empty($component)){
+				$detail['component_name'] = $component->display_name;
+				$detail['component_code'] = $component->code;
+			}			
+		}
+
+		return $list;
+	}
 	
 }

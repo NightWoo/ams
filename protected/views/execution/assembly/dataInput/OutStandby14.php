@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>27#厂房备车</title>
+		<title>14#厂房备车</title>
     	<!-- Le styles -->
     	<link rel="stylesheet" type="text/css" href="/bms/css/bootstrap.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="/bms/css/execution/assembly/dataInput/OutStandby.css" media="screen">
@@ -36,7 +36,7 @@
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
-		            	<legend>27#厂房备车
+		            	<legend>14#厂房备车
 		            		<span class="pull-right">
 				            	<a href="/bms/execution/warehouseLabel"><i class="icon-link"></i>&nbsp;成品库标签</a>
 			            		/
@@ -55,9 +55,9 @@
 								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">
 							</div>
-							<input type="button" class="btn btn-success" id='btnSubmit' value='27#厂房备车'>
+							<input type="button" class="btn btn-inverse" id='btnSubmit' value='14#厂房备车'>
 							<input type="button" class="btn" id ="reset" value ="清空">
-							<input type="hidden" id='standbyArea' name='standbyArea' value="27"></input>
+							<input type="hidden" id='standbyArea' name='standbyArea' value="14"></input>
 							<span class="help-inline" id="hint">未获得任何可备车辆</span>
 							<div class="help-inline" id="carInfo">
 								<span class="label label-info" rel="tooltip" title="车列" id="rowInfo"></span>

@@ -132,6 +132,12 @@ class FaultController extends BmsBaseController
                 }
             }
 
+            $checkTrace = $car->checkTraceComponentByConfig();
+            if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
+            
+            $vinValidate = $car->validateVin();
+            if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
+
             $tablePrefix = "VQ1_STATIC_TEST";
             $nodeName = "VQ1";
             if($car->car->assembly_line == "II"){

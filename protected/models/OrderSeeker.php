@@ -803,7 +803,7 @@ class OrderSeeker
 	}
 
 	public function getConfigList ($carSeries, $carType) {
-		$condition = "car_series=?";
+		$condition = "is_disabled=0 AND car_series=?";
 		$values = array($carSeries);
 		if(!empty($carType)) {
 			$condition .= " AND car_type=?";

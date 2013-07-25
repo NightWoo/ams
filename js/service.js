@@ -233,6 +233,11 @@ var GET_PROVIDER_CODE = "/bms/provider/getCode";
 var GET_COMPONENT_NAME_LIST = "/bms/component/search";
 var GET_PROVIDER_NAME_LIST = "/bms/provider/getNameList";
 
+var QUERY_ACCESSORY_LIST = "/bms/config/queryAccessoryList";
+var SAVE_ACCESSORY_DETAIL = "/bms/config/saveAccessoryDetail";
+var DELETE_ACCESSORY_DETAIL = "/bms/config/deleteAccessoryDetail";
+var COPY_ACCESSORY_LIST ="/bms/config/copyAccessoryList";
+
 //added by wujun
 //pause edit
 var QUERY_PAUSE_RECORD = "/bms/pause/query";

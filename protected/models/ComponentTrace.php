@@ -154,6 +154,19 @@ class ComponentTrace
 		return array($total, $datas);
 	}
 
+	public function getCarAllTrace($carId, $series){
+		if(empty($series)){
+			$car = CarAR::model()->findByPk($carId);
+			$series = $car->series;
+		}
+		$table = strtolower("component_trace_" .$series);
+
+		$sql = "SELECT component_id FROM $table WHERE car_id=$carId";
+		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
+
+		return $datas;
+	}
+
 	public function getNodeName($nodeId) {
 		$node = Node::create($nodeId);
 		$name = $node->name;
@@ -180,5 +193,4 @@ class ComponentTrace
 
 	}	
 
-	
 }

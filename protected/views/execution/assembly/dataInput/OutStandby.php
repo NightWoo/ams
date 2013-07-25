@@ -43,6 +43,8 @@
 		            			<a href="/bms/execution/outStandby35"><i class="icon-link"></i>&nbsp;35#厂房备车</a>
 		            			/
 		            			<a href="/bms/execution/outStandby27"><i class="icon-link"></i>&nbsp;27#厂房备车</a>
+		            			/
+		            			<a href="/bms/execution/outStandby14"><i class="icon-link"></i>&nbsp;14#厂房备车</a>
 		            		</span>
 		            	</legend>
 		            </div>

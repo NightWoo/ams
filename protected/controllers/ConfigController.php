@@ -5,6 +5,7 @@ Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.AR.CarColorMapAR');
 Yii::import('application.models.AR.CarConfigListAR');
+Yii::import('application.models.AR.CarAccessoryListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.FileUpload.FileUpload');
 Yii::import('application.models.AR.SubConfigCarQueueAR');
@@ -37,6 +38,7 @@ class ConfigController extends BmsBaseController
 	//added by wujun
 	public function actionSave() {
 		$id = $this->validateIntVal('id',0);
+		$isDisabled = $this->validateIntVal('isDisabled', 0);
 		$series = $this->validateStringVal('car_series','');
 		$type = $this->validateStringVal('car_type','');
 		$configName = $this->validateStringVal('config_name','');
@@ -82,6 +84,7 @@ class ConfigController extends BmsBaseController
 			$config->assisted_steering = $steering;
 			$config->certificate_note = $certificateNote;
 			$config->remark = $remark;
+			$config->is_disabled = $isDisabled;
 			$config->user_id = Yii::app()->user->id;
 			$config->modify_time = date("YmdHis");
 			
@@ -94,6 +97,7 @@ class ConfigController extends BmsBaseController
 	
 	public function actionSaveOrderConfig() {
 		$id = $this->validateIntVal('id',0);
+		$isDisabled = $this->validateIntVal('isDisabled', 0);
 		$series = $this->validateStringVal('car_series','');
 		$type = $this->validateStringVal('car_type','');
 		$configName = $this->validateStringVal('config_name','');
@@ -125,6 +129,7 @@ class ConfigController extends BmsBaseController
 			$config->car_type = $type;
 			$config->name = $configName;
 			$config->remark = $remark;
+			$config->is_disabled = $isDisabled;
 			$config->user_id = Yii::app()->user->id;
 			$config->modify_time = date("YmdHis");
 			
@@ -430,6 +435,90 @@ class ConfigController extends BmsBaseController
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this-> renderJsonBms(false , $e->getMessage());
+		}
+	}
+
+	public function actionQueryAccessoryList () {
+		$orderConfigId = $this->validateIntVal('orderConfigId', 0);
+		try {
+			$seeker = new OrderConfigSeeker;
+			$data = $seeker->getAccessoryList($orderConfigId);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionSaveAccessoryDetail(){
+		$id = $this->validateIntVal('id', 0);
+		$orderConfigId = $this->validateIntVal('orderConfigId', 0);
+		$componentId = $this->validateIntVal('componentId',0);
+		$remark = $this->validateStringVal('remark','');
+		
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			if(empty($orderConfigId)){
+				throw new Exception('需先选择配置，请返回随车附件明细页面');
+			}
+			if(empty($componentId)){
+				throw new Exception('零部件不能为空');
+			}
+			
+			if(empty($id)){
+				$exist = CarAccessoryListAR::model()->find('order_config_id=? AND component_id=?', array($orderConfigId, $componentId));
+				if(!empty($exist)){
+					throw new Exception('此零部件已经存在于本配置的随车附件明细中');
+				} else {
+					$accessoryDetail = new CarAccessoryListAR;
+					$accessoryDetail->create_time = date("YmdHis");
+				}
+			} else {
+				$accessoryDetail = CarAccessoryListAR::model()->findByPk($id);
+			}
+			
+			$accessoryDetail->order_config_id = $orderConfigId;
+			$accessoryDetail->component_id = $componentId;
+			$accessoryDetail->remark = $remark;
+			$accessoryDetail->user_id = Yii::app()->user->id;
+			$accessoryDetail->modify_time = date("YmdHis");
+			
+			$accessoryDetail->save();
+			$transaction->commit();
+			$this->renderJsonBms(true, 'saved');
+		} catch (Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());	
+		}
+	}
+
+	public function actionDeleteAccessoryDetail() {
+		$id = $this->validateIntVal('id', 0);
+		try{
+			$accessoryDetail = CarAccessoryListAR::model()->findByPk($id);
+			if(!empty($accessoryDetail)) {
+				$accessoryDetail->delete();
+			}
+			$this->renderJsonBms(true, 'deleted', '');
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}	
+	}
+
+	public function actionCopyAccessoryList() {
+		$originalId = $this->validateIntVal('originalId', 0);
+		$clonedId = $this->validateIntval('clonedId', 0);
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			if(!empty($originalId) && !empty($clonedId)) {
+				$sql = "DELETE FROM car_accessory_list WHERE order_config_id = '$clonedId'";
+				Yii::app()->db->createCommand($sql)->execute();
+				Config::copyAccessoryList($originalId, $clonedId);
+			}
+			$transaction->commit();
+			$this->renderJsonBms(true, 'copy success', '');
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}
 

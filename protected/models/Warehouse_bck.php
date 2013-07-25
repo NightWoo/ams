@@ -24,19 +24,6 @@ class Warehouse
 		}
 
 		$conditions = array();
-		switch($car->series){
-			case "F0" :
-				$conditions['area'] = "(id>1 AND id<200)";
-				break;
-			case "M6" :
-				$conditions['area'] = "(id>1 AND id<200)";
-				break;
-			case "6B" :
-				$conditions['area'] = "(id>400 AND id<500)";
-				break;
-			default:
-		}
-		
 		$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
 		$conditions['free'] = "status=0 AND free_seat>0";
 		$condition = join(' AND ', $conditions);
@@ -48,8 +35,7 @@ class Warehouse
 		//如无同型车列		
 		if(empty($row)) {
 			//查找空车列，并生成同型车列
-			$voidCondtion = $conditions['area'] . " AND status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC";
-			$voidRow = WarehouseAR::model()->find($voidCondtion, array($car->series, $car->special_property));
+			$voidRow = WarehouseAR::model()->find("status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC", array($car->series, $car->special_property));
 
 			if(!empty($voidRow) && !empty($orderConfigId)){
 				$row = $voidRow;
@@ -61,12 +47,16 @@ class Warehouse
 			} else {
 				//根据特殊属性找到合适车列
 				if($car->special_property == 1){
+					// $row = WarehouseAR::model()->find('area=? AND series=?', array('G', ''));
 					$row = WarehouseAR::model()->findByPk(200);
 				} else if ($car->special_property == 0) {
+					//$row = WarehouseAR::model()->find('area=?', array('Z'));
+					// $row = WarehouseAR::model()->findByPk(1001);
 					if($car->series == '6B'){
 						$row = WarehouseAR::model()->findByPk(600);
 					}
 				} else if ($car->special_property == 9) {
+					// $row = WarehouseAR::model()->find('area=?', array('X'));
 					$row = WarehouseAR::model()->findByPk(1000);
 				}
 			}

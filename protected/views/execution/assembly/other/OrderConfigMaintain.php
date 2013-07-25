@@ -28,7 +28,9 @@
             <div>
             	<legend>订单配置维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;配置维护</a>
+            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
+            			/
+            			<a href="/bms/execution/accessoryListMaintain"><i class="icon-link"></i>&nbsp;随车附件</a>
             		</span>
             	</legend>
             </div>
@@ -94,6 +96,12 @@
   	<div class="modal-body">
   		<form id="" class="form-horizontal">
   			<div class="control-group">
+                <label class="control-label" for="">停用</label>
+                <div class="controls">
+                    <input type="checkbox" id="newIsDisabled">
+                </div>
+            </div>
+  			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
 			      	<select id="newCarSeries" class="input-medium">
@@ -146,6 +154,12 @@
   	</div>
   	<div class="modal-body">
   		<form id="" class="form-horizontal">
+  			<div class="control-group">
+                <label class="control-label" for="">停用</label>
+                <div class="controls">
+                    <input type="checkbox" id="editIsDisabled">
+                </div>
+            </div>
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">

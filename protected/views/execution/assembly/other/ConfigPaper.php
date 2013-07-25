@@ -37,9 +37,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>配置跟单维护
+            	<legend>生产配置跟单维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;配置维护</a>
+            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
             			/
             			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细 </a>
             		</span>

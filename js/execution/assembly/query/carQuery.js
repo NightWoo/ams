@@ -97,7 +97,7 @@ $(document).ready(function () {
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
-				    $('#configName').html(car.config_name);
+				    $('#configName').html(car.config_name + "/" + car.cold);
 				    if(response.data.status && response.data.status !== "")
 				    	$('#statusInfo').html(response.data.status);
 				    else

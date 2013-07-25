@@ -84,8 +84,8 @@
                             <li class="title"><i class="icon-envelope"></i>&nbsp;联系我们</li>
                             <li>
                                 <ul id="contect">
-                                    <li class="text-info">账号申请：<a href="Mailto:liu.wenlu@byd.com">liu.wenlu@byd.com</a></li>
-                                    <li class="text-info">系统维护：<a href="Mailto:liu.wenlu@byd.com">liu.wenlu@byd.com</a></li>
+                                    <li class="text-info">账号申请：<a href="Mailto:yang.huifen@byd.com">yang.huifen@byd.com</a></li>
+                                    <li class="text-info">系统维护：<a href="Mailto:yang.huifen@byd.com">yang.huifen@byd.com</a></li>
                                     <li class="text-info">系统管理：<a href="Mailto:wu.jun9@byd.com">wu.jun9@byd.com</a></li>
                                     <li class="text-info">联系电话：0755-89888888-69550</li>
                                 </ul> 

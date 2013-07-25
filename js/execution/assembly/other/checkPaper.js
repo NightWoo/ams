@@ -85,6 +85,7 @@ $("document").ready(function() {
 	function initPage(){
 		//add head class
 		$("#headAssemblyLi").addClass("active");
+		$("#leftCheckPaperLi").addClass("active");
 		resetPage();
 		$("#messageAlert").hide();
 	}

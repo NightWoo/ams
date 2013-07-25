@@ -13,18 +13,18 @@ $(document).ready(function  () {
 		    	"currentNode": $('#currentNode').attr("value")},//vin and node
 		    success: function(response){
 			    if(response.success){
-			    	$("#divDetail").data("series", response.data.series);
+			    	$("#divDetail").data("series", response.data.car.series);
 					ajaxDutyList();
 					ajaxGetComponents("tableEngine", "engine");
 			    	$("#divDetail").fadeIn(1000);
-			    	$("#vinText").val(response.data.vin);	//added by wujun
+			    	$("#vinText").val(response.data.car.vin);	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
 					$("#btnSubmit").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
-		    		var data = response.data;
+		    		var data = response.data.car;
 		    		$('#serialNumber').html(data.serial_number);
 		    	 	$('#series').html(window.byd.SeriesName[data.series]);
 			    	$('#color').html(data.color);
@@ -33,6 +33,22 @@ $(document).ready(function  () {
 				    	$('#statusInfo').html(data.status);
 				    else
 				    	$('#statusInfo').text("");
+
+				    if(response.data.checkTrace.notGood){
+				    	$.each(response.data.checkTrace.notFound, function (componentId, component) {
+				    		message = response.data.car.vin + "未追溯零部件“"+ component.name +"”" + "，" + component.node;
+				    		addCheckMessage(message);
+				    	})
+				    }
+
+				    if(!response.data.vinValidate.success){
+				    	addCheckMessage(response.data.vinValidate.message);
+				    }
+
+				    if(!(response.data.IRemote.Result) || response.data.IRemote.TestState != "2"){
+				    	message = response.data.car.vin + "未通过云系统测试";
+				    	addCheckMessage(message);
+				    }
 			    }
 			    else{
 				    resetPage();
@@ -348,6 +364,17 @@ $(document).ready(function  () {
 				$("#messageAlert").hide(1000);
 			},5000);
 		});
+	}
+
+	function addCheckMessage (message) {
+
+		checkMessage  = "<div class='alert alert-error fade in'>";
+		checkMessage += "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+		checkMessage += "<strong>注意！</strong>";
+		checkMessage += message;
+		checkMessage += "</div>";
+
+		$("#checkAlert").prepend(checkMessage);
 	}
 //-------------------END common functions -----------------------
 

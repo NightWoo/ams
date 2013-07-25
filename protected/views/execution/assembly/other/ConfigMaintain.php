@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>配置维护</title>
+	<title>生产配置维护</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
@@ -26,13 +26,15 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>配置维护
+            	<legend>生产配置维护
             		<span class="pull-right">
-            			<a href="/bms/execution/orderConfigMaintain"><i class="icon-link"></i>&nbsp;订单配置</a>
-            			/
             			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
             			/
-            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细 </a>
+            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细</a>
+            			/
+            			<a href="/bms/execution/orderConfigMaintain"><i class="icon-link"></i>&nbsp;订单配置</a>
+            			/
+            			<a href="/bms/execution/accessoryListMaintain"><i class="icon-link"></i>&nbsp;随车附件</a>
             		</span>
             	</legend>
             </div>
@@ -97,6 +99,12 @@
   	</div>
   	<div class="modal-body">
   		<form id="" class="form-horizontal">
+  			<div class="control-group">
+                <label class="control-label" for="">停用</label>
+                <div class="controls">
+                    <input type="checkbox" id="newIsDisabled">
+                </div>
+            </div>
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
@@ -193,6 +201,12 @@
   	</div>
   	<div class="modal-body">
   		<form id="" class="form-horizontal">
+  			<div class="control-group">
+                <label class="control-label" for="">停用</label>
+                <div class="controls">
+                    <input type="checkbox" id="editIsDisabled">
+                </div>
+            </div>
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">

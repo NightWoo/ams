@@ -102,6 +102,21 @@ class Config
 		}			
 	}
 
-	public function addMainConfigPage($file) {
+	public static function copyAccessoryList($originalId, $clonedId) {
+		$seeker = new OrderConfigSeeker();
+		$details = $seeker->getAccessoryList($originalId);
+		if(!empty($details)){
+			foreach($details as $detail) {
+				$ar = new CarAccessoryListAR();
+				$ar->order_config_id = $clonedId;
+				$ar->user_id = Yii::app()->user->id;
+				$ar->create_time = date("YmdHis");
+				$ar->component_id = $detail['component_id'];
+				$ar->remark = $detail['remark'];
+				$ar->save();
+			}
+		} else {
+			throw new Exception('there is no accessory detail in this order_config');
+		}			
 	}
 }

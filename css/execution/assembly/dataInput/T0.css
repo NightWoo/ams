@@ -7,6 +7,10 @@
 	margin-bottom: 10px;
 }
 
+#planTable, #planTomorrow{
+	font-size: 12px;
+} 
+
 #tablePlan {
 	margin-top: 15px;
 	margin-bottom: 0px;

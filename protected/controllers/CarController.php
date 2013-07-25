@@ -113,7 +113,14 @@ class CarController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
 			// $car->passNode('LEFT_WORK_SHOP');
-            $data = $car->car;
+            $checkTrace = $car->checkTraceComponentByConfig();
+            $vinValidate = $car->validateVin();
+            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
+                $IRemote = $car->getIRemoteTestResult();
+            } else {
+                $IRemote = array("Result"=>true,"TestState"=>2);
+            }
+            $data = array("car"=>$car->car, "checkTrace"=>$checkTrace, "vinValidate"=>$vinValidate, "IRemote" => $IRemote);
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -351,6 +358,7 @@ class CarController extends BmsBaseController
             if(!empty($car->car->config_id)){
                 $carData['config_name'] = CarConfigAR::model()->findByPk($car->car->config_id)->name;
             }
+            $carData['cold'] = $carData['cold_resistant'] == 0 ? "非耐寒" : "耐寒";
 
             $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData, 'status' =>$status));
         } catch(Exception $e) {

@@ -568,6 +568,26 @@ class Car
 		return $exist;
 	}
 
+	public function checkTraceComponentByConfig() {
+		$notGood = false;
+		$series = strtoupper($this->car->series);
+		$traceSeeker = ComponentTrace::createSeeker();
+		$componentIds = $traceSeeker->getCarAllTrace($this->car->id, $series);
+
+		$configSeeker = new ConfigSeeker();
+		$traceList = $configSeeker->getTraceList($this->car->config_id);
+
+		$notFound = array();
+		foreach($traceList as $trace){
+			if(in_array($trace['component_id'], $componentIds) || in_array($trace['replacement_id'], $componentIds) || $trace['node_id'] == 15) continue;
+			$notFound[$trace['component_id']]['name'] = ComponentAR::model()->findByPk($trace['component_id'])->display_name;
+			$notFound[$trace['component_id']]['node'] = NodeAR::model()->findByPk($trace['node_id'])->display_name;
+			$notGood = true;
+		}
+
+		return array("notGood" =>$notGood, "notFound" =>$notFound);			
+	}
+
 	public function getComponentName($componentId) {
 		$sql = "SELECT display_name FROM component WHERE id=$componentId";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
@@ -834,6 +854,22 @@ class Car
 				$subConfig->queue_time = date('Y-m-d H:i:s'); 
 				$subConfig->save();
 			}
+		}
+	}
+
+	public function addVinLaserQueue() {
+		$queue = VinLaserQueueAR::model()->find('vin=?', array($this->car->vin));
+
+		if(empty($subConfig)) {
+			$queue = new VinLaserQueueAR();
+			$queue->vin = $this->car->vin;
+			$queue->line = $this->car->assembly_line;
+			$queue->assembly_time = date('Y-m-d H:i:s'); 
+			$queue->manual = 0;
+			$queue->seat_t01 = 0;
+			$queue->seat_t17 = 0;
+			$queue->seat_engine = 0;
+			$queue->save();
 		}
 	}
 	
@@ -1640,6 +1676,11 @@ class Car
 		}
 
 		return $data;
+	}
+
+	public function validateVin(){
+		$ret = $VinManager = VinManager::validateDigit9($this->car->vin);
+		return $ret;
 	}
 
 	private function cutCarType($type) {

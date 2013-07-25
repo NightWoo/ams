@@ -2,11 +2,11 @@ $(document).ready(function() {
 	
 	initPage();
 		
-	$("#config").change(function() {						
-		if(!($("#config").val()=== "")){						
+	$("#orderConfig").change(function() {						
+		if(!($("#orderConfig").val() == 0)){						
 			$("#btnAdd").removeAttr("disabled");
 			$("#btnCopy").removeAttr("disabled");
-		}else {
+		} else {
 			$("#btnAdd").attr("disabled", "disabled");
 			$("#btnCopy").attr("disabled", "disabled");
 		}	
@@ -19,21 +19,21 @@ $(document).ready(function() {
 		$("#btnCopy").attr("disabled", "disabled");
 
 		if(!($(this).val()==="")){
-			fillType($("#carSeries").val());
-			fillConfig($("#carSeries").val());
+			$("#carType").html("").append(fillType($(this).val()));
+			$("#orderConfig").html("").append(fillOrderConfig($(this).val()));
 		} else {
-			$("#config, #carType").html('<option value="">请先选择车系</option>');
+			$("#orderConfig, #carType").html('<option value="">请先选择车系</option>');
 		}		
 	})
 	
 	$("#carType").change(function() {
-		fillConfig($("#carSeries").val(), $(this).val());
+		$("#orderConfig").html("").append(fillOrderConfig($("#carSeries").val(), $(this).val()));
 		$("#btnAdd").attr("disabled", "disabled");
 		$("#btnCopy").attr("disabled", "disabled");
 	})
 	
 	$("#btnQuery").click(function() {
-		if(!($("#config").val() === "")){
+		if(!($("#orderConfig").val() === "")){
 			ajaxQuery();
 		} else {
 			alert("必须选择配置")	
@@ -42,70 +42,53 @@ $(document).ready(function() {
 	
 	$("#btnAdd").click(function() {
 		$("#newModal").modal("show");
-		$("#newModal h3").html($("#config option:selected").html());
+		$("#newModal h3").html($("#orderConfig option:selected").html());
 	})
 	
 	$("#btnCopy").click(function() {
+		$("#clonedConfig").html("").append(fillOrderConfig($("#carSeries").val(), $("#carType").val()));
 		$("#copyModal").modal("show");
-		$("#copyModal h3").html($("#config option:selected").html());
+		$("#copyModal h3").html($("#orderConfig option:selected").html());
 	})
 	
-	$("#tableConfigList").live("click",function(e) {
+	$("#tableAccessoryList").live("click",function(e) {
 		if($(e.target).html()==="编辑"){
 			emptyEditModal();
 			var siblings = $(e.target).parent("td").siblings();
 			var thisTr = $(e.target).closest("tr");
-			$("#editIsTrace").val(thisTr.data("istrace"));
-			$("#editNode").val(thisTr.data("nodeId"));
 			$("#editComponentName").val(thisTr.data("componentName"));
 			$("#editComponentCode").html("");
 			$("#editComponentCode").html(fillComponentCode(thisTr.data("componentName")));
 			$("#editComponentCode").val(thisTr.data("componentId"));
-			if(thisTr.data("replacementId") > 0){
-				$("#editHaveReplacement").attr("checked", "checked");
-				$("#editReplacementName").val(thisTr.data("replacementName")).removeAttr("disabled");
-				$("#editReplacementCode").html("");
-				$("#editReplacementCode").html(fillComponentCode(thisTr.data("replacementName"))).removeAttr("disabled");
-				$("#editReplacementCode").val(thisTr.data("replacementId"));
-			}
 
-			$("#editProviderName").val(siblings[4].innerHTML);
-			$("#editProviderCode").html(thisTr.data("providerCode"));
-			$("#editRemark").val(siblings[5].innerHTML);
+			$("#editRemark").val(siblings[3].innerHTML);
 			
 			
 			$("#editModal").data("id", thisTr.data("configListId"));
-			$("#editModal").data("configId", thisTr.data("configId"));
+			$("#editModal").data("orderConfigId", thisTr.data("orderConfigId"));
 			
-			$("#editProviderId").val(thisTr.data("providerId"));
 			$("#editModal").modal("show");
-			$("#editModal h3").html($("#config option:selected").html());
+			$("#editModal h3").html($("#orderConfig option:selected").html());
 			
 		}else if($(e.target).html()==="删除"){
-			if(confirm("是否删除本零部件？")){
-				ajaxDelete($(e.target).closest("tr").data("configListId"));
+			if(confirm("是否删除本随车附件？")){
+				ajaxDelete($(e.target).closest("tr").data("accessoryListId"));
 			}
 		}
 		
 	})
 		
 	$("#btnAddMore").click(function() {
-		configId = $("#config").val();
-		replacementId = $("#newReplacementCode").val();
-		if(ajaxCheckReplacement(configId,replacementId)){
-			ajaxAdd();
-			emptyNewModal();
-		}
+		configId = $("#orderConfig").val();
+		ajaxAdd();
+		emptyNewModal();
 	})
 	
 	$("#btnNewConfirm").click(function() {
-		configId = $("#config").val();
-		replacementId = $("#newReplacementCode").val();
-		if(ajaxCheckReplacement(configId,replacementId)){
-			ajaxAdd();
-			emptyNewModal();
-			$("#newModal").modal("hide");
-		}
+		configId = $("#orderConfig").val();
+		ajaxAdd();
+		emptyNewModal();
+		$("#newModal").modal("hide");
 	})
 	
 	$("#btnAddClose").click(function() {
@@ -120,52 +103,12 @@ $(document).ready(function() {
 	})
 
 	$("#btnCopyConfirm").click(function() {
-		if(confirm('请确认是否将\"' + $("#config option:selected").html() + '\"明细复制给\"'+ $("#clonedConfig option:selected").html() +'\"?此操作不可恢复，请谨慎')){
+		if(confirm('请确认是否将\"' + $("#orderConfig option:selected").html() + '\"随车附件明细复制给\"'+ $("#clonedConfig option:selected").html() +'\"?此操作不可恢复，请谨慎')){
 			ajaxCopy();
 			$("#copyModal").modal("hide");	
 		}
 	})
 	
-	$(".prePage").click(function (){
-		if(parseInt($(".curPage").attr("page")) > 1){
-			$("#tableConfigList tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) - 1);
-		}
-	})
-
-	$(".nextPage").click(function (){
-		if(parseInt($(".curPage").attr("page")) * 50 < parseInt($("#totalText").attr("total")) ){
-			$("#tableConfigList tbody").text("");
-			ajaxQuery(parseInt($(".curPage").attr("page")) + 1);
-		}
-	})
-
-	$("#newHaveReplacement").change(function() {
-		if($("#newHaveReplacement").attr("checked") == "checked"){
-			$("#newReplacementName").removeAttr("disabled");
-			$("#newReplacementCode").removeAttr("disabled");
-		} else {
-			$("#newReplacementName").attr("disabled", "disabled").val("");
-			$("#newReplacementCode").attr("disabled" ,"disabled").html("");
-		}
-	})
-
-	$("#editHaveReplacement").change(function() {
-		if($("#editHaveReplacement").attr("checked") == "checked"){
-			$("#editReplacementName").removeAttr("disabled");
-			$("#editReplacementCode").removeAttr("disabled");
-		} else {
-			$("#editReplacementName").attr("disabled", "disabled").val("");
-			$("#editReplacementCode").attr("disabled" ,"disabled").html("");
-		}
-	})
-
-	if ($.browser.msie) {
-		$('input:checkbox').click(function () {
-			this.blur();  
-	   		this.focus();
-	  	});  
-	};
 	
 	function initPage() {
 		$("#headPlanLi").addClass("active");
@@ -178,55 +121,27 @@ $(document).ready(function() {
 		$("#editModal").modal("hide");
 		$("#copyModal").modal("hide");
 		
-		$("#tableConfigList").hide();
-		$(".pagination").hide();
-		
-		// $("#carSeries").val("F0")
-		fillType($("#carSeries").val());
-		fillConfig($("#carSeries").val());
+		$("#tableAccessoryList").hide();
 	}
 	
-	function ajaxQuery(targetPage) {
+	function ajaxQuery() {
 		$.ajax({
-			url: QUERY_CONFIG_LIST,
+			url: QUERY_ACCESSORY_LIST,
 			type: "get",
 			dataType: "json",
 			data: {
-				"configId": $("#config").val(),
-				"nodeId": $("#node").val(),
-				"perPage":50,
-				"curPage":targetPage || 1
+				"orderConfigId": $("#orderConfig").val(),
 			},
 			success: function(response) {
 				if(response.success){
-					$("#tableConfigList>tbody").html("");
-					$.each(response.data.list, function (index, value){
+					$("#tableAccessoryList>tbody").html("");
+					$.each(response.data, function (index, value){
 						var tr = $("<tr />");
 						
 						//config_list_id, component_name
 						$("<td />").html(value.id).appendTo(tr);
+						$("<td />").html(value.component_code).appendTo(tr);
 						$("<td />").html(value.component_name).appendTo(tr);
-						//trace_type
-						if(value.istrace === "1"){
-							$("<td />").html("单件追溯").appendTo(tr);
-						}else if(value.istrace === "2"){
-							$("<td />").html("批次追溯").appendTo(tr);
-						}else {
-							$("<td />").html("不追溯").appendTo(tr);
-						}
-						
-						//node
-						if(!(value.node_id === "0")){
-							$("<td />").html(value.node_name).appendTo(tr);
-						}else {
-							$("<td />").html("未指定").appendTo(tr);
-						}
-						//provier
-						if(!(value.provider_id === "0")){
-							$("<td />").html(value.provider_name).appendTo(tr);
-						} else {
-							$("<td />").html("未指定").appendTo(tr);
-						}
 						
 						//remark, modify_time, user_name	
 						$("<td />").html(value.remark).appendTo(tr);
@@ -240,48 +155,17 @@ $(document).ready(function() {
 						editTd.appendTo(tr);
 						
 						//record data
-						tr.data("configListId", value.id);
+						tr.data("accessoryListId", value.id);
 						tr.data("componentId", value.component_id);
 						tr.data("componentName", value.component_name);
 						tr.data("componentCode", value.component_code);
-						tr.data("replacementId", value.replacement_id);
-						tr.data("replacementName", value.replacement_name);
-						tr.data("replacementCode", value.replacement_code);
-						tr.data("providerId", value.provider_id);
-						tr.data("providerCode", value.provider_code);
-						tr.data("istrace", value.istrace);
-						tr.data("nodeId", value.node_id);
-						tr.data("configId", value.config_id);
+						tr.data("orderConfigId", value.order_config_id);
 						
 						//add to tableConfigList
-						$("#tableConfigList>tbody").append(tr);
-						$("#tableConfigList").show();						
+						$("#tableAccessoryList>tbody").append(tr);
 					});
 					
-					//pager thing
-					
-		    		if(response.data.pager.curPage == 1) {
-		    			//$(".prePage").hide();
-						$(".prePage a span").html("&times;");
-					} else {
-		    			//$(".prePage").show();
-						$(".prePage a span").html("&lt;");
-					}
-		    		if(response.data.pager.curPage * 50 >= response.data.pager.total ) {
-		    			//$(".nextPage").hide();
-						$(".nextPage a span").html("&times;");
-					} else {
-		    			//$(".nextPage").show();
-						$(".nextPage a span").html("&gt;");
-					}
-					$(".curPage").attr("page", response.data.pager.curPage);
-					$(".curPage a span").html(response.data.pager.curPage);
-					$("#totalText").attr("total", response.data.pager.total);
-					$("#totalText").html("导出全部" + response.data.pager.total + "条记录");
-		    		// $(".curPage").html("第" + response.data.pager.curPage + "页");
-					
-					$("#tableConfigList").show();
-					$(".pagination").show();
+					$("#tableAccessoryList").show();
 				};
 			},
 			error: function() { 
@@ -290,78 +174,67 @@ $(document).ready(function() {
 		})
 	}
 	
-	function fillConfig(carSeries, carType){
+	function fillOrderConfig(carSeries, carType){
+		var options = '<option value="0" selected>请选择</option>';
 		$.ajax({
-			url: FILL_CONFIG,
+			url: FILL_ORDER_CONFIG,
 			type: "get",
 			dataType: "json",
 			data: {
 				"carSeries" : carSeries,
 				"carType" : carType,	
 			},
+			async: false,
 			success: function(response) {
-				if(response.success){
-					$("#tableConfigList>tbody").html("");
-					$("#config").html("");
-					var option = '<option value="" selected>请选择配置</option>';	
+				if(response.success){						
 					$.each(response.data, function(index,value){
-						option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
+						options +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
 					});
-				 	$("#config").html(option);
-				 
-					// if(typeof(carType) == "undefined") {
-						// $("#clonedConfig").html("");
-					// } else {
-						$("#clonedConfig").html(option); 
-					// }	
 				}
 			},
 			error: function() { 
 		    	alertError(); 
 		    }
 		})
+		return options;
 	}
 	
 	function fillType(carSeries) {
+		var options = '<option value="" selected>请选择</option>';
 		$.ajax({
-			url: FILL_CAR_TYPE,
+			url: FILL_ORDER_CAR_TYPE,
 			type: "get",
 			dataType: "json",
 			data: {
 				"carSeries" : carSeries	
 			},
+			async: false,
 			success: function(response) {
 				if(response.success){
-					$("#tableConfigList>tbody").html("");
-					$("#carType").html("");
-					var option = '<option value="" selected>请选择车型</option>'
 					$.each(response.data, function(index, value){
-						option += '<option value="'+ value.car_type +'">'+ value.car_type +'</option>';
+						options += '<option value="'+ value +'">'+ value +'</option>';
 					});
-					$("#carType").html(option);
 				}
 			},
 			error: function() { 
 		    	alertError(); 
 		    }
 		})
+		return options;
 	}
 		
 	function ajaxAdd() {
 		var bol;
 		$.ajax({
-			url: SAVE_CONFIG_DETAIL,
+			url: SAVE_ACCESSORY_DETAIL,
 			async: false,
 			type: "get",
 			dataType: "json",
 			data: {
 				"id": 0,
-				"configId":  $("#config").val(),
-				"istrace": $("#newIsTrace").val(),
-				"nodeId": $("#newNode").val(),
+				"orderConfigId":  $("#orderConfig").val(),
 				"componentId": $("#newComponentCode").val(),
-				"replacementId": $("#newReplacementCode").val(),
-				"providerId": $("#newProviderId").val(),	
 				"remark": $("#newRemark").val()
 			},
 			success: function (response) {
@@ -379,19 +252,14 @@ $(document).ready(function() {
 	}
 	
 	function ajaxEdit() {
-		var bol;
 		$.ajax({
-			url: SAVE_CONFIG_DETAIL,
+			url: SAVE_ACCESSORY_DETAIL,
 			type: "get",
 			dataType: "json",
 			data: {				
 				"id": $("#editModal").data("id"),
-				"configId": $("#editModal").data("configId"),
-				"istrace": $("#editIsTrace").val(),
-				"nodeId": $("#editNode").val(),
+				"orderConfigId": $("#editModal").data("orderConfigId"),
 				"componentId": $("#editComponentCode").val(),
-				"replacementId": $("#editReplacementCode").val(),
-				"providerId": $("#editProviderId").val(),
 				"remark": $("#editRemark").val()
 			},
 			success: function (response) {
@@ -399,26 +267,24 @@ $(document).ready(function() {
 				if(!response.success){
 					alert(response.message);
 				}
-				bol = response.success;
 			},
 			error: function() { 
 		    	alertError(); 
 		    }
 		})
-		return bol;
 	}
 	
 	function ajaxCopy() {
 		$.ajax({
-			url: COPY_CONFIG_LIST,
+			url: COPY_ACCESSORY_LIST,
 			type: "get",
 			dataType: "json",
 			data: {
-				"originalId": $("#config").val(),
+				"originalId": $("#orderConfig").val(),
 				"clonedId": $("#clonedConfig").val()
 			},
 			success: function (response) {
-				$("#config").val($("#clonedConfig").val());
+				$("#orderConfig").val($("#clonedConfig").val());
 				ajaxQuery();
 			},
 			error: function () {
@@ -427,13 +293,13 @@ $(document).ready(function() {
 		})
 	}
 	
-	function ajaxDelete(configListId) {
+	function ajaxDelete(accessoryListId) {
 		$.ajax({
-			url: DELETE_CONFIG_DETAIL,
+			url: DELETE_ACCESSORY_DETAIL,
 			type: "get",
 			dataType: "json",
 			data: {
-				"id": configListId	
+				"id": accessoryListId	
 			},
 			success: function(response) {
 				if(response.success) {
@@ -446,29 +312,6 @@ $(document).ready(function() {
 		})
 	}
 
-	function ajaxCheckReplacement(configId,replacementId){
-		bol = false;
-		$.ajax({
-			url: CHECK_REPLACEMENT,
-			type: "get",
-			dataType: "json",
-			data: {
-				"configId" : configId,
-				"replacementId": replacementId,
-			},
-			async: false,
-			success: function(response){
-				if(response.success){
-					bol = true;
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(){alertError();}
-		});
-		return bol;
-	}
-	
 	function emptyNewModal() {
 		$("#newIsTrace").val("1"),
 		$("#newNode").val(""),
@@ -530,28 +373,6 @@ $(document).ready(function() {
 		return option;
 	}	
 	
-	function getProviderCode(providerName) {
-		var data;
-		$.ajax ({
-			url: GET_PROVIDER_CODE,
-			type: "get",
-			async: false,
-			dataType: "json",
-			data: {
-				"providerName": providerName	
-			},
-			success: function(response) {
-				if(response.success){
-					data = response.data[0];
-				}
-			},
-			error: function() { 
-		    	alertError(); 
-		    }
-		})
-		return data;
-	}
-	
 	//供应商的自动补全
 	$("#newProviderName").typeahead({
 	    source: function (input, process) {
@@ -593,6 +414,20 @@ $(document).ready(function() {
 			return item;			
     	}
 	});
+
+	$("#newReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#newReplacementCode").html("");
+			$("#newReplacementCode").html(fillComponentCode(item));
+			$("#newReplacementCode>option:first-child").select();
+			return item;			
+    	}
+	});
 	
 	$("#editComponentName").typeahead({
 	    source: function (input, process) {
@@ -608,4 +443,17 @@ $(document).ready(function() {
     	}
 	});
 
+	$("#editReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#editReplacementCode").html("");
+			$("#editReplacementCode").html(fillComponentCode(item));
+			$("#editReplacementCode>option:first-child").select();
+			return item;			
+    	}
+	});
 });

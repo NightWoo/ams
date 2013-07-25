@@ -486,6 +486,7 @@ function ajaxGetStock (argument) {
 				$(".quantity-f").html(response.data.area_quantity.F);
 				$(".quantity-g").html(response.data.area_quantity.G);
 	    		$(".area-h").html(response.data.area_quantity.H);
+	    		$(".area-k").html(response.data.area_quantity.K);
 	    		$(".area-x").html(response.data.area_quantity.X);
 	    		$(".area-y").html(response.data.area_quantity.Y);
 	    		$(".area-z").html(response.data.area_quantity.Z);

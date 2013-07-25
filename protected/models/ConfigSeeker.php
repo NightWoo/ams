@@ -69,7 +69,7 @@ class ConfigSeeker
 	
 	//added by wujun
 	public function getNameList ($carSeries, $carType) {
-		$condition = "car_series=?";
+		$condition = "is_disabled=0 AND car_series=?";
 		$values = array($carSeries);
 		if(!empty($carType)) {
 			$condition .= " AND car_type=?";
@@ -149,7 +149,7 @@ class ConfigSeeker
 	public function getListDetail($configId) {
 		if(!empty($configId)) {
 		$condition = "config_id='$configId'";
-			$sql = "SELECT istrace, provider_id, component_id, node_id, remark
+			$sql = "SELECT istrace, provider_id, component_id,replacement_id, node_id, remark
 					  FROM car_config_list
 					 WHERE $condition";
 			$details = Yii::app()->db->createCommand($sql)->queryAll();
@@ -159,4 +159,11 @@ class ConfigSeeker
 		return $details;
 	}
 	
+	public function getTraceList($configId) {
+		$sql = "SELECT istrace, provider_id, component_id, replacement_id, node_id
+				FROM car_config_list
+				WHERE config_id=$configId AND istrace>0";
+		$list = Yii::app()->db->createCommand($sql)->queryAll();
+		return $list;
+	}
 }

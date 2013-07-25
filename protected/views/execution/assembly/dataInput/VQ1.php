@@ -49,6 +49,7 @@
 								</div>
 								<!-- <span class="help-inline">xcdshcj</span> -->
 							</div>
+							<div id="checkAlert"></div>
 							<div>
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 -->

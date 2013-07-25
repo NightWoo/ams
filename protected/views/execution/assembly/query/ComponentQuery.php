@@ -92,7 +92,7 @@
 									<option value="C10">C10</option>
 									<option value="C21">C21</option>
 									<option value="F10">F10</option>
-									<option value="ROAD_TEST_FINISH">VQ2动态.路试结束</option>
+									<option value="ROAD_TEST_FINISH">VQ2.路试</option>
 								</select>
 							</td>
 						</tr>

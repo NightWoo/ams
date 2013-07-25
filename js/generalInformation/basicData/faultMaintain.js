@@ -147,12 +147,14 @@ $(document).ready( function () {
 		    				$("<td />").html("启用").appendTo(tr);
 		    			} else {
 		    				$("<td />").html("冻结").appendTo(tr);
+		    				tr.addClass("warning")
 		    			}
 
 		    			//编辑
-		    			var editTd = $("<td />").html(" ¦ ");
+		    			// var editTd = $("<td />").html(" ¦ ");
+		    			var editTd = $("<td />");
 		    			$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-		    			$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
+		    			// $("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 		    			editTd.appendTo(tr);
 
 		    			//record id

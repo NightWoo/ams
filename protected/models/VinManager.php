@@ -99,4 +99,88 @@ class VinManager
 		return $car;
 	}
 	
+	public static function validateDigit9($vin) {
+		$replacement = array(
+			"0" => "0",
+			"1" => "1",
+			"2" => "2",
+			"3" => "3",
+			"4" => "4",
+			"5" => "5",
+			"6" => "6",
+			"7" => "7",
+			"8" => "8",
+			"9" => "9",
+			"A" => "1",
+			"B" => "2",
+			"C" => "3",
+			"D" => "4",
+			"E" => "5",
+			"F" => "6",
+			"G" => "7",
+			"H" => "8",
+			"J" => "1",
+			"K" => "2",
+			"L" => "3",
+			"M" => "4",
+			"N" => "5",
+			"P" => "7",
+			"R" => "9",
+			"S" => "2",
+			"T" => "3",
+			"U" => "4",
+			"V" => "5",
+			"W" => "6",
+			"X" => "7",
+			"Y" => "8",
+			"Z" => "9",
+		);
+
+		$weight = array(
+			0 => 8,
+			1 => 7,
+			2 => 6,
+			3 => 5,
+			4 => 4,
+			5 => 3,
+			6 => 2,
+			7 => 10,
+			9 => 9,
+			10 => 8,
+			11 => 7,
+			12 => 6,
+			13 => 5,
+			14 => 4,
+			15 => 3,
+			16 => 2,
+		);
+		$success = true;
+		$message = "VIN第9位校验成功！";
+		$vin = strtoupper($vin);
+		$len = strlen($vin);
+		if($len != 17) {
+			$success = false;
+			$message = "VIN长度有误，请确认！";
+			return array("success"=>$success,"message"=>$message);
+		}
+		$digitArray = str_split($vin);
+		$sum = 0;
+		for($i=0;$i<$len;$i++){
+			if($i==8) continue;
+			if(!array_key_exists($digitArray[$i], $replacement)){
+				$success = false;
+				$message = "VIN中存在非法字符 “".$digitArray[$i]. "” ，请确认！";
+				return array("success"=>$success,"message"=>$message);
+			}
+			$sum += $replacement[$digitArray[$i]] * $weight[$i];
+		}
+
+		$digitValidated = $sum%11 == 10 ? "X" : $sum%11;
+		if($digitValidated != $digitArray[8]){
+			$success = false;
+			$message = $vin . "第9位校验失败！请联系信息系统管理员";
+		}
+
+		return array("success"=>$success,"message"=>$message);
+	}
 }

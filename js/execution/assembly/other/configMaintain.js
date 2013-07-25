@@ -44,17 +44,17 @@ $(document).ready(function() {
 
 	$("#newClime").change(function(){
 		if($(this).val() == "国内"){
-			$("#newExportCountry").attr("disabled", "disabbled").val("");
+			$("#newExportCountry").attr("disabled", "disabled").val("");
 		} else {
-			$("#newExportCountry").removeAttr("disabled", "disabbled");
+			$("#newExportCountry").removeAttr("disabled", "disabled");
 		};
 	})
 
 	$("#editClime").change(function(){
 		if($(this).val() == "国内"){
-			$("#editExportCountry").attr("disabled", "disabbled").val("");
+			$("#editExportCountry").attr("disabled", "disabled").val("");
 		} else {
-			$("#editExportCountry").removeAttr("disabled", "disabbled");
+			$("#editExportCountry").removeAttr("disabled", "disabled");
 		};
 	})
 
@@ -97,6 +97,13 @@ $(document).ready(function() {
 		if($(e.target).html()==="编辑"){
 			emptyEditModal();
 			var tr = $(e.target).closest("tr");
+
+			if (tr.data("isDisabled") == "1") {
+				$("#editIsDisabled").attr("checked", "checked");
+			} else {
+				$("#editIsDisabled").removeAttr("checked");
+			}
+
 			$("#editCarType").html(fillType(tr.data("car_series")));
 			$("#editOrderConfig").html(fillOrderConfig(tr.data("car_series")));
 			$("#editCarSeries").val(tr.data("car_series"));
@@ -121,7 +128,7 @@ $(document).ready(function() {
 			$("#editModal").modal("show");
 			
 		} else if($(e.target).html()==="删除"){
-			ajaxDelete($(e.target).closest("tr").data("id"));
+			// ajaxDelete($(e.target).closest("tr").data("id"));
 		}	
 	})
 	
@@ -149,17 +156,20 @@ $(document).ready(function() {
 						$("<td />").html(value.modify_time).appendTo(tr);
 						$("<td />").html(value.user_name).appendTo(tr);
 						$("<td />").html(value.remark).appendTo(tr);
-						var editTd = $("<td />").html(" ¦ ");
-						$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-						$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
+						// var editTd = $("<td />").html(" ¦ ");
+						var editTd = $("<td />");
+						$("<button />").addClass("btn-link").html("编辑").appendTo(editTd);
+						// $("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 						editTd.appendTo(tr);
 						
-						// tr.data("id", value.id);
+						tr.data("isDisabled", value.disabled);
 						// tr.data("car_series", value.car_series);
 						// tr.data("car_type", value.car_type);
 						// tr.data("config_name", value.name);
 						// tr.data("remark", value.remark);
-
+						if(value.disabled == "1"){
+							tr.addClass("warning");
+						}
 						$.each(value, function	(key, val) {
 							tr.data(key, val);
 						})
@@ -175,11 +185,15 @@ $(document).ready(function() {
 	}
 	
 	function ajaxAdd (argument) {
+		var isDisabled = 0;
+		if($("#newIsDisabled").attr("checked") === "checked")
+			isDisabled = 1;
 		$.ajax({
 			type: "get",
 			dataType: "json",
 			url: SAVE_CONFIG,
 			data: {
+				"isDisabled": isDisabled,
 				"car_series": $("#newCarSeries").val(),
 				"car_type": $("#newCarType").val(),
 				"config_name": $("#newConfigName").val(),
@@ -208,12 +222,16 @@ $(document).ready(function() {
 	}
 	
 	function ajaxEdit (argument) {
+		var isDisabled = 0;
+		if($("#editIsDisabled").attr("checked") === "checked")
+			isDisabled = 1;
 		$.ajax({
 			type: "get",
 			dataType:"json",
 			url: SAVE_CONFIG,
 			data: {
 				"id" : $("#editModal").data("id"),
+				"isDisabled": isDisabled,
 				"car_series" : $("#editCarSeries").val(),
 				"car_type" : $("#editCarType").val(),
 				"config_name" : $("#editConfigName").val(),

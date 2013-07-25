@@ -25,9 +25,9 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>配置明细
+            	<legend>生产配置明细维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;配置维护</a>
+            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
             			/
             			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
             		</span>

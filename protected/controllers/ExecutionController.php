@@ -121,11 +121,12 @@ class ExecutionController extends BmsBaseController
             $car->addToPlan($date, $planId);
 			$car->generateSerialNumber($line);
             $serial_number = $car->car->serial_number;      //added by wujun
-
+            $car->addVinLaserQueue();
             if($currentNode === 'T0'){
                 $subTypes = array('subEngine','subFrontAxle','subInstrument');
                 $car->addSubConfig($subTypes);
             }
+
 
 			$transaction->commit();
 
@@ -215,26 +216,51 @@ class ExecutionController extends BmsBaseController
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
             // $car->passNode('LEFT_WORK_SHOP');
-
-            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
-                $checkIRemote = true;
-                $ff = CJSON::decode($faults);
-                if(!empty($ff)){
-                    foreach($ff as $f){
-                        //如果有离线修复故障，则不校验云系统
-                        if(!$f['fixed']){
-                            $checkIRemote = false;
-                            break;
-                        }
+            $shouldCheck = true;
+            $ff = CJSON::decode($faults);
+            if(!empty($ff)){
+                foreach($ff as $f){
+                    //如果有离线修复故障，则不校验
+                    if(!$f['fixed']){
+                        $shouldCheck = false;
+                        break;
                     }
                 }
-                if($checkIRemote){
+            }
+            if($shouldCheck){
+                if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
                     $IRemote = $car->getIRemoteTestResult();
                     if(!($IRemote->Result) || $IRemote->TestState != "2"){
                         throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
                     }
                 }
+
+                $checkTrace = $car->checkTraceComponentByConfig();
+                if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
+                
+                $vinValidate = $car->validateVin();
+                if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
             }
+
+            // if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
+            //     $checkIRemote = true;
+            //     $ff = CJSON::decode($faults);
+            //     if(!empty($ff)){
+            //         foreach($ff as $f){
+            //             //如果有离线修复故障，则不校验云系统
+            //             if(!$f['fixed']){
+            //                 $checkIRemote = false;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            //     if($checkIRemote){
+            //         $IRemote = $car->getIRemoteTestResult();
+            //         if(!($IRemote->Result) || $IRemote->TestState != "2"){
+            //             throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
+            //         }
+            //     }
+            // }
 
             $tablePrefix = "VQ1_STATIC_TEST";
             if($nodeName == "VQ1_2") $tablePrefix .= "_2";
@@ -1104,6 +1130,16 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
         }
     }
+
+    public function actionAccessoryListMaintain() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/AccessoryListMaintain');
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
 	
 	//added by wujun
 	public function actionConfigList() {
@@ -1244,6 +1280,10 @@ class ExecutionController extends BmsBaseController
         $this->render('assembly/dataInput/OutStandby27');  
     }
 
+    public function actionOutStandby14() {
+        $this->render('assembly/dataInput/OutStandby14');  
+    }
+
     public function actionWarehouseLabel() {
         $this->render('assembly/dataInput/WarehouseLabel');  
     }
@@ -1319,11 +1359,15 @@ class ExecutionController extends BmsBaseController
 		 try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            $fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            // $ret = $car->checkTraceComponentByConfig();
+            $ret = $car->validateVin();
+            // $fault = Fault::createSeeker();
+            // $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            // $client = new SoapClient('http://192.168.1.31/bms/carInfoService/quote?wsdl');
+            // $ret = $client->getCarInfo('LGXC4DG6D0047714');
 
             // $transaction->commit();
-            $this->renderJsonBms(true, !empty($exist), $exist);
+            $this->renderJsonBms(true, $ret, $ret);
         } catch(Exception $e) {
             // $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);

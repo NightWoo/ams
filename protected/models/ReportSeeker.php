@@ -430,7 +430,7 @@ class ReportSeeker
 		foreach($datas as &$data){
 			$detailSql = "SELECT id, node_id,TIMESTAMPDIFF(second,pause_time,recover_time) AS howlong, pause_time, recover_time
 						FROM pause
-						WHERE $condition AND remark = '{$data['pause_reason']}';
+						WHERE $condition AND remark = '{$data['pause_reason']}' AND cause_type='{$data['cause_type']}' AND duty_department='{$data['duty_department']}';
 						ORDER BY pause_time ASC";
 			$details = Yii::app()->db->createCommand($detailSql)->queryAll();
 			foreach($details as &$detail){
