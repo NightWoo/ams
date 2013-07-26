@@ -453,6 +453,7 @@ class ConfigController extends BmsBaseController
 		$id = $this->validateIntVal('id', 0);
 		$orderConfigId = $this->validateIntVal('orderConfigId', 0);
 		$componentId = $this->validateIntVal('componentId',0);
+		$unit = $this->validateIntVal('unit',1);
 		$remark = $this->validateStringVal('remark','');
 		
 		$transaction = Yii::app()->db->beginTransaction();
@@ -478,6 +479,7 @@ class ConfigController extends BmsBaseController
 			
 			$accessoryDetail->order_config_id = $orderConfigId;
 			$accessoryDetail->component_id = $componentId;
+			$accessoryDetail->unit = $unit;
 			$accessoryDetail->remark = $remark;
 			$accessoryDetail->user_id = Yii::app()->user->id;
 			$accessoryDetail->modify_time = date("YmdHis");

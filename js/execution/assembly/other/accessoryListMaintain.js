@@ -61,10 +61,11 @@ $(document).ready(function() {
 			$("#editComponentCode").html(fillComponentCode(thisTr.data("componentName")));
 			$("#editComponentCode").val(thisTr.data("componentId"));
 
-			$("#editRemark").val(siblings[3].innerHTML);
+			$("#editUnit").val(siblings[3].innerHTML);
+			$("#editRemark").val(siblings[4].innerHTML);
 			
 			
-			$("#editModal").data("id", thisTr.data("configListId"));
+			$("#editModal").data("id", thisTr.data("accessoryListId"));
 			$("#editModal").data("orderConfigId", thisTr.data("orderConfigId"));
 			
 			$("#editModal").modal("show");
@@ -142,6 +143,7 @@ $(document).ready(function() {
 						$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.component_code).appendTo(tr);
 						$("<td />").html(value.component_name).appendTo(tr);
+						$("<td />").html(value.unit).appendTo(tr);
 						
 						//remark, modify_time, user_name	
 						$("<td />").html(value.remark).appendTo(tr);
@@ -235,6 +237,7 @@ $(document).ready(function() {
 				"id": 0,
 				"orderConfigId":  $("#orderConfig").val(),
 				"componentId": $("#newComponentCode").val(),
+				"unit": $("#newUnit").val(),
 				"remark": $("#newRemark").val()
 			},
 			success: function (response) {
@@ -260,6 +263,7 @@ $(document).ready(function() {
 				"id": $("#editModal").data("id"),
 				"orderConfigId": $("#editModal").data("orderConfigId"),
 				"componentId": $("#editComponentCode").val(),
+				"unit": $("#editUnit").val(),
 				"remark": $("#editRemark").val()
 			},
 			success: function (response) {

@@ -88,7 +88,7 @@ class OrderConfigSeeker
 	}
 
 	public function getAccessoryList ($orderConfigId) {
-		$sql = "SELECT id, order_config_id, component_id, remark, modify_time, user_id 
+		$sql = "SELECT id, order_config_id, component_id, unit, remark, modify_time, user_id 
 				  FROM car_accessory_list 
 				 WHERE order_config_id = $orderConfigId 
 				 ORDER BY id ASC";

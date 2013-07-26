@@ -1268,6 +1268,10 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionAccessoryListPrint() {
+        $this->render('assembly/dataInput/AccessoryListPrint');  
+    }
+
     public function actionOutStandby() {
         $this->render('assembly/dataInput/OutStandby');  
     }
@@ -1358,10 +1362,11 @@ class ExecutionController extends BmsBaseController
         // $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
-            $car = Car::create($vin);
+            // $car = Car::create($vin);
             // $ret = $car->checkTraceComponentByConfig();
-            $ret = $car->validateVin();
-            // $fault = Fault::createSeeker();
+            // $ret = $car->validateVin();
+            $seeker = new OrderSeeker();
+            $ret = $seeker->queryBoardAccessoryList('D0705018');
             // $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             // $client = new SoapClient('http://192.168.1.31/bms/carInfoService/quote?wsdl');
             // $ret = $client->getCarInfo('LGXC4DG6D0047714');

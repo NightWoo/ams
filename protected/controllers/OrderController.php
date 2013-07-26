@@ -115,9 +115,10 @@ class OrderController extends BmsBaseController
 	}
 
 	public function actionQueryBoardInfo(){
+		$type = $this->validateStringVal("type", "certificatePaper");
 		try{
 			$orderSeeker = new OrderSeeker();
-			$data = $orderSeeker->queryBoardInfo();
+			$data = $orderSeeker->queryBoardInfo($type);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e){
 			$this->renderJsonBms(false, $e->getMessage());
@@ -598,8 +599,9 @@ class OrderController extends BmsBaseController
 	public function actionQueryByBoard() {
 		try{
 			$boardNumber = $this->validateStringVal('boardNumber', '');
+			$type = $this->validateStringVal("type", "certificatePaper");
 			$seeker = new OrderSeeker();
-			$data = $seeker->queryByBoard($boardNumber);
+			$data = $seeker->queryByBoard($boardNumber,$type);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());

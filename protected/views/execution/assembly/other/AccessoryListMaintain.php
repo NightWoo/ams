@@ -73,9 +73,10 @@
 				<table id="tableAccessoryList" class="table table-condensed">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<th>#</th>
 							<th>零部件编号</th>
 							<th>零部件名称</th>
+							<th>数量</th>
 							<th>备注</th>
 							<th>更新时间</th>
 							<th>更新人</th>
@@ -107,6 +108,12 @@
 					</select>
 				</div>
 			</div>
+			<div class="control-group">
+                <label class="control-label" for="">*&nbsp;数量</label>
+                <div class="controls">
+                    <input type="text" class="input-small" placeholder="请输入数量..." id="newUnit"/>
+                </div>
+            </div>
   			<div class="control-group">
 				<label class="control-label" for="">备注</label>
 				<div class="controls">
@@ -139,6 +146,12 @@
 					</select>
 				</div>
 			</div>
+			<div class="control-group">
+                <label class="control-label" for="">*&nbsp;数量</label>
+                <div class="controls">
+                    <input type="text" class="input-small" placeholder="请输入数量..." id="editUnit"/>
+                </div>
+            </div>
   			<div class="control-group">
 				<label class="control-label" for="">备注</label>
 				<div class="controls">

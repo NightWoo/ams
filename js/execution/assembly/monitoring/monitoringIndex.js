@@ -636,6 +636,17 @@ function ajaxBalance (node) {
 		}
 	});
 
+	$(".area-btn-k,.area-btn-h").live("click", function () {
+		var blockNumber = $.trim($(this).find("span").filter(".area-text").html());
+		if (blockNumber == $("#blockDetail").data("currentBlock")) {
+			$("#blockDetail").hide();
+			$("#blockDetail").data("currentBlock", "");
+		} else {
+			$("#blockDetail").data("currentBlock", blockNumber);
+			ajaxStockyard(blockNumber);
+		}
+	});
+
 	$(".area-lane").live("click", function() {
 		ajaxLaneInfo ();
 	})

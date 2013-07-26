@@ -578,10 +578,13 @@ class OrderSeeker
 		return array('totalToPrint'=>$totalToPrint, 'laneInfo'=>$laneInfo);
 	}
 
-	public function queryByBoard($boardNumber){
+	public function queryByBoard($boardNumber,$type="certificatePaper"){
+		$filterColumn = "is_printed";
+		if($type == "accessoryList") $filterColumn = "accessory_list_printed";
+
 		$sql = "SELECT board_number,id as order_id,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
 				FROM `order`
-				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND is_printed=0
+				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND $filterColumn=0
 				ORDER BY lane_id,distributor_name,series";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -639,17 +642,20 @@ class OrderSeeker
 		return $ret;
 	}
 
-	public function queryBoardInfo(){
+	public function queryBoardInfo($type="certificatePaper"){
+		$filterColumn = "is_printed";
+		if($type == "accessoryList") $filterColumn = "accessory_list_printed";
+
 		$boardArray = array();
 		$boardInfo = array();
 		$totalToPrint = 0;
 
-		$sql  = "SELECT DISTINCT(board_number) FROM `order` WHERE is_printed = 0 AND `status`>0 ORDER BY board_number ASC";
+		$sql  = "SELECT DISTINCT(board_number) FROM `order` WHERE $filterColumn = 0 AND `status`>0 ORDER BY board_number ASC";
 		$boardArray = Yii::app()->db->createCommand($sql)->queryColumn();
 
 		foreach($boardArray as $board){
 			$boardInfo[$board] = array("toPrint"=>0,"countSum"=>0,"amountSum"=>0);
-			$sql = "SELECT SUM(amount) as amount, SUM(count) as count FROM `order` WHERE board_number='$board' AND is_printed = 0 AND `status`>0 GROUP BY CONCAT(lane_id,distributor_name,series)";
+			$sql = "SELECT SUM(amount) as amount, SUM(count) as count FROM `order` WHERE board_number='$board' AND $filterColumn = 0 AND `status`>0 GROUP BY CONCAT(lane_id,distributor_name,series)";
 			$datas = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach($datas as $data){
 				$boardInfo[$board]["countSum"] += $data["count"];
@@ -980,6 +986,27 @@ class OrderSeeker
 			$isPrinted = true;
 		}
 		return $isPrinted;
+	}
+
+	public function queryBoardAccessoryList($boardNumber) {
+		$sql = "SELECT series, order_config_id, SUM(amount) AS amount FROM `order` WHERE board_number='$boardNumber' GROUP BY order_config_id ORDER BY series, order_config_id";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$listArray = array();
+		foreach($datas as $data){
+			$seeker = new OrderConfigSeeker();
+			$list = $seeker->getAccessoryList($data['order_config_id']);
+			foreach($list as &$detail){
+				if(empty($listArray[$data['series']][$detail['component_id']])){
+					$listArray[$data['series']][$detail['component_id']]['component_name'] = $detail['component_name'];
+					$listArray[$data['series']][$detail['component_id']]['component_code'] = $detail['component_code'];
+					$listArray[$data['series']][$detail['component_id']]['quantity'] = 0;
+				}
+				$listArray[$data['series']][$detail['component_id']]['quantity'] += $detail['unit'] * $data['amount'];
+			}
+		}
+
+		return $listArray;
 	}
 
 }
