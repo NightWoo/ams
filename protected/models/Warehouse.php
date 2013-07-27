@@ -29,7 +29,7 @@ class Warehouse
 				$conditions['area'] = "(id>1 AND id<200)";
 				break;
 			case "M6" :
-				$conditions['area'] = "(id>1 AND id<200)";
+				$conditions['area'] = "((id>400 AND id<500) OR (id>600 AND id<700))";
 				break;
 			case "6B" :
 				$conditions['area'] = "(id>400 AND id<500)";

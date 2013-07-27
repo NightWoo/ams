@@ -96,7 +96,7 @@
 	                </table>
 	                <div style="width:570pt">
 	                	<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
-		                <table class="table table-condensed table-bordered" style="font-size:12px;">
+		                <table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px;">
 							<thead>
 								<tr>
 									<th style="width:60px">车系</th>

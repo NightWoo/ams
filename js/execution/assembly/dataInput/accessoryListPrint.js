@@ -137,6 +137,53 @@ $("document").ready(function() {
 		})
 	}
 
+	function ajaxQueryAccessoryList(boardNumber) {
+		$(".accessoryListTable>tbody").html("");
+		$.ajax({
+			url: QUERY_BOARD_ACCESSORY_LIST,
+			type: "get",
+			dataType: "json",
+			data:{
+				"boardNumber" : boardNumber,
+			},
+			error: function(){alertError();},
+			success: function(response) {
+				if(response.success){
+					$.each(response.data, function (series, detail){
+						var num = detail.length;
+						var tmp = $("<tbody />");
+
+						for(var i=0; i<num; i++){
+							$("<tr />").appendTo(tmp);
+						}
+
+						$.each(detail, function (index, value) {
+							tr = tmp.children("tr:eq("+ index +")");
+							$("<td />").html(value.component_code).appendTo(tr);
+							$("<td />").html(value.component_name).appendTo(tr);
+							$("<td />").addClass("alignRight").html(value.quantity).appendTo(tr);
+							$("<td />").html("").appendTo(tr);
+							
+							tr.data("componentId", value.component_id);
+							tr.data("quantity", value.quantity);
+						});
+
+						var firstTr = tmp.children("tr:eq(0)");
+						firstTr.addClass("thickBoarder");
+
+						seriesTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(byd.SeriesName[series]).prependTo(firstTr);
+
+						$(".accessoryListTable>tbody").append(tmp.children("tr"));
+					})
+
+					$(".accessoryListTable").show();
+				} else {
+					alertError(response.message);
+				}
+			}
+		})
+	}
+
 
 	$("#refreshLane").click(function(){
 		getBoardInfo();
@@ -149,6 +196,7 @@ $("document").ready(function() {
 		if($(e.target).hasClass("board")){
 			boardNumber = $(e.target).attr("boardnum");
 			queryOrdersByBoardNumber(boardNumber);
+			ajaxQueryAccessoryList(boardNumber);
 			curBoard = boardNumber;
 		}
 	})
@@ -156,6 +204,7 @@ $("document").ready(function() {
 	$(".queryBoardBtn").click(function(){
 		boardNumber = $.trim($("#boardNumberInput").val());
 		queryOrdersByBoardNumber(boardNumber);
+		ajaxQueryAccessoryList(boardNumber);
 	})
 
 	$("#tableOrders").live('click', function(e) {

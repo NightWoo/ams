@@ -998,12 +998,17 @@ class OrderSeeker
 			$list = $seeker->getAccessoryList($data['order_config_id']);
 			foreach($list as &$detail){
 				if(empty($listArray[$data['series']][$detail['component_id']])){
-					$listArray[$data['series']][$detail['component_id']]['component_name'] = $detail['component_name'];
+					$listArray[$data['series']][$detail['component_id']]['component_id'] = $detail['component_id'];
 					$listArray[$data['series']][$detail['component_id']]['component_code'] = $detail['component_code'];
+					$listArray[$data['series']][$detail['component_id']]['component_name'] = $detail['component_name'];
 					$listArray[$data['series']][$detail['component_id']]['quantity'] = 0;
 				}
 				$listArray[$data['series']][$detail['component_id']]['quantity'] += $detail['unit'] * $data['amount'];
 			}
+		}
+
+		foreach($listArray as &$seriesList){
+			$seriesList = array_values($seriesList);
 		}
 
 		return $listArray;

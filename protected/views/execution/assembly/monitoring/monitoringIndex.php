@@ -190,11 +190,11 @@
 
 				    		<div id="extraArea" class="">
 	      					    <dl class="dl-horizontal">
-								    <dt>特殊区X</dt><dd class="area-x">-</dd>
 								    <dt><a class="area-btn-k">14#附加区<span class="area-text">K</span></a></dt><dd class="area-k">-</dd>
+								    <dt><a class="area-btn-y">35#附加区<span class="area-text">Y</span></a></dt><dd class="area-y">-</dd>
 								    <dt><a class="area-btn-h">27#临时区<span class="area-text">H</span></a></dt><dd class="area-h">-</dd>
 								    <dt>27#出口车Z</dt><dd class="area-z">-</dd>
-								    <dt>35#附加区Y</dt><dd class="area-y">-</dd>
+								    <dt>特殊区X</dt><dd class="area-x">-</dd>
 								    <dt>WDI</dt><dd class="area-wdi">-</dd>
 							    </dl>
 		      				</div>

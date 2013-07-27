@@ -8,8 +8,8 @@ class ShiftRecordCommand extends CConsoleCommand
 	public function actionAddShiftDaily() {
 
 		$lineSpeed = array(
-			'0' => 120,
-			'1' => 120
+			'0' => 180,
+			'1' => 180
 		);
 
 		$curDate = DateUtil::getCurDate();
@@ -26,7 +26,7 @@ class ShiftRecordCommand extends CConsoleCommand
 				$ar->end_time = $lastDate . ' 19:59:59';
 			}else if($shift === 1){
 				$ar->start_time = $lastDate . ' 20:00:00';
-				$ar->end_time = $curDate . ' 06:59:59';
+				$ar->end_time = $curDate . ' 07:59:59';
 			}
 
 			$ar->save();

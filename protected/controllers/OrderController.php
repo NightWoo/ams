@@ -718,4 +718,15 @@ class OrderController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}
+
+	public function actionQueryBoardAccessoryList() {
+		$boardNumber = $this->validateStringVal('boardNumber', '');
+		try {
+			$seeker = new OrderSeeker();
+			$data = $seeker->queryBoardAccessoryList($boardNumber);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}
+	}
 }

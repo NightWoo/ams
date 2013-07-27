@@ -636,7 +636,7 @@ function ajaxBalance (node) {
 		}
 	});
 
-	$(".area-btn-k,.area-btn-h").live("click", function () {
+	$(".area-btn-k,.area-btn-h,.area-btn-y").live("click", function () {
 		var blockNumber = $.trim($(this).find("span").filter(".area-text").html());
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();

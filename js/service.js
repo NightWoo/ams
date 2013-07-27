@@ -237,6 +237,7 @@ var QUERY_ACCESSORY_LIST = "/bms/config/queryAccessoryList";
 var SAVE_ACCESSORY_DETAIL = "/bms/config/saveAccessoryDetail";
 var DELETE_ACCESSORY_DETAIL = "/bms/config/deleteAccessoryDetail";
 var COPY_ACCESSORY_LIST ="/bms/config/copyAccessoryList";
+var QUERY_BOARD_ACCESSORY_LIST ="/bms/order/queryBoardAccessoryList";
 
 //added by wujun
 //pause edit

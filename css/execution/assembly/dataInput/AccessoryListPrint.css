@@ -115,3 +115,7 @@
 .boardNumberText, .boardNumberTextDiv {
 	margin-bottom: 5px;
 }
+
+.accessoryListTable .alignRight{
+	text-align: right;
+}
