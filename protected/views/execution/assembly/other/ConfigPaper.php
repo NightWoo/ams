@@ -75,8 +75,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 								</select>
 							</td>
 							<td> 
-								<input type="button" class="btn btn-primary" id="" value="全部上传"></input>
-								<i id="queryRefresh" class="icon-refresh"></i> 
+								<!-- <input type="button" class="btn btn-primary" id="" value="全部上传"></input> -->
+								<button type="button" class="btn btn-primary" id="queryRefresh" value=""><i class="icon-refresh"></i>&nbsp;刷新</button>
+								 
 							</td>
 						</tr>
 					</table>
@@ -85,54 +86,70 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 				<input type="hidden" id='sessionId' value='<?php echo session_id();?>'></input>
 				<div class="well form-inline" id="configContainer">
 					<div class="config-item">
-						<form name="front" id="frontForm" method="post" enctype="multipart/form-data" 
-						action="/bms/config/upload"
-						 > 
-						 主正面 <input type="file" name="front" />
-						 <input type="submit" value="上传" class="btn btn-primary"/>
-						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
-						</form> 
-						
-						
-						
+						<form name="front" id="frontForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							主 1/4
+							<input type="file" name="front" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
+						</form>
 					</div>
 
 					<div class="config-item">
-						<form name="front" id="backForm" method="post" enctype="multipart/form-data" 
-						action="/bms/config/upload"
-						 > 
-						主反面 <input type="file" name="back" />
-						 <input type="submit" value="上传" class="btn btn-primary"/>
-						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						<form name="front" id="backForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							主 2/4 
+							<input type="file" name="back" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
+					</div>
 
+					<div class="config-item">
+						<form name="front" id="front2Form" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							主 3/4
+							<input type="file" name="front2" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
+						</form>
+					</div>
+
+					<div class="config-item">
+						<form name="front" id="back2Form" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							主 4/4
+							<input type="file" name="back2" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
+						</form> 
 					</div>
 
 					
 					<div class="config-item">
-						<form name="front" id="subInstrumentForm" method="post" enctype="multipart/form-data" 
-						action="/bms/config/upload"
-						 > 
-						 仪表台   <input type="file" name="subInstrument" />
-						 <input type="submit" value="上传" class="btn btn-primary"/>
-						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						<form name="front" id="subInstrumentForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							仪表台
+							<input type="file" name="subInstrument" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
-
 					</div>
 
 					<div class="config-item">
-						<form name="front" id="subEngineForm" method="post" enctype="multipart/form-data" 
-						action="/bms/config/upload"
-						 > 
-						发动机 <input type="file" name="subEngine" />
-						 <input type="submit" value="上传" class="btn btn-primary"/>
-						 <span class="help-inline btnDelect" id="del"><p class="text-error">删除本配置单</p></span>
-						<span class="help-inline notyet"><p class="text-success">尚未上传配置单</p></span>
+						<form name="front" id="subEngineForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
+							发动机
+							<input type="file" name="subEngine" />
+							<input type="submit" value="上传" class="btn btn-primary"/>
+							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
-
 					</div>
 				</div>					
 		  	</div><!-- end of 主体 -->

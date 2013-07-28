@@ -806,7 +806,7 @@ class Car
 		$carType = CarTypeMapAR::model()->find('car_type=?', array($this->car->type));
         $carModel = $carType->car_model;
 
-		$types = array('front','back');
+		$types = array('front','back','front2','back2');
 		$images = array();
 		if(!empty($config)) {
 			$path = "/home/work/bms/web/bms/configImage/" . $config->id;
@@ -835,6 +835,8 @@ class Car
             'coldResistant' => $this->car->cold_resistant,
 			'frontImage' => $images['front'],
 			'backImage' => $images['back'],
+			'front2Image' => $images['front2'],
+			'back2Image' => $images['back2'],
 		);
 		return $ret;
 	}

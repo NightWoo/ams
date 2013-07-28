@@ -3,90 +3,133 @@ $(document).ready(function () {
 	$("#configContainer").hide();
 
 	$("#frontForm").submit(function () {
-	
-	$("#frontForm").ajaxSubmit({
-		type: "post",
-		url : "/bms/config/upload",
-		data : {id: $('#config').val()},
-		dataType : "json",
-		success : function (response) {
-			if (response.success) {
-				alert("success");
-				var index =0;
-				$(".config-item .btnDelect").eq(index).show();
-				$(".config-item .notyet").eq(index).hide();
-			} else {
-				alert(response.message);
+		$("#frontForm").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index =0;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.front).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
+				
 			}
-			
-		}
+		});
+		return false;
 	});
-	return false;
-});
-$("#backForm").submit(function () {
 	
-	$("#backForm").ajaxSubmit({
-		type: "post",
-		url : "/bms/config/upload",
-		data : {id: $('#config').val()},
-		dataType : "json",
-		success : function (response) {
-			if (response.success) {
-				alert("success");
-				var index = 1;
-				$(".config-item .btnDelect").eq(index).show();
-				$(".config-item .notyet").eq(index).hide();
-			} else {
-				alert(response.message);
+	$("#backForm").submit(function () {
+		$("#backForm").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index = 1;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.back).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
 			}
-		}
+		});
+		return false;
 	});
-	return false;
-});
 
-$("#subInstrumentForm").submit(function () {
-	
-	$("#subInstrumentForm").ajaxSubmit({
-		type: "post",
-		url : "/bms/config/upload",
-		data : {id: $('#config').val()},
-		dataType : "json",
-		success : function (response) {
-			if (response.success) {
-				alert("success");
-				var index = 2;
-				$(".config-item .btnDelect").eq(index).show();
-				$(".config-item .notyet").eq(index).hide();
-			} else {
-				alert(response.message);
+	$("#front2Form").submit(function () {
+		$("#front2Form").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index =2;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.front2).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
+				
 			}
-		}
+		});
+		return false;
 	});
-	return false;
-});
-
-$("#subEngineForm").submit(function () {
-	
-	$("#subEngineForm").ajaxSubmit({
-		type: "post",
-		url : "/bms/config/upload",
-		data : {id: $('#config').val()},
-		dataType : "json",
-		success : function (response) {
-			if (response.success) {
-				alert("success");
-				var index = 3;
-				$(".config-item .btnDelect").eq(index).show();
-				$(".config-item .notyet").eq(index).hide();
-			} else {
-				alert(response.message);
+	$("#back2Form").submit(function () {
+		$("#back2Form").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index = 3;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.back2).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
 			}
-		}
+		});
+		return false;
 	});
-	return false;
-});
 
-var fileObjNameMap = ["front", "back", "subInstrument", "subEngine"];
+	$("#subInstrumentForm").submit(function () {
+		$("#subInstrumentForm").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index = 4;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.subInstrument).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
+			}
+		});
+		return false;
+	});
+
+	$("#subEngineForm").submit(function () {
+		$("#subEngineForm").ajaxSubmit({
+			type: "post",
+			url : "/bms/config/upload",
+			data : {id: $('#config').val()},
+			dataType : "json",
+			success : function (response) {
+				if (response.success) {
+					alert("success");
+					var index = 5;
+					$(".config-item .btnDelect").eq(index).show();
+					$(".config-item .viewImage").eq(index).data("path", response.data.image.subEngine).show();
+					$(".config-item .notyet").eq(index).hide();
+				} else {
+					alert(response.message);
+				}
+			}
+		});
+		return false;
+	});
+
+var fileObjNameMap = ["front", "back", "front2", "back2", "subInstrument", "subEngine"];
 $(".btnDelect").live("click",function () {
 		var index = $(".config-item").index($(this).parent().parent("div"));
 		ajaxSender.ajaxDeleteConfig($("#config").val(), fileObjNameMap[index], index);
@@ -106,6 +149,16 @@ $(".btnDelect").live("click",function () {
 		$("#configContainer").show();
 	});
 
+	$("#queryRefresh").click(function() {
+		resetConfigItem();
+		ajaxSender.ajaxGetConfigDetail($("#config").val());
+		$("#configContainer").show();
+	})
+
+	$(".viewImage").live("click", function () {
+		window.open($(this).data("path"));
+	})
+
 	function initPage() {
 		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
@@ -115,6 +168,7 @@ $(".btnDelect").live("click",function () {
 		$(".config-item button").removeClass().addClass("btn btn-primary");
 		$(".config-item input[type=text]").removeAttr("disabled").val("");
 		$(".config-item .btnDelect").hide();
+		$(".config-item .viewImage").hide();
 		$(".config-item .notyet").show();
 		// $('.uploadify').uploadify('disable', false);
 	}
@@ -174,6 +228,7 @@ $(".btnDelect").live("click",function () {
 							$(".config-item button").eq(index).addClass("disabled");
 							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.front);
 							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.front).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
 						}
@@ -183,29 +238,52 @@ $(".btnDelect").live("click",function () {
 							$(".config-item button").eq(index).addClass("disabled");
 							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.back);
 							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.back).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
 						}
 
-						index = 2;//handle subInstrument
+						index = 2;//handle front
+						if (response.data.front != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.front2);
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.front2).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
+
+						index = 3;//handle back
+						if (response.data.back != "") {
+							$(".config-item button").eq(index).addClass("disabled");
+							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.back2);
+							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.back2).show();
+							$(".config-item .notyet").eq(index).hide();
+							// $('.uploadify').eq(index).uploadify('disable', true);
+						}
+
+						index = 4;//handle subInstrument
 						if (response.data.subInstrument != "") {
 							$(".config-item button").eq(index).addClass("disabled");
 							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.subInstrument);
 							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.subInstrument).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
 						}
 
-						index = 3;//handle subEngine
+						index = 5;//handle subEngine
 						if (response.data.subEngine != "") {
 							$(".config-item button").eq(index).addClass("disabled");
 							$(".config-item input[type=text]").eq(index).attr("disabled", "disabled").val(response.data.subEngine);
 							$(".config-item .btnDelect").eq(index).show();
+							$(".config-item .viewImage").eq(index).data("path", response.data.image.subEngine).show();
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
 						}
-					}
-					else{
+					}else{
+						alert(response.message);
 					}
 				},
 				error:function(){alertError();}
@@ -222,6 +300,7 @@ $(".btnDelect").live("click",function () {
 						$(".config-item button").eq(index).removeClass().addClass("btn btn-primary");
 						$(".config-item input[type=text]").eq(index).removeAttr("disabled").val("");
 						$(".config-item .btnDelect").eq(index).hide();
+						$(".config-item .viewImage").eq(index).hide();
 						$(".config-item .notyet").eq(index).show();
 					}
 					else{

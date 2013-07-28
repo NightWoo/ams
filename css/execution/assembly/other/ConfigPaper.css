@@ -30,9 +30,9 @@ td p, span p {
 	padding-top: 5px;
 }
 
-.btnDelect {
+.btnDelect, .viewImage {
 	cursor:pointer;
-}
+};
 
 #queryRefresh {
 	cursor:pointer;

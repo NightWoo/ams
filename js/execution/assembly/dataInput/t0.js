@@ -183,6 +183,8 @@ $("document").ready(function() {
 					$(".printBarCode").attr("src", response.data.vinBarCode);
 					$(".printFrontImage").attr("src", response.data.frontImage);
 					$(".printBackImage").attr("src", response.data.backImage);
+					// $(".printFront2Image").attr("src", response.data.front2Image);
+					// $(".printBack2Image").attr("src", response.data.back2Image);
 					$(".printType").html(response.data.type);
 					$(".printModel").html(response.data.carModel);
 					$(".printSeries").html(response.data.series);
@@ -198,6 +200,7 @@ $("document").ready(function() {
 						if (response.data.frontImage == "" || response.data.backImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
+							// console.log($(".configPaper"))
 							$(".configPaper").addClass("toPrint");
 							setTimeout(function (){window.print();},1500);
 							fadeMessageAlert(response.message,"alert-success");

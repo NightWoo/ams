@@ -351,14 +351,16 @@ class ConfigController extends BmsBaseController
             $config = CarConfigAR::model()->findByPk($id);
 			$ret = $config->attributes;
             if(!empty($config)) {
-                $images = array('front', 'back', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
+                $images = array('front', 'back', 'front2', 'back2', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
                 $path = "/home/work/bms/web/bms/configImage/" . $config->id;
+                $url = "/bms/configImage/" . $config->id;
                 foreach($images as $image) {
                     $name = $image . '.jpg';
 					if(!file_exists($path . '/' . $name)) {
 						$name = '';	
 					}
 					$ret[$image] = $name;
+					$ret["image"][$image] = $url . '/' . $name; 
                 }
             }
             $this->renderJsonBms(true, 'OK', $ret);
@@ -393,15 +395,19 @@ class ConfigController extends BmsBaseController
         try{
 			Yii::log($id, 'info', 'bms');
             $config = CarConfigAR::model()->findByPk($id);
+            $ret = $config->attributes;
             if(!empty($config)) {
-				$images = array('front', 'back', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
+				$images = array('front', 'back', 'front2', 'back2', 'subInstrument', 'subRearAxle', 'subFrontAxle', 'subEngine');
 				$path = "/home/work/bms/web/bms/configImage/" . $config->id;
+				$url = "/bms/configImage/" . $config->id;
 				foreach($images as $image) {
+					$name = $image . '.jpg';
 					$namePrefix = $image; 
 					$infos = FileUpload::uploadImage($image, $path, $namePrefix);
+					$ret["image"][$image] = $url . '/' . $name; 
 				}
             }
-            $this->renderJsonBms(true, 'OK', '');
+            $this->renderJsonBms(true, 'OK', $ret);
         }catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }
