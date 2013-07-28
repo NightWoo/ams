@@ -30,9 +30,11 @@
 
 #toggle-top {
 	position: fixed;
-	top:43px;
+	top:41px;
 	width:100%;
 	height:14px;
+  background-color: white;
+  z-index: 100;
 }
 
 #icon-top {
@@ -43,7 +45,7 @@
 }
 
 .offhead {
-	margin-top:60px;
+	margin-top:55px;
 	margin-right:20px;
 }
 
@@ -79,7 +81,6 @@ a {
 [class^="icon-"],[class*=" icon-"]{margin-top:4px;}
 .dropdown-menu{margin:0;}
 label{vertical-align:middle;}
-.offhead{margin-top:60px;}
 .leftside{position: fixed;}
 body{padding-bottom:20px;}
 

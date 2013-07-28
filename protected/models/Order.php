@@ -482,6 +482,17 @@ class Order
 		);
 	}
 
+	public function printAccessoryList($boardNumber){
+		$boardNumber = trim($boardNumber);
+		if(empty($boardNumber)) return;
+		$orders = OrderAR::model()->findAll("board_number=?", array($boardNumber));
+		foreach($orders as $order){
+			$order->accessory_list_printed = 1;
+			$order->save();
+		}
+		return true;
+	}
+
 	private function orderCarType($series = ""){
 		$orderCarType = array();
 		$condition = "";

@@ -25,7 +25,7 @@ $("document").ready(function() {
 			dataType: "json",
 			success: function (response){
 				$("#boardBar").html("");
-				$("#totalOK").html(response.data.totalToPrint);
+				var totalOK = 0;
 				var boardArray = response.data.boardArray;
 				var boardInfo = response.data.boardInfo;
 				$.each(boardInfo, function (boardNumber, value){
@@ -33,28 +33,30 @@ $("document").ready(function() {
 					var divContainer = $("<div />").addClass("pull-left boardContainer");
 					var a = $("<a />").addClass("thumbnail board").attr("href", "#").attr("boardnum",boardNumber);
 					var pNumber = $("<p />").addClass("pull-left board").attr("boardnum",boardNumber).html("#"+boardNumber);
-					var pOK = $("<p />").addClass("label pull-right boardOK board").attr("boardnum",boardNumber).html(value.toPrint);
-					if(value.toPrint > 0){
-						pOK.addClass("label-success");
-					}else{
-						pOK.removeClass("label-success");
-					};
+					// var pOK = $("<p />").addClass("label pull-right boardOK board").attr("boardnum",boardNumber).html(value.toPrint);
+					// if(value.toPrint > 0){
+					// 	pOK.addClass("label-success");
+					// }else{
+					// 	pOK.removeClass("label-success");
+					// };
 					var progress = $("<div />").addClass("progress progress-info board").attr("boardnum",boardNumber);
 					var bar = $("<div />").addClass("bar board").attr("style", "width:" +(parseInt(value.countSum) / parseInt(value.amountSum) * 100) + "%").html(value.countSum + "/" + value.amountSum).attr("boardnum",boardNumber);
 					if (value.countSum == value.amountSum) {
-	    				progress.removeClass().addClass("progress").addClass("progress-success");
+	    				progress.removeClass("progress-info").addClass("progress").addClass("progress-success");
+	    				totalOK++;
 	    			} else if (value.countSum == "0"){
 	    				bar.css("color", "black");
 	    			}
 
 	    			progress.append(bar);
 	    			a.append(pNumber);
-	    			a.append(pOK);
+	    			// a.append(pOK);
 	    			a.append(progress);
 	    			divContainer.append(a);
 	    			div.append(divContainer);
 	    			$("#boardBar").append(div);
 				})
+				$("#totalOK").html(totalOK);
 			},
 			error: function(){alertError();}
 		})
@@ -131,6 +133,7 @@ $("document").ready(function() {
 				// }
 
 				// $("#tableOrders tbody").append(trPrintAll);
+				$(".boardNumberTextDiv").show();
 				$("#tableOrders").show();
 			},
 			error: function(){alertError}
@@ -184,6 +187,24 @@ $("document").ready(function() {
 		})
 	}
 
+	function printList(boardNumber) {
+		$.ajax({
+			url: PRINT_ACCESSORY_LIST,
+			type: "get",
+			dataType: "json",
+			data: {
+				"boardNumber" : boardNumber,
+			},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success) {
+					window.print();
+				} else {
+					alert(response.message);
+				}
+			},
+		})
+	}
 
 	$("#refreshLane").click(function(){
 		getBoardInfo();
@@ -240,12 +261,9 @@ $("document").ready(function() {
 		}
 	})
 
-	$("#detailPrintAll").click(function () {
-		if(confirm('是否传输打印？')){
-			$("#detailModal").modal("hide");
-			$("#spinModal").modal("show");
-			printOne($("#detailModal").data("orderId"));
-		}
+	$("#printList").click(function () {
+		printList(curBoard);
+		getBoardInfo();
 	})
 
 	//make tooltip work

@@ -18,7 +18,7 @@ td{border:1px solid black;font-size: 8px;font-family: "宋体"}
 }
 
 body{
-	margin: 5pt 0 0 5pt;
+	margin: 10pt 0 0 5pt;
 	/*margin-left: 5pt;*/
 }
 
@@ -32,15 +32,8 @@ table {
 	margin-left: 1pt;
 }
 
-.docCode {
-	height: 20px;
-	border:none;
-}
-
 .logo {
 	height: 28px;
-	width: 142px;
-	position: absolute;
 	top: 15pt;
 }
 
@@ -50,49 +43,17 @@ table {
 
 td {
 	font-family: "Microsoft YaHei";
-	font-size: 8pt;
-	border:1pt solid gray;
 }
 
 th {
 	border: none;
 	font-family: "Microsoft YaHei";
-	font-size: 14pt;
 }
 
-.trInfo {
-	height: 20pt;
-	/*text-align: center;*/
+.boardNumberText, .boardNumberTextDiv {
+	margin-bottom: 5px;
 }
 
-.trInfo td {
-	width: 42pt;
-}
-
-td.barcode {
-	width: 280pt;
-}
-
-tr.trList {
-	height: 14pt;
-	width: 811pt;
-}
-
-td.tdList {
-	width: 210pt;
-}
-
-td.tdCheck {
-	width: 30pt;
-	text-align: center;
-}
-
-.alignCenter {
-	text-align: center;
-	font-weight: bold;
-}
-
-.alignRight {
+.accessoryListTable .alignRight{
 	text-align: right;
-	font-weight: bold;
 }

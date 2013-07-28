@@ -1,4 +1,15 @@
 /* CSS Document */
+#headLegend {
+	width:100%;
+	background-color: white;
+	z-index: 100;
+}
+
+#mainBody {
+	position: relative;
+    top: 50px;
+}
+
 .headBadge{
 	line-height: 36px;
 	margin-left: 16px;
@@ -21,13 +32,13 @@
 }
 
 #refreshLane i {
-	margin-top: 8px;
+	margin-top: 10px;
 	margin-left: 0;
 }
 
 #totalOK{
 	font-size: 40px;
-    line-height: 40px;
+    line-height: 50px;
     margin: 5px 0 5px 188px;
     text-align: right;
     width: 80px;
@@ -118,4 +129,8 @@
 
 .accessoryListTable .alignRight{
 	text-align: right;
+}
+
+.boardNumberTextDiv {
+	display: none;
 }

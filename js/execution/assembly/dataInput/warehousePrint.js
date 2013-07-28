@@ -42,7 +42,7 @@ $("document").ready(function() {
 					var progress = $("<div />").addClass("progress progress-info board").attr("boardnum",boardNumber);
 					var bar = $("<div />").addClass("bar board").attr("style", "width:" +(parseInt(value.countSum) / parseInt(value.amountSum) * 100) + "%").html(value.countSum + "/" + value.amountSum).attr("boardnum",boardNumber);
 					if (value.countSum == value.amountSum) {
-	    				progress.removeClass().addClass("progress").addClass("progress-success");
+	    				progress.removeClass("progress-info").addClass("progress").addClass("progress-success");
 	    			} else if (value.countSum == "0"){
 	    				bar.css("color", "black");
 	    			}

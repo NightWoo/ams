@@ -6,7 +6,13 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
-	<link href="/bms/css/execution/assembly/dataInput/AccessoryListPrint.css" rel="stylesheet">	
+	<link href="/bms/css/execution/assembly/dataInput/AccessoryListPrint.css" rel="stylesheet" media="screen">	
+	<link rel="stylesheet" type="text/css" href="/bms/css/execution/assembly/dataInput/AccessoryListPrint_print.css" media="print">
+	<style type="text/css" media="screen">
+		.printable{
+			display: none;
+		}
+	</style>
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
@@ -17,7 +23,7 @@
 	<script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
 </head>
 <body>
-		
+	<div  class="notPrintable">
 	<?php
 		require_once(dirname(__FILE__)."/../../../common/head.php");
 	?>
@@ -27,27 +33,21 @@
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
-            <div>
+            <div id="headLegend" class="affix">
             	<legend>随车附件清单打印
             		<span class="pull-right">
             		</span>
             	</legend>
             </div>
             
-   	   		<div><!-- 主体 -->
+   	   		<div id="mainBody"><!-- 主体 -->
 			    <div class="accordion span4" id="accordionLane">
 			    	<div class="accordion-group" id="laneGroup1">
 			    		<div class="accordion-heading">
-			    			<!-- <div class="headBadge">
-		    				 	<span class="label label-success" id="totalOK">2</span>
-			    			</div> -->
 			    			<a href="#" id="refreshLane"><i class="icon-refresh pull-right"></i></a>
 			    			<p class="text-success" id="totalOK">0</p>
-			    			<!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionLane" href="#collapse1">
-			    				01-10
-			    			</a> -->
 			    		</div>
-			    		<div id="collapse1" class="accordion-body collapse in" style="overflow-y: scroll; height:460px">
+			    		<div id="collapse1" class="accordion-body collapse in" style="overflow-y: scroll; height:500px">
 			    			<div class="accordion-inner">
 			    				<div id="boardBar" class="block">
 									<!-- <div>
@@ -68,48 +68,50 @@
 			    </div>
 
 			    <div class="offset4">
-			    	<div class="input-prepend input-append" style="margin-top:15px;">
+			    	<div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">板号</span>
                         <input type="text" class="input-small" placeholder="备板号..." id="boardNumberInput"/>
                         <a class="btn queryBoardBtn appendBtn"><i class="icon-search"></i></a>
                     </div>
-                    <div class="help-inline" style="margin-top: 5px;"><a><i class="icon-print"></i>打印附件清单</a></div>
-                    <div class="boardNumberText"></div>
-	                <table id="tableOrders" class="table table-condensed table-bordered" style="font-size:12px; display:none">
-	                    <thead>
-	                        <tr>
-	                            <!-- <th style="width:50px">板号</th> -->
-	                            <th style="min-width:30px">车道</th>
-	                            <th style="min-width:100px">经销商</th>
-	                            <th>订单号</th>
-	                            <th style="min-width:30px">车系</th>
-	                            <th style="min-width:180px">车型/配置</th>
-	                            <th style="min-width:40px">耐寒性</th>
-	                            <th style="min-width:50px">颜色</th>
-	                            <th style="min-width:30px">数量</th>
-	                            <th style="min-width:30px">已备</th>
-	                            <th style="min-width:30px">出库</th>
-	                        </tr>
-	                    </thead>
-	                    <tbody>
-	                    </tbody>
-	                </table>
-	                <div style="width:570pt">
-	                	<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
-		                <table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px;">
-							<thead>
-								<tr>
-									<th style="width:60px">车系</th>
-									<th style="min-width:180px">零部件编号</th>
-									<th style="min-width:180px">零部件名称</th>
-									<th style="width:60px">数量</th>
-									<th style="width:60px">确认</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
+                    <div class="help-inline" style="margin-top: 5px;"><span><i class="icon-arrow-right"></i>&nbsp;&nbsp;</span><a id="printList"><i class="icon-print"></i>打印附件清单</a></div>
+                    <!-- <div class="boardNumberText"></div> -->
+                    <div style="overflow-y: scroll; height:500px">
+		                <table id="tableOrders" class="table table-condensed table-bordered" style="font-size:12px; display:none">
+		                    <thead>
+		                        <tr>
+		                            <!-- <th style="width:50px">板号</th> -->
+		                            <th style="min-width:30px">车道</th>
+		                            <th style="min-width:100px">经销商</th>
+		                            <th>订单号</th>
+		                            <th style="min-width:30px">车系</th>
+		                            <th style="min-width:180px">车型/配置</th>
+		                            <th style="min-width:40px">耐寒性</th>
+		                            <th style="min-width:50px">颜色</th>
+		                            <th style="min-width:30px">数量</th>
+		                            <th style="min-width:30px">已备</th>
+		                            <th style="min-width:30px">出库</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                    </tbody>
+		                </table>
+		                <div>
+		                	<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
+			                <table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px; display:none">
+								<thead>
+									<tr>
+										<th style="width:60px">车系</th>
+										<th style="min-width:180px">零部件编号</th>
+										<th style="min-width:180px">零部件名称</th>
+										<th style="width:60px">数量</th>
+										<th style="width:60px">确认</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+		            </div>
 				</div>
 
 				
@@ -163,6 +165,38 @@
 	  	</div>
   	</div>
 </div>
-
+</div><!-- not printable -->
+<div class="printable" style="width:570pt;margin: 0 auto;">
+	<div class="logo">
+		<img class="pull-right" src="/bms/img/byd-auto.jpg" alt="" >
+	</div>
+	<div style="margin: 0 auto; padding-right:10px">
+		<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
+		<table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px;">
+			<thead>
+				<tr>
+					<th colspan="5" style="text-align: left">
+						交付人 / 日期：<?php for($i=0;$i<64;$i++) echo "&nbsp;" ?>
+						签收人 / 日期：<?php for($i=0;$i<64;$i++) echo "&nbsp;" ?>
+					</th>
+				</tr>
+				<tr>
+					<th style="width:60px">车系</th>
+					<th style="min-width:180px">零部件编号</th>
+					<th style="min-width:180px">零部件名称</th>
+					<th style="width:60px">数量</th>
+					<th style="width:60px">确认</th>
+				</tr>
+			</thead>
+			<tbody>
+				<td>F0</td>
+				<td>DDD</td>
+				<td>AAAA</td>
+				<td>DDDD</td>
+				<td></td>
+			</tbody>
+		</table>
+	</div>
+</div>
 </body>
 </html>

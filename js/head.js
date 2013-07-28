@@ -26,7 +26,7 @@ $("#toggle-top").toggle(
 			$(".offhead").animate({"margin-top":"60px"});
 			$("#icon-top").removeClass("icon-chevron-down");
 			$("#icon-top").addClass("icon-chevron-up");
-			$("#toggle-top").animate({"top":"43px"});
+			$("#toggle-top").animate({"top":"41px"});
 			$("#bmsHead").slideDown();
 	  }
 	);

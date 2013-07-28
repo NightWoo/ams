@@ -579,12 +579,12 @@ class OrderSeeker
 	}
 
 	public function queryByBoard($boardNumber,$type="certificatePaper"){
-		$filterColumn = "is_printed";
-		if($type == "accessoryList") $filterColumn = "accessory_list_printed";
+		$filterColumn = "AND is_printed = 0";
+		if($type == "accessoryList") $filterColumn = "";
 
 		$sql = "SELECT board_number,id as order_id,lane_id, order_number, distributor_name, amount, hold, count, series, car_type, color, cold_resistant, order_config_id
 				FROM `order`
-				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) AND $filterColumn=0
+				WHERE board_number='$boardNumber' AND (`status`=1 OR `status`=2) $filterColumn
 				ORDER BY lane_id,distributor_name,series";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 

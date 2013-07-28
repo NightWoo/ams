@@ -524,6 +524,17 @@ class ConfigController extends BmsBaseController
 		}
 	}
 
+	public function actionPrintAccessoryList() {
+		$boardNumber = $this->validateStringVal("boardNumber", "");
+		try{
+			$order = new Order();
+			$order->printAccessoryList($boardNumber);
+			$this->renderJsonBms(true, 'printed', "");
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	protected function reloadSession() {
 		$session_name = session_name();
 
