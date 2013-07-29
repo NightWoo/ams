@@ -71,7 +71,7 @@
                         <li class="notPrintable"><a class="queryRecycle" href="#tabRecycle" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>周转车与生产周期</a></li>
                         <li class="notPrintable"><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>发车与成品库周期</a></li>
                         <li class="notPrintable"><a class="print" href="#"><i class="icon-print"></i></a></li>
-                        <!-- <li class="dropdown">
+                        <li class="dropdown pull-right notPrintable">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 导出
                                 <b class="caret"></b>
@@ -82,7 +82,7 @@
                                 <li><a class="exportCars" point='warehouse' timespan='monthly'>入库明细</a></li>
                                 <li><a class="exportCars" point='distribute' timespan='monthly'>出库明细</a></li>
                             </ul>
-                        </li> -->
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabCompletion">

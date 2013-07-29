@@ -11,7 +11,8 @@ $("document").ready(function() {
 	function initPage(){
 		//add head class
 		$("#headAssemblyLi").addClass("active");
-		$("#leftWarehousePrintLi").addClass("active");
+		$("#leftAccessoryListPrintLi").addClass("active");
+		toggleHint(true);
 		getBoardInfo();
 	}
 
@@ -33,12 +34,6 @@ $("document").ready(function() {
 					var divContainer = $("<div />").addClass("pull-left boardContainer");
 					var a = $("<a />").addClass("thumbnail board").attr("href", "#").attr("boardnum",boardNumber);
 					var pNumber = $("<p />").addClass("pull-left board").attr("boardnum",boardNumber).html("#"+boardNumber);
-					// var pOK = $("<p />").addClass("label pull-right boardOK board").attr("boardnum",boardNumber).html(value.toPrint);
-					// if(value.toPrint > 0){
-					// 	pOK.addClass("label-success");
-					// }else{
-					// 	pOK.removeClass("label-success");
-					// };
 					var progress = $("<div />").addClass("progress progress-info board").attr("boardnum",boardNumber);
 					var bar = $("<div />").addClass("bar board").attr("style", "width:" +(parseInt(value.countSum) / parseInt(value.amountSum) * 100) + "%").html(value.countSum + "/" + value.amountSum).attr("boardnum",boardNumber);
 					if (value.countSum == value.amountSum) {
@@ -62,8 +57,6 @@ $("document").ready(function() {
 		})
 	}
 
-
-
 	function queryOrdersByBoardNumber(boardNumber) {
 		$("#boardNumberInput").val(boardNumber);
 		$.ajax({
@@ -77,6 +70,7 @@ $("document").ready(function() {
 			success: function (response) {
 				$(".boardNumberText").html(boardNumber);
 				$("#tableOrders>tbody").html("");
+				distributors = [];
 				$.each(response.data.group, function (laneDistributorSeries, one) {
 					var num = one.orders.length;
 					var tmp = $("<tbody />");
@@ -113,31 +107,46 @@ $("document").ready(function() {
 					firstTr.addClass("thickBoarder");
 
 					distributorTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.distributor).prependTo(firstTr);
-					laneTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.lane).prependTo(firstTr);
-					// printTd = $("<td />").attr("rowspan", num).attr("style", "text-align:center;").addClass("rowSpanTd")
-					// a = $("<button />").addClass("btn printGroup").attr("disabled", "disabled").html("<i class='btnPrint icon-print'></i>&nbsp;打印此组");
-					// a.data("orderIds", one.orderIds);
-					// a.appendTo(printTd);
-					// printTd.prependTo(firstTr);
-					// if(one.amount == one.count){
-					// 	a.removeAttr("disabled").addClass("btn-success");
-					// }
-		
+					laneTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.lane).prependTo(firstTr);		
 					$("#tableOrders tbody").append(tmp.children("tr"));
-				})
-				
-				// trPrintAll = $("<tr />");
-				// $("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary printAllByBoard' id='boardPrintAll' disabled><i class='btnPrint icon-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
-				// if(response.data.remainTotal == '0'){
-				// 	trPrintAll.children("td").children(".printAllByBoard").removeAttr("disabled");
-				// }
 
-				// $("#tableOrders tbody").append(trPrintAll);
+					if($.inArray(one.distributor, distributors) == -1){
+						distributors.push(one.distributor);
+					}
+				})
+				$(".distributorsText").html(distributors.join("，"));
 				$(".boardNumberTextDiv").show();
 				$("#tableOrders").show();
 			},
 			error: function(){alertError}
 		})
+	}
+
+	function queryBoardNumberByVin(){
+		toggleSeachIcon(".queryVinBtn","icon-spinner icon-spin");
+		$.ajax({
+			url: QUERY_BOARD_NUMBER_BY_VIN,
+			type: "get",
+			dataType: "json",
+			data: {
+				"vin": $.trim($("#vinInput").val()),
+			},
+			error: function(){
+				toggleSeachIcon(".queryVinBtn","icon-search");
+				alertError();
+			},
+			success: function(response) {
+				toggleSeachIcon(".queryVinBtn","icon-search");
+				if(response.success){
+					toggleHint(false);
+					queryOrdersByBoardNumber(response.data);
+					ajaxQueryAccessoryList(response.data);
+				} else {
+					toggleHint(true);
+					alert(response.message);
+				}
+			}
+		});
 	}
 
 	function ajaxQueryAccessoryList(boardNumber) {
@@ -206,6 +215,21 @@ $("document").ready(function() {
 		})
 	}
 
+	function toggleSeachIcon(selector,icon) {
+		$(selector).children("i").removeClass().addClass(icon);
+	}
+
+	function toggleHint (showHint) {
+		if(showHint){
+			$("#printBtnDiv").hide();
+			$("#hintDiv").fadeIn(1000);
+
+		}else{
+			$("#hintDiv").hide();
+			$("#printBtnDiv").fadeIn(1000);
+		}
+	}
+
 	$("#refreshLane").click(function(){
 		getBoardInfo();
 		if(curBoard != ''){
@@ -216,6 +240,7 @@ $("document").ready(function() {
 	$("#boardBar").live("click", function(e) {
 		if($(e.target).hasClass("board")){
 			boardNumber = $(e.target).attr("boardnum");
+			toggleHint(false);
 			queryOrdersByBoardNumber(boardNumber);
 			ajaxQueryAccessoryList(boardNumber);
 			curBoard = boardNumber;
@@ -226,6 +251,12 @@ $("document").ready(function() {
 		boardNumber = $.trim($("#boardNumberInput").val());
 		queryOrdersByBoardNumber(boardNumber);
 		ajaxQueryAccessoryList(boardNumber);
+	})
+
+	$(".queryVinBtn").click(function(){
+		if($.trim($("#vinInput").val()) != ""){
+			queryBoardNumberByVin()
+		}
 	})
 
 	$("#tableOrders").live('click', function(e) {

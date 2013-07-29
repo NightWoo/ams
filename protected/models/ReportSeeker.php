@@ -738,8 +738,8 @@ class ReportSeeker
 		return $boards;
 	}
 
-	public function queryCarDetail($date, $point, $timeSpan="daily"){
-		list($stime, $etime) = $this->reviseTime($date, $time);
+	public function queryCarDetail($date, $point, $timespan="daily"){
+		list($stime, $etime) = $this->reviseTime($date, $timespan);
 
 		$data = $this->queryDetailByPoint($stime, $etime, $point);
 

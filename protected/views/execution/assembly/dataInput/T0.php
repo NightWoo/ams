@@ -10,13 +10,13 @@
     	<link rel="stylesheet" type="text/css" href="/bms/css/execution/assembly/dataInput/T0.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="/bms/css/printable.css" media="print">
 		<style type="text/css" media="screen">
-		.printable{
-			display: none;
-		}
-	</style>
-	<style type="text/css" media="print">
-td,th{border:none;}
-</style>
+			.printable{
+				display: none;
+			}
+		</style>
+		<style type="text/css" media="print">
+			td,th{border:none;}
+		</style>
 
     	<!-- <link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/dataInput/T0.css" rel="stylesheet"> -->
@@ -151,7 +151,7 @@ td,th{border:none;}
 			</div>
 		</div>
 
-		<div id="configPaper" class="configPaper printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt">
+		<div class="configPaper printable" style="width:840pt;height:1100pt; padding-top:10pt; font-size:18pt">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>

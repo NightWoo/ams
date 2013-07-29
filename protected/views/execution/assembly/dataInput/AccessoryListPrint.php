@@ -69,11 +69,17 @@
 
 			    <div class="offset4">
 			    	<div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
+                        <span class="add-on">VIN</span>
+                        <input type="text" class="input-medium" placeholder="VIN号..." id="vinInput"/>
+                        <a class="btn queryVinBtn appendBtn" style="width:13px;"><i class="icon-search"></i></a>
+                    </div>
+			    	<!-- <div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">板号</span>
                         <input type="text" class="input-small" placeholder="备板号..." id="boardNumberInput"/>
                         <a class="btn queryBoardBtn appendBtn"><i class="icon-search"></i></a>
-                    </div>
-                    <div class="help-inline" style="margin-top: 5px;"><span><i class="icon-arrow-right"></i>&nbsp;&nbsp;</span><a id="printList"><i class="icon-print"></i>打印附件清单</a></div>
+                    </div> -->
+                    <div id="hintDiv" class="help-inline">通过VIN查询所在板车的订单及随附件清单</div>
+                    <div id="printBtnDiv" class="help-inline" style="margin-top: 5px;"><span class="boardNumberText"></span><span>&nbsp;&nbsp;<i class="icon-arrow-right"></i>&nbsp;&nbsp;</span><a id="printList"><i class="icon-print"></i>打印附件清单</a></div>
                     <!-- <div class="boardNumberText"></div> -->
                     <div style="overflow-y: scroll; height:500px">
 		                <table id="tableOrders" class="table table-condensed table-bordered" style="font-size:12px; display:none">
@@ -96,7 +102,7 @@
 		                    </tbody>
 		                </table>
 		                <div>
-		                	<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
+		                	<!-- <div class="boardNumberTextDiv"><span>&nbsp;&nbsp;随车附件清单</span></div> -->
 			                <table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px; display:none">
 								<thead>
 									<tr>
@@ -172,6 +178,7 @@
 	</div>
 	<div style="margin: 0 auto; padding-right:10px">
 		<div class="boardNumberTextDiv"><span class="boardNumberText"></span><span>&nbsp;&nbsp;随车附件清单</span></div>
+		<div class="distributorsTextDiv"><span>经销商：</span><span class="distributorsText"></span></div>
 		<table class="accessoryListTable table table-condensed table-bordered" style="font-size:12px;">
 			<thead>
 				<tr>

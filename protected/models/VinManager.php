@@ -82,7 +82,7 @@ class VinManager
 		$data = array_combine($label,$resArray['string']);
 		
 		if(empty($data['id']) || empty($data['series'])) {
-			throw new Exception("vin $vin not exit in vinm");
+			throw new Exception("vin号 $vin 不存在");
 		}
 		$car = new CarAR();
 		$car->id = intval($data['id']);

@@ -151,7 +151,7 @@
 			</div>
 		</div>
 
-		<div class="configPaper printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt">
+		<div class="configPaper printable" page="1" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
@@ -172,7 +172,7 @@
 			</table>
 		</div>
 
-		<div class="configPaper printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+		<div class="configPaper printable" page="2" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
@@ -193,7 +193,7 @@
 			</table>
 		</div>
 
-		<div class="configPaper printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+		<div class="configPaper printable" page="3" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
@@ -214,7 +214,7 @@
 			</table>
 		</div>
 
-		<div class="configPaper printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+		<div class="configPaper printable" page="4" style="width:560pt;height:820pt; padding-top:10pt; font-size:14pt; page-break-before: always">
 			<table class="" style="width:100%; margin-top:10pt;">
 				<tr>
 					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>

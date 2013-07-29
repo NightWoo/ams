@@ -235,8 +235,8 @@ class ExecutionController extends BmsBaseController
                     }
                 }
 
-                $checkTrace = $car->checkTraceComponentByConfig();
-                if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
+                // $checkTrace = $car->checkTraceComponentByConfig();
+                // if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
                 
                 $vinValidate = $car->validateVin();
                 if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
@@ -669,7 +669,7 @@ class ExecutionController extends BmsBaseController
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
             
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
             //$car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id == 0 || $car->car->status != '成品库'){
@@ -807,6 +807,18 @@ class ExecutionController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
             $data = $car->generateCheckTraceData();
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionConfigPaperMainPrint() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $data = $car->generateConfigData();
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -1314,6 +1326,10 @@ class ExecutionController extends BmsBaseController
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
         }
+    }
+
+    public function actionConfigPaperMain() {
+        $this->render('assembly/other/ConfigPaperMain');  
     }
 
     public function actionFaultDutyEdit() {

@@ -222,6 +222,18 @@ class CarController extends BmsBaseController
         }
     }
 
+    public function actionValidateCar() {
+        $vin = $this->validateStringVal('vin', '');
+        try{
+            $car = Car::create($vin);
+            $data = $car->car;
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+    }
+
     public function actionValidateWarehouseLabel() {
         $vin = $this->validateStringVal('vin', '');
         try{            
@@ -906,6 +918,22 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false,$e->getMessage(),null);
+        }
+    }
+
+    public function actionQueryBoardNumber() {
+        $vin = $this->validateStringVal('vin', '');
+         try{
+            $car = Car::create($vin);
+            $order = OrderAR::model()->findByPk($car->car->order_id);
+            $boardNumber = "";
+            if(!empty($order)){
+                $boardNumber = $order->board_number;
+            }
+
+            $this->renderJsonBms(true, 'OK', $boardNumber);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
 

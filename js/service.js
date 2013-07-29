@@ -45,6 +45,9 @@ var VQ1_SUBMIT_EXCEPTION = "/bms/fault/saveVQ1";
 var CHECKPAPER_VALIDATE = "/bms/car/validateCheckPaper";
 var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 
+var CONFIGPAPER_MAIN_SUBMIT = "/bms/execution/configPaperMainPrint";
+var CAR_VALIDATE = "/bms/car/validateCar";
+
 var SHOW_CAR_FAULTS = "/bms/car/showFaults";
 var SAVE_FAULT_DUTY_DEPARTMENT = "/bms/fault/saveDutyDepartment";
 
@@ -239,6 +242,7 @@ var DELETE_ACCESSORY_DETAIL = "/bms/config/deleteAccessoryDetail";
 var COPY_ACCESSORY_LIST = "/bms/config/copyAccessoryList";
 var QUERY_BOARD_ACCESSORY_LIST = "/bms/order/queryBoardAccessoryList";
 var PRINT_ACCESSORY_LIST = "/bms/config/printAccessoryList";
+var QUERY_BOARD_NUMBER_BY_VIN = "/bms/car/queryBoardNumber";
 
 //added by wujun
 //pause edit
