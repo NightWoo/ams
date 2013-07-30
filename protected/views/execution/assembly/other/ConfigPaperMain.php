@@ -34,7 +34,10 @@
     			?>
     			<div id="bodyright" class="offset2"><!-- Main体 -->
                     <div>
-                        <legend>主配置单检验打印
+                        <legend>主配置单打印
+                            <span class="pull-right">
+                                <a href="/bms/execution/child?view=T0&node=T0"><i class="icon-link"></i>&nbsp;T0</a>
+                            </span>
                         </legend>
                     </div>
                 			           
@@ -43,7 +46,7 @@
     						<label>VIN</label>
     						<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
     						<input type="button" class="btn btn-primary" id ="btnSubmit" 
-    							disabled="disabled" value ="打印检验跟单"></input>
+    							disabled="disabled" value ="打印主配置单"></input>
     						<input type="button" class="btn" id ="reset" value ="清空"></input>
     						<span class="help-inline" id="vinHint">请输入VIN后回车</span>
     						<div class="help-inline" id="carInfo">

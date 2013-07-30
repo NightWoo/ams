@@ -44,6 +44,8 @@
 		            	<legend><?php echo $nodeDisplayName;?>
 		            		<span class="pull-right">
 		            			<a href="/bms/execution/pauseEdit"><i class="icon-link"></i>&nbsp;停线编辑</a>
+		            			/
+		            			<a href="/bms/execution/configPaperMain"><i class="icon-link"></i>&nbsp;主配置单打印</a>
 		            		</span>
 		            	</legend>
 		            </div>

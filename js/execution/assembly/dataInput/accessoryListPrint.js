@@ -259,6 +259,15 @@ $("document").ready(function() {
 		}
 	})
 
+	$(window).bind('keydown', enterHandler);
+	function enterHandler (event) {
+		if(event.keyCode == '13'){
+			if($.trim($("#vinInput").val()) != ""){
+			queryBoardNumberByVin()
+			return false;
+		}
+	}
+
 	$("#tableOrders").live('click', function(e) {
 		if($(e.target).is('i')) {
 			var tr = $(e.target).closest("tr");

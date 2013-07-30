@@ -57,7 +57,7 @@
 		            	<div class="stop_mark" id="stopMark">C00</div>
 		            	<div class="t1 range" id="rangeT1"></div>
 		            	<div class="t2 range" id="rangeT2"></div>
-		            	<div class="t3 range" id="rangeT3"></div>
+		            	<!-- <div class="t3 range" id="rangeT3"></div> -->
 		            	<div class="c1 range" id="rangeC1"></div>
 		            	<div class="c2 range" id="rangeC2"></div>
 		            	<div class="f1 range" id="rangeF1"></div>
@@ -78,7 +78,7 @@
 	            			<div id="pauseTimeT1" class="pauseTime">-</div>
 	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
 							<div id="pauseTimeT2" class="pauseTime">-</div>
-							<div id="pauseTimeT3" class="pauseTime">-</div>
+							<!-- <div id="pauseTimeT3" class="pauseTime">-</div> -->
 							<div id="pauseTimeC1" class="pauseTime">-</div>
 							<div id="pauseTimeC2" class="pauseTime">-</div>
 							<div id="pauseTimeF1" class="pauseTime">-</div>

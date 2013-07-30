@@ -88,7 +88,7 @@ $(document).ready(function () {
 			var toShowList = [];
     		//dealing with seats
     		$.each(seatStatus, function (index,value) {
-    			if (value.seat != "00") {
+    			if (value.seat != "00" || value.node_id == 2) {
 	    			toShowList.push(value.full_seat);
 	    			if (_this.existFlash(value.full_seat) == false) {
 	    				
@@ -141,7 +141,7 @@ $(document).ready(function () {
 			var toShowList = [];
     		//dealing with seats
     		$.each(seatStatus, function (index,value) {
-    			if (value.seat == "00") {
+    			if (value.seat == "00" && value.node_id != 2) {
 	    			toShowList.push(value.full_seat);
 	    			if (_this.existFlash(value.full_seat) == false) {
 	    				var ft = value.foreground_text;
@@ -181,13 +181,13 @@ $(document).ready(function () {
 		flash : function (element,  frontText, frontColor, frontBg, oppoText, oppoColor, oppoBg, gap ) {
 			$(element).css("color", oppoColor).css("background", oppoBg).html(oppoText);
 			if (parseInt(oppoText) > 0 && parseInt(oppoText) < 100){
-				$(element).html(oppoText.substr(0,1) + " " + oppoText.substr(1,1));
+				$(element).html(oppoText.substr(0,1) + "<br>" + oppoText.substr(1,1));
 			}
 			__sto(function (cS, fT, fC, fB) {
 				cS.css("color", fC).css("background", fB).html(fT);
 
-				if (parseInt(fT) > 0 && parseInt(fT) < 100){
-					cS.html(fT.substr(0,1) + " " + fT.substr(1,1));
+				if ((parseInt(fT) > 0 && parseInt(fT) < 100) || fT == "T0"){
+					cS.html(fT.substr(0,1) + "<br>" + fT.substr(1,1));
 				}
 				// $("#seat" + sN).removeClass("seat_call").addClass("seat_call_oppo").html(oT);
 			},gap, $(element), frontText, frontColor, frontBg);

@@ -224,7 +224,7 @@ function ajaxGetSection () {
 	    			temp.addClass("seat").addClass("normal_seat").attr("id", "seat" + value).html(value).appendTo($("#seatDiv"));
 	    			temp.data("seatNumber", value);
 
-	    			// $("<div />").addClass("double").attr("id", "double" + value).appendTo($("#multiCallDiv"));
+	    			$("<div />").addClass("double").attr("id", "double" + value).appendTo($("#multiCallDiv"));
 	    		});
 
 	    		

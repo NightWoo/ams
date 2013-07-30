@@ -22,33 +22,34 @@
                 <span style="margin-left:10px;color:red;" id="otherSectionInfo"> </span>
                 <span id="time" class="pull-right"></span>
             </div>
-            <div id="board_middle">
-                <!-- <div id="multiCallDiv">
-                </div> -->
-                <div class="div_self" id="seatDiv">
-                    <!-- <div class="self">01</div>
-                    <div class="self">02</div>
-                    <div class="self">03</div>
-                    <div class="self">04</div>
-                    <div class="self">05</div>
-                    <div class="self">06</div>
-                    <div class="self">07</div>
-                    <div class="self">08</div>
-                    <div class="self">09</div>
-                    <div class="self">10</div>
-                    <div class="self">11</div> -->
-                </div>
 
-                <!-- <div class="div_section" id="divSection">
-                    <div class="section" id="EF1">EF1</div>
-                    <div class="section" id="EF2">EF2</div>
-                    <div class="section" id="EF3">EF3</div>
-                </div> -->
+            <div id="multiCallDiv">
+
+            </div>
+            <div class="div_self" id="seatDiv">
+                <!-- <div class="self">01</div>
+                <div class="self">02</div>
+                <div class="self">03</div>
+                <div class="self">04</div>
+                <div class="self">05</div>
+                <div class="self">06</div>
+                <div class="self">07</div>
+                <div class="self">08</div>
+                <div class="self">09</div>
+                <div class="self">10</div>
+                <div class="self">11</div> -->
+            </div>
+
+            <div class="div_section" id="divSection">
+                <div class="section" id="EF1">EF1</div>
+                <div class="section" id="EF2">EF2</div>
+                <div class="section" id="EF3">EF3</div>
+                
             </div>
 
              <div class="board_bottom" id="bottomDiv">
                 <span id="lineRate">120sec</span>
-                <span style="display:inline-block;margin-left:8px;height:12px;width:10px;vertical-align: middle" class="symbol" id="symbol"></span>
+                <div style="display:inline-block;margin-left:8px;height:12px;width:10px" class="symbol" id="symbol"></div>
                 <span id="pauseTime" style="margin-left:8px;">32/101min</span>
                 <span id="workingTimePercentage" style="margin-left:20px;">49.5%</span>
                 <span id="productAmount" class="pull-right">121/2000辆</span>

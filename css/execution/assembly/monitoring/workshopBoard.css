@@ -47,6 +47,18 @@ color:black;}
 	width: 110px;height: 40px;
 	border-radius: 2px;
 }
+#blockT1{
+	width:155px;
+}
+#blockT2{
+	width:180px;
+}
+#facadeT1{
+	width:155px;
+}
+#facadeT2{
+	width:180px;
+}
 
 .normal_seat{
 	display: block;

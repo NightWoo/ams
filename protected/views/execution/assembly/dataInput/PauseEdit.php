@@ -31,14 +31,11 @@
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
-            <div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active">停线编辑</li>
-						<li class="pull-right"><a href="/bms/execution/child?view=T0&node=T0">前往T0</a></li>                 
-				</ul></div><!-- end 面包屑 -->
-            
+            <legend>停线编辑
+        		<span class="pull-right">
+        			<a href="/bms/execution/child?view=T0&node=T0"><i class="icon-link"></i>&nbsp;T0</a>
+        		</span>
+        	</legend>
    	   		<div><!-- 主体 -->
 				<form id="form" class="well form-search">
 					<table>

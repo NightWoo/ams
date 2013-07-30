@@ -30,27 +30,18 @@
               require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2">
-            	<div>
-					<ul class="breadcrumb"><!-- 面包屑 -->
-						<li>
-							<a href="#">生产执行</a><span class="divider">&gt;</span>
-						</li>
-						<li>
-							<a href="#">总装</a><span class="divider">&gt;</span>
-						</li>
-						<li class="active">
-							生产监控
-						</li>
-						<li class="pull-right">
-							welcome&nbsp;
-						<a id="welcomeShop" href="#">车间板</a>
-						<span class="divider">&frasl;</span>
-						<a id="welcomeSection" href="#">工段板</a>
-					</li>
-					</ul>
-				</div><!-- end 面包屑 -->
+				<div>
+	            	<legend>监控面板
+	            		<span class="pull-right">
+	            			<i class="icon-link"></i>
+	            			welcome
+	            			<a id="welcomeShop" href="#">&nbsp;车间板</a>
+	            			/
+	            			<a id="welcomeSection" href="#">&nbsp;工段板</a>
+	            		</span>
+	            	</legend>
+	            </div>
 
-				
 	          	<div id="divTabs">
 			    	<ul id="tabs" class="nav nav-pills">
 			            <li class="active"   id="liAssembly"><a href="#index" data-toggle="tab">总装车间</a></li>
@@ -82,16 +73,17 @@
 		            	<div class="andon_bord" id="andon_board"></div>
 		            	<div class="node_pbs sub-flag"></div>
 		            	<div class="node_t0 sub-flag"></div>
-		            	<div class="node_vq1"></div>
+		            	<div class="node_vq1 sub-flag"></div>
 		            	<div class="pauseTimeArea" id="pauseTimeArea" style="color:red;">
-		            			<div id="pauseTimeT1" class="pauseTime">-</div>
+	            			<div id="pauseTimeT1" class="pauseTime">-</div>
+	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
 							<div id="pauseTimeT2" class="pauseTime">-</div>
 							<div id="pauseTimeT3" class="pauseTime">-</div>
 							<div id="pauseTimeC1" class="pauseTime">-</div>
 							<div id="pauseTimeC2" class="pauseTime">-</div>
 							<div id="pauseTimeF1" class="pauseTime">-</div>
 							<div id="pauseTimeF2" class="pauseTime">-</div>
-	            			<div id="pauseTimeDevice" class="pauseTime">-</div>
+							<div id="pauseTimeVQ1" class="pauseTime">-</div>
 	            			<div id="totalPauseTime" class="pauseTime">-</div>
 		            	</div>
 		            	<div id="useRate">
@@ -153,23 +145,71 @@
 				    	<div class="vq2-check-data"></div>
 
 	      			</div>
-	      			<div id="warehouse" class="tab-pane ">	
-						<div class="outware-warehouse warehouse-node sub-flag"></div>
-			    		<div class="inware-warehouse warehouse-node sub-flag"></div>
-			    		<div class="vq3-warehouse warehouse-node"></div>
-			    		<div class="area-a">a</div>
-			    		<div class="area-b">b</div>
-			    		<div class="area-c">c</div>
-			    		<div class="area-d">d</div>
-			    		<div class="area-e">e</div>
-			    		<div class="area-e-right">e</div>
-			    		<div class="area-f">f</div>
+	      			<div id="warehouse" class="tab-pane">
+	      				<div id="capacityRate">
 
-			    		<div class="area-total-amount"></div>
+	      				</div>
+	      				<div id="warehouseContainer">
+			      			<div id ="warehouseBack">
+			      			</div>
+			      			<div class="containerG">
+			      				<div class="progressG progressBlue"></div>
+			      			</div>
+			      			<div class="containerF">
+			      				<div class="progressF progressBlue"></div>
+			      			</div>
+			      			<div class="containerE">
+			      				<div class="progressE progressBlue"></div>
+			      			</div>
+			      			<!-- <div class="maskF"></div> -->
+			      			<div class="containerD containerABCD">
+			      				<div class="progressD progressBlue"></div>
+			      			</div>
+			      			<div class="containerC containerABCD">
+			      				<div class="progressC progressBlue"></div>
+			      			</div>
+			      			<div class="containerB containerABCD">
+			      				<div class="progressB progressBlue"></div>
+			      			</div>
+			      			<div class="containerA containerABCD">
+			      				<div class="progressA progressBlue"></div>
+			      			</div>
+			      			<div class="warehouseImg"><img src="/bms/img/warehouse_572x420.png"></div>
+							<div class="outware-warehouse warehouse-node sub-flag"></div>
+				    		<div class="inware-warehouse warehouse-node sub-flag"></div>
+				    		<!-- <div class="vq3-warehouse warehouse-node"></div> -->
+				    		<div class="area-a">&nbsp;&nbsp;<span class="area-text">A</span>-<span class="quantity quantity-a">0</span></div>
+				    		<div class="area-b">&nbsp;&nbsp;<span class="area-text">B</span>-<span class="quantity quantity-b">0</span></div>
+				    		<div class="area-c">&nbsp;&nbsp;<span class="area-text">C</span>-<span class="quantity quantity-c">0</span></div>
+				    		<div class="area-d">&nbsp;&nbsp;<span class="area-text">D</span>-<span class="quantity quantity-d">0</span></div>
+				    		<div class="area-e"><span class="area-text">E</span>-<span class="quantity quantity-e">0</span></div>
+				    		<div class="area-f"><span class="area-text">F</span>-<span class="quantity quantity-f">0</span></div>
+				    		<div class="area-g"><span class="area-text">G</span>-<span class="quantity quantity-g">0</span></div>
+				    		<div class="area-total-amount"></div>
+				    		<div class="area-lane"></div>
 
-			    		<div class="span4" id="blockDetail">
+				    		<div id="extraArea" class="">
+	      					    <dl class="dl-horizontal">
+								    <dt><a class="area-btn-k">14#附加区<span class="area-text">K</span></a></dt><dd class="area-k">-</dd>
+								    <dt><a class="area-btn-y">35#附加区<span class="area-text">Y</span></a></dt><dd class="area-y">-</dd>
+								    <dt><a class="area-btn-h">27#临时区<span class="area-text">H</span></a></dt><dd class="area-h">-</dd>
+								    <dt>27#出口车Z</dt><dd class="area-z">-</dd>
+								    <dt>特殊区X</dt><dd class="area-x">-</dd>
+								    <dt>WDI</dt><dd class="area-wdi">-</dd>
+							    </dl>
+		      				</div>
 
-              			</div>
+		      				<div id="divWarehousePeriod">
+		      					<span id="warehousePeriod"><i class="icon-time"></i>-H</span>
+		      				</div>
+
+		      				<div id="divTransportPeriod">
+		      					<span id="transportPeriod"><i class="icon-time"></i>-H</span>
+		      				</div>
+	      				</div>
+
+
+			    		
 	      			</div>
 		         </div>
 
@@ -340,6 +380,42 @@
             		</thead>
             		<tbody></tbody>
 	            </table>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
+
+		<!-- modal -->
+		<div class="modal" id="areaModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:600px;margin-left:-300px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h3> 库区信息</h3>
+		  	</div>
+		  	<div class="modal-body">
+		  		<div class="" id="blockDetail">
+
+              	</div>
+		  	</div>
+		  	<div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
+		  	</div>
+		</div>
+
+		<div class="modal" id="laneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:600px;margin-left:-300px;">
+		  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		   	 	<h4 id="laneHead">发车道</h4>
+		  	</div>
+		  	<div class="modal-body">
+		  		<div class="" id="laneDetail">
+              	</div>
+
+              	<!-- <div class="span2">
+              		<p id="loadingLane" class="text-info"></p>
+              		<p id="fullLane" class="text-success"></p>
+              		<p id="freeLane" class="text-warning"></p>
+              	</div> -->
 		  	</div>
 		  	<div class="modal-footer">
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">确认</button>
