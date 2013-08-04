@@ -672,7 +672,7 @@ class ExecutionController extends BmsBaseController
 			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
             //$car->passNode('CHECK_OUT');
-			if($car->car->warehouse_id == 0 || $car->car->status != '成品库'){
+			if($car->car->warehouse_id == 0 || $car->car->status != '成品库' || $car->car->warehouse_id <=1000){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
 			
@@ -820,6 +820,17 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $data = $car->generateConfigData();
 
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionCarLabelAssemblyPrint() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $car = Car::create($vin);
+            $data = $car->generateInfoPaperData();
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -1332,6 +1343,10 @@ class ExecutionController extends BmsBaseController
         $this->render('assembly/other/ConfigPaperMain');  
     }
 
+    public function actionCarLabelAssembly() {
+        $this->render('assembly/other/CarLabelAssembly');  
+    }
+
     public function actionFaultDutyEdit() {
         try{
             Yii::app()->permitManager->check('FAULT_DUTY_EDIT');
@@ -1378,14 +1393,7 @@ class ExecutionController extends BmsBaseController
         // $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
-            // $car = Car::create($vin);
-            // $ret = $car->checkTraceComponentByConfig();
-            // $ret = $car->validateVin();
-            $seeker = new OrderSeeker();
-            $ret = $seeker->queryBoardAccessoryList('D0705018');
-            // $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
-            // $client = new SoapClient('http://192.168.1.31/bms/carInfoService/quote?wsdl');
-            // $ret = $client->getCarInfo('LGXC4DG6D0047714');
+            $ret = WarehouseAR::model()->find("id=?", array(600));
 
             // $transaction->commit();
             $this->renderJsonBms(true, $ret, $ret);

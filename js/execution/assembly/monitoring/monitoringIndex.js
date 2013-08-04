@@ -489,6 +489,7 @@ function ajaxGetStock (argument) {
 	    		$(".area-k").html(response.data.area_quantity.K);
 	    		$(".area-x").html(response.data.area_quantity.X);
 	    		$(".area-y").html(response.data.area_quantity.Y);
+	    		$(".area-t").html(response.data.area_quantity.T);
 	    		$(".area-z").html(response.data.area_quantity.Z);
 	    		$(".area-wdi").html(response.data.area_quantity.WDI);
 				$(".area-total-amount").html(response.data.warehourse_cars.all);

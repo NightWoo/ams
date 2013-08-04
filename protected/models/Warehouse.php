@@ -64,7 +64,8 @@ class Warehouse
 					$row = WarehouseAR::model()->findByPk(200);
 				} else if ($car->special_property == 0) {
 					if($car->series == '6B'){
-						$row = WarehouseAR::model()->findByPk(600);
+						// $row = WarehouseAR::model()->findByPk(600);
+						$row = WarehouseAR::model()->find("id=? AND quantity<capacity", array(600));
 					}
 				} else if ($car->special_property == 9) {
 					$row = WarehouseAR::model()->findByPk(1000);

@@ -20,12 +20,13 @@
 			<li id="leftWarehouseQueryLi"><a href="/bms/execution/query?type=WarehouseQuery">成品库查询</a></li>
 		<li class="nav-header">报表</li>
 			<li id="leftManufactureReportLi"><a href="/bms/execution/report?type=ManufactureReport">生产报表</a></li>
-			<li id="leftWarehouseReportLi"><a href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li>
+			<li id="leftQualityReportLi"><a href="/bms/execution/report?type=QualityReport">质量报表</a></li>
+			<!-- <li id="leftWarehouseReportLi"><a href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li> -->
 			<!-- <li><a href="#">追溯零部件换件</a></li> -->
 		<li class="nav-header">异常操作</li>
 			<li id="leftCheckPaperLi"><a href="/bms/execution/checkPaper">检验跟单</a></li>
-			<li id="leftFaultDutyLi"><a href="/bms/execution/FaultDutyEdit">故障责任编辑</a></li>
-			<!-- <li id="leftConfigPaperMainLi"><a href="/bms/execution/configPaperMain">主配置单</a></li> -->
+			<li id="leftFaultDutyLi"><a href="/bms/execution/faultDutyEdit">故障责任编辑</a></li>
+			<li id="leftCarLabelAssemblyLi"><a href="/bms/execution/carLabelAssembly">车辆标签</a></li>
 			<!-- <li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li> -->
 			<!-- <li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li> -->
 			<!-- <li><a href="#">操作手册.总装</a></li>    -->

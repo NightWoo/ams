@@ -48,6 +48,8 @@ var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 var CONFIGPAPER_MAIN_SUBMIT = "/bms/execution/configPaperMainPrint";
 var CAR_VALIDATE = "/bms/car/validateCar";
 
+var CAR_LABEL_ASSEMBLY_PRINT = "/bms/execution/carLabelAssemblyPrint";
+
 var SHOW_CAR_FAULTS = "/bms/car/showFaults";
 var SAVE_FAULT_DUTY_DEPARTMENT = "/bms/fault/saveDutyDepartment";
 

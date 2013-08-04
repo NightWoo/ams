@@ -8,9 +8,9 @@ class ReportController extends BmsBaseController
 
 	public function actionDebug(){
         $seeker= new ReportSeeker();
-        $date = "2013-06-21";
+        $date = "2013-07-21";
         $timespan = "monthly";
-        $ret = $seeker->queryPauseDetail($date);
+        $ret = $seeker->queryQualification('VQ2_ROAD_TEST', $date, $timespan);
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 

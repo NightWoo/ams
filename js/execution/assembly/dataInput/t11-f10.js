@@ -124,8 +124,7 @@ $("document").ready(function() {
 
 					  	setTimeout(function (){window.print();},800);
 				  	}
-				}
-				else{
+				} else {
 					fadeMessageAlert(response.message,"alert-error");
 				}
 			},

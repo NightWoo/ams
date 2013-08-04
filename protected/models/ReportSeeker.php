@@ -831,6 +831,142 @@ class ReportSeeker
 		return $datas;
 	}
 
+	public function queryQualification($point, $date, $timespan) {
+		list($stime, $etime) = $this->reviseTime($date, $timespan);
+		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
+		$seriesArray = self::$SERIES_NAME;
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$lineSeriesY = array();
+		foreach($seriesArray as $series => $seriesName){
+			$countTotal[$seriesName] = 0;
+			$columnSeriesY[$seriesName] = array();
+		}
+
+		foreach($timeArray as $queryTime){
+			$carCountAll = $this->countCarTrace($point, $queryTime['stime'], $queryTime['etime']);
+			$countNG = $this->countOnlineFixed($point, 'all', $queryTime['stime'], $queryTime['etime']);
+			foreach($seriesArray as $series => $seriesName){
+				$faultCount = $this->countFault($point, $series, $queryTime['stime'], $queryTime['etime']);
+				$columnSeriesY[$seriesName][] = empty($carCountAll) ? null : round($faultCount / $carCountAll, 2);
+			}
+			$lineSeriesY[] = empty($carCountAll) ? null : round(($carCountAll - $countNG) / $carCountAll, 2);
+			$columnSeriesX[] = $queryTime['point'];
+		}
+
+		$ret = array(
+			"carSeries" => array_values(self::$SERIES_NAME),
+			"series" => array(
+				'x' => $columnSeriesX,
+				'column' => $columnSeriesY,
+				'line' => $lineSeriesY,
+			),
+		);
+
+		return $ret;
+	}
+
+	public function countCarTrace($point, $stime, $etime, $series="") {
+		$nodeIdStr = $this->parseNodeId($point);
+		$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time>='$stime' AND pass_time<'$etime' AND node_id IN ($nodeIdStr)";
+		if(!empty($series)) $sql .= " AND car_series = '$series'";
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
+	}
+
+	public function countFault($point, $series, $stime, $etime) {
+		$tables = $this->parseTables($point, $series);
+		$count = 0;
+		foreach($tables as $table=>$nodeName) {
+			$countSql = "SELECT count(*) FROM $table WHERE create_time>='$stime' AND create_time<'$etime'";
+			$count += Yii::app()->db->createCommand($countSql)->queryScalar();
+		}
+		return $count;
+	}
+
+	public function countOnlineFixed($point, $series, $stime, $etime) {
+		$tables = $this->parseTables($point);
+		foreach($tables as $table=>$nodeName) {
+			$dataSql[] = "(SELECT car_id FROM $table WHERE create_time>='$stime' AND create_time<'$etime' AND status <>'在线修复')";
+		}
+		$sql = join(" UNION ALL ", $dataSql);
+		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
+		$datas = array_unique($datas);
+		$count = count($datas);
+		return $count;
+	}
+
+	private function parseTables($point, $series="all") {
+		$tablePrefixs = array(
+			'VQ1_STATIC_TEST' => 10,
+			'VQ1_STATIC_TEST_2' => 209,
+			'VQ2_ROAD_TEST' => 15,
+			'VQ2_LEAK_TEST' => 16,
+			'VQ3_FACADE_TEST' => 17,
+			'WDI_TEST' => 95,
+		);
+		$nodeTables = array(
+			'VQ1' => 'VQ1_STATIC_TEST',
+			'VQ1_2' => 'VQ1_STATIC_TEST_2',
+			'VQ2_ROAD_TEST' => 'VQ2_ROAD_TEST',
+			'VQ2_LEAK_TEST' => 'VQ2_LEAK_TEST',
+			'VQ3' => 'VQ3_FACADE_TEST',
+			'WDI' => 'WDI_TEST',
+		);
+
+		$temps = array();
+		if(empty($point) || $point === 'all') {
+			$temps = $tablePrefixs;
+		} else if($point === 'VQ2_ALL') {
+			$temps = array(
+				'VQ2_ROAD_TEST' => 15,
+            	'VQ2_LEAK_TEST' => 16,
+			);
+		} else if($point === 'VQ1_ALL') {
+			$temps = array(
+				'VQ1_STATIC_TEST' => 10,
+            	'VQ1_STATIC_TEST_2' => 209,
+			);
+		} else if(!empty($nodeTables[$point])) {
+			$temps = array($nodeTables[$point]=>$tablePrefixs[$nodeTables[$point]]);
+		}
+
+		$tables = array();
+		if(empty($series) || $series === 'all') {
+			$series = array('F0', 'M6', '6B');
+		} else {
+			$series = explode(',', $series);
+		}
+		foreach($temps as $prefix=>$name) {
+			foreach($series as $serie) {
+				$tables[$prefix . "_" .$serie] = $name;
+			}
+		}
+
+		return $tables;
+	}
+
+	private function parseNodeId($point) {
+		$nodeIds = array(
+            'VQ1' => 10,
+            'VQ1_2' => 209,
+			// 'VQ2_CHECK_LINE' => 13,
+            'VQ2_ROAD_TEST' => 15,
+            'VQ2_LEAK_TEST' => 16,
+			'VQ2_ALL' => '15,16',
+			// 'VQ2_ALL' => '13,15,16',
+            'VQ3' => 17,
+			// 'WDI'  => 95,
+        );
+
+		if(empty($point) || $point === 'all') {
+			return join(',', array_values($nodeIds));
+		} else {
+			return $nodeIds[$point];
+		}
+
+	}
+
 	public function reviseTime($date, $timespan){
 		switch($timespan) {
 			case "daily":

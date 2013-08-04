@@ -111,7 +111,7 @@
     			</div>
     		</div>
 
-    		<div id="printInfo">
+    		<div id="printInfo" style="page-break-before: always">
     			<div>
     				<p class="printDate">-</p>
     			</div>

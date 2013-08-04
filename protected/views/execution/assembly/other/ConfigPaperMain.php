@@ -45,8 +45,8 @@
     					<form id="form" class="well form-search">
     						<label>VIN</label>
     						<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
-    						<input type="button" class="btn btn-primary" id ="btnSubmit" 
-    							disabled="disabled" value ="打印主配置单"></input>
+    						<button type="button" class="btn btn-primary" id ="btnSubmit" 
+    							disabled="disabled"><i class="icon-print"></i>&nbsp;主配置单</button>
     						<input type="button" class="btn" id ="reset" value ="清空"></input>
     						<span class="help-inline" id="vinHint">请输入VIN后回车</span>
     						<div class="help-inline" id="carInfo">

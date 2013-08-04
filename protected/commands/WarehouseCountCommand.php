@@ -58,7 +58,7 @@ class WarehouseCountCommand extends CConsoleCommand
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
 		$seriesArray = self::$SERIES;
-		$monthStart = date("Y-m", strtotime($lastDate)) . "-01 08:00:00";
+		$monthStart = date("Y-m", strtotime($curDate)) . "-01 08:00:00";
 
 		$countDate = $curDate;
 		$workDate = $curDate;
@@ -124,7 +124,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	private function countBalance($series, $all=false) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND (`status`='成品库' OR `status`='WDI')";
 		if(!$all){
-			$sql .= " AND warehouse_id < 1000 AND special_property < 9";
+			$sql .= " AND warehouse_id <= 2000 AND warehouse_id <> 1000 AND special_property < 9";
 		}
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;
