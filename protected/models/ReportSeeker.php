@@ -866,6 +866,56 @@ class ReportSeeker
 		return $ret;
 	}
 
+	public function queryFaultDaily($point, $date){
+		list($stime, $etime) = $this->reviseTime($date, "daily");
+		$seriesArray = self::$SERIES_NAME;
+		$column = array(
+			"columnSeriesX" => array(),
+			"columnSeriesY" => array(),
+		);
+		$donut = array();
+
+		foreach($seriesArray as $series => $seriesName){
+			$columnSeriesY[$seriesName] = array();
+		}
+		$topFaults = $this->queryTopFault($point, "all", $stime, $etime);
+		foreach($topFaults as $one){
+			$column['columnSeriesX'][] = $seriesArray[$one['series']] . "-" . $one['fault'];
+			foreach($seriesArray as $series=>$seriesName){
+				$column['columnSeriesY'][$seriesName][] = $series == $one['series'] ? intval($one['count']) : 0;
+			}
+		}
+
+		$dutys = $this->queryFaultDutyDistribute($point, "all", $stime, $etime);
+		$iColor = 0;
+		foreach($dutys as $one){
+			$tmp = explode("/", $one['duty']);
+			$department = $tmp[0];
+			$subDepartment = empty($tmp[1]) ? "-" : $tmp[1];
+			if(empty($donut[$department])){
+				$donut[$department] = array(
+					"y"=>0,
+					"colorIndex"=>$iColor++,
+					"drilldown"=>array(
+						'name'=>$department,
+						'categories'=>array(),
+						'data'=>array(),
+					),
+				);
+			}
+			$donut[$department]['y'] += $one['percentage'];
+			$donut[$department]['drilldown']['categories'][] = $subDepartment;
+			$donut[$department]['drilldown']['data'][] = $one['percentage'];
+		}
+
+		$ret = array(
+			"carSeries" => array_values(self::$SERIES_NAME),
+			"columnData" => $column,
+			"donutData" => $donut,
+		);
+		return $ret;
+	}
+
 	public function countCarTrace($point, $stime, $etime, $series="") {
 		$nodeIdStr = $this->parseNodeId($point);
 		$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time>='$stime' AND pass_time<'$etime' AND node_id IN ($nodeIdStr)";
@@ -894,6 +944,59 @@ class ReportSeeker
 		$datas = array_unique($datas);
 		$count = count($datas);
 		return $count;
+	}
+
+	public function queryFaults($point, $series, $stime, $etime) {
+		$tables = $this->parseTables($point, $series);
+		$dutyList = $this->dutyList();
+		foreach($tables as $table=>$nodeName){
+			$tmp = explode("_", $table);
+			$series = end($tmp); 
+			$dataSql[] = "(SELECT '$series' AS series, car_id, fault_id, fault_mode, CONCAT(component_name,fault_mode) AS fault, duty_department, FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
+		}
+		$sql = join(" UNION ALL ", $datasql);
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($datas as &$data) {
+			$data['duty'] = $dutyList[$data['duty_department']];
+		}
+		return $datas;
+	}
+
+	public function queryTopFault($point, $series, $stime, $etime, $top=10) {
+		$tables = $this->parseTables($point, $series);
+		foreach($tables as $table=>$nodeName){
+			$tmp = explode("_", $table);
+			$series = end($tmp); 
+			$dataSqls[] = "(SELECT '$series' AS series, car_id, fault_id, fault_mode, CONCAT(component_name,fault_mode) AS fault, duty_department FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
+		}
+		$datasql = join(" UNION ALL ", $dataSqls);
+		$sql = "SELECT *,COUNT(fault_id) AS count FROM (" . $datasql .") t GROUP BY fault_id ORDER BY count DESC LIMIT 0,$top";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		return $datas;
+	}
+
+	public function queryFaultDutyDistribute($point, $series, $stime, $etime) {
+		$tables = $this->parseTables($point, $series);
+		foreach($tables as $table=>$nodeName){
+			$dataSqls[] = "(SELECT duty_department FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
+			$countSqls[] = "(SELECT count(*) FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
+		}
+		$datasql = join(" UNION ALL ", $dataSqls);
+		$sql = "SELECT *,COUNT(duty_department) AS count FROM (" . $datasql .") t GROUP BY duty_department ORDER BY count DESC";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$total = 0;
+		foreach($countSqls as $countSql) {
+			$total += Yii::app()->db->createCommand($countSql)->queryScalar();
+		}
+
+		$dutyList = $this->dutyList();
+		foreach($datas as &$data) {
+			$data['duty'] = $dutyList[$data['duty_department']];
+			$data['percentage'] = $data['count'] / $total;
+		}
+
+		return $datas;
 	}
 
 	private function parseTables($point, $series="all") {
@@ -1094,6 +1197,21 @@ class ReportSeeker
 		}
 
 		return $ret;
+	}
+
+	public function dutyList(){
+		$list = array();
+		$sql = "SELECT id,name,display_name FROM duty_department";
+		$dutyDepartments = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($dutyDepartments as $department){
+			$list[$department['id']] = $department['display_name'];
+		}
+		$list['assembly'] = '总装工厂';
+		$list['paint'] = '涂装工厂';
+		$list['welding'] = '焊装工厂';
+		$list[''] = '-';
+
+		return $list;
 	}
 
 	public function secondConvertToMMss($howlong) {

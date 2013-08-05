@@ -219,7 +219,7 @@ class FaultSeeker
 			}
 			else{
 			 	$data['duty_department'] = $dutyList[$data['duty_department']];
-			 }
+			}
 
 			$data['series'] = $name[$data['series']];
 

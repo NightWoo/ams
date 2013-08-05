@@ -332,6 +332,8 @@ var QUERY_RECYCLE_REPROT_CHART = "/bms/report/queryRecycleChart";
 var QUERY_OVERTIME_CARS = "/bms/report/queryOvertimeCars";
 var QUERY_WAREHOUSE_CHART = "/bms/report/queryWarehouseChart";
 var QUERY_OVERTIME_ORDERS = "/bms/report/queryOvertimeOrders";
+var QUERY_QUALIFICATION_REPORT = "/bms/report/queryQualification";
+var QUERY_FAULT_DISTRIBUTE_REPORT = "/bms/report/queryFaultDistribute";
 
 function alertError (message) {
 	message = 'ajax error'

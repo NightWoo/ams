@@ -54,11 +54,11 @@
             </div >
                 <div style="width:820pt;margin: 0px auto;">
                     <ul id="tabUl" class="nav nav-pills">
-                        <li class="active"><a class="VQ1" href="#tabVQ1" data-toggle="tab"><span class="screenHide">1.&nbsp;</span>I线_VQ1</a></li>
-                        <li class="notPrintable"><a class="VQ1_2" href="#tabVQ1_2" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>I线_VQ1</a></li>
-                        <li class="notPrintable"><a class="VQ2_ROAD_TEST" href="#tabVQ2Road" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>VQ2-路试</a></li>
-                        <li class="notPrintable"><a class="VQ2_LEAK_TEST" href="#tabVQ2Leak" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>VQ2-淋雨</a></li>
-                        <li class="notPrintable"><a class="VQ3" href="#tabVQ3" data-toggle="tab"><span class="screenHide">5.&nbsp;</span>VQ3</a></li>
+                        <li class="active"><a class="queryQualification VQ1" point="VQ1" href="#tabVQ1" data-toggle="tab"><span class="screenHide">1.&nbsp;</span>I线_VQ1</a></li>
+                        <li class="notPrintable"><a class="queryQualification VQ1_2" point="VQ1_2" href="#tabVQ1_2" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>II线_VQ1</a></li>
+                        <li class="notPrintable"><a class="queryQualification VQ2_ROAD_TEST" point="VQ2_ROAD_TEST" href="#tabVQ2Road" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>VQ2-路试</a></li>
+                        <li class="notPrintable"><a class="queryQualification VQ2_LEAK_TEST" point="VQ2_LEAK_TEST" href="#tabVQ2Leak" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>VQ2-淋雨</a></li>
+                        <li class="notPrintable"><a class="queryQualification VQ3" point="VQ3" href="#tabVQ3" data-toggle="tab"><span class="screenHide">5.&nbsp;</span>VQ3</a></li>
                         <li class="notPrintable"><a class="print" href="#"><i class="icon-print"></i></a></li>
                         <!-- <li class="dropdown pull-right notPrintable">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -86,7 +86,7 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tabVQ1">
+                        <div class="tab-pane active tabQualification" point="VQ1" id="tabVQ1">
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
@@ -103,20 +103,20 @@
                             </div>
                             <div class="row-fluid">
                                 <div class="span8">
-                                    <div class="divLoading">
+                                    <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="faultsChart-VQ1" class="faultsChart" point="VQ1" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
-                                    <div class="divLoading">
+                                    <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="dutyChart-VQ1" class="dutyChart" point="VQ1" timespan="yearly"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane active" id="tabVQ1_2">
+                        <div class="tab-pane tabQualification" point="VQ1_2" id="tabVQ1_2">
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
@@ -136,124 +136,104 @@
                                     <div class="divLoading">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ1" class="faultsChart" point="VQ1_2" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ1_2" class="faultsChart" point="VQ1_2" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ1" class="dutyChart" point="VQ1_2" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ1_2" class="dutyChart" point="VQ1_2" timespan="yearly"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane printable" id="tabVQ2Road">
+                        <div class="tab-pane tabQualification" point="VQ2_ROAD_TEST" id="tabVQ2Road">
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
+                                    <div class="qualificationChart" point="VQ2_ROAD_TEST" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="useYearlyChart" class="useChart" timespan="yearly"></div>
+                                    <div class="qualificationChart" point="VQ2_ROAD_TEST" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div>
-                                <table id="tablePause" class="table table-condensed table-bordered tablePause" style="display: none;">
-                                    <thead>
-                                        <tr>
-                                            <!-- <th>ID</th> -->
-                                            <th class="thType">停线类型</th>
-                                            <th class="thDuty">责任部门</th>
-                                            <th class="thReason">原因</th>
-                                            <th class="thHowlong alignRight">总时长</th>
-                                            <th class="thHowlong alignRight">时长</th>
-                                            <th class="thPauseTime">停线时刻</th>
-                                            <th class="thRecoverTime">恢复时刻</th>
-                                            <th class="thSeat">工位</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            
-                                    </tbody>
-                                </table>
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="faultsChart-VQ2_ROAD_TEST" class="faultsChart" point="VQ2_ROAD_TEST" timespan="monthly"></div>
+                                </div>
+                                <div class="span4">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="dutyChart-VQ2_ROAD_TEST" class="dutyChart" point="VQ2_ROAD_TEST" timespan="yearly"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabVQ2Leak">
+                        <div class="tab-pane tabQualification" point="VQ2_LEAK_TEST" id="tabVQ2Leak">
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="recycleMonthlyChart" class="recycleChart" timespan="monthly"></div>
+                                    <div class="qualificationChart" point="VQ2_LEAK_TEST" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="recycleYearlyChart" class="recycleChart" timespan="yearly"></div>
+                                    <div class="qualificationChart" point="VQ2_LEAK_TEST" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div>
-                                <div>
-                                    <table id="overtimeCarsTable" class="table table-bordered table-condensed initHide overtimeCarsTable">
-                                        <thead>
-                                            <tr>
-                                                <th style="min-width:60px">生产周期</th>
-                                                <th style="min-width:40px">车系</th>
-                                                <th>流水号</th>
-                                                <th>VIN号</th>
-                                                <th style="min-width:160px">配置</th>
-                                                <th style="min-width:60px">颜色</th>
-                                                <th style="min-width:60px">状态</th>
-                                                <th>备注</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="faultsChart-VQ2_LEAK_TEST" class="faultsChart" point="VQ2_LEAK_TEST" timespan="monthly"></div>
+                                </div>
+                                <div class="span4">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="dutyChart-VQ2_LEAK_TEST" class="dutyChart" point="VQ2_LEAK_TEST" timespan="yearly"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabVQ3">
+                        <div class="tab-pane tabQualification" point="VQ3" id="tabVQ3">
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="warehouseMonthlyChart" class="warehouseChart" timespan="monthly"></div>
+                                    <div class="qualificationChart" point="VQ3" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="warehouseYearlyChart" class="warehouseChart" timespan="yearly"></div>
+                                    <div class="qualificationChart" point="VQ3" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div>
-                                <table id="overtimeOrdersTable" class="table table-condensed overtimeOrdersTable" style="display: none;">
-                                    <thead>
-                                        <tr>
-                                            <th>备板编号</th>
-                                            <th style="min-width:40px">车道</th>
-                                            <th>订单号</th>
-                                            <!-- <th style="min-width:160px">经销商</th> -->
-                                            <th style="min-width:40px">车系</th>
-                                            <th style="min-width:160px">车型/配置/耐寒性</th>
-                                            <th style="min-width:60px">颜色</th>
-                                            <th style="min-width:30px">数量</th>
-                                            <th style="min-width:30px">已备</th>
-                                            <th style="min-width:30px">出库</th>
-                                            <th style="min-width:120px">指令激活</th>
-                                            <th><i class="icon-time"></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            
-                                    </tbody>
-                                </table>
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="faultsChart-VQ3" class="faultsChart" point="VQ3" timespan="monthly"></div>
+                                </div>
+                                <div class="span4">
+                                    <div class="divLoading">
+                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                    </div>
+                                    <div id="dutyChart-VQ3" class="dutyChart" point="VQ3" timespan="yearly"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

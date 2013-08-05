@@ -8,9 +8,10 @@ class ReportController extends BmsBaseController
 
 	public function actionDebug(){
         $seeker= new ReportSeeker();
-        $date = "2013-07-21";
+        $date = "2013-07-01";
         $timespan = "monthly";
-        $ret = $seeker->queryQualification('VQ2_ROAD_TEST', $date, $timespan);
+        // $ret = $seeker->queryQualification('VQ2_ROAD_TEST', $date, $timespan);
+        $ret = $seeker->queryFaultDaily('VQ1', $date);
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
@@ -165,4 +166,30 @@ class ReportController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
+
+    public function actionQueryQualification() {
+        $point = $this->validateStringVal("point", "VQ1");
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryQualification($point, $date, $timespan);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryFaultDistribute() {
+        $point = $this->validateStringVal("point", "VQ1");
+        $date = $this->validateStringVal("date", "");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryFaultDaily($point, $date);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
 }

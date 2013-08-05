@@ -31,6 +31,8 @@ class CarSeeker
 		'WH-35' =>array('成品库'),
 		'WH-X' =>array('成品库'),
 		'WH-14' =>array('成品库'),
+		'WH-13' =>array('成品库'),
+		'WH-15' =>array('成品库'),
 		'WH-T' =>array('成品库'),
 		'WH-WDI' =>array('WDI'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验','VQ1异常','VQ1合格', '出生产车间' , 'VQ1退库', '检测线缓冲','VQ2检测线','VQ2路试', 'VQ2淋雨', 'VQ2异常.路试', 'VQ2异常.漏雨' , 'VQ2退库', 'VQ3检验' ,'VQ3合格', 'VQ3异常' , 'VQ3退库','成品库'),
@@ -619,11 +621,17 @@ class CarSeeker
 		if($state === 'WH-14'){
 			$condition .= " AND warehouse_id>=400 AND warehouse_id< 500";
 		}
+		if($state === 'WH-13'){
+			$condition .= " AND warehouse_id=2001";
+		}
+		if($state === 'WH-15'){
+			$condition .= " AND warehouse_id=2002";
+		}
 		if($state === 'WH-X'){
 			$condition .= " AND warehouse_id=1000";
 		}
 		if($state === 'WH-T'){
-			$condition .= " AND warehouse_id>=2000 AND warehouse_id<=2010";
+			$condition .= " AND warehouse_id=2000";
 		}
 
 		//recyclePeriod = now - assembly_time, or recyclePeriod = assembly_time - warehouse_time
@@ -814,7 +822,7 @@ class CarSeeker
 			'VQ3-OK' => array('VQ3-OK'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
 			// 'WH' => array('WH'),
-			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-14','WH-X','WH-T','WH-WDI'),
+			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-14','WH-X','WH-T','WH-13','WH-15','WH-WDI'),
 			'WHin' => array('WHin'),
 			'assembly' => array('PBS', 'onLine', 'onLine-2', 'VQ1', 'VQ2', 'VQ3', 'WH'),
 			'mergeRecyle' => array('PBS','onLine', 'onLine-2','recycle', 'WH'),
@@ -848,6 +856,8 @@ class CarSeeker
 			'WH-X' => '异常X',
 			'WH-WDI' => 'WDI',
 			'WH-14' => '14#厂房',
+			'WH-13' => '13#厂房',
+			'WH-15' => '15#厂房',
 			'WH-T' => '临时T',
 		);
 
