@@ -46,6 +46,22 @@
                 <legend>质量报表
                     <span class="">
                         <input type="text" class="input-small"  placeholder="日期..." id="startTime"/>
+                        <label class="radio inline">
+                          <input type="radio" name="seriesRadios" id="optionsRadiosAll" value="all" checked>
+                          全部
+                        </label>
+                        <label class="radio inline">
+                          <input type="radio" name="seriesRadios" id="optionsRadiosF0" value="F0">
+                          F0
+                        </label>
+                        <label class="radio inline">
+                          <input type="radio" name="seriesRadios" id="optionsRadiosM6" value="M6">
+                          M6
+                        </label>
+                        <label class="radio inline">
+                          <input type="radio" name="seriesRadios" id="optionsRadios6B" value="6B">
+                          思锐
+                        </label>
                     </span>
                     <span class="pull-right">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
@@ -101,18 +117,18 @@
                                     <div class="qualificationChart" point="VQ1" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span8">
+                            <div class="row-fluid row-2">
+                                <div class="span7">
                                     <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ1" class="faultsChart" point="VQ1" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ1" class="faultsChart" point="VQ1"></div>
                                 </div>
-                                <div class="span4">
+                                <div class="span5">
                                     <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ1" class="dutyChart" point="VQ1" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ1" class="dutyChart" point="VQ1"></div>
                                 </div>
                             </div>
                         </div>
@@ -131,18 +147,18 @@
                                     <div class="qualificationChart" point="VQ1_2" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span8">
-                                    <div class="divLoading">
+                            <div class="row-fluid 2ndRow">
+                                <div class="span7">
+                                    <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ1_2" class="faultsChart" point="VQ1_2" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ1_2" class="faultsChart" point="VQ1_2"></div>
                                 </div>
-                                <div class="span4">
-                                    <div class="divLoading">
+                                <div class="span5">
+                                    <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ1_2" class="dutyChart" point="VQ1_2" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ1_2" class="dutyChart" point="VQ1_2"></div>
                                 </div>
                             </div>
                         </div>
@@ -161,18 +177,18 @@
                                     <div class="qualificationChart" point="VQ2_ROAD_TEST" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span8">
-                                    <div class="divLoading">
+                            <div class="row-fluid 2ndRow">
+                                <div class="span7">
+                                    <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ2_ROAD_TEST" class="faultsChart" point="VQ2_ROAD_TEST" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ2_ROAD_TEST" class="faultsChart" point="VQ2_ROAD_TEST"></div>
                                 </div>
-                                <div class="span4">
-                                    <div class="divLoading">
+                                <div class="span5">
+                                    <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ2_ROAD_TEST" class="dutyChart" point="VQ2_ROAD_TEST" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ2_ROAD_TEST" class="dutyChart" point="VQ2_ROAD_TEST"></div>
                                 </div>
                             </div>
                         </div>
@@ -191,18 +207,18 @@
                                     <div class="qualificationChart" point="VQ2_LEAK_TEST" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span8">
-                                    <div class="divLoading">
+                            <div class="row-fluid 2ndRow">
+                                <div class="span7">
+                                    <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ2_LEAK_TEST" class="faultsChart" point="VQ2_LEAK_TEST" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ2_LEAK_TEST" class="faultsChart" point="VQ2_LEAK_TEST"></div>
                                 </div>
-                                <div class="span4">
-                                    <div class="divLoading">
+                                <div class="span5">
+                                    <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ2_LEAK_TEST" class="dutyChart" point="VQ2_LEAK_TEST" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ2_LEAK_TEST" class="dutyChart" point="VQ2_LEAK_TEST"></div>
                                 </div>
                             </div>
                         </div>
@@ -221,18 +237,18 @@
                                     <div class="qualificationChart" point="VQ3" timespan="yearly"></div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span8">
-                                    <div class="divLoading">
+                            <div class="row-fluid 2ndRow">
+                                <div class="span7">
+                                    <div class="divLoading" chart="column">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="faultsChart-VQ3" class="faultsChart" point="VQ3" timespan="monthly"></div>
+                                    <div id="faultsChart-VQ3" class="faultsChart" point="VQ3"></div>
                                 </div>
-                                <div class="span4">
-                                    <div class="divLoading">
+                                <div class="span5">
+                                    <div class="divLoading" chart="donut">
                                         <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
                                     </div>
-                                    <div id="dutyChart-VQ3" class="dutyChart" point="VQ3" timespan="yearly"></div>
+                                    <div id="dutyChart-VQ3" class="dutyChart" point="VQ3"></div>
                                 </div>
                             </div>
                         </div>

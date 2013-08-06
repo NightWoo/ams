@@ -73,6 +73,10 @@ class Warehouse
 			}
 		} 
 
+		if(empty($row)){
+			$row = WarehouseAR::model()->findByPk(2000);
+		}
+
 		//如明确了进入的车列
 		if(!empty($row)){
 			//进入车列

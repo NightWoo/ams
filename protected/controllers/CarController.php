@@ -654,9 +654,10 @@ class CarController extends BmsBaseController
 		$etime = $this->validateStringVal('etime');
 		$status = $this->validateIntVal('status', 0);
 		$vin = $this->validateStringVal('vin');
+        $top  =$this->validateIntVal("top", 0);
 		
 		$seeker = new SubConfigSeeker($type);
-		$datas = $seeker->queryAll($vin, $status, $stime, $etime);
+		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top);
 		$this->renderJsonBms(true, 'OK', $datas);
 	}
 

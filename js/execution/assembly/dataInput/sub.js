@@ -88,7 +88,8 @@ $("document").ready(function() {
 		    data: {
 		    	"type": $("#subType").val(),
 		    	"stime":$("#startTime").val(),
-				"etime":$("#endTime").val()
+				"etime":$("#endTime").val(),
+				"top" :20,
 		    },//vin
 		    async:false,
 		    success: function(response){
@@ -145,8 +146,8 @@ $("document").ready(function() {
 		$("#tableList tbody").text("");
 		//set default queue time and get queue
 		// $("#startTime").val(window.byd.DateUtil.todayBeginTime);
-		$("#startTime").val('2013-04-06 08:00');
-		$("#endTime").val(window.byd.DateUtil.todayEndTime);
+		$("#startTime").val(byd.DateUtil.firstDayOfTheMonth);
+		$("#endTime").val(byd.DateUtil.todayEndTime);
 		ajaxGetPrintList();
 
 	}

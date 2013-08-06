@@ -8,7 +8,7 @@ class SubConfigSeeker
 
 
 	//0 not print , 1 printed, 2 forbid print
-	public function queryAll($vin = null, $status = 0, $stime = null, $etime = null) {
+	public function queryAll($vin = null, $status = 0, $stime = null, $etime = null, $top=0) {
 		$conditions = array("q.type='{$this->type}'");
 		if($status != -1) {
 			$conditions[] = "q.status = $status";
@@ -26,8 +26,10 @@ class SubConfigSeeker
 		$conditions[] = "c.config_id=cc.id";
 
 		$condition = join(' AND ', $conditions);
-		$sql = "SELECT c.serial_number,c.vin,c.series,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time as queueTime,q.status FROM sub_config_car_queue q,car c,car_config cc WHERE $condition ";
-
+		$sql = "SELECT c.serial_number,c.vin,c.series,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time as queueTime,q.status FROM sub_config_car_queue q,car c,car_config cc WHERE $condition ORDER BY queueTime ASC";
+		if(!empty($top)){
+			$sql .= " LIMIT 0,$top";
+		}
 
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 

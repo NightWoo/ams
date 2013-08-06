@@ -25,6 +25,10 @@ $(document).ready(function () {
     $(".print").click(function() {
     	window.print();
     })
+
+    $(":radio[name=seriesRadios]").click(function(){
+    	series = $(":radio[name=seriesRadios]:checked").val();
+    });
 //END event bindings -------------------------
 
 
@@ -63,6 +67,7 @@ $(document).ready(function () {
 				"point": point,
 				"date": $("#startTime").val(),
 				"timespan": timespan,
+				"series" : $(":radio[name=seriesRadios]:checked").val(),
 			},
 			error: function(){alertError();},
 			success: function(response){
@@ -79,6 +84,7 @@ $(document).ready(function () {
 
 	function ajaxQueryFaultDistribute(point) {
 		$(".faultsChart[point="+ point +"]").hide();
+		$(".dutyChart[point="+ point +"]").hide();
 		$(".tabQualification[point="+ point +"] .divLoading[chart=column]").show();
 		$(".tabQualification[point="+ point +"] .divLoading[chart=donut]").show();
 		$.ajax({
@@ -88,6 +94,7 @@ $(document).ready(function () {
 			data: {
 				"point": point,
 				"date": $("#startTime").val(),
+				"series" : $(":radio[name=seriesRadios]:checked").val(),
 			},
 			error: function(){alertError();},
 			success: function(response){
@@ -568,16 +575,36 @@ $(document).ready(function () {
 		columnData: {
 			chart: {
                 type: 'column',
-                // renderTo: 'columnContainer'
+                spacingLeft: 70,
             },
+            navigation: {
+	            buttonOptions: {
+	                enabled: false
+	            }
+	        },
             title: {
-                text: '故障TOP10'
+                text: '',
             },
             subtitle: {
                 text: ''
             },
+            legend: {
+				enabled: true,
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				borderWidth: 0,
+			},
             xAxis: {
-                categories: []
+                categories: [],
+                labels: {
+					rotation: -45,
+					align: 'right',
+					style: {
+						fontSize: '10px',
+						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
+					}
+				}
             },
             credits: {
                 enabled: false
@@ -585,7 +612,8 @@ $(document).ready(function () {
             yAxis: {
                 min: 0,
                 title: {
-                    text: '故障数'
+                	enabled: false,
+                    text: '故障数',
                 },
                 stackLabels: {
                     enabled: true,
@@ -596,12 +624,18 @@ $(document).ready(function () {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                footerFormat: '</table>',
+                formatter: function() {
+                	s = '<table>';
+                	$.each(this.points, function(i, point) {
+	                	if(point.y >0){
+	                		s += "<tr><td style='color:{series.color};padding:0'></td>"+ point.series.name + "-" + point.key +": " + point.y +"</tr>";
+	                	}
+                	});
+                	s += '</table>';
+                	return s;
+                },
                 shared: true,
-                useHTML: true
+                useHTML: true,
             },
             plotOptions: {
                 column: {
@@ -612,19 +646,22 @@ $(document).ready(function () {
                 }
             },
             series: [],
-            navigation: {
-	            buttonOptions: {
-	                verticalAlign: 'bottom',
-	                y: -20,
-	            }
-	        }
 		},
 		donutData: {
             chart: {
-                type: 'pie'
+                type: 'pie',
+                spacingLeft: 120,
+                spacingRight: 80,
             },
+            navigation: {
+            	enabled: false,
+	            buttonOptions: {
+	                enabled: false
+	            }
+	        },
             title: {
-                text: '责任分布'
+                enabled: false,
+                text: '',
             },
             credits: {
                 enabled: false
@@ -641,21 +678,20 @@ $(document).ready(function () {
                 }
             },
             tooltip: {
-        	    valueSuffix: '辆'
+                shared: true,
+                useHTML: true,
+        	    formatter: function() {
+        	    	s = "<span>" + this.key +": " + (this.y*100).toFixed(1) + "%</span>";
+                	return s;
+                },
             },
-            navigation: {
-	            buttonOptions: {
-	                verticalAlign: 'bottom',
-	                y: -20,
-	            }
-	        },
             series: [{
                 name: '责任部门',
                 data: [],
                 size: '60%',
                 dataLabels: {
                     formatter: function() {
-                        return this.y > 0 ? '<b>'+ this.point.name +'</b> ' + "[" + this.y +"]": null;
+                        return this.y > 0.1 ? '<b>'+ this.point.name +'</b> ' + "[" + (this.y*100).toFixed(1) +"%]": null;
                     },
                     color: 'white',
                     distance: -30
@@ -666,9 +702,10 @@ $(document).ready(function () {
                 size: '80%',
                 innerSize: '60%',
                 dataLabels: {
+                	distance: 5,
                     formatter: function() {
                         // display only if larger than 0
-                        return this.y > 0 ? '<b>'+ this.point.name +'</b> '+  "[" + this.y + "]" : null;
+                        return (this.y > 0.01 && this.key != "-") ? '<b>'+ this.point.name +'</b> '+  "[" + (this.y*100).toFixed(1) + "%]" : null;
                     }
                 }
             }]
@@ -684,7 +721,6 @@ $(document).ready(function () {
         			data: columnSeriesData.columnSeriesY[series],
         		}
         	})
-	        	console.log(columnSeries);
         	this.columnData.xAxis.categories = columnSeriesData.columnSeriesX;
         	this.columnData.series = columnSeries;
         	$(".tabQualification[point="+ this.point +"] .divLoading[chart=column]").hide();

@@ -19,8 +19,11 @@ $(function () {
 	window.byd.DateUtil = {
 
 		firstDayOfTheMonth : function () {
-			return new Date().getFullYear() + '-' + (new Date().getMonth() + 1)
-				+ '-01 00:00';
+			year = new Date().getFullYear();
+			month = new Date().getMonth() + 1;
+			month = month>=10 ? month : "0" + month;
+			time = year + '-' + month + '-01 08:00';
+			return time;
 		},
 
 		currentDate: function() {

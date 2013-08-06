@@ -31,7 +31,7 @@ legend {
 	min-height: 400px;
 }
 
-.qualificationChart{
+.qualificationChart, .faultsChart, .dutyChart{
 	height: 300px;
 }
 
@@ -66,4 +66,13 @@ legend {
 
 .alignCenter{
 	text-align: center;
+}
+
+.radio.inline{
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+
+.row-2 {
+	margin-top: 20px;
 }

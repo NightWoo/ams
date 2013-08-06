@@ -171,9 +171,10 @@ class ReportController extends BmsBaseController
         $point = $this->validateStringVal("point", "VQ1");
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
+        $series = $this->validateStringVal("series", "all");
         try{
             $seeker = new ReportSeeker();
-            $data = $seeker->queryQualification($point, $date, $timespan);
+            $data = $seeker->queryQualification($point, $date, $timespan, $series);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
@@ -183,9 +184,10 @@ class ReportController extends BmsBaseController
     public function actionQueryFaultDistribute() {
         $point = $this->validateStringVal("point", "VQ1");
         $date = $this->validateStringVal("date", "");
+        $series = $this->validateStringVal("series", "all");
         try{
             $seeker = new ReportSeeker();
-            $data = $seeker->queryFaultDaily($point, $date);
+            $data = $seeker->queryFaultDaily($point, $date, $series);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());

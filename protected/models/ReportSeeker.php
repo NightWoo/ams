@@ -831,10 +831,10 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryQualification($point, $date, $timespan) {
+	public function queryQualification($point, $date, $timespan, $seriesText="all") {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
-		$seriesArray = self::$SERIES_NAME;
+		$seriesArray = $this->parseSeries($seriesText);
 		$columnSeriesX = array();
 		$columnSeriesY = array();
 		$lineSeriesY = array();
@@ -844,8 +844,8 @@ class ReportSeeker
 		}
 
 		foreach($timeArray as $queryTime){
-			$carCountAll = $this->countCarTrace($point, $queryTime['stime'], $queryTime['etime']);
-			$countNG = $this->countOnlineFixed($point, 'all', $queryTime['stime'], $queryTime['etime']);
+			$carCountAll = $this->countCarTrace($point, $queryTime['stime'], $queryTime['etime'], $seriesText);
+			$countNG = $this->countNG($point, $seriesText, $queryTime['stime'], $queryTime['etime']);
 			foreach($seriesArray as $series => $seriesName){
 				$faultCount = $this->countFault($point, $series, $queryTime['stime'], $queryTime['etime']);
 				$columnSeriesY[$seriesName][] = empty($carCountAll) ? null : round($faultCount / $carCountAll, 2);
@@ -855,7 +855,7 @@ class ReportSeeker
 		}
 
 		$ret = array(
-			"carSeries" => array_values(self::$SERIES_NAME),
+			"carSeries" => array_values($seriesArray),
 			"series" => array(
 				'x' => $columnSeriesX,
 				'column' => $columnSeriesY,
@@ -866,9 +866,9 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryFaultDaily($point, $date){
+	public function queryFaultDaily($point, $date, $seriesText="all"){
 		list($stime, $etime) = $this->reviseTime($date, "daily");
-		$seriesArray = self::$SERIES_NAME;
+		$seriesArray = $this->parseSeries($seriesText);
 		$column = array(
 			"columnSeriesX" => array(),
 			"columnSeriesY" => array(),
@@ -878,9 +878,10 @@ class ReportSeeker
 		foreach($seriesArray as $series => $seriesName){
 			$columnSeriesY[$seriesName] = array();
 		}
-		$topFaults = $this->queryTopFault($point, "all", $stime, $etime);
+		$topFaults = $this->queryTopFault($point, $seriesText, $stime, $etime);
 		foreach($topFaults as $one){
-			$column['columnSeriesX'][] = $seriesArray[$one['series']] . "-" . $one['fault'];
+			// $column['columnSeriesX'][] = $seriesArray[$one['series']] . "-" . $one['fault'];
+			$column['columnSeriesX'][] = $one['fault'];
 			foreach($seriesArray as $series=>$seriesName){
 				$column['columnSeriesY'][$seriesName][] = $series == $one['series'] ? intval($one['count']) : 0;
 			}
@@ -909,7 +910,7 @@ class ReportSeeker
 		}
 
 		$ret = array(
-			"carSeries" => array_values(self::$SERIES_NAME),
+			"carSeries" => array_values($seriesArray),
 			"columnData" => $column,
 			"donutData" => $donut,
 		);
@@ -919,7 +920,7 @@ class ReportSeeker
 	public function countCarTrace($point, $stime, $etime, $series="") {
 		$nodeIdStr = $this->parseNodeId($point);
 		$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time>='$stime' AND pass_time<'$etime' AND node_id IN ($nodeIdStr)";
-		if(!empty($series)) $sql .= " AND car_series = '$series'";
+		if(!empty($series) && $series != "all") $sql .= " AND car_series = '$series'";
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;
 	}
@@ -934,8 +935,8 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function countOnlineFixed($point, $series, $stime, $etime) {
-		$tables = $this->parseTables($point);
+	public function countNG($point, $series, $stime, $etime) {
+		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName) {
 			$dataSql[] = "(SELECT car_id FROM $table WHERE create_time>='$stime' AND create_time<'$etime' AND status <>'在线修复')";
 		}
@@ -1219,5 +1220,17 @@ class ReportSeeker
 		$howlongSS = intval($howlong % 60);
 		$ret = $howlongMM . "'" . sprintf("%02d", $howlongSS) . "\"";
 		return $ret;
+	}
+
+	private function parseSeries($series) {
+		if(empty($series) || $series === 'all') {
+            $seriesArray = array('F0'=>'F0', 'M6'=>'M6', '6B'=>'思锐');
+        } else {
+            $series = explode(',', $series);
+            foreach($series as $one){
+            	$seriesArray[$one] = self::$SERIES_NAME[$one];
+            }
+        }
+		return $seriesArray;
 	}
 }
