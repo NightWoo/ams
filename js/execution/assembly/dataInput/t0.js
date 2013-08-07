@@ -42,7 +42,6 @@ $("document").ready(function() {
 						var remark = "<td>" + plans[i].remark + "</td>";
 						//modified by wujun
 						$("#planTable tbody").append("<tr id='" + plans[i].id + "'>" + num + left + car_series + car_type + config_name + cold_resistant + color + car_year + /*order_type +*/ special_order + remark + "</tr>");
-						// console.log($("#"+plans[i].id));
 						if(plans[i].is_frozen == 1){
 							$("#"+plans[i].id).addClass("warning");
 						}
@@ -66,7 +65,7 @@ $("document").ready(function() {
         	dataType: "json",//返回json格式的数据
 			url: T0_GET_PLAN,//ref:  /bms/js/service.js
 			data: {
-				"plan_date": nextWorkDate(),
+				"plan_date": byd.DateUtil.nextWorkDate,
 				"assembly_line" : $("#line").attr("value"),
 			},
 			success: function(response) {
@@ -133,21 +132,8 @@ $("document").ready(function() {
 				 	} else {
 				 		$("#infoColdResistant").html("非耐寒")
 				 	}
-				 	//$("#tableCarInfo tbody").text("");
-					//var car_series = "<td>" + car.series + "</td>";//车系
-					//var car_vin = "<td>" + car.vin + "</td>";//vin
-					//var car_type = "<td>" + car.type + "</td>";//车型
-					//var color = "<td>" + car.color + "</td>";//颜色
-					// var car_year = "<td>" + car.car_year + "</td>";//年份
-					//var config_name = "<td>" + car.config_name + "</td>";
-					// var order_type = "<td>" + car.order_type + "</td>";
-					//var special_order = "<td>" + car.special_order + "</td>";
-					//var remark = "<td>" + car.remark + "</td>";
-					//$("#tableCarInfo tbody").append("<tr>" + car_series + car_vin + car_type + color + 
-					//	/*car_year +*/ config_name /*+ order_type*/ + special_order + remark + hiddenPlanId + "</tr>");
-					//var hiddenPlanId = "<input type='hidden' value='" + car.plan_id + "' />";
-					$("#carInfo").attr("planId", car.plan_id);	//added by wujun
-					$("#" + car.plan_id).addClass("info");	//added by wujun
+					$("#carInfo").attr("planId", car.plan_id);
+					$("#" + car.plan_id).addClass("info");
 				}
 				else{
 					resetPage();
@@ -200,7 +186,6 @@ $("document").ready(function() {
 						if (response.data.frontImage == "" || response.data.backImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
-							// console.log($(".configPaper"))
 							$(".configPaper").addClass("toPrint");
 							setTimeout(function (){window.print();},1500);
 							fadeMessageAlert(response.message,"alert-success");
@@ -219,27 +204,12 @@ $("document").ready(function() {
 				setTimeout(function() {
 					$("#vinHint").hide().html("未输入VIN");
 					toggleVinHint(true);
-				},5000);
+				},60000);
 			},
 			error:function(){alertError();}
 		});
 	}
-	//get the car original data, added by wujun 
-	function ajaxGetCar(){
-		$.ajax({
-		    type: "get",//使用get方法访问后台
-    	    dataType: "json",//返回json格式的数据
-			async: false,
-		    url: GET_CAR,//ref:  /bms/js/service.js
-		    data: {"vin": $('#vinText').attr("value")},//vin
-		    success: function(){},
-		    error:function(){}
-       });
-	}
 
-	function ajaxConfig () {
-		
-	}
 //-------------------END ajax -----------------------	
 
 //------------------- common functions -----------------------	
@@ -256,8 +226,8 @@ $("document").ready(function() {
 		resetPage();
 		$("#messageAlert").hide();
 
-		$("#today").html(workDate());
-		$("#tomorrow").html(nextWorkDate());
+		$("#today").html(byd.DateUtil.workDate);
+		$("#tomorrow").html(byd.DateUtil.nextWorkDate);
 	}
 
 	/*
@@ -313,98 +283,6 @@ $("document").ready(function() {
 				$("#messageAlert").hide(1000);
 			},5000);
 		});
-	}
-
-	//added by wujun
-	function currentDate (argument) {
-			var now = new Date();
-			var year = now.getFullYear();       //年
-			var month = now.getMonth() + 1;     //月
-			var day = now.getDate();            //日
-		   // var hh = now.getHours();            //时
-			//var mm = now.getMinutes();          //分
-		   
-			var clock = year + '-';
-
-			if(month < 10) clock += '0';
-			clock += month + '-';
-
-			if(day < 10) clock += '0';
-			clock += day;
-
-			//clock += "08:00";
-
-			return(clock); 
-	}
-
-	//added by wujun
-	function yesterday () {			
-			//获取系统时间 
-			var now = new Date();
-			var nowYear = now.getFullYear();
-			var nowMonth = now.getMonth();
-			var nowDate = now.getDate();
-			//处理
-			var uom = new Date(nowYear,nowMonth, nowDate);
-			uom.setDate(uom.getDate()-1);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
-			var LINT_MM = uom.getMonth();
-			LINT_MM++;
-			var LSTR_MM = LINT_MM > 10?LINT_MM:("0"+LINT_MM)
-			var LINT_DD = uom.getDate();
-			var LSTR_DD = LINT_DD > 10?LINT_DD:("0"+LINT_DD)
-			//得到最终结果
-			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
-			return(uom);
-	}
-
-	//added by wujun
-	function tomorrowDate () {
-			//获取系统时间 
-			var now = new Date();
-			var nowYear = now.getFullYear();
-			var nowMonth = now.getMonth();
-			var nowDate = now.getDate();
-			//处理
-			var uom = new Date(nowYear,nowMonth, nowDate);
-			uom.setDate(uom.getDate() + 1);//取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
-			var LINT_MM = uom.getMonth();
-			LINT_MM++;
-			var LSTR_MM = LINT_MM >= 10?LINT_MM:("0"+LINT_MM)
-			var LINT_DD = uom.getDate();
-			var LSTR_DD = LINT_DD >= 10?LINT_DD:("0"+LINT_DD)
-			//得到最终结果
-			uom = uom.getFullYear() + "-" + LSTR_MM + "-" + LSTR_DD; 
-			return(uom); 
-	}
-
-	//added by wujun
-	function workDate() {
-		var now = new Date();
-		var hh = now.getHours();
-		var workDate;
-
-		if(hh>=8 && hh<24) {
-			workDate = currentDate();
-		} else {
-			workDate = yesterday();
-		}
-
-		return(workDate);
-	}
-
-	//added by wujun
-	function nextWorkDate() {
-		var now = new Date();
-		var hh = now.getHours();
-		var nextWorkDate
-
-		if(hh>=8 && hh<24) {
-			nextWorkDate = tomorrowDate();
-		} else {
-			nextWorkDate = currentDate();
-		}
-
-		return nextWorkDate;
 	}
 
 //-------------------END common functions -----------------------

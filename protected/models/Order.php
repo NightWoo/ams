@@ -110,6 +110,81 @@ class Order
 		}
 	}
 
+	public function activateBoard($boardNumber) {
+		$orders = OrderAR::model()->findall("board_number=? ORDER BY standby_date DESC", array($boardNumber));
+		$boardDate = $orders[0]->standby_date;
+		if(!empty($orders)){
+			$maxOrder = OrderAR::model()->find('status=1 AND standby_date=? AND board_number<>? ORDER BY priority DESC', array($boardDate, $boardNumber));
+			$maxPrioity = empty($maxOrder)? 0 : $maxOrder->priority + 1;
+			foreach($orders as &$order){
+				if(empty($order->lane_id)){
+					throw new Exception($order->order_number.'未选择发车道');
+				}
+				$order->priority = $maxPrioity;
+				$order->status = 1;
+				$curDate = DateUtil::getCurDate();
+				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){
+					$order->activate_time = date('YmdHis');
+					$order->lane_status = 1;
+				}
+
+				$order->save();
+			}
+		}
+	}
+
+	public function frozenBoard($boardNumber) {
+		$orders = OrderAR::model()->findall("board_number=?", array($boardNumber));
+		if(!empty($orders)){
+			foreach($orders as &$order){
+				$order->priority = 0;
+				$order->status = 0;
+				$order->save();
+			}
+		}
+	}
+
+	public function setBoardTop($boardNumber) {
+		$orders = OrderAR::model()->findall("board_number=? ORDER BY standby_date DESC", array($boardNumber));
+		$boardDate = $orders[0]->standby_date;
+		if(!empty($orders)){
+			$boardPriority = $orders[0]->priority;
+			$highers  = OrderAR::model()->findAll('status=1 AND priority<? AND standby_date=? AND board_number<>?', array($boardPriority, $boardDate, $boardNumber));
+			if(!empty($highers)){
+				foreach($highers as $higher) {
+						$higher->priority = $higher->priority + 1;
+						$higher->save();
+				}
+			}
+			foreach($orders as &$order){
+				$order->priority = 0;
+				$order->save();
+			}
+		}
+	}
+
+	public function setBoardSamePriority($boardNumber) {
+		$orders = OrderAR::model()->findall("boardNumber=? ORDER BY priority ASC", array($boardNumber));
+		if(!empty($orders)){
+			$boardPriority = $orders[0]->priority;
+			foreach($orders as &$order){
+				$order->priority = $boardPriority;
+				$order->save();
+			}
+		}
+	}
+
+	public function setBoardSameStandbyDate($boardNumber) {
+		$orders = OrderAR::model()->findall("boardNumber=? ORDER BY standby_date DESC", array($boardNumber));
+		if(!empty($orders)){
+			$boardPriority = $orders[0]->standby_date;
+			foreach($orders as &$order){
+				$order->priority = $boardPriority;
+				$order->save();
+			}
+		}
+	}
+
 	public function match($series, $carType, $configId, $color, $coldResistant, $date) {
 		$success = false;
 		$data = array();

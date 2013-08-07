@@ -130,17 +130,7 @@
 	font-size: 11px;
 }
 
-#tableResult .btn-link {
+ #tableResult .btn-link {
  	padding: 0;
  	font-size: 12px
  }
-
-#tableResult .thickBorder td{
-	border-top-width: 3px;
-}
-#tableResult .rowSpanTd{
-	background-color: white; 
-}
-#tableResult .amountTd, #tableResult .holdTd, #tableResult .countTd {
-	text-align: right;
-}

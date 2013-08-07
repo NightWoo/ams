@@ -38,40 +38,46 @@ class Car
 		$configId = $this->car->config_id;
 		$carSeries = $this->car->series;		//added by wujun
 		$data = $this->car->attributes;
-
-		$planSeeker = new PlanSeeker();
-		$plans = $planSeeker->search($date, $carSeries, $line, false ,true);
-	
-		$plansArray = array();
-		foreach($plans as $plan) {
-			if(!isset($plansArray[$plan['plan_date']])) {
-				$plansArray[$plan['plan_date']] = array();
-			}
-			$plansArray[$plan['plan_date']][] = $plan;
-		}
-		$curPrority = PHP_INT_MAX;
-		$data['adapt_plan'] = false;
-		foreach($plansArray as $plans) {
+		$planId = $this->car->plan_id;
+		if(empty($planId)){
+			$planSeeker = new PlanSeeker();
+			$plans = $planSeeker->search($date, $carSeries, $line, false ,true);
+		
+			$plansArray = array();
 			foreach($plans as $plan) {
-				$priority = intval($plan['priority']);
-				if($curPrority > $priority) {
-					if($plan['car_body'] === $data['type'] && $plan['color'] === $data['color'] && intval($plan['total']) > intval($plan['ready']) && $data['special_order'] === $plan['special_order']) {			//added by wujun
-						$data['plan_id'] = $plan['id'];
-						$data['car_year'] = $plan['car_year'];
-						$data['config_name'] = $plan['config_name'];
-						$data['order_type'] = $plan['order_type'];
-						$data['special_order'] = $plan['special_order'];
-						$data['cold_resistant'] = $plan['cold_resistant'];		//added by wujun
-						$data['remark'] = $plan['remark'];
-						$data['adapt_plan'] = true;
-						$curPrority = $priority;
+				if(!isset($plansArray[$plan['plan_date']])) {
+					$plansArray[$plan['plan_date']] = array();
+				}
+				$plansArray[$plan['plan_date']][] = $plan;
+			}
+			$curPrority = PHP_INT_MAX;
+			$data['adapt_plan'] = false;
+			foreach($plansArray as $plans) {
+				foreach($plans as $plan) {
+					$priority = intval($plan['priority']);
+					if($curPrority > $priority) {
+						if($plan['car_body'] === $data['type'] && $plan['color'] === $data['color'] && intval($plan['total']) > intval($plan['ready']) && $data['special_order'] === $plan['special_order']) {			//added by wujun
+							$data['plan_id'] = $plan['id'];
+							$data['car_year'] = $plan['car_year'];
+							$data['config_name'] = $plan['config_name'];
+							$data['order_type'] = $plan['order_type'];
+							$data['special_order'] = $plan['special_order'];
+							$data['cold_resistant'] = $plan['cold_resistant'];		//added by wujun
+							$data['remark'] = $plan['remark'];
+							$data['adapt_plan'] = true;
+							$curPrority = $priority;
+						}
 					}
 				}
+				if($data['adapt_plan']) {
+					break;
+				}	
 			}
-			if($data['adapt_plan']) {
-				break;
-			}	
+		} else {
+			$data['adapt_plan'] = true;
 		}
+
+
 		return $data;
 	}
 
@@ -1086,6 +1092,12 @@ class Car
 			$ret['row'] = WarehouseAR::model()->findByPk($ret['warehouse_id'])->row;
 		}
 		return $ret;
+	}
+
+	public function checkAlreadyOnline(){
+		if($this->car->assembly_time > '0000-00-00 00:00:00'){
+			throw new Exception($this->car->vin . '已上线');
+		}
 	}
 
 	public function checkAlreadyOut(){

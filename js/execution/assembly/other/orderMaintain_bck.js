@@ -121,19 +121,18 @@ $("document").ready(function() {
 	})
 
 	$("#tableResult").live("click", function(e) {
-		if ($(e.target).is("i") || $(e.target).is("a")) {
+		if ($(e.target).is("i")) {
 			var siblings = $(e.target).closest("td").siblings();
 			var tr = $(e.target).closest("tr");
 
 			if($(e.target).hasClass("icon-thumbs-up")) {
-				// ajaxTop(tr.data("id"));
-				ajaxSetBoardTop(tr.data("boardNumber"));
-			// } else if($(e.target).hasClass("icon-hand-up")){
-			// 	ajaxUp(tr.data("id"));
-			// } else if($(e.target).hasClass("icon-remove")) {
-			// 	if(confirm('是否删除本订单？')){
-			// 		ajaxDelete(tr.data("id"));
-			// 	}	
+				ajaxTop(tr.data("id"));
+			} else if($(e.target).hasClass("icon-hand-up")){
+				ajaxUp(tr.data("id"));
+			} else if($(e.target).hasClass("icon-remove")) {
+				if(confirm('是否删除本订单？')){
+					ajaxDelete(tr.data("id"));
+				}	
 			} else if($(e.target).hasClass("icon-edit")) {
 				emptyEditModal();
 				carSeries = tr.data("series");
@@ -171,10 +170,10 @@ $("document").ready(function() {
 				$("#editModal").data("id", tr.data("id"));
 
 				$("#editModal").modal("show");
-			// } else if($(e.target).hasClass("icon-resize-full")){
-			// 	emptySplitModal();
-			// 	$("#splitModal").data("id",tr.data("id"));
-			// 	$("#splitModal").modal("show");
+			} else if($(e.target).hasClass("icon-resize-full")){
+				emptySplitModal();
+				$("#splitModal").data("id",tr.data("id"));
+				$("#splitModal").modal("show");
 			} else if($(e.target).hasClass("icon-tags")){
 				if($(e.target).parent().attr("disabled") != "disabled"){
 					emptyManualModal();
@@ -187,10 +186,6 @@ $("document").ready(function() {
 					$("#manualModal .modal-header h4").html("手工配单" + tr.data("orderNumber") + "-" + tr.data("distributorName"));
 					$("#manualModal").modal("show");
 				}
-			} else if($(e.target).attr("action") == "activate"){
-				ajaxActivateBoard(tr.data("boardNumber"));
-			} else if($(e.target).attr("action") == "frozen"){
-				ajaxFrozenBoard(tr.data("boardNumber"));
 			}
 		}
 	})
@@ -220,7 +215,9 @@ $("document").ready(function() {
 
 	$("#btnEditConfirm").click(function() {
 		ajaxEdit();
+		ajaxQuery();
 		$("#editModal").modal("hide");
+		emptyEditModal();
 	})
 
 	$("#manualSearch").click(function() {
@@ -395,6 +392,7 @@ $("document").ready(function() {
 			if(chosen){
 				orderArray.push($(tr).data());
 			}
+			console.log(orderArray);
 		})
 
 		var  orderObj ={};
@@ -505,6 +503,7 @@ $("document").ready(function() {
 			$(tr).data("carrier", "");
 			chosen = ($(tr).find("input").filter(".choose").attr("checked") === "checked");
 			
+			console.log(chosen);
 			if(chosen){
 				orderArray.push($(tr).data());
 			}
@@ -578,11 +577,10 @@ $("document").ready(function() {
 		orderNumber = $.trim($("#orderNumber").val());
 		boardNumber = $.trim($("#boardNumber").val());
 		distributor = $.trim($("#distributor").val());
-		$("#tableResult>tbody").html("");
 		$.ajax({
 			type: "get",
 			dataType: "json",
-			url: QUERY_BOARD_ORDERS,
+			url: ORDER_QUERY,
 			data: {
 				"standbyDate": $("#standbyDate").val(),
 				"orderNumber": orderNumber,
@@ -590,116 +588,112 @@ $("document").ready(function() {
 				"distributor": distributor,
 				"series" : $("#selectSeries").val(),
 		    	"status" : getStatusChecked(),
-				// "orderBy": 'priority,lane_id,`status`',
-				"orderBy": 'priority,board_number,lane_id,`status`',
+				"orderBy": 'priority,lane_id,`status`',
 			},
 			success: function(response) {
 				if(response.success) {
-					var boards = response.data;
-					$.each(boards, function (index, value) {
-						var num = value.orders.length;
-		    			var tmp = $("<tbody />");
+					$("#tableResult>tbody").html("");
+					$.each(response.data, function (index, value) {
+						var tr = $("<tr />");
+						var thumbTd = $("<td />");
 
-		    			for(var i=0; i<num; i++){
-		    				tr = $("<tr />").appendTo(tmp);
-		    				switch(value.boardStatus){
-			    				case "0" :
-			    					tr.addClass("info");
-			    					break;
-		    					case "1" :
-			    					break;
-			    				case "2" :
-			    					tr.addClass("success");
-			    					break;
-			    				default: 
-			    					statusA = "";
-			    			}
-		    			};
-
-
-		    			$.each(value.orders, function (index, order) {
-		    				tr = tmp.children("tr:eq("+ index +")");
-		    				editTd = $("<td />");
-		    				editTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+						if(index !==0 && !(orderNumber != "" || distributor != "")){
+							// if(orderNumber != "" || distributor != ""){
+							// 	thumbTd.html('<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>&nbsp;<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="分拆"><i class="icon-resize-full"></i></a>').appendTo(tr);
+							// } else {
+								thumbTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>'
+									+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+									+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>'
+									+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="调高一位"><i class="icon-hand-up"></i></a>'
+									+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
+							// }
+						} else {
+							thumbTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-remove"></i></a>'
+								+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+								+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="置顶"><i class="icon-thumbs-up"></i></a>'
 								+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
-							editTd.appendTo(tr);
-							laneName = order.lane_name == "" ? "-" : order.lane_name
-		    				$("<td />").html(laneName).appendTo(tr);
+							thumbTd.appendTo(tr);
+						}
 
-		    				$("<td />").html(order.order_number).appendTo(tr);
-		    				$("<td />").html(order.distributor_name).appendTo(tr);
-		    				if(order.series == '6B'){
-			    				$("<td />").html('思锐').appendTo(tr);
-		    				} else {
-			    				$("<td />").html(order.series).appendTo(tr);
-		    				};
-		    				$("<td />").html(order.car_type_config + "/" + order.cold).appendTo(tr);
-		    				$("<td />").html(order.color).appendTo(tr);
-		    				$("<td />").html(order.amount).appendTo(tr);
-		    				$("<td />").html(order.hold).appendTo(tr);
-		    				$("<td />").html(order.count).appendTo(tr);
+						$("<td />").html(value.priority).appendTo(tr);
 
+						if (value.status == "1") {
+							$("<td />").html("激活").appendTo(tr);
+						} else if(value.status == "2") {
+							$("<td />").html("关闭").appendTo(tr);
+						} else {
+							$("<td />").html("冻结").appendTo(tr);
+						}
 
-							countIcon = order.to_count == "1" ? "<i class='icon-pushpin'></i>" : "";
-		    				if(order.short < 0){
-		    					$(tr).removeClass('info warning success');
-		    					$(tr).addClass('warning');
-		    					$("<td />").html(countIcon + order.short).addClass("text-error alignCenter").appendTo(tr);
-	    					} else {
-	    						$("<td />").addClass("alignCenter").html(countIcon).appendTo(tr);
-	    					}
+						$("<td />").html(value.board_number).appendTo(tr);
+						if(value.lane_name == ""){
+							$("<td />").html("-").appendTo(tr);
+						} else {
+							$("<td />").html(value.lane_name).appendTo(tr);
+						}
 
-	    					tr.data("id", order.id);
-							tr.data("orderNumber", order.order_number);
-							tr.data("standbyDate", order.standby_date);
-							tr.data("priority", order.priority);
-							tr.data("status", order.status);
-							tr.data("amount", order.amount);
-							tr.data("hold", order.hold);
-							tr.data("count", order.count);
-							tr.data("series", order.series);
-							tr.data("carType", order.car_type);
-							tr.data("color", order.color);
-							tr.data("coldResistant", order.cold_resistant);
-							tr.data("orderConfigId", order.order_config_id);
-							tr.data("laneId", order.lane_id);
-							tr.data("distributorName", order.distributor_name);
-							tr.data("distributorCode", order.distributor_code);
-							tr.data("carrier", order.carrier);
-							tr.data("remark", order.remark);
-							tr.data("boardNumber", order.board_number);
-							tr.data("toCount", order.to_count);
-							// tr.data("orderNature", order.order_nature);
-							// tr.data("country", order.country);
-							// tr.data("city", order.city);
-							// tr.data("sellCarType", order.sell_color);
-							// tr.data("configDescription", order.config_description);
-		    			})
-						var firstTr = tmp.children("tr:eq(0)");
-		    			firstTr.addClass("thickBorder");
-		    			boardTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardNumber).prependTo(firstTr);
-		    			switch(value.boardStatus){
-		    				case "0" :
-		    					statusA = "<a class='btn btn-link' rel='tooltip' data-toggle='tooltip' data-placement='top' title='激活此板' action='activate'>激活</a>";
-		    					break;
-	    					case "1" :
-		    					statusA = "<a class='btn btn-link' rel='tooltip' data-toggle='tooltip' data-placement='top' title='冻结此板' action='frozen'>冻结</a>";
-		    					break;
-		    				case "2" :
-		    					statusA = "已关闭";
-		    					break;
-		    				default: 
-		    					statusA = "";
+						$("<td />").html(value.order_number).appendTo(tr);
+						$("<td />").html(value.distributor_name).appendTo(tr);
+						if(value.series === '6B'){
+							$("<td />").html('思锐').appendTo(tr);
+						}else{
+							$("<td />").html(value.series).appendTo(tr);
+						}
+						$("<td />").html(value.car_type_config).appendTo(tr);
+						
+						if (value.cold_resistant == "1") {
+		    				$("<td />").html("耐寒").appendTo(tr);
+		    			} else {
+		    				$("<td />").html("非耐寒").appendTo(tr);
 		    			}
-		    			if(value.boardShort <0 && value.boardStatus==0) statusA="库存不足";
-		    			statusTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(statusA).prependTo(firstTr);
-		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardPriority).prependTo(firstTr);
-		    			reorderA = value.boardPriority != 0 ? "<a class='btn btn-link' rel='tooltip' data-toggle='tooltip' data-placement='top' title='置顶此板'><i class='icon-thumbs-up'></i></a>" : "";
-		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(reorderA).prependTo(firstTr);
+						$("<td />").html(value.color).appendTo(tr);
+						$("<td />").html(value.amount).appendTo(tr);
+						$("<td />").html(value.hold).appendTo(tr);
+						$("<td />").html(value.count).appendTo(tr);
+						if(value.to_count == "1"){
+							$("<td />").html("<i class='icon-pushpin'></i>").appendTo(tr);
+						} else {
+							$("<td />").html("-").appendTo(tr);
+						}
 
-		    			$("#tableResult>tbody").append(tmp.children("tr"));
+						// $("<td />").html(value.remark).appendTo(tr);
+
+						if(value.amount == value.hold){
+							thumbTd.find("i").filter(".icon-tags").parent().attr("disabled", "disabled");
+						}
+
+						tr.data("id", value.id);
+						tr.data("orderNumber", value.order_number);
+						tr.data("standbyDate", value.standby_date);
+						tr.data("priority", value.priority);
+						tr.data("status", value.status);
+						tr.data("amount", value.amount);
+						tr.data("hold", value.hold);
+						tr.data("count", value.count);
+						tr.data("series", value.series);
+						tr.data("carType", value.car_type);
+						tr.data("color", value.color);
+						tr.data("coldResistant", value.cold_resistant);
+						tr.data("orderConfigId", value.order_config_id);
+						tr.data("laneId", value.lane_id);
+						tr.data("orderNature", value.order_nature);
+						tr.data("distributorName", value.distributor_name);
+						tr.data("distributorCode", value.distributor_code);
+						tr.data("country", value.country);
+						tr.data("city", value.city);
+						tr.data("carrier", value.carrier);
+						tr.data("sellCarType", value.sell_color);
+						tr.data("configDescription", value.config_description);
+						tr.data("remark", value.remark);
+						tr.data("boardNumber", value.board_number);
+						tr.data("carrier", value.carrier);
+						tr.data("toCount", value.to_count);
+
+						$("#tableResult>tbody").append(tr);
+
+						$("#tableResult").show();
+
 					});
-					$("#tableResult").show();
 				} else {
 					alert(response.message);
 				}
@@ -769,7 +763,7 @@ $("document").ready(function() {
 			data: {
 				"boardNumber": $("#internalBoardNumber").val(),
 				"standbyDate": $("#internalStandbyDate").val(),
-				// "status": $("#internalStatus").val(),
+				"status": $("#internalStatus").val(),
 				"laneId": $("#internalLane").val(),
 				"distributorName": $("#internalDistributorName").val(),
 				"amount": $("#internalAmount").val(),
@@ -809,63 +803,6 @@ $("document").ready(function() {
 				}
 			},
 			error: function() {alertError();}
-		})
-	}
-
-	function ajaxSetBoardTop(boardNumber) {
-		$.ajax({
-			type: "get",
-			dataType: "json",
-			url: SET_BOARD_TOP,
-			data: {
-				"boardNumber": boardNumber,
-			},
-			success: function(response) {
-				if(response.success) {
-					ajaxQuery();
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(){alertError();}
-		})
-	}
-
-	function ajaxActivateBoard(boardNumber) {
-		$.ajax({
-			type: "get",
-			dataType: "json",
-			url: ACTIVATE_BOARD,
-			data: {
-				"boardNumber": boardNumber,
-			},
-			success: function(response) {
-				if(response.success) {
-					ajaxQuery();
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(){alertError();}
-		})
-	}
-
-	function ajaxFrozenBoard(boardNumber) {
-		$.ajax({
-			type: "get",
-			dataType: "json",
-			url: FROZEN_BOARD,
-			data: {
-				"boardNumber": boardNumber,
-			},
-			success: function(response) {
-				if(response.success) {
-					ajaxQuery();
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(){alertError();}
 		})
 	}
 

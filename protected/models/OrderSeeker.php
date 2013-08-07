@@ -184,7 +184,7 @@ class OrderSeeker
 			$condition .= " AND carrier LIKE '%$carrier'";
 		}
 		
-		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count, carrier FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
+		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count, carrier, order_nature FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
 			throw new Exception("查无订单");
@@ -260,7 +260,7 @@ class OrderSeeker
 				$matchCount = CarAR::model()->count($matchCondition, $values);
 				
 				$alreadyNeed = 0;
-				if($order['status'] = 1){
+				if($order['status'] == 1){
 					$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` =1 AND to_count=1 AND (priority<{$order['priority']} OR (priority={$order['priority']} AND id<{$order['id']})) AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']} AND id<>{$order['id']}";
 				} else {
 					$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` =1 AND to_count=1 AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']}";
@@ -280,12 +280,18 @@ class OrderSeeker
 					'boardAmount' => 0,
 					'boardHold' => 0,
 					'boardCount' => 0,
+					'boardPriority'=>$order['priority'],
+					'boardStatus'=>$order['status'],
+					'boardShort' =>0,
 					'orders' => array(),
 				);
 			}
 			$boards[$order['board_number']]['boardAmount'] += $order['amount'];
 			$boards[$order['board_number']]['boardHold'] += $order['hold'];
 			$boards[$order['board_number']]['boardCount'] += $order['count'];
+			if($order['short']<0) {
+				$boards[$order['board_number']]['boardShort'] += $order['short'];
+			}
 			$boards[$order['board_number']]['orders'][] = $order;
 		}
 		return $boards;

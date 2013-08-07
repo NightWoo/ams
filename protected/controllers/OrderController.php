@@ -16,6 +16,16 @@ class OrderController extends BmsBaseController
 		);
 	}
 
+	public function actionTest(){
+		$orderNumber = $this->validateStringVal('orderNumber', '');
+		try {
+			// $orders = OrderAR::model()->findAll('standby_date=? AND status=1 AND amount>count GROUP BY board_number ORDER BY priority ASC', array('2013-08-07'));
+			$this->renderJsonBms(true, 'OK', $orders);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionGetOriginalOrders(){
 		$orderNumber = $this->validateStringVal('orderNumber', '');
 		try {
@@ -231,16 +241,16 @@ class OrderController extends BmsBaseController
 				// 	$order->priority = $max->priority + 1;
 				// }
 			}
-			if($status == 1 ){
-				$samePriority = OrderAR::model()->find('standby_date=? AND status=1 AND priority=?', array($standbyDate, $order->priority));
-				if(!empty($samePriority) && $samePriority->id != $order->id) {
-					$max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
-					$order->priority = $max->priority + 1;
-				}
+			// if($status == 1 ){
+			// 	$samePriority = OrderAR::model()->find('standby_date=? AND status=1 AND priority=?', array($standbyDate, $order->priority));
+			// 	if(!empty($samePriority) && $samePriority->id != $order->id) {
+			// 		$max = OrderAR::model()->find('standby_date=? AND status=1 ORDER BY priority DESC', array($standbyDate));
+			// 		$order->priority = $max->priority + 1;
+			// 	}
 
-			}else{
-				$order->priority = 0;
-			}
+			// }else{
+			// 	$order->priority = 0;
+			// }
 
 			if(empty($laneId)) $order->priority = 0;
 
@@ -727,6 +737,48 @@ class OrderController extends BmsBaseController
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	
+		}
+	}
+
+	public function actionActivateBoard() {
+		$boardNumber = $this->validateStringVal("boardNumber", "");
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$order = new Order();
+			$data = $order->activateBoard($boardNumber);
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionFrozenBoard() {
+		$boardNumber = $this->validateStringVal("boardNumber", "");
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$order = new Order();
+			$data = $order->frozenBoard($boardNumber);
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
+	public function actionSetBoardTop() {
+		$boardNumber = $this->validateStringVal("boardNumber", "");
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$order = new Order();
+			$data = $order->setBoardTop($boardNumber);
+			$transaction->commit();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage());
 		}
 	}
 }

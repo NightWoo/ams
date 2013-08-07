@@ -1,9 +1,0 @@
-<html>
-	<body>
-		<?php
-			//phpinfo();
-			require_once("head.php");
-		?>
-		4455555
-	</body>
-</html>

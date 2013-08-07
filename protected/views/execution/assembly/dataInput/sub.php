@@ -124,22 +124,22 @@
             </div>
        	</div><!-- offhead -->
 
-	    <div class="printable" style="width:840pt;height:570pt; padding-top:10pt; font-size:18pt">
+	    <div class="printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:18pt">
             <table class="" style="width:100%; margin-top:10pt;">
                 <tr>
                     <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
-                    <td width="50%" class="printType" style="font-size:18pt"></td>
-                    <td style="text-align:right; font-size:18pt; width=10%; padding-right:10pt" class="printSeries"></td>
+                    <td width="50%" class="printType" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt" class="printSeries"></td>
                 </tr>
                 <tr>
-                    <td class="printConfig" style="font-size:18pt"></td>
-                    <td style="text-align:right; font-size:18pt; padding-right:10pt" class="printSerialNumber"></td>
+                    <td class="printConfig" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; padding-right:10pt" class="printSerialNumber"></td>
                 </tr>
             </table>
             <img src="" width="" height="" class="printFrontImage" style="display: block; margin:0 auto">
             <table style="width:100%;margin-top:10pt;">
                 <tr>
-                    <td class="printRemark" style="font-size:18pt; padding-left:10pt"></td>
+                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
                     <!-- <td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">1/2</td> -->
                 </tr>
             </table>

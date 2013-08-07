@@ -148,23 +148,23 @@
 	                            <!-- <th>#</th> -->
 	                            <th id="thReorder">调整</th>
 	                            <th id="thPriority">优先</th>
-	                            <th id="thStatus">操作</th>
+	                            <th id="thStatus">状态</th>
 	                            <th id="thBoard">备板编号</th>
-	                            <th id="thEdit"></th>
 	                            <th id="thLane">车道</th>
 	                            <th id="thOrderNumber">订单号</th>
 	                            <th id="thDistributor">经销商</th>
 	                            <th id="thSeries">车系</th>
-	                            <th id="thCarType">车型/配置/耐寒性</th>
+	                            <th id="thCarType">车型/配置</th>
 	                            <!-- <th id="thConfig">配置</th> -->
-	                            <!-- <th id="thColdResistant">耐寒性</th> -->
+	                            <th id="thColdResistant">耐寒性</th>
 	                            <th id="thColor">颜色</th>
 	                            <th id="thAmount">数量</th>
 	                            <th id="thHold">已备</th>
 	                            <th id="thCount">出库</th>
-	                            <th id="thToCount">统计</th>
+	                            <th id="thToCount"></th>
 	                            <!-- <th id="thOrderType">订单类型</th> -->
 	                            <!-- <th id="thRemark">备注</th> -->
+	                            <!-- <th id="thEdit"></th> -->
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -357,8 +357,8 @@
                 <label class="control-label" for="editStatus">&nbsp;状态</label>
                 <div class="controls">
                 	<select id="editStatus" class="input-small">
-                		<option value="0" disabled>冻结</option>
-                		<option value="1" disabled>激活</option>
+                		<option value="0">冻结</option>
+                		<option value="1">激活</option>
                 		<option value="2">关闭</option>
                 	</select>
                 </div>
@@ -471,7 +471,7 @@
                     <input id="internalStandbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'editStandbyDate',dateFmt:'yyyy-MM-dd'});"/>
                 </div>
             </div>
-            <!-- <div class="control-group">
+            <div class="control-group">
                 <label class="control-label" for="internalStatus">&nbsp;状态</label>
                 <div class="controls">
                 	<select id="internalStatus" class="input-small">
@@ -480,7 +480,7 @@
                 		<option value="2">关闭</option>
                 	</select>
                 </div>
-            </div> -->
+            </div>
             <div class="control-group">
                 <label class="control-label" for="internalLane">&nbsp;车道</label>
                 <div class="controls">

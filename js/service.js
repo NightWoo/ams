@@ -5,9 +5,9 @@ var SERVER_ADDRESS = "";
 var GET_CAR = "/bms/car/getCar";
 
 //PBS校验      需返回车系、颜色、车身、VIN号
-var PSB_VALIDATE = "/bms/car/validatePbs";
+var PBS_VALIDATE = "/bms/car/validatePbs";
 //PBS进入彩身车库
-var PSB_ENTER_WORKSHOP = "/bms/execution/enterPbs";
+var PBS_ENTER_WORKSHOP = "/bms/execution/enterPbs";
 
 //T0  获取计划，以显示
 var T0_GET_PLAN = "/bms/plan/search";
@@ -274,6 +274,9 @@ var ORDER_TOP_PRI = "/bms/order/top";
 var ORDER_INC_PRI = "/bms/order/inc";
 var ORDER_DELETE = "/bms/order/delete";
 var ORDER_SPLIT = "/bms/order/split";
+var SET_BOARD_TOP = "/bms/order/setBoardTop";
+var ACTIVATE_BOARD = "/bms/order/activateBoard";
+var FROZEN_BOARD = "/bms/order/frozenBoard";
 var ORDER_GET_CAR_STANDBY = "/bms/order/getCarStandby";
 var ORDER_HOLD_RELEASE = "/bms/order/holdRelease";
 var FILL_ORDER_CONFIG = "/bms/order/getOrderConfig";

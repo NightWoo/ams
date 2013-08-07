@@ -34,9 +34,17 @@ class CarController extends BmsBaseController
 	
 	public function actionValidatePbs() {
         $vin = $this->validateStringVal('vin', '');
+        $line = $this->validateStringVal('line', 'I');
         try{
-            //$data = VinManager::importCar($vin);
-			$data = VinManager::getCar($vin);			//use webservice to get car data, added by wujun
+            $car = Car::create($vin);
+
+            //“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
+            //
+            $curDate = DateUtil::getCurDate();
+            $data = $car->matchPlan($curDate,$line);
+            if($data['adapt_plan'] === false) {
+                throw new Exception($vin . '无可匹配的生产计划');
+            }
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());

@@ -87,14 +87,22 @@ class ExecutionController extends BmsBaseController
 
 	//进入彩车身库
 	public function actionEnterPbs() {
-		try{
-			$vin = $this->validateStringVal('vin', '');
+        $vin = $this->validateStringVal('vin', '');
+        $date = $this->validateStringVal('date', date('Y-m-d'));
+        $planId = $this->validateIntVal('planId', 0);
+        $line = $this->validateStringVal('line', 'I');
+        $transaction = Yii::app()->db->beginTransaction();
+        try{
 			$car = Car::create($vin);
-            $car->checkAlreadyOut();
-            $car->checkAlreadyWarehouse();
-        	$car->enterNode('PBS', 0 , true);
+            $car->checkAlreadyOnline();
+        	$car->enterNode('PBS');
+            if($car->car->series == "6B" || $car->car->series == "M6"){
+                $car->addToPlan($date, $planId);
+            }
+            $transaction->commit();
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {
+            $transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
@@ -118,7 +126,9 @@ class ExecutionController extends BmsBaseController
             // $car->enterNode('T0', 0 ,true);
 			$car->enterNode($currentNode, 0 ,true);
             $car->assemblyTime();
-            $car->addToPlan($date, $planId);
+            if(empty($car->car->plan_id)) {
+                $car->addToPlan($date, $planId);
+            }
 			$car->generateSerialNumber($line);
             $serial_number = $car->car->serial_number;      //added by wujun
             $car->addVinLaserQueue();
