@@ -35,7 +35,7 @@ class LaneController extends BmsBaseController
 		try{
 			$laneId = $this->validateIntVal("laneId", 0);
 
-			$orders = OrderAR::model()->findAll("lane_status=1 AND lane_id=?", array($laneId));
+			$orders = OrderAR::model()->findAll("lane_status=1 AND lane_id=? AND out_finish_time>'0000-00-00 00:00:00'", array($laneId));
 			if(!empty($orders)){
 				foreach($orders as $order){
 					$order->lane_status = 2;

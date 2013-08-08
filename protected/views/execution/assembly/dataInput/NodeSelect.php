@@ -115,6 +115,10 @@
 						<div class="node-rgl node-VQ1_2" onclick="window.location.href='/bms/execution/child?view=VQ1&node=VQ1_2'">
 							VQ1
 						</div>
+						<div class="node-rect node-BJK" onclick="window.location.href='#'">备件库</div>
+						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S1&view=SPSPoint&node=零部件分拣点S1&point=S1'">S1</div>
+						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S2&view=SPSPoint&node=零部件分拣点S2&point=S2'">S2</div>
+						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S3&view=SPSPoint&node=零部件分拣点S3&point=S3'">S3</div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->

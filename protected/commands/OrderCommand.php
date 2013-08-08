@@ -42,7 +42,7 @@ class OrderCommand extends CConsoleCommand
 		}
 
 	}
-
+ 
 	private function getCurDateOrders() {
 		$curDate = DateUtil::getCurDate();
 		$orders = OrderAR::model()->findAll('standby_date=? ORDER BY priority ASC', array($curDate));
@@ -57,7 +57,7 @@ class OrderCommand extends CConsoleCommand
 	}
 
 	private function findSameBoardOrders($boardNumber){
-		$orders = OrderAR::model()->findAll('board_number=? AND amount=count', array($boardNumber));
+		$orders = OrderAR::model()->findAll('board_number=?', array($boardNumber));
 		return $orders;
 	}
 }

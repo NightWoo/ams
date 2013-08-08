@@ -141,6 +141,8 @@
 	font-size: 11px;
 	cursor:pointer;
 	border-radius: 2px;
+	/*background: #9966FF;*/
+	/*opacity: 0.5;*/
 }  
 .node-rect:hover{
 	background: #9966FF;
@@ -212,4 +214,27 @@
 .node-VQ1_2 {
 	left: 457px;
     top: -878px;
+}
+
+.node-BJK {
+	left: 451px;
+    top: -877px;
+}
+
+.node-S1 {
+	left: 105px;
+    top: -831px;
+    width: 36px;
+}
+
+.node-S2 {
+	left: 190px;
+    top: -849px;
+    width: 36px;
+}
+
+.node-S3 {
+	left: 369px;
+    top: -867px;
+    width: 36px;
 }

@@ -334,14 +334,18 @@ class OrderController extends BmsBaseController
 		try {
 			$order = OrderAR::model()->findByPk($id);
 			if(!empty($order)) {
-				if($order->status == 1){
-					$lowers = OrderAR::model()->findAll('standby_date=? AND priority>?', array($order->standby_date, $order->priority));
-					foreach($lowers as $lower) {
-						$lower->priority -= 1;
-						$lower->save();
-					}
+				// if($order->status == 1){
+				// 	$lowers = OrderAR::model()->findAll('standby_date=? AND priority>?', array($order->standby_date, $order->priority));
+				// 	foreach($lowers as $lower) {
+				// 		$lower->priority -= 1;
+				// 		$lower->save();
+				// 	}
+				// }
+				if($order->hold>0){
+					throw new Exception("此单已备车，无法删除！");
+				}{
+					$order->delete();
 				}
-				$order->delete();
 			}
 			$this->renderJsonBms(true, 'OK', '');
 		} catch(Exception $e) {

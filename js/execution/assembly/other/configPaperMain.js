@@ -57,8 +57,8 @@ $("document").ready(function() {
 					$(".printBarCode").attr("src", response.data.vinBarCode);
 					$(".printFrontImage").attr("src", response.data.frontImage);
 					$(".printBackImage").attr("src", response.data.backImage);
-					// $(".printFront2Image").attr("src", response.data.front2Image);
-					// $(".printBack2Image").attr("src", response.data.back2Image);
+					$(".printFront2Image").attr("src", response.data.front2Image);
+					$(".printBack2Image").attr("src", response.data.back2Image);
 					$(".printType").html(response.data.type);
 					$(".printSeries").html(response.data.series);
 					if(response.data.coldResistant == "1"){
@@ -71,8 +71,16 @@ $("document").ready(function() {
 					if (response.data.frontImage == "" || response.data.backImage == "") {
 						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
-						console.log($(".configPaper"))
 						$(".configPaper").addClass("toPrint");
+						if(response.data.backImage == ""){
+								$(".configPaper[page=2]").removeClass("toPrint");
+							}
+							if(response.data.front2Image == ""){
+								$(".configPaper[page=3]").removeClass("toPrint");
+							}
+							if(response.data.back2Image == ""){
+								$(".configPaper[page=4]").removeClass("toPrint");
+							}
 						setTimeout(function (){window.print();},1500);
 						fadeMessageAlert(response.message,"alert-success");
 					}

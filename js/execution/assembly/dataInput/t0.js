@@ -123,7 +123,7 @@ $("document").ready(function() {
 			    	toggleVinHint(false);
 			    	//clear before and render car info data,include series,type and color
 				 	var car = response.data;
-				 	$("#infoSeries").html(car.series);
+				 	$("#infoSeries").html(byd.SeriesName[car.series]);
 				 	$("#infoType").html(car.type);
 				 	$("#infoColor").html(car.color);
 				 	$("#infoStatus").html(car.status);
@@ -169,8 +169,8 @@ $("document").ready(function() {
 					$(".printBarCode").attr("src", response.data.vinBarCode);
 					$(".printFrontImage").attr("src", response.data.frontImage);
 					$(".printBackImage").attr("src", response.data.backImage);
-					// $(".printFront2Image").attr("src", response.data.front2Image);
-					// $(".printBack2Image").attr("src", response.data.back2Image);
+					$(".printFront2Image").attr("src", response.data.front2Image);
+					$(".printBack2Image").attr("src", response.data.back2Image);
 					$(".printType").html(response.data.type);
 					$(".printModel").html(response.data.carModel);
 					$(".printSeries").html(response.data.series);
@@ -183,10 +183,19 @@ $("document").ready(function() {
 					$(".printSerialNumber").html(response.data.serialNumber);
 					$(".printRemark").html("备注：" + response.data.remark);
 					if($("#currentNode").val() == 'T0'){
-						if (response.data.frontImage == "" || response.data.backImage == "") {
+						if (response.data.frontImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
 							$(".configPaper").addClass("toPrint");
+							if(response.data.backImage == ""){
+								$(".configPaper[page=2]").removeClass("toPrint");
+							}
+							if(response.data.front2Image == ""){
+								$(".configPaper[page=3]").removeClass("toPrint");
+							}
+							if(response.data.back2Image == ""){
+								$(".configPaper[page=4]").removeClass("toPrint");
+							}
 							setTimeout(function (){window.print();},1500);
 							fadeMessageAlert(response.message,"alert-success");
 						}

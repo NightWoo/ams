@@ -699,6 +699,53 @@ class CarController extends BmsBaseController
         }
 	}
 
+    public function actionValidateSpsQueue() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $point = $this->validateStringVal('point', 'S1');
+            
+            $seeker = new SpsSeeker($point);
+            $seeker->validate($vin);
+
+            $data = VinManager::getCar($vin);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionQuerySpsQueue() {
+        $point = $this->validateStringVal('point', 'S1');
+        $stime = $this->validateStringVal('stime');
+        $etime = $this->validateStringVal('etime');
+        $status = $this->validateIntVal('status', 0);
+        $vin = $this->validateStringVal('vin');
+        $top  =$this->validateIntVal("top", 0);
+        $sortType  =$this->validateStringVal("sortType", "ASC");
+        
+        $seeker = new SpsSeeker($point);
+        $datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
+        $count = $seeker->countQueue($status, $stime, $etime);
+        $ret = array("datas"=>$datas, "countAll"=>$count);
+
+        $this->renderJsonBms(true, 'OK', $ret);
+    }
+
+    public function actionPrintSpsPaper() {
+        try{
+            $vin = $this->validateStringVal('vin', '');
+            $point = $this->validateStringVal('point', 'S1');
+            $car = Car::create($vin);
+            $datas = $car->generateSpsData($point);
+            
+            $this->renderJsonBms(true, 'OK', $datas);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+
+    }
+
     public function actionQueryBalanceDetail() {
         try{
             $state = $this->validateStringVal('state', 'WH');

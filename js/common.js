@@ -109,7 +109,6 @@ $(function () {
 			} else {
 				endClock = self.byd.DateUtil.currentDate();
 			}
-			console.log(self);
 	        endClock += " 07:59";
 
 	        return(endClock);

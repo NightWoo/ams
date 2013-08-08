@@ -8,7 +8,7 @@
 				<ul class="nav">
 					<!-- <li ><a href="/bms/site">首页</a></li> -->
 					<li class="dropdown" id="headManagementSystemLi">
-						<a href="/bms/ManagementSystem/home?chapter=0" class="dropdown-toggle"><i class="icon-sitemap"></i>体系</a>
+						<a href="/bms/ManagementSystem/home?chapter=0" class="dropdown-toggle"><i class="icon-sitemap"></i>&nbsp;体系</a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="">体系概况</a></li>
 							<li><a href="zz_nodeselect.php">管理考核与评价</a></li>
@@ -16,7 +16,7 @@
 						</ul> -->
 					</li>
 					<li class="dropdown" id="headAssemblyLi">
-						<a href="/bms/execution" class="dropdown-toggle"><i class="icon-dashboard"></i>生产</a>
+						<a href="/bms/execution" class="dropdown-toggle"><i class="icon-dashboard"></i>&nbsp;生产</a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="/bms/execution/home">总装</a></li>
 							<li><a href="#">涂装</a></li>
@@ -25,7 +25,7 @@
 						</ul> -->
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle"><i class="icon-map-marker"></i>现场<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle"><i class="icon-map-marker"></i>&nbsp;现场<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">现场管理1</a></li>
 							<li><a href="#">现场管理2</a></li>
@@ -33,10 +33,10 @@
 						</ul> -->
 					</li>
 					<li class="dropdown" id="headPlanLi">
-						<a href="/bms/execution/configPlan"><i class="icon-tasks"></i>计划<!-- <b class="caret"></b> --></a>
+						<a href="/bms/execution/configPlan"><i class="icon-tasks"></i>&nbsp;计划<!-- <b class="caret"></b> --></a>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle"><i class="icon-thumbs-up"></i>质量<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle"><i class="icon-thumbs-up"></i>&nbsp;质量<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">质量工程</a></li>
 							<li><a href="#">IQS售后质量</a></li>
@@ -48,14 +48,14 @@
 						</ul> -->
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-money"></i>成本<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-money"></i>&nbsp;成本<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">成本管理1</a></li>
 							<li><a href="#">成本管理2</a></li>
 						</ul> -->
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-group"></i>人事<!-- <b class="caret"></b> --></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-group"></i>&nbsp;人事<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">人力资源管理</a></li>
 							<li><a href="#">文件记录管理</a></li>
@@ -64,7 +64,7 @@
 						</ul> -->
 					</li>
 					<li id="headGeneralInformationLi">
-						<a href="/bms/generalInformation/faultMaintain"><i class="icon-list-alt"></i>数据库<!-- <b class="caret"></b> --></a>
+						<a href="/bms/generalInformation/faultMaintain"><i class="icon-list-alt"></i>&nbsp;数据库<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">情报中心</a></li>
 							<li><a href="/bms/generalInformation/generalIndex">基础数据库</a></li>

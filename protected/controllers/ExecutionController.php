@@ -76,13 +76,14 @@ class ExecutionController extends BmsBaseController
         $nodeName = $this->validateStringVal('node','NodeSelect');
 		$line = $this->validateStringVal('line','I');
 		$view = $this->validateStringVal('view','NodeSelect');
-		$type = $this->validateStringVal('type','subInstrument');
+        $type = $this->validateStringVal('type','subInstrument');
+		$point = $this->validateStringVal('point','S1');
 		if(in_array($nodeName, self::$NODE_MAP)) {
 			$view = self::$MERGED_VIEW;
 		}
 		
 		$node = Node::createByName($nodeName); 
-		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line));	
+		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));	
 	}
 
 	//进入彩车身库
@@ -98,7 +99,10 @@ class ExecutionController extends BmsBaseController
         	$car->enterNode('PBS');
             if($car->car->series == "6B" || $car->car->series == "M6"){
                 $car->addToPlan($date, $planId);
+                $spsPoints = array('S1','S2','S3');
+                $car->addSpsQueue($spsPoints);
             }
+
             $transaction->commit();
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {

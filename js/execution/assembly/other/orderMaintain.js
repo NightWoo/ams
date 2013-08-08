@@ -130,10 +130,10 @@ $("document").ready(function() {
 				ajaxSetBoardTop(tr.data("boardNumber"));
 			// } else if($(e.target).hasClass("icon-hand-up")){
 			// 	ajaxUp(tr.data("id"));
-			// } else if($(e.target).hasClass("icon-remove")) {
-			// 	if(confirm('是否删除本订单？')){
-			// 		ajaxDelete(tr.data("id"));
-			// 	}	
+			} else if($(e.target).hasClass("icon-trash")) {
+				if(confirm('是否删除本订单？')){
+					ajaxDelete(tr.data("id"));
+				}	
 			} else if($(e.target).hasClass("icon-edit")) {
 				emptyEditModal();
 				carSeries = tr.data("series");
@@ -620,7 +620,8 @@ $("document").ready(function() {
 		    			$.each(value.orders, function (index, order) {
 		    				tr = tmp.children("tr:eq("+ index +")");
 		    				editTd = $("<td />");
-		    				editTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+		    				editTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-trash"></i></a>'
+		    					+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
 								+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
 							editTd.appendTo(tr);
 							laneName = order.lane_name == "" ? "-" : order.lane_name

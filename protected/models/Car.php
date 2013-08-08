@@ -866,6 +866,25 @@ class Car
 		}
 	}
 
+	public function addSpsQueue($spsPoints = array('S1','S2','S3'), $line="I") {
+		foreach($spsPoints as $point) {
+			$spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
+
+			if(empty($spsQueueOne)) {
+				$spsQueueOne = new SpsQueueAR();
+
+				$spsQueueOne->line = $line;
+				$spsQueueOne->car_id = $this->car->id;
+				$spsQueueOne->series = $this->car->series;
+				$spsQueueOne->vin = $this->car->vin;
+				$spsQueueOne->point = $point;
+				$spsQueueOne->status = 0;
+				$spsQueueOne->queue_time = date('Y-m-d H:i:s'); 
+				$spsQueueOne->save();
+			}
+		}
+	}
+
 	public function addVinLaserQueue() {
 		$queue = VinLaserQueueAR::model()->find('vin=?', array($this->car->vin));
 
@@ -932,6 +951,59 @@ class Car
 		if(!empty($subConfig)) {
 			$subConfig->status = 1;
 			$subConfig->save();
+		}
+
+		return $ret;
+	}
+
+	public function generateSpsData($point='S1', $force = false) {
+		$spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
+		if(empty($spsQueueOne)) {//suit for those cars has passed t0 
+			throw new Exception("该车不在列队中");
+		}
+
+		if(!$force) {
+			if($spsQueueOne->status == 2) {//forbid print
+				$info = array(1=>"已经",2=>"禁止");
+				throw new Exception("该车{$info[$spsQueueOne->status]}已打印 {$point} 分拣单");
+			}
+		}		
+
+        $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+		$config = CarConfigAR::model()->findByPk($this->car->config_id);
+
+		// $images = array();
+		// if(!empty($config)) {
+		// 	$path = "/home/work/bms/web/bms/configImage/" . $config->id;
+		// 	$name = $type . '.jpg';
+		// 	$fileName = $path . '/' . $name;
+		// 	$image = '';
+		// 	if(file_exists($fileName)) {
+		// 		$image = '/bms/configImage/' .$config->id . '/' . $name;
+		// 	}
+		// }
+
+        $ret = array(
+            'vinBarCode' => "/bms/" .$vinBarCodePath,
+            'type' => $this->car->type,
+            'serialNumber' => $this->car->serial_number,
+			'series' => $this->car->series,
+            'date' => date('Y-m-d'),
+            'color' => $this->car->color,
+			'config' => $config->name,
+            'remark'  => $this->car->remark,
+            'vinCode' => $this->car->vin,
+            'coldResistant' => $this->car->cold_resistant,
+			// 'image' => $image,
+		);
+		
+
+		if(!empty($spsQueueOne)) {
+			$spsQueueOne->status = 1;
+			$spsQueueOne->check_time = date("YmdHis");
+			$spsQueueOne->save();
 		}
 
 		return $ret;

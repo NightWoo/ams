@@ -77,7 +77,7 @@ $("document").ready(function() {
 			    	toggleVinHint(false);
 			    	//render car info data,include series,type and color
 		    		var car = response.data;
-				 	$("#infoSeries").html(car.series);
+				 	$("#infoSeries").html(byd.SeriesName[car.series]);
 				 	$("#infoType").html(car.type);
 				 	$("#infoColor").html(car.color);
 				 	$("#infoStatus").html(car.status);
