@@ -341,7 +341,7 @@ class OrderController extends BmsBaseController
 				// 		$lower->save();
 				// 	}
 				// }
-				if($order->hold>0){
+				if($order->hold>0 || $order->count>0){
 					throw new Exception("此单已备车，无法删除！");
 				}{
 					$order->delete();

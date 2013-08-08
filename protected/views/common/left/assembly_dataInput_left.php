@@ -3,7 +3,6 @@
 	<ul class="nav nav-list affix bs-docs-sidenav">
 		<li class="nav-header">数据录入</li>
 			<li id="leftNodeSelectLi"><a href="/bms/execution/index">录入节点</a></li>
-			<li id="leftPauseEditLi"><a href="/bms/execution/pauseEdit">停线编辑</a></li>
 			<li id="leftWarehousePrintLi"><a href="/bms/execution/warehousePrint">出库打印</a></li>
 			<li id="leftAccessoryListPrintLi"><a href="/bms/execution/accessoryListPrint">随车附件清单</a></li>
 			<!-- <li id="leftLaneManageLi"><a href="/bms/execution/outStandby">备车</a></li>
@@ -24,9 +23,9 @@
 			<!-- <li id="leftWarehouseReportLi"><a href="/bms/execution/report?type=WarehouseReport">成品库日报</a></li> -->
 			<!-- <li><a href="#">追溯零部件换件</a></li> -->
 		<li class="nav-header">异常操作</li>
-			<li id="leftCheckPaperLi"><a href="/bms/execution/checkPaper">检验跟单</a></li>
 			<li id="leftFaultDutyLi"><a href="/bms/execution/faultDutyEdit">故障责任编辑</a></li>
 			<li id="leftCarLabelAssemblyLi"><a href="/bms/execution/carLabelAssembly">车辆标签</a></li>
+			<!-- <li id="leftCheckPaperLi"><a href="/bms/execution/checkPaper">检验跟单</a></li> -->
 			<!-- <li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li> -->
 			<!-- <li id="leftPlanPauseLi"><a href="/bms/execution/planPause">计划停线</a></li> -->
 			<!-- <li><a href="#">操作手册.总装</a></li>    -->

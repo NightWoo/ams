@@ -32,6 +32,9 @@
 			<div id="bodyright" class="offset2"><!-- Main体 -->
                 <div>
                     <legend><?php echo $nodeDisplayName;?>
+                        <span class="pull-right">
+                            <a href="/bms/execution/checkPaper"><i class="icon-link"></i>&nbsp;检验跟单</a>
+                        </span>
                     </legend>
                 </div>
             			           

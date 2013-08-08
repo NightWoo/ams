@@ -2,14 +2,14 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>分装队列维护</title>
+        <title>SPS队列维护</title>
         <!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet">
         <link href="/bms/css/common.css" rel="stylesheet">
         <link href="/bms/css/flick/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
         <link href="/bms/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
         <!-- <link href="/bms/css/datetimepicker.css" rel="stylesheet"> -->
-		<link href="/bms/css/execution/assembly/other/subQueueMaintain.css" rel="stylesheet">
+		<link href="/bms/css/execution/assembly/other/SPSQueueMaintain.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/jquery-ui-1.10.3.custom.min.js"></script>
         <!-- <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.js"></script> -->
@@ -20,7 +20,7 @@
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
-        <script type="text/javascript" src="/bms/js/execution/assembly/other/subQueueMaintain.js"></script>
+        <script type="text/javascript" src="/bms/js/execution/assembly/other/SPSQueueMaintain.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
     </head>
 
@@ -38,7 +38,7 @@
             
             <div id="bodyright" class="offset2">
             <div>
-                <legend>分装列队维护
+                <legend>SPS列队维护
                 </legend>
             </div>
                 <div><!-- 主体 -->
@@ -56,11 +56,10 @@
                             </td>
                             <td>
                                 <!-- <label>分装</label> -->
-                                <select id="selectSub" class="select-medium">
-                                    <option value="subInstrument">仪表分装</option>
-                                    <option value="subEngine" selected>发动机分装</option>
-                                    <option value="subFrontAxle">前桥分装</option>
-                                    <option value="subRearAxle" disabled>后桥分装</option>
+                                <select id="selectPoint" class="select-medium">
+                                    <option value="S1" selected>S1</option>
+                                    <option value="S2">S2</option>
+                                    <option value="S3">S3</option>
                                 </select>
                             </td>
                             
@@ -91,7 +90,9 @@
                     <thead>
                         <tr class="active">
                             <th class="" style="width:60px">整车编号</th>
+                            <th class="" style="width:60px">列队状态</th>
                             <th class="" style="width:120px">列队时间</th>
+                            <th class="" style="width:120px">车辆状态</th>
                             <th class="" style="width:150px">VIN号</th>
                             <th class="" style="width:30px">车系</th>
                             <th class="" style="width:230px">车型/配置</th>
@@ -122,13 +123,13 @@
             <div class="control-group">
                 <label class="control-label" for="queueTime">排队时间</label>
                 <div class="controls">
-                    <input id="queueTime" type="text" class="input-large" placeholder="请输入排队时间..." onClick="WdatePicker({el:'queueTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
-                    <!-- <input id="queueTime" type="text" class="input-large datetimepicker" placeholder="请输入排队时间..."/> -->
+                    <input id="queueTime" type="text" class="input-large" placeholder="请输入列时间..." onClick="WdatePicker({el:'queueTime',dateFmt:'yyyy-MM-dd HH:mm:ss'});"/>
+                    <!-- <input id="queueTime" type="text" class="input-large datetimepicker" placeholder="请输入列队时间..."/> -->
                 </div>
             </div>
            
             <div class="control-group">
-                <label class="control-label" for="editStatus">打印状态</label>
+                <label class="control-label" for="editStatus">状态</label>
                 <div class="controls">
                     <select id="editStatus" name="" class="input-large">
                         <option value="">请选择</option>

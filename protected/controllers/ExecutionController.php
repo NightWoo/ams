@@ -1294,6 +1294,16 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionSpsQueueMaintain() {
+        try{
+            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            $this->render('assembly/other/SPSQueueMaintain');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     //added by wujun
     public function actionDataThrow() {
         try{

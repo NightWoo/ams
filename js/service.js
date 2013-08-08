@@ -320,6 +320,7 @@ var SUB_CONFIG_SAVE = "/bms/config/saveSub";
 var SPS_QUEUE_VALIDATE = "/bms/car/validateSpsQueue";
 var SPS_QUEUE_QUERY = "/bms/car/querySpsQueue";
 var SPS_QUEUE_SUBMIT = "/bms/car/printSpsPaper";
+var SPS_QUEUE_SAVE ="/bms/car/saveSpsQueue";
 
 var VALIDATE_DATA_THROW = "/bms/car/validateDataThrow";
 var ASSEMBLY_FINISH_DATA_THROW = "/bms/car/throwAssemblyFinish"

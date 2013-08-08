@@ -4,6 +4,7 @@ Yii::import('application.models.VinManager');
 Yii::import('application.models.SubConfigSeeker');
 Yii::import('application.models.AR.WarehouseAR');
 Yii::import('application.models.AR.CarConfigAR');
+Yii::import('application.models.AR.SpsQueueAR');
 class CarController extends BmsBaseController
 {
 	/**
@@ -720,9 +721,9 @@ class CarController extends BmsBaseController
         $stime = $this->validateStringVal('stime');
         $etime = $this->validateStringVal('etime');
         $status = $this->validateIntVal('status', 0);
-        $vin = $this->validateStringVal('vin');
-        $top  =$this->validateIntVal("top", 0);
-        $sortType  =$this->validateStringVal("sortType", "ASC");
+        $vin = $this->validateStringVal('vin', '');
+        $top  = $this->validateIntVal("top", 0);
+        $sortType  = $this->validateStringVal("sortType", "ASC");
         
         $seeker = new SpsSeeker($point);
         $datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
@@ -744,6 +745,23 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
 
+    }
+
+    public function actionSaveSpsQueue() {
+        $id = $this->validateIntVal('id', 0);
+        $status = $this->validateIntVal('status', 0);
+        $queueTime = $this->validateStringVal('queueTime', date('Y-m-d H:i:s'));
+        try{
+            $config = SpsQueueAR::model()->findByPk($id);
+            if(!empty($config)) {
+                $config->status = $status;
+                $config->queue_time = $queueTime;
+                $config->save();
+            }
+            $this->renderJsonBms(true, 'OK', '');
+        }catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
     }
 
     public function actionQueryBalanceDetail() {
