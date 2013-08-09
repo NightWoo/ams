@@ -90,13 +90,13 @@
                                         <table id="tableList" class="table table-condensed">
                                             <thead>
                                                 <tr class="active">
-                                                    <th class="">整车编号</th>
+                                                    <th class="">SPS编号</th>
                                                     <th class="">列队时间</th>
                                                     <th class="">状态</th>
                                                     <th class="">VIN</th>
                                                     <th class="">车系</th>
                                                     <th class="">车型/配置</th>
-                                                    <th class="">耐寒性</th>
+                                                    <!-- <th class="">耐寒性</th> -->
                                                     <th class="">颜色</th>
                                                     <th class="">特殊单号</th>
                                                     <th class="">备注</th>
@@ -118,13 +118,13 @@
                                         <table id="tableDoneList" class="table table-condensed">
                                             <thead>
                                                 <tr class="active">
-                                                    <th class="">整车编号</th>
+                                                    <th class="">SPS编号</th>
                                                     <th class="">分拣时间</th>
                                                     <th class="">状态</th>
                                                     <th class="">VIN</th>
                                                     <th class="">车系</th>
                                                     <th class="">车型/配置</th>
-                                                    <th class="">耐寒性</th>
+                                                    <!-- <th class="">耐寒性</th> -->
                                                     <th class="">颜色</th>
                                                     <th class="">特殊单号</th>
                                                     <th class="">备注</th>

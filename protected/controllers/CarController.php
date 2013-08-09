@@ -38,7 +38,9 @@ class CarController extends BmsBaseController
         $line = $this->validateStringVal('line', 'I');
         try{
             $car = Car::create($vin);
-
+            if(!empty($car->car->plan_id)) {
+                throw new Exception("此车已匹配计划");
+            }
             //“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
             //
             $curDate = DateUtil::getCurDate();
@@ -708,9 +710,10 @@ class CarController extends BmsBaseController
             $seeker = new SpsSeeker($point);
             $seeker->validate($vin);
 
-            $data = VinManager::getCar($vin);
+            $car = Car::create($vin);
+            // $data = VinManager::getCar($vin);
 
-            $this->renderJsonBms(true, 'OK', $data);
+            $this->renderJsonBms(true, 'OK', $car->car);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

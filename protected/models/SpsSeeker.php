@@ -26,7 +26,7 @@ class SpsSeeker
 		$conditions[] = "c.config_id=cc.id";
 
 		$condition = join(' AND ', $conditions);
-		$sql = "SELECT c.serial_number,c.vin,c.series,c.status as car_status,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time,q.status as sps_status,q.check_time FROM sps_queue q,car c,car_config cc WHERE $condition ORDER BY queue_time $sortType";
+		$sql = "SELECT c.serial_number,c.sps_serial,c.vin,c.series,c.status as car_status,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time,q.status as sps_status,q.check_time FROM sps_queue q,car c,car_config cc WHERE $condition ORDER BY queue_time $sortType";
 		if(!empty($top)){
 			$sql .= " LIMIT 0,$top";
 		}

@@ -62,8 +62,19 @@ class Order
 			$ar->create_time = date('YmdHis');
 			$ar->user_id = Yii::app()->user->id;
 
+			$activated = $this->isBoardActivated($order['boardNumber']);
+			if($activated) {
+				$ar->status = 1;
+				$ar->activate_time = date('YmdHis');
+			}
+
 			$ar->save();
 		}
+	}
+
+	public function isBoardActivated($boardNumber){
+		$orderAr = OrderAR::model()->find("board_number=? AND status>0", array($boardNumber));
+		return !empty($orderAr);
 	}
 
 	public function split($orderId, $number=0, $laneId=0){
@@ -123,7 +134,7 @@ class Order
 				$order->priority = $maxPrioity;
 				$order->status = 1;
 				$curDate = DateUtil::getCurDate();
-				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){
+				if($order->activate_time == '0000-00-00 00:00:00'){
 					$order->activate_time = date('YmdHis');
 					$order->lane_status = 1;
 				}

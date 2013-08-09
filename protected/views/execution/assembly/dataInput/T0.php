@@ -154,87 +154,87 @@
 		</div>
 
 		<div class="configPaper printable" page="1" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt">
-			<table class="" style="width:100%; margin-top:10pt;">
-				<tr>
-					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
-					<td width="50%" class="printType" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">第1页</td>
-				</tr>
-				<tr>
-					<td class="printConfig" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
-				</tr>
-			</table>
-			<img src="" width="" height="" class="printFrontImage" style="display: block; margin:0 auto">
-			<!-- <table style="width:100%;margin-top:10pt;">
-				<tr>
-					<td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
-					<td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">1/4</td>
-				</tr>
-			</table> -->
-		</div>
+            <table class="" style="width:100%; margin-top:10pt;">
+                <tr>
+                    <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+                    <td rowspan="2" width="50%" class="printType" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">1/<span class="maxPage">1</span></td>
+                </tr>
+                <tr>
+                    <!-- <td class="printConfig" style="font-size:14pt"></td> -->
+                    <td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
+                </tr>
+            </table>
+            <img src="" width="" height="" class="printFrontImage" style="display: block; margin:0 auto">
+            <!-- <table style="width:100%;margin-top:10pt;">
+                <tr>
+                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
+                    <td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">1/4</td>
+                </tr>
+            </table> -->
+        </div>
 
-		<div class="configPaper printable" page="2" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
-			<table class="" style="width:100%; margin-top:10pt;">
-				<tr>
-					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
-					<td width="50%" class="printType" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">第2页</td>
-				</tr>
-				<tr>
-					<td class="printConfig" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
-				</tr>
-			</table>
-			<img src="" width="" height="" class="printBackImage" style="display: block; margin:0 auto">
-			<!-- <table style="width:100%;margin-top:10pt;">
-				<tr>
-					<td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
-					<td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">2/4</td>
-				</tr>
-			</table> -->
-		</div>
+        <div class="configPaper printable" page="2" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+            <table class="" style="width:100%; margin-top:10pt;">
+                <tr>
+                    <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+                    <td rowspan="2" width="50%" class="printType" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">2/<span class="maxPage">2</span></td>
+                </tr>
+                <tr>
+                    <!-- <td class="printConfig" style="font-size:14pt"></td> -->
+                    <td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
+                </tr>
+            </table>
+            <img src="" width="" height="" class="printBackImage" style="display: block; margin:0 auto">
+            <!-- <table style="width:100%;margin-top:10pt;">
+                <tr>
+                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
+                    <td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">2/4</td>
+                </tr>
+            </table> -->
+        </div>
 
-		<div class="configPaper printable" page="3" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
-			<table class="" style="width:100%; margin-top:10pt;">
-				<tr>
-					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
-					<td width="50%" class="printType" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">第3页</td>
-				</tr>
-				<tr>
-					<td class="printConfig" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
-				</tr>
-			</table>
-			<img src="" width="" height="" class="printFront2Image" style="display: block; margin:0 auto">
-			<!-- <table style="width:100%;margin-top:10pt;">
-				<tr>
-					<td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
-					<td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">3/4</td>
-				</tr>
-			</table> -->
-		</div>
+        <div class="configPaper printable" page="3" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+            <table class="" style="width:100%; margin-top:10pt;">
+                <tr>
+                    <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+                    <td rowspan="2" width="50%" class="printType" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">3/<span class="maxPage">3</span></td>
+                </tr>
+                <tr>
+                    <!-- <td class="printConfig" style="font-size:14pt"></td> -->
+                    <td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
+                </tr>
+            </table>
+            <img src="" width="" height="" class="printFront2Image" style="display: block; margin:0 auto">
+            <!-- <table style="width:100%;margin-top:10pt;">
+                <tr>
+                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
+                    <td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">3/4</td>
+                </tr>
+            </table> -->
+        </div>
 
-		<div class="configPaper printable" page="4" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
-			<table class="" style="width:100%; margin-top:10pt;">
-				<tr>
-					<td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
-					<td width="50%" class="printType" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">第4页</td>
-				</tr>
-				<tr>
-					<td class="printConfig" style="font-size:14pt"></td>
-					<td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
-				</tr>
-			</table>
-			<img src="" width="" height="" class="printBack2Image" style="display: block; margin:0 auto">
-			<!-- <table style="width:100%;margin-top:10pt;">
-				<tr>
-					<td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
-					<td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">4/4</td>
-				</tr>
-			</table> -->
-		</div>
+        <div class="configPaper printable" page="4" style="width:560pt;height:800pt; padding-top:10pt; font-size:14pt; page-break-before: always">
+            <table class="" style="width:100%; margin-top:10pt;">
+                <tr>
+                    <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+                    <td rowspan="2" width="50%" class="printType" style="font-size:14pt"></td>
+                    <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt">4/<span class="maxPage">4</span></td>
+                </tr>
+                <tr>
+                    <!-- <td class="printConfig" style="font-size:14pt"></td> -->
+                    <td style="text-align:right; font-size:14pt; padding-right:10pt"><span class="printSeries"></span><span>-</span><span class="printSerialNumber"></span></td>
+                </tr>
+            </table>
+            <img src="" width="" height="" class="printBack2Image" style="display: block; margin:0 auto">
+            <!-- <table style="width:100%;margin-top:10pt;">
+                <tr>
+                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
+                    <td align="right" style="text-align:right; font-size:14pt; padding-right:10pt">4/4</td>
+                </tr>
+            </table> -->
+        </div>
 	</body>
 </html>

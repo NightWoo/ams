@@ -171,14 +171,16 @@ $("document").ready(function() {
 					$(".printBackImage").attr("src", response.data.backImage);
 					$(".printFront2Image").attr("src", response.data.front2Image);
 					$(".printBack2Image").attr("src", response.data.back2Image);
-					$(".printType").html(response.data.type);
+					// $(".printType").html(response.data.type);
 					$(".printModel").html(response.data.carModel);
 					$(".printSeries").html(response.data.series);
 					$(".printGlass").html(response.data.sideGlass);
 					if(response.data.coldResistant == "1"){
-						$(".printConfig").html(response.data.config +'/'+ '耐寒');							
+						$(".printType").html(response.data.carModel + "/" + response.data.config + "/" + "耐寒");
+						// $(".printConfig").html(response.data.config + "/" + "耐寒");							
 					}else{
-						$(".printConfig").html(response.data.config +'/'+ '非耐寒');							
+						$(".printType").html(response.data.carModel + "/" + response.data.config + "/" + "非耐寒");
+						// $(".printConfig").html(response.data.config + "/" + "非耐寒");							
 					}
 					$(".printSerialNumber").html(response.data.serialNumber);
 					$(".printRemark").html("备注：" + response.data.remark);
@@ -186,16 +188,22 @@ $("document").ready(function() {
 						if (response.data.frontImage == "") {
 							fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 						} else {
-							$(".configPaper").addClass("toPrint");
-							if(response.data.backImage == ""){
-								$(".configPaper[page=2]").removeClass("toPrint");
+							maxPage = 1;
+							$(".configPaper[page=1]").addClass("toPrint");
+							if(response.data.backImage != ""){
+								$(".configPaper[page=2]").addClass("toPrint");
+								maxPage = 2;
 							}
-							if(response.data.front2Image == ""){
-								$(".configPaper[page=3]").removeClass("toPrint");
+							if(response.data.front2Image != ""){
+								$(".configPaper[page=3]").addClass("toPrint");
+								maxPage = 3;
 							}
-							if(response.data.back2Image == ""){
-								$(".configPaper[page=4]").removeClass("toPrint");
+							if(response.data.back2Image != ""){
+								$(".configPaper[page=4]").addClass("toPrint");
+								maxPage = 4;
 							}
+
+							$(".maxPage").html(maxPage);
 							setTimeout(function (){window.print();},1500);
 							fadeMessageAlert(response.message,"alert-success");
 						}

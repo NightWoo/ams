@@ -95,7 +95,7 @@ $("document").ready(function() {
 		    	"point": $("#spsPoint").val(),
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
-				"top" :20,
+				"top" :30,
 		    },//vin
 		    async:false,
 		    success: function(response){
@@ -106,17 +106,17 @@ $("document").ready(function() {
 		    		if (index == 0) {
 		    			tr.addClass("info");
 		    		}
-		    		$("<td />").html(value.serial_number).appendTo(tr);
+		    		$("<td />").html(value.sps_serial).appendTo(tr);
 		    		$("<td />").html(value.queue_time).appendTo(tr);
 		    		$("<td />").html(value.car_status).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		if(value.cold_resistant == "1"){
-						$("<td />").html('耐寒').appendTo(tr);						
-					}else{
-						$("<td />").html('非耐寒').appendTo(tr);						
-					}
+		   //  		if(value.cold_resistant == "1"){
+					// 	$("<td />").html('耐寒').appendTo(tr);						
+					// }else{
+					// 	$("<td />").html('非耐寒').appendTo(tr);						
+					// }
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
@@ -139,24 +139,24 @@ $("document").ready(function() {
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
 				"status": 1,
-				"top" :20,
+				"top" :30,
 				"sortType": "DESC",
 		    },//vin
 		    success: function(response){
 		    	$("#tableDoneList tbody").text("");
 		    	$(response.data.datas).each(function (index, value) {
 		    		var tr = $("<tr />");
-		    		$("<td />").html(value.serial_number).appendTo(tr);
+		    		$("<td />").html(value.sps_serial).appendTo(tr);
 		    		$("<td />").html(value.check_time).appendTo(tr);
 		    		$("<td />").html(value.car_status).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		if(value.cold_resistant == "1"){
-						$("<td />").html('耐寒').appendTo(tr);						
-					}else{
-						$("<td />").html('非耐寒').appendTo(tr);						
-					}
+		   //  		if(value.cold_resistant == "1"){
+					// 	$("<td />").html('耐寒').appendTo(tr);						
+					// }else{
+					// 	$("<td />").html('非耐寒').appendTo(tr);						
+					// }
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);

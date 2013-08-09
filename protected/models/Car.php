@@ -146,6 +146,13 @@ class Car
 		$this->car->save();
 	}
 
+	public function generateSpsSerial($line) {
+		$sn = new SpsSerialAR();
+		$sn->save();
+		$this->car->sps_serial = $line . "-" . sprintf("%06d", $sn->id);
+		$this->car->save();
+	}
+
 	public function addToPlan($date, $planId) {
 		$exist = PlanAR::model()->findByPk($planId);
 		if(empty($exist)) {
@@ -872,7 +879,6 @@ class Car
 
 			if(empty($spsQueueOne)) {
 				$spsQueueOne = new SpsQueueAR();
-
 				$spsQueueOne->line = $line;
 				$spsQueueOne->car_id = $this->car->id;
 				$spsQueueOne->series = $this->car->series;

@@ -114,7 +114,7 @@ $("document").ready(function() {
 			success: function(response){
 				resetPage();
 				if(response.success){
-					$("#vinHint").html("上一辆：" + response.data.vinCode);
+					$("#vinHint").html("上一辆：" + response.data);
 				  	fadeMessageAlert(response.message,"alert-success");
 				}
 				else{

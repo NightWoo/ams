@@ -20,7 +20,9 @@ class OrderController extends BmsBaseController
 		$orderNumber = $this->validateStringVal('orderNumber', '');
 		try {
 			// $orders = OrderAR::model()->findAll('standby_date=? AND status=1 AND amount>count GROUP BY board_number ORDER BY priority ASC', array('2013-08-07'));
-			$this->renderJsonBms(true, 'OK', $orders);
+			$order = new Order();
+			$ret = $order->isBoardActivated('D0807030');
+			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
 		}

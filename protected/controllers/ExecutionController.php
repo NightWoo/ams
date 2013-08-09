@@ -95,12 +95,16 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try{
 			$car = Car::create($vin);
+            if(!empty($car->car->plan_id)) {
+                throw new Exception("此车已匹配计划");
+            }
             $car->checkAlreadyOnline();
         	$car->enterNode('PBS');
-            if($car->car->series == "6B" || $car->car->series == "M6"){
+            if(($car->car->series == "6B" || $car->car->series == "M6") && empty($car->car->plan_id)){
                 $car->addToPlan($date, $planId);
                 $spsPoints = array('S1','S2','S3');
                 $car->addSpsQueue($spsPoints);
+                $car->generateSpsSerial($line);
             }
 
             $transaction->commit();
@@ -1417,9 +1421,13 @@ class ExecutionController extends BmsBaseController
         // $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
-            $ret = WarehouseAR::model()->find("id=?", array(600));
+            $car = Car::create($vin);
 
-            // $transaction->commit();
+            if(empty($car->car->plan_id)) {
+                $ret = "empty";
+            } else {
+                $ret = "not empty";
+            }
             $this->renderJsonBms(true, $ret, $ret);
         } catch(Exception $e) {
             // $transaction->rollback();
