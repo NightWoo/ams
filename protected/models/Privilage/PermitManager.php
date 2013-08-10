@@ -15,6 +15,13 @@ class PermitManager
 	public function init() {
 	}
 	public function check($point) {
+		$permit = $this->checkPrivilage($point);
+
+		if(!$permit) {
+			throw new Exception('permission denied');
+		}
+	}
+	public function checkPrivilage($point) {
 		$permit = false;
 		if(is_array($point)) {
 			foreach($point as $p) {
@@ -26,9 +33,6 @@ class PermitManager
 			$permit = $this->_userRole->check($point);
 		}
 
-		if(!$permit) {
-			throw new Exception('permission denied');
-		}
+		return $permit;
 	}
-
 }

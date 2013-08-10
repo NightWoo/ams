@@ -163,6 +163,7 @@ class User extends CActiveRecord
 			'telephone' => $this->telephone,
 			'cellphone' => $this->cellphone,
 			'display_name' => $this->display_name,
+			'admin' => $this->admin,
 		);
 	}
 }

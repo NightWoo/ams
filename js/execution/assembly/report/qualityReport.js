@@ -38,7 +38,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftQualityReportLi").addClass("active");
-		$("#divLeft,#divHead").addClass("notPrintable");
+		$("#divLeft,#divHead,#divFoot").addClass("notPrintable");
 		$("#startTime").val(window.byd.DateUtil.lastWorkDate());
 
 		ajaxQueryQualification("VQ1", "monthly");

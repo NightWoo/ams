@@ -58,8 +58,8 @@
                         </tbody>
                 </table>
             	</form>
-                <legend>账号管理</legend>
                 <div id='adminThing'>
+	                <legend>账号管理</legend>
 	                <form class="well form-horizontal">
 	                    <table>
 							<tr>

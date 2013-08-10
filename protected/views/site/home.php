@@ -7,6 +7,14 @@
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
     <link href="/bms/css/home.css" rel="stylesheet">
+    <style type="text/css" media="screen">
+    	#toggle-top{
+    		background: none;
+   		}
+   		#tileContainer{
+   			margin-top: 150px;
+   		}	
+    </style>
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
@@ -16,14 +24,14 @@
 </head>
 <body>
 	<?php
-		//require_once(dirname(__FILE__)."/../common/head.php");
+		require_once(dirname(__FILE__)."/../common/head.php");
 	?>
-	<div>
+	<!-- <div>
 		<div id="welcome">你好，<a href="/bms/generalInformation/accountMaintain"><?php echo Yii::app()->user->display_name; ?></a></div>
 		<div class="pull-right btnField">
 			<div id="logout" class="btnIcon pull-right"></div>
 		</div>
-	</div>
+	</div> -->
 	<div id="tileContainer" class="floatClear">
 		<div id="quality" class="tile rectangle">
 			<div class="title">

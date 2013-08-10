@@ -39,8 +39,8 @@
                     <div>
                         <legend><?php echo $nodeDisplayName;?>
                             <span class="pull-right">
-                                <!-- <a href="/bms/execution/pauseEdit"><i class="icon-link"></i>&nbsp;停线编辑</a>
-                                /
+                                <a href="/bms/execution/spsQueueMaintain"><i class="icon-link"></i>&nbsp;SPS队列维护</a>
+                                <!-- /
                                 <a href="/bms/execution/configPaperMain"><i class="icon-link"></i>&nbsp;主配置单打印</a> -->
                             </span>
                         </legend>
@@ -93,6 +93,7 @@
                                                     <th class="">SPS编号</th>
                                                     <th class="">列队时间</th>
                                                     <th class="">状态</th>
+                                                    <th class="">流水号</th>
                                                     <th class="">VIN</th>
                                                     <th class="">车系</th>
                                                     <th class="">车型/配置</th>
@@ -121,6 +122,7 @@
                                                     <th class="">SPS编号</th>
                                                     <th class="">分拣时间</th>
                                                     <th class="">状态</th>
+                                                    <th class="">流水号</th>
                                                     <th class="">VIN</th>
                                                     <th class="">车系</th>
                                                     <th class="">车型/配置</th>

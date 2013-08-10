@@ -25,6 +25,11 @@ class ExecutionController extends BmsBaseController
         'OrderCarQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 		'WarehouseQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 	);
+
+    public static $CHILD_PRIVILAGE = array(
+        'PBS' => array('DATA_INPUT_PBS'),
+        'SPSPoint' => array('DATA_INPUT_SPS'),
+    );
 	/**
 	 * Declares class-based actions.
 	 */
@@ -78,12 +83,20 @@ class ExecutionController extends BmsBaseController
 		$view = $this->validateStringVal('view','NodeSelect');
         $type = $this->validateStringVal('type','subInstrument');
 		$point = $this->validateStringVal('point','S1');
-		if(in_array($nodeName, self::$NODE_MAP)) {
-			$view = self::$MERGED_VIEW;
-		}
-		
-		$node = Node::createByName($nodeName); 
-		$this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));	
+        try{
+            if(in_array($nodeName, self::$NODE_MAP)) {
+                $view = self::$MERGED_VIEW;
+            }
+            
+            $node = Node::createByName($nodeName); 
+            if(array_key_exists($view, self::$CHILD_PRIVILAGE)) {
+                Yii::app()->permitManager->check(self::$CHILD_PRIVILAGE[$view]);
+            }
+            $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
 	}
 
 	//进入彩车身库
@@ -1300,7 +1313,7 @@ class ExecutionController extends BmsBaseController
 
     public function actionSpsQueueMaintain() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check('DATA_MAINTAIN_SPS');
             $this->render('assembly/other/SPSQueueMaintain');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

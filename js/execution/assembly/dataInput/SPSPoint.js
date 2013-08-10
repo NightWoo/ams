@@ -109,6 +109,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.sps_serial).appendTo(tr);
 		    		$("<td />").html(value.queue_time).appendTo(tr);
 		    		$("<td />").html(value.car_status).appendTo(tr);
+		    		$("<td />").html(value.serial_number).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
@@ -149,6 +150,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.sps_serial).appendTo(tr);
 		    		$("<td />").html(value.check_time).appendTo(tr);
 		    		$("<td />").html(value.car_status).appendTo(tr);
+		    		$("<td />").html(value.serial_number).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);

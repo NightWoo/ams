@@ -24,6 +24,7 @@
     <body>
         <?php
         	require_once(dirname(__FILE__)."/../../../common/head.php");
+        	// require_once(dirname(__FILE__)."/../../../common/foot/query_foot.php");
         ?>
 		<div class="offhead">
 			<?php

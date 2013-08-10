@@ -518,29 +518,41 @@ class MonitorSeeker
 		$etimeHM = date("H:i", strtotime($etime));
 
 		$restTime = 0;
-		if($etimeHM >= "08:00" && $etimeHM < "11:30"){
-
+		if($etimeHM >= "08:00" && $etimeHM < "10:00"){
+			$restTime = 0;
 		}
-		if($etimeHM >= "11:30" && $etimeHM < "12:30"){
-			$restTime = strtotime($etime) - strtotime($thisDate . " 11:30:00");
+		if($etimeHM >= "10:00" && $etimeHM < "11:30"){
+			$restTime = 600;
 		}
-		if($etimeHM >= "12:30" && $etimeHM < "17:00"){
-			$restTime = 3600;
+		if($etimeHM >= "11:30" && $etimeHM < "13:00"){
+			$restTime = 600 + strtotime($etime) - strtotime($thisDate . " 11:30:00");
 		}
-		if($etimeHM >= "17:00" && $etimeHM < "18:00"){
-			$restTime = 3600 + (strtotime($etime) - strtotime($thisDate . " 17:00:00"));
+		if($etimeHM >= "13:00" && $etimeHM < "15:00"){
+			$restTime = 6000;
 		}
-		if($etimeHM >= "18:00" && $etimeHM < "23:30"){
-			$restTime = 7200;
+		if($etimeHM >= "15:00" && $etimeHM < "17:30"){
+			$restTime = 6600;
 		}
-		if($etimeHM >= "23:30" || $etimeHM < "00:30"){
-			$restTime = 7200 + (strtotime($etime) - strtotime($workDate . " 23:30:00"));
+		if($etimeHM >= "17:30" && $etimeHM < "18:30"){
+			$restTime = 6600 + (strtotime($etime) - strtotime($thisDate . " 17:30:00"));
 		}
-		if($etimeHM >= "00:30" && $etimeHM < "05:00"){
+		if($etimeHM >= "18:30" && $etimeHM < "23:00"){
+			$restTime = 10200;
+		}
+		if($etimeHM >= "23:00" || $etimeHM < "00:30"){
 			$restTime = 10800;
 		}
-		if($etimeHM >= "05:00" && $etimeHM < "08:00"){
-			$restTime = 10800 + (strtotime($etime) - strtotime($thisDate . " 05:00:00"));
+		if($etimeHM >= "00:30" && $etimeHM < "01:30"){
+			$restTime = 10800 + (strtotime($etime) - strtotime($workDate . " 23:30:00"));
+		}
+		if($etimeHM >= "01:30" && $etimeHM < "05:00"){
+			$restTime = 14400;
+		}
+		if($etimeHM >= "05:00" && $etimeHM < "07:00"){
+			$restTime = 15000;
+		}
+		if($etimeHM >= "07:00" && $etimeHM < "08:00"){
+			$restTime = 15000 + (strtotime($etime) - strtotime($thisDate . " 07:00:00"));
 		}
 
 		return $restTime;

@@ -232,75 +232,80 @@ $(document).ready(function () {
 		    		//if 'admin' ,render userlist
 		    		var userList = response.data.userList;
 		    		// console.log(userList.length);
-		    		if (userList.length > 0) {
+		    		if(response.data.user.admin == "1"){
 		    			$("#adminThing").show();
-		    			$.each(userList,function (index,value) {
-			    			var tr = $("<tr />");
-			    			$("<td />").html(value.id).appendTo(tr);
-			    			$("<td />").html(value.username).appendTo(tr);
-			    			$("<td />").html(value.display_name).appendTo(tr);
-			    			emailTd = $("<td><a href='Mailto:" + value.email + "'>"+ value.email +"</a></td>");
-			    			emailTd.appendTo(tr);
-			    			// $("<td />").html(value.email).appendTo(tr);
-			    			var optionTd = $("<td />");
-			    			var groupDiv = $("<div />", {
-			    				'class' : 'btn-group'
-			    			})
-			    			$("<input />", {
-			    				'type' : 'button',
-			    				"class" : "btn btn-primary btn-small optReset",
-			    				'value' : "初始化密码"
-			    			}).appendTo(groupDiv);
-			    			$("<input />", {
-			    				'type' : 'button',
-			    				"class" : "btn btn-small optModify",
-			    				'value' : "用户信息"
-			    			}).appendTo(groupDiv);
-			    			$("<input />", {
-			    				'type' : 'button',
-			    				"class" : "btn btn-danger btn-small optRight",
-			    				'value' : "权限编辑"
-			    			}).appendTo(groupDiv);
-			    			$("<input />", {
-			    				'type' : 'button',
-			    				"class" : "btn btn-danger btn-small optDelete",
-			    				'value' : "账号删除"
-			    			}).appendTo(groupDiv);
+			    		if (userList.length > 0) {
+			    			$.each(userList,function (index,value) {
+				    			var tr = $("<tr />");
+				    			$("<td />").html(value.id).appendTo(tr);
+				    			$("<td />").html(value.username).appendTo(tr);
+				    			$("<td />").html(value.display_name).appendTo(tr);
+				    			emailTd = $("<td><a href='Mailto:" + value.email + "'>"+ value.email +"</a></td>");
+				    			emailTd.appendTo(tr);
+				    			// $("<td />").html(value.email).appendTo(tr);
+				    			var optionTd = $("<td />");
+				    			var groupDiv = $("<div />", {
+				    				'class' : 'btn-group'
+				    			})
+				    			$("<input />", {
+				    				'type' : 'button',
+				    				"class" : "btn btn-primary btn-small optReset",
+				    				'value' : "初始化密码"
+				    			}).appendTo(groupDiv);
+				    			$("<input />", {
+				    				'type' : 'button',
+				    				"class" : "btn btn-small optModify",
+				    				'value' : "用户信息"
+				    			}).appendTo(groupDiv);
+				    			$("<input />", {
+				    				'type' : 'button',
+				    				"class" : "btn btn-danger btn-small optRight",
+				    				'value' : "权限编辑"
+				    			}).appendTo(groupDiv);
+				    			$("<input />", {
+				    				'type' : 'button',
+				    				"class" : "btn btn-danger btn-small optDelete",
+				    				'value' : "账号删除"
+				    			}).appendTo(groupDiv);
 
-			    			groupDiv.appendTo(optionTd);
-			    			optionTd.appendTo(tr);
+				    			groupDiv.appendTo(optionTd);
+				    			optionTd.appendTo(tr);
 
-			    			tr.data("userId", value.id);
-			    			tr.data("userName", value.username);
-			    			tr.data("cardNumber", value.card_number);
-			    			tr.data("card8H10D", value.card_8H10D);
-			    			tr.data("email", value.email);
-			    			tr.data("cellphone", value.cell);
-			    			tr.data("telephone", value.telephone);
-			    			tr.data("roleIds", value.roleIds);
-			    			$("#resultTable tbody").append(tr);
-			    		});
-			    		$(".optDelete").bind("click", optDelete);
-			    		$(".optReset").bind("click", optReset);
-			    		$(".optModify").bind("click", optModify);
-			    		//deal with pager
-			    		$(".pager").show();
-			    		if(response.data.pager.curPage == 1)
-			    			$(".prePage").hide();
-			    		else
-			    			$(".prePage").show();
-			    		if(response.data.pager.curPage * 5 >= response.data.pager.total )
-			    			$(".nextPage").hide();
-			    		else
-			    			$(".nextPage").show();
-			    		$(".curPage").attr("page", response.data.pager.curPage);
-			    		$(".curPage").html("第" + response.data.pager.curPage + "页");
+				    			tr.data("userId", value.id);
+				    			tr.data("userName", value.username);
+				    			tr.data("cardNumber", value.card_number);
+				    			tr.data("card8H10D", value.card_8H10D);
+				    			tr.data("email", value.email);
+				    			tr.data("cellphone", value.cell);
+				    			tr.data("telephone", value.telephone);
+				    			tr.data("roleIds", value.roleIds);
+				    			$("#resultTable tbody").append(tr);
+				    		});
+				    		$(".optDelete").bind("click", optDelete);
+				    		$(".optReset").bind("click", optReset);
+				    		$(".optModify").bind("click", optModify);
+				    		//deal with pager
+				    		$(".pager").show();
+				    		if(response.data.pager.curPage == 1)
+				    			$(".prePage").hide();
+				    		else
+				    			$(".prePage").show();
+				    		if(response.data.pager.curPage * 5 >= response.data.pager.total )
+				    			$(".nextPage").hide();
+				    		else
+				    			$(".nextPage").show();
+				    		$(".curPage").attr("page", response.data.pager.curPage);
+				    		$(".curPage").html("第" + response.data.pager.curPage + "页");
 
-			    		ajaxGetRights();
+				    		ajaxGetRights();
+				    		$("#resultTable>tbody").show();
+			    		} else {
+			    			$("#resultTable>tbody").hide();
+			    			$(".pager").hide();
+			    		}
 		    		} else {
 		    			$("#adminThing").hide();
 		    		}
-		    		
 		    	}else{
 		    		$("#vinText").val("");
 		    		alert(response.message);

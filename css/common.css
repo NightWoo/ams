@@ -60,6 +60,17 @@
 	margin-left:20px;
 }
 
+#divFoot .brand{
+  padding-top: 7px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  font-size: 16px;
+}
+
+#divFoot .nav li{
+  line-height: 15px;
+}
+
 legend span {
   font-size: 14px;
   padding-top: 4px;
