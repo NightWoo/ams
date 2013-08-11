@@ -121,6 +121,8 @@ $("document").ready(function() {
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
+
+		    		tr.data("vin", value.vin);
 		    		tr.appendTo($("#tableList tbody"));
 		    		//after fetch,set the 1st car to the print place		    		
 		    	});
@@ -202,7 +204,8 @@ $("document").ready(function() {
 		if ($("#tableList tr").length > 1) {
 			$("#vinText").attr("disabled", "disabled");
 			//获取第一行的VIN号
-			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(3)").text());
+			// $("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(3)").text());
+			$("#vinText").attr("value", $("#tableList tr:eq(1)").data("vin"));
 			$("#btnSubmit, #btnTopOut").removeAttr("disabled");
 		} else {
 			$("#vinText").removeAttr("disabled");

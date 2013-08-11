@@ -263,8 +263,9 @@ $("document").ready(function() {
 	function enterHandler (event) {
 		if(event.keyCode == '13'){
 			if($.trim($("#vinInput").val()) != ""){
-			queryBoardNumberByVin()
-			return false;
+				queryBoardNumberByVin()
+				return false;
+			}
 		}
 	}
 

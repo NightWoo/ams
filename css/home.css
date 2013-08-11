@@ -87,6 +87,11 @@ h3 {
 #tileContainer {
 	margin-left: 23px;
 	width: 1326px;
+	margin-top: 120px;
+}
+
+#toggle-top{
+    background: none;
 }
 
 .mainData {

@@ -26,9 +26,20 @@ class ExecutionController extends BmsBaseController
 		'WarehouseQuery' => array('READ_ONLY', 'FAULT_QUERY', 'NODE_QUERY', 'FAULT_QUERY_ASSEMBLY', 'NODE_QUERY_ASSEMBLY'),
 	);
 
-    public static $CHILD_PRIVILAGE = array(
+    public static $CHILD_VIEW_PRIVILAGE = array(
         'PBS' => array('DATA_INPUT_PBS'),
         'SPSPoint' => array('DATA_INPUT_SPS'),
+        'T11-F10' => array('DATA_INPUT_T11_F10'),
+        'F20' => array('DATA_INPUT_VQ1'),
+        'VQ1' => array('DATA_INPUT_VQ1'),
+        'VQ2RoadTestFinished' => array('DATA_INPUT_VQ2'),
+        'VQ2LeakTest' => array('DATA_INPUT_VQ2'),
+        'VQ3' => array('DATA_INPUT_VQ3'),
+        'SUB' => array('DATA_INPUT_SUB'),
+    );
+
+    public static $CHILD_NODE_PRIVILAGE = array(
+        'T0' => array('DATA_INPUT_T0'),
     );
 	/**
 	 * Declares class-based actions.
@@ -88,9 +99,12 @@ class ExecutionController extends BmsBaseController
                 $view = self::$MERGED_VIEW;
             }
             
-            $node = Node::createByName($nodeName); 
-            if(array_key_exists($view, self::$CHILD_PRIVILAGE)) {
-                Yii::app()->permitManager->check(self::$CHILD_PRIVILAGE[$view]);
+            $node = Node::createByName($nodeName);
+            if(array_key_exists($nodeName, self::$CHILD_NODE_PRIVILAGE)) {
+                Yii::app()->permitManager->check(self::$CHILD_NODE_PRIVILAGE[$nodeName]);
+            } 
+            if(array_key_exists($view, self::$CHILD_VIEW_PRIVILAGE)) {
+                Yii::app()->permitManager->check(self::$CHILD_VIEW_PRIVILAGE[$view]);
             }
             $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));  
         } catch(Exception $e) {
@@ -1434,9 +1448,8 @@ class ExecutionController extends BmsBaseController
         // $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
-            $car = Car::create($vin);
-
-            if(empty($car->car->plan_id)) {
+            // $car = Car::create($vin);
+            if(Yii::app()->permitManager->checkPrivilage('DATA_INPUT_SPS')) {
                 $ret = "empty";
             } else {
                 $ret = "not empty";

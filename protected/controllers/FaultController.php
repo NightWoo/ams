@@ -488,9 +488,13 @@ class FaultController extends BmsBaseController
 		try{
 			$opUserId = Yii::app()->user->id;
             $user = User::model()->findByPk($opUserId);
-            if(!$user->admin) {
+            // if(!$user->admin) {
+            //     BmsLogger::warning($opUserId . " try to save component");
+            //     throw new Exception ('不要做坏事，有记录的！！');
+            // }
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
                 BmsLogger::warning($opUserId . " try to save component");
-                throw new Exception ('不要做坏事，有记录的！！');
+                throw new Exception ('您无故障库维护权限');
             }
 
 			$id = $this->validateIntVal('id', 0);
@@ -562,9 +566,13 @@ class FaultController extends BmsBaseController
             $opUserId = Yii::app()->user->id;
             $user = User::model()->findByPk($opUserId);
             $id = $this->validateIntVal('id', 0);
-            if(!$user->admin) {
-                BmsLogger::warning($opUserId . " try to upload fault_standard @ " .$id);
-                throw new Exception ('不要做坏事，有记录的！！');
+            // if(!$user->admin) {
+            //     BmsLogger::warning($opUserId . " try to upload fault_standard @ " .$id);
+            //     throw new Exception ('不要做坏事，有记录的！！');
+            // }
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
+                BmsLogger::warning($opUserId . " try to save component");
+                throw new Exception ('您无故障库维护权限');
             }
             BmsLogger::info("update image fault_standard @ " .$id);
             $standard = FaultStandardAR::model()->findByPk($id);
@@ -612,9 +620,13 @@ class FaultController extends BmsBaseController
             $id = $this->validateIntVal('id', 0);
 			$opUserId = Yii::app()->user->id;
             $user = User::model()->findByPk($opUserId);
-            if(!$user->admin) {
-                BmsLogger::warning($opUserId . " try to remove fault_standard_image @ " .$id);
-                throw new Exception ('不要做坏事，有记录的！！');
+            // if(!$user->admin) {
+            //     BmsLogger::warning($opUserId . " try to remove fault_standard_image @ " .$id);
+            //     throw new Exception ('不要做坏事，有记录的！！');
+            // }
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
+                BmsLogger::warning($opUserId . " try to save component");
+                throw new Exception ('您无故障库维护权限');
             }
             BmsLogger::info("delete image fault_standard_image @ " .$id);
 

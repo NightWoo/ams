@@ -311,12 +311,16 @@ $(document).ready( function () {
 			data : {"id" : $("#carouselInner .active img").data("picId")
 				},
 			success : function (response) {
-				var $siblings = $("#carouselInner .active").siblings();
-				$("#carouselInner .active").remove();
-				$siblings.first().addClass("active");
+				if(response.success){
+					var $siblings = $("#carouselInner .active").siblings();
+					$("#carouselInner .active").remove();
+					$siblings.first().addClass("active");
+				} else {
+					alert(response.message);
+				}
 			},
-			error : function (response) {
-				alert(response.message);
+			error : function () {
+				alertError();
 			}
 		});
 	}
@@ -339,9 +343,12 @@ $(document).ready( function () {
 					"description" : $("#inputDescription").val()
 				},
 			success : function (response) {
-				// console.log(response.message);
-				$('#editModal').modal("hide");
-				queryPage($(".curPage").attr("page"));
+				if(response.success){
+					$('#editModal').modal("hide");
+					queryPage($(".curPage").attr("page"));
+				} else {
+					alert(response.message);
+				}
 			},
 			error : function (response) {
 				alert(response.message);
@@ -376,8 +383,9 @@ $(document).ready( function () {
 					$("#newDescription").attr("value", "");
 					queryPage(1);
 					$('#newModal').modal("hide");
+				} else{
+					alert(response.message);
 				}
-				// alert(response.message);
 			},
 			error : function (response) {
 				alert(response.message);

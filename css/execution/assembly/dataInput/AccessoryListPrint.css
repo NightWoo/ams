@@ -18,6 +18,7 @@
 #accordionLane{
 	margin-left: 0;
 	position: fixed;
+	top: 103px;
 }
 #laneGroup1 {
 	border: none;

@@ -7,14 +7,6 @@
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
     <link href="/bms/css/home.css" rel="stylesheet">
-    <style type="text/css" media="screen">
-    	#toggle-top{
-    		background: none;
-   		}
-   		#tileContainer{
-   			margin-top: 150px;
-   		}	
-    </style>
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
