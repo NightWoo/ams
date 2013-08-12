@@ -201,7 +201,7 @@ $(document).ready( function () {
 				$("#inputMode").val(siblings[2].innerHTML);
 				$("#inputLevel").val(siblings[4].innerHTML);
 				$("#inputKind").val($(e.target).parent("td").parent("tr").data("kindId"));
-				$("#inputDescription").val($(siblings[3]).children(":eq(0)").attr("title"));
+				$("#inputDescription").val($(e.target).parent("td").parent("tr").data("description"));
 				if (siblings[6].innerHTML === '启用') {
 					$("#inputStatus").val(1);
 				} else {

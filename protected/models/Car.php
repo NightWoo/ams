@@ -640,9 +640,9 @@ class Car
 	public function getTemperatureFault(){
 		$series = $this->car->series;
 		$faultArray = array(
-			"F0"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
-			"M6"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
-			"6B"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
+			"F0"=>array("faultId"=>"14174","componentId"=>"683","dutyDepartment"=>"0"),
+			"M6"=>array("faultId"=>"14175","componentId"=>"2892","dutyDepartment"=>"0"),
+			"6B"=>array("faultId"=>"14176","componentId"=>"3396","dutyDepartment"=>"0"),
 		);
 
 		return $faultArray[$series];
@@ -912,16 +912,21 @@ class Car
 
 	public function addVinLaserQueue() {
 		$queue = VinLaserQueueAR::model()->find('vin=?', array($this->car->vin));
-
-		if(empty($subConfig)) {
+		$statusT01 = 0; 
+		$statusEngine = 0;
+		if(($this->car->special_property==1 && $this->car->assembly_line=="I")){
+			$statusT01 = 1; 
+			$statusEngine = 1;
+		} 
+		if(empty($queue)) {
 			$queue = new VinLaserQueueAR();
 			$queue->vin = $this->car->vin;
 			$queue->line = $this->car->assembly_line;
 			$queue->assembly_time = date('Y-m-d H:i:s'); 
 			$queue->manual = 0;
-			$queue->seat_t01 = 0;
+			$queue->seat_t01 = $statusT01;
 			$queue->seat_t17 = 0;
-			$queue->seat_engine = 0;
+			$queue->seat_engine = $statusEngine;
 			$queue->save();
 		}
 	}

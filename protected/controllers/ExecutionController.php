@@ -422,10 +422,10 @@ class ExecutionController extends BmsBaseController
 			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
             $faults = CJSON::decode($faults);
-            // if($temperature>20){
-            //     $tempFault = $car-> getTemperatureFault();
-            //     array_push($faults, $tempFault);
-            // }
+            if($temperature>20){
+                $tempFault = $car-> getTemperatureFault();
+                array_push($faults, $tempFault);
+            }
             $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('在线');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
@@ -1454,12 +1454,8 @@ class ExecutionController extends BmsBaseController
         // $transaction = Yii::app()->db->beginTransaction();
 		 try{
             $vin = $this->validateStringVal('vin', '');
-            // $car = Car::create($vin);
-            if(Yii::app()->permitManager->checkPrivilage('DATA_INPUT_SPS')) {
-                $ret = "empty";
-            } else {
-                $ret = "not empty";
-            }
+            $car = Car::create($vin);
+            $ret = ($car->car->special_property==1 && $car->car->assembly_line=="I") ? 1:0; 
             $this->renderJsonBms(true, $ret, $ret);
         } catch(Exception $e) {
             // $transaction->rollback();
