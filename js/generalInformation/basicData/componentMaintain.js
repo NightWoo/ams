@@ -71,13 +71,23 @@ $(document).ready( function () {
 		    			$("<td />").html(value.category).appendTo(tr);
 		    			$("<td />").html(value.code).appendTo(tr);
 		    			$("<td />").html(value.display_name).appendTo(tr);		//modifid by wujun
+		    			$("<td />").html(value.simple_code).appendTo(tr);
 		    			if (value.is_fault == "1") {
 		    				$("<td />").html("是").appendTo(tr);
 		    			} else {
 		    				$("<td />").html("否").appendTo(tr);
 		    			}
-		    			
-		    			$("<td />").html(value.simple_code).appendTo(tr);
+		    			providerTd = $("<td />").appendTo(tr);
+		    			providerNames = [];
+		    			for(i=1;i<=3;i++){
+		    				if(value["provider_display_name_"+i] != ""){
+		    					providerNames.push(value["provider_display_name_"+i]);
+		    				}
+		    			}
+		    			providerText = providerNames.join("/");
+		    			providerText = providerText == "" ? "<i class='icon-plus'></i>添加" : "<i class='icon-edit'></i>" + providerText;
+		    			$("<a />").addClass("editProvider").html( providerText).appendTo(providerTd);
+		    			$("<td />").html(value.unit_price).appendTo(tr);
 		    			$("<td />").html(value.remark).appendTo(tr);
 		    			var editTd = $("<td />").html(" ¦ ");
 		    			$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
@@ -88,7 +98,11 @@ $(document).ready( function () {
 		    			tr.data("carSeries", value.car_series);
 		    			tr.data("componentId", value.id);
 		    			tr.data("categoryId", value.category_id);
-						tr.data("name",value.name);		//added by wujun
+						tr.data("name",value.name);
+						tr.data("unitPrice",value.unit_price);	
+						tr.data("provider_1",value.provider_1);	
+						tr.data("provider_2",value.provider_2);	
+						tr.data("provider_3",value.provider_3);	
 		    			$("#tableComponent tbody").append(tr);
 
 
@@ -117,7 +131,7 @@ $(document).ready( function () {
 
 
 	$("#tableComponent").click(function (e) {
-		if ($(e.target).is("button")) {
+		if($(e.target).is("button")) {
 			if ($(e.target).html() === "编辑") {
 
 				$('#editModal').modal("toggle");
@@ -129,13 +143,14 @@ $(document).ready( function () {
 				// $("#inputCate").attr("value",siblings[1].innerHTML);
 				$("#inputCode").attr("value",siblings[2].innerHTML);
 				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		//modified by wujun
-				if (siblings[4].innerHTML === '是') {
+				$("#inputSimpleCode").attr("value",siblings[4].innerHTML);
+				if (siblings[5].innerHTML === '是') {
 					$("#checkboxIsFault").attr("checked", "checked");
 				} else {
 					$("#checkboxIsFault").removeAttr("checked");
 				}
-				$("#inputSimpleCode").attr("value",siblings[5].innerHTML);
-				$("#inputComment").attr("value",siblings[6].innerHTML);
+				$("#editUnitPrice").val(tr.data("unitPrice"));
+				$("#inputComment").attr("value",siblings[8].innerHTML);
 
 				// console.log($(e.target).parent("td").parent("tr").data("componentId"));
 				$("#editModal").data("componentId", tr.data("componentId"));
@@ -144,7 +159,13 @@ $(document).ready( function () {
 			} else {
 				ajaxDelete(tr.data("componentId"));
 			}
-			
+		}
+
+		if($(e.target).is("a")){
+			if($(e.target).hasClass("editProvider")){
+				var tr = $(e.target).closest("tr");
+				$("#editProviderModal").modal("show");
+			}
 		}
 	});
 
@@ -198,11 +219,12 @@ $(document).ready( function () {
 					"category" : $("#inputCate").val(),
 					"isfault" : isFault,
 					"simpleCode" : $("#inputSimpleCode").attr("value"),
+					"unitPrice" : $("#editUnitPrice").attr("value"),
 					"remark" : $("#inputComment").attr("value")},
 			success : function (response) {
 				if(response.success) {
 					$("#editModal").modal("hide");
-
+					goQuery();
 				} else {
 					alert(response.message);
 				}
@@ -234,7 +256,8 @@ $(document).ready( function () {
 					"code" : $("#newCode").attr("value"), 
 					"category" : $("#newCate").val(),
 					"isfault" : isFault,
-					"simpleCode" : $("#newSimpleCode").attr("value"),			//added by wujun
+					"simpleCode" : $("#newSimpleCode").attr("value"),	
+					"unitPrice" : $("#newUnitPrice").attr("value"),
 					"remark" : $("#newComment").attr("value")},
 			success : function (response) {
 				$("#newSeries").val(0);
@@ -244,8 +267,8 @@ $(document).ready( function () {
 				$("#newIsFault").removeAttr("checked");
 				$("#newSimpleCode").attr("value", "");
 				$("#newComment").attr("value", "");
-				$("#newModal").modal("hide");		//added by wujun
-				//alert(response.message);			//modified by wujun
+				$("#newModal").modal("hide");
+				goQuery();
 			},
 			error : function (response) {
 				alert(response.message);
@@ -261,15 +284,7 @@ $(document).ready( function () {
 			data : {"id" : deleteId},
 			success : function (response) {
 				alert(response.message);
-				if ($("#liF0").hasClass("active")) {
-					var isFault = Number($("#isFaultF0").attr("checked") === "checked");
-					ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
-						isFault ,parseInt($(".curPage").attr("page")));
-				} else {
-					var isFault = Number($("#isFaultM6").attr("checked") === "checked");
-					ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
-						isFault, parseInt($(".curPage").attr("page")));
-			}
+				goQuery();
 			},
 			error : function (response) {
 				alert(response.message);
@@ -280,21 +295,22 @@ $(document).ready( function () {
 	$(window).bind('keydown', enterHandler);
 	function enterHandler (event) {
 		if (event.keyCode == "13"){
-			if ($("#liF0").hasClass("active")) {
-				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
-				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), 
-					isFault ,parseInt($(".curPage").attr("page")));
-			} else if($("#liM6").hasClass("active")) {
-				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
-				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
-					isFault, parseInt($(".curPage").attr("page")));
-			} else if($("#li6B").hasClass("active")){
-				var isFault = Number($("#isFault6B").attr("checked") === "checked");
-				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
-					isFault, parseInt($(".curPage").attr("page")));
-			}
+			goQuery();
 			return false;
 		}
+	}
+
+	function goQuery() {
+		if ($("#liF0").hasClass("active")) {
+				var isFault = Number($("#isFaultF0").attr("checked") === "checked");
+				ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), isFault ,parseInt($(".curPage").attr("page")));
+			} else if($("#liM6").hasClass("active")) {
+				var isFault = Number($("#isFaultM6").attr("checked") === "checked");
+				ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(), isFault, parseInt($(".curPage").attr("page")));
+			} else if($("#li6B").hasClass("active")){
+				var isFault = Number($("#isFault6B").attr("checked") === "checked");
+				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(), isFault, parseInt($(".curPage").attr("page")));
+			}
 	}
 
 	$(".prePage").click(
@@ -332,4 +348,82 @@ $(document).ready( function () {
 			}
 		}
 	);
+
+	function getProviderCode(providerName) {
+		var data;
+		$.ajax ({
+			url: GET_PROVIDER_CODE,
+			type: "get",
+			async: false,
+			dataType: "json",
+			data: {
+				"providerName": providerName	
+			},
+			success: function(response) {
+				if(response.success){
+					data = response.data[0];
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+		return data;
+	}
+
+	$("#editProviderName1").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
+	        	if(data.data == '') {
+	        		$("#editProviderCode1").html("<i class='icon-remove'></i>");
+	        		$("#editProviderId1").val("0");
+	        	}
+	        	return process(data.data);
+	        },'json');
+	    },
+
+	    updater:function (item) {
+	    	code = getProviderCode(item).provider_code;
+			$("#editProviderCode1").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderId1").val(getProviderCode(item).provider_id);
+			return item;
+    	}
+	});
+	$("#editProviderName2").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
+	        	if(data.data == '') {
+	        		$("#editProviderCode1").html("<i class='icon-remove'></i>");
+	        		$("#editProviderId1").val("0");
+	        	}
+	        	return process(data.data);
+	        },'json');
+	    },
+
+	    updater:function (item) {
+	    	code = getProviderCode(item).provider_code;
+			$("#editProviderCode2").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderId2").val(getProviderCode(item).provider_id);
+			return item;
+    	}
+	});
+	$("#editProviderName3").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
+	        	if(data.data == '') {
+	        		$("#editProviderCode3").html("<i class='icon-remove'></i>");
+	        		$("#editProviderId3").val("0");
+	        	}
+	        	return process(data.data);
+	        },'json');
+	    },
+
+	    updater:function (item) {
+	    	code = getProviderCode(item).provider_code;
+			$("#editProviderCode3").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderId3").val(getProviderCode(item).provider_id);
+			return item;
+    	}
+	});
+
 });

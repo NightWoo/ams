@@ -1,6 +1,6 @@
 <?php
 Yii::import('application.models.Car');
-Yii::import('application.models.ComponentSeeker');
+Yii::import('application.models.AR.ProviderAR');
 
 class ComponentSeeker
 {
@@ -35,7 +35,7 @@ class ComponentSeeker
 		$limit = $perPage;
 		$offset = ($curPage - 1) * $perPage;
 
-		$sql = "SELECT id,car_series, category_id, code, display_name, name, is_fault, simple_code, remark  FROM component WHERE $condition ORDER BY code ASC LIMIT $offset,$limit";
+		$sql = "SELECT id,car_series, category_id, code, display_name, name, is_fault, simple_code,unit_price, remark, provider_1,provider_2,provider_3  FROM component WHERE $condition ORDER BY code ASC LIMIT $offset,$limit";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();		
 
 
@@ -54,6 +54,12 @@ class ComponentSeeker
 
 		foreach($datas as &$data) {
 			$data['category'] = $categorys[$data['category_id']];
+			for($i=1;$i<=3;$i++){
+				$providerDisplayName = "provider_display_name_" . $i;
+				$providerNum = "provider_". $i;
+				$provider = ProviderAR::model()->findByPk($data[$providerNum]);
+				$data[$providerDisplayName] = empty($provider) ? "" : $provider->display_name;
+			}
 		}
 
 		return array($total, $datas);

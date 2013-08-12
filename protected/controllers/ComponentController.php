@@ -122,6 +122,7 @@ class ComponentController extends BmsBaseController
 			$displayName = $this->validateStringVal('displayName', '');
 			$isfault = $this->validateIntVal('isfault', 0);
 			$simpleCode = $this->validateStringVal('simpleCode', '');
+			$unitPrice = $this->validateStringVal('unitPrice', '');
 			$remark = $this->validateStringVal('remark', '');
 			if(empty($name) || empty($code)) {
 				throw new Exception('零部件编号/名称不能为空');
@@ -142,6 +143,7 @@ class ComponentController extends BmsBaseController
 			$component->display_name = $displayName;
 			$component->is_fault = $isfault;
 			$component->category_id = $category;
+			$component->unit_price = $unitPrice;
 			$component->remark = $remark;
 			$component->modify_time = date('YmdHis');
 			$component->user_id = Yii::app()->user->id;

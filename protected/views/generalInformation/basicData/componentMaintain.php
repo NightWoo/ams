@@ -179,8 +179,10 @@
 									<th>类别</th>
 									<th>零部件编号</th>
 									<th>零部件名称</th>
-									<th>故障件</th>
 									<th>简码</th>
+									<th>故障件</th>
+									<th>供应商</th>
+									<th>单价</th>
 									<th>备注</th>
 									<th></th>
 								</tr>
@@ -270,6 +272,13 @@
 			    <div class="controls">
 			      	<input type="text" id="newSimpleCode" placeholder="简码">
 			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="newSimpleCode">单价</label>
+			    <div class="controls">
+			      	<input type="text" id="newUnitPrice" placeholder="单价">
+			      	<span clses="help-inline">如：1.21</span>
+			    </div>
 			</div>	  
 			<div class="control-group">
 			    <label class="control-label" for="newComment">备注</label>
@@ -348,13 +357,60 @@
 			    <div class="controls">
 			      	<input type="text" id="inputSimpleCode" placeholder="简码">
 			    </div>
-			</div>	  
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="editSimpleCode">单价</label>
+			    <div class="controls">
+			      	<input type="text" id="editUnitPrice" placeholder="单价">
+			      	<span clses="help-inline">如：1.21</span>
+			    </div>
+			</div>
+			  
 			<div class="control-group">
 			    <label class="control-label" for="inputComment">备注</label>
 			    <div class="controls">
 			    	<textarea class="input-xlarge" id="inputComment" rows="2"></textarea>
 			    </div>
 			</div>	  	  
+		</form>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" id="btnEditConfirm">确认修改</button>
+  	</div>
+</div>
+
+<div class="modal" id="editProviderModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h3>编辑供应商</h3>
+  	</div>
+  	<div class="modal-body">
+  		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="">第一供应商</label>
+				<div class="controls">
+					<input type="text" id="editProviderName1" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<span id="editProviderCode1"class="help-inline inputProviderCode"></span>
+					<input type="hidden" id="editProviderId1" class="inputProviderId" value="">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="">第二供应商</label>
+				<div class="controls">
+					<input type="text" id="editProviderName2" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<span id="editProviderCode2"class="help-inline inputProviderCode"></span>
+					<input type="hidden" id="editProviderId2" class="inputProviderId" value="">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="">第三供应商</label>
+				<div class="controls">
+					<input type="text" id="editProviderName3" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<span id="editProviderCode3"class="help-inline inputProviderCode"></span>
+					<input type="hidden" id="editProviderId3" class="inputProviderId" value="">
+				</div>
+			</div>
 		</form>
   	</div>
   	<div class="modal-footer">
