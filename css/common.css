@@ -86,6 +86,11 @@ a {
   cursor: pointer;
 }
 
+@media screen {
+  body{
+    padding-bottom:40px;
+  }
+}
 
 /*below added by wujun modify bootstrap.css*/
 .icon-white{margin-top:4px;}
@@ -93,7 +98,6 @@ a {
 .dropdown-menu{margin:0;}
 label{vertical-align:middle;}
 .leftside{position: fixed;}
-body{padding-bottom:20px;}
 
 /*alert margin*/
 #messageAlert{

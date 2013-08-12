@@ -402,10 +402,10 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
 			$bagCode = $this->validateStringVal('bag', '');
             $driverId = $this->validateStringVal('driver', 0);
+            $temperature = $this->validateStringVal('temperature', 0);
             
             $fault = Fault::createSeeker();
            
-
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
@@ -421,12 +421,18 @@ class ExecutionController extends BmsBaseController
             }
 			$car->checkTestLinePassed();
 			$car->passNode('VQ3');
-            
+            $faults = CJSON::decode($faults);
+            // if($temperature>20){
+            //     $tempFault = $car-> getTemperatureFault();
+            //     array_push($faults, $tempFault);
+            // }
             $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
             $fault->save('在线');
             $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
             $car->addGasBagTraceCode($bagCode);
+            $car->recordTemperature($temperature, $driverId);
+            
             $transaction->commit();
 
 			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($car->car->id,13));

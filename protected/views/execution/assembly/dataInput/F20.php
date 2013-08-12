@@ -386,7 +386,7 @@
                     <td class="tdList">AMT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">空调温度__________℃</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -770,7 +770,7 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">空调温度__________℃</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1144,7 +1144,7 @@
                     <td class="tdList">DCT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">空调温度__________℃</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>

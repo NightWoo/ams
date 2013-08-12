@@ -105,10 +105,11 @@
 
 								</div>
 							</div>
+							
 							<div>
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 --> 
-							</form>                 
+							</form>
 							<form id="formBag" class="well form-search">
 								<label>气囊</label>
 								<input id="inputBag" type="text" class="span3" placeholder="请扫描/输入主驾气囊条码...">
@@ -118,9 +119,19 @@
 									<ul id="tabs" class="nav nav-pills">
 										<li class="active"><a href="#general" data-toggle="tab">常见</a></li>
 										<li><a href="#other" data-toggle="tab">其他</a></li>
+										<li>
+											<div style="margin:0 0 0px 5px;padding-top:2px">
+												<!-- <label>温度</label> -->
+												<div class="input-append">
+													<input id="inputTemperature" type="text" class="span3" style="width:70px" placeholder="空调温度...">
+													<span class="add-on">℃</span>
+												</div>
+											</div>
+										</li>
 									</ul>
 								</div>
 								<div id="tabContent" class="tab-content">
+
 									<div class="tab-pane active" id="general">
 										<table id="tableGeneral" class="table">
 											<thead>

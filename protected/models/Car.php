@@ -629,6 +629,25 @@ class Car
 	    $this->addTraceComponents($node, '{692:"'.$gasBagCode.'"}');	
 	}
 
+	public function recordTemperature($temperature=0, $recorderId=0){
+		$ar = new AirconditionTemperatureAR();
+		$ar->car_id = $this->car->id;
+		$ar->temperature = $temperature;
+		$ar->user_id = $recorderId;
+		$ar->save();
+	}
+
+	public function getTemperatureFault(){
+		$series = $this->car->series;
+		$faultArray = array(
+			"F0"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
+			"M6"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
+			"6B"=>array("faultId"=>"13934","componentId"=>"3396","dutyDepartment"=>"0"),
+		);
+
+		return $faultArray[$series];
+	}
+
 	public function getAllTrace($node) {
 		$condition = "";
 		if(!empty($node)) {

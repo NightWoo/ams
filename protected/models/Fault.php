@@ -13,7 +13,7 @@ class Fault
 		$this->tablePrefix = $tablePrefix;
 		
 		$this->vin = $vin;
-		$this->faults = CJSON::decode($faults);
+		$this->faults = is_array($faults) ? $faults : CJSON::decode($faults);
 		$this->others = $others;
 	}
 		

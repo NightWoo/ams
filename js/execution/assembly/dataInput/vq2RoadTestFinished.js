@@ -208,7 +208,7 @@ $(document).ready(function  () {
 		//init all
 
 		$("#formBag").hide();
-		
+		$("#inputTemperature").val("");
 		if (dutyOption != "") {
 			//初始化  ‘其他’栏
 			$("#tableOther tbody").text("");
@@ -290,12 +290,19 @@ $(document).ready(function  () {
 	//提交
 	//构造提交的json，包括以下 vin 和fault，fault如下
 	// fault:[{"componentId":1,"faultId":1,"fixed":false},{}]
-	$("#btnSubmit").click(function() {		
+	$("#btnSubmit").click(function() {
+		temperature = $.trim($("#inputTemperature").val());
+		// if(temperature == "" || !(/^\d*$/.test(temperature))){
+		if(temperature == "" || !(temperature>0 && temperature<40)){
+			alert("必须输入空调温度，且填写的必须是小于40的整数");
+			return false;
+		}		
 		//vin号，和故障数组
 		var sendData = {};
 		sendData.vin = $('#vinText').val();
 		sendData.bag = $("#inputBag").val();
 		sendData.driver = $("#driver").val();
+		sendData.temperature = $.trim($("#inputTemperature").val());
 		sendData.fault = [];
 		console.log($("#tabContent tr").length);
 		var selects = $("#tabContent tr select").filter(".fault-type");
