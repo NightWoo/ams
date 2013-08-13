@@ -134,7 +134,7 @@ class Order
 				$order->priority = $maxPrioity;
 				$order->status = 1;
 				$curDate = DateUtil::getCurDate();
-				if($order->activate_time == '0000-00-00 00:00:00'){
+				if($order->activate_time == '0000-00-00 00:00:00' && $order->standby_date == $curDate){
 					$order->activate_time = date('YmdHis');
 					$order->lane_status = 1;
 				}

@@ -14,6 +14,7 @@ class ExecutionController extends BmsBaseController
 		'T11','T21','T32','C10','C21','F10',
         'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2',
 	);
+
 	public static $MERGED_VIEW = "T11-F10";
 
 	public static $QUERY_PRIVILAGE = array(
@@ -28,8 +29,6 @@ class ExecutionController extends BmsBaseController
 
     public static $CHILD_VIEW_PRIVILAGE = array(
         'PBS' => array('DATA_INPUT_PBS'),
-        'SPSPoint' => array('DATA_INPUT_SPS'),
-        'T11-F10' => array('DATA_INPUT_T11_F10'),
         'F20' => array('DATA_INPUT_VQ1'),
         'VQ1' => array('DATA_INPUT_VQ1'),
         'VQ2RoadTestFinished' => array('DATA_INPUT_VQ2'),
@@ -39,7 +38,14 @@ class ExecutionController extends BmsBaseController
     );
 
     public static $CHILD_NODE_PRIVILAGE = array(
+        'S1' => array('DATA_INPUT_SPS_S1'),
+        'S2' => array('DATA_INPUT_SPS_S2'),
+        'S3' => array('DATA_INPUT_SPS_S3'),
         'T0' => array('DATA_INPUT_T0'),
+        'T0_2' => array('DATA_INPUT_T0_2'), 
+        'T11' => array('DATA_INPUT_T11_F10'), 'T21' => array('DATA_INPUT_T11_F10'), 'T32' => array('DATA_INPUT_T11_F10'), 'C10' => array('DATA_INPUT_T11_F10'),'C21' => array('DATA_INPUT_T11_F10'),'F10' => array('DATA_INPUT_T11_F10'),
+        'T11_2' => array('DATA_INPUT_T11_F10_2'),'T21_2' => array('DATA_INPUT_T11_F10_2'),'T32_2' => array('DATA_INPUT_T11_F10_2'),'C10_2' => array('DATA_INPUT_T11_F10_2'),'C21_2' => array('DATA_INPUT_T11_F10_2'),'F10_2' => array('DATA_INPUT_T11_F10_2'),
+        'CHECK_IN' => array('DATA_INPUT_WAREHOUSE'),'OutStandby'=>array('DATA_INPUT_WAREHOUSE'), 'CHECK_OUT' => array('DATA_INPUT_WAREHOUSE'),
     );
 	/**
 	 * Declares class-based actions.
@@ -102,10 +108,11 @@ class ExecutionController extends BmsBaseController
             $node = Node::createByName($nodeName);
             if(array_key_exists($nodeName, self::$CHILD_NODE_PRIVILAGE)) {
                 Yii::app()->permitManager->check(self::$CHILD_NODE_PRIVILAGE[$nodeName]);
-            } 
+            }
             if(array_key_exists($view, self::$CHILD_VIEW_PRIVILAGE)) {
                 Yii::app()->permitManager->check(self::$CHILD_VIEW_PRIVILAGE[$view]);
             }
+
             $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

@@ -458,7 +458,7 @@ $(document).ready(function () {
 			"roleIds" : list},
 		    success:function (response) {
 		    	if(response.success){
-		    		
+		    		ajaxQuery();
 		    	}else{
 		    		// $("#vinText").val("");
 		    		alert(response.message);

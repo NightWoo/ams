@@ -109,9 +109,13 @@ class ComponentController extends BmsBaseController
 		try{
 			$opUserId = Yii::app()->user->id;
             $user = User::model()->findByPk($opUserId);
-            if(!$user->admin) {
+            // if(!$user->admin) {
+            //     BmsLogger::warning($opUserId . " try to save component");
+            //     throw new Exception ('不要做坏事，有记录的！！');
+            // }
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
                 BmsLogger::warning($opUserId . " try to save component");
-                throw new Exception ('不要做坏事，有记录的！！');
+                throw new Exception ('您无故障库维护权限');
             }
 
 			$id = $this->validateIntVal('id', 0);
@@ -156,14 +160,48 @@ class ComponentController extends BmsBaseController
         }
 	}
 
+	public function actionSaveProvider() {
+		$componentId = $this->validateIntVal("componentId", 0);
+		$providerIds = array();
+		for($i=1;$i<=3;$i++){
+			$providerIds[$i] = $this->validateIntVal("providerId".$i, 0);
+		}
+		try {
+			$opUserId = Yii::app()->user->id;
+            $user = User::model()->findByPk($opUserId);
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
+                BmsLogger::warning($opUserId . " try to save component");
+                throw new Exception ('您无故障库维护权限');
+            }
+            $component = ComponentAR::model()->findByPk($componentId);
+            if(empty($component)) {
+            	throw new Exception("零部件不存在");
+            } else {
+            	for($i=1;$i<=3;$i++){
+            		$provider = "provider_$i";
+	            	$component->$provider = $providerIds[$i];
+            	}
+            	$component->save();
+            }
+            $data = $component;
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
+
 	public function actionRemove() {
 		try{
 			$opUserId = Yii::app()->user->id;
             $user = User::model()->findByPk($opUserId);
 			$id = $this->validateIntVal('id', 0);
-            if(!$user->admin) {
-                BmsLogger::warning($opUserId . " try to remove component @ " .$id);
-                throw new Exception ('不要做坏事，有记录的！！');
+            // if(!$user->admin) {
+            //     BmsLogger::warning($opUserId . " try to remove component @ " .$id);
+            //     throw new Exception ('不要做坏事，有记录的！！');
+            // }
+            if(!Yii::app()->permitManager->checkPrivilage('BASE_DATA_EDIT')){
+                BmsLogger::warning($opUserId . " try to save component");
+                throw new Exception ('您无故障库维护权限');
             }
 			BmsLogger::info("remove component @ " .$id);
 			$component = ComponentAR::model()->findByPk($id);

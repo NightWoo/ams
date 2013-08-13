@@ -133,7 +133,7 @@
                     <td class="tdList">右前/后门框密封条未装配到位</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">四轮定位：</td>
+                    <td class="tdList">P档检测：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -144,7 +144,7 @@
                     <td class="tdList">右前/后门护板未装配到位、间隙</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">大灯：</td>
+                    <td class="tdList">四轮定位：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -155,7 +155,7 @@
                     <td class="tdList">主/副驾驶座椅卡滞</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">侧滑：</td>
+                    <td class="tdList">ESP/EPB/SRS：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -166,7 +166,7 @@
                     <td class="tdList">右A柱上护板钣金外露/黑胶外露/标签外露</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">制动：</td>
+                    <td class="tdList">大灯：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -177,7 +177,7 @@
                     <td class="tdList">行李箱脏/杂胶/少卡扣</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">速度：</td>
+                    <td class="tdList">侧滑：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -188,7 +188,7 @@
                     <td class="tdList">右后门玻璃与钣金干涉</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">排放：</td>
+                    <td class="tdList">制动：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -199,7 +199,7 @@
                     <td class="tdList">左/右C柱上护板与顶棚间隙</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">底盘：</td>
+                    <td class="tdList">速度、声响：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -210,7 +210,7 @@
                     <td class="tdList">背门密封条未装配到位/松脱</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">方向盘力矩复检：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -221,7 +221,7 @@
                     <td class="tdList">背门难关/大顶饰条间隙/开胶</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">空调温度：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -232,7 +232,7 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">排放：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -243,7 +243,7 @@
                     <td class="tdList alignRight">四门两盖〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
+                    <td class="tdList">底盘：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -254,7 +254,7 @@
                     <td class="tdList">前机盖与左/右翼子板间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">车辆向左/右跑偏、方向盘不正</td>
+                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -265,7 +265,7 @@
                     <td class="tdList">左/右翼子板与前保间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">刹车软、电喇叭异响/不响</td>
+                    <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -276,7 +276,7 @@
                     <td class="tdList">左/右前门与翼子板间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">底盘、前座总成、机盖铰链处异响</td>
+                    <td class="tdList">车辆向左/右跑偏、方向盘不正</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -287,7 +287,7 @@
                     <td class="tdList">左/右后门与前门间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">后排靠背总成、背门异响</td>
+                    <td class="tdList">刹车软、电喇叭异响/不响</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -298,7 +298,7 @@
                     <td class="tdList">左/右后门与后围间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">防冻液少/多、转向液少/多、制动液少/多</td>
+                    <td class="tdList">底盘、前座总成、机盖铰链处异响</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -309,7 +309,7 @@
                     <td class="tdList">后保险杠与左/右后围间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">时钟弹簧不对中、方向盘力矩未打</td>
+                    <td class="tdList">后排靠背总成、背门异响</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -320,7 +320,7 @@
                     <td class="tdList">左/右后组合灯与后围间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">安全气囊未解码</td>
+                    <td class="tdList">防冻液少/多、转向液少/多、制动液少/多</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -331,7 +331,7 @@
                     <td class="tdList">背门与左/右后组合灯间隙/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">时钟弹簧不对中、方向盘力矩未打</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -342,7 +342,7 @@
                     <td class="tdList">加油口盖异响/面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList">安全气囊未解码</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -386,7 +386,7 @@
                     <td class="tdList">AMT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">空调温度__________℃</td>
+                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -517,7 +517,29 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
+                    <td class="tdList">P档检测：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
                     <td class="tdList">四轮定位：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">ESP/EPB/SRS：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -561,7 +583,29 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">速度：</td>
+                    <td class="tdList">速度、声响：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">方向盘力矩复检：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">空调温度：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -577,10 +621,10 @@
                     <td class="tdCheck"></td>
                 </tr>
                 <tr class="trList">
-                    <td class="tdList"></td>
+                    <td class="tdList alignRight">性能检验〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList"></td>
+                    <td class="tdList alignRight">后背门〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList">底盘：</td>
@@ -603,28 +647,6 @@
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList alignRight">性能检验〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList alignRight">后背门〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
@@ -709,28 +731,6 @@
                     <td class="tdCheck"></td>
                 </tr>
                 <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
                     <td class="tdList alignRight">左侧门〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
@@ -770,7 +770,7 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">空调温度__________℃</td>
+                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -902,7 +902,7 @@
                     <td class="tdList">右前/后门框密封条未装配到位、亮饰条高点</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">四轮定位：</td>
+                    <td class="tdList">P档检测：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -913,7 +913,7 @@
                     <td class="tdList">右A柱上护板未装配到位</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">ESP/EPB/SRS</td>
+                    <td class="tdList">四轮定位：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -924,7 +924,7 @@
                     <td class="tdList">右翼子板与前门间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">大灯：</td>
+                    <td class="tdList">ESP/EPB/SRS：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -935,7 +935,7 @@
                     <td class="tdList">右前门与后门间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">制动：</td>
+                    <td class="tdList">大灯：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -957,7 +957,40 @@
                     <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">速度：</td>
+                    <td class="tdList">制动：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">速度、声响：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">方向盘力矩复检：</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">空调温度：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -973,46 +1006,13 @@
                     <td class="tdCheck"></td>
                 </tr>
                 <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList">底盘：</td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList">P档：</td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
                     <td class="tdList alignRight">性能检验〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                     <td class="tdList alignRight">行李箱盖〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
+                    <td class="tdList">底盘：</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1023,7 +1023,7 @@
                     <td class="tdList">行李箱盖与左/右侧围间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">车辆向左/右跑偏、方向盘不正</td>
+                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1034,7 +1034,7 @@
                     <td class="tdList">左/右尾灯与组合后灯间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">刹车软、电喇叭异响/不响</td>
+                    <td class="tdList alignRight">路试〖<?php for($i=0;$i<16;$i++){echo '&nbsp;';} ?>〗</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1045,7 +1045,7 @@
                     <td class="tdList">后保险杠与左/右侧围间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">底盘、前座总成、机盖铰链处异响</td>
+                    <td class="tdList">车辆向左/右跑偏、方向盘不正</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1056,7 +1056,7 @@
                     <td class="tdList">左/右组合后灯与侧围间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">防冻液少/多、转向液少/多、制动液少/多</td>
+                    <td class="tdList">刹车软、电喇叭异响/不响</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1067,7 +1067,7 @@
                     <td class="tdList">行李箱踏板与左/右毡垫间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">时钟弹簧不对中、方向盘力矩未打</td>
+                    <td class="tdList">底盘、前座总成、机盖铰链处异响</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1078,7 +1078,7 @@
                     <td class="tdList">左/右尾灯与行李箱盖间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">安全气囊未解码</td>
+                    <td class="tdList">防冻液少/多、转向液少/多、制动液少/多</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1089,29 +1089,29 @@
                     <td class="tdList">后档风玻璃与左/右侧围间隙、面差</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
+                    <td class="tdList">时钟弹簧不对中、方向盘力矩未打</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList">安全气囊未解码</td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                </tr>
+                <tr class="trList">
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdList"></td>
+                    <td class="tdCheck"></td>
+                    <td class="tdCheck"></td>
                     <td class="tdList">倒车影像/全景影像</td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList">指南针/TV</td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                </tr>
-                <tr class="trList">
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdCheck"></td>
-                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1122,7 +1122,7 @@
                     <td class="tdList alignCenter">VQ1关联检验</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList alignCenter">VQ2关联检验</td>
+                    <td class="tdList">指南针/TV</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1133,7 +1133,7 @@
                     <td class="tdList">云服务空调开启失败、提交失败</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">ESP/EPB/SRS</td>
+                    <td class="tdList"></td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>
@@ -1144,7 +1144,7 @@
                     <td class="tdList">DCT变速箱自学习</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
-                    <td class="tdList">空调温度__________℃</td>
+                    <td class="tdList alignCenter">VQ2关联检验</td>
                     <td class="tdCheck"></td>
                     <td class="tdCheck"></td>
                 </tr>

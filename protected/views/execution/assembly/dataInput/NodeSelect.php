@@ -72,7 +72,7 @@
 						<div class="node-rgl node-RK" onclick="window.location.href='/bms/execution/child?node=CHECK_IN&view=WarehouseEntry'">
 							入库
 						</div>
-						<div class="node-rgl node-standby" onclick="window.location.href='/bms/execution/outStandby'">
+						<div class="node-rgl node-standby" onclick="window.location.href='/bms/execution/child?node=OutStandby&view=OutStandby'">
 							备车
 						</div>
 						<div class="node-rgl node-WDI" onclick="window.location.href='/bms/execution/child?node=WDI&view=WDI'">
@@ -82,10 +82,10 @@
 							出库
 						</div>
 						<div class="node-rect node-FCD" onclick="window.location.href='/bms/execution/laneManage'">发车道</div>
-						<div class="node-rect node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&node=仪表分装&type=subInstrument'">仪表</div>
-						<!-- <div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&node=后桥分装&type=subRearAxle'">后桥分装</div> -->
-						<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&node=前桥分装&type=subFrontAxle'">前桥</div>
-						<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&node=发动机分装&type=subEngine'">发动机</div>
+						<div class="node-rect node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&type=subInstrument'">仪表</div>
+						<!-- <div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&type=subRearAxle'">后桥分装</div> -->
+						<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&type=subFrontAxle'">前桥</div>
+						<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&type=subEngine'">发动机</div>
 
 						<!-- II线 -->
 						<div class="node-rgl node-T0_2" onclick="window.location.href='/bms/execution/child?view=T0&node=T0_2&line=II'">
@@ -116,9 +116,9 @@
 							VQ1
 						</div>
 						<div class="node-rect node-BJK" onclick="window.location.href='#'">备件库</div>
-						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S1&view=SPSPoint&node=零部件分拣点S1&point=S1'">S1</div>
-						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S2&view=SPSPoint&node=零部件分拣点S2&point=S2'">S2</div>
-						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=零部件分拣点S3&view=SPSPoint&node=零部件分拣点S3&point=S3'">S3</div>
+						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=S1&view=SPSPoint&point=S1'">S1</div>
+						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=S2&view=SPSPoint&point=S2'">S2</div>
+						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=S3&view=SPSPoint&point=S3'">S3</div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->

@@ -166,6 +166,7 @@ var CHECK_CARD_NUMBER ="/bms/user/checkCardNumber";
 var QUERY_COMPONENT_LIST = "/bms/component/showList";
 var SAVE_COMPONENT  = "/bms/component/save";
 var REMOVE_COMPONENT = "/bms/component/remove";
+var SAVE_COMPONENT_PROVIDER = "/bms/component/saveProvider";
 
 var SEARCH_COMPONENT_NAME_LIST = "/bms/fault/search";
 var QUERY_FAULT_BASE = "/bms/fault/queryBase";

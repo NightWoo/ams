@@ -56,9 +56,13 @@ class ComponentSeeker
 			$data['category'] = $categorys[$data['category_id']];
 			for($i=1;$i<=3;$i++){
 				$providerDisplayName = "provider_display_name_" . $i;
+				$providerName = "provider_name_" . $i;
+				$providerCode = "provider_code_" . $i;
 				$providerNum = "provider_". $i;
 				$provider = ProviderAR::model()->findByPk($data[$providerNum]);
 				$data[$providerDisplayName] = empty($provider) ? "" : $provider->display_name;
+				$data[$providerName] = empty($provider) ? "" : $provider->name;
+				$data[$providerCode] = empty($provider) ? "" : $provider->code;
 			}
 		}
 

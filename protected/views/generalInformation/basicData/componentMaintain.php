@@ -380,17 +380,17 @@
   	</div>
 </div>
 
-<div class="modal" id="editProviderModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+<div class="modal" id="editProviderModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:760px;margin-left:-390px;">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-   	 	<h3>编辑供应商</h3>
+   	 	<h4>编辑供应商</h4>
   	</div>
   	<div class="modal-body">
   		<form class="form-horizontal">
 			<div class="control-group">
 				<label class="control-label" for="">第一供应商</label>
 				<div class="controls">
-					<input type="text" id="editProviderName1" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<input type="text" id="editProviderName1" class="input-xlarge inputProviderName" placeholder="请输入供应商">
 					<span id="editProviderCode1"class="help-inline inputProviderCode"></span>
 					<input type="hidden" id="editProviderId1" class="inputProviderId" value="">
 				</div>
@@ -398,7 +398,7 @@
 			<div class="control-group">
 				<label class="control-label" for="">第二供应商</label>
 				<div class="controls">
-					<input type="text" id="editProviderName2" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<input type="text" id="editProviderName2" class="input-xlarge inputProviderName" placeholder="请输入供应商">
 					<span id="editProviderCode2"class="help-inline inputProviderCode"></span>
 					<input type="hidden" id="editProviderId2" class="inputProviderId" value="">
 				</div>
@@ -406,7 +406,7 @@
 			<div class="control-group">
 				<label class="control-label" for="">第三供应商</label>
 				<div class="controls">
-					<input type="text" id="editProviderName3" class="input-medium inputProviderName" placeholder="请输入供应商">
+					<input type="text" id="editProviderName3" class="input-xlarge inputProviderName" placeholder="请输入供应商">
 					<span id="editProviderCode3"class="help-inline inputProviderCode"></span>
 					<input type="hidden" id="editProviderId3" class="inputProviderId" value="">
 				</div>
@@ -415,7 +415,7 @@
   	</div>
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-primary" id="btnEditConfirm">确认修改</button>
+	    <button class="btn btn-primary" id="btnEditProviderConfirm">确认修改</button>
   	</div>
 </div>
 

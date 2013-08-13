@@ -13,39 +13,7 @@ $(document).ready( function () {
 		});
 		$(".pagination").hide();
 
-
-		// $("#selectCategoryF0").val(2);
-		// var tr = $("<tr />");
-		    		
-		//     			var editTd = $("<td />").html(" ¦ ");
-		//     			$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-		//     			$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
-		//     			editTd.appendTo(tr);
-
-		//     			$("#tableComponent tbody").append(tr);
 	}
-
-	$("#btnQueryF0").click(function () {
-		var isFault = Number($("#isFaultF0").attr("checked") === "checked");
-		ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), isFault);
-		return false;
-	});
-
-	$("#btnQueryM6").click(function () {
-		var isFault = Number($("#isFaultM6").attr("checked") === "checked");
-		ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
-			isFault);
-		return false;
-	});
-
-	$("#btnQuery6B").click(function () {
-		var isFault = Number($("#isFault6B").attr("checked") === "checked");
-		ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
-			isFault);
-		return false;
-	});
-
-
 
 	function ajaxQuery (series, name, code, cate, isFault, pageNumber) {
 
@@ -98,11 +66,16 @@ $(document).ready( function () {
 		    			tr.data("carSeries", value.car_series);
 		    			tr.data("componentId", value.id);
 		    			tr.data("categoryId", value.category_id);
+		    			tr.data("componentCode", value.code);
+		    			tr.data("componentName", value.name);
 						tr.data("name",value.name);
-						tr.data("unitPrice",value.unit_price);	
-						tr.data("provider_1",value.provider_1);	
-						tr.data("provider_2",value.provider_2);	
-						tr.data("provider_3",value.provider_3);	
+						tr.data("unitPrice",value.unit_price);
+						for(i=1;i<=3;i++){
+							tr.data("provider_" + i, value["provider_" + i]);	
+							tr.data("provider_display_name_" + i,value["provider_display_name_" + i]);	
+							tr.data("provider_name_" + i, value["provider_name_" + i]);	
+							tr.data("provider_code_" + i, value["provider_code_" + i]);	
+		    			}	
 		    			$("#tableComponent tbody").append(tr);
 
 
@@ -128,74 +101,6 @@ $(document).ready( function () {
 			}
 		});
 	}
-
-
-	$("#tableComponent").click(function (e) {
-		if($(e.target).is("button")) {
-			if ($(e.target).html() === "编辑") {
-
-				$('#editModal').modal("toggle");
-
-				var siblings = $(e.target).parent("td").siblings();
-				var tr = $(e.target).closest("tr");
-				$("#inputSeries").val(tr.data("carSeries"));
-				$("#inputCate").val(tr.data("categoryId"));
-				// $("#inputCate").attr("value",siblings[1].innerHTML);
-				$("#inputCode").attr("value",siblings[2].innerHTML);
-				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		//modified by wujun
-				$("#inputSimpleCode").attr("value",siblings[4].innerHTML);
-				if (siblings[5].innerHTML === '是') {
-					$("#checkboxIsFault").attr("checked", "checked");
-				} else {
-					$("#checkboxIsFault").removeAttr("checked");
-				}
-				$("#editUnitPrice").val(tr.data("unitPrice"));
-				$("#inputComment").attr("value",siblings[8].innerHTML);
-
-				// console.log($(e.target).parent("td").parent("tr").data("componentId"));
-				$("#editModal").data("componentId", tr.data("componentId"));
-				$("#inputName").attr("value", tr.data("name"));	//added by wujun
-				// $("#editModal").data("componentId");//get the component id 
-			} else {
-				ajaxDelete(tr.data("componentId"));
-			}
-		}
-
-		if($(e.target).is("a")){
-			if($(e.target).hasClass("editProvider")){
-				var tr = $(e.target).closest("tr");
-				$("#editProviderModal").modal("show");
-			}
-		}
-	});
-
-	$("#btnAddF0").click(function () {
-		$('#newSeries').attr("value", "F0");
-		$('#newModal').modal("toggle");
-	});
-
-	$("#btnAddM6").click(function () {
-		$('#newSeries').attr("value", "M6");
-		$('#newModal').modal("toggle");
-	});
-
-	$("#btnAdd6B").click(function () {
-		$('#newSeries').attr("value", "6B");
-		$('#newModal').modal("toggle");
-	});
-
-	$("#btnEditConfirm").click(function () {
-		ajaxEdit();
-	});
-
-	$("#btnNewConfirm").click(function () {
-		if ($.trim($("#newCode").attr("value")) === "" ||
-			$.trim($("#newName").attr("value")) === "") {
-			alert("零部件编号和零部件名称不能为空");
-			return false;
-		}
-		ajaxNew();
-	});
 
 	function ajaxEdit (compId) {
 		var isFault = 0;
@@ -276,6 +181,30 @@ $(document).ready( function () {
 		});
 	}
 
+	function ajaxEditProvider(componentId) {
+		$.ajax({
+			url: SAVE_COMPONENT_PROVIDER,
+			type: "get",
+			dataType: "json",
+			data:{
+				"componentId": componentId,
+				"providerId1" : $("#editProviderId1").val(),
+				"providerId2" : $("#editProviderId2").val(),
+				"providerId3" : $("#editProviderId3").val(),
+			},
+			error: function() {alertError();},
+			success: function(response) {
+				if(response.success) {
+					goQuery();
+					$("#editProviderModal").modal("hide");
+					emptyEditProviderModal();
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
 	function ajaxDelete (deleteId) {
 		$.ajax({
 			url : REMOVE_COMPONENT,
@@ -313,6 +242,134 @@ $(document).ready( function () {
 			}
 	}
 
+	function getProviderCode(providerName) {
+		var data;
+		$.ajax ({
+			url: GET_PROVIDER_CODE,
+			type: "get",
+			async: false,
+			dataType: "json",
+			data: {
+				"providerName": providerName	
+			},
+			success: function(response) {
+				if(response.success){
+					data = response.data[0];
+				}
+			},
+			error: function() { 
+		    	alertError(); 
+		    }
+		})
+		return data;
+	}
+
+	function emptyEditProviderModal() {
+		$("#editProviderModal").data("componentId", "0");
+		for(i=1;i<=3;i++){
+			$("#editProviderName" + i).val("");
+			$("#editProviderCode" + i).val("");
+			$("#editProviderId" + i).val("0");
+		}
+	}
+
+	$("#btnQueryF0").click(function () {
+		var isFault = Number($("#isFaultF0").attr("checked") === "checked");
+		ajaxQuery("F0", $("#inputNameF0").val(), $("#inputCodeF0").val(), $("#selectCategoryF0").val(), isFault);
+		return false;
+	});
+
+	$("#btnQueryM6").click(function () {
+		var isFault = Number($("#isFaultM6").attr("checked") === "checked");
+		ajaxQuery("M6", $("#inputNameM6").val(), $("#inputCodeM6").val(), $("#selectCategoryM6").val(),
+			isFault);
+		return false;
+	});
+
+	$("#btnQuery6B").click(function () {
+		var isFault = Number($("#isFault6B").attr("checked") === "checked");
+		ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
+			isFault);
+		return false;
+	});
+
+	$("#tableComponent").click(function (e) {
+		if($(e.target).is("button")) {
+			if ($(e.target).html() === "编辑") {
+
+				$('#editModal').modal("toggle");
+
+				var siblings = $(e.target).parent("td").siblings();
+				var tr = $(e.target).closest("tr");
+				$("#inputSeries").val(tr.data("carSeries"));
+				$("#inputCate").val(tr.data("categoryId"));
+				$("#inputCode").attr("value",siblings[2].innerHTML);
+				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		
+				$("#inputSimpleCode").attr("value",siblings[4].innerHTML);
+				if (siblings[5].innerHTML === '是') {
+					$("#checkboxIsFault").attr("checked", "checked");
+				} else {
+					$("#checkboxIsFault").removeAttr("checked");
+				}
+				$("#editUnitPrice").val(tr.data("unitPrice"));
+				$("#inputComment").attr("value",siblings[8].innerHTML);
+
+				$("#editModal").data("componentId", tr.data("componentId"));
+				$("#inputName").attr("value", tr.data("name"));	
+			} else {
+				ajaxDelete(tr.data("componentId"));
+			}
+		}
+
+		if($(e.target).is("a")){
+			if($(e.target).hasClass("editProvider")){
+				var tr = $(e.target).closest("tr");
+				for(i=1;i<=3;i++){
+					$("#editProviderName" + i).val(tr.data("provider_display_name_" + i));
+					$("#editProviderId" + i).val(tr.data("provider_" + i));
+    				providerCode = tr.data("provider_" + i) == "0" ? "" : "<i class='icon-ok'></i>[" + tr.data("provider_code_" + i) + "]";
+    				$("#editProviderCode" + i).html(providerCode);
+    			}
+    			$("#editProviderModal").data("componentId", tr.data("componentId"));
+    			$("#editProviderModal .modal-header h4").html("[" +tr.data("componentCode") + "]" + tr.data("componentName") );
+				$("#editProviderModal").modal("show");
+			}
+		}
+	});
+
+	$("#btnAddF0").click(function () {
+		$('#newSeries').attr("value", "F0");
+		$('#newModal').modal("toggle");
+	});
+
+	$("#btnAddM6").click(function () {
+		$('#newSeries').attr("value", "M6");
+		$('#newModal').modal("toggle");
+	});
+
+	$("#btnAdd6B").click(function () {
+		$('#newSeries').attr("value", "6B");
+		$('#newModal').modal("toggle");
+	});
+
+	$("#btnEditConfirm").click(function () {
+		ajaxEdit();
+	});
+
+	$("#btnNewConfirm").click(function () {
+		if ($.trim($("#newCode").attr("value")) === "" ||
+			$.trim($("#newName").attr("value")) === "") {
+			alert("零部件编号和零部件名称不能为空");
+			return false;
+		}
+		ajaxNew();
+	});
+
+	$("#btnEditProviderConfirm").click(function () {
+		componentId = $("#editProviderModal").data("componentId");
+		ajaxEditProvider(componentId);
+	});
+
 	$(".prePage").click(
 		function (){
 			if ($("#liF0").hasClass("active")) {
@@ -349,28 +406,6 @@ $(document).ready( function () {
 		}
 	);
 
-	function getProviderCode(providerName) {
-		var data;
-		$.ajax ({
-			url: GET_PROVIDER_CODE,
-			type: "get",
-			async: false,
-			dataType: "json",
-			data: {
-				"providerName": providerName	
-			},
-			success: function(response) {
-				if(response.success){
-					data = response.data[0];
-				}
-			},
-			error: function() { 
-		    	alertError(); 
-		    }
-		})
-		return data;
-	}
-
 	$("#editProviderName1").typeahead({
 	    source: function (input, process) {
 	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
@@ -393,8 +428,8 @@ $(document).ready( function () {
 	    source: function (input, process) {
 	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
 	        	if(data.data == '') {
-	        		$("#editProviderCode1").html("<i class='icon-remove'></i>");
-	        		$("#editProviderId1").val("0");
+	        		$("#editProviderCode2").html("<i class='icon-remove'></i>");
+	        		$("#editProviderId2").val("0");
 	        	}
 	        	return process(data.data);
 	        },'json');
