@@ -26,11 +26,11 @@
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle"><i class="icon-map-marker"></i>&nbsp;现场<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
+						<ul class="dropdown-menu">
 							<li><a href="#">现场管理1</a></li>
 							<li><a href="#">现场管理2</a></li>
 							<li><a href="#">现场管理3</a></li>
-						</ul> -->
+						</ul>
 					</li>
 					<li class="dropdown" id="headPlanLi">
 						<a href="/bms/execution/configPlan"><i class="icon-tasks"></i>&nbsp;计划<!-- <b class="caret"></b> --></a>
@@ -91,7 +91,7 @@
 	</div>
 </div>
 <div id="toggle-top" href="">
-	<!-- <i id="icon-top" class="icon-chevron-up"></i>	 -->
+	<i id="icon-top" class="icon-chevron-up"></i>	
 </div>
 </div>
 <div id="divFoot">

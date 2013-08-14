@@ -82,6 +82,10 @@ legend span {
   width:50px;
 }
 
+.appendBtn {
+  width:13px;
+}
+
 a {
   cursor: pointer;
 }

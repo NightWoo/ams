@@ -23,7 +23,7 @@ $("#toggle-top").toggle(
 			$(".offhead").animate({"margin-top":"20px"});
 	  },
 	  function () {
-			$(".offhead").animate({"margin-top":"60px"});
+			$(".offhead").animate({"margin-top":"55px"});
 			$("#icon-top").removeClass("icon-chevron-down");
 			$("#icon-top").addClass("icon-chevron-up");
 			$("#toggle-top").animate({"top":"41px"});

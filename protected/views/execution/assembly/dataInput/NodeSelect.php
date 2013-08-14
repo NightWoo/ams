@@ -115,7 +115,7 @@
 						<div class="node-rgl node-VQ1_2" onclick="window.location.href='/bms/execution/child?view=VQ1&node=VQ1_2'">
 							VQ1
 						</div>
-						<div class="node-rect node-BJK" onclick="window.location.href='#'">备件库</div>
+						<div class="node-rect node-BJK" onclick="window.location.href='/bms/execution/child?node=SPARES_STORE&view=SparesStore'">备件库</div>
 						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=S1&view=SPSPoint&point=S1'">S1</div>
 						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=S2&view=SPSPoint&point=S2'">S2</div>
 						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=S3&view=SPSPoint&point=S3'">S3</div>

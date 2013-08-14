@@ -71,7 +71,7 @@
 			    	<div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">VIN</span>
                         <input type="text" class="input-medium" placeholder="VIN号..." id="vinInput"/>
-                        <a class="btn queryVinBtn appendBtn" style="width:13px;"><i class="icon-search"></i></a>
+                        <a class="btn queryVinBtn appendBtn"><i class="icon-search"></i></a>
                     </div>
 			    	<!-- <div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">板号</span>
