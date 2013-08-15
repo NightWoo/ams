@@ -337,6 +337,7 @@ $(document).ready(function () {
 		    		alert("用户添加成功！");
 		    		$("#newModal").modal('hide');
 		    		ajaxQuery ($(".curPage").attr("page"));
+		    		emptyNewModal();
 		    	} else {
 		    		// $("#vinText").val("");
 		    		alert(response.message);
@@ -467,6 +468,10 @@ $(document).ready(function () {
 		    error:function(){alertError();}
 		});
 		$('#rightModal').modal("toggle");
+	}
+
+	function emptyNewModal(){
+		$("#newModal input[type=text]").val("");
 	}
 
 });

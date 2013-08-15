@@ -37,11 +37,22 @@
   z-index: 100;
 }
 
+#bodyleft{
+  display: none;
+}
+#toggle-left {
+  left: 0;
+}
+
 #icon-top {
-	position: relative;
-	left: 99%;
+  vertical-align:text-top;
 	opacity: 0.5;
-	margin-top: 0;
+  display: none;
+}
+
+#icon-top-container {
+  width:14px;
+  margin: 0 auto;
 }
 
 .offhead {
@@ -106,6 +117,7 @@ label{vertical-align:middle;}
 /*alert margin*/
 #messageAlert{
   margin-top: 10px;
+  display: none;
 }
 /*pager style*/
 .pager li{

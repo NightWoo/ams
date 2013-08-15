@@ -8,8 +8,8 @@ class ShiftRecordCommand extends CConsoleCommand
 	public function actionAddShiftDaily() {
 
 		$lineSpeed = array(
-			'0' => 180,
-			'1' => 180
+			'0' => 165,
+			'1' => 165
 		);
 
 		$curDate = DateUtil::getCurDate();

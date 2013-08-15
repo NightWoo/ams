@@ -29,7 +29,7 @@
 								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
 								<a id="validateVinBtn" class="btn validateVinBtn appendBtn"><i class="icon-search"></i></a>
 							</div>
-							<button type="button" id="btnSubmint" class="btn btn-primary">提交</button>
+							<button type="button" id="btnSubmit" class="btn btn-primary">提交</button>
 							<button type="button" id="reset" class="btn">清空</button>
 							<input type="hidden" id="currentNod" name="currentNode" value="<?php echo $node?>">
 							<div class="help-inline" id="carInfo">
@@ -107,6 +107,6 @@
     <a href="#" class="btn btn-primary">Save changes</a>
   </div>
 </div>
-<script data-main="/bms/rjs/sparesStore.js" src="/bms/rjs/require.js"></script>
+<script data-main="/bms/rjs/sparesStore.js" src="/bms/rjs/lib/require.js"></script>
 </body>
 </html>
