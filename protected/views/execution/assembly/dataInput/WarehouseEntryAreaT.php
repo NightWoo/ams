@@ -31,11 +31,11 @@
 				?>
 				<div id="bodyright" class="offset2"><!-- Main体 -->
 					<div>
-		            	<legend><?php echo $nodeDisplayName;?>
+		            	<legend>入库临时区
 		            		<span class="pull-right">
 		            			 <a href="/bms/execution/warehouseRelocate"><i class="icon-link"></i>&nbsp;重新分配库位</a>
 		            			 /
-		            			 <a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntryAreaT"><i class="icon-link"></i>&nbsp;入库临时区</a>
+		            			 <a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntry"><i class="icon-link"></i>&nbsp;入成品库</a>
 		            		</span>
 		            	</legend>
 		            </div>
@@ -51,7 +51,7 @@
 											</div>
 											<input type="button" class="btn" id ="reset" value ="清空">
 											<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'>
-											<input type="hidden" id='areaT' name='areaT' value='0'>
+											<input type="hidden" id='areaT' name='areaT' value='1'>
 										</td>
 									</tr>
 									<tr>
@@ -60,7 +60,7 @@
 												<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
 												<input type="text" class="span3" placeholder="请贴厂牌完成入库..." id="cardText" disabled="disabled">
 											</div>
-												<input type="button" class="btn btn-primary" disabled="disabled" id ="btnSubmit" value ="入库">
+												<input type="button" class="btn btn-danger" disabled="disabled" id ="btnSubmit" value ="入库临时区" style="width:156px">
 										</td>
 									</tr>
 									<tr>
@@ -86,6 +86,21 @@
 				</div><!-- end Main体 -->
 			</div><!-- end offhead体 -->
 		</div>
+		<!-- <div class="printable toPrint" style="width:168pt;height:70pt; margin:8pt 0; font-family: Microsoft YaHei;">
+			<div style="text-align:center;font-size:24pt;text-align: center;">
+				<p id="rowPrint" style="margin: 0 5pt 0 0;">A000</p>
+			</div>
+			<div style="text-align:center;font-size:14pt;margin: 0 5pt;">
+				<p id="vinPrint" style="margin:0 5pt 5pt 0;">LC0C14AA0d0000000</p>
+			</div>
+			<div style="font-size:10pt;">
+				<span id="driver" style="margin-left:10pt">
+					司机
+				</span>
+				<span class="nowTime" style="float:right; margin-right:14pt">
+				</span>
+			</div>
+		</div> -->
 		<div class="printable toPrint" style="width:220pt;height:100pt; padding: 7pt 5pt; font-family: Microsoft YaHei;">
 			<div style="text-align:center;font-size:14pt;text-align: center;">
 				<p id="rowPrint" style="margin: 2pt 5pt;">A000</p>

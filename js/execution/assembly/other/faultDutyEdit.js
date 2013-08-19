@@ -96,7 +96,8 @@ $(document).ready(function () {
 		    		// $("#vinText").val(car.vin);
 		    		$("#vin").html(car.vin);
 		    		$('#serialNumber').html(car.serial_number);
-		    	 	$('#series').html(car.series);
+		    	 	$('#series').html(byd.SeriesName[car.series]);
+			    	$('#cold').html(car.cold);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    $('#configName').html(car.config_name);

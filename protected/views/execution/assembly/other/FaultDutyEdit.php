@@ -11,6 +11,7 @@
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
+        <script type="text/javascript" src="/bms/js/common.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/other/faultDutyEdit.js"></script>
 	</head>
 
@@ -76,6 +77,7 @@
                     <span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>
                     <span class="label label-info" rel="tooltip" title="车型" id="type"></span>
                     <span class="label label-info" rel="tooltip" title="配置" id="configName"></span>
+                    <span class="label label-info" rel="tooltip" title="配置" id="cold"></span>
                     <span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
                     <span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
                 </div>

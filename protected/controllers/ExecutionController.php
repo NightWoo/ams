@@ -629,6 +629,7 @@ class ExecutionController extends BmsBaseController
         try {
             $vin = $this->validateStringVal('vin', '');
             $driverId = $this->validateIntVal('driverId', 0);
+            $areaT = $this->validateIntVal('areaT', 0);
             $date = DateUtil::getCurDate();
 
             $car = Car::create($vin);
@@ -669,7 +670,8 @@ class ExecutionController extends BmsBaseController
                 $car->enterNode('OutStandby', $driverId);
             } else {
                 $warehouse = new Warehouse;
-                $data = $warehouse->checkin($vin);
+                $forceToAreaT = empty($areaT)? false : true;
+                $data = $warehouse->checkin($vin, $forceToAreaT);
                 $message = $vin . '已成功入库，请开往' . $data['row'];
                 $car->car->warehouse_id = $data['warehouse_id'];
                 $car->car->area = $data['area'];

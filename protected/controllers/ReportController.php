@@ -7,11 +7,11 @@ class ReportController extends BmsBaseController
 {
 
 	public function actionDebug(){
-        $seeker= new ReportSeeker();
-        $date = "2013-07-01";
-        $timespan = "monthly";
-        // $ret = $seeker->queryQualification('VQ2_ROAD_TEST', $date, $timespan);
-        $ret = $seeker->queryFaultDaily('VQ1', $date);
+        // $seeker= new ReportSeeker();
+        $workDate = DateUtil::getLastDate();
+        $workDateTime = strtotime($workDate);
+        // $ret = date("n月j日", $workDateTime);
+        $ret =date("n-j H:i");
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 

@@ -384,26 +384,10 @@ class Car
 		$ctClass = "ComponentTrace{$series}AR";
 		Yii::import('application.models.AR.' .$ctClass);
 		$messages = array();
-		//deleted by wujun debug
-		// foreach($codeList as $componentId=>$code) {
-  //           if(empty($code)) {
-  //               continue;
-  //           }
-		// 	try {
-  //           	$this->checkBarCode($componentId, $code);
-		// 	} catch(Exception $e) {
-		// 		$messages[] = $e->getMessage();
-		// 	}
-		// }
-		// if(!empty($messages)) {
-		// 	$message = join("<br>", $messages);
-		// 	throw new Exception($message);
-		// }
 		foreach($codeList as $componentId=>$code) {
 			if(empty($code)) {
 				continue;
 			}
-			//$this->checkBarCode($componentId, $code);	
 			$trace = $ctClass::model()->find('car_id=? AND component_id=? AND node_id=?', array($this->car->id, $componentId, $nodeId));
 			if(empty($trace)) {
 				$trace = new $ctClass();
@@ -487,7 +471,7 @@ class Car
 			$ctClass = "ComponentTrace{$series}AR";
         	Yii::import('application.models.AR.' .$ctClass);
 
-			$exist = $ctClass::model()->find('bar_code = ?', array($code));
+			$exist = $ctClass::model()->find('bar_code=? AND status<2', array($code));
 			if(!empty($exist)) {
 				if($exist->car_id == $this->car->id && $exist->component_id=$componentId) {
 					continue;
@@ -573,7 +557,7 @@ class Car
         $ctClass = "ComponentTrace{$series}AR";
         Yii::import('application.models.AR.' .$ctClass);
 		$componentIdText = join(',', $componentIds);
-		$exist = $ctClass::model()->find("car_id=? AND component_id IN ($componentIdText) ", array($this->car->id));
+		$exist = $ctClass::model()->find("car_id=? AND component_id IN ($componentIdText) AND status<2", array($this->car->id));
 		
 		if(empty($exist)) {
 			throw new Exception($this->vin . ' 还没有追溯零部件 ' .$componentName.  '!');
@@ -1798,6 +1782,27 @@ class Car
 	public function validateVin(){
 		$ret = $VinManager = VinManager::validateDigit9($this->car->vin);
 		return $ret;
+	}
+
+	public function mainInfo() {
+		$data = $this->car->getAttributes();
+		$data['cold'] = empty($data['cold_resistant']) ? "非耐寒" : "耐寒";
+		$carType = CarTypeMapAR::model()->find("car_type=?", array($data['type']));
+		$carModel = !empty($carType) ? $carType->car_model : $this->cutCarType($data['type']);
+		$data['type_config'] = $data['type'];
+		$data['type_order_config'] = $data['type'];
+		if(!empty($data['config_id'])){
+			$config = CarConfigAR::model()->findByPk($data['config_id']);
+			$orderConfig = OrderConfigAR::model()->findByPk($config->order_config_id);
+			$data['config_name'] = $config->name;
+			$data['order_config_name'] = $orderConfig->name;
+			$data['type_config'] = $carModel . "/" . $config->name;
+			$data['type_order_config'] = $carModel . "/" . $orderConfig->name;
+		}
+		$data['row'] = empty($data['warehouse_id']) ? "" : WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
+		$data['lane'] = empty($data['lane_id']) ? "" : LaneAR::model()->findByPk($data['lane_id'])->name;
+
+		return $data;
 	}
 
 	private function cutCarType($type) {

@@ -72,6 +72,7 @@ $("document").ready(function() {
 			data: {
 				"vin": $("#vinText").val(),
 				"driverId": $("#cardText").attr("cardid"),
+				"areaT": $("#areaT").val(),
 			},
 			async:false,
 			success: function(response){

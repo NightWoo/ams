@@ -233,7 +233,6 @@ class ComponentController extends BmsBaseController
 
 	}
 	
-	//added by wujun
 	public function actionGetCode() {
 		$series = $this->validateStringVal('series', '');
 		$name =$this->validateStringVal('componentName', '');
@@ -244,6 +243,17 @@ class ComponentController extends BmsBaseController
 			$seeker = new ComponentSeeker;
 			$data = $seeker->getComponentCode($name, $series);
 			
+			$this->renderJsonBms(true, 'OK', $data);
+		}catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}	
+	}
+
+	public function actionGetInfo() {
+		$componentId = $this->validateIntVal("componentId", 0);
+		try{
+			$seeker = new ComponentSeeker;
+			$data = $seeker->getComponentInfo($componentId);			
 			$this->renderJsonBms(true, 'OK', $data);
 		}catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	

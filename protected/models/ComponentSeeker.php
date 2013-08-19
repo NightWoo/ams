@@ -70,9 +70,27 @@ class ComponentSeeker
 	}
 	
 	//added by wujun
-	public function getComponentCode($componentName, $series) {
+	public function getComponentCode ($componentName, $series) {
 		$sql = "SELECT id AS component_id, code AS component_code, display_name AS component_name, name, simple_code FROM component WHERE display_name = '$componentName' AND car_series='$series'";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		return $datas;
 	}
+
+	public function getComponentInfo ($componentId) {
+		$sql = "SELECT id AS component_id, code, name, display_name, unit_price,simple_code, provider_1, provider_2, provider_3 FROM component WHERE id=$componentId";
+		$component = Yii::app()->db->createCommand($sql)->queryRow();
+		$component['provider'] = array();
+		for($i=1;$i<=3;$i++){
+			$providerNum = "provider_". $i;
+			if(empty($component[$providerNum])) continue;
+			$providerDisplayName = "provider_display_name_" . $i;
+			$providerName = "provider_name_" . $i;
+			$providerCode = "provider_code_" . $i;
+			$provider = ProviderAR::model()->findByPk($component[$providerNum]);
+			$component['provider'][$component[$providerNum]]["display_name"] = empty($provider) ? "" : $provider->display_name;
+			$component['provider'][$component[$providerNum]]["name"] = empty($provider) ? "" : $provider->name;
+			$component['provider'][$component[$providerNum]]["code"] = empty($provider) ? "" : $provider->code;
+		}
+		return $component;
+	}	
 }

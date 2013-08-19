@@ -1,0 +1,11 @@
+#faultsTable, #componentsTable {
+	font-size: 12px;
+}
+
+#faultsDiv, #componentsDiv{
+	display: none;
+}
+
+#componentsTable input, #componentsTable select {
+	margin-bottom: 0;
+}

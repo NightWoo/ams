@@ -11,67 +11,67 @@ class Warehouse
 	public function __construct(){
 	}
 
-	public function checkin($vin) {
+	public function checkin($vin, $forceToAreaT=false) {
 		$car = CarAR::model()->find('vin=?', array($vin));
 		//$carYear = CarYear::getCarYear($vin);
-		
-		//map the order_config
-		$orderConfigId = 0;
-		$configId = $car->config_id;
-		$config = CarConfigAR::model()->findByPk($configId);
-		if(!empty($config)) {
-			$orderConfigId = $config->order_config_id;
-		}
-
-		$conditions = array();
-		switch($car->series){
-			case "F0" :
-				$conditions['area'] = "(id>1 AND id<200)";
-				break;
-			case "M6" :
-				$conditions['area'] = "((id>400 AND id<500) OR (id>600 AND id<700))";
-				break;
-			case "6B" :
-				$conditions['area'] = "(id>400 AND id<500)";
-				break;
-			default:
-		}
-		
-		$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
-		$conditions['free'] = "status=0 AND free_seat>0";
-		$condition = join(' AND ', $conditions);
-		$condition .= ' ORDER BY id ASC';
-		$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property);
-		// 寻找同型车列
-		$row = WarehouseAR::model()->find($condition, $values);
-
-		//如无同型车列		
-		if(empty($row)) {
-			//查找空车列，并生成同型车列
-			$voidCondtion = $conditions['area'] . " AND status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC";
-			$voidRow = WarehouseAR::model()->find($voidCondtion, array($car->series, $car->special_property));
-
-			if(!empty($voidRow) && !empty($orderConfigId)){
-				$row = $voidRow;
-				$row->car_type = $car->type;
-				$row->color = $car->color;
-				$row->cold_resistant = $car->cold_resistant;
-				$row->order_config_id = $orderConfigId;
-				$row->save();
-			} else {
-				//根据特殊属性找到合适车列
-				if($car->special_property == 1){
-					$row = WarehouseAR::model()->findByPk(200);
-				} else if ($car->special_property == 0) {
-					if($car->series == '6B'){
-						// $row = WarehouseAR::model()->findByPk(600);
-						$row = WarehouseAR::model()->find("id=? AND quantity<capacity", array(600));
-					}
-				} else if ($car->special_property == 9) {
-					$row = WarehouseAR::model()->findByPk(1000);
-				}
+		if(!$forceToAreaT){
+			//map the order_config
+			$orderConfigId = 0;
+			$configId = $car->config_id;
+			$config = CarConfigAR::model()->findByPk($configId);
+			if(!empty($config)) {
+				$orderConfigId = $config->order_config_id;
 			}
-		} 
+
+			$conditions = array();
+			switch($car->series){
+				case "F0" :
+					$conditions['area'] = "(id>1 AND id<200)";
+					break;
+				case "M6" :
+					$conditions['area'] = "(id>400 AND id<500) ";
+					break;
+				case "6B" :
+					$conditions['area'] = "((id>400 AND id<500) OR (id>600 AND id<700))";
+					break;
+				default:
+			}
+			
+			$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
+			$conditions['free'] = "status=0 AND free_seat>0";
+			$condition = join(' AND ', $conditions);
+			$condition .= ' ORDER BY id ASC';
+			$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property);
+			// 寻找同型车列
+			$row = WarehouseAR::model()->find($condition, $values);
+
+			//如无同型车列		
+			if(empty($row)) {
+				//查找空车列，并生成同型车列
+				$voidCondtion = $conditions['area'] . " AND status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC";
+				$voidRow = WarehouseAR::model()->find($voidCondtion, array($car->series, $car->special_property));
+
+				if(!empty($voidRow) && !empty($orderConfigId)){
+					$row = $voidRow;
+					$row->car_type = $car->type;
+					$row->color = $car->color;
+					$row->cold_resistant = $car->cold_resistant;
+					$row->order_config_id = $orderConfigId;
+					$row->save();
+				} else {
+					//根据特殊属性找到合适车列
+					if($car->special_property == 1){
+						$row = WarehouseAR::model()->findByPk(200);
+					} else if ($car->special_property == 0) {
+						if($car->series == '6B'){
+							// $row = WarehouseAR::model()->find("id=? AND quantity<capacity", array(600));
+						}
+					} else if ($car->special_property == 9) {
+						$row = WarehouseAR::model()->findByPk(1000);
+					}
+				}
+			} 
+		}
 
 		if(empty($row)){
 			$row = WarehouseAR::model()->findByPk(2000);

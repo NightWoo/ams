@@ -5,6 +5,7 @@
 	<title>备件库</title>
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<link href="/bms/css/execution/assembly/dataInput/SparesStore.css" rel="stylesheet">
 	
 </head>
 <body>
@@ -32,12 +33,15 @@
 							<button type="button" id="btnSubmit" class="btn btn-primary">提交</button>
 							<button type="button" id="reset" class="btn">清空</button>
 							<input type="hidden" id="currentNod" name="currentNode" value="<?php echo $node?>">
+							<div class="help-inline" id="vinHint">请输入VIN后回车</div>
 							<div class="help-inline" id="carInfo">
-								<span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
-								<span class="label label-info" rel="tooltip" title="车系" id="series"></span>
-								<span class="label label-info" rel="tooltip" title="车型" id="type"></span>
-								<span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
-                        		<span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
+								<span class="label label-info" rel="tooltip" title="流水号" id="serialNumberInfo"></span>
+								<span class="label label-info" rel="tooltip" title="车系" id="seriesInfo"></span>
+								<span class="label label-info" rel="tooltip" title="车型" id="typeInfo"></span>
+								<span class="label label-info" rel="tooltip" title="耐寒" id="coldInfo"></span>
+								<span class="label label-info" rel="tooltip" title="颜色" id="colorInfo"></span>
+                        		<span class="label label-info" rel="tooltip" title="状态" id="statusInfo"></span>
+                        		<span class="label label-info" rel="tooltip" title="库区" id="rowInfo"></span>
 							</div>
 						</div>
 					</form>
@@ -45,9 +49,8 @@
 						<div id="messageAlert" class="alert"></div>
 					</div>
 					<div class="row-fluid">
-						<div class="span5">
-							<table class="table">
-								<caption>故障</caption>
+						<div id="faultsDiv" class="span4">
+							<table id="faultsTable" class="table">
 								<thead>
 									<tr>
 										<th>节点</th>
@@ -57,20 +60,18 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>data</td>
-										<td>data</td>
-										<td>data</td>
-										<td>data</td>
-									</tr>
 								</tbody>
 							</table>
 						</div>
-						<div class="span7">
-							<table class="table">
-								<caption>table title and/or explanatory text</caption>
+						<div id="componentsDiv" class="span8">
+							<div class="input-prepend">
+								<span class="add-on">责任</span>
+								<select id="dutySelect" class="input-medium"></select>
+							</div>
+							<table id="componentsTable" class="table">
 								<thead>
 									<tr>
+										<th><a id="addComponent"><i class="icon-plus"></i></a></th>
 										<th>零部件名称</th>
 										<th>零部件编码</th>
 										<th>供应商</th>
@@ -79,13 +80,6 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>data</td>
-										<td>data</td>
-										<td>data</td>
-										<td>data</td>
-										<td>data</td>
-									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -94,19 +88,6 @@
 			</div><!-- end of mainbody -->
 		</div><!-- end of bodyright -->
 	</div>
-<div id="modaltest" class="modal hide fade">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>对话框标题</h3>
-  </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn">关闭</a>
-    <a href="#" class="btn btn-primary">Save changes</a>
-  </div>
-</div>
 <script data-main="/bms/rjs/sparesStore.js" src="/bms/rjs/lib/require.js"></script>
 </body>
 </html>
