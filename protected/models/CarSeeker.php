@@ -44,7 +44,7 @@ class CarSeeker
 	}
 
 
-	public function queryCheckinDetail($startTime, $endTime, $series='', $curPage=0, $perPage=0){
+	public function queryCheckinDetail ($startTime, $endTime, $series='', $curPage=0, $perPage=0) {
 		if(empty($startTime) || empty($endTime)){
 			throw new Exception ('起止时间不可为空');
 		}
@@ -84,7 +84,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryCheckoutDetail($startTime, $endTime, $series='', $curPage=0, $perPage=0){
+	public function queryCheckoutDetail ($startTime, $endTime, $series='', $curPage=0, $perPage=0) {
 		if(empty($startTime) || empty($endTime)){
 			throw new Exception ('起止时间不可为空');
 		}
@@ -129,7 +129,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryBalanceDetail($state, $series='', $curPage=0, $perPage=0, $whAvailableOnly = false, $area=''){
+	public function queryBalanceDetail ($state, $series='', $curPage=0, $perPage=0, $whAvailableOnly = false, $area='') {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -222,7 +222,7 @@ class CarSeeker
         return  array($total, $cars, $areaArray);
 	}
 
-	public function queryAssemblyBalance($state){ 
+	public function queryAssemblyBalance ($state) { 
 		$seriesArray = $this->parseSeries('all');
 		$seriesName = $this->seriesName();
 		$stateArray = $this->stateArray($state);
@@ -270,7 +270,7 @@ class CarSeeker
 		);	
 	}
 
-	public function balanceDistribute($state, $series){
+	public function balanceDistribute ($state, $series) {
 		
 		$stateName = $this->stateName();
 
@@ -339,7 +339,7 @@ class CarSeeker
 
 	}
 
-	public function queryBalanceCars($state, $series, $whAvailableOnly=false){
+	public function queryBalanceCars ($state, $series, $whAvailableOnly=false) {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -374,7 +374,7 @@ class CarSeeker
 		return $cars;
 	}
 
-	public function getBalanceCars($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly=false,$recyclePeriod=""){
+	public function getBalanceCars ($state,$orderConfigId,$coldResistant,$color,$whAvailableOnly=false,$recyclePeriod="") {
 		$conditions = array();
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
@@ -443,7 +443,7 @@ class CarSeeker
 		return $cars;
 	}
 
-	public function queryRecycleBalancePeriod($state, $series){
+	public function queryRecycleBalancePeriod ($state, $series) {
 		$seriesArray = $this->parseSeries($series);
 		$seriesName = $this->seriesName();
 		$stateArray = $this->stateArray($state);
@@ -512,7 +512,7 @@ class CarSeeker
 		);
 	}
 
-	public function getRecycleCars($state,$series,$recyclePeriod){
+	public function getRecycleCars ($state,$series,$recyclePeriod) {
 		$conditions = array();
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
@@ -572,7 +572,7 @@ class CarSeeker
 		return $cars;
 	}
 
-	public function countStateCars($state,$series, $color='', $orderConfigId=0, $coldResistant=2, $lowRP=0, $highRP=0) {
+	public function countStateCars ($state,$series='', $color='', $orderConfigId=0, $coldResistant=2, $lowRP=0, $highRP=0) {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -647,7 +647,7 @@ class CarSeeker
 		return $total;
 	}
 
-	public function queryOrderCar($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier=''){
+	public function queryOrderCar ($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier='') {
 		$configNames = $this->configNameList();
 		$orderNumberArray = array();
 		$orderSeeker = new OrderSeeker(); 
@@ -700,7 +700,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryCar($vin='',$series='',$serial=''){
+	public function queryCar ($vin='',$series='',$serial='') {
 		$conditions = array();
 
 		if(!empty($vin)){
@@ -721,7 +721,7 @@ class CarSeeker
 		return $vin;
 	}
 
-	public function queryTestlineRecord($vin) {
+	public function queryTestlineRecord ($vin) {
 		$sql = "SELECT * FROM view_testline_summary WHERE vin='$vin'";
 		$record = Yii::app()->db->createCommand($sql)->queryRow();
 		$record['Light_Flag_L'] = 'F';
@@ -737,7 +737,7 @@ class CarSeeker
 		return $record;
 	}
 
-	public function configColdArray($state, $series){
+	public function configColdArray ($state, $series){
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -764,7 +764,7 @@ class CarSeeker
 		return $configColdArray;
 	}
 
-	public function queryVins($vinText){
+	public function queryVins ($vinText) {
 
 		$vinArray = preg_split ('[\s|,|，]',$vinText);
         ArrayFunc::array_remove_empty($vinArray);
@@ -792,7 +792,7 @@ class CarSeeker
         return $datas;
 	}
 
-	private function parseSeries($series) {
+	private function parseSeries ($series) {
 		if(empty($series) || $series === 'all') {
             $series = array('F0', 'M6', '6B');
         } else {
@@ -801,7 +801,7 @@ class CarSeeker
 		return $series;
 	}
 
-	private function seriesName(){
+	private function seriesName () {
 		$seriesName = array(
 			'F0' => 'F0',
 			'M6' => 'M6',
@@ -811,7 +811,7 @@ class CarSeeker
 		return $seriesName;
 	}
 
-	private function stateArray($state){
+	private function stateArray ($state) {
 		$stateMap=array(
 			'PBS' => array('PBS'),
 			'onLine' => array('onLine'),
@@ -830,7 +830,7 @@ class CarSeeker
 		return $stateMap[$state];
 	}
 
-	private function stateName(){
+	private function stateName () {
 		$stateName = array(
 			'PBS' => 'PBS',
 			'onLine' => 'I线',
@@ -864,7 +864,7 @@ class CarSeeker
 		return $stateName;
 	}
 
-	private function periodArray(){
+	private function periodArray () {
 		$periodArray = array(
 			'&lt;8H' => array('low'=>0,'high'=>8),
 			'8-16H' => array('low'=>8,'high'=>16),
@@ -875,7 +875,7 @@ class CarSeeker
 		return $periodArray;
 	}
 
-	private function configNameList(){
+	private function configNameList () {
 		$configName = array();
 		$sql = "SELECT car_config_id, order_config_id , name , car_model FROM view_config_name";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
@@ -885,7 +885,7 @@ class CarSeeker
 		return $configName;
 	}
 
-	private function configIdList(){
+	private function configIdList () {
 		$configIds = array();
 		$sql = "SELECT car_config_id, order_config_id , name FROM view_config_name";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
@@ -898,7 +898,7 @@ class CarSeeker
 		return $configIds;
 	}
 
-	private function colorCategories($series){
+	private function colorCategories ($series) {
 		$colors = array();
 		$sql = "SELECT color from car_color_map WHERE series='$series'";
 		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -908,7 +908,7 @@ class CarSeeker
 		return $datas;
 	}
 
-	private function configCategories($series){
+	private function configCategories ($series) {
 		$configs = array();
 		$sql = "SELECT id from car_config WHERE series='$series'";
 		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -918,7 +918,7 @@ class CarSeeker
 		return $configs;
 	}
 
-	private function getWarehoseAreaIds($area) {
+	private function getWarehoseAreaIds ($area) {
 		$sql = "SELECT MIN(id) AS areaMin, MAX(id) AS areaMax FROM warehouse WHERE area='$area'";
 		$data = Yii::app()->db->createCommand($sql)->queryRow();
 

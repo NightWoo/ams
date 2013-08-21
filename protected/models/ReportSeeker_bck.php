@@ -445,7 +445,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryRecycleBalance($sDate, $eDate) {
+	public function queryRecycleBalance ($sDate, $eDate) {
 		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' GROUP BY series,state";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -458,6 +458,16 @@ class ReportSeeker
 			$count[$data['state']] += ceil($data['count']);
 		}
 
+		return $count;
+	}
+
+	public function queryRecycleBalanceNow () {
+		$stateArray = $this->stateArray('recycle');
+		$count = array();
+		$carSeeker = new CarSeeker();
+		foreach($stateArray as $state) {
+			$count[$state] = $carSeeker->countStateCars($state);
+		}
 		return $count;
 	}
 

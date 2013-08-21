@@ -153,6 +153,14 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		return jsonText;
 	}
 
+	function ajaxSubmit () {
+
+	}
+
+	function validateBarCode () {
+		
+	}
+
 	function isNeedBarCode (componentId) {
 		need = false;
 		for(i=0;i<configList.length;i++) {

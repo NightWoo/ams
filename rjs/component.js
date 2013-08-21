@@ -74,7 +74,7 @@ define(['service'], function (service) {
 
 		getInfo: function (componentId) {
 			return getInfo(componentId);
-		}
+		},
 
 		validateBarCode: function (vin, componentId, barCode) {
 			return ajaxValidateBarCode(vin, componentId, barCode);

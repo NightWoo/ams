@@ -148,7 +148,7 @@ class FaultController extends BmsBaseController
 			$fault->save('离线');
 
             $node = Node::createByName($nodeName);
-            $car->detectStatus($node);
+            $car->detectStatus($nodeName);
 
             $this->renderJsonBms(true, 'OK');
             $transaction->commit();
@@ -182,7 +182,7 @@ class FaultController extends BmsBaseController
 
             $car = Car::create($vin);
             $node = Node::createByName("ROAD_TEST_FINISH");
-            $car->detectStatus($node);
+            $car->detectStatus('ROAD_TEST_FINISH');
 
             $transaction->commit();
             $this->renderJsonBms(true, 'OK');
@@ -217,7 +217,7 @@ class FaultController extends BmsBaseController
 
             $car = Car::create($vin);
             $node = Node::createByName("VQ2");
-            $car->detectStatus($node);
+            $car->detectStatus("VQ2");
 
             $transaction->commit();
             $this->renderJsonBms(true, 'OK');
@@ -257,7 +257,7 @@ class FaultController extends BmsBaseController
 			
 			$car = Car::create($vin);
             $node = Node::createByName("VQ3");
-            $car->detectStatus($node);
+            $car->detectStatus("VQ3");
 
             $transaction->commit();
             $this->renderJsonBms(true, 'OK');

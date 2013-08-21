@@ -144,9 +144,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-			//if($car->car->series != 'M6'){
-				 $car->leftNode('CHECK_LINE');
-			//}
+			$car->leftNode('CHECK_LINE');
 
 			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
@@ -168,9 +166,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 			
-			//if($car->car->series != 'M6'){
-				$car->leftNode('ROAD_TEST_FINISH');
-			//}
+			$car->leftNode('ROAD_TEST_FINISH');
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -524,7 +520,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 				
-			$car->leftNode('VQ1');
+			// $car->leftNode('VQ1');
 
 			$fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
@@ -545,7 +541,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-            $car->leftNode('ENTER_CHECK_SHOP');
+            // $car->leftNode('ENTER_CHECK_SHOP');
             $car->passNode('ROAD_TEST_START');
             $data = $car->car;
 
@@ -1034,6 +1030,20 @@ class CarController extends BmsBaseController
             }
 
             $this->renderJsonBms(true, 'OK', $boardNumber);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionReplaceSpares () {
+        $vin = $this->validateStringVal('vin', '');
+        $spares = $this->validateStringVal('spares', '[]');
+        try {
+            $car = Car::create($vin);
+            list($nodeName, $traceId) = $car->enterNode('SPARES_STORE');
+            $car->replaceSpares($spares, $traceId);
+
+            $this->renderJsonBms(true, 'OK', null);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

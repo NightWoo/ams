@@ -396,6 +396,7 @@ class OrderController extends BmsBaseController
 			$car = Car::create($data['vin']);
 			$car->throwMarkPrintData();
 			$car->enterNode('OutStandby', $driverId);
+			$car->detectStatus("OutStandby");
 			$driverName = User::model()->findByPk($driverId)->display_name;
 			$data['driver_name'] = $driverName;
 
@@ -488,6 +489,7 @@ class OrderController extends BmsBaseController
 			//退回成品库异常区
 			if(empty($toVQ3)) {
 				$car->enterNode('CHECK_IN');
+				// $car->detectStatus("CHECK_IN");
 
 				//异常区X warehouse_id=1000
 				$warehouse = WarehouseAR::model()->findByPk(1000);
@@ -511,6 +513,7 @@ class OrderController extends BmsBaseController
 			//退回VQ3
 			if($toVQ3 == 1){
 				$car->enterNode('VQ3');
+				// $car->detectStatus("VQ3");
 				$car->warehouseReturn('VQ3');
 				$car->car->status = 'VQ3退库';
 				$car->car->warehouse_id = 0;

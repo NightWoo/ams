@@ -95,7 +95,7 @@ $("document").ready(function() {
 		    	"point": $("#spsPoint").val(),
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
-				"top" :30,
+				"top" :80,
 		    },//vin
 		    async:false,
 		    success: function(response){
@@ -142,7 +142,7 @@ $("document").ready(function() {
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
 				"status": 1,
-				"top" :30,
+				"top" :80,
 				"sortType": "DESC",
 		    },//vin
 		    success: function(response){

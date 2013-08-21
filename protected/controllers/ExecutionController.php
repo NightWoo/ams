@@ -133,14 +133,14 @@ class ExecutionController extends BmsBaseController
                 throw new Exception("此车已匹配计划");
             }
             $car->checkAlreadyOnline();
-        	$car->enterNode('PBS');
+            $car->enterNode('PBS');
+            $car->detectStatus('PBS');
             if(($car->car->series == "6B" || $car->car->series == "M6") && empty($car->car->plan_id)){
                 $car->addToPlan($date, $planId);
                 $spsPoints = array('S1','S2','S3');
                 $car->addSpsQueue($spsPoints);
                 $car->generateSpsSerial($line);
             }
-
             $transaction->commit();
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {
@@ -165,20 +165,19 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOut();
             $car->checkAlreadyWarehouse();
             //$car->leftNode('PBS');
-            // $car->enterNode('T0', 0 ,true);
 			$car->enterNode($currentNode, 0 ,true);
+            $car->detectStatus($currentNode);
             $car->assemblyTime();
             if(empty($car->car->plan_id)) {
                 $car->addToPlan($date, $planId);
             }
-			$car->generateSerialNumber($line);
+            $car->generateSerialNumber($line);
             $serial_number = $car->car->serial_number;      //added by wujun
             $car->addVinLaserQueue();
             if($currentNode === 'T0'){
                 $subTypes = array('subEngine','subFrontAxle','subInstrument');
                 $car->addSubConfig($subTypes);
             }
-
 
 			$transaction->commit();
 
@@ -217,6 +216,7 @@ class ExecutionController extends BmsBaseController
             $car->addTraceComponents($enterNode, $componentCode);
 
             $data = $car->generateInfoPaperData();
+            $car->detectStatus($enterNode->name);
             $transaction->commit();
 
 			if($nodeName == 'T32' || $nodeName == 'T32_2'){
@@ -239,6 +239,7 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyWarehouse();
             //$car->leftNode('F10');
             $car->enterNode($nodeName);
+            $car->detectStatus($nodeName);
             //print check trace 
             $data = $car->generateCheckTraceData();
             $transaction->commit();
@@ -294,76 +295,24 @@ class ExecutionController extends BmsBaseController
                 if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
             }
 
-            // if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
-            //     $checkIRemote = true;
-            //     $ff = CJSON::decode($faults);
-            //     if(!empty($ff)){
-            //         foreach($ff as $f){
-            //             //如果有离线修复故障，则不校验云系统
-            //             if(!$f['fixed']){
-            //                 $checkIRemote = false;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     if($checkIRemote){
-            //         $IRemote = $car->getIRemoteTestResult();
-            //         if(!($IRemote->Result) || $IRemote->TestState != "2"){
-            //             throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
-            //         }
-            //     }
-            // }
+            list($nodeName, $traceId) = $car->enterNode($nodeName);
 
             $tablePrefix = "VQ1_STATIC_TEST";
             if($nodeName == "VQ1_2") $tablePrefix .= "_2";
 
-            $fault = Fault::create($tablePrefix, $vin, $faults);
+            $fault = Fault::create($tablePrefix, $vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
-            
-			$car->enterNode($nodeName);
+
+            $car->detectStatus($nodeName);
             $car->finish();
             $transaction->commit();
 
             $car->throwTestlineCarInfo();
 			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
-            $this->renderJsonBms(true, 'OK');
+            $this->renderJsonBms(true, 'OK', null);
 
         } catch(Exception $e) {
 			$transaction->rollback();
-            $this->renderJsonBms(false, $e->getMessage(), null);
-        }
-    }
-
-	public function actionEnterLWS() {
-        try{
-            $vin = $this->validateStringVal('vin', '');
-			$car = Car::create($vin);
-            $car->checkAlreadyOut();
-            $car->checkAlreadyWarehouse();
-			$fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
-            if(!empty($exist)) {
-                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
-            }
-
-            $car->leftNode('VQ1');
-            $car->enterNode('LEFT_WORK_SHOP', 0);
-            $this->renderJsonBms(true, 'OK', $vin);
-        } catch(Exception $e) {
-            $this->renderJsonBms(false, $e->getMessage(), null);
-        }
-    }
-
-	public function actionEnterECS() {
-        try{
-            $vin = $this->validateStringVal('vin', '');
-            $car = Car::create($vin);
-            $car->checkAlreadyOut();
-            $car->checkAlreadyWarehouse();
-            $car->leftNode('LEFT_WORK_SHOP');
-            $car->enterNode('ENTER_CHECK_SHOP', 0);
-            $this->renderJsonBms(true, 'OK', $vin);
-        } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }
@@ -374,33 +323,14 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $car->checkAlreadyOut();
             $car->checkAlreadyWarehouse();
-            $car->leftNode('ENTER_CHECK_SHOP');
+            // $car->leftNode('ENTER_CHECK_SHOP');
             $car->enterNode('CHECK_LINE', 0);
+            $car->detectStatus('CHECK_LINE');
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         } 
     }
-
-	public function actionEnterRTS() {
-        try{
-            $vin = $this->validateStringVal('vin', '');
-			$driverId = $this->validateIntVal('driverId',0);
-			if(empty($driverId)) {
-				throw new Exception('请选择司机后再开始路试');
-			}
-            $car = Car::create($vin);
-            $car->checkAlreadyOut();
-            $car->checkAlreadyWarehouse();
-            $car->leftNode('CHECK_LINE');
-			$car->passNode('VQ3');
-            $car->enterNode('ROAD_TEST_START', $driverId);
-
-            $this->renderJsonBms(true, 'OK', $vin);
-        } catch(Exception $e) {
-            $this->renderJsonBms(false, $e->getMessage(), null);
-        }   
-    }   
 
 	public function actionEnterRTF() {
 		$transaction = Yii::app()->db->beginTransaction();
@@ -426,20 +356,20 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			$car->checkTestLinePassed();
+			// $car->checkTestLinePassed();  //already validate in CarController actionValidateRTF()
 			$car->passNode('VQ3');
             $faults = CJSON::decode($faults);
             if($temperature>20){
                 $tempFault = $car-> getTemperatureFault();
                 array_push($faults, $tempFault);
             }
-            $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults);
+            list($nodeName, $traceId) = $car->enterNode('ROAD_TEST_FINISH', $driverId);
+            $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
-            $car->enterNode('ROAD_TEST_FINISH', $driverId);
 
             $car->addGasBagTraceCode($bagCode);
             $car->recordTemperature($temperature, $driverId);
-            
+            $car->detectStatus($nodeName);
             $transaction->commit();
 
 			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($car->car->id,13));
@@ -483,10 +413,11 @@ class ExecutionController extends BmsBaseController
             }
         
             
+            list($nodeName, $traceId) = $car->enterNode('VQ2', $driverId);
             
-            $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults);
+            $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
-            $car->enterNode('VQ2', $driverId);
+            $car->detectStatus($nodeName);
             $transaction->commit();
 
 			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
@@ -525,13 +456,15 @@ class ExecutionController extends BmsBaseController
 			$car->leftNode('VQ2');
             
 			$car->passNode('CHECK_IN');
+            list($nodeName, $traceId) = $car->enterNode('VQ3', $driverId);
             $others = array(
                 'checker' => $driverId,
+                'traceId' => $traceId,
             );
             
             $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults, $others);
             $fault->save('在线');
-            $car->enterNode('VQ3', $driverId);
+            $car->detectStatus($nodeName);
             $transaction->commit();
 
 			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
@@ -554,66 +487,19 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
 	
             // $car->enterNode('WDI');
+            list($nodeName, $traceId) = $car->enterNodeWDI($checkTime);
             $others = array(
                 'checkTime' => $checkTime,
                 'checker' => $checker,
                 'subChecker' => $subChecker,
+                'traceId' => $traceId,
             );
             $fault = Fault::create('WDI_TEST',$vin, $faults, $others);
             $fault->save('离线' , true);//is wdi
             if($faults === '[]'){
                 $fault->wdiNoFault();
             }
-            $car->enterNodeWDI($checkTime);
-			$transaction->commit();
-            $this->renderJsonBms(true, 'OK', $vin);
-        } catch(Exception $e) {
-			$transaction->rollback();
-            $this->renderJsonBms(false, $e->getMessage(), null);
-        }
-    }
-
-	public function actionEnterCI() {
-		$transaction = Yii::app()->db->beginTransaction();
-        try{
-            $vin = $this->validateStringVal('vin', '');
-			$area = $this->validateIntVal('lane',0);
-			$car = Car::create($vin);
-			
-			$fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复',array('VQ3_FACADE_TEST_'));
-            if(!empty($exist)) {
-                throw new Exception ($vin .'车辆在VQ3还有未修复的故障');
-            }
-
-            $car->leftNode('VQ3');
-			$car->passNode('CHECK_OUT');
-            $car->enterNode('CHECK_IN',0);
-
-			$car->moveToArea($area);
-			$transaction->commit();
-            $this->renderJsonBms(true, 'OK', $vin);
-        } catch(Exception $e) {
-			$transaction->rollback();
-            $this->renderJsonBms(false, $e->getMessage(), null);
-        }
-    }
-
-
-	public function actionEnterCO() {
-		$transaction = Yii::app()->db->beginTransaction();
-        try{
-            $vin = $this->validateStringVal('vin', '');
-            $lane = $this->validateIntVal('lane',0);
-            if(empty($lane)) {
-                throw new Exception('no lane has selected');
-            }
-
-            $car = Car::create($vin);
-            $car->leftNode('CHECK_IN');
-            $car->enterNode('CHECK_OUT',0);
-
-			$car->moveToLane($lane);
+            $car->detectStatus($nodeName);
 			$transaction->commit();
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
@@ -658,8 +544,9 @@ class ExecutionController extends BmsBaseController
 			$car->checkAlreadyOut();
 			
             $onlyOnce = false;
-            $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
-            
+            list($nodeName, $tarceId) = $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
+            $car->detectStatus($nodeName);
+
             $matched = false;
             if($car->car->special_property<9){
                 list($matched, $data) = $car->matchOrder($date);
@@ -667,7 +554,8 @@ class ExecutionController extends BmsBaseController
             if($matched) {
                 $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
                 $car->throwMarkPrintData();
-                $car->enterNode('OutStandby', $driverId);
+                list($nodeName, $traceId) = $car->enterNode('OutStandby', $driverId);
+                $car->detectStatus($nodeName);
             } else {
                 $warehouse = new Warehouse;
                 $forceToAreaT = empty($areaT)? false : true;
@@ -731,7 +619,6 @@ class ExecutionController extends BmsBaseController
             
 			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
-            //$car->passNode('CHECK_OUT');
 			if($car->car->warehouse_id == 0 || $car->car->status != '成品库' || $car->car->warehouse_id <=1000){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
@@ -745,7 +632,8 @@ class ExecutionController extends BmsBaseController
             if($matched) {
                 $message = $vin . '已匹配订单' . $data['orderNumber'] .'-'. $data['distributorName'] .'-'. $data['lane'] .'，请开往WDI区';
                 $car->throwMarkPrintData();
-                $car->enterNode('OutStandby', $driverId);
+                list($nodeName, $traceId) = $car->enterNode('OutStandby', $driverId);
+                $car->detectStatus($nodeName);
             } else {
                 $warehouse = new Warehouse;
                 $data = $warehouse->checkin($vin);
@@ -790,15 +678,14 @@ class ExecutionController extends BmsBaseController
                 throw new Exception($car->car->vin . "系统未记录发动机号，无法出库");
             }
 
-            // if($car->car->series == 'F0'){
-            //     // $gearboxTrace = $car->checkTraceGearBox();
-            //     $absTrace = $car->checkTraceABS();
-            // }
+            if($car->car->series == 'F0'){
+                $absTrace = $car->checkTraceABS();
+            }
 
 			// $car->checkTestLinePassed();
             $onlyOnce = false;
-            $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
-
+            list($nodeName, $traceId) = $car->enterNode('CHECK_OUT', $driverId, $onlyOnce);
+            $car->detectStatus($nodeName);
             $data = '';
             $warehouse = new Warehouse;
             $data = $warehouse->checkout($vin);
@@ -919,8 +806,8 @@ class ExecutionController extends BmsBaseController
             $remark = $this->validateStringVal('remark', '');
 
             $car = Car::create($vin);
-            list($nodeAr, $traceId) = $car->enterNode($node,$driverId,false,$remark);
-
+            list($nodeName, $traceId) = $car->enterNode($node,$driverId,false,$remark);
+            $nodeAr = Node::createByName($nodeName);
             $nodeDisName = $nodeAr->display_name;
             $message = $car->car->vin. '成功录入' . $nodeDisName;
 

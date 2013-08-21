@@ -12,7 +12,10 @@ class Order
 	public function __construct(){
 	}
 
-	public function checkDetail($details){
+	private static $LC0_TYPE = "('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)')";
+	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)');
+
+	public function checkDetail ($details) {
 		$orders = CJSON::decode($details);
 		if(empty($orders)){
 			return;
@@ -26,7 +29,7 @@ class Order
 		return $data;
 	}
 	
-	public function genernate($details){
+	public function genernate ($details) {
 		$orders = CJSON::decode($details);
 		if(empty($orders)){
 			return;
@@ -72,7 +75,7 @@ class Order
 		}
 	}
 
-	public function isBoardActivated($boardNumber){
+	public function isBoardActivated ($boardNumber) {
 		$orderAr = OrderAR::model()->find("board_number=? AND status>0", array($boardNumber));
 		return !empty($orderAr);
 	}
@@ -121,7 +124,7 @@ class Order
 		}
 	}
 
-	public function activateBoard($boardNumber) {
+	public function activateBoard ($boardNumber) {
 		$orders = OrderAR::model()->findall("board_number=? ORDER BY standby_date DESC", array($boardNumber));
 		$boardDate = $orders[0]->standby_date;
 		if(!empty($orders)){
@@ -144,7 +147,7 @@ class Order
 		}
 	}
 
-	public function frozenBoard($boardNumber) {
+	public function frozenBoard ($boardNumber) {
 		$orders = OrderAR::model()->findall("board_number=?", array($boardNumber));
 		if(!empty($orders)){
 			foreach($orders as &$order){
@@ -155,7 +158,7 @@ class Order
 		}
 	}
 
-	public function setBoardTop($boardNumber) {
+	public function setBoardTop ($boardNumber) {
 		$orders = OrderAR::model()->findall("board_number=? ORDER BY standby_date DESC", array($boardNumber));
 		$boardDate = $orders[0]->standby_date;
 		if(!empty($orders)){
@@ -174,7 +177,7 @@ class Order
 		}
 	}
 
-	public function setBoardSamePriority($boardNumber) {
+	public function setBoardSamePriority ($boardNumber) {
 		$orders = OrderAR::model()->findall("boardNumber=? ORDER BY priority ASC", array($boardNumber));
 		if(!empty($orders)){
 			$boardPriority = $orders[0]->priority;
@@ -185,7 +188,7 @@ class Order
 		}
 	}
 
-	public function setBoardSameStandbyDate($boardNumber) {
+	public function setBoardSameStandbyDate ($boardNumber) {
 		$orders = OrderAR::model()->findall("boardNumber=? ORDER BY standby_date DESC", array($boardNumber));
 		if(!empty($orders)){
 			$boardPriority = $orders[0]->standby_date;
@@ -196,7 +199,7 @@ class Order
 		}
 	}
 
-	public function match($series, $carType, $configId, $color, $coldResistant, $date) {
+	public function match ($series, $carType, $configId, $color, $coldResistant, $date) {
 		$success = false;
 		$data = array();
 		$orderConfigId = 0;
@@ -230,7 +233,7 @@ class Order
 		return array($success, $data);
 	}
 
-	public function getCarStandby($standbyDate, $standbyArea=0, $series="") {
+	public function getCarStandby ($standbyDate, $standbyArea=0, $series="") {
 		//$matchedOrder = new OrderAR;
 		$data = array();
 
@@ -248,6 +251,7 @@ class Order
         $condition .= " ORDER BY priority ASC";
 		$orders = OrderAR::model()->findAll($condition, array($standbyDate));
 		if(!empty($orders)){
+			
 			foreach($orders as $order) {
 				$sql = "SELECT id FROM car_config WHERE order_config_id = $order->order_config_id";
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -275,6 +279,10 @@ class Order
 				}
 
 				$values = array($order->series, $order->color, $order->cold_resistant);
+
+				$LC0Type = self::$LC0_TYPE;
+				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1)";
+				$matchCondition .= $LC0Condition;
 				
 				$matchCondition .= "  ORDER BY warehouse_time ASC";
 				$matchedCar = CarAR::model()->find($matchCondition, $values);
@@ -345,7 +353,7 @@ class Order
 
 	}
 
-	public function matchManually($orderId, $vins){
+	public function matchManually ($orderId, $vins) {
 		$vins = CJSON::decode($vins);
 		if(empty($orderId) || empty($vins)){
 			return;
@@ -354,12 +362,16 @@ class Order
 		$order = OrderAR::model()->findByPk($orderId);
 		if($order->amount == $order->hold){
 			$orderNumber = $order->order_number;
-			throw new Exception("$orderNumber已备齐，无法继续匹配车辆", 1);
+			throw new Exception("$orderNumber 已备齐，无法继续匹配车辆", 1);
 		}
 		$successVins = array();
 		foreach($vins as $vin){
 			$car = Car::create($vin);
 			if(!empty($car)){
+				if(!(in_array($car->car->type, self::$LC0_TYPE_ARRAY) || substr($car->car->vin, 0,3)=='LGX' || $car->car->special_property==1)){
+					throw new Exception($vin . "不符合当前‘LC0’可发车条件，不可匹配订单");
+				}
+
 				if($car->car->warehouse_time == '0000-00-00 00:00:00'){
 					throw new Exception($vin. "未入库，不可匹配订单", 1);
 				}
@@ -380,6 +392,7 @@ class Order
 				$rowWDI->saveCounters(array('quantity'=>1));
 
 				$car->enterNode('OutStandby');
+				$car->detectStatus("OutStandby");
 				$car->car->order_id = $order->id;
 				$car->car->old_wh_id = $warehouseId;
 				$car->car->warehouse_id = 1;
@@ -405,7 +418,7 @@ class Order
 		return array($order->order_number, $successVins);
 	}
 
-	public function printByOrder($orderId){
+	public function printByOrder ($orderId) {
 		$order = OrderAR::model()->findByPk($orderId);
 		// $this->updateOrderSellInfo($order);
 
@@ -441,7 +454,7 @@ class Order
 		return $order->board_number;
 	}
 
-	public function printByOrders($orderIds){
+	public function printByOrders ($orderIds) {
 		foreach($orderIds as $orderId){
 			$this->printByOrder($orderId);
 		}
@@ -449,7 +462,7 @@ class Order
 		return $orderIds;
 	}
 
-	public function printByBoard($boardNumber) {
+	public function printByBoard ($boardNumber) {
 		if(empty($boardNumber)){
 			throw new Exception ('无法按空备板编号打印');
 		}
@@ -474,7 +487,7 @@ class Order
 		return $boardNumber;
 	}
 
-	public function updateOrderSellInfo($order = null){
+	public function updateOrderSellInfo ($order = null) {
 		if(!empty($order)){
 			$orderDetailId = $order->order_detail_id;
 			$seeker = new OrderSeeker();
@@ -492,7 +505,7 @@ class Order
 
 	}
 
-	public function printBySpecialOrder($specialOrder, $forceThrow=false, $country='出口', $clime='出口'){
+	public function printBySpecialOrder ($specialOrder, $forceThrow=false, $country='出口', $clime='出口') {
 		$specialOrder = trim($specialOrder);
 		$specialOrder = strtoupper($specialOrder);
 		if(empty($specialOrder)){
@@ -512,7 +525,7 @@ class Order
 		return $ret;
 	}
 
-	public function printByVins($vins, $specialOrder, $forceThrow=false){
+	public function printByVins ($vins, $specialOrder, $forceThrow=false) {
 		$total = 0;
 		$certificateSuccess = 0;
 		$inspectionSuccess = 0;
@@ -568,7 +581,7 @@ class Order
 		);
 	}
 
-	public function printAccessoryList($boardNumber){
+	public function printAccessoryList ($boardNumber) {
 		$boardNumber = trim($boardNumber);
 		if(empty($boardNumber)) return;
 		$orders = OrderAR::model()->findAll("board_number=?", array($boardNumber));
@@ -579,7 +592,7 @@ class Order
 		return true;
 	}
 
-	private function orderCarType($series = ""){
+	private function orderCarType ($series = "") {
 		$orderCarType = array();
 		$condition = "";
 		if(!empty($series)){
@@ -593,7 +606,7 @@ class Order
 		return $orderCarType;
 	}
 
-	private function parseSeries($series) {
+	private function parseSeries ($series) {
 		if(empty($series) || $series === 'all') {
             $series = array('F0', 'M6', '6B');
         } else {

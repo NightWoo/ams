@@ -14,6 +14,8 @@ class OrderSeeker
 	}
 
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
+	private static $LC0_TYPE = "('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)')";
+	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)');
 
 	public function getOriginalOrders($orderNumber) {
         if(empty($orderNumber)){
@@ -256,6 +258,11 @@ class OrderSeeker
 	        	$configId = "(" . join(',', $configId) . ")";
 
 				$matchCondition = "warehouse_id>1 AND warehouse_id< 1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
+				
+				$LC0Type = self::$LC0_TYPE;
+				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1)";
+				$matchCondition .= $LC0Condition;
+
 				$values = array($order['series'], $order['color'], $order['cold_resistant']);
 				$matchCount = CarAR::model()->count($matchCondition, $values);
 				

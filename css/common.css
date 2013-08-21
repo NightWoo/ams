@@ -101,10 +101,6 @@ a {
   cursor: pointer;
 }
 
-table input[type="radio"], table input[type="checkbox"] {
-  margin-top: 0;
-}
-
 @media screen {
   body{
     padding-bottom:40px;

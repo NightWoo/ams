@@ -9,3 +9,11 @@
 #componentsTable input, #componentsTable select {
 	margin-bottom: 0;
 }
+
+#addComponent {
+	font-size: 14px;
+}
+
+table input[type="radio"], table input[type="checkbox"] {
+  margin-top: 0;
+}

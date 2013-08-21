@@ -13,6 +13,7 @@ class Car
 	private $config;
 	private $configList;
 	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
+	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)');
 	protected function __construct($vin){
 		$this->vin = $vin;
 		$this->car = VinManager::getCar($vin);
@@ -24,7 +25,7 @@ class Car
 		$this->config = CarConfigAR::model()->findByPk($this->car->config_id);
 	}
 
-	public static function create($vin) {
+	public static function create ($vin) {
 		$c = __class__;
 		return new $c($vin);
 	}
@@ -34,7 +35,7 @@ class Car
 	}
 
 	//fill extend info
-	public function matchPlan($date,$line) {
+	public function matchPlan ($date,$line) {
 		$configId = $this->car->config_id;
 		$carSeries = $this->car->series;		//added by wujun
 		$data = $this->car->attributes;
@@ -81,7 +82,7 @@ class Car
 		return $data;
 	}
 
-	protected function getBodyMap() {
+	protected function getBodyMap () {
 		if($this->car->series === 'F0') {
 			$sql = "SELECT car_type FROM car_body_type_map WHERE series='F0' AND car_body = '{$this->car->type}'";
 			return Yii::app()->db->createCommand($sql)->queryColumn();
@@ -89,35 +90,35 @@ class Car
 		return array($this->car->type);
 	}
 
-	public function assemblyTime() {
+	public function assemblyTime () {
 		if($this->car->assembly_time == '0000-00-00 00:00:00') {
 			$this->car->assembly_time = date('YmdHis');
 			$this->car->save();
 		}
 	}
 
-	public function finish() {
+	public function finish () {
 		if($this->car->finish_time == '0000-00-00 00:00:00') {
 			$this->car->finish_time = date('YmdHis');
 			$this->car->save();
 		}
 	}
 
-	public function warehouseTime() {
+	public function warehouseTime () {
 		if($this->car->warehouse_time == '0000-00-00 00:00:00') {
 			$this->car->warehouse_time = date('YmdHis');
 			$this->car->save();
 		}
 	}
 
-	public function distributeTime() {
+	public function distributeTime () {
 		if($this->car->distribute_time == '0000-00-00 00:00:00') {
 			$this->car->distribute_time = date('YmdHis');
 			$this->car->save();
 		}
 	}
 
-	public function generateSerialNumber($line) {
+	public function generateSerialNumber ($line) {
 		$series = $this->car->series;
 		$snClass = "SerialNumber" . strtoupper($series) . "AR";
 		if($line === 'II'){
@@ -146,14 +147,14 @@ class Car
 		$this->car->save();
 	}
 
-	public function generateSpsSerial($line) {
+	public function generateSpsSerial ($line) {
 		$sn = new SpsSerialAR();
 		$sn->save();
 		$this->car->sps_serial = $line . "-" . sprintf("%06d", $sn->id);
 		$this->car->save();
 	}
 
-	public function addToPlan($date, $planId) {
+	public function addToPlan ($date, $planId) {
 		$exist = PlanAR::model()->findByPk($planId);
 		if(empty($exist)) {
 			throw new Exception($date . ' selected plan is not valid');
@@ -171,12 +172,12 @@ class Car
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 
-	public function getConfigDetail($node) {
+	public function getConfigDetail ($node) {
 		$seeker = Config::create($this->car->config_id);
 		return $seeker->getDetail($this->car, $node);
 	}
 
-	public function enterNode($nodeName,$driverId = 0, $onlyOnce = false, $remark = '') {
+	public function enterNode ($nodeName,$driverId = 0, $onlyOnce = false, $remark = '') {
 		$node = Node::createByName($nodeName);
 		if(!$node->exist()){
 			throw new Exception('不存在名字为' . $nodeName . '的节点');
@@ -207,22 +208,22 @@ class Car
 			$trace->remark = $remark;
 			$trace->save();
 
-			$onlineNodes = array(
-				'T11','T21','T32','C10','C21','F10','F20',
-	        	'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2','F20_2'
-	       	);
-			//car status
-			if($nodeName !== 'WDI' && $nodeName !== 'DETECT_SHOP_LEAVE' && $nodeName !== 'DETECT_SHOP_RETURN'){
-				//如果已经下线，录入线上节点不改变车辆状态
-				if(!(in_array($nodeName, $onlineNodes) && $this->car->finish_time>'0000-00-00 00:00:00')){
-					$this->detectStatus($node);
-				}
-			}
+			// $onlineNodes = array(
+			// 	'T11','T21','T32','C10','C21','F10','F20',
+	  //       	'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2','F20_2'
+	  //      	);
+			// //car status
+			// if($nodeName !== 'WDI' && $nodeName !== 'DETECT_SHOP_LEAVE' && $nodeName !== 'DETECT_SHOP_RETURN'){
+			// 	//如果已经下线，录入线上节点不改变车辆状态
+			// 	if(!(in_array($nodeName, $onlineNodes) && $this->car->finish_time>'0000-00-00 00:00:00')){
+			// 		$this->detectStatus($node);
+			// 	}
+			// }
 		//}
-		return array($node, $trace->id); 
+		return array($node->name, $trace->id); 
 	}
 
-	public function enterNodeWDI($passtime,$driverId = 0){
+	public function enterNodeWDI ($passtime,$driverId = 0) {
 		$node = Node::createByName('WDI');
 		if(!$node->exist()){
 			throw new Exception('不存在名字为' . $nodeName . '的节点');
@@ -243,9 +244,10 @@ class Car
 		$trace->save();
 	}
 
-	public function detectStatus($node = null) {
+
+	public function detectStatus ($nodeName = "") {
 		//TODO：可以优化
-		if(empty($node)) {
+		if(empty($nodeName)) {
 			$sql = "SELECT distinct node_id FROM node_trace WHERE car_id={$this->car->id}";
 			$traceNodes = Yii::app()->db->createCommand($sql)->queryColumn();
 
@@ -256,6 +258,16 @@ class Car
 				$nodeId = Yii::app()->db->createCommand($sql)->queryScalar();
 			}		
 			$node = Node::create($nodeId);
+		} else {
+			$node = NodeAR::model()->find("name=?", array($nodeName));
+		}
+
+		$onlineNodes = array(
+				'T11','T21','T32','C10','C21','F10','F20',
+	        	'T11_2','T21_2','T32_2','C10_2','C21_2','F10_2','F20_2'
+	    );
+		if(empty($node->main_zone) || (in_array($node->name, $onlineNodes) && $this->car->finish_time>'0000-00-00 00:00:00')){
+			return;
 		}
 		
 		$zone = $node->main_zone;
@@ -313,7 +325,7 @@ class Car
 		$this->car->save();
 	}
 
-	public function recordWarehouseReturnTrace($nodeTraceId, $returnTo) {
+	public function recordWarehouseReturnTrace ($nodeTraceId, $returnTo) {
 		$ar = new WarehouseReturnTraceAR();
 		$ar->trace_id = $nodeTraceId;
 		$ar->return_to = $returnTo;
@@ -321,7 +333,7 @@ class Car
 		$ar->save();
 	}
 
-	public function leftNode($nodeName) {
+	public function leftNode ($nodeName) {
         $node = Node::createByName($nodeName);
         if(!$node->exist()){
             throw new Exception('不存在名字为' . $nodeName . '的节点');
@@ -338,7 +350,7 @@ class Car
         }
 	}
 
-	public function passNode($nodeName) {
+	public function passNode ($nodeName) {
 		$node = Node::createByName($nodeName);
         if(!$node->exist()){
             throw new Exception('不存在名字为' . $nodeName . '的节点');
@@ -357,7 +369,7 @@ class Car
 
 	
 	//pass node cars
-	public static function countPassNode($nodeName, $date) {
+	public static function countPassNode ($nodeName, $date) {
 		$curdaytime = strtotime($date);
 		$curday = date('Y-m-d',$curdaytime);
 		$curdaytime = strtotime($curday);
@@ -374,7 +386,7 @@ class Car
 		return $passCount;
 	}
 
-	public function addTraceComponents($node, $componentCodeText) {
+	public function addTraceComponents ($node, $componentCodeText) {
 		$codeList = CJSON::decode($componentCodeText);
 		if(empty($codeList)){
 			return;
@@ -409,7 +421,7 @@ class Car
 			
 	}
 
-	private function calProvider($barCode, $componentId , $fullname = false) {
+	private function calProvider ($barCode, $componentId , $fullname = false) {
 		if(empty($barCode)) {	
 			return '';
 		}
@@ -439,7 +451,7 @@ class Car
 		return $this->getSpecialProvider($componentId);
 	}
 
-	private function getSpecialProvider($componentId) {
+	private function getSpecialProvider ($componentId) {
 		$provider = '';
 		if($componentId == 526 || $componentId == 533) {
 			$p = ProviderAR::model()->findByPk(52);	
@@ -453,7 +465,7 @@ class Car
 	}
 
 
-	public function checkBarCode($componentId, $code) {
+	public function checkBarCode ($componentId, $code) {
 		$configListComponent = CarConfigListAR::model()->find('config_id=? AND component_id=?',array($this->car->config_id,$componentId));
 		if($configListComponent->istrace != 1) {//no need to check unique
 			return;
@@ -482,7 +494,7 @@ class Car
 	}
 
 	//汽油机
-	public function checkTraceGasolineEngine() {
+	public function checkTraceGasolineEngine () {
 		$sql = "SELECT engine_component_id FROM car_engine WHERE car_series='{$this->car->series}'";
 
 		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -502,7 +514,7 @@ class Car
 	}
 
 	//变速箱总成
-	public function checkTraceGearBox() {
+	public function checkTraceGearBox () {
 		// $componentName = '变速箱总成';
 		// return $this->checkTraceComponentByName($componentName);
 		$sql = "SELECT gearbox_component_id FROM car_gearbox WHERE car_series='{$this->car->series}'";
@@ -524,7 +536,7 @@ class Car
 	}
 
 	//ABS or ESC
-	public function checkTraceABS() {
+	public function checkTraceABS () {
 		
 		$sql = "SELECT abs_component_id FROM car_abs WHERE car_series='{$this->car->series}'";
 
@@ -544,12 +556,12 @@ class Car
 		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
 	}
 
-	public function checkTraceComponentByName($componentName) {
+	public function checkTraceComponentByName ($componentName) {
 		$componentIds = $this->getComponentIds($componentName);
 		return $this->checkTraceComponentByIds($componentIds, $componentName);
 	}
 
-	public function checkTraceComponentByIds($componentIds, $componentName = '') {
+	public function checkTraceComponentByIds ($componentIds, $componentName = '') {
 		if(empty($componentIds)) {
 			throw new Exception($this->vin . ' 没有零部件 ' . $componentName . ' !');
 		}
@@ -565,7 +577,7 @@ class Car
 		return $exist;
 	}
 
-	public function checkTraceComponentByConfig() {
+	public function checkTraceComponentByConfig () {
 		$notGood = false;
 		$series = strtoupper($this->car->series);
 		$traceSeeker = ComponentTrace::createSeeker();
@@ -585,7 +597,7 @@ class Car
 		return array("notGood" =>$notGood, "notFound" =>$notFound);			
 	}
 
-	public function getComponentName($componentId) {
+	public function getComponentName ($componentId) {
 		$sql = "SELECT display_name FROM component WHERE id=$componentId";
 		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
@@ -598,14 +610,14 @@ class Car
 		return empty($p) ? '' : $p->name;
 	}
 
-	public function getComponentIds($componentName) {
+	public function getComponentIds ($componentName) {
         $sql = "SELECT id FROM component WHERE display_name='$componentName'";
         return Yii::app()->db->createCommand($sql)->queryColumn();
     }
 
 
 	//in vq2 
-	public function addGasBagTraceCode($gasBagCode) {
+	public function addGasBagTraceCode ($gasBagCode) {
 		if(empty($gasBagCode)) {
 			return;
 		}
@@ -613,7 +625,7 @@ class Car
 	    $this->addTraceComponents($node, '{692:"'.$gasBagCode.'"}');	
 	}
 
-	public function recordTemperature($temperature=0, $recorderId=0){
+	public function recordTemperature ($temperature=0, $recorderId=0){
 		$ar = new AirconditionTemperatureAR();
 		$ar->car_id = $this->car->id;
 		$ar->temperature = $temperature;
@@ -621,7 +633,7 @@ class Car
 		$ar->save();
 	}
 
-	public function getTemperatureFault(){
+	public function getTemperatureFault () {
 		$series = $this->car->series;
 		$faultArray = array(
 			"F0"=>array("faultId"=>"14174","componentId"=>"683","dutyDepartment"=>"0"),
@@ -632,7 +644,7 @@ class Car
 		return $faultArray[$series];
 	}
 
-	public function getAllTrace($node) {
+	public function getAllTrace ($node) {
 		$condition = "";
 		if(!empty($node)) {
 			$sql = "SELECT id FROM node WHERE name='$node'";
@@ -758,13 +770,13 @@ class Car
 		return $sortDatas;
 	}
 
-	public function getFaults($node){
+	public function getFaults ($node) {
 		$seeker = Fault::createSeeker();
 		$faults = $seeker->queryCarFaults($this->car->id,$node,$this->car->series);
 		return $faults;
 	}
 
-	public function multi_array_sort($multi_array,$sort_key,$sort=SORT_ASC){  
+	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
         if(is_array($multi_array)){  
             foreach ($multi_array as $row_array){  
                 if(is_array($row_array)){  
@@ -781,7 +793,7 @@ class Car
     }  
 
 
-	public function moveToArea($area) {
+	public function moveToArea ($area) {
 		$fault = Fault::createSeeker();
 		$exist = $fault->exist($this, '未修复');
 		if(!empty($exist)) {
@@ -800,7 +812,7 @@ class Car
 
 	}
 
-	public function moveToLane($lane) {
+	public function moveToLane ($lane) {
         $this->car->lane = $lane;
 		$node = Node::createByName("CHECK_OUT");
 		$distributor = '';
@@ -813,7 +825,7 @@ class Car
         $this->car->save();
     }
 
-	public function generateConfigData() {
+	public function generateConfigData () {
         $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
@@ -858,7 +870,7 @@ class Car
 		return $ret;
 	}
 	
-	public function addSubConfig($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle')) {
+	public function addSubConfig ($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle')) {
 		// $types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
 		foreach($types as $type) {
 			$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
@@ -876,7 +888,7 @@ class Car
 		}
 	}
 
-	public function addSpsQueue($spsPoints = array('S1','S2','S3'), $line="I") {
+	public function addSpsQueue ($spsPoints = array('S1','S2','S3'), $line="I") {
 		foreach($spsPoints as $point) {
 			$spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
 
@@ -894,7 +906,7 @@ class Car
 		}
 	}
 
-	public function addVinLaserQueue() {
+	public function addVinLaserQueue () {
 		$queue = VinLaserQueueAR::model()->find('vin=?', array($this->car->vin));
 		$statusT01 = 0; 
 		$statusEngine = 0;
@@ -916,7 +928,7 @@ class Car
 	}
 	
 	//force : true force to print
-	public function generateSubConfigData($type='subInstrument', $force = false) {
+	public function generateSubConfigData ($type='subInstrument', $force = false) {
 		$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
 		if(empty($subConfig)) {//suit for those cars has passed t0 
 			//$this->addSubConfig();
@@ -970,7 +982,7 @@ class Car
 		return $ret;
 	}
 
-	public function generateSpsData($point='S1', $force = false) {
+	public function generateSpsData ($point='S1', $force = false) {
 		$spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
 		if(empty($spsQueueOne)) {//suit for those cars has passed t0 
 			throw new Exception("该车不在列队中");
@@ -1023,7 +1035,7 @@ class Car
 		return $ret;
 	}
 
-	public function generateCheckTraceData() {
+	public function generateCheckTraceData () {
 		$barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
@@ -1034,7 +1046,7 @@ class Car
 
 		$engineTrace = $this->checkTraceGasolineEngine(); 
 		if($this->car->series === 'F0'){
-			$this->checkTraceGearBox();
+			// $this->checkTraceGearBox();
 			$absTrace = $this->checkTraceABS();
 				if(!empty($absTrace)){
 					$barCode = $absTrace->bar_code;
@@ -1064,7 +1076,7 @@ class Car
 		return $ret;
 	}
 
-	public function generateInfoPaperData() {
+	public function generateInfoPaperData () {
 		$barcodeGenerator = BarCodeGenerator::create("BCGcode128");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
@@ -1094,13 +1106,18 @@ class Car
 	}
 		
 	//added by wujun
-	public function matchOrder($date) {
+	public function matchOrder ($date) {
 		$series = $this->car->series;
 		$carType = $this->car->type;
 		$config = $this->car->config_id;
 		$color = $this->car->color;
 		$coldResistant = $this->car->cold_resistant;
 		//$carYear = $this->carYear;
+
+		//不符合LC0规则不匹配订单
+		if(!(in_array($this->car->type, self::$LC0_TYPE_ARRAY) || substr($this->car->vin, 0,3)=='LGX' || $this->car->special_property==1)){
+			return array(false, array());
+		}
 		
 		$order = new Order;            
         list($success, $data) = $order->match($series, $carType, $config, $color, $coldResistant, $date);
@@ -1130,7 +1147,7 @@ class Car
         return array($success, $data);
 	}
 
-	public function warehouseReturn($goTo, $remark, $driverId = 0){
+	public function warehouseReturn ($goTo, $remark, $driverId = 0) {
 		//释放订单
 		$this->releaseOrder();
 
@@ -1166,7 +1183,7 @@ class Car
 		}
 
 		$onlyOnce=false;
-		list($node, $traceId) = $this->enterNode("WAREHOUSE_RETURN", $driverId, $onlyOnce, $remark);
+		list($nodeName, $traceId) = $this->enterNode("WAREHOUSE_RETURN", $driverId, $onlyOnce, $remark);
 		$this->recordWarehouseReturnTrace($traceId, $goTo);
 		$this->car->status = $status;
 
@@ -1180,25 +1197,25 @@ class Car
 		return $ret;
 	}
 
-	public function checkAlreadyOnline(){
+	public function checkAlreadyOnline () {
 		if($this->car->assembly_time > '0000-00-00 00:00:00'){
 			throw new Exception($this->car->vin . '已上线');
 		}
 	}
 
-	public function checkAlreadyOut(){
+	public function checkAlreadyOut () {
 		if($this->car->distribute_time > '0000-00-00 00:00:00'){
 			throw new Exception($this->car->vin . '已出库');
 		}
 	}
 
-	public function checkAlreadyWarehouse(){
+	public function checkAlreadyWarehouse () {
 		if($this->car->warehouse_time > '0000-00-00 00:00:00'){
 			throw new Exception($this->car->vin . '已入库');
 		}
 	}
 	
-	public function releaseOrder(){
+	public function releaseOrder () {
 		
 		if($this->car->order_id>0){
 			$order = OrderAR::model()->findByPk($this->car->order_id);
@@ -1230,7 +1247,7 @@ class Car
 		}
 	}
 	
-	public function throwTestlineCarInfo(){
+	public function throwTestlineCarInfo () {
 
 		//好像有点太过程化了，找时间优化
 		$vin = $this->car->vin;
@@ -1267,7 +1284,7 @@ class Car
 		
 	}
 	
-	public function checkTestLinePassed() {
+	public function checkTestLinePassed () {
 		if($this->car->config_id == 45) {
 			return;
 		}
@@ -1285,7 +1302,7 @@ class Car
 		return;
 	}
 
-	public function isTestLinePassed() {
+	public function isTestLinePassed () {
 		$flag = false;
 		$vin = $this->car->vin;
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
@@ -1298,7 +1315,7 @@ class Car
 		return $flag;
 	}
 
-	public function throwInspectionSheetData($markOnly=false) {
+	public function throwInspectionSheetData ($markOnly=false) {
 		//好像有点太过程化了，找时间优化
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
@@ -1341,7 +1358,7 @@ class Car
 		return $ret;
 	}
 
-	public function throwInspectionSheetDataExport($specialOrder) {
+	public function throwInspectionSheetDataExport ($specialOrder) {
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;
@@ -1383,7 +1400,7 @@ class Car
 		return $ret;
 	}
 
-	public function throwMarkPrintData() {
+	public function throwMarkPrintData () {
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;
@@ -1416,7 +1433,7 @@ class Car
 		
 	}
 
-	public function getCertificateData($carId) {
+	public function getCertificateData ($carId) {
 		$sql = "SELECT car_model, order_number, country, distributor_name, order_detail_id, order_nature, certificate_note, assisted_steering, tyre, lane_name, sell_color, sell_car_type
 				FROM view_certificate
 				WHERE car_id = $carId";
@@ -1426,7 +1443,7 @@ class Car
 		}
 	}
 
-	public function getCertificateDataExport($carId) {
+	public function getCertificateDataExport ($carId) {
 		$sql = "SELECT car_model, certificate_note, assisted_steering, tyre, export_country, mark_clime
 				FROM view_certificate_export
 				WHERE car_id = $carId";
@@ -1436,7 +1453,7 @@ class Car
 		}
 	}
 
-	public function throwCertificateData($outDate, $computerName= '10.23.1.67', $country='国内', $district='比亚迪长沙') {
+	public function throwCertificateData ($outDate, $computerName= '10.23.1.67', $country='国内', $district='比亚迪长沙') {
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;
@@ -1513,7 +1530,7 @@ class Car
 	   	return $ret;
 	}
 
-	public function throwCertificateDataExport($specialOrder, $forceThrow=false, $outDate='',$computerName= '10.23.1.67', $district='比亚迪长沙') {
+	public function throwCertificateDataExport ($specialOrder, $forceThrow=false, $outDate='',$computerName= '10.23.1.67', $district='比亚迪长沙') {
 		$carId = $this->car->id;
 		$vin = $this->car->vin;
 		$config = $this->car->config_id;
@@ -1592,7 +1609,7 @@ class Car
 	   	return $ret;
 	}
 
-	public function existInHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin){
+	public function existInHGZ ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $vin) {
 		$exist = false;
 
 		$sql = "SELECT VIN,DGDH,DGMXID FROM Print_Table WHERE VIN='{$vin}'";
@@ -1616,7 +1633,7 @@ class Car
         return $exist;
 	}
 
-	public function wrightHGZ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $sql) {
+	public function wrightHGZ ($tdsDB, $tdsSever, $tdsUser, $tdsPwd, $sql) {
    
         //connect
         $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
@@ -1634,7 +1651,7 @@ class Car
         return $ret;
 	}
 
-	public function getAbsInfo($barCode) {
+	public function getAbsInfo ($barCode) {
 		$providerCode = substr($barCode, 0, 6);
 		$type = array(
 						'118627' => 'DBC7',
@@ -1655,7 +1672,7 @@ class Car
 
 	}
 
-	public function throwVinAssembly($vin, $point, $shift='总装1线A班', $time=''){
+	public function throwVinAssembly ($vin, $point, $shift='总装1线A班', $time='') {
 		// if(YII_DEBUG) {
 		// 	return;
 		// }
@@ -1678,7 +1695,7 @@ class Car
 		return $result;
 	}
 
-	public function throwVinStoreIn($vin, $row, $driverName='', $inTime=''){
+	public function throwVinStoreIn ($vin, $row, $driverName='', $inTime='') {
 		
 		// $row = iconv('UTF-8', 'GB2312', $row);
 		// $driverName = iconv('UTF-8', 'GB2312', $driverName);
@@ -1699,7 +1716,7 @@ class Car
 		return $result;
 	}
 
-	public function throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $distributorName, $engineCode, $outTime=''){
+	public function throwVinStoreOut ($vin, $lane, $orderNumber, $orderDetailId, $distributorName, $engineCode, $outTime='') {
 		
 		// if(YII_DEBUG) {
 		// 	return;
@@ -1731,7 +1748,7 @@ class Car
 	 *   Result:bool, 有无记录
 	 *	 TestState:string, 0:有记录未测试，1:有记录测试失败，2：有记录测试成功，“XXXX”: 无记录具体的消息字符串
 	 */
-	public function getIRemoteTestResult(){
+	public function getIRemoteTestResult () {
 		
 		$vin = $this->car->vin;
 		$client = new SoapClient(Yii::app()->params['IRemote_test_result']);
@@ -1742,10 +1759,34 @@ class Car
 		);
 		$result = $client -> GetIRemoteTestResult($params);
 
+		$ret = $result->GetIRemoteTestResultResult;
+		if($ret->Result){
+			$testResult = 1;
+			$testState = $ret->TestState;
+			$msg="";
+		} else {
+			$testResult = 0;
+			$testState = 0;
+			$msg = $ret->Msg;
+		}
+		$this->saveIRemoteResult($testResult,$testState,$msg);
+
 		return $result->GetIRemoteTestResultResult;
 	}
 
-	public function getWarehouseLabel(){
+	public function saveIRemoteResult ($testResult=0, $testState=0, $msg="") {
+		$carId=$this->car->id;
+		$ar = new IRemoteResultAR();
+		$ar->car_id = $carId;
+		$ar->Result = $testResult;
+		$ar->TestState = $testState;
+		$ar->Msg = $msg;
+		$ar->user_id = Yii::app()->user->id;
+		$ar->create_time = date("YmdHis");
+		$ar->save();
+	}
+
+	public function getWarehouseLabel () {
 		$data = $this->car->getAttributes();
 		$data['row'] = '---';
 		$data['driver_name'] = '';
@@ -1779,12 +1820,12 @@ class Car
 		return $data;
 	}
 
-	public function validateVin(){
+	public function validateVin () {
 		$ret = $VinManager = VinManager::validateDigit9($this->car->vin);
 		return $ret;
 	}
 
-	public function mainInfo() {
+	public function mainInfo () {
 		$data = $this->car->getAttributes();
 		$data['cold'] = empty($data['cold_resistant']) ? "非耐寒" : "耐寒";
 		$carType = CarTypeMapAR::model()->find("car_type=?", array($data['type']));
@@ -1805,7 +1846,51 @@ class Car
 		return $data;
 	}
 
-	private function cutCarType($type) {
+	public function replaceSpares ($spares, $traceId) {
+		$spares = is_array($spares) ? $spares : CJSON::decode($spares);
+		foreach($spares as $spare) {
+			$replacementAr = new SpareReplacementAR();
+			$replacementAr->car_id = $car->car->id;
+			$replacementAr->node_trace_id = $traceId;
+			$replacementAr->component_id = $spare['componentId'];
+			$replacementAr->provider_id = $spare['providerId'];
+			$replacementAr->duty_department_id = $spare['dutyDepartmentId'];
+			$replacementAr->is_collateral = $spare['isCollateral'];
+			$replacementAr->unit_price = $spare['unitPrice'];
+			$replacementAr->barCode = $spare['barCode'];
+			$replacementAr->replace_time = date("YmdHis");
+			$replacementAr->user_id = Yii::app()->user->id;
+			$replacementAr->save();
+
+			if(!empty($spare['barCode'])){
+				$series = strtoupper($this->car->series);
+				$ctClass = "ComponentTrace{$series}AR";
+				Yii::import('application.models.AR.' .$ctClass);
+				$oldTrace = $ctClass::model()->find('car_id=? AND component_id=?', array($this->car->id, $spare['componentId']));
+				if(!empty($oldTrace)) {
+					$oldTrace->status = 2;
+					$oldTrace->save();
+				}
+				$newTrace = new $ctClass();
+				$newTrace->car_id = $this->car->id;
+				$newTrace->car_series = $this->car->series;
+				$newTrace->car_type = $this->car->type;
+				$newTrace->vin = $this->car->vin;
+				$newTrace->component_id = $spare['componentId'];
+				$newTrace->component_name = $this->getComponentName($spare['componentId']);
+				$newTrace->node_id = 100;
+				$newTrace->create_time = date('YmdHis');
+				$newTrace->user_id = Yii::app()->user->id;
+				$newTrace->user_display_name = Yii::app()->user->display_name;
+				$newTrace->provider = $this->calProvider($spare['barCode'], $spare['componentId']);
+				$newTrace->bar_code = $spare['barCode'];
+				$newTrace->status = 1;
+				$newTrace->save();
+			}
+		}
+	}
+
+	private function cutCarType ($type) {
 		$length = strlen($type);
         $typeName = '';
 		$i = 0;

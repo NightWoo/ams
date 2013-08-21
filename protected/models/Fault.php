@@ -128,6 +128,7 @@ class Fault
 			$ar->creator = empty($this->others['checker']) ? $userId : $this->others['checker'];
 			// $ar->updator = $userId;
 			$ar->updator = empty($this->others['checker']) ? $userId : $this->others['checker'];
+			$ar->node_trace_id = empty($this->others['traceId']) ? 0 : $this->others['traceId'];
 
 			if($iswdi) {
 				$ar->modify_time = $curtime;

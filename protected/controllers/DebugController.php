@@ -1,10 +1,8 @@
 <?php
-Yii::import('application.models.AR.UserSmsAR');
-Yii::import('application.models.CarSeeker');
-Yii::import('application.models.ReportSeeker');
-Yii::import('application.models.Sms.SmsService');
+Yii::import('application.models.AR.*');
+Yii::import('application.models.*');
 
-class SmsDailyCommand extends CConsoleCommand
+class DebugController extends BmsBaseController
 {
 	private static $SERIES = array(
 		'F0' => 'F0',
@@ -12,11 +10,28 @@ class SmsDailyCommand extends CConsoleCommand
 		'6B' => '思锐',
 	);
 
+	private static $LC0_TYPE = "('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)')";
+	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)');
+
 	private static $COUNT_POINT_DAILY = array(
 		"assemblyCount" => "上线",
 		"warehouseCount" => "入库",
 		"distributeCount" => "出库",
+		// "onlineBalance" => "在制",
+		// "recycleBalance" => "周转",
+		// "warehouseBalance" => "库存",
 	);
+
+	public function actionTest () {
+		$vin = $this->validateStringVal("vin", "");
+		try{
+			$reportSeeker = new ReportSeeker();
+			$ret = $this->makeContent('2013-08-19 08:00:00', '2013-08-19 20:00:00', "afternoon");
+			$this->renderJsonBms(true, 'OK', $ret);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+	}
 
 	public function actionProductionAfternoon () {
 		$curDate = DateUtil::getCurDate();
@@ -69,18 +84,13 @@ class SmsDailyCommand extends CConsoleCommand
 	}
 
 	public function makeContent ($stime, $etime, $type="afternoon") {
-		$curDate = DateUtil::getCurDate();
-		$lastDate = DateUtil::getLastDate();
-		
 		if($type == "afternoon"){
-			$workDate = $curDate;
-			$timeText = $curDate ." 08:00 - " . $curDate. "20:00";
+			$workDate = DateUtil::getCurDate();
 		} else if($type == "morning") {
-			$workDate = $lastDate;
-			$timeText = $lastDate ." 08:00 - " . $curDate. "08:00";
+			$workDate = DateUtil::getLastDate();
 		}
 		$head = date("n月j日", strtotime($workDate));
-		$head .= "长沙总装产量通报[" . $timeText . "]\r";
+		$head .= "长沙总装产量通报(" . date("n-j,H:i") . ")\r";
 		$foot = "【十一部AMS】";
 
 		$productionText = $this->makeProdutionText($stime, $etime);
@@ -89,7 +99,7 @@ class SmsDailyCommand extends CConsoleCommand
 
 		$body = $productionText . $recycleText . $useText;
 
-		$content = "(" .$head.$body.$foot.")";
+		$content = $head.$body.$foot;
 
 		return $content;
 	}
@@ -105,8 +115,8 @@ class SmsDailyCommand extends CConsoleCommand
 			$text = self::$COUNT_POINT_DAILY[$point] . $total ."[" . join("/", $count) . "]";
 			$textArray[] = $text;
 		}
-		$productionText = "(1)生产情况(F0/M6/思锐)\r";
-		$productionText.= "    -" . join(";\r    -", $textArray) . ".\r";
+		$productionText = "(1)生产情况(F0/思锐/M6)\r";
+		$productionText.= "-" . join(";\r-", $textArray) . ".\r";
 
 		return $productionText;
 	}
@@ -118,7 +128,7 @@ class SmsDailyCommand extends CConsoleCommand
 			$total += intval($count);
 		}
 		$recycleText = "(2)周转车(VQ1/VQ2/VQ3)\r";
-		$recycleText.= "    -" . $total . "[" . join("/", $countArray) ."].\r";
+		$recycleText.= "-" . $total . "[" . join("/", $countArray) ."].\r";
 
 		return $recycleText;
 	}
@@ -132,8 +142,9 @@ class SmsDailyCommand extends CConsoleCommand
 		foreach($pauseDetail as $pause) {
 			$pauseTextArray[] = $pause['duty_department'] . "/" . $pause['pause_reason'] . "/" . $pause['howlongMin'] . "min";
 		}
-		$useText = "(3)生产利用[" . $useRate . "/" . $pauseTime . "min]\r";
-		$useText.= "    -" . join(";\r    -", $pauseTextArray) . ".\r";
+		$useText = "(3)停线责任\r";
+		$useText.= "-" . join(";\r-", $pauseTextArray) . ".\r";
+		$useText.= "利用率/停线时长:" . $useRate . "/" . $pauseTime . "min.\r";
 
 		return $useText;
 	}

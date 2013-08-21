@@ -321,9 +321,9 @@ class ReportSeeker
 		return $causeDistribute;
 	}
 
-	public function queryUseRateBase($stime, $etime){
+	public function queryUseRateBase($stime, $etime, $line="", $shift=-1){
 
-		$datas = $this->queryShiftRecord($stime, $etime);
+		$datas = $this->queryShiftRecord($stime, $etime, $line, $shift);
 		$use = array();
 
 		$capacity = null;
@@ -345,7 +345,7 @@ class ReportSeeker
 		return $use;
 	}
 
-	public function queryUseRate($stime, $etime){
+	public function queryUseRate ($stime, $etime){
 
 		$data = $this->queryCapacityDaily($stime, $etime);
 		$use = array();
@@ -385,13 +385,16 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryShiftRecord($stime, $etime, $line=""){
+	public function queryShiftRecord($stime, $etime, $line="", $shift=-1){
 		$sDate = substr($stime, 0, 10);
 		$eDate = substr($etime, 0, 10);
 
-		$condition = " shift_date>='$sDate' AND shift_date<'$eDate'";
+		$condition = $sDate==$eDate ? "  shift_date='$sDate'" :" shift_date>='$sDate' AND shift_date<'$eDate'";
 		if(!empty($line)){
 			$condition .= " AND line='$line'";
+		}
+		if($shift>-1) {
+			$condition .= " AND shift=$shift";
 		}
 
 		$sql = "SELECT * FROM shift_record WHERE $condition";
@@ -503,6 +506,16 @@ class ReportSeeker
 			$count[$data['state']] += ceil($data['count']);
 		}
 
+		return $count;
+	}
+
+	public function queryRecycleBalanceNow () {
+		$stateArray = $this->stateArray('recycle');
+		$count = array();
+		$carSeeker = new CarSeeker();
+		foreach($stateArray as $state) {
+			$count[$state] = $carSeeker->countStateCars($state);
+		}
 		return $count;
 	}
 
