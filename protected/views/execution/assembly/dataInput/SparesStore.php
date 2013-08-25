@@ -44,10 +44,9 @@
                         		<span class="label label-info" rel="tooltip" title="库区" id="rowInfo"></span>
 							</div>
 						</div>
-					</form>
-					<div>
 						<div id="messageAlert" class="alert"></div>
-					</div>
+					</form>
+					<div id="checkAlert"></div>
 					<div class="row-fluid">
 						<div id="faultsDiv" class="span4">
 							<table id="faultsTable" class="table">
@@ -88,6 +87,6 @@
 			</div><!-- end of mainbody -->
 		</div><!-- end of bodyright -->
 	</div>
-<script data-main="/bms/rjs/sparesStore.js" src="/bms/rjs/lib/require.js"></script>
 </body>
+<script data-main="/bms/rjs/sparesStore.js" src="/bms/rjs/lib/require.js"></script>
 </html>

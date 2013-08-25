@@ -11,7 +11,7 @@ class GeneralInformationController extends BmsBaseController
 		);
 	}
 
-	public function actionGeneralIndex() {
+	public function actionIndex() {
 		$this->render('generalIndex');
 	}
 

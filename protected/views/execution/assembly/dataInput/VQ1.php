@@ -49,10 +49,8 @@
 								</div>
 								<!-- <span class="help-inline">xcdshcj</span> -->
 							</div>
+							<div id="messageAlert" class="alert"></div>    
 							<div id="checkAlert"></div>
-							<div>
-								<div id="messageAlert" class="alert"></div>    
-							</div> <!-- end 提示信息 -->
 							<div id="divDetail">
 								<div>
 									<ul id="tabs" class="nav nav-pills">

@@ -689,11 +689,15 @@ class CarSeeker
 			$data['order_number'] = $orderNumberArray[$data['order_id']];
 			$data['lane'] = '-';
 			if(!empty($data['lane_id'])){
-				$data['lane'] = LaneAR::model()->findByPk($data['lane_id'])->name;
+				$lane = LaneAR::model()->findByPk($data['lane_id']);
+				$data['lane'] = $lane->name;
 			}
 			$data['row'] = '-';
 			if(!empty($data['old_wh_id'])){
-				$data['row'] = WarehouseAR::model()->findByPk($data['old_wh_id'])->row;
+				$oldRow = WarehouseAR::model()->findByPk($data['old_wh_id']);
+				if(!empty($oldRow)) {
+					$data['row'] = $oldRow->row;
+				}
 			}
 		}
 

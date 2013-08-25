@@ -1,7 +1,7 @@
 <div id="divLeft">
 <div id="bodyleft" class="span2" ><!-- 侧边栏 -->
 	<ul class="nav nav-list affix bs-docs-sidenav">
-		<li id="leftConfigLi"><a href="/bms/execution/configPlan">生产计划</a></li>
+		<li id="leftConfigLi"><a href="/bms/execution/planMaintain">生产计划</a></li>
 		<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
 		<li id="leftSubQueueMaintainLi"><a href="/bms/execution/subQueueMaintain">分装队列维护</a></li>
 		<li id="leftSpsQueueMaintainLi"><a href="/bms/execution/spsQueueMaintain">SPS队列维护</a></li>

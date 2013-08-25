@@ -44,7 +44,7 @@ define(['service'], function (service) {
 		return componentInfo;
 	}
 
-	function ajaxValidateBarCode (vin, componentId, barCode) {
+	function ajaxCheckBarCode (vin, componentId, barCode) {
 		result = [];
 		$.ajax({
 			url: service.VALIDATE_BAR_CODE,
@@ -65,6 +65,50 @@ define(['service'], function (service) {
 				}
 			}
 		})
+		return result;
+	}
+
+	function validateBarCode (barCode, simpleCode) {
+		var matched = false;
+		var barSimpleCode = "";
+		var providerCode = "";
+		switch(barCode.length) {
+			case 17:
+				if(barCode.substring(0,3) == 'BYD')	//len 17 may be an engine
+					barSimpleCode = barCode.substring(0,8);
+				else{
+					barSimpleCode = barCode.substring(5,8);
+					providerCode = barCode.substring(0,5);
+				}
+				break;
+			case 18:
+				//len 18 may be an DongAN gearbox
+				if(barCode.substring(0,5) == 'F4A4B'){
+					barSimpleCode = barCode.substring(0,5)
+				} else if(barCode.substring(0,9) == 'BYD476ZQA'){ //len 18 may be an 475ZQA engine
+					barSimpleCode = barCode.substring(0,9)
+				} else{
+					barSimpleCode = barCode.substring(6,9);
+					providerCode = barCode.substring(0,6);
+				}
+				break;
+			case 16:
+				barSimpleCode = barCode.substring(0,7);
+				break;
+			case 15:	//liandian ECU
+				barSimpleCode = barCode.substring(0,3);
+				break;
+			case 3:
+				barSimpleCode = barCode;
+				break;
+			case 14:	//4G69 engine
+				barSimpleCode = barCode.substring(0,4);
+				break;
+			default: break;
+		}
+
+		if(barSimpleCode == simpleCode) matched = true;
+		return matched;
 	}
 
 	return {
@@ -76,8 +120,12 @@ define(['service'], function (service) {
 			return getInfo(componentId);
 		},
 
-		validateBarCode: function (vin, componentId, barCode) {
-			return ajaxValidateBarCode(vin, componentId, barCode);
+		ajaxCheckBarCode: function (vin, componentId, barCode) {
+			return ajaxCheckBarCode(vin, componentId, barCode);
+		},
+
+		validateBarCode: function (barCode, simpleCode) {
+			return validateBarCode(barCode, simpleCode);
 		}
 	}
 })

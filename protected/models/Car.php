@@ -1850,14 +1850,15 @@ class Car
 		$spares = is_array($spares) ? $spares : CJSON::decode($spares);
 		foreach($spares as $spare) {
 			$replacementAr = new SpareReplacementAR();
-			$replacementAr->car_id = $car->car->id;
+			$replacementAr->car_id = $this->car->id;
 			$replacementAr->node_trace_id = $traceId;
 			$replacementAr->component_id = $spare['componentId'];
+			$replacementAr->fault_id = $spare['faultId'];
 			$replacementAr->provider_id = $spare['providerId'];
 			$replacementAr->duty_department_id = $spare['dutyDepartmentId'];
 			$replacementAr->is_collateral = $spare['isCollateral'];
 			$replacementAr->unit_price = $spare['unitPrice'];
-			$replacementAr->barCode = $spare['barCode'];
+			$replacementAr->bar_code = $spare['barCode'];
 			$replacementAr->replace_time = date("YmdHis");
 			$replacementAr->user_id = Yii::app()->user->id;
 			$replacementAr->save();
@@ -1866,10 +1867,12 @@ class Car
 				$series = strtoupper($this->car->series);
 				$ctClass = "ComponentTrace{$series}AR";
 				Yii::import('application.models.AR.' .$ctClass);
-				$oldTrace = $ctClass::model()->find('car_id=? AND component_id=?', array($this->car->id, $spare['componentId']));
-				if(!empty($oldTrace)) {
-					$oldTrace->status = 2;
-					$oldTrace->save();
+				$oldTraces = $ctClass::model()->findAll('car_id=? AND component_id=?', array($this->car->id, $spare['componentId']));
+				foreach($oldTraces as $oldTrace) {
+					if(!empty($oldTrace)) {
+						$oldTrace->status = 2;
+						$oldTrace->save();
+					}
 				}
 				$newTrace = new $ctClass();
 				$newTrace->car_id = $this->car->id;

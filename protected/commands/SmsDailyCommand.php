@@ -74,10 +74,10 @@ class SmsDailyCommand extends CConsoleCommand
 		
 		if($type == "afternoon"){
 			$workDate = $curDate;
-			$timeText = $curDate ." 08:00 - " . $curDate. "20:00";
+			$timeText = date("n-j", strtotime($curDate)) ." 08:00~" . date("n-j", strtotime($curDate)) . " 20:00";
 		} else if($type == "morning") {
 			$workDate = $lastDate;
-			$timeText = $lastDate ." 08:00 - " . $curDate. "08:00";
+			$timeText = date("n-j", strtotime($lastDate)) ." 08:00~" . date("n-j", strtotime($curDate)) . " 08:00";
 		}
 		$head = date("n月j日", strtotime($workDate));
 		$head .= "长沙总装产量通报[" . $timeText . "]\r";

@@ -76,8 +76,50 @@ class ReportSeeker
 		"VQ3" => "VQ3",
 	);
 
+	public function queryManufactureSimple ($date) {
+		list($stime, $etime) = $this->reviseDailyTime($date);
+		$data = array();
+		$countArray["assemblyCount1"] = $this->countCarByPoint($stime, $etime, "assembly", "I");
+		$countArray["assemblyCount2"] = $this->countCarByPoint($stime, $etime, "assembly", "II");
 
-	public function queryManufactureDaily($date) {
+		$sPlanDate = substr($stime, 0, 10);
+		$ePlanDate = substr($etime, 0, 10);
+		$lineArray = array(1=>"I",2=>"II");
+		foreach($lineArray as $i => $line) {
+			$assemblyCount = $this->countCarByPointAllSeries($stime, $etime, "assembly", $line); 
+			$completion = $this->queryPlanCompletionAllSeries($sPlanDate, $ePlanDate, $line);
+
+			$assemblyCountText = "assemblyCount" . $i;
+			$completionText = "completion" . $i;
+
+			$data[$assemblyCountText] = $assemblyCount;
+			$data[$completionText] = empty($completion) ? 0 : $completion*100 . "%";
+		}
+		$pause = $this->queryPauseRecourd($stime,$etime);
+		$data['pauseTime'] = empty($pause['howlong']) ? 0 : round($pause['howlong']/60, 0); 
+		$useRate = $this->queryUseRate($stime,$etime);
+		$data['useRate'] = empty($useRate['useRate']) ? 0 : ($useRate['useRate']*100) . "%";
+
+		$data['recycleBalance'] = $this->queryRecycleBalanceAllSeries($sPlanDate, $ePlanDate);
+		$data['assemblyPeriod'] = $this->queryAssemblyPeriod($stime, $etime);
+
+		$data['distributeCount'] = $this->countCarByPointAllSeries ($stime,$etime,$point="distribute");
+		$data['warehousePeriod'] = $this->queryWarehousePeriod($stime, $etime);
+
+		return $data;
+	}
+
+	public function queryQualificationSimple ($date) {
+		$pointArray= array("VQ1","VQ1_2","VQ2_ROAD_TEST","VQ2_LEAK_TEST","VQ3");
+		$data = array();
+		foreach($pointArray as $point) {
+			$data[$point] = $this->queryPassRate($point, $date, "daily", $seriesText = "all");
+		}
+		return $data;
+	}
+
+
+	public function queryManufactureDaily ($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
 		list($sMonth, $eDate) = $this->reviseDailyMonth($date);
 		$countArray = array();
@@ -156,7 +198,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryCompletion($date, $timespan){
+	public function queryCompletion ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$seriesArray = self::$SERIES_NAME;
@@ -220,7 +262,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryPlanCompletion($sDate, $eDate, $line=""){
+	public function queryPlanCompletion ($sDate, $eDate, $line="") {
 		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
 		if(!empty($line)) $sql .= " AND assembly_line='$line'";
 		$sql .= " GROUP BY series";
@@ -245,7 +287,15 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryManufactureUse($date, $timespan){
+	public function queryPlanCompletionAllSeries ($sDate, $eDate, $line="") {
+		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		if(!empty($line)) $sql .= " AND assembly_line='$line'";
+		$data = Yii::app()->db->createCommand($sql)->queryRow();
+		$completion = empty($data['total']) ? null : round($data['ready'] / $data['total'], 2);
+		return $completion;
+	}
+
+	public function queryManufactureUse ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$causeArray = self::$PAUSE_CAUSE_TYPE;
@@ -297,7 +347,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryPauseRecourd($stime, $etime){
+	public function queryPauseRecourd ($stime, $etime) {
 		$sql = "SELECT id, cause_type, pause_time, recover_time, TIMESTAMPDIFF(second,pause_time,recover_time) AS howlong FROM pause WHERE pause_type!='计划停线' AND pause_time>='$stime' AND pause_time<'$etime' AND recover_time>'0000-00-00 00:00:00'";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		return $datas;
@@ -321,7 +371,7 @@ class ReportSeeker
 		return $causeDistribute;
 	}
 
-	public function queryUseRateBase($stime, $etime, $line="", $shift=-1){
+	public function queryUseRateBase ($stime, $etime, $line="", $shift=-1) {
 
 		$datas = $this->queryShiftRecord($stime, $etime, $line, $shift);
 		$use = array();
@@ -369,7 +419,7 @@ class ReportSeeker
 		return $use;
 	}
 
-	public function queryCapacityDaily($stime, $etime, $line=""){
+	public function queryCapacityDaily ($stime, $etime, $line="") {
 		$sDate = substr($stime, 0, 10);
 		$eDate = substr($etime, 0, 10);
 
@@ -385,7 +435,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryShiftRecord($stime, $etime, $line="", $shift=-1){
+	public function queryShiftRecord ($stime, $etime, $line="", $shift=-1) {
 		$sDate = substr($stime, 0, 10);
 		$eDate = substr($etime, 0, 10);
 
@@ -412,7 +462,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryPauseDetail($date) {
+	public function queryPauseDetail ($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
 		// $seeker = new PauseSeeker();
 		// $curPage = 1;
@@ -450,7 +500,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryRecycleChart($date, $timespan) {
+	public function queryRecycleChart ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$stateArray= self::$RECYCLE_BALANCE_STATE;
@@ -493,7 +543,19 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryRecycleBalance($sDate, $eDate) {
+	//recycle blance only
+	public function queryRecycleBalanceAllSeries ($sDate, $eDate) {
+		$dateCondition = "work_date>='$sDate' AND work_date<'$eDate'";
+		if($sDate == $eDate) {
+			$dateCondition = "work_date='$sDate'";
+		}
+		$sql = "SELECT (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE $dateCondition AND state IN ('VQ1','VQ2','VQ3')";
+		$count = Yii::app()->db->createCommand($sql)->queryscalar();
+		return intval($count);
+	}
+
+	//recycle blance + online blance
+	public function queryRecycleBalance ($sDate, $eDate) {
 		$sql = "SELECT state, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine','onLine-2', 'VQ1','VQ2','VQ3') GROUP BY series,state";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -519,7 +581,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryOnlineBalanceGroupBySeries($sDate, $eDate) {
+	public function queryOnlineBalanceGroupBySeries ($sDate, $eDate) {
 		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('onLine','onLine-2')  GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -535,7 +597,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryRecycleBalanceGroupBySeries($sDate, $eDate) {
+	public function queryRecycleBalanceGroupBySeries ($sDate, $eDate) {
 		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state IN ('VQ1','VQ2','VQ3')  GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -551,7 +613,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryWarehouseBalanceGroupBySeries($sDate, $eDate) {
+	public function queryWarehouseBalanceGroupBySeries ($sDate, $eDate) {
 		$sql = "SELECT series, (sum(count)/count(DISTINCT work_date)) as count FROM balance_daily WHERE work_date>='$sDate' AND work_date<'$eDate' AND state ='WH'  GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -567,7 +629,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryAssemblyPeriod($stime, $etime){
+	public function queryAssemblyPeriod ($stime, $etime) {
 		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
 		$sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time,TIMESTAMPDIFF(second,assembly_time,warehouse_time) AS howlong FROM car WHERE $condition";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
@@ -585,7 +647,7 @@ class ReportSeeker
 		return $period;
 	}
 
-	public function countOnline($stime, $etime, $line='I'){
+	public function countOnline ($stime, $etime, $line='I'){
 		$sql = "SELECT COUNT(id) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime' AND assembly_line='$line'";
 		$data = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $data;
@@ -631,7 +693,7 @@ class ReportSeeker
 		return $cars;
 	}
 
-	public function queryUnsolvedFaults($carId, $table) {
+	public function queryUnsolvedFaults ($carId, $table) {
 		$sql = "SELECT CONCAT(component_name,fault_mode) AS fault
 				FROM $table
 				WHERE car_id=$carId AND status='未修复'";
@@ -640,7 +702,7 @@ class ReportSeeker
 		return $faults;
 	}
 
-	public function queryNodeRemark($carId, $nodeId) {
+	public function queryNodeRemark ($carId, $nodeId) {
 		$sql = "SELECT remark FROM node_trace WHERE node_id=$nodeId AND car_id=$carId";
 		$remarks = Yii::app()->db->createCommand($sql)->queryColumn();
 		$remarks = array_unique($remarks);
@@ -648,7 +710,7 @@ class ReportSeeker
 		return $remarks;
 	}
 
-	public function queryWarehouseChart($date, $timespan) {
+	public function queryWarehouseChart ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$seriesArray = self::$SERIES_NAME;
@@ -689,7 +751,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryWarehousePeriod($stime, $etime){
+	public function queryWarehousePeriod ($stime, $etime){
 		$condition = " `status`>0 AND activate_time>='$stime' AND activate_time<'$etime'";
 		$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` WHERE $condition";
 		$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
@@ -724,7 +786,7 @@ class ReportSeeker
 		return $warehousePeriodAvg;
 	}
 
-	public function queryOvertimeOrders() {
+	public function queryOvertimeOrders () {
 		$sql = "SELECT id, order_number, board_number, TIMESTAMPDIFF(second,activate_time,CURRENT_TIMESTAMP) AS warehouse_period, standby_date, amount, hold, count, series, car_type, car_model, color, cold_resistant, order_config_id, config_name, distributor_name, lane_id,lane_name, status, activate_time, out_finish_time 
 				FROM view_order 
 				WHERE `status` = 1 AND amount>count AND activate_time>'0000-00-00 00:00:00' AND out_finish_time='0000-00-00 00:00:00'
@@ -751,7 +813,7 @@ class ReportSeeker
 		return $boards;
 	}
 
-	public function queryCarDetail($date, $point, $timespan="daily"){
+	public function queryCarDetail ($date, $point, $timespan="daily") {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 
 		$data = $this->queryDetailByPoint($stime, $etime, $point);
@@ -759,7 +821,7 @@ class ReportSeeker
 		return $data;
 	}
 
-	public function countCarByPoint($stime,$etime,$point="assembly",$line=""){
+	public function countCarByPoint ($stime,$etime,$point="assembly",$line="") {
 		$point .= "_time";
 		$sql = "SELECT series, COUNT(id) as `count` FROM car WHERE $point>='$stime' AND $point<'$etime'";
 		if(!empty($line)){
@@ -780,7 +842,17 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function countCarByState($state){
+	public function countCarByPointAllSeries ($stime,$etime,$point="assembly",$line="") {
+		$point .= "_time";
+		$sql = "SELECT COUNT(id) as `count` FROM car WHERE $point>='$stime' AND $point<'$etime'";
+		if(!empty($line)){
+			$sql .= " AND assembly_line='$line'";
+		}
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
+	}
+
+	public function countCarByState ($state) {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
 				$states = self::$NODE_BALANCE_STATE[$state];
@@ -808,7 +880,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryDetailByPoint($stime, $etime, $point="assembly"){
+	public function queryDetailByPoint ($stime, $etime, $point="assembly") {
 		$point .= "_time";
 		$sql = "SELECT id as car_id, vin, assembly_line, serial_number, series, type, config_id, cold_resistant, color,status, engine_code, assembly_time, finish_time, warehouse_time, distribute_time, warehouse_id, order_id, lane_id, distributor_name, remark, special_order
 				FROM car
@@ -844,7 +916,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryQualification($point, $date, $timespan, $seriesText="all") {
+	public function queryQualification ($point, $date, $timespan, $seriesText="all") {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
 		$seriesArray = $this->parseSeries($seriesText);
@@ -879,7 +951,29 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function queryFaultDaily($point, $date, $seriesText="all"){
+	public function queryPassRate ($point, $date, $timespan, $seriesText = "all") {
+		list($stime, $etime) = $this->reviseTime($date, $timespan);
+		$carCountAll = $this->countCarTrace($point, $stime, $etime, $seriesText);
+		$countNG = $this->countNG($point, $seriesText, $stime, $etime);
+		$passRate = empty($carCountAll) ? null : round(($carCountAll - $countNG) / $carCountAll, 2);
+
+		if($seriesText == "all") {
+			$passRateSub = array();
+			$seriesArray = $this->parseSeries($seriesText);
+			foreach($seriesArray as $series => $seriesName) {
+				$carCount = $this->countCarTrace($point, $stime, $etime, $series);
+				$countNG = $this->countNG($point, $series, $stime, $etime);
+				$passRateSub[$series] = empty($carCount) ? null : round(($carCount - $countNG) / $carCount, 2);
+			}
+			$ret = array("total" => $passRate, "sub" => $passRateSub);
+		} else {
+			$ret = $passRate;
+		}
+
+		return $ret;
+	}
+
+	public function queryFaultDaily ($point, $date, $seriesText="all") {
 		list($stime, $etime) = $this->reviseTime($date, "daily");
 		$seriesArray = $this->parseSeries($seriesText);
 		$column = array(
@@ -930,7 +1024,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function countCarTrace($point, $stime, $etime, $series="") {
+	public function countCarTrace ($point, $stime, $etime, $series="") {
 		$nodeIdStr = $this->parseNodeId($point);
 		$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time>='$stime' AND pass_time<'$etime' AND node_id IN ($nodeIdStr)";
 		if(!empty($series) && $series != "all") $sql .= " AND car_series = '$series'";
@@ -938,7 +1032,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function countFault($point, $series, $stime, $etime) {
+	public function countFault ($point, $series, $stime, $etime) {
 		$tables = $this->parseTables($point, $series);
 		$count = 0;
 		foreach($tables as $table=>$nodeName) {
@@ -948,7 +1042,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function countNG($point, $series, $stime, $etime) {
+	public function countNG ($point, $series, $stime, $etime) {
 		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName) {
 			$dataSql[] = "(SELECT car_id FROM $table WHERE create_time>='$stime' AND create_time<'$etime' AND status <>'在线修复')";
@@ -960,7 +1054,7 @@ class ReportSeeker
 		return $count;
 	}
 
-	public function queryFaults($point, $series, $stime, $etime) {
+	public function queryFaults ($point, $series, $stime, $etime) {
 		$tables = $this->parseTables($point, $series);
 		$dutyList = $this->dutyList();
 		foreach($tables as $table=>$nodeName){
@@ -976,7 +1070,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryTopFault($point, $series, $stime, $etime, $top=10) {
+	public function queryTopFault ($point, $series, $stime, $etime, $top=10) {
 		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName){
 			$tmp = explode("_", $table);
@@ -989,7 +1083,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	public function queryFaultDutyDistribute($point, $series, $stime, $etime) {
+	public function queryFaultDutyDistribute ($point, $series, $stime, $etime) {
 		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName){
 			$dataSqls[] = "(SELECT duty_department FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
@@ -1013,7 +1107,7 @@ class ReportSeeker
 		return $datas;
 	}
 
-	private function parseTables($point, $series="all") {
+	private function parseTables ($point, $series="all") {
 		$tablePrefixs = array(
 			'VQ1_STATIC_TEST' => 10,
 			'VQ1_STATIC_TEST_2' => 209,
@@ -1063,7 +1157,7 @@ class ReportSeeker
 		return $tables;
 	}
 
-	private function parseNodeId($point) {
+	private function parseNodeId ($point) {
 		$nodeIds = array(
             'VQ1' => 10,
             'VQ1_2' => 209,
@@ -1084,7 +1178,7 @@ class ReportSeeker
 
 	}
 
-	public function reviseTime($date, $timespan){
+	public function reviseTime ($date, $timespan) {
 		switch($timespan) {
 			case "daily":
 				list($stime, $etime) = $this->reviseDailyTime($date);
@@ -1128,7 +1222,7 @@ class ReportSeeker
 		return array($stime, $etime);
 	}
 
-	private function reviseYearlyTime($date) {
+	private function reviseYearlyTime ($date) {
 		$d = strtotime($date);
 		$nextY = strtotime('+1 year', $d);
 		$stime = date("Y-01-01 08:00:00", $d);
@@ -1137,7 +1231,7 @@ class ReportSeeker
 		return array($stime, $etime);
 	}
 
-	private function stateArray($state){
+	private function stateArray ($state){
 		$stateMap=array(
 			'PBS' => array('PBS'),
 			'onLine' => array('onLine'),
@@ -1156,7 +1250,7 @@ class ReportSeeker
 		return $stateMap[$state];
 	}
 
-	private function configNameList(){
+	private function configNameList () {
 		$configName = array();
 		$sql = "SELECT car_config_id, order_config_id , name , car_model FROM view_config_name";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1166,7 +1260,7 @@ class ReportSeeker
 		return $configName;
 	}
 
-	public function parseQueryTime($stime, $etime, $timespan){
+	public function parseQueryTime ($stime, $etime, $timespan) {
 		$s = strtotime($stime);
 		$e = strtotime($etime);
 
@@ -1213,7 +1307,7 @@ class ReportSeeker
 		return $ret;
 	}
 
-	public function dutyList(){
+	public function dutyList () {
 		$list = array();
 		$sql = "SELECT id,name,display_name FROM duty_department";
 		$dutyDepartments = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1228,14 +1322,14 @@ class ReportSeeker
 		return $list;
 	}
 
-	public function secondConvertToMMss($howlong) {
+	public function secondConvertToMMss ($howlong) {
 		$howlongMM = intval($howlong / 60);
 		$howlongSS = intval($howlong % 60);
 		$ret = $howlongMM . "'" . sprintf("%02d", $howlongSS) . "\"";
 		return $ret;
 	}
 
-	private function parseSeries($series) {
+	private function parseSeries ($series) {
 		if(empty($series) || $series === 'all') {
             $seriesArray = array('F0'=>'F0', 'M6'=>'M6', '6B'=>'思锐');
         } else {

@@ -70,8 +70,8 @@
             </div >
                 <div style="width:820pt;margin: 0px auto;">
                     <ul id="tabUl" class="nav nav-pills">
-                        <li class="active"><a class="queryQualification VQ1" point="VQ1" href="#tabVQ1" data-toggle="tab"><span class="screenHide">1.&nbsp;</span>I线_VQ1</a></li>
-                        <li class="notPrintable"><a class="queryQualification VQ1_2" point="VQ1_2" href="#tabVQ1_2" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>II线_VQ1</a></li>
+                        <li class="active"><a class="queryQualification VQ1" point="VQ1" href="#tabVQ1" data-toggle="tab"><span class="screenHide">1.&nbsp;</span>VQ1-I线</a></li>
+                        <li class="notPrintable"><a class="queryQualification VQ1_2" point="VQ1_2" href="#tabVQ1_2" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>VQ1-II线</a></li>
                         <li class="notPrintable"><a class="queryQualification VQ2_ROAD_TEST" point="VQ2_ROAD_TEST" href="#tabVQ2Road" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>VQ2-路试</a></li>
                         <li class="notPrintable"><a class="queryQualification VQ2_LEAK_TEST" point="VQ2_LEAK_TEST" href="#tabVQ2Leak" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>VQ2-淋雨</a></li>
                         <li class="notPrintable"><a class="queryQualification VQ3" point="VQ3" href="#tabVQ3" data-toggle="tab"><span class="screenHide">5.&nbsp;</span>VQ3</a></li>

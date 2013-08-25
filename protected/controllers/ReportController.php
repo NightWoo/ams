@@ -7,11 +7,12 @@ class ReportController extends BmsBaseController
 {
 
 	public function actionDebug(){
-        // $seeker= new ReportSeeker();
+        $seeker= new ReportSeeker();
         $workDate = DateUtil::getLastDate();
         $workDateTime = strtotime($workDate);
+        $date = "2013-08-04";
         // $ret = date("n月j日", $workDateTime);
-        $ret =date("n-j H:i");
+        $ret = $seeker -> queryQualificationSimple($date);
 		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
@@ -27,6 +28,23 @@ class ReportController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
 	}
+
+    public function actionQuerySimpleDaily () {
+        // $date = DateUtil::getLastDate();
+        $date = "2013-08-13";
+        try {
+            $seeker = new ReportSeeker();
+            $manufactureDaily = $seeker->queryManufactureSimple($date);
+            $qualificationDaily = $seeker->queryQualificationSimple($date);
+
+            $data['manufactureDaily'] = $manufactureDaily;
+            $data['qualificationDaily'] = $qualificationDaily;
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
 
 	public function actionExportCars() {
 		$date = $this->validateStringVal("date", "");

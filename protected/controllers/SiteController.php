@@ -86,4 +86,8 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect('/bms');
 	}
+
+	public function actionPlanPannelIndex () {
+		$this->render('pannels/planPannel');
+	}
 }

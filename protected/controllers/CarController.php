@@ -335,7 +335,7 @@ class CarController extends BmsBaseController
     public function actionValidateBarCode(){
         $vin = $this->validateStringVal('vin', '');
         $componentId = $this->validateIntVal('componentId', '');
-        $barCode = $this->validateStringVal('barCode');
+        $barCode = $this->validateStringVal('barCode', '');
         try{
             $car = Car::create($vin);
             $car->checkBarCode($componentId, $barCode);

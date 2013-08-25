@@ -3,7 +3,7 @@ $("document").ready(function() {
 	initPage();
 	var compArray = [];
 	var recordArray = [];
-	console.log($("#currentNode").attr("value"));
+	// console.log($("#currentNode").attr("value"));
 	//$("#myNode").html($("#currentNode").attr("value"));
 
 //------------------- ajax -----------------------	
@@ -96,7 +96,7 @@ $("document").ready(function() {
 			};
 		}
 		var jsonText = JSON.stringify(obj);
-		console.log(jsonText);
+		// console.log(jsonText);
 
 		$.ajax({
 			type: "post",//使用get方法访问后台
@@ -211,7 +211,7 @@ $("document").ready(function() {
 		validate 
 	*/
 	function getCompIndex (compCode) {
-		console.log(compCode);
+		// console.log(compCode);
 		var simpleCode = "";
 		var providerCode = "";
 		if(compCode.length == 17){//零部件代码为 6-8位
@@ -243,11 +243,11 @@ $("document").ready(function() {
 				simpleCode = compCode.substring(0,4);
 		}
 
-		console.log("simpleCode:" + simpleCode);
+		// console.log("simpleCode:" + simpleCode);
 		for (var i = 0; i < compArray.length; i++) {
 			//判断规则
 			if(compArray[i].simple_code == simpleCode){
-				console.log("match" + i);
+				// console.log("match" + i);
 				if(compArray[i].provider_code == "" ||
 					compArray[i].provider_code == providerCode)
 					return i;
@@ -357,7 +357,7 @@ $("document").ready(function() {
 		//modified by wujun
 		if(event.keyCode == "13" || event.keyCode == "10"){
 			if(jQuery.trim($('#compCodeText').val()) != ""){
-				console.log($('#compCodeText').val());
+				// console.log($('#compCodeText').val());
 				var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
 				if(index != -1){
 					// if(!compArray[index].bar_code){
@@ -373,8 +373,8 @@ $("document").ready(function() {
 					}
 				}
 				$(this).val("");
-				console.log(compArray.length);
-				console.log(recordArray.length);
+				// console.log(compArray.length);
+				// console.log(recordArray.length);
 				if(compArray.length == recordArray.length){
 					$("#btnSubmit").focus();
 				}

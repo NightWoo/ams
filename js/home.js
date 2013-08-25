@@ -2,65 +2,69 @@ $(function () {
 	initPage();
 		
 	$("#logout").click(function(){
-		window.location.href='/bms/site/logout'
+		window.location.href='/bms/site/logout';
 	})
 	
 	$("#quality").click(function(){
-		window.location.href='/bms/execution/query?type=NodeQuery'
+		window.location.href='/bms/execution/query?type=NodeQuery';
 	})
 	
 	$("#efficiency").click(function(){
-		window.location.href='/bms/execution/monitoringIndex'
+		window.location.href='/bms/execution/monitoringIndex';
 	})
 	
 	$("#dataInput").click(function(){
-		window.location.href='/bms/execution/index'
+		window.location.href='/bms/execution/index';
 	})
 	
 	$("#query").click(function(){
-		window.location.href='/bms/execution/query?type=CarQuery'
+		window.location.href='/bms/execution/query?type=CarQuery';
 	})
 
 	$("#warehouseMaintain").click(function(){
-		window.location.href='/bms/execution/warehouseReturn'
+		window.location.href='/bms/execution/warehouseReturn';
 	})
 	
 	$("#maintain").click(function(){
-		window.location.href='/bms/execution/ConfigPlan'
+		window.location.href='/bms/execution/ConfigPlan';
 	})
 	
 	$("#basicDatabase").click(function(){
-		window.location.href='/bms/generalInformation/faultMaintain'
+		window.location.href='/bms/generalInformation';
 	})
 
 	$("#orderMaintain").click(function(){
-		window.location.href='/bms/execution/orderMaintain'
+		window.location.href='/bms/execution/orderMaintain';
 	})
 	
 	
 	$("#cost").click(function(){
-		window.location.href='/bms/managementSystem/workSummaryCost'
+		window.location.href='/bms/managementSystem/workSummaryCost';
 	})
 	
 	
 	$("#manpower").click(function(){
-		window.location.href='/bms/managementSystem/workSummaryManpower'
+		window.location.href='/bms/managementSystem/workSummaryManpower';
 	})
 	
 	$("#managementSystem").click(function(){
-		window.location.href='/bms/ManagementSystem/home?chapter=0'
+		window.location.href='/bms/ManagementSystem/home?chapter=0';
 	})
 
 	$("#carAccessControl").click(function(){
-		window.location.href='/bms/execution/DetectShopAccess'
+		window.location.href='/bms/execution/DetectShopAccess';
 	})
 	
 	$("#safety").click(function(){
 		window.location.href='#'
 	})
 
-	$("#summary").click(function(){
-		// window.location.href='/bms/managementSystem/workSummaryAPD'
+	$("#manufactureReport").click(function(){
+		window.location.href='/bms/execution/report?type=ManufactureReport';
+	})
+
+	$("#qualtityReport").click(function(){
+		window.location.href='/bms/execution/report?type=QualityReport';
 	})
 
 	function initPage() {

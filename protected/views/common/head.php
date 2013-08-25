@@ -64,7 +64,7 @@
 						</ul> -->
 					</li>
 					<li id="headGeneralInformationLi">
-						<a href="/bms/generalInformation/faultMaintain"><i class="icon-list-alt"></i>&nbsp;数据库<!-- <b class="caret"></b> --></a>
+						<a href="/bms/generalInformation"><i class="icon-list-alt"></i>&nbsp;数据<!-- <b class="caret"></b> --></a>
 						<!-- <ul class="dropdown-menu">
 							<li><a href="#">情报中心</a></li>
 							<li><a href="/bms/generalInformation/generalIndex">基础数据库</a></li>

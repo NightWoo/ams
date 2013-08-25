@@ -49,7 +49,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 	})
 
 	$("#btnSubmit").click(function () {
-		
+		ajaxSubmit();
 	})
 
 	// $("#componentsTable").on("focus", "input[name=componentName]" ,function (e) {
@@ -122,43 +122,75 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		  .data("simpleCode", componentInfo.simple_code)
 		  .data("needBarCode", needBarCode)
 		  .data("providerId", selectProvider.val())
-		  .data("unitPrice", componentInfo.unit_price);
+		  .data("unitPrice", componentInfo.unit_price)
+		  .data("componentName", componentInfo.display_name);
 	}
 
 	function packComponent () {
 		var dataArray = [];
+		var suspended = false;
 		$("#componentsTable>tbody>tr").each(function (index, tr) {
-			if(tr.data("componentId") != 0) {
+			if($(tr).data("componentId") != 0) {
 				barCode = $.trim($(tr).find("input").filter(".barCode").val());
-				if(tr.data("needBarCode")) {
-					validateBarCode(tr.data("componentId"), barCode);
+				if($(tr).data("needBarCode")) {
+					matched = component.validateBarCode(barCode, $(tr).data("simpleCode"))
+					if(!matched){
+						alert($(tr).data("componentName") + "条码校验失败，请确认");
+						suspended = true;
+						return false;
+					} else {
+						checkRet = component.ajaxCheckBarCode($("#vinText").val(), $(tr).data("componentId"), barCode);
+						if(!checkRet.success){
+							alert(checkRet.message);
+							suspended = true;
+							return false;
+						}
+					}
 				}
-				isCollateral = $(tr).find("input[name=collateralCheck]").attr("checked") == "checked" ? 1 : 0;
+				isCollateral = $(tr).find("input").filter(".collateralCheck").prop( "checked" ) ? 1 : 0;
 
-				tr.data("carId", $("vinText").data("carId"));
-				tr.data("faultId", $(":radio[name=choseFault]:checked").data("id"));
-				tr.data("dutyDepartmentId", $("#dutySelect").val());
-				tr.data("barCode", barCode);
-				tr.data("isCollateral", isCollateral);
+				$(tr).data("carId", $("#vinText").data("carId"));
+				$(tr).data("faultId", $(":radio[name=choseFault]:checked").data("id"));
+				$(tr).data("dutyDepartmentId", $("#dutySelect").val());
+				$(tr).data("barCode", barCode);
+				$(tr).data("isCollateral", isCollateral);
 
 				dataArray.push($(tr).data());
 			}
 		})
+		//如果组织或数据条目为0,返回包裹数据失败
+		if(suspended || dataArray.length == 0) return false;
 
 		var dataObj = {};
-		for(i=0;i<dataArray.length;i++) {
+		for(var i=0;i<dataArray.length;i++) {
 			dataObj[i] = dataArray[i];
 		}
-		var jsonText = JSON.stringigy(dataObj);
+		var jsonText = JSON.stringify(dataObj);
 		return jsonText;
 	}
 
 	function ajaxSubmit () {
-
-	}
-
-	function validateBarCode () {
-		
+		repares = packComponent();
+		//数据包装完全包裹成功才submit
+		if(repares) {
+			$.ajax({
+				url: service.RELACE_SPARES,
+				dataType: "json",
+				data:{
+					"vin": $("#vinText").val(),
+					"spares": repares,
+				},
+				error: function () {common.alertError();},
+				success: function (response) {
+					resetPage();
+					if(response.success) {
+						common.fadeMessageAlert(response.message,"alert-success");
+					} else {
+						common.fadeMessageAlert(response.message,"alert-error");
+					}
+				} 
+			})
+		}
 	}
 
 	function isNeedBarCode (componentId) {
@@ -217,16 +249,6 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 			$("#vinHint").hide();
 			$("#carInfo").fadeIn(1000);
 		}
-	}
-
-	function fadeMessageAlert (message,alertClass) {
-		$("#messageAlert").removeClass("alert-error alert-success").addClass(alertClass);
-		$("#messageAlert").html(message);
-		$("#messageAlert").show(500,function () {
-			setTimeout(function() {
-				$("#messageAlert").hide(1000);
-			},5000);
-		});
 	}
 
 	function goValidate () {
@@ -293,14 +315,16 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 
 				    $.each(response.data.faultArray, function (faultClass, faults) {
 				    	$.each(faults, function (index, fault) {
-				    		tr = $("<tr />");
-				    		$("<td />").html(fault.node_name).appendTo(tr);
-				    		$("<td />").html(fault.component_name + fault.fault_mode).appendTo(tr);
-				    		$("<td />").html(fault.duty).appendTo(tr);
-		    				radio = $("<input />")
-		    					.attr("type", "radio").attr("name", "choseFault")
-		    					.data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass)
-		    				$("<td />").append(radio).appendTo(tr);
+				    		if(fault.fault_mode){
+					    		tr = $("<tr />");
+					    		$("<td />").html(fault.node_name).appendTo(tr);
+					    		$("<td />").html(fault.component_name + fault.fault_mode).appendTo(tr);
+					    		$("<td />").html(fault.duty).appendTo(tr);
+			    				radio = $("<input />")
+			    					.attr("type", "radio").attr("name", "choseFault")
+			    					.data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass)
+			    				$("<td />").append(radio).appendTo(tr);
+				    		}
 
 		    				$("#faultsTable>tbody").append(tr);
 				    	})

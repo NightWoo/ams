@@ -35,6 +35,7 @@
 	height:14px;
   background-color: white;
   z-index: 100;
+  cursor: pointer;
 }
 
 #bodyleft{
@@ -108,6 +109,15 @@ a {
 }
 
 /*below added by wujun modify bootstrap.css*/
+div.thumbnail:hover, div.thumbnail:focus {
+    border-color: #0088CC;
+    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+div.thumbnail {
+  cursor: pointer;
+}
+
 .icon-white{margin-top:4px;}
 [class^="icon-"],[class*=" icon-"]{margin-top:4px;}
 .dropdown-menu{margin:0;}

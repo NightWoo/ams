@@ -329,7 +329,7 @@ $(document).ready(function  () {
 		$("#tabContent .tab-pane:first-child").addClass("active");
 
 		clicked = [true,false,false,false,false,true];
-		console.log(clicked);
+		// console.log(clicked);
 
 	}
 
