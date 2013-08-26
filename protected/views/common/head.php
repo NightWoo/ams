@@ -6,84 +6,42 @@
 			<a class="brand" href="/bms/site">AMS</a>
 			<div class="nav-collapse">
 				<ul class="nav">
-					<!-- <li ><a href="/bms/site">首页</a></li> -->
-					<li class="dropdown" id="headManagementSystemLi">
-						<a href="/bms/ManagementSystem/home?chapter=0" class="dropdown-toggle"><i class="icon-sitemap"></i>&nbsp;体系</a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="">体系概况</a></li>
-							<li><a href="zz_nodeselect.php">管理考核与评价</a></li>
-							<li><a href="#">体系审核</a></li>
-						</ul> -->
+					<li id="headManagementSystemLi">
+						<a href="/bms/ManagementSystem/home?chapter=0" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="体系"><i class="icon-sitemap"></i></a>
 					</li>
-					<li class="dropdown" id="headAssemblyLi">
-						<a href="/bms/execution" class="dropdown-toggle"><i class="icon-dashboard"></i>&nbsp;生产</a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="/bms/execution/home">总装</a></li>
-							<li><a href="#">涂装</a></li>
-							<li><a href="#">焊装</a></li>
-							<li><a href="#">冲压</a></li>
-						</ul> -->
+					<li id="headTechnologyLi">
+						<a href="" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="技术"><i class="icon-cogs"></i></a>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle"><i class="icon-map-marker"></i>&nbsp;现场<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="#">现场管理1</a></li>
-							<li><a href="#">现场管理2</a></li>
-							<li><a href="#">现场管理3</a></li>
-						</ul> -->
+					<li id="headAssemblyLi">
+						<a href="/bms/execution" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="生产"><i class="icon-wrench"></i></a>
 					</li>
-					<li class="dropdown" id="headPlanLi">
-						<a href="/bms/execution/configPlan"><i class="icon-tasks"></i>&nbsp;计划<!-- <b class="caret"></b> --></a>
+					<li class="divider-vertical"></li>
+					<li id="headEfficiencyLi">
+						<a href="/bms/execution/monitoringIndex" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="效率"><i class="icon-dashboard"></i></a>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle"><i class="icon-thumbs-up"></i>&nbsp;质量<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="#">质量工程</a></li>
-							<li><a href="#">IQS售后质量</a></li>
-							<li><a href="#">DRR内部质量</a></li>
-							<li><a href="#">SQE零部件质量</a></li>
-							<li><a href="#">CPA产品审核</a></li>
-							<li><a href="#">LPA过程审核</a></li>
-							<li><a href="#">Lesson Learned</a></li>
-						</ul> -->
+					<li id="headQualityLi">
+						<a href="/bms/execution/query?type=NodeQuery"  rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="质量"><i class="icon-thumbs-up-alt"></i></a>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-money"></i>&nbsp;成本<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="#">成本管理1</a></li>
-							<li><a href="#">成本管理2</a></li>
-						</ul> -->
+					<li>
+						<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="icon-check"></i></a>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-group"></i>&nbsp;人事<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="#">人力资源管理</a></li>
-							<li><a href="#">文件记录管理</a></li>
-							<li><a href="#">工具量具管理</a></li>
-							<li><a href="#">培训管理</a></li>
-						</ul> -->
+					<li id="headCostLi">
+						<a href="/bms/managementSystem/workSummaryCost" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i></a>
 					</li>
+					<li id="headManpowerLi">
+						<a href="/bms/managementSystem/workSummaryManpower" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="icon-group"></i></a>
+					</li>
+					<li class="divider-vertical"></li>
 					<li id="headGeneralInformationLi">
-						<a href="/bms/generalInformation"><i class="icon-list-alt"></i>&nbsp;数据<!-- <b class="caret"></b> --></a>
-						<!-- <ul class="dropdown-menu">
-							<li><a href="#">情报中心</a></li>
-							<li><a href="/bms/generalInformation/generalIndex">基础数据库</a></li>
-							<li><a href="#">维护与帮助</a></li>
-						</ul> -->
+						<a href="/bms/generalInformation" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="数据"><i class="icon-list-alt"></i></a>
 					</li>
-					
 				</ul>
         		<ul class="nav pull-right">
-          			<!-- <li><a href="#"><i class="icon-envelope"></i>&nbsp;0</a></li> -->
-          			<li class="dropdown">
-            			<a href="/bms/generalInformation/accountMaintain"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
-            			<!-- <ul class="dropdown-menu">
-              				<li><a href="/bms/generalInformation/accountMaintain">个人中心</a></li>
-              				<li><a href="/bms/site/logout">注销</a></li>
-            			</ul> -->
+          			<li>
+            			<a href="/bms/generalInformation/accountMaintain" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="账户管理"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
          			 </li>
          			 <li>
-            			<a href="/bms/site/logout"><i class="icon-signout"></i>注销</a>
+            			<a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="icon-signout"></i></a>
          			 </li>
         		</ul>			
 			</div>
@@ -110,7 +68,7 @@
 					<li id=""><a href="/bms/execution/query?type=NodeQuery">质量</a></li>
 					<li id=""><a href="/bms/execution/query?type=BalanceQuery">结存</a></li>
 					<li id=""><a href="/bms/execution/query?type=OrderCarQuery">发车</a></li>
-					<li id=""><a href="/bms/execution/query?type=WarehouseQuery">成品库</a></li>
+					<!-- <li id=""><a href="/bms/execution/query?type=WarehouseQuery">成品库</a></li> -->
 				</ul>
 			</div>
 		</div>	

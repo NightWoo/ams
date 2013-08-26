@@ -38,7 +38,7 @@
 		?>
         <div class="offhead">
             <?php
-            require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+            // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
         	<div id="bodyright" class="offset2">
@@ -61,6 +61,9 @@
                     </span>
                     <span class="pull-right">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
+                    </span>
+                    <span class="pull-right">
+                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="icon-link"></i>&nbsp;质量报表</a>
                     </span>
                 </legend>
             </div >

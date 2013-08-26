@@ -146,6 +146,10 @@ $("document").ready(function() {
 		$("#leftNodeSelectLi").addClass("active");
 		resetPage();
 		$("#messageAlert").hide();
+
+		if($("#currentNode").val() == "F10" || $("#currentNode").val() == "F10_2") {
+			$("#linkCarLabel").show();
+		}
 	}
 
 	/*

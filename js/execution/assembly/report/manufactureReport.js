@@ -68,7 +68,7 @@ $(document).ready(function () {
 
 	function initPage(){
 		//add head class
-		$("#headAssemblyLi").addClass("active");
+		$("#headGeneralInformationLi").addClass("active");
 		$("#leftManufactureReportLi").addClass("active");
 
 		$("#divLeft,#divHead,#divFoot").addClass("notPrintable");

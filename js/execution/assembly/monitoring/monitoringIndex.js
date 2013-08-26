@@ -59,7 +59,7 @@ $(document).ready(function () {
 	};
 	// console.log(markMap['T1']);
 	//add head class
-	$("#headAssemblyLi").addClass("active");
+	$("#headEfficiencyLi").addClass("active");
 	$("#leftMonitoringLi").addClass("active");
 
 	$("#rangeT1").data("sectionName","T1");

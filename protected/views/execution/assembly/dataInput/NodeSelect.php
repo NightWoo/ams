@@ -8,6 +8,7 @@
         <link href="/bms/css/execution/assembly/dataInput/NodeSelect.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/head.js"></script>
     </head>
@@ -17,13 +18,16 @@
         ?>
 		<div class="offhead">
 			<?php
-              require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+              // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 			<div id="bodyright" class="offset2"><!-- Main -->
-				<legend>节点选择
+				<legend style="width:940px;margin:0 auto;">生产执行
+					<!-- <span class="pull-right">
+                        <a href="/bms/execution/monitoringIndex"><i class="icon-link"></i>&nbsp;监控面板</a>
+                    </span> -->
             	</legend>
-            	<div class="tab-content">
-					<div class="main tab-pane active main"><!-- 内容主体 -->
+            	<div style="width:970px;margin:0 auto;">
+					<div class="main tab-pane active main" style="margin-left:10px"><!-- 内容主体 -->
 						<div class="node-rgl node-PBS" onclick="window.location.href='/bms/execution/child?view=PBS&node=PBS'"	rel="tooltip" title="PBS节点">
 							PBS
 						</div>
@@ -119,10 +123,77 @@
 						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=S1&view=SPSPoint&point=S1'">S1</div>
 						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=S2&view=SPSPoint&point=S2'">S2</div>
 						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=S3&view=SPSPoint&point=S3'">S3</div>
+						<div class="warehousePrint"><a href="/bms/execution/warehousePrint"><i class="icon-print"></i>&nbsp;合格证</a></div>
+						<div class="accessoryListPrint"><a href="/bms/execution/accessoryListPrint"><i class="icon-print"></i>&nbsp;随车件</a></div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->
 		</div><!-- end offhead -->
+		<div class="container">
+                <div>
+                    <legend>计划与调度</legend>
+                    <div>
+                        <ul class="thumbnails">
+                            <li class="span2">
+                              <div id="planMaintain" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>生产计划</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="orderMaintain" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>发车计划</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="planPause" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>班次/计划停线</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="pauseEdit" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>停线编辑</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="subQueueMaintain" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>分装列队调整</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="spsQueueMaintain" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>SPS列队调整</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="warehouseAdjust" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>库位整理</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="warehouseReturn" class="thumbnail" style="height:60px">
+                                <div>
+                                    <h5>退库</h5>
+                                </div>
+                              </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        </div>
     </body>
 		<script type="text/javascript">
 		$(document).ready(function () {

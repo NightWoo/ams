@@ -140,6 +140,13 @@
                                 </div>
                               </div>
                             </li>
+                            <li class="span2">
+                              <div id="configMaintain" class="thumbnail" style="height:120px">
+                                <div>
+                                    <h5>配置维护</h5>
+                                </div>
+                              </div>
+                            </li>
                             <!-- <li class="span2">
                               <div id="" class="thumbnail" style="height:120px">
                                 <div>

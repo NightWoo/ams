@@ -1,5 +1,5 @@
 define(function() {
-	function attachDropDown(){
+	function attachDropDown () {
 		var timeoutDrop;
 		$("#bmsHead .dropdown")
 		.hover(
@@ -16,7 +16,7 @@ define(function() {
 		});
 	}
 
-	function attachToggleTop() {
+	function attachToggleTop () {
 		$("#toggle-top").on("click", function() {
 			if($("#bmsHead").css("display") == "none"){
 				$(".offhead").animate({"margin-top":"55px"});
@@ -43,10 +43,19 @@ define(function() {
 		)
 	}
 
+	function attachTootip () {
+		$('body').tooltip(
+			{
+	         selector: "*[rel=tooltip]",
+	    	}
+	    );	
+	}
+
 	return {
 		doInit: function() {
 			attachDropDown();
 			attachToggleTop();
+			attachTootip();
 		}
 	}
 })

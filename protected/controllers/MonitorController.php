@@ -289,8 +289,8 @@ class MonitorController extends BmsBaseController
 
 		$wareHousePass = $seeker->queryWareHousePassCars($stime, $etime);
 		$data['checkin'] = $wareHousePass['warehourse_in']['all'] . " / $planCars";
-
 		$standbyPlan = $seeker->queryStandbyPlan($date);
+		$standbyPlan = empty($standbyPlan) ? 0 : $standbyPlan;
 		$data['checkout'] = $wareHousePass['warehourse_out']['all'] . " / $standbyPlan";
 		$data['lineURate'] = $seeker->queryLineURate($stime, $etime);
 

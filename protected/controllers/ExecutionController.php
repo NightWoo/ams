@@ -368,7 +368,7 @@ class ExecutionController extends BmsBaseController
             $fault->save('在线');
 
             $car->addGasBagTraceCode($bagCode);
-            $car->recordTemperature($temperature, $driverId);
+            $car->recordTemperature($temperature, $traceId, $driverId);
             $car->detectStatus($nodeName);
             $transaction->commit();
 
@@ -847,7 +847,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入员,用户名,订单号,发动机号\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";

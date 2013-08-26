@@ -23,12 +23,12 @@
 	?>
 	<div class="offhead">
 	   <?php
-		require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+		// require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
-            	<legend>出库打印
+            	<legend>合格证与厂检单传输打印
             		<span class="pull-right">
             			<!-- <a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
             			/ -->

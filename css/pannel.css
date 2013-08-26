@@ -9,7 +9,7 @@ div.thumbnail {
 }
 
 .thumbnail li {
-    margin-bottom: 5px;
+    /*margin-bottom: 0px;*/
 }
 
 .thumbnail h5 {
@@ -27,6 +27,12 @@ div.thumbnail {
 	text-align: right;
 }
 
-.maindata .unit {
-	font-size: 16px;
+.mainData {
+    font-size: 18px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.mainData .unit {
+    font-size: 16px;
 }

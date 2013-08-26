@@ -36,7 +36,7 @@ $(document).ready(function () {
 
 	function initPage(){
 		//add head class
-		$("#headAssemblyLi").addClass("active");
+		$("#headGeneralInformationLi").addClass("active");
 		$("#leftQualityReportLi").addClass("active");
 		$("#divLeft,#divHead,#divFoot").addClass("notPrintable");
 		$("#startTime").val(window.byd.DateUtil.lastWorkDate());

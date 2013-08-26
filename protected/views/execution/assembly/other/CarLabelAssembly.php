@@ -31,13 +31,15 @@
 		?>
     		<div class="offhead">
     			<?php
-    			require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+    			// require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
     			?>
     			<div id="bodyright" class="offset2"><!-- Main体 -->
                     <div>
                         <legend>车辆标签打印
                             <span class="pull-right">
-                                <a href="/bms/execution/child?view=T0&node=T0"><i class="icon-link"></i>&nbsp;T0</a>
+                                <a href="/bms/execution/child?view=F10&node=F10"><i class="icon-link"></i>&nbsp;I线_F10</a>
+                                /
+                                <a href="/bms/execution/child?view=F10_2&node=F10_2"><i class="icon-link"></i>&nbsp;II线_F10</a>
                             </span>
                         </legend>
                     </div>

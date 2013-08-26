@@ -68,5 +68,12 @@ define(['service'], function(service) {
 			message = message || 'ajax error';
 			// alert(message);
 		},
+
+		attachTooltip: function () {
+			$('body').tooltip(
+		        {
+		         selector: "*[rel=tooltip]",
+		    });	
+		}
 	}
 })

@@ -20,12 +20,14 @@
         ?>
         <div class="offhead">
             <?php
-              require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+              // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
             <div id="bodyright" class="offset2"><!-- Main -->  
            		<legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
                         <a href="/bms/execution/child?node=漏雨&view=VQ2LeakTestException"><i class="icon-link"></i>&nbsp;VQ2异常.漏雨</a>
+                        /
+                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
                     </span>
 	            </legend>
             

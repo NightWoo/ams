@@ -1086,11 +1086,11 @@ class ReportSeeker
 	public function queryFaultDutyDistribute ($point, $series, $stime, $etime) {
 		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName){
-			$dataSqls[] = "(SELECT duty_department FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
+			$dataSqls[] = "(SELECT concat(car.assembly_line, $table.duty_department) AS duty_department_name, $table.duty_department,car.assembly_line FROM $table inner join car on car.id = $table.car_id WHERE $table.create_time>='$stime' AND $table.create_time<'$etime')";
 			$countSqls[] = "(SELECT count(*) FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
 		}
 		$datasql = join(" UNION ALL ", $dataSqls);
-		$sql = "SELECT *,COUNT(duty_department) AS count FROM (" . $datasql .") t GROUP BY duty_department ORDER BY count DESC";
+		$sql = "SELECT *,COUNT(duty_department_name) AS count FROM (" . $datasql .") t GROUP BY duty_department_name ORDER BY count DESC";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$total = 0;
@@ -1101,6 +1101,7 @@ class ReportSeeker
 		$dutyList = $this->dutyList();
 		foreach($datas as &$data) {
 			$data['duty'] = $dutyList[$data['duty_department']];
+			if(!(stripos($data['duty'], "总装") === false)) $data['duty'].= "_" . $data['assembly_line'];
 			$data['percentage'] = $data['count'] / $total;
 		}
 

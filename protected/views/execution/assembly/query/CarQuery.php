@@ -21,7 +21,7 @@
 		?>
         <div class="offhead">
            <?php
-            require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+            // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
         	<!-- Main体 -->	
@@ -84,7 +84,7 @@
                     <thead>
                         <tr>
                             <th>节点</th>
-                            <th>故障/退库记录</th>
+                            <th>故障/节点信息</th>
                             <th>故障状态</th>
                             <th>录入人员</th>
                             <th>录入时间</th>

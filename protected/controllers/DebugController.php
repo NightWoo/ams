@@ -25,8 +25,9 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal("vin", "");
 		try{
-			$reportSeeker = new ReportSeeker();
-			$ret = $this->makeContent('2013-08-19 08:00:00', '2013-08-19 20:00:00', "afternoon");
+			// $reportSeeker = new ReportSeeker();
+			// $ret = $this->makeContent('2013-08-19 08:00:00', '2013-08-19 20:00:00', "afternoon");
+			$ret = strpos("11总装工厂", "总装");
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());

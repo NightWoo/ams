@@ -20,12 +20,14 @@
 		?>
 		<div class="offhead">
 			<?php
-				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+				// require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- 页体 -->
 				<legend><?php echo $nodeDisplayName;?>静态检验
                     <span class="pull-right">
                         <a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception"><i class="icon-link"></i>&nbsp;VQ1异常</a>
+                        /
+                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
                     </span>
                 </legend>
 				

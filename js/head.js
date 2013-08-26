@@ -62,5 +62,11 @@ $("#toggle-top").toggle(
 		clearTimeout(timeoutLeaveLeft);
 		clearTimeout(timeoutChevonRight);
 	});
-	
+
+	$('body').tooltip(
+		{
+         selector: "*[rel=tooltip]",
+    	}
+    );
+
 });

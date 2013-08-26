@@ -9,7 +9,7 @@ $(document).ready(function () {
 	*/
 	function initPage(){
 		//add head class
-		$("#headAssemblyLi").addClass("active");
+		$("#headQualityLi").addClass("active");
 		$("#leftNodeQueryLi").addClass("active");
 
 		$("#startTime").val(currentDate8());

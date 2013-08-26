@@ -22,7 +22,7 @@
         ?>
         <div class="offhead">
            <?php
-            require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
+            // require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
             ?>
 
             <!-- Main体 -->  

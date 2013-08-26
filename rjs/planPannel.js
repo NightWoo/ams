@@ -33,6 +33,6 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 	})
 
 	function initPage () {
-		$("#headPlanLi").addClass("active");
+		$("#headTechnologyLi").addClass("active");
 	}
 });

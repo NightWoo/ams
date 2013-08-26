@@ -32,7 +32,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 	?>
 	<div class="offhead">
 	   <?php
-		require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
+		// require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
 		?>
      
         <div id="bodyright" class="offset2"><!-- 页体 -->

@@ -98,10 +98,8 @@ $(document).ready(function () {
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    $('#configName').html(car.config_name + "/" + car.cold);
-				    if(response.data.status && response.data.status !== "")
-				    	$('#statusInfo').html(response.data.status);
-				    else
-				    	$('#statusInfo').text("");
+				    row = car.row == "" ? "" : "-" + car.row;
+			    	$('#statusInfo').html(car.status + row);
 		    		$("#carTag").show();
 					$("#resultTable").show();	//add by wujun
 

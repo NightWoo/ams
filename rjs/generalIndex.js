@@ -22,6 +22,7 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 		"faultMaintain": "/bms/generalInformation/faultMaintain",
 		"providerMaintain": "/bms/generalInformation/providerMaintain",
 		"distributorMaintain": "/bms/generalInformation/distributorMaintain",
+		"configMaintain": "/bms/execution/configMaintain",
 	}
 
 	$(".thumbnail").click(function () {

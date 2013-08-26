@@ -13,11 +13,13 @@ require.config({
 
 require(["service","common","jquery","bootstrap"], function(service,common,$) {
 	initPage();
+	common.attachTooltip();
 
 	tumbnailUrl = {
-		"manufacturePannel": "/bms/execution/monitoringIndex",
+		"efficiencyPannel": "/bms/execution/monitoringIndex",
+		"manufacturePannel": "/bms/execution/index",
 		"qualityPannel": "/bms/execution/query?type=NodeQuery",
-		"planPannel": "/bms/site/planPannelIndex",
+		"technologyPannel": "",
 		"fieldPannel": "",
 		"costPannel": "/bms/managementSystem/workSummaryCost",
 		"manpowerPannel": "/bms/managementSystem/workSummaryManpower",
@@ -31,7 +33,7 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 
 	$("#shortcutUl").on("click", ".shortcut", function (e) {
 		if($(e.target).closest("li").attr("href")) {
-			window.location.href = $(e.target).closest("li").attr("href");
+			window.open($(e.target).closest("li").attr("href"),"_blank");
 		}
 	})
 

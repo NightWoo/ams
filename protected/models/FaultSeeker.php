@@ -196,6 +196,7 @@ class FaultSeeker
 			}
 			$data['vin'] = $cars[$carId]->vin;
 			$data['series'] = $cars[$carId]->series;
+			$data['line'] = $cars[$carId]->assembly_line;
 			if(!empty($data['updator'])) {
 				$data['user_name'] = $userInfos[$data['updator']];
 			} else {

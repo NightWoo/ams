@@ -31,11 +31,14 @@
 			?>
 			<div class="offhead">
 				<?php
-					require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+					// require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 				?>
 					<div id="bodyright" class="offset2"><!-- Main体 -->	            
 						<div>
 		                    <legend><?php echo $nodeDisplayName;?>
+		                    	<span class="pull-right">
+			                    	<a href="/bms/execution/carLabelAssembly" id="linkCarLabel" style="display:none"><i class="icon-link"></i>&nbsp;车辆标签</a>
+			                    </span>
 		                    </legend>
 		                </div>
 						<div ><!-- 内容主体 -->

@@ -101,10 +101,7 @@ $(document).ready(function () {
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
 				    $('#configName').html(car.config_name);
-				    if(response.data.status && response.data.status !== "")
-				    	$('#statusInfo').html(response.data.status);
-				    else
-				    	$('#statusInfo').text("");
+			    	$('#statusInfo').html(car.status);
 		    		$("#carTag").show();
 
 		    		$.each(response.data.faultArray,function (faultClass, faults) {

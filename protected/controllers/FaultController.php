@@ -416,14 +416,15 @@ class FaultController extends BmsBaseController
         try{
             $fault = Fault::createSeeker();
             list($total, $datas) = $fault->query($component, $mode, $series, $stime, $etime, $node,0, 0);
-			$content = "车系,VIN号,故障零部件,故障模式,故障状态,责任部门,节点,驾驶员,录入人员,录入时间,确认时间,初检人员,复检人员\n";
+			$content = "车系,VIN号,故障零部件,故障模式,故障状态,责任部门,线别,节点,驾驶员,录入人员,录入时间,确认时间,初检人员,复检人员\n";
 			foreach($datas as $data) {
 				$content .= "{$data['series']},";
 				$content .= "{$data['vin']},";
 				$content .= "{$data['component_name']},";
 				$content .= "{$data['fault_mode']},";
                 $content .= "{$data['fault_status']},";
-				$content .= "{$data['duty_department']},";
+                $content .= "{$data['duty_department']},";
+				$content .= "{$data['line']},";
 				$content .= "{$data['node_name']},";
                 $content .= "{$data['driver_name']},";
 				$content .= "{$data['user_name']},";

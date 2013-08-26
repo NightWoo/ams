@@ -378,8 +378,11 @@ class CarController extends BmsBaseController
                 $carData['config_name'] = CarConfigAR::model()->findByPk($car->car->config_id)->name;
             }
             $carData['cold'] = $carData['cold_resistant'] == 0 ? "非耐寒" : "耐寒";
+            $carData['row'] = "";
+            $row = WarehouseAR::model()->findByPk($carData['warehouse_id']);
+            if(!empty($row)) $carData['row'] = $row->row;
 
-            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData, 'status' =>$status));
+            $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }
@@ -410,7 +413,7 @@ class CarController extends BmsBaseController
                 $status .= '-' . $carInfo['distributor_name'];
             }
 
-            $this->renderJsonBms(true, 'OK', array('faultArray' => $data, 'car'=> $carInfo, 'status' =>$status));
+            $this->renderJsonBms(true, 'OK', array('faultArray' => $data, 'car'=> $carInfo));
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }

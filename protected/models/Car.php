@@ -625,10 +625,11 @@ class Car
 	    $this->addTraceComponents($node, '{692:"'.$gasBagCode.'"}');	
 	}
 
-	public function recordTemperature ($temperature=0, $recorderId=0){
+	public function recordTemperature ($temperature=0, $traceId=0, $recorderId=0){
 		$ar = new AirconditionTemperatureAR();
 		$ar->car_id = $this->car->id;
 		$ar->temperature = $temperature;
+		$ar->trace_id = $traceId;
 		$ar->user_id = $recorderId;
 		$ar->save();
 	}
@@ -687,6 +688,9 @@ class Car
         $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_2_$series WHERE car_id={$this->car->id}";
         $vq1_2s = Yii::app()->db->createCommand($sql)->queryAll();
 
+        $sql = "SELECT trace_id,create_time,temperature,user_id AS updator, '' AS component_name, '' AS fault_mode, '-' AS `status`,'-' AS modify_time FROM aircondition_temperature WHERE car_id={$this->car->id}";
+        $temperatures = Yii::app()->db->createCommand($sql)->queryAll();
+
 		$datas = array();
 		$processed = array();
 		foreach($traces as $trace) {
@@ -710,6 +714,11 @@ class Car
 					foreach($roads as $road){
 						if(strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $road;
+						}
+					}
+					foreach($temperatures as $temperature) {
+						if($temperature['trace_id'] == $trace['id'] || (strtotime($temperature['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($temperature['create_time']) >= (strtotime($trace['pass_time']) - 2))){
+							$values[] = $temperature;
 						}
 					}
 					break;
@@ -754,10 +763,11 @@ class Car
 				$datas[] = $trace;
 			} else {
 				foreach($values as $value) {
+					$fault = !empty($value['temperature']) ? "空调温度：" . $value['temperature'] . "℃" : $value['component_name'] . $value['fault_mode'];
 					$datas[] = array(
 						'create_time' => $value['create_time'],
 						'node_name' => $name,
-						'fault' => $value['component_name'] . $value['fault_mode'],
+						'fault' => $fault,
 						'fault_status' => $value['status'],
 						'user_name' => $userInfos[$value['updator']],
 						'modify_time' => $value['modify_time'],
