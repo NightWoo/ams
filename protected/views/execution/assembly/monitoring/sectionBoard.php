@@ -7,7 +7,8 @@
         <link href="/bms/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="/bms/css/execution/assembly/monitoring/sectionBoard.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
-		<script type="text/javascript" src="/bms/js/head.js"></script>
+        <!-- // <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script> -->
+		<!-- // <script type="text/javascript" src="/bms/js/head.js"></script> -->
 		<script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/sectionBoard.js"></script>
     </head>

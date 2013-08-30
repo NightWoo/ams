@@ -112,7 +112,7 @@ $(document).ready(function(e) {
 
 
 	function initPage() {
-		$("#headPlanLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftPlanPauseLi").addClass("active");
 
 		$("#startTime").val(byd.DateUtil.currentDate8() + ":00");

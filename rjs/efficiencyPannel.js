@@ -25,7 +25,6 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 		"spsQueueMaintain": "/bms/execution/spsQueueMaintain",
 		"dataThrow": "/bms/execution/dataThrow",
 		"warehouseAdjust": "/bms/execution/warehouseAdjust",
-		"warehouseReturn": "/bms/execution/warehouseReturn",
 	}
 
 	$(".thumbnail").click(function () {
@@ -33,6 +32,6 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 	})
 
 	function initPage () {
-		$("#headTechnologyLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 	}
 });

@@ -24,7 +24,7 @@
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div class="container">
                 <div>
-                    <legend>总装报表<span>&nbsp;&nbsp;(2013-08-12)</span></legend>
+                    <legend>总装报表&nbsp;&nbsp;<span id="lastWorkDate"></span></legend>
                     <div>
                         <ul class="thumbnails">
                             <li class="span4">
@@ -63,7 +63,7 @@
                     <div>
                         <ul class="thumbnails">
                             <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
+                              <div id="planningDivisionReport" class="thumbnail" style="height:120px">
                                 <div>
                                     <h5>计划处日报</h5>
                                 </div>

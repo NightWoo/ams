@@ -50,6 +50,7 @@ class ConfigController extends BmsBaseController
 		$steering = $this->validateStringVal('assisted_steering','液压');
 		$certificateNote = $this->validateStringVal('certificate_note','');
 		$remark = $this->validateStringVal('remark','');
+		$aircondition = $this->validateIntVal('aircondition','');
 		
 		try {
 			if(empty($series)) {
@@ -80,6 +81,7 @@ class ConfigController extends BmsBaseController
 			$config->mark_clime = $markClime;
 			$config->export_country = $exportCountry;
 			$config->side_glass = $sideGlass;
+			$config->aircondition = $aircondition;
 			$config->tyre = $tyre;
 			$config->assisted_steering = $steering;
 			$config->certificate_note = $certificateNote;
@@ -123,6 +125,17 @@ class ConfigController extends BmsBaseController
 				$config->create_time = date("YmdHis");
 			} else {
 				$config = OrderConfigAR::model()->findByPk($id);
+			}
+			if($isDisabled == 1){
+				$occupys = CarConfigAR::model()->findAll('order_config_id=? AND is_disabled=0', array($id));
+				if(!empty($occupys)) {
+					$names = array();
+					foreach($occupys as $carConfig){
+						$names[] = $carConfig->name;
+					}
+					$name = join("、", $names);
+					throw new Exception("请先停用生产配置".$name);
+				}
 			}
 			
 			$config->car_series = $series;

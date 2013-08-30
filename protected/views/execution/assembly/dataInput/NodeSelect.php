@@ -28,7 +28,7 @@
             	</legend>
             	<div style="width:970px;margin:0 auto;">
 					<div class="main tab-pane active main" style="margin-left:10px"><!-- 内容主体 -->
-						<div class="node-rgl node-PBS" onclick="window.location.href='/bms/execution/child?view=PBS&node=PBS'"	rel="tooltip" title="PBS节点">
+						<div class="node-rgl node-PBS" onclick="window.location.href='/bms/execution/child?view=PBS&node=PBS'">
 							PBS
 						</div>
 						<div class="node-rgl node-T0" onclick="window.location.href='/bms/execution/child?view=T0&node=T0&line=I'">
@@ -125,75 +125,11 @@
 						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=S3&view=SPSPoint&point=S3'">S3</div>
 						<div class="warehousePrint"><a href="/bms/execution/warehousePrint"><i class="icon-print"></i>&nbsp;合格证</a></div>
 						<div class="accessoryListPrint"><a href="/bms/execution/accessoryListPrint"><i class="icon-print"></i>&nbsp;随车件</a></div>
+						<div class="warehouseReturn"><a href="/bms/execution/warehouseReturn"><i class="icon-reply"></i>&nbsp;退库</a></div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->
 		</div><!-- end offhead -->
-		<div class="container">
-                <div>
-                    <legend>计划与调度</legend>
-                    <div>
-                        <ul class="thumbnails">
-                            <li class="span2">
-                              <div id="planMaintain" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>生产计划</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="orderMaintain" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>发车计划</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="planPause" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>班次/计划停线</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="pauseEdit" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>停线编辑</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="subQueueMaintain" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>分装列队调整</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="spsQueueMaintain" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>SPS列队调整</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="warehouseAdjust" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>库位整理</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="warehouseReturn" class="thumbnail" style="height:60px">
-                                <div>
-                                    <h5>退库</h5>
-                                </div>
-                              </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-        </div>
     </body>
 		<script type="text/javascript">
 		$(document).ready(function () {

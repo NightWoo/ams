@@ -1864,6 +1864,8 @@ class Car
 			$replacementAr->node_trace_id = $traceId;
 			$replacementAr->component_id = $spare['componentId'];
 			$replacementAr->fault_id = $spare['faultId'];
+			$replacementAr->fault_component_name = $spare['faultComponentName'];
+			$replacementAr->fault_mode = $spare['faultMode'];
 			$replacementAr->provider_id = $spare['providerId'];
 			$replacementAr->duty_department_id = $spare['dutyDepartmentId'];
 			$replacementAr->is_collateral = $spare['isCollateral'];
@@ -1899,8 +1901,19 @@ class Car
 				$newTrace->bar_code = $spare['barCode'];
 				$newTrace->status = 1;
 				$newTrace->save();
+
+				$isEngine = CarEngineAR::model()->find("engine_component_id=?", array($spare['componentId']));
+				if(!empty($isEngine)) {
+					$this->updateCarEngineCode($spare['barCode']);
+				}
 			}
 		}
+	}
+
+	private function updateCarEngineCode ($engineCode) {
+		$this->car->engine_code = $engineCode;
+		$this->car->save();
+		$this->throwTestlineCarInfo();
 	}
 
 	private function cutCarType ($type) {

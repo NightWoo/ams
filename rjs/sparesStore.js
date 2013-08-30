@@ -151,6 +151,8 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 
 				$(tr).data("carId", $("#vinText").data("carId"));
 				$(tr).data("faultId", $(":radio[name=choseFault]:checked").data("id"));
+				$(tr).data("faultComponentName", $(":radio[name=choseFault]:checked").data("component_name"));
+				$(tr).data("faultMode", $(":radio[name=choseFault]:checked").data("fault_mode"));
 				$(tr).data("dutyDepartmentId", $("#dutySelect").val());
 				$(tr).data("barCode", barCode);
 				$(tr).data("isCollateral", isCollateral);
@@ -322,7 +324,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 					    		$("<td />").html(fault.duty).appendTo(tr);
 			    				radio = $("<input />")
 			    					.attr("type", "radio").attr("name", "choseFault")
-			    					.data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass)
+			    					.data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass).data("component_name", fault.component_name).data("fault_mode",fault.fault_mode);
 			    				$("<td />").append(radio).appendTo(tr);
 				    		}
 

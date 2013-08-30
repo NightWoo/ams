@@ -6,18 +6,20 @@ require.config({
 		"head": "../head",
 		"service": "../service",
 		"common": "../common",
+		"dateUtil": "../dateUtil",
 	},
 	"shim": {
 		"bootstrap": ["jquery"],
 	}
 })
 
-require(["head","service","common","jquery","bootstrap"], function(head,service,common,$) {
+require(["dateUtil","head","service","common","jquery","bootstrap"], function(dateUtil,head,service,common,$) {
 	head.doInit();
 	initPage();
 	tumbnailUrl = {
 		"manufactureReport": "/bms/execution/report?type=ManufactureReport",
 		"qualityReport": "/bms/execution/report?type=QualityReport",
+		"planningDivisionReport": "/bms/execution/report?type=PlanningDivisionReport",
 		"componentMaintain": "/bms/generalInformation/componentMaintain",
 		"faultMaintain": "/bms/generalInformation/faultMaintain",
 		"providerMaintain": "/bms/generalInformation/providerMaintain",
@@ -34,6 +36,7 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 	function initPage () {
 		$("#headGeneralInformationLi").addClass("active");
 		querySimpleDaily();
+		$("#lastWorkDate").html(dateUtil.getTime("lastWorkDate"));
 	}
 
 	function querySimpleDaily () {

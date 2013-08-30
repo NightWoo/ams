@@ -52,7 +52,7 @@ $(document).ready(function() {
 	})
 
 	function initPage() {
-		$("#headPlanLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftDataThrowLi").addClass("active");
 		$("#messageAlert").hide();
 		resetPage();

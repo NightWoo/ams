@@ -11,11 +11,10 @@
     	<!-- <link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/execution/assembly/dataInput/T0.css" rel="stylesheet"> -->
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
-
-		<script type="text/javascript" src="/bms/js/bootstrap-collapse.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/dataInput/warehouseLabel.js"></script>
     	<style type="text/css" media="screen">
 			.printable{

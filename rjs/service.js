@@ -9,5 +9,5 @@ define({
 	QUERY_SIMPLE_Daily: "/bms/report/querySimpleDaily",
 	SHOW_HOME_INFO: "/bms/monitor/showHomeEfficiency",
 	SHOW_MONITOR_INFO: "/bms/monitor/showInfo",
-
+	QUERY_PLANNING_DIVISION_DAILY: "/bms/report/queryPlanningDivisionDaily",
 })

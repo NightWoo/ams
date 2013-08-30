@@ -2,7 +2,7 @@ define(['service'], function(service) {
 	SeriesArray = {
 		"F0" : "F0",
 		"M6" : "M6",
-		"6B" : "思锐",
+		"6B" : "思锐"
 	}
 
 	function fadeMessageAlert (message,alertClass) {

@@ -119,6 +119,12 @@ $(document).ready(function() {
 				$("#editSideGlass").removeAttr("disabled");
 			}
 			$("#editSideGlass").val(tr.data("side_glass"));
+			if(tr.data("aircondition") == 1) {
+				$("#editAircondition").attr("checked", "checked");
+			} else {
+				$("#editAircondition").removeAttr("checked");
+			}
+
 			$("#editTyre").val(tr.data("tyre"));
 			$("#editSteering").val(tr.data("assisted_steering"));
 			$("#editCertificateNote").val(tr.data("certificate_note"));
@@ -162,7 +168,8 @@ $(document).ready(function() {
 						// $("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 						editTd.appendTo(tr);
 						
-						tr.data("isDisabled", value.disabled);
+						tr.data("isDisabled", value.is_disabled);
+						tr.data("aircondition", value.aircondition);
 						// tr.data("car_series", value.car_series);
 						// tr.data("car_type", value.car_type);
 						// tr.data("config_name", value.name);
@@ -188,6 +195,9 @@ $(document).ready(function() {
 		var isDisabled = 0;
 		if($("#newIsDisabled").attr("checked") === "checked")
 			isDisabled = 1;
+		var aircondition = 0;
+		if($("#newAircondition").attr("checked") === "checked")
+			aircondition = 1;
 		$.ajax({
 			type: "get",
 			dataType: "json",
@@ -204,7 +214,8 @@ $(document).ready(function() {
 				"tyre" : $("#newTyre").val(),
 				"assisted_steering" : $("#newSteering").val(),
 				"certificate_note" : $("#newCertificateNote").val(),
-				"remark": $("#newRemark").val()
+				"remark": $("#newRemark").val(),
+				"aircondition": aircondition,
 			},
 			success: function (response) {
 				if (response.success) {
@@ -225,6 +236,9 @@ $(document).ready(function() {
 		var isDisabled = 0;
 		if($("#editIsDisabled").attr("checked") === "checked")
 			isDisabled = 1;
+		var aircondition = 0;
+		if($("#editAircondition").attr("checked") === "checked")
+			aircondition = 1;
 		$.ajax({
 			type: "get",
 			dataType:"json",
@@ -243,6 +257,7 @@ $(document).ready(function() {
 				"assisted_steering" : $("#editSteering").val(),
 				"certificate_note" : $("#editCertificateNote").val(),
 				"remark" : $("#editRemark").val(),
+				"aircondition": aircondition,
 			},
 			success: function (response) {
 				if (response.success) {
@@ -250,7 +265,7 @@ $(document).ready(function() {
 					ajaxQuery();
 					emptyEditModal();
 				} else {
-					alert(respose.message);
+					alert(response.message);
 				}
 			},
 			error: function () {
@@ -291,7 +306,8 @@ $(document).ready(function() {
 		$("#editSteering").val("");
 		$("#editCertificateNote").val("");
 		$("#editRemark").text("");
-		$("#editExportCountry").attr("disabled", "disabled").val("");	
+		$("#editExportCountry").attr("disabled", "disabled").val("");
+		$("#editAircondition").removeAttr("checked");	
 	}
 	
 	function emptyNewModal (argument) {
@@ -308,6 +324,7 @@ $(document).ready(function() {
 		$("#newRemark").text("");
 		$("#newExportCountry").attr("disabled", "disabled").val("");
 		$("#newRemark").text("");	
+		$("#newAircondition").removeAttr("checked");	
 	}
 
 });

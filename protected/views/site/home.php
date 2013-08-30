@@ -6,20 +6,7 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link rel="stylesheet" href="/bms/css/font-awesome.min.css">
-	<link href="/bms/css/pannel.css" rel="stylesheet">
-	<style type="text/css">
-		#maintContainer {
-      margin-top: 10px;
-    }
-    #shortcut {
-			width: 170px;
-			margin-left:50px;
-		}
-		#shortcutContainer {
-			max-height:600px;
-			overflow-y: scroll;
-		}
-	</style>
+	<link href="/bms/css/home.css" rel="stylesheet">
 </head>
 <body>
 	<div id="maintContainer" class="container">
@@ -36,32 +23,38 @@
 				<div>
             <ul class="thumbnails">
               <li class="span3">
-                <div id="managementSystemPannel" class="thumbnail pannel" style="height:120px">
+                <div id="managementSystemPannel" class="thumbnail pannel" style="background-color:#2b5797;">
                   <div>
-                      <h5><i class="icon-sitemap"></i>&nbsp;体系</h5>
+                      <h4><i class="icon-sitemap"></i>&nbsp;体系</h4>
                   </div>
                 </div>
               </li>
               <li class="span3">
-                <div id="technologyPannel" class="thumbnail pannel" style="height:120px">
-                  <h5><i class="icon-cogs"></i>&nbsp;技术</h5>
+                  <div id="technologyPannel" class="thumbnail pannel" style="background-color:#ffc40d;">
+                  <h4><i class="icon-cogs"></i>&nbsp;技术</h4>
                   <h3 class="maindata"></h3>
                 </div>
               </li>
               <li class="span3">
-                <div id="manufacturePannel" class="thumbnail pannel" style="height:120px">
-                  <h5><i class="icon-wrench"></i>&nbsp;生产</h5>
+                  <div id="manufacturePannel" class="thumbnail pannel" style="background-color:#1BA1E2;">
+                  <h4><i class="icon-wrench"></i>&nbsp;生产</h4>
                   <h3 class="maindata"></h3>
                 </div>
               </li>
+              <li class="span9">
+                  <div id="monitorPannel" class="thumbnail">
+                    <h4 class="pull-right"><i class="icon-desktop"></i>&nbsp;监控</h4>
+                    <!-- <img src="/bms/img/workshop_thumbnail.jpg" alt=""> -->
+                  </div>
+              </li>
               <li class="span3">
-                <div id="qualityPannel" class="thumbnail pannel" style="height:120px">
+                <div id="qualityPannel" class="thumbnail pannel" style="background-color:#b91d47;">
                   <div>
                       <div>
                         <div class="mainData pull-right">
                           <span id="DRR">-</span>
                         </div>
-                        <h5><i class="icon-thumbs-up-alt"></i>&nbsp;质量</h5>
+                        <h4><i class="icon-thumbs-up-alt"></i>&nbsp;质量</h4>
                       </div>
                       <ul>
                       	<li id="vq1"></li>
@@ -72,13 +65,13 @@
                 </div>
                 </li>
                 <li class="span3">
-                  <div id="efficiencyPannel" class="thumbnail pannel" style="height:120px">
+                  <div id="efficiencyPannel" class="thumbnail pannel" style="background-color:#339933;">
                     <div>
                         <div>
                             <div class="mainData pull-right">
                               <span id="workingTimePercentage">-</span> / <span id="pauseTime">-</span><span class="unit">min</span>
                             </div>
-                            <h5><i class="icon-dashboard"></i>&nbsp;效率</h5>
+                            <h4><i class="icon-dashboard"></i>&nbsp;效率</h4>
                         </div>
                         <ul>
                         	<li id="onLine"></li>
@@ -89,30 +82,30 @@
                   </div>
                 </li>
                 <li class="span3">
-                  <div id="fieldPannel" class="thumbnail pannel" style="height:120px">
+                  <div id="fieldPannel" class="thumbnail pannel" style="background-color:#F09609;">
                     <div>
-                        <h5><i class="icon-check"></i>&nbsp;现场</h5>
+                        <h4><i class="icon-check"></i>&nbsp;现场</h4>
                     </div>
                   </div>
                 </li>
                 <li class="span3">
-                  <div id="costPannel" class="thumbnail pannel" style="height:120px">
+                  <div id="costPannel" class="thumbnail pannel" style="background-color:#E671B8;">
                     <div>
-                        <h5><i class="icon-money"></i>&nbsp;成本</h5>
+                        <h4><i class="icon-money"></i>&nbsp;成本</h4>
                     </div>
                   </div>
                 </li>
                 <li class="span3">
-                  <div id="manpowerPannel" class="thumbnail pannel" style="height:120px">
+                  <div id="manpowerPannel" class="thumbnail pannel" style="background-color:#00ABA9;">
                     <div>
-                        <h5><i class="icon-group"></i>&nbsp;人事</h5>
+                        <h4><i class="icon-group"></i>&nbsp;人事</h4>
                     </div>
                   </div>
                 </li>
                 <li class="span3">
-                  <div id="databasePannel" class="thumbnail pannel" style="height:120px">
+                  <div id="databasePannel" class="thumbnail pannel" style="background-color:#A200FF;">
                     <div>
-                        <h5><i class="icon-list-alt"></i>&nbsp;数据</h5>
+                        <h4><i class="icon-list-alt"></i>&nbsp;数据</h4>
                     </div>
                   </div>
                 </li>
@@ -124,70 +117,70 @@
 				<div id="shortcutContainer">
             <ul id="shortcutUl" class="thumbnails">
                 <li class="span2" href="/bms/execution/index">
-                  <div class="thumbnail shortcut" style="height:120px">
+                  <div class="thumbnail shortcut">
                     <div>
                         <h5>数据录入</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/query?type=CarQuery" >
-                  <div class="thumbnail shortcut" style="height:120px">
+                  <div class="thumbnail shortcut">
                     <div>
                         <h5>数据查询</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/report?type=ManufactureReport">
-                  <div class="thumbnail shortcut" style="height:120px">
+                  <div class="thumbnail shortcut">
                     <div>
                         <h5>生产报表</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/report?type=QualityReport">
-                  <div class="thumbnail shortcut" style="height:120px">
+                  <div class="thumbnail shortcut">
                     <div>
                         <h5>质量报表</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/planMaintain">
-                  <div id="" class="thumbnail shortcut" style="height:120px">
+                  <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>生产计划</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/orderMaintain">
-                  <div id="" class="thumbnail shortcut" style="height:120px">
+                  <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>发车计划</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/pauseEdit">
-                  <div id="" class="thumbnail shortcut" style="height:120px">
+                  <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>停线编辑</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/warehouseAdjust">
-                  <div id="warehouseAdjust" class="thumbnail" style="height:120px">
+                  <div id="warehouseAdjust" class="thumbnail shortcut">
                     <div>
                         <h5>库位整理</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/warehouseReturn">
-                  <div id="" class="thumbnail shortcut" style="height:120px">
+                  <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>成品库退库</h5>
                     </div>
                   </div>
                 </li>
                 <li class="span2" href="/bms/execution/DetectShopAccess">
-                  <div id="" class="thumbnail shortcut" style="height:120px">
+                  <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>车辆门禁</h5>
                     </div>

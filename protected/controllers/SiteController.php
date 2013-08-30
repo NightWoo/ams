@@ -87,7 +87,7 @@ class SiteController extends Controller
 		$this->redirect('/bms');
 	}
 
-	public function actionPlanPannelIndex () {
-		$this->render('pannels/planPannel');
+	public function actionEfficiencyPannelIndex () {
+		$this->render('pannels/efficiencyPannel');
 	}
 }

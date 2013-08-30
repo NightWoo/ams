@@ -85,7 +85,7 @@ $("document").ready(function() {
 	*/
 	function initPage(){
 		//add head class
-		$("#headPlanLi").addClass("active");
+		$("#headAssemblyLi").addClass("active");
 		$("#leftWarehouseReturnLi").addClass("active");
 		resetPage();
 		$("#messageAlert").hide();

@@ -160,6 +160,12 @@
 				</div>
 			</div>
 			<div class="control-group">
+                <label class="control-label" for="">后空调</label>
+                <div class="controls">
+                    <input type="checkbox" id="newAircondition">
+                </div>
+            </div>
+			<div class="control-group">
 				<label class="control-label" for="">*&nbsp;轮胎规格</label>
 				<div class="controls">
 					<input type="text" id="newTyre" class="input-medium" placeholder="请输入配置名称...">
@@ -261,6 +267,12 @@
 					<span class="help-inline">针对M6</span>
 				</div>
 			</div>
+			<div class="control-group">
+                <label class="control-label" for="">后空调</label>
+                <div class="controls">
+                    <input type="checkbox" id="editAircondition">
+                </div>
+            </div>
 			<div class="control-group">
 				<label class="control-label" for="">*&nbsp;轮胎规格</label>
 				<div class="controls">

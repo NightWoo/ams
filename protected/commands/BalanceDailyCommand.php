@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.AR.BalanceDailyAR');
+Yii::import('application.models.AR.BalancePlanningDivisionDailyAR');
 Yii::import('application.models.CarSeeker');
 class BalanceDailyCommand extends CConsoleCommand
 {
@@ -24,6 +25,8 @@ class BalanceDailyCommand extends CConsoleCommand
 				$this->countSave($state,$balance,$series,$countDate,$workDate);
 			}
 		}
+
+		$this->saveWarehousePlnningDivision($countDate, $workDate);
 	}
 
 	private function countBalance($state, $series) {
@@ -44,5 +47,24 @@ class BalanceDailyCommand extends CConsoleCommand
 		$ar->record_time = date("YmdHis");
 		$ar->save();
 	}
+
+	private function saveWarehousePlnningDivision ($countDate, $workDate) {
+		$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE status='成品库' OR status='WDI' GROUP BY series,PDType,special_property";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		foreach($datas as $data) {
+			$ar = new BalancePlanningDivisionDailyAR();
+			$ar->series = $data['series'];
+			$ar->planning_division_type_name = $data['pdType'];
+			$ar->special_property = $data['special_property'];
+			$ar->count = $data['count'];
+			$ar->state = 'WH';
+			$ar->count_date = $countDate;
+			$ar->work_date = $workDate;
+			$ar->record_time = date("YmdHis");
+			$ar->save();
+		}
+	}
+
 
 }

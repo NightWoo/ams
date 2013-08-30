@@ -379,8 +379,11 @@ class CarController extends BmsBaseController
             }
             $carData['cold'] = $carData['cold_resistant'] == 0 ? "非耐寒" : "耐寒";
             $carData['row'] = "";
+            $carData['lane'] = "";
             $row = WarehouseAR::model()->findByPk($carData['warehouse_id']);
             if(!empty($row)) $carData['row'] = $row->row;
+            $lane = LaneAR::model()->findByPk($car->car->lane_id);
+            if(!empty($lane)) $carData['lane'] = $lane->name;
 
             $this->renderJsonBms(true, 'OK', array('traces' => $data, 'car'=> $carData));
         } catch(Exception $e) {
@@ -1041,13 +1044,15 @@ class CarController extends BmsBaseController
     public function actionReplaceSpares () {
         $vin = $this->validateStringVal('vin', '');
         $spares = $this->validateStringVal('spares', '[]');
+        $transaction = Yii::app()->db->beginTransaction();
         try {
             $car = Car::create($vin);
             list($nodeName, $traceId) = $car->enterNode('SPARES_STORE');
             $car->replaceSpares($spares, $traceId);
-
+            $transaction->commit();
             $this->renderJsonBms(true, 'OK', null);
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
     }

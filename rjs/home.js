@@ -16,18 +16,19 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 	common.attachTooltip();
 
 	tumbnailUrl = {
-		"efficiencyPannel": "/bms/execution/monitoringIndex",
-		"manufacturePannel": "/bms/execution/index",
-		"qualityPannel": "/bms/execution/query?type=NodeQuery",
+		"managementSystemPannel": "/bms/ManagementSystem/home?chapter=0",
 		"technologyPannel": "",
+		"manufacturePannel": "/bms/execution/index",
+		"monitorPannel": "/bms/execution/monitoringIndex",
+		"qualityPannel": "/bms/execution/query?type=NodeQuery",
+		"efficiencyPannel": "/bms/site/efficiencyPannelIndex",
 		"fieldPannel": "",
 		"costPannel": "/bms/managementSystem/workSummaryCost",
 		"manpowerPannel": "/bms/managementSystem/workSummaryManpower",
 		"databasePannel": "/bms/generalInformation",
-		"managementSystemPannel": "/bms/ManagementSystem/home?chapter=0",
 	}
 
-	$(".pannel").click(function () {
+	$(".pannel,#monitorPannel").click(function () {
 		window.location.href= tumbnailUrl[$(this).attr("id")];
 	})
 

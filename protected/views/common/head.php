@@ -7,38 +7,38 @@
 			<div class="nav-collapse">
 				<ul class="nav">
 					<li id="headManagementSystemLi">
-						<a href="/bms/ManagementSystem/home?chapter=0" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="体系"><i class="icon-sitemap"></i></a>
+						<a href="/bms/ManagementSystem/home?chapter=0" data-toggle="tooltip" data-placement="bottom" title="体系"><i class="icon-sitemap"></i>&nbsp;体系</a>
 					</li>
 					<li id="headTechnologyLi">
-						<a href="" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="技术"><i class="icon-cogs"></i></a>
+						<a href="" data-toggle="tooltip" data-placement="bottom" title="技术"><i class="icon-cogs"></i>&nbsp;技术</a>
 					</li>
 					<li id="headAssemblyLi">
-						<a href="/bms/execution" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="生产"><i class="icon-wrench"></i></a>
+						<a href="/bms/execution" data-toggle="tooltip" data-placement="bottom" title="生产"><i class="icon-wrench"></i>&nbsp;生产</a>
 					</li>
 					<li class="divider-vertical"></li>
 					<li id="headEfficiencyLi">
-						<a href="/bms/execution/monitoringIndex" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="效率"><i class="icon-dashboard"></i></a>
+						<a href="/bms/site/efficiencyPannelIndex" data-toggle="tooltip" data-placement="bottom" title="效率"><i class="icon-dashboard"></i>&nbsp;效率</a>
 					</li>
 					<li id="headQualityLi">
-						<a href="/bms/execution/query?type=NodeQuery"  rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="质量"><i class="icon-thumbs-up-alt"></i></a>
+						<a href="/bms/execution/query?type=NodeQuery"  data-toggle="tooltip" data-placement="bottom" title="质量"><i class="icon-thumbs-up-alt"></i>&nbsp;质量</a>
 					</li>
 					<li>
-						<a href="#" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="icon-check"></i></a>
+						<a href="#" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="icon-check"></i>&nbsp;现场</a>
 					</li>
 					<li id="headCostLi">
-						<a href="/bms/managementSystem/workSummaryCost" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i></a>
+						<a href="/bms/managementSystem/workSummaryCost" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i>&nbsp;成本</a>
 					</li>
 					<li id="headManpowerLi">
-						<a href="/bms/managementSystem/workSummaryManpower" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="icon-group"></i></a>
+						<a href="/bms/managementSystem/workSummaryManpower" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="icon-group"></i>&nbsp;人事</a>
 					</li>
 					<li class="divider-vertical"></li>
 					<li id="headGeneralInformationLi">
-						<a href="/bms/generalInformation" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="数据"><i class="icon-list-alt"></i></a>
+						<a href="/bms/generalInformation" data-toggle="tooltip" data-placement="bottom" title="数据"><i class="icon-list-alt"></i>&nbsp;数据</a>
 					</li>
 				</ul>
         		<ul class="nav pull-right">
           			<li>
-            			<a href="/bms/generalInformation/accountMaintain" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="账户管理"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
+            			<a href="/bms/generalInformation/accountMaintain" data-toggle="tooltip" data-placement="bottom" title="账户管理"><i class="icon-user"></i>&nbsp;<?php echo Yii::app()->user->display_name;?></a>
          			 </li>
          			 <li>
             			<a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="icon-signout"></i></a>

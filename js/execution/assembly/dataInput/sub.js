@@ -135,7 +135,7 @@ $("document").ready(function() {
 	*/
 	function initPage(){
 		//add head class
-		$("#headAssemblyLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
 		
 		toggleVinHint(true);

@@ -1,125 +1,65 @@
-/* CSS Document */
-body {
-	background-color: rgb(20,115,170);
-	color: rgb(255,255,255);
+div.thumbnail {
+  cursor: pointer;
 }
 
-.tile {
-	background-color: rgb(70,180,215);
-	margin: 5px;
-	padding: 10px;
-	float: left;
-	cursor:pointer;
-	position:relative;
+#monitorPannel:hover {
+  /*border-color: #0088CC;*/
+  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+#monitorPannel {
+  background-image: url("/bms/img/workshop_thumbnail.jpg");
+  background-repeat:no-repeat;
+  width: 690px;
+  height: 120px;
+  text-align:center;
+  vertical-align: middle;
+}
+#monitorPannel h4 {
+  margin-right: 10px;
+  margin-top: 90px;
 }
 
-.tile:hover {
-	background-color: rgb(0,185,225);
+.thumbnail h5 {
+  margin-left: 10px;
+  margin-top: 5px;
 }
-
-.square {
-	height: 130px;
-	width: 130px;	
+.thumbnail h4{
+  margin-left: 10px;
+  margin-top: 5px;  
 }
-
-.floatClear {
-	clear: left;	
-}
-
-.rectangle{
-	height: 130px;
-	width: 290px;	
-}
-
-#welcome {
-	font-size: 24px;
-	line-height: 32px;
-	margin-top: 50px;
-	margin-bottom: 35px;
-	margin-left: 28px;
-	float:left;
-}
-
-.btnIcon {
-	height: 32px;
-	width: 32px;
-	/*background-color:rgb(70,180,215);*/
-	margin-left: 10px;
-	cursor: pointer;
-}
-
-#logout {
-	background:url('../img/logout.png');
-}
-
-#logout:hover {
-	background:url('../img/logout.hover.png');
-}
-
-.btnField {
-	margin-bottom: 35px;
-    margin-right: 25px;
-    margin-top: 50px;
-}
-
-h3 {
-	margin:0;
-	line-height:25px;
-	letter-spacing:3px;
-}
-
-.tile h1 {
-	margin: 0;
-	font-size: 35px;	
-}
-
-.tile h2 {
-	margin: 0;
-	line-height: 1;
-}
-
-.tile p {
-	margin-top: 0;
-	margin-bottom: 5px;
-	font-size: 20px;	
-}
-
-#tileContainer {
-	margin-left: 23px;
-	width: 1326px;
-	margin-top: 120px;
-}
-
-#toggle-top{
-    background: none;
-}
-
 .mainData {
-	position: absolute;
-	bottom: 10px;
+  margin-right: 10px;
+  font-weight: bold;
 }
-
-.subData {
-	position: absolute;
-    right: 10px;
-    top: 10px;
+#maintContainer {
+  margin-top: 10px;
 }
-
-.shortcut {
-	margin-left: 25px;	
+#shortcut {
+	width: 170px;
+	margin-left:50px;
 }
-
-.offhead {
-	margin-top: 15px;
+#shortcutContainer {
+	max-height:600px;
+	overflow-y: scroll;
 }
-
-a {
-	color: rgb(70,180,215);	
+.pannel {
+  color: white;
+  height: 120px;
+  border-color:none;
 }
-a:hover {
-	color: rgb(0,185,225);
+.pannel:hover, .pannel:focus {
+  border-color :none;
+  box-shadow: none;
+  opacity: 0.7;
 }
-
-#safety {
-	background-image:url('../img/safety.jpg');
+#shortcutUl li .shortcut {
+  height:120px;
+  border-color:none;
+  color: white;
+  background: #bbb;
+}
+#shortcutUl li .shortcut:hover, #shortcutUl li.shortcut:focus {
+  border-color :none;
+  box-shadow: none;
+  opacity: 0.7;
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>计划面板</title>
+	<title>效率面板</title>
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
     <link href="/bms/css/common.css" rel="stylesheet">
 	<link href="/bms/css/pannel.css" rel="stylesheet">
@@ -35,9 +35,8 @@
                         </ul>
                     </div>
                 </div>
-
                 <div>
-                    <legend>总装维护</legend>
+                    <legend>调度与调整</legend>
                     <div>
                         <ul class="thumbnails">
                             <li class="span2">
@@ -55,23 +54,23 @@
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="configMaintain" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5>配置维护</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
                               <div id="subQueueMaintain" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5>分装列队</h5>
+                                    <h5>分装列队调整</h5>
                                 </div>
                               </div>
                             </li>
                             <li class="span2">
                               <div id="spsQueueMaintain" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5>SPS列队</h5>
+                                    <h5>SPS列队调整</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="warehouseAdjust" class="thumbnail" style="height:120px">
+                                <div>
+                                    <h5>库位整理</h5>
                                 </div>
                               </div>
                             </li>
@@ -85,31 +84,9 @@
                         </ul>
                     </div>
                 </div>
-
-                <div>
-                    <legend>成品库维护</legend>
-                    <div>
-                        <ul class="thumbnails">
-                            <li class="span2">
-                              <div id="warehouseAdjust" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5>库位整理</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
-                              <div id="warehouseReturn" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5>退库</h5>
-                                </div>
-                              </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div><!-- end of 页体 -->
     </div><!-- end of head -->
 </body>
-<script data-main="/bms/rjs/planPannel.js" src="/bms/rjs/lib/require.js"></script>
+<script data-main="/bms/rjs/efficiencyPannel.js" src="/bms/rjs/lib/require.js"></script>
 </html>

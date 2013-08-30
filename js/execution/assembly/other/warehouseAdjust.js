@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
 	initPage();
 
 	function initPage() {
-		$("#headPlanLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftWarehouseAdjustLi").addClass("active");
 
 		$("#tableResult").hide();

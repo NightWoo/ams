@@ -57,7 +57,7 @@ $(document).ready(function(e) {
 	});
 	
 	function initPage() {
-		$("#headAssemblyLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftPauseEditLi").addClass("active");
 		
 		$("#startTime").val(currentDate8());

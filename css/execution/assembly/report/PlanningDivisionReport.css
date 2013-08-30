@@ -1,0 +1,56 @@
+.screenHide {
+	display: none;
+}
+
+#tableDaily {
+	font-size: 12px
+}
+
+#timeQueryInputDiv {
+	margin-bottom: 0;
+	margin-left: 10px;
+	height: 33px;
+}
+
+#startTime, #btnQuery {
+	padding-top:2px;
+	padding-bottom:2px;
+} 
+
+
+legend {
+	margin-bottom: 20px;
+}
+
+
+.divLoading {
+	height: 200px;
+	margin: 100px auto 0;
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#tableDaily .alignRight{
+	text-align: right;
+}
+
+#tableDaily th {
+	vertical-align: middle;
+}
+
+.thickBorder td{
+	border-top-width: 3px;
+}
+#tableDaily .rowSpanTd{
+	background-color: white; 
+}
+
+.alignCenter{
+	text-align: center;
+}

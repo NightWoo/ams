@@ -99,7 +99,9 @@ $(document).ready(function () {
 				    $('#type').html(car.type);
 				    $('#configName').html(car.config_name + "/" + car.cold);
 				    row = car.row == "" ? "" : "-" + car.row;
-			    	$('#statusInfo').html(car.status + row);
+				    lane = car.lane == "" ? "" : "-" + car.lane;
+				    distributor = car.distributor_name == "" ? "" : "-" + car.distributor_name 
+			    	$('#statusInfo').html(car.status + row + lane + distributor);
 		    		$("#carTag").show();
 					$("#resultTable").show();	//add by wujun
 

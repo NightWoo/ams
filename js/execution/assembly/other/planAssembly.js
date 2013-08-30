@@ -10,7 +10,7 @@ $(document).ready(function () {
 	*/
 	function initPage(){
 		//add head class
-		$("#headPlanLi").addClass("active");
+		$("#headEfficiencyLi").addClass("active");
 		$("#leftConfigLi").addClass("active");
 		
 		$("#newModal").modal("hide");

@@ -59,7 +59,7 @@
                               </ul>
                         </div> -->
                     </span>
-                    <span class="pull-right">
+                    <span class="pull-right printable">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
                     </span>
                     <span class="pull-right">

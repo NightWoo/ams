@@ -115,7 +115,7 @@ $(document).ready(function() {
 						editTd.appendTo(tr);
 						
 						tr.data("id", value.id);
-						tr.data("isDisabled", value.disabled);
+						tr.data("isDisabled", value.is_disabled);
 						tr.data("car_series", value.car_series);
 						tr.data("car_type", value.car_type);
 						tr.data("config_name", value.name);
@@ -187,7 +187,7 @@ $(document).ready(function() {
 					ajaxQuery();
 					emptyEditModal();
 				} else {
-					alert(respose.message);
+					alert(response.message);
 				}
 			},
 			error: function () {
