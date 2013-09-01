@@ -33,7 +33,7 @@ define(['service'], function (service) {
 			async: false, 
 			dataType: "json",
 			data: {
-				"componentId" : componentId,
+				"componentId" : componentId
 			},
 			success: function(response) {
 				if(response.success){
@@ -52,7 +52,7 @@ define(['service'], function (service) {
 			data: {
 				"vin" : vin,
 				"componentId" : componentId,
-				"barCode" : barCode,
+				"barCode" : barCode
 			},
 			async:false,
 			success: function (response) {

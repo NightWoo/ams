@@ -8,11 +8,11 @@ require.config({
 		"head": "../head",
 		"service": "../service",
 		"common": "../common",
-		"dateTimeUtil": "../dateTimeUtil",
+		"dateTimeUtil": "../dateTimeUtil"
 	},
 	"shim": {
 		"bootstrap": ["jquery"],
-		"bootstrap-datetimepicker": ["jquery"],
+		"bootstrap-datetimepicker": ["jquery"]
 	}
 })
 
@@ -26,7 +26,7 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
 		todayBtn: true,
 		pickerPosition: "bottom-left",
 		language: "zh-CN",
-		minView: "2",
+		minView: "2"
     });
 
 

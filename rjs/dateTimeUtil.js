@@ -1,6 +1,6 @@
 define(function () {
 	DateUtil = {
-		firstDayOfTheMonth : function () {
+		firstDayOfTheMonth: function () {
 			year = new Date().getFullYear();
 			month = new Date().getMonth() + 1;
 			month = month>=10 ? month : "0" + month;

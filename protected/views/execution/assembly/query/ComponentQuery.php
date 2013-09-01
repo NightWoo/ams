@@ -106,7 +106,7 @@
 				 </div>-->
 				 <div id="pagination" class="pagination" style="display: none;">
                         <ul>
-                            <li id="export"><a href=""><span id="total"></span></a></li>
+                            <li id="export"><a href="#"><span id="total"></span></a></li>
                         </ul>
                         <ul>
                             <li id="firstPage"><a href="#"><span>&lt;&lt;</span></a></li>

@@ -73,6 +73,12 @@ $(document).ready(function () {
 		}	
 	});
 
+	$("#resultTable").on("click", ".spares", function (e) {
+		tr = $(e.target).closest("tr");
+		$("#sparesModal .faultText").html("-" + tr.data("fault")+"-换件");
+		ajaxQuerySpares(tr.data("traceId"));
+	})
+
 
 	function ajaxQuery (argument) {
 		$("#resultTable tbody").html("");
@@ -92,7 +98,7 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		var car = response.data.car;
 		    		// $("#vinText").val(car.vin);
-		    		$("#vin").html(car.vin);
+		    		$("#vin, .vinText").html(car.vin);
 		    		$('#serialNumber').html(car.serial_number);
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);
@@ -106,14 +112,21 @@ $(document).ready(function () {
 					$("#resultTable").show();	//add by wujun
 
 		    		$.each(response.data.traces,function (index,value) {
-		    			var nodeNameTd = "<td>" + value.node_name + "</td>";
-		    			var faultTd = "<td>" + value.fault + "</td>";
-		    			var faultStatusTd = "<td>" + value.fault_status + "</td>";
-		    			var userNameTd = "<td>" + value.user_name + "</td>";
-		    			var memoTd = "<td>" + value.modify_time + "</td>";
-		    			var createTimeTd = "<td>" + value.create_time + "</td>";
-		    			var tr = "<tr>" + nodeNameTd + faultTd + 
-		    				faultStatusTd + userNameTd + createTimeTd + memoTd + "</tr>";
+		    			tr = $("<tr />");
+		    			$("<td />").html(value.node_name).appendTo(tr);
+		    			$("<td />").html(value.fault).appendTo(tr);
+		    			if(value.fault_status == "换件") {
+		    				faultStatus = $("<a />").addClass("spares").html("<i class='icon-list'></i>&nbsp;" + value.fault_status);
+		    			} else {
+		    				faultStatus = value.fault_status;
+		    			}
+		    			$("<td />").html(faultStatus).appendTo(tr);
+		    			$("<td />").html(value.user_name).appendTo(tr);
+		    			$("<td />").html(value.create_time).appendTo(tr);
+		    			$("<td />").html(value.modify_time).appendTo(tr);
+
+		    			tr.data("traceId", value.id);
+		    			tr.data("fault", value.fault);
 		    			$("#resultTable tbody").append(tr);
 		    		});
 		    	}else{
@@ -142,7 +155,7 @@ $(document).ready(function () {
 		    data: {
 		    	"vin": $('#vinText').val(),
 		    	"series": $('#selectSeries').val(),
-		    	"serialNumber": $('#serialText').val(),
+		    	"serialNumber": $('#serialText').val()
 		    },
 		    success:function (response) {
 		    	if(response.success){
@@ -176,5 +189,35 @@ $(document).ready(function () {
 		    },
 		    error:function(){alertError();}
 		});
+	}
+
+	function ajaxQuerySpares(traceId) {
+		$("#sparesDetail>tbody").html("");
+		$.ajax({
+			url: QUERY_SPARES_TRACE,
+			type: "get",
+			dataType: "json",
+			data:{
+				"traceId": traceId
+			},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					$.each(response.data, function (index, value) {
+						tr = $("<tr />");
+						isCollateral = value.is_collateral == "1" ? "是" : "否";
+						$("<td />").html(isCollateral).appendTo(tr);
+						$("<td />").html(value.component_code).appendTo(tr);
+						$("<td />").html(value.component_name).appendTo(tr);
+						$("<td />").html(value.bar_code).appendTo(tr);
+						$("<td />").html(value.provider_name).appendTo(tr);
+						$("#sparesDetail>tbody").append(tr);
+					});
+					$("#sparesModal").modal("show");
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 });

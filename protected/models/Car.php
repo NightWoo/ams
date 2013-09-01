@@ -672,24 +672,26 @@ class Car
 		}
 
 		$series = $this->car->series;
-		$sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_$series WHERE car_id={$this->car->id}";
+		$sql = "SELECT node_trace_id AS trace_id, create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_$series WHERE car_id={$this->car->id}";
 		$vq1s = Yii::app()->db->createCommand($sql)->queryAll();
 
-		$sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ2_ROAD_TEST_$series WHERE car_id={$this->car->id}";
+		$sql = "SELECT node_trace_id AS trace_id, create_time,modify_time,updator,component_name, fault_mode,status FROM VQ2_ROAD_TEST_$series WHERE car_id={$this->car->id}";
         $roads = Yii::app()->db->createCommand($sql)->queryAll();
 
-        $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ2_LEAK_TEST_$series WHERE car_id={$this->car->id}";
+        $sql = "SELECT node_trace_id AS trace_id, create_time,modify_time,updator,component_name, fault_mode,status FROM VQ2_LEAK_TEST_$series WHERE car_id={$this->car->id}";
         $leaks = Yii::app()->db->createCommand($sql)->queryAll();
 
-
-        $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ3_FACADE_TEST_$series WHERE car_id={$this->car->id}";
+        $sql = "SELECT node_trace_id AS trace_id, create_time,modify_time,updator,component_name, fault_mode,status FROM VQ3_FACADE_TEST_$series WHERE car_id={$this->car->id}";
         $vq3s = Yii::app()->db->createCommand($sql)->queryAll();
 
-        $sql = "SELECT create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_2_$series WHERE car_id={$this->car->id}";
+        $sql = "SELECT node_trace_id AS trace_id, create_time,modify_time,updator,component_name, fault_mode,status FROM VQ1_STATIC_TEST_2_$series WHERE car_id={$this->car->id}";
         $vq1_2s = Yii::app()->db->createCommand($sql)->queryAll();
 
         $sql = "SELECT trace_id,create_time,temperature,user_id AS updator, '' AS component_name, '' AS fault_mode, '-' AS `status`,'-' AS modify_time FROM aircondition_temperature WHERE car_id={$this->car->id}";
         $temperatures = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $sql = "SELECT node_trace_id AS trace_id, replace_time AS create_time, user_id AS updator, fault_component_name AS component_name, fault_mode, '换件' AS `status`, '-' AS modify_time FROM spare_replacement WHERE car_id={$this->car->id} GROUP BY node_trace_id";
+        $replacements = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$datas = array();
 		$processed = array();
@@ -742,6 +744,13 @@ class Car
 							$values[] = $vq1_2;
 						}
 					}
+					break;
+				case 100:
+					foreach($replacements as $replacement){
+						if($replacement['trace_id'] == $trace['id']){
+							$values[] = $replacement;
+						}
+					}
 					break;    
 				default:
 					;
@@ -765,12 +774,13 @@ class Car
 				foreach($values as $value) {
 					$fault = !empty($value['temperature']) ? "空调温度：" . $value['temperature'] . "℃" : $value['component_name'] . $value['fault_mode'];
 					$datas[] = array(
+						'id' => $value['trace_id'],
 						'create_time' => $value['create_time'],
 						'node_name' => $name,
 						'fault' => $fault,
 						'fault_status' => $value['status'],
 						'user_name' => $userInfos[$value['updator']],
-						'modify_time' => $value['modify_time'],
+						'modify_time' => $value['modify_time']
 					);
 				}
 			}

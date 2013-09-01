@@ -68,7 +68,7 @@
 					<li id=""><a href="/bms/execution/query?type=NodeQuery">质量</a></li>
 					<li id=""><a href="/bms/execution/query?type=BalanceQuery">结存</a></li>
 					<li id=""><a href="/bms/execution/query?type=OrderCarQuery">发车</a></li>
-					<!-- <li id=""><a href="/bms/execution/query?type=WarehouseQuery">成品库</a></li> -->
+					<li id=""><a href="/bms/execution/query?type=ReplacementQuery">换件</a></li>
 				</ul>
 			</div>
 		</div>	

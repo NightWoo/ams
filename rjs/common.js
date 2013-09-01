@@ -32,7 +32,7 @@ define(['service'], function(service) {
 			async: false,
 			dataType: "json",
 			data: {
-				"node": type,
+				"node": type
 			},
 			success: function (response) {
 				$.each(response.data, function (index, value) {
@@ -45,6 +45,21 @@ define(['service'], function(service) {
 		})
 		options = optionsDiv.children();
 		return options;
+	}
+
+	function getSeriesChecked () {
+		var f0Checked = $("#checkboxF0").prop("checked");
+		var m6Checked = $("#checkboxM6").prop("checked");
+		var _6BChecked = $("#checkbox6B").prop("checked");
+		
+		var temp = [];
+		if (f0Checked)
+			temp.push($("#checkboxF0").val());
+		if (m6Checked)
+			temp.push($("#checkboxM6").val());
+		if (_6BChecked)
+			temp.push($("#checkbox6B").val());
+		return temp.join(",");
 	}
 
 	return {
@@ -64,6 +79,10 @@ define(['service'], function(service) {
 			return getDutyOptions(type, showDisabled);
 		},
 
+		getSeriesChecked: function () {
+			return getSeriesChecked();
+		},
+
 		alertError: function (message) {
 			message = message || 'ajax error';
 			// alert(message);
@@ -72,7 +91,7 @@ define(['service'], function(service) {
 		attachTooltip: function () {
 			$('body').tooltip(
 		        {
-		         selector: "*[rel=tooltip]",
+		         selector: "*[rel=tooltip]"
 		    });	
 		}
 	}

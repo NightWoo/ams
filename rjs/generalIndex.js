@@ -6,10 +6,10 @@ require.config({
 		"head": "../head",
 		"service": "../service",
 		"common": "../common",
-		"dateUtil": "../dateUtil",
+		"dateUtil": "../dateUtil"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
+		"bootstrap": ["jquery"]
 	}
 })
 
@@ -24,7 +24,7 @@ require(["dateUtil","head","service","common","jquery","bootstrap"], function(da
 		"faultMaintain": "/bms/generalInformation/faultMaintain",
 		"providerMaintain": "/bms/generalInformation/providerMaintain",
 		"distributorMaintain": "/bms/generalInformation/distributorMaintain",
-		"configMaintain": "/bms/execution/configMaintain",
+		"configMaintain": "/bms/execution/configMaintain"
 	}
 
 	$(".thumbnail").click(function () {

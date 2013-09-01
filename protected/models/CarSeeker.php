@@ -8,6 +8,9 @@ Yii::import('application.models.Car');
 
 class CarSeeker
 {
+	public function __construct(){
+	}
+
 	private static $NODE_BALANCE_STATE = array(
 		'PBS' => array('彩车身库'),
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
@@ -39,10 +42,6 @@ class CarSeeker
 	);
 
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
-
-	public function __construct(){
-	}
-
 
 	public function queryCheckinDetail ($startTime, $endTime, $series='', $curPage=0, $perPage=0) {
 		if(empty($startTime) || empty($endTime)){

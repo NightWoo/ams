@@ -126,7 +126,7 @@
                 <li class="span2" href="/bms/execution/query?type=CarQuery" >
                   <div class="thumbnail shortcut">
                     <div>
-                        <h5>数据查询</h5>
+                        <h5>车辆查询</h5>
                     </div>
                   </div>
                 </li>

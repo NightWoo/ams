@@ -5,10 +5,10 @@ require.config({
 		"bootstrap": "./bootstrap.min",
 		"head": "../head",
 		"service": "../service",
-		"common": "../common",
+		"common": "../common"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
+		"bootstrap": ["jquery"]
 	}
 })
 
@@ -24,7 +24,7 @@ require(["head","service","common","jquery","bootstrap"], function(head,service,
 		"subQueueMaintain": "/bms/execution/subQueueMaintain",
 		"spsQueueMaintain": "/bms/execution/spsQueueMaintain",
 		"dataThrow": "/bms/execution/dataThrow",
-		"warehouseAdjust": "/bms/execution/warehouseAdjust",
+		"warehouseAdjust": "/bms/execution/warehouseAdjust"
 	}
 
 	$(".thumbnail").click(function () {

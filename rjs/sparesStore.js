@@ -7,14 +7,14 @@ require.config({
 		"left": "../left",
 		"service": "../service",
 		"common": "../common",
-		"component": "../component",
+		"component": "../component"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
+		"bootstrap": ["jquery"]
 	}
 })
 
-require(["head","left","service","common","component","jquery","bootstrap"], function(head,left,service,common,component,$) {
+require(["head","left","service","common","component","jquery","bootstrap"], function (head,left,service,common,component,$) {
 	head.doInit();
 	left.doInit();
 	initPage();
@@ -79,6 +79,11 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		fillComponentInfo(selectCode.val());
 	})
 
+	$("#componentsTable").on("click", "a.removeTr", function (e) {
+		tr = $(e.target).closest("tr");
+		tr.remove();
+	})
+
 	currentComponentFocusIndex = -1;
 	
 
@@ -130,7 +135,19 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		var dataArray = [];
 		var suspended = false;
 		$("#componentsTable>tbody>tr").each(function (index, tr) {
-			if($(tr).data("componentId") != 0) {
+			componentNameText = $(tr).find("input").filter(".componentName").val();
+			if(!componentNameText) {
+				alert("零部件名称存在空值，请确认");
+					suspended = true;
+					return false;
+			}
+			if($(tr).data("componentId") && $(tr).data("componentId") != 0 && componentNameText) {
+				if(!$(tr).data("providerId") || $(tr).data("providerId") == 0) {
+					alert("必须选择供应商，如零部件未维护供应商，请联系AMS零部件清单维护人员进行维护");
+					suspended = true;
+					return false;
+				}
+
 				barCode = $.trim($(tr).find("input").filter(".barCode").val());
 				if($(tr).data("needBarCode")) {
 					matched = component.validateBarCode(barCode, $(tr).data("simpleCode"))
@@ -160,7 +177,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 				dataArray.push($(tr).data());
 			}
 		})
-		//如果组织或数据条目为0,返回包裹数据失败
+		//如果阻止或数据条目为0,返回包裹数据失败
 		if(suspended || dataArray.length == 0) return false;
 
 		var dataObj = {};
@@ -173,6 +190,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 
 	function ajaxSubmit () {
 		repares = packComponent();
+		console.log(repares);
 		//数据包装完全包裹成功才submit
 		if(repares) {
 			$.ajax({
@@ -264,6 +282,11 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 	function addComponentTr () {
 		tr = $("<tr />");
 		num = $("<td />").html($("#componentsTable>tbody>tr").length + 1);
+		remove = $("<td />")
+			.append($("<a />")
+				.attr("rel", "tooltip").attr("data-toggle", "tooltip").attr("title", "删除此行")
+				.addClass('removeTr')
+				.html("<i class='icon-trash'></i>"));
 		componentName = $("<td />")
 			.append($("<input>")
 				.attr("type", "text").attr("name", "componentName")
@@ -285,7 +308,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 				.attr("type", "checkBox").attr("disabled", "disabled").attr("name", "collateralCheck")
 				.addClass("collateralCheck"));
 
-		tr.append(num).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck);
+		tr.append(remove).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck);
 		$("#componentsTable>tbody").prepend(tr);
 	}
 

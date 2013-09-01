@@ -10,7 +10,7 @@
 	margin-bottom: 0;
 }
 
-#addComponent {
+#addComponent, .removeTr {
 	font-size: 14px;
 }
 

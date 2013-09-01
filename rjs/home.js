@@ -4,10 +4,10 @@ require.config({
 		"jquery": "./jquery-2.0.3.min",
 		"bootstrap": "./bootstrap.min",
 		"service": "../service",
-		"common": "../common",
+		"common": "../common"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
+		"bootstrap": ["jquery"]
 	}
 })
 
@@ -25,7 +25,7 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 		"fieldPannel": "",
 		"costPannel": "/bms/managementSystem/workSummaryCost",
 		"manpowerPannel": "/bms/managementSystem/workSummaryManpower",
-		"databasePannel": "/bms/generalInformation",
+		"databasePannel": "/bms/generalInformation"
 	}
 
 	$(".pannel,#monitorPannel").click(function () {

@@ -5,13 +5,27 @@
 		<title>车辆查询.总装</title>
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
-		<link href="/bms/css/execution/assembly/query/CarQuery.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">		
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/query/carQuery.js"></script>
+
+        <style type="text/css">
+            #sparesDetail {
+                font-size: 12px;
+            }
+            .well {
+                margin-bottom: 10px;    
+            }
+            #resultTable {
+                font-size:12px; 
+            }
+            #sparesModal h4 {
+                margin: 5px 0;
+            }
+        </style>
 	</head>
 
 
@@ -373,5 +387,29 @@
                 </div>
             </div><!-- END MAIN -->
         </div>
+<div class="modal" id="sparesModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4><span class="vinText"></span><span class="faultText"></span> </h4>
+    </div>
+    <div class="modal-body">
+        <table class="table table-condensed table-hover" id="sparesDetail">
+            <thead>
+                <tr>
+                    <th style="width:50px">连带损</th>
+                    <th style="width:120px">零部件编号</th>
+                    <th style="width:150px">零部件名称</th>
+                    <th style="width:150px">零部件条码</th>
+                    <th style="width:200px">供应商</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
 	</body>
 </html>

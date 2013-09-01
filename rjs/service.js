@@ -10,4 +10,6 @@ define({
 	SHOW_HOME_INFO: "/bms/monitor/showHomeEfficiency",
 	SHOW_MONITOR_INFO: "/bms/monitor/showInfo",
 	QUERY_PLANNING_DIVISION_DAILY: "/bms/report/queryPlanningDivisionDaily",
+	QUERY_REPLACEMENT_DETAIL: "/bms/spares/queryReplacementDetail",
+	EXPORT_REPLACEMENT_DETAIL: "/bms/spares/exportReplacementDetail"
 })

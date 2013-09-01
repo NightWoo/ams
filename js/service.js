@@ -127,6 +127,7 @@ var CAR_ACCESS_VALIDATE = "/bms/car/validateCarAccess";
 var CAR_ACCESS_SUBMIT = "/bms/execution/carAccessSubmit";
 
 var SHOW_TRACE = "/bms/car/showTrace";
+var QUERY_SPARES_TRACE = "/bms/spares/querySparesTrace";
 var TRACE_EXPORT = "/bms/car/exportTrace";
 var QUERY_TESTLINE_RECORD = "/bms/car/queryTestlineRecord";
 var FAULT_QUERY = "/bms/fault/query";

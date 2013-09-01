@@ -46,7 +46,7 @@ define(function() {
 	function attachTootip () {
 		$('body').tooltip(
 			{
-	         selector: "*[rel=tooltip]",
+	         selector: "*[rel=tooltip]"
 	    	}
 	    );	
 	}
