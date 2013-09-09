@@ -981,7 +981,7 @@ class FaultSeeker
 	public function queryCarFaults($carId,$nodeName,$series){
 		$tables = $this->parseTables($nodeName, $series);
 		$dutyList = $this->dutyList();
-		$dutyType = $this->dutyType();
+		$dutyArea = $this->dutyArea();
 		$faults = array();
 		foreach($tables as $table => $nodeId){
 			$sql = "SELECT id, car_id, component_name, fault_mode, `status`, create_time, updator, duty_department
@@ -992,7 +992,7 @@ class FaultSeeker
 				$data['duty'] = $dutyList[$data['duty_department']];
 				$data['user_name'] = empty($data['updator']) ? "-" : User::model()->findByPk($data['updator'])->display_name;
 				$data['node_name'] = NodeAR::model()->findByPk($nodeId)->display_name;
-				$data['duty_type'] = $dutyType[$table];
+				$data['duty_area'] = $dutyArea[$table];
 			}
 			$faultClass = $this->getFaultClass($table);
 			$faults[$faultClass] = $datas;
@@ -1247,7 +1247,7 @@ class FaultSeeker
 		return $list;
 	}
 
-	public function dutyType() {
+	public function dutyArea() {
 		$list = array(
 			'VQ1_STATIC_TEST_F0' => 'VQ1',
 			'VQ1_STATIC_TEST_M6' => 'VQ1',
@@ -1264,9 +1264,9 @@ class FaultSeeker
 			'VQ3_FACADE_TEST_F0' => 'VQ3',
 			'VQ3_FACADE_TEST_M6' => 'VQ3',
 			'VQ3_FACADE_TEST_6B' => 'VQ3',
-			'WDI_TEST_F0' => 'WDI',
-			'WDI_TEST_M6' => 'WDI',
-			'WDI_TEST_6B' => 'WDI',
+			'WDI_TEST_F0' => 'WH',
+			'WDI_TEST_M6' => 'WH',
+			'WDI_TEST_6B' => 'WH',
 		);
 		return $list;
 	}

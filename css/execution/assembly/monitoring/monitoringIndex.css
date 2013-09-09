@@ -18,6 +18,10 @@
 	z-index: 100; 
 	overflow: hidden;
 }
+
+#pbsBalanceTable {
+	font-size: 12px;
+}
 /*#detecthouse*/
  #background {
 	position: relative;

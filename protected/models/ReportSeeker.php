@@ -12,7 +12,7 @@ class ReportSeeker
 	}
 
 	private static $NODE_BALANCE_STATE = array(
-		'PBS' => array('彩车身库'),
+		'PBS' => array('彩车身库','预上线'),
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
 		'onLine-2' => array('II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验'),
 		'onLine-all' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
@@ -1173,7 +1173,7 @@ class ReportSeeker
 				$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['export'] += intval($data['count']);
 				$countData[$data['series']]['合计']['warehouseBalance']['daily']['export'] += intval($data['count']);
 				$countTotal['warehouseBalance']['daily']['export'] += intval($data['count']);
-			} else {
+			} else if ($data['special_property'] != '9') {
 				$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['domestic'] += intval($data['count']);
 				$countData[$data['series']]['合计']['warehouseBalance']['daily']['domestic'] += intval($data['count']);
 				$countTotal['warehouseBalance']['daily']['domestic'] += intval($data['count']);

@@ -35,7 +35,7 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
     })
 
     function queryReportDaily () {
-    	$("tableDaily>tbody").html("");
+    	$("#tableDaily>tbody").html("");
     	$.ajax({
     		url: service.QUERY_PLANNING_DIVISION_DAILY,
     		dataType: "json",
@@ -99,5 +99,6 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
 	function initPage () {
 		$("#headGeneralInformationLi").addClass("active");
 		$("#startTime").val(dateTimeUtil.getTime('lastWorkDate'));
+        queryReportDaily();
 	}
 });

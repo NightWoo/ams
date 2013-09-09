@@ -126,6 +126,8 @@
 						<div class="warehousePrint"><a href="/bms/execution/warehousePrint"><i class="icon-print"></i>&nbsp;合格证</a></div>
 						<div class="accessoryListPrint"><a href="/bms/execution/accessoryListPrint"><i class="icon-print"></i>&nbsp;随车件</a></div>
 						<div class="warehouseReturn"><a href="/bms/execution/warehouseReturn"><i class="icon-reply"></i>&nbsp;退库</a></div>
+						<div class="frontBumper"><a href="/bms/execution/child?node=frontBumper&view=SPSPoint&point=frontBumper"><i class="icon-th"></i>&nbsp;JIS前保</a></div>
+						<div class="rearBumper"><a href="/bms/execution/child?node=rearBumper&view=SPSPoint&point=rearBumper"><i class="icon-th"></i>&nbsp;JIS后保</a></div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->

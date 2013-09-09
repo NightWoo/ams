@@ -1,3 +1,12 @@
+<?php 
+    $spsPointName = array(
+        "S1"=>"SPS-1",
+        "S2"=>"SPS-2",
+        "S3"=>"SPS-3",
+        "frontBumper"=>"JIS-前保险杠",
+        "rearBumper"=>"JIS-后保险杠"
+    );
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -37,7 +46,7 @@
 		
                 <div id="bodyright" class="offset2"><!-- 页体 -->
                     <div>
-                        <legend><?php echo $nodeDisplayName;?>
+                        <legend><?php echo $spsPointName[$nodeDisplayName];?>
                             <span class="pull-right">
                                 <a href="/bms/execution/spsQueueMaintain"><i class="icon-link"></i>&nbsp;SPS队列维护</a>
                                 <!-- /

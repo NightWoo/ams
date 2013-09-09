@@ -52,13 +52,31 @@
 							<table id="faultsTable" class="table">
 								<thead>
 									<tr>
-										<th>节点</th>
+										<th>区域</th>
 										<th>故障</th>
 										<th>责任</th>
 										<th>选择</th>
 									</tr>
+									<tr id="newFaultTr" style="display:none">
+										<td>
+											<span id="newLine"></span>
+										</td>
+										<td>
+											<div>
+												<input id="newFaultComponent" type='text' style="width:90px">
+												<select id="newFaultMode" disabled="disabled" class="help-inline" style="width:100px"><option value="">故障模式</option></select>
+											</div>
+										</td>
+										<td>
+											-
+										</td>
+										<td>
+											<input id="newFaultRadio" type="radio" name="choseFault" disabled>
+										</td>
+									</tr>
 								</thead>
 								<tbody>
+									
 								</tbody>
 							</table>
 						</div>
@@ -66,6 +84,12 @@
 							<div class="input-prepend">
 								<span class="add-on">责任</span>
 								<select id="dutySelect" class="input-medium"></select>
+							</div>
+							<div class="input-prepend">
+								<span class="add-on">换件人</span>
+								<select id="handlerSelect" class="input-medium">
+									<option value=""></option>
+								</select>
 							</div>
 							<table id="componentsTable" class="table">
 								<thead>
@@ -76,6 +100,7 @@
 										<th>供应商</th>
 										<th>零部件条码</th>
 										<th>连带损</th>
+										<th>报废</th>
 									</tr>
 								</thead>
 								<tbody>

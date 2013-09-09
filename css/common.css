@@ -184,6 +184,12 @@ label{vertical-align:middle;}
   background-color: #d9edf7;
   
 }
+
+.popover {
+  z-index: 1050;
+  max-width: 476px;
+}
+
 /*added by wujun modify bootstrap.css finished*/
 
 /*bootstrap 2.2.2 add*/

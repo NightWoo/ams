@@ -60,7 +60,7 @@ $(document).ready(function () {
 	$("#resultTable").live("click", function(e) {
 		if($(e.target).hasClass("faultEdit")){
 			$("#editDutyDepartment").html("");
-			node = $(e.target).data("duty_type");
+			node = $(e.target).data("duty_area");
 			dutyId = $(e.target).data("duty_department");
 			$("#editDutyDepartment").append(getDutyList(node)).val(dutyId);
 
@@ -110,7 +110,7 @@ $(document).ready(function () {
 		    				$("<td />").html(fault.node_name).appendTo(tr);
 		    				$("<td />").html(fault.component_name + fault.fault_mode).appendTo(tr);
 		    				$("<td />").html(fault.status).appendTo(tr);
-		    				a = $("<a />").addClass("faultEdit").html(fault.duty).data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass);
+		    				a = $("<a />").addClass("faultEdit").html(fault.duty).data("id", fault.id).data("duty_area",fault.duty_area).data("duty_department", fault.duty_department).data("faultClass", faultClass);
 		    				$("<td />").append(a).appendTo(tr);
 		    				$("<td />").html(fault.create_time).appendTo(tr);
 		    				$("<td />").html(fault.user_name).appendTo(tr);

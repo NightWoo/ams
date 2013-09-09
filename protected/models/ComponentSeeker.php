@@ -35,7 +35,7 @@ class ComponentSeeker
 		$limit = $perPage;
 		$offset = ($curPage - 1) * $perPage;
 
-		$sql = "SELECT id,car_series, category_id, code, display_name, name, is_fault, simple_code,unit_price, remark, provider_1,provider_2,provider_3  FROM component WHERE $condition ORDER BY code ASC LIMIT $offset,$limit";
+		$sql = "SELECT id,car_series, category_id, code,sap_code, display_name, name, is_fault, simple_code,unit_price, remark, provider_1,provider_2,provider_3  FROM component WHERE $condition ORDER BY code ASC LIMIT $offset,$limit";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();		
 
 

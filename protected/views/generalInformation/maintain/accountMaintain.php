@@ -127,9 +127,9 @@
 		    </div>
 		  </div>
 		  <div class="control-group">
-		    <label class="control-label" for="sellTel"> 座机</label>
+		    <label class="control-label" for="selfTel"> 座机</label>
 		    <div class="controls">
-		      <input type="text" id="sellTel" placeholder="座机">
+		      <input type="text" id="selfTel" placeholder="座机">
 		    </div>
 		  </div>	  
 		</form>
@@ -242,6 +242,12 @@
 		      <input type="text" id="inputTelephone" placeholder="Telephone">
 		    </div>
 		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="inputCertificate">操作凭证</label>
+		    <div class="controls">
+		      <input type="text" id="inputCertificate" placeholder="Certificate">
+		    </div>
+		  </div>
 		</form>
   	</div>
   	<div class="modal-footer">
@@ -297,6 +303,12 @@
 		    <label class="control-label" for="editTelephone">座机</label>
 		    <div class="controls">
 		      <input type="text" id="editTelephone" placeholder="Telephone">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="editCertificate">操作凭证</label>
+		    <div class="controls">
+		      <input type="text" id="inputCertificate" placeholder="Certificate">
 		    </div>
 		  </div>	  
 		</form>

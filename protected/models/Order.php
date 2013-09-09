@@ -12,8 +12,9 @@ class Order
 	public function __construct(){
 	}
 
-	private static $LC0_TYPE = "('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)')";
-	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
+	private static $LC0_TYPE = "('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)')";
+	private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
+	private static $LC0_CONFIG_ARRAY = array(7,9);
 
 	public function checkDetail ($details) {
 		$orders = CJSON::decode($details);
@@ -280,8 +281,12 @@ class Order
 
 				$values = array($order->series, $order->color, $order->cold_resistant);
 
-				$LC0Type = self::$LC0_TYPE;
-				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1)";
+				// $LC0Type = self::$LC0_TYPE;
+				// $LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR (type='QCJ7100L(1.0排量舒适型)' AND color='法兰红') OR config_id IN (7,9) OR (type IN ('QCJ7152ET1(1.5TI尊贵型)','QCJ7152ET1(1.5TI尊享型)','QCJ7152ET2(1.5TID尊贵型)') AND color<>'巧克力棕' AND color<>'德兰黑') )";
+				list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
+				list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
+				$LC0TypeColorText = $this->getLC0TypeColorText();
+				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
 				$matchCondition .= $LC0Condition;
 				
 				$matchCondition .= "  ORDER BY warehouse_time ASC";
@@ -368,7 +373,10 @@ class Order
 		foreach($vins as $vin){
 			$car = Car::create($vin);
 			if(!empty($car)){
-				if(!(in_array($car->car->type, self::$LC0_TYPE_ARRAY) || substr($car->car->vin, 0,3)=='LGX' || $car->car->special_property==1)){
+				list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
+				list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
+				// if(!(in_array($car->car->type, self::$LC0_TYPE_ARRAY) || substr($car->car->vin, 0,3)=='LGX' || $car->car->special_property==1 || $car->car->special_property==2 || in_array($car->car->config_id, self::$LC0_CONFIG_ARRAY) )){
+				if(!(in_array($car->car->type, $LC0TypeArray) || substr($car->car->vin, 0,3)=='LGX' || $car->car->special_property==1 || $car->car->special_property==2 || in_array($car->car->config_id, $LC0ConfigArray) )){
 					throw new Exception($vin . "不符合当前‘LC0’可发车条件，不可匹配订单");
 				}
 
@@ -613,5 +621,33 @@ class Order
             $series = explode(',', $series);
         }
 		return $series;
+	}
+
+	//lc0 unlock temp
+	private function getLC0Type () {
+		$sql = "SELECT car_type FROM lc0_unlock WHERE category='type'";
+		$LC0TypeArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Type = "('" . join("','", $LC0TypeArray) . "')";
+		return array($LC0TypeArray,$LC0Type);
+	}
+
+	private function getLC0Config () {
+		$sql = "SELECT car_config FROM lc0_unlock WHERE category='config' AND car_config>0";
+		$LC0ConfigArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Config = "(" . join(",", $LC0ConfigArray) . ")";
+		return array($LC0ConfigArray,$LC0Config);
+	}
+
+	private function getLC0TypeColorText () {
+		$sql = "SELECT car_type,car_colors FROM lc0_unlock WHERE category='type_color'";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		$textArray = array();
+		foreach($datas as $data){
+			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
+		}
+
+		$text = join(" OR ", $textArray);
+
+		return $text;
 	}
 }

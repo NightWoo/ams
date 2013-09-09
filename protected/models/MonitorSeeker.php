@@ -6,11 +6,12 @@ Yii::import('application.models.SeriesSeeker');
 class MonitorSeeker
 {
 	private static $NODE_BALANCE_STATE = array(
-			'PBS' => array('彩车身库'),
-			'VQ1' => array('VQ1异常','退库VQ1'),
+			// 'PBS' => array('彩车身库'),
+			'PBS' => array('预上线'),
+			'VQ1' => array('VQ1异常','VQ1退库'),
 			'VQ1-EXCEPTION' => array('VQ1异常'),
-			'VQ2' => array('整车下线','出生产车间','检测线缓冲','VQ2路试', 'VQ2淋雨检验', 'VQ2异常.路试','VQ2异常.漏雨','退库VQ2'),
-			'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常','退库VQ3')
+			'VQ2' => array('VQ1合格', '出生产车间', '检测线缓冲','VQ2检测线', 'VQ2路试', 'VQ2淋雨', 'VQ2异常.路试', 'VQ2异常.漏雨', 'VQ2退库'),
+			'VQ3' => array('VQ3检验' ,'VQ3合格', 'VQ3异常','VQ3退库'),
 			);
 
 	public function __construct(){
@@ -168,11 +169,41 @@ class MonitorSeeker
 			}
 		} else {
 			$states = $node;
-	}
+		}
 		$str = "'" . join("','", $states) . "'";
-		$sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE status IN ($str)";
-		return Yii::app()->db->createCommand($sql)->queryAll();
+		$sql = "SELECT id,serial_number,sps_serial,series,vin,type,color,modify_time as time FROM car WHERE status IN ($str) ORDER BY modify_time";
+
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		if($node == "PBS") {
+			foreach($datas as &$data) {
+				$traceSql = "SELECT pass_time FROM node_trace WHERE car_id={$data['id']} AND node_id=1 AND user_id>100 ORDER BY pass_time DESC";
+				$traceTime = Yii::app()->db->createCommand($traceSql)->queryScalar();
+				if(!empty($traceTime)) {
+					$data['time'] = !empty($traceTime) ? $traceTime : $data['time'];
+				}
+			}
+			$datas = $this->multi_array_sort($datas, 'time');
+		}
+
+		return $datas;
+
 	}
+
+	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
+        if(is_array($multi_array)){  
+            foreach ($multi_array as $row_array){  
+                if(is_array($row_array)){  
+                    $key_array[] = $row_array[$sort_key];  
+                }else{  
+                    return -1;  
+                }  
+            }  
+        }else{  
+            return -1;  
+        }  
+        array_multisort($key_array,$sort,$multi_array);  
+        return $multi_array;  
+    }
 
 	public function queryBalanceCount($node, $series = 'all') {
 		if(!is_array($node)) {
@@ -362,10 +393,10 @@ class MonitorSeeker
 		}
 
 		//WDI & Y quantity
-		$sql = "SELECT COUNT(id) FROM car WHERE warehouse_id=1 OR warehouse_id=600 GROUP BY area";
-		$dataSpecial = Yii::app()->db->createCommand($sql)->queryColumn();
-		$ret['WDI'] = $dataSpecial[0];	//WDI
-		$ret['Y'] = $dataSpecial[1];	//Y
+		// $sql = "SELECT COUNT(id) FROM car WHERE warehouse_id=1 OR warehouse_id=600 GROUP BY area";
+		// $dataSpecial = Yii::app()->db->createCommand($sql)->queryColumn();
+		// $ret['WDI'] = $dataSpecial[0];	//WDI
+		// $ret['Y'] = $dataSpecial[1];	//Y
 
 		return $ret;
 	}
@@ -524,35 +555,36 @@ class MonitorSeeker
 		if($etimeHM >= "10:00" && $etimeHM < "11:30"){
 			$restTime = 600;
 		}
-		if($etimeHM >= "11:30" && $etimeHM < "13:00"){
+		if($etimeHM >= "11:30" && $etimeHM < "12:30"){
 			$restTime = 600 + strtotime($etime) - strtotime($thisDate . " 11:30:00");
 		}
-		if($etimeHM >= "13:00" && $etimeHM < "15:00"){
-			$restTime = 6000;
+
+		if($etimeHM >= "12:30" && $etimeHM < "15:00"){
+			$restTime = 4200;
 		}
-		if($etimeHM >= "15:00" && $etimeHM < "17:30"){
-			$restTime = 6600;
+		if($etimeHM >= "15:00" && $etimeHM < "17:00"){
+			$restTime = 4800;
 		}
-		if($etimeHM >= "17:30" && $etimeHM < "18:30"){
-			$restTime = 6600 + (strtotime($etime) - strtotime($thisDate . " 17:30:00"));
+		if($etimeHM >= "17:00" && $etimeHM < "18:00"){
+			$restTime = 4800 + (strtotime($etime) - strtotime($thisDate . " 17:00:00"));
 		}
-		if($etimeHM >= "18:30" && $etimeHM < "23:00"){
-			$restTime = 10200;
+		if($etimeHM >= "18:00" && $etimeHM < "23:00"){
+			$restTime = 8400;
 		}
 		if($etimeHM >= "23:00" || $etimeHM < "00:30"){
-			$restTime = 10800;
+			$restTime = 9000;
 		}
 		if($etimeHM >= "00:30" && $etimeHM < "01:30"){
-			$restTime = 10800 + (strtotime($etime) - strtotime($workDate . " 23:30:00"));
+			$restTime = 9000 + (strtotime($etime) - strtotime($workDate . " 23:30:00"));
 		}
 		if($etimeHM >= "01:30" && $etimeHM < "05:00"){
-			$restTime = 14400;
+			$restTime = 12600;
 		}
 		if($etimeHM >= "05:00" && $etimeHM < "07:00"){
-			$restTime = 15000;
+			$restTime = 13200;
 		}
 		if($etimeHM >= "07:00" && $etimeHM < "08:00"){
-			$restTime = 15000 + (strtotime($etime) - strtotime($thisDate . " 07:00:00"));
+			$restTime = 13200 + (strtotime($etime) - strtotime($thisDate . " 07:00:00"));
 		}
 
 		return $restTime;

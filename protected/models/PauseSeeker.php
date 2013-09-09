@@ -213,7 +213,6 @@ class PauseSeeker
 		}
 
 		$cSeries = array();
-		$detail['causeType'] = array_values($causeTypeChartData);
 		foreach ($causeTypeChartData as &$chartData) {
 			$percentage = round($chartData['howlong'] / $sum, 3);
 			$chartData['percentage'] = $percentage * 100 . "%";
@@ -223,6 +222,7 @@ class PauseSeeker
 			$howlongSS = intval($howlong % 60);
 			$chartData['howlong'] = $howlongMM . '分' . sprintf("%02d", $howlongSS) . '秒';
 		}
+		$detail['causeType'] = array_values($causeTypeChartData);
 
 		return array(
 				'detail'=> $detail,

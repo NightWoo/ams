@@ -122,6 +122,7 @@ class ComponentController extends BmsBaseController
 			$series = $this->validateStringVal('series', '');
 			$category = $this->validateIntVal('category', 7);
 			$code = $this->validateStringVal('code', '');
+			$sapCode = $this->validateStringVal('sapCode', '');
 			$name = $this->validateStringVal('name', '');
 			$displayName = $this->validateStringVal('displayName', '');
 			$isfault = $this->validateIntVal('isfault', 0);
@@ -135,6 +136,10 @@ class ComponentController extends BmsBaseController
 			if(!empty($code) && !empty($exist)) {
 				throw new Exception('零部件编码已存在');
 			}
+			$sapExist = ComponentAR::model()->find('sap_code=? && id!=?', array($sapCode, $id));
+			if(!empty($sapCode) && !empty($sapExist)) {
+				throw new Exception('SAP编码已存在');
+			}
 			$component = ComponentAR::model()->findByPk($id);
             if(empty($component)) {
 				$component = new ComponentAR();
@@ -142,6 +147,7 @@ class ComponentController extends BmsBaseController
             }
 			$component->car_series = $series;
 			$component->code = $code;
+			$component->sap_code = $sapCode;
 			$component->simple_code = $simpleCode;
 			$component->name = $name;
 			$component->display_name = $displayName;

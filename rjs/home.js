@@ -1,10 +1,7 @@
 require.config({
-	"baseUrl": "/bms/rjs/lib",
 	"paths":{
-		"jquery": "./jquery-2.0.3.min",
-		"bootstrap": "./bootstrap.min",
-		"service": "../service",
-		"common": "../common"
+		"jquery": "lib/jquery-2.0.3.min",
+		"bootstrap": "lib/bootstrap.min"
 	},
 	"shim": {
 		"bootstrap": ["jquery"]
@@ -21,9 +18,9 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 		"manufacturePannel": "/bms/execution/index",
 		"monitorPannel": "/bms/execution/monitoringIndex",
 		"qualityPannel": "/bms/execution/query?type=NodeQuery",
-		"efficiencyPannel": "/bms/site/efficiencyPannelIndex",
+		"efficiencyPannel": "/bms/site/pannelIndex?pannel=efficiencyPannel",
 		"fieldPannel": "",
-		"costPannel": "/bms/managementSystem/workSummaryCost",
+		"costPannel": "/bms/site/pannelIndex?pannel=costPannel",
 		"manpowerPannel": "/bms/managementSystem/workSummaryManpower",
 		"databasePannel": "/bms/generalInformation"
 	}

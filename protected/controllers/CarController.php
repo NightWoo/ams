@@ -285,6 +285,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 			//$car->leftNode('PBS');
+            $car->checkRatioControl($line);
 
 			//“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
 			//
@@ -428,11 +429,11 @@ class CarController extends BmsBaseController
         $series = $this->validateStringVal('series', '');
         $serialNumber = $this->validateStringVal('serialNumber', '');
         try{
-            $seeker = new CarSeeker();
-            $vin = $seeker->queryCar($vin,$series,$serialNumber);
-            if(empty($vin)){
-                throw new Exception('查无车辆');
-            }
+            // $seeker = new CarSeeker();
+            // $vin = $seeker->queryCar($vin,$series,$serialNumber);
+            // if(empty($vin)){
+            //     throw new Exception('查无车辆');
+            // }
             $car = Car::create($vin);
             $carInfo = $car->mainInfo();
             $data = $car->getFaults($node);

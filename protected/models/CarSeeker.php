@@ -12,7 +12,7 @@ class CarSeeker
 	}
 
 	private static $NODE_BALANCE_STATE = array(
-		'PBS' => array('彩车身库'),
+		'PBS' => array('彩车身库','预上线'),
 		'onLine' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验'),
 		'onLine-2' => array('II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验'),
 		'VQ1' => array('VQ1异常','VQ1退库'),

@@ -121,6 +121,7 @@ class UserController extends BmsBaseController
 			$email = $this->validateStringVal('email');
 			$cell = $this->validateStringVal('cell');
 			$tele = $this->validateStringVal('telephone');
+			$certificate = $this->validateStringVal('certificate');
 			$card = $this->validateStringVal('card_number');
 			$card8H10D = $this->validateStringVal('card_8H10D');
 
@@ -151,6 +152,7 @@ class UserController extends BmsBaseController
 			$user->email = $email;
 			$user->cellphone = $cell;
 			$user->telephone = $tele;
+			$user->certificate = $certificate;
 			$user->card_number = $card;
 			$user->card_8H10D = $card8H10D;
 			if(empty($id)) {

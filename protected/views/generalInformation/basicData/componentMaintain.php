@@ -250,6 +250,12 @@
 			    </div>
 			</div>
 			<div class="control-group">
+			    <label class="control-label" for="newCode">SAP编号</label>
+			    <div class="controls">
+			      	<input type="text" id="newSapCode" placeholder="零部件编号">
+			    </div>
+			</div>
+			<div class="control-group">
 			    <label class="control-label" for="newName">官方名称</label>
 			    <div class="controls">
 			      	<input type="text" id="newName" placeholder="零部件官方名称">
@@ -332,6 +338,12 @@
 			    <label class="control-label" for="inputCode">零部件编号</label>
 			    <div class="controls">
 			      	<input type="text" id="inputCode" placeholder="零部件编号">
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="newCode">SAP编号</label>
+			    <div class="controls">
+			      	<input type="text" id="inputSapCode" placeholder="零部件编号">
 			    </div>
 			</div>
 			<div class="control-group">

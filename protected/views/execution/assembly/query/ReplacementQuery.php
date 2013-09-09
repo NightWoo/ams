@@ -69,6 +69,8 @@
                 <div>
                     <ul id="tabs" class="nav nav-pills">
                         <li><a href="#tabDetail" data-toggle="tab">明细报表</a></li>
+                        <li><a href="#tabCostTrend" data-toggle="tab">成本趋势</a></li>
+                        <li><a href="#tabCostDuty" data-toggle="tab">换件责任</a></li>
                         <div id="paginationDetail" class="pagination pagination-small pagination-right" style="display: none;">
                             <ul>
                                 <li id="exportDetail"><a href="#"><span id="totalDetail"></span></a></li>
@@ -97,6 +99,7 @@
                                     <th>连带损</th>
                                     <th>责任部门</th>
                                     <th>换件故障</th>
+                                    <th>区域</th>
                                     <th>换件时间</th>
                                 </tr>
                             </thead>
@@ -118,9 +121,27 @@
                                     </td>
                                     <td>{{:duty_department_name}}</td>
                                     <td>{{:fault_component_name}}{{:fault_mode}}</td>
+                                    <td>{{:duty_area}}</td>
                                     <td>{{:replace_time}}</td>
                                 </tr>
                             </script>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="tabCostTrend">
+                        <div id="costTrendContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                        <table id="tableCostTrend" class="table table-condensed table-bordered">
+                            <thead />
+                            <tbody />
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="tabCostDuty">
+                        <div id="costDutyPlatoContainer" style="min-width: 400px; height: 400px; margin: 0 auto">
+                        </div>
+                        <table id="tablecostDutyPlato" class="table table-condensed table-bordered">
+                            <thead />
+                            <tbody />
                         </table>
                     </div>
                 </div>

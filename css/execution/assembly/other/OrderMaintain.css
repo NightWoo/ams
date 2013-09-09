@@ -144,3 +144,7 @@
 #tableResult .amountTd, #tableResult .holdTd, #tableResult .countTd {
 	text-align: right;
 }
+
+.iconBtn:hover,.iconBtn:focus {
+	text-decoration:none;
+}

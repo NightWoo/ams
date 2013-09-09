@@ -345,6 +345,16 @@ var QUERY_OVERTIME_ORDERS = "/bms/report/queryOvertimeOrders";
 var QUERY_QUALIFICATION_REPORT = "/bms/report/queryQualification";
 var QUERY_FAULT_DISTRIBUTE_REPORT = "/bms/report/queryFaultDistribute";
 
+// ---- SOBIN 2013/7/19
+var QUERY_TOOLS_HOME_MAKER = "/bms/toolsManagement/searchMaker";
+var QUERY_TOOLS_HOME_DISTRIBUTOR = "/bms/toolsManagement/searchDistributor";
+var QUERY_TOOLS_HOME_PARAMETER = "/bms/toolsManagement/searchParameter";
+var QUERY_TOOLS_HOME_TOOLSUSER = "/bms/toolsManagement/searchToolsUser";
+var QUERY_TOOLS_TOOLSMANAGEMENT = "/bms/toolsManagement/searchManagement";
+var QUERY_TOOLS_TOOLSASSIGN = "/bms/toolsManagement/searchAssign";
+var QUERY_TOOLS_TOOLSCHECK = "/bms/toolsManagement/searchCheck";
+// ---- SOBIN 2013/7/19
+
 function alertError (message) {
 	message = 'ajax error'
 	// alert(message);

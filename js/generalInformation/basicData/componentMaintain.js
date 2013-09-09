@@ -66,6 +66,7 @@ $(document).ready( function () {
 		    			tr.data("carSeries", value.car_series);
 		    			tr.data("componentId", value.id);
 		    			tr.data("categoryId", value.category_id);
+		    			tr.data("sapCode", value.sap_code);
 		    			tr.data("componentCode", value.code);
 		    			tr.data("componentName", value.name);
 						tr.data("name",value.name);
@@ -121,6 +122,7 @@ $(document).ready( function () {
 										}													//added by wujun
 									},														//added by wujun
 					"code" : $("#inputCode").attr("value"), 
+					"sapCode" : $("#inputSapCode").attr("value"), 
 					"category" : $("#inputCate").val(),
 					"isfault" : isFault,
 					"simpleCode" : $("#inputSimpleCode").attr("value"),
@@ -158,7 +160,8 @@ $(document).ready( function () {
 											return $("#newDisplayName").attr("value");		//added by wujun
 										}													//added by wujun
 									},														//added by wujun
-					"code" : $("#newCode").attr("value"), 
+					"code" : $("#newCode").attr("value"),
+					"sapCode" : $("#newSapCode").attr("value"), 
 					"category" : $("#newCate").val(),
 					"isfault" : isFault,
 					"simpleCode" : $("#newSimpleCode").attr("value"),	
@@ -168,6 +171,7 @@ $(document).ready( function () {
 				$("#newSeries").val(0);
 				$("#newCate").val(0);
 				$("#newCode").attr("value", "");
+				$("#newSapCode").attr("value", "");
 				$("#newName").attr("value", "");
 				$("#newIsFault").removeAttr("checked");
 				$("#newSimpleCode").attr("value", "");
@@ -303,6 +307,7 @@ $(document).ready( function () {
 				var tr = $(e.target).closest("tr");
 				$("#inputSeries").val(tr.data("carSeries"));
 				$("#inputCate").val(tr.data("categoryId"));
+				$("#inputSapCode").val(tr.data("sapCode"));
 				$("#inputCode").attr("value",siblings[2].innerHTML);
 				$("#inputDisplayName").attr("value",siblings[3].innerHTML);		
 				$("#inputSimpleCode").attr("value",siblings[4].innerHTML);

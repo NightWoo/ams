@@ -542,11 +542,12 @@ function ajaxPbsBalance () {
 	    		$("#pbsBalanceTable tbody").text("");
 	    		$.each(response.data, function (index, value) {
 	    			var tr = $("<tr />");
-	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(value.sps_serial).appendTo(tr);
+	    			$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 	    			$("<td />").html(value.vin).appendTo(tr);
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
-	    			$("<td />").html(value.time).appendTo(tr);
+	    			$("<td />").html(value.time.substr(0,16)).appendTo(tr);
 	    			
 	    			$("#pbsBalanceTable tbody").append(tr);
 	    		});
@@ -573,7 +574,7 @@ function ajaxVq1Balance () {
 	    		$("#vq1BalanceTable tbody").text("");
 	    		$.each(response.data, function (index, value) {
 	    			var tr = $("<tr />");
-	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 	    			$("<td />").html(value.vin).appendTo(tr);
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
@@ -606,7 +607,7 @@ function ajaxBalance (node) {
 	    		$("#modalTable tbody").text("");
 	    		$.each(response.data, function (index, value) {
 	    			var tr = $("<tr />");
-	    			$("<td />").html(value.series).appendTo(tr);
+	    			$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 	    			$("<td />").html(value.vin).appendTo(tr);
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);

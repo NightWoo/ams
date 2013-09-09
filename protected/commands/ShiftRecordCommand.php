@@ -39,9 +39,9 @@ class ShiftRecordCommand extends CConsoleCommand
 		$this->addPlanPause($stime, $etime, "早例行休息");
 
 		//白班午休增加半小时
-		$stime = $lastDate . " 12:30:00";
-		$etime = $lastDate . " 13:00:00";
-		$this->addPlanPause($stime, $etime, "午休增加30分钟");
+		// $stime = $lastDate . " 12:30:00";
+		// $etime = $lastDate . " 13:00:00";
+		// $this->addPlanPause($stime, $etime, "午休增加30分钟");
 
 		//午例行休息
 		$stime = $lastDate . " 15:50:00";
@@ -79,10 +79,10 @@ class ShiftRecordCommand extends CConsoleCommand
 		$etime = $curDate . " 10:00:00";
 		$this->addPlanPause($stime, $etime, "早例行休息");
 
-		//白班午休增加半小时
-		$stime = $curDate . " 12:30:00";
-		$etime = $curDate . " 13:00:00";
-		$this->addPlanPause($stime, $etime, "午休增加30分钟");
+		// //白班午休增加半小时
+		// $stime = $curDate . " 12:30:00";
+		// $etime = $curDate . " 13:00:00";
+		// $this->addPlanPause($stime, $etime, "午休增加30分钟");
 
 		//午例行休息
 		$stime = $curDate . " 15:50:00";

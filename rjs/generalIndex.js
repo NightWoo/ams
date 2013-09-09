@@ -6,14 +6,14 @@ require.config({
 		"head": "../head",
 		"service": "../service",
 		"common": "../common",
-		"dateUtil": "../dateUtil"
+		"dateTimeUtil": "../dateTimeUtil"
 	},
 	"shim": {
 		"bootstrap": ["jquery"]
 	}
 })
 
-require(["dateUtil","head","service","common","jquery","bootstrap"], function(dateUtil,head,service,common,$) {
+require(["dateTimeUtil","head","service","common","jquery","bootstrap"], function(dateTimeUtil,head,service,common,$) {
 	head.doInit();
 	initPage();
 	tumbnailUrl = {
@@ -36,7 +36,7 @@ require(["dateUtil","head","service","common","jquery","bootstrap"], function(da
 	function initPage () {
 		$("#headGeneralInformationLi").addClass("active");
 		querySimpleDaily();
-		$("#lastWorkDate").html(dateUtil.getTime("lastWorkDate"));
+		$("#lastWorkDate").html(dateTimeUtil.getTime("lastWorkDate"));
 	}
 
 	function querySimpleDaily () {

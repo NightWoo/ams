@@ -12,7 +12,7 @@ $(document).ready(function () {
 		$("#emailModal").modal("show");
 		$("#inputEmailChange").val($("#userInfoTr").data("email"));
 		$("#selfCell").val($("#userInfoTr").data("cell"));
-		$("#sellTel").val($("#userInfoTr").data("tel"));
+		$("#selfTel").val($("#userInfoTr").data("tel"));
 	});
 	//------------------- common functions -----------------------	
 	//initialize this page
@@ -124,6 +124,7 @@ $(document).ready(function () {
 		}
 		$("#editCellPhone").val(tr.data("cellphone"));
 		$("#editTelephone").val(tr.data("telephone"));
+		$("#editCertificate").val(tr.data("certificate"));
 
 		$('#editModal').data("userId",tr.data("userId"));
 		$('#editModal').modal("show");
@@ -147,7 +148,7 @@ $(document).ready(function () {
 		    url: UPDATE_USER,//ref:  /bms/js/service.js
 		    data: {"email" : $("#inputEmailChange").val(),
 		    		"cellphone" : $("#selfCell").val(),
-		    		"telephone" : $("#sellTel").val()
+		    		"telephone" : $("#selfTel").val()
 		},
 
 		    success:function (response) {
@@ -278,6 +279,7 @@ $(document).ready(function () {
 				    			tr.data("email", value.email);
 				    			tr.data("cellphone", value.cell);
 				    			tr.data("telephone", value.telephone);
+				    			tr.data("certificate", value.certificate);
 				    			tr.data("roleIds", value.roleIds);
 				    			$("#resultTable tbody").append(tr);
 				    		});
@@ -330,7 +332,8 @@ $(document).ready(function () {
 				"display_name" : $("#inputDisplayName").val(),
 				"email" : $("#inputEmail").val(),
 				"cell" : $("#inputCellPhone").val(),
-				"telephone" : $("#inputTelephone").val()
+				"telephone" : $("#inputTelephone").val(),
+				"certificate" : $("#inputCertificate").val()
 			},
 		    success:function (response) {
 		    	if (response.success) {
@@ -364,7 +367,8 @@ $(document).ready(function () {
 				"display_name" : $("#editDisplayName").val(),
 				"email" : $("#editEmail").val(),
 				"cell" : $("#editCellPhone").val(),
-				"telephone" : $("#editTelephone").val()
+				"telephone" : $("#editTelephone").val(),
+				"certificate" : $("#editCertificate").val()
 			},
 		    success:function (response) {
 		    	if (response.success) {

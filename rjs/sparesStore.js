@@ -1,22 +1,20 @@
 require.config({
-	"baseUrl": "/bms/rjs/lib",
+	// "baseUrl": "/bms/rjs/lib",
 	"paths":{
-		"jquery": "./jquery-2.0.3.min",
-		"bootstrap": "./bootstrap.min",
-		"head": "../head",
-		"left": "../left",
-		"service": "../service",
-		"common": "../common",
-		"component": "../component"
+		"jquery": "lib/jquery-2.0.3.min",
+		"bootstrap": "lib/bootstrap.min",
+		"head": "head",
+		"service": "service",
+		"common": "common",
+		"component": "component"
 	},
 	"shim": {
 		"bootstrap": ["jquery"]
 	}
 })
 
-require(["head","left","service","common","component","jquery","bootstrap"], function (head,left,service,common,component,$) {
+require(["head","service","common","component","jquery","bootstrap"], function (head,service,common,component,$) {
 	head.doInit();
-	left.doInit();
 	initPage();
 
 	$('#vinText').on('keydown', function (event) {
@@ -42,6 +40,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 			$("#componentsDiv").fadeIn();
 		}
 		tr = $(e.target).closest("tr").addClass("info").siblings().removeClass("info");
+		$("#btnSubmit").removeAttr("disabled");
 	})
 
 	$("#addComponent").click(function () {
@@ -85,6 +84,39 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 	})
 
 	currentComponentFocusIndex = -1;
+
+	$("#newFaultComponent").typeahead({
+	    source: function (input, process) {
+	    	disableNewFault();
+	        $.get(service.SEARCH_PART, {"component":input,"series":$("#vinText").data("series")}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+	     	ajaxViewModes(item);//根据part的名字查找故障模式
+        	return item;
+    	}
+	});
+
+	$("#newFaultMode").change(function () {
+		if($(this).val() != "") {
+			mode = $(this).children().filter(":selected").html();
+			$("#newFaultRadio")
+				.removeAttr("disabled").attr("checked", "checked").prop("checked", true)
+				.data("id", $("#newFaultMode").val()).data("duty_area",$("#vinText").data("line")).data("duty_department", "").data("component_name", $("#newFaultComponent").val()).data("fault_mode",mode);
+			if($("#componentsDiv").css("display") == "none"){
+				$("#componentsDiv").fadeIn();
+			}
+			addComponentTr();
+			$("#btnSubmit").removeAttr("disabled");
+		} else {
+			$("#newFaultRadio").attr("disabled", "disabled").removeAttr("checked");
+			$("#btnSubmit").attr("disabled","disabled");
+			$("#componentsDiv").hide();
+			$("#componentsTable>tbody").html("");
+
+		}
+	})
 	
 
 	function disableTr (index) {
@@ -93,6 +125,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		tr.find("select").filter(".provider").html("").attr("disabled", "disabled");
 		tr.find("input").filter(".barCode").val("").attr("disabled", "disabled");
 		tr.find("input").filter(".collateralCheck").removeAttr("checked").attr("disabled", "disabled");
+		tr.find("input").filter(".scrapCheck").removeAttr("checked").attr("disabled", "disabled");
 
 		tr.data("componentId", 0);
 	}
@@ -122,6 +155,7 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 			tr.find("input").filter(".barCode").removeAttr("disabled");
 		}
 		tr.find("input").filter(".collateralCheck").removeAttr("disabled");
+		tr.find("input").filter(".scrapCheck").removeAttr("disabled");
 
 		tr.data("componentId", componentInfo.component_id)
 		  .data("simpleCode", componentInfo.simple_code)
@@ -165,14 +199,18 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 					}
 				}
 				isCollateral = $(tr).find("input").filter(".collateralCheck").prop( "checked" ) ? 1 : 0;
+				isScrap = $(tr).find("input").filter(".scrapCheck").prop( "checked" ) ? 1 : 0;
 
 				$(tr).data("carId", $("#vinText").data("carId"));
 				$(tr).data("faultId", $(":radio[name=choseFault]:checked").data("id"));
 				$(tr).data("faultComponentName", $(":radio[name=choseFault]:checked").data("component_name"));
 				$(tr).data("faultMode", $(":radio[name=choseFault]:checked").data("fault_mode"));
+				$(tr).data("dutyArea", $(":radio[name=choseFault]:checked").data("duty_area"));
 				$(tr).data("dutyDepartmentId", $("#dutySelect").val());
+				$(tr).data("handler", $("#handlerSelect").val());
 				$(tr).data("barCode", barCode);
 				$(tr).data("isCollateral", isCollateral);
+				$(tr).data("isScrap", isScrap);
 
 				dataArray.push($(tr).data());
 			}
@@ -254,6 +292,9 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 		$("#faultsTable>tbody").html("");
 		$("#componentsTable>tbody").html("");
 		$("#faultsDiv, #componentsDiv").hide();
+		$("#newFaultTr").hide();
+		disableNewFault();
+		$("#newFaultComponent").val("");
 
 		options = common.getDutyOptions("SparesStore", true);
 		$("#dutySelect").append(options);
@@ -307,8 +348,12 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 			.append($("<input>")
 				.attr("type", "checkBox").attr("disabled", "disabled").attr("name", "collateralCheck")
 				.addClass("collateralCheck"));
+		scrapCheck = $("<td />")
+			.append($("<input>")
+				.attr("type", "checkBox").attr("disabled", "disabled").attr("name", "scrapCheck")
+				.addClass("scrapCheck"));
 
-		tr.append(remove).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck);
+		tr.append(remove).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck).append(scrapCheck);
 		$("#componentsTable>tbody").prepend(tr);
 	}
 
@@ -325,9 +370,10 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 				if(response.success) {
 					configList = response.data.configList;
 					var car = response.data.car 
-					$("#vinText").val(car.vin).data("series", car.series).data("carId", car.id);
+					$("#vinText").val(car.vin).data("series", car.series).data("carId", car.id).data("line", car.assembly_line);
 			    	$("#vinText, #validateVinBtn").attr("disabled","disabled");
-					$("#btnSubmit").removeAttr("disabled");
+					// $("#btnSubmit").removeAttr("disabled");
+					$("#newLine").html(car.assembly_line+"线");
 			    	toggleVinHint(false);
 
 		    		$('#serialNumberInfo').html(car.serial_number);
@@ -338,22 +384,26 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 				    $('#statusInfo').html(car.status);
 				    $('#rowInfo').html(car.row);
 
+			    	allEmpty = true;
 				    $.each(response.data.faultArray, function (faultClass, faults) {
 				    	$.each(faults, function (index, fault) {
 				    		if(fault.fault_mode){
 					    		tr = $("<tr />");
-					    		$("<td />").html(fault.node_name).appendTo(tr);
+					    		$("<td />").html(fault.duty_area).appendTo(tr);
 					    		$("<td />").html(fault.component_name + fault.fault_mode).appendTo(tr);
 					    		$("<td />").html(fault.duty).appendTo(tr);
 			    				radio = $("<input />")
 			    					.attr("type", "radio").attr("name", "choseFault")
-			    					.data("id", fault.id).data("duty_type",fault.duty_type).data("duty_department", fault.duty_department).data("faultClass", faultClass).data("component_name", fault.component_name).data("fault_mode",fault.fault_mode);
+			    					.data("id", fault.id).data("duty_area",fault.duty_area).data("duty_department", fault.duty_department).data("component_name", fault.component_name).data("fault_mode",fault.fault_mode);
 			    				$("<td />").append(radio).appendTo(tr);
 				    		}
-
 		    				$("#faultsTable>tbody").append(tr);
+		    				allEmpty = false;
 				    	})
 				    });
+				    if(allEmpty) {
+					    $("#newFaultTr").show();
+				    }
 				    $("#faultsDiv, #faultsTable").show();
 				    addComponentTr();
 			    } else {
@@ -362,6 +412,47 @@ require(["head","left","service","common","component","jquery","bootstrap"], fun
 			    }
 			}
 		})
+	}
+
+	//根据零部件的名字查找故障模式
+	function ajaxViewModes (text) 
+	{
+		$.ajax({
+			type: "get",//使用get方法访问后台
+        	dataType: "json",//返回json格式的数据
+			url: service.VQ1_VIEW_MODES,
+			data: {
+				"component":text,
+				"series" : $("#vinText").data("series")
+			},
+			success: function(response) 
+			{
+				if(response.success){
+					//重新选择的时候 清空select
+					select = $("#newFaultMode").html("");
+					var options = "<option value=''>故障模式</option>";
+					$.each(response.data.fault_mode,function (ind,value) {
+						options += '<option value="' + value.id + '">' + value.mode + '</option>';
+						
+					});
+					select.append(options);
+					select.removeAttr("disabled");
+				} else {
+					fadeMessageAlert(response.message,"alert-error");
+				}
+			},
+			error:function(){}
+		});
+	}
+
+	function disableNewFault () {
+		select = $("#newFaultMode").html("<option value=''>故障模式</option>");
+		select.attr("disabled", "disabled");
+		$("#newFaultRadio").attr("disabled", "disabled").removeAttr("checked");
+		$("#btnSubmit").attr("disabled", "disabled");
+
+		$("#componentsDiv").hide();
+		$("#componentsTable>tbody").html("");
 	}
 
 });

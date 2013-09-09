@@ -36,7 +36,7 @@ class UserSeeker
 		
 		$limit = $perPage;
 		$offset = ($curPage - 1) * $perPage;
-        $sql = "SELECT id,username,display_name,email,card_number,card_8H10D,telephone,cellphone as cell FROM user WHERE $condition LIMIT $offset,$limit";
+        $sql = "SELECT id,username,display_name,email,card_number,card_8H10D,telephone,certificate,cellphone as cell FROM user WHERE $condition LIMIT $offset,$limit";
         $userList = Yii::app()->db->createCommand($sql)->queryAll();
 		$userList = $this->fillRoles($userList);
 		// $sql = "SELECT count(*) FROM user WHERE $condition LIMIT $offset,$limit";

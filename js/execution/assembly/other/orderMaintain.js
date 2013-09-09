@@ -125,7 +125,7 @@ $("document").ready(function() {
 			var siblings = $(e.target).closest("td").siblings();
 			var tr = $(e.target).closest("tr");
 
-			if($(e.target).hasClass("icon-thumbs-up")) {
+			if($(e.target).hasClass("icon-step-forward")) {
 				// ajaxTop(tr.data("id"));
 				ajaxSetBoardTop(tr.data("boardNumber"));
 			// } else if($(e.target).hasClass("icon-hand-up")){
@@ -618,9 +618,9 @@ $("document").ready(function() {
 		    			$.each(value.orders, function (index, order) {
 		    				tr = tmp.children("tr:eq("+ index +")");
 		    				editTd = $("<td />");
-		    				editTd.html('<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-trash"></i></a>'
-		    					+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
-								+'&nbsp;<a class="btn btn-link" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
+		    				editTd.html('<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-trash"></i></a>'
+		    					+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
+								+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
 							editTd.appendTo(tr);
 							laneName = order.lane_name == "" ? "-" : order.lane_name
 		    				$("<td />").html(laneName).appendTo(tr);
@@ -693,7 +693,7 @@ $("document").ready(function() {
 		    			if(value.boardShort <0 && value.boardStatus==0) statusA="库存不足";
 		    			statusTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(statusA).prependTo(firstTr);
 		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardPriority).prependTo(firstTr);
-		    			reorderA = value.boardPriority != 0 ? "<a class='btn btn-link' rel='tooltip' data-toggle='tooltip' data-placement='top' title='置顶此板'><i class='icon-thumbs-up'></i></a>" : "";
+		    			reorderA = value.boardPriority != 0 ? "<a class='btn btn-link iconBtn' rel='tooltip' data-toggle='tooltip' data-placement='top' title='置顶此板'><i class='icon-step-forward  icon-rotate-270'></i></a>" : "";
 		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(reorderA).prependTo(firstTr);
 
 		    			$("#tableResult>tbody").append(tmp.children("tr"));

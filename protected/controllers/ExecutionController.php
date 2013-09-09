@@ -42,6 +42,8 @@ class ExecutionController extends BmsBaseController
         'S1' => array('DATA_INPUT_SPS_S1'),
         'S2' => array('DATA_INPUT_SPS_S2'),
         'S3' => array('DATA_INPUT_SPS_S3'),
+        'frontBumper' => array('DATA_INPUT_SPS_FB'),
+        'rearBumper' => array('DATA_INPUT_SPS_RB'),
         'T0' => array('DATA_INPUT_T0'),
         'T0_2' => array('DATA_INPUT_T0_2'), 
         'T11' => array('DATA_INPUT_T11_F10'), 'T21' => array('DATA_INPUT_T11_F10'), 'T32' => array('DATA_INPUT_T11_F10'), 'C10' => array('DATA_INPUT_T11_F10'),'C21' => array('DATA_INPUT_T11_F10'),'F10' => array('DATA_INPUT_T11_F10'),
@@ -138,7 +140,7 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus('PBS');
             if(($car->car->series == "6B" || $car->car->series == "M6") && empty($car->car->plan_id)){
                 $car->addToPlan($date, $planId);
-                $spsPoints = array('S1','S2','S3');
+                $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
                 $car->addSpsQueue($spsPoints);
                 $car->generateSpsSerial($line);
             }
@@ -174,6 +176,7 @@ class ExecutionController extends BmsBaseController
             }
             $car->generateSerialNumber($line);
             $serial_number = $car->car->serial_number;      //added by wujun
+            $car->ratioControlNext($line);
             $car->addVinLaserQueue();
             if($currentNode === 'T0'){
                 $subTypes = array('subEngine','subFrontAxle','subInstrument');

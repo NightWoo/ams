@@ -22,7 +22,7 @@
 		?>
         <div class="offhead">
            <?php
-            require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+            // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
             ?>
 
         	<!-- Main体 -->	
@@ -30,6 +30,17 @@
             <div id="bodyright" class="offset2">
                 <div>
                     <legend>故障责任编辑
+                        <span class="pull-right">
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="icon-link"></i>&nbsp;I线VQ1</a>
+                        /
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="icon-link"></i>&nbsp;II线VQ1</a>
+                        /
+                        <a href="/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished"><i class="icon-link"></i>&nbsp;VQ2路试</a>
+                        /
+                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"></i>&nbsp;VQ2淋雨</a>
+                        /
+                        <a href="/bms/execution/child?node=VQ3&view=VQ3"><i class="icon-link"></i>&nbsp;VQ3</a>
+                    </span>
                     </legend>
                 </div>
                 <form class="well form-search">

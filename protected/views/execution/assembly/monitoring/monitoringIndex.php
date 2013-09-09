@@ -10,6 +10,7 @@
         <link href="/bms/css/execution/assembly/monitoring/monitoringIndex.css" rel="stylesheet">
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 		<script type="text/javascript" src="/bms/js/head.js"></script>
+		<script type="text/javascript" src="/bms/js/common.js"></script>
 		<script type="text/javascript" src="/bms/js/jquery.qtip.js"></script>
 		<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/bms/js/service.js"></script>
@@ -274,15 +275,18 @@
 		<div class="modal" id="pbsBalanceModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">
 		  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		   	 	<h3>PBS结存明细</h3>
+		   	 	<h3>预上线</h3>
 		  	</div>
 		  	<div class="modal-body">
 		  		<table class="table table-bordered" id="pbsBalanceTable">
-            		<thead><th>车系</th>
+            		<thead>
+            			<th>SPS编号</th>
+            			<th>车系</th>
             			<th>VIN号</th>
-            			<th>车型/车身</th>
+            			<th>车型</th>
             			<th>颜色</th>
-            			<th>进入时间</th></thead>
+            			<th>进入时间</th>
+            		</thead>
             		<tbody></tbody>
 	            </table>
 		  	</div>
@@ -302,7 +306,7 @@
             		<thead>
             			<th>车系</th>
             			<th>VIN号</th>
-            			<th>车型/车身</th>
+            			<th>车型</th>
             			<th>颜色</th>
             			<th>进入时间</th>
             		</thead>
@@ -325,7 +329,7 @@
             		<thead>
             			<th>车系</th>
             			<th>VIN号</th>
-            			<th>车型/车身</th>
+            			<th>车型</th>
             			<th>颜色</th>
             			<th>进入时间</th>
 
@@ -351,7 +355,7 @@
             		<thead>
             			<th>车系</th>
             			<th>VIN号</th>
-            			<th>车型/车身</th>
+            			<th>车型</th>
             			<th>颜色</th>
             			<th>进入时间</th>
 
@@ -375,7 +379,7 @@
             		<thead>
             			<th>车系</th>
             			<th>VIN号</th>
-            			<th>车型/车身</th>
+            			<th>车型</th>
             			<th>颜色</th>
             			<th>进入时间</th>
 

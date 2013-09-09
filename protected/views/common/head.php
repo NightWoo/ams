@@ -17,7 +17,7 @@
 					</li>
 					<li class="divider-vertical"></li>
 					<li id="headEfficiencyLi">
-						<a href="/bms/site/efficiencyPannelIndex" data-toggle="tooltip" data-placement="bottom" title="效率"><i class="icon-dashboard"></i>&nbsp;效率</a>
+						<a href="/bms/site/pannelIndex?pannel=efficiencyPannel" data-toggle="tooltip" data-placement="bottom" title="效率"><i class="icon-dashboard"></i>&nbsp;效率</a>
 					</li>
 					<li id="headQualityLi">
 						<a href="/bms/execution/query?type=NodeQuery"  data-toggle="tooltip" data-placement="bottom" title="质量"><i class="icon-thumbs-up-alt"></i>&nbsp;质量</a>
@@ -26,7 +26,8 @@
 						<a href="#" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="icon-check"></i>&nbsp;现场</a>
 					</li>
 					<li id="headCostLi">
-						<a href="/bms/managementSystem/workSummaryCost" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i>&nbsp;成本</a>
+						<!-- <a href="/bms/managementSystem/workSummaryCost" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i>&nbsp;成本</a> -->
+						<a href="/bms/site/pannelIndex?pannel=costPannel" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i>&nbsp;成本</a>
 					</li>
 					<li id="headManpowerLi">
 						<a href="/bms/managementSystem/workSummaryManpower" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="icon-group"></i>&nbsp;人事</a>

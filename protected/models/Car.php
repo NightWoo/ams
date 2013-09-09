@@ -13,7 +13,7 @@ class Car
 	private $config;
 	private $configList;
 	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
-	private static $LC0_TYPE_ARRAY = array('BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)');
+	private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
 	protected function __construct($vin){
 		$this->vin = $vin;
 		$this->car = VinManager::getCar($vin);
@@ -80,6 +80,30 @@ class Car
 
 
 		return $data;
+	}
+
+	public function checkRatioControl ($line) {
+		if(!empty($this->car->skip_ratio_control)) return;
+		$ratioControl = OnlineRatioControlAR::model()->find("activated=1 AND line=?", array($line));
+		if(!empty($ratioControl) && $ratioControl->series != $this->car->series) {
+			$activatedSeriesName = self::$SERIES_NAME[$ratioControl->series]; 
+			$thisSeriesName = self::$SERIES_NAME[$this->car->series]; 
+			throw new Exception("按照上线比例控制，当前应上线[" . $activatedSeriesName . "]，此车为[" . $thisSeriesName . "]不可上线，如需跳过上线比例控制，请联系生产调度。");
+		}
+	}
+
+	public function ratioControlNext ($line) {
+		if(!empty($this->car->skip_ratio_control)) return;
+		$ratioControl = OnlineRatioControlAR::model()->find("activated=1 AND line='$line'");
+		if(empty($ratioControl)) return;
+		$next = OnlineRatioControlAR::model()->find("id>? AND line=? ORDER BY id ASC",array($ratioControl->id, $line));
+		if(empty($next)) $next = OnlineRatioControlAR::model()->find("id<? AND line=? ORDER BY id ASC",array($ratioControl->id, $line));
+		if(!empty($next)) {
+			$ratioControl->activated = 0;
+			$next->activated = 1;
+			$ratioControl->save();
+			$next->save();
+		}
 	}
 
 	protected function getBodyMap () {
@@ -908,7 +932,7 @@ class Car
 		}
 	}
 
-	public function addSpsQueue ($spsPoints = array('S1','S2','S3'), $line="I") {
+	public function addSpsQueue ($spsPoints = array('S1','S2','S3','frontBumper','rearBumper'), $line="I") {
 		foreach($spsPoints as $point) {
 			$spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
 
@@ -1135,7 +1159,10 @@ class Car
 		//$carYear = $this->carYear;
 
 		//不符合LC0规则不匹配订单
-		if(!(in_array($this->car->type, self::$LC0_TYPE_ARRAY) || substr($this->car->vin, 0,3)=='LGX' || $this->car->special_property==1)){
+		list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
+		list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
+		// if(!(in_array($this->car->type, self::$LC0_TYPE_ARRAY) || substr($this->car->vin, 0,3)=='LGX' || $this->car->special_property==1)){
+		if(!(in_array($this->car->type, $LC0TypeArray) || substr($this->car->vin, 0,3)=='LGX' || $this->car->special_property==1 || in_array($this->car->config_id, $LC0ConfigArray) )){
 			return array(false, array());
 		}
 		
@@ -1873,15 +1900,18 @@ class Car
 			$replacementAr->car_id = $this->car->id;
 			$replacementAr->node_trace_id = $traceId;
 			$replacementAr->component_id = $spare['componentId'];
+			$replacementAr->duty_area = $spare['dutyArea'];
 			$replacementAr->fault_id = $spare['faultId'];
 			$replacementAr->fault_component_name = $spare['faultComponentName'];
 			$replacementAr->fault_mode = $spare['faultMode'];
 			$replacementAr->provider_id = $spare['providerId'];
 			$replacementAr->duty_department_id = $spare['dutyDepartmentId'];
 			$replacementAr->is_collateral = $spare['isCollateral'];
+			$replacementAr->treatment = empty($spare['isScrap']) ? "返修" : "报废";
 			$replacementAr->unit_price = $spare['unitPrice'];
 			$replacementAr->bar_code = $spare['barCode'];
 			$replacementAr->replace_time = date("YmdHis");
+			$replacementAr->handler = $spare['handler'];
 			$replacementAr->user_id = Yii::app()->user->id;
 			$replacementAr->save();
 
@@ -1943,6 +1973,34 @@ class Car
         }
 
         return $typeName;
+	}
+
+	//lc0 unlock temp
+	private function getLC0Type () {
+		$sql = "SELECT car_type FROM lc0_unlock WHERE category='type'";
+		$LC0TypeArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Type = "('" . join("','", $LC0TypeArray) . "')";
+		return array($LC0TypeArray,$LC0Type);
+	}
+
+	private function getLC0Config () {
+		$sql = "SELECT car_config FROM lc0_unlock WHERE category='config' AND car_config>0";
+		$LC0ConfigArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Config = "(" . join(",", $LC0ConfigArray) . ")";
+		return array($LC0ConfigArray,$LC0Config);
+	}
+
+	private function getLC0TypeColorText () {
+		$sql = "SELECT car_type,car_colors FROM lc0_unlock WHERE category='type_color'";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		$textArray = array();
+		foreach($datas as $data){
+			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
+		}
+
+		$text = join(" OR ", $textArray);
+
+		return $text;
 	}
 
 }

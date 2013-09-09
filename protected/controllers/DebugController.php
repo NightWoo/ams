@@ -12,57 +12,43 @@ class DebugController extends BmsBaseController
 
 	private static $STATES=array('onLine','onLine-2','VQ1','VQ2','VQ3','WH');
 
-	public function actionCountMorning() {
-		$lastDate = DateUtil::getLastDate();
-		$curDate = DateUtil::getCurDate();
-
-		$countDate = $curDate;
-		$workDate = $lastDate;
-
-		foreach(self::$STATES as $state){
-			foreach(self::$SERIES as $series => $seriesName){
-				$balance =$this->countBalance($state, $series);
-				$this->countSave($state,$balance,$series,$countDate,$workDate);
-			}
+	public function actionTest () {
+		$vin = $this->validateStringVal('vin', '');
+		try {
+			list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
+			list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
+			$LC0TypeColorText = $this->getLC0TypeColorText();
+			$ret = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
+			$this->renderJsonBms(true, 'OK', $ret);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
-
-		$this->saveWarehousePlnningDivision($countDate, $workDate);
 	}
 
-	private function countBalance($state, $series) {
-		$seeker = new CarSeeker();
-		$count = $seeker->countStateCars($state,$series);
-		return $count;
+	private function getLC0Type () {
+		$sql = "SELECT car_type FROM lc0_unlock WHERE category='type'";
+		$LC0TypeArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Type = "('" . join("','", $LC0TypeArray) . "')";
+		return array($LC0TypeArray,$LC0Type);
 	}
 
-
-	private function countSave($state,$count,$series,$countDate,$workDate,$log=0){
-		$ar = new BalanceDailyAR();
-		$ar->series = $series;
-		$ar->count = $count;
-		$ar->state = $state;
-		$ar->count_date = $countDate;
-		$ar->work_date = $workDate;
-		$ar->log = $log;
-		$ar->record_time = date("YmdHis");
-		$ar->save();
+	private function getLC0Config () {
+		$sql = "SELECT car_config FROM lc0_unlock WHERE category='config' AND car_config>0";
+		$LC0ConfigArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$LC0Config = "(" . join(",", $LC0ConfigArray) . ")";
+		return array($LC0ConfigArray,$LC0Config);
 	}
 
-	private function saveWarehousePlnningDivision ($countDate, $workDate) {
-		$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE status='成品库' OR status='WDI' GROUP BY series,PDType,special_property";
+	private function getLC0TypeColorText () {
+		$sql = "SELECT car_type,car_colors FROM lc0_unlock WHERE category='type_color'";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		foreach($datas as $data) {
-			$ar = new BalancePlanningDivisionDailyAR();
-			$ar->series = $data['series'];
-			$ar->planning_division_type_name = $data['pdType'];
-			$ar->special_property = $data['special_property'];
-			$ar->count = $data['count'];
-			$ar->state = 'WH';
-			$ar->count_date = $countDate;
-			$ar->work_date = $workDate;
-			$ar->record_time = date("YmdHis");
-			$ar->save();
+		$textArray = array();
+		foreach($datas as $data){
+			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
 		}
+
+		$text = join(" OR ", $textArray);
+
+		return $text;
 	}
 }

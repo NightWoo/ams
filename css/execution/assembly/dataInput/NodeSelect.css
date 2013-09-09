@@ -263,6 +263,22 @@
     width: 100px;
 }
 
+.frontBumper {
+	position:relative;
+	left: 100px;
+    top: -915px;
+    width: 160px;
+    font-size: 14px;
+}
+
+.rearBumper {
+    position: relative;
+	font-size: 14px;
+    left: 220px;
+    top: -935px;
+    width: 160px;
+}
+
 
 div.thumbnail:hover, div.thumbnail:focus {
     border-color: #0088CC;
