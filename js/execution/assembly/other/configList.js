@@ -608,4 +608,33 @@ $(document).ready(function() {
     	}
 	});
 
+	//零部件的自动补全
+	$("#editReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val()}, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#editReplacementCode").html("");
+			$("#editReplacementCode").html(fillComponentCode(item));
+			$("#editReplacementCode>option:first-child").select();
+			return item;			
+    	}
+	});
+	
+	$("#newReplacementName").typeahead({
+	    source: function (input, process) {
+	        $.get(GET_COMPONENT_NAME_LIST, {"component":input, "series":$("#carSeries").val() }, function (data) {
+	        	return process(data.data);
+	        },'json');
+	    },
+	    updater:function (item) {
+			$("#newReplacementCode").html("");
+			$("#newReplacementCode").html(fillComponentCode(item));
+			$("#newReplacementCode>option:first-child").select();
+			return item;			
+    	}
+	});
+
 });

@@ -89,6 +89,7 @@
 								<span class="add-on">换件人</span>
 								<select id="handlerSelect" class="input-medium">
 									<option value=""></option>
+									<option value="苏福山">苏福山</option>
 								</select>
 							</div>
 							<table id="componentsTable" class="table">
