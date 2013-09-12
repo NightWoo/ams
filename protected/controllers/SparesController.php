@@ -113,4 +113,25 @@ class SparesController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
+
+	public function actionGetHandlerTeams () {
+		try {
+			$seeker = new SparesSeeker();
+			$teams = $seeker->getHandlerTeams();
+			$this->renderJsonBms(true, 'OK', $teams);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionGetHandlers () {
+		$team = $this->validateStringVal("team", "");
+		try {
+			$seeker = new SparesSeeker();
+			$handlers = $seeker->getHandlers($team);
+			$this->renderJsonBms(true, 'OK', $handlers);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
 }

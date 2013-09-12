@@ -635,7 +635,7 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			if($car->car->warehouse_id > 0 && $car->car->warehouse_id <= 1000){
+			if($car->car->warehouse_id > 0 && $car->car->warehouse_id < 1000){
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}

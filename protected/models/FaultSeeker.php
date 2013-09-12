@@ -294,7 +294,7 @@ class FaultSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-		$sql = "SELECT car_id, vin, series, pass_time as create_time, '-' as modify_time, node_id,node_trace.user_id as updator, '-' as component_name, '-' as fault_mode, '合格' as fault_status FROM node_trace,car $condition $limit";
+		$sql = "SELECT car_id, vin, series, pass_time as create_time, '-' as modify_time, node_id,node_trace.user_id as updator, '-' as component_name, '-' as fault_mode, '合格' as fault_status, '-' as duty_department, assembly_line as `line`, '' as checker, '' as sub_checker FROM node_trace,car $condition $limit";
         $traces = Yii::app()->db->createCommand($sql)->queryAll();
 
 
@@ -1243,6 +1243,7 @@ class FaultSeeker
 		$list['paint'] = '涂装';
 		$list['welding'] = '焊装';
 		$list[''] = '-';
+		$list['0'] = '-';
 
 		return $list;
 	}

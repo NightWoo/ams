@@ -26,7 +26,7 @@ $(document).ready(function () {
 			$("#selectItem").show();
 		} else {
 			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").show();
-			$("#selectItem").hide();
+			$("#selectItem").val("").hide();
 		}
 	});
 	function currentDate8 (argument) {

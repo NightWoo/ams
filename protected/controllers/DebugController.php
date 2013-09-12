@@ -15,10 +15,9 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
-			list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
-			$LC0TypeColorText = $this->getLC0TypeColorText();
-			$ret = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
+			$date = "2013-02-28";
+			$nextDay = strtotime("+1 day", strtotime($date));
+			$ret = date("Y-m-d", $nextDay) . " 08:00:00";
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);

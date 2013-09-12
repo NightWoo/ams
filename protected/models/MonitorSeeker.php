@@ -523,15 +523,17 @@ class MonitorSeeker
 
 		//    $lineRunTime += $lrET - $lrST;
 		//}
-
 		$lineRunTime = strtotime($etime) - strtotime($stime);	
-		$linePauses = LinePauseAR::model()->findAll("pause_time > ? AND pause_type=?" , array($stime, '计划停线'));
+		$linePauses = LinePauseAR::model()->findAll("pause_time>? AND pause_time<=? AND pause_type=?" , array($stime, $etime, '计划停线'));
+		$now = time();
 		$planPauseTime = 0;
 		foreach($linePauses as $linePause) {
-			if($linePause->status == 1) {
-				$planPauseTime += (time() - strtotime($linePause->pause_time));
-			} else {
-				$planPauseTime += (strtotime($linePause->recover_time) - strtotime($linePause->pause_time));
+			$tRecover = strtotime($linePause->recover);
+			$tPause = strtotime($linePause->pause);
+			if($linePause->status == 1 || ($now > $tPause && $now < $tRecover)) {
+				$planPauseTime += ($now - $tPause);
+			} else if($now > $tRecover) {
+				$planPauseTime += ($tRecover - $tPause);
 			}
 		}
 

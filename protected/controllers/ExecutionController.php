@@ -623,7 +623,7 @@ class ExecutionController extends BmsBaseController
             
 			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
-			if($car->car->warehouse_id == 0 || $car->car->status != '成品库' || $car->car->warehouse_id <=1000){
+			if($car->car->warehouse_id == 0 || $car->car->status != '成品库' || $car->car->warehouse_id <1000){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
 			

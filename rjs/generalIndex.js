@@ -1,12 +1,8 @@
 require.config({
-	"baseUrl": "/bms/rjs/lib",
+	// "baseUrl": "/bms/rjs/lib",
 	"paths":{
-		"jquery": "./jquery-2.0.3.min",
-		"bootstrap": "./bootstrap.min",
-		"head": "../head",
-		"service": "../service",
-		"common": "../common",
-		"dateTimeUtil": "../dateTimeUtil"
+		"jquery": "lib/jquery-2.0.3.min",
+		"bootstrap": "lib/bootstrap.min"
 	},
 	"shim": {
 		"bootstrap": ["jquery"]

@@ -114,6 +114,9 @@ class Warehouse
 		if(empty($order)){
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
+			if($order->count == $order->amount) {
+				throw new Exception('此订单出库数量已满，无法出库');
+			}
 			$order->saveCounters(array('count'=>1));
 			// $order->count += 1;
 			// $order->save();

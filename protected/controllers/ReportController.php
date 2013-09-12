@@ -31,8 +31,7 @@ class ReportController extends BmsBaseController
 	}
 
     public function actionQuerySimpleDaily () {
-        // $date = DateUtil::getLastDate();
-        $date = "2013-08-13";
+        $date = DateUtil::getLastDate();
         try {
             $seeker = new ReportSeeker();
             $manufactureDaily = $seeker->queryManufactureSimple($date);

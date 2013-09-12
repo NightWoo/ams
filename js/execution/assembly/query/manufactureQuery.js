@@ -645,6 +645,7 @@ $(document).ready(function () {
 					// mQuery.pie.updatePausePieTable(type);
 					mQuery.pauseAnalysis.pauseAjaxData = response.data;
 					mQuery.pauseAnalysis.drawAnalysis();
+					mQuery.pauseAnalysis.updatePauseAnalysisTable();
 				} else {
 					alert(response.message);
 				}
@@ -1344,7 +1345,17 @@ $(document).ready(function () {
 		},
 
 		updatePauseAnalysisTable: function() {
+			trName = $("<tr />").html("<td>责任</td>");
+			trHowlong = $("<tr />").html("<td>时长(分)</td>");
+			trPercentage = $("<tr />").html("<td>百分率</td>");
 
+			$.each(this.pauseAjaxData.detail.dutyDepartment, function (index, value) {
+				$("<td />").html(value.name).appendTo(trName);
+				$("<td />").html((value.howlong / 60).toFixed(1)).appendTo(trHowlong);
+				$("<td />").html(value.percentage).appendTo(trPercentage);
+			})
+
+			$("#tablePauseAnalysis>tbody").append(trName).append(trHowlong).append(trPercentage);
 		}
 	}
 

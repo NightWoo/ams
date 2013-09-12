@@ -1,19 +1,16 @@
 require.config({
-	// "baseUrl": "/bms/rjs/lib",
 	"paths":{
 		"jquery": "lib/jquery-2.0.3.min",
 		"bootstrap": "lib/bootstrap.min",
-		"head": "head",
-		"service": "service",
-		"common": "common",
-		"component": "component"
+		"jsrender": "lib/jsrender.min"
 	},
 	"shim": {
-		"bootstrap": ["jquery"]
+		"bootstrap": ["jquery"],
+		"jsrender": ["jquery"]
 	}
 })
 
-require(["head","service","common","component","jquery","bootstrap"], function (head,service,common,component,$) {
+require(["head","service","common","component","jquery","bootstrap","jsrender"], function (head,service,common,component,$) {
 	head.doInit();
 	initPage();
 
@@ -28,6 +25,15 @@ require(["head","service","common","component","jquery","bootstrap"], function (
 
 	$("#validateVinBtn").click(function () {
 		goValidate();
+	})
+
+	$("#teamSelect").change(function () {
+		getHandlers($("#teamSelect").val());
+		if($(this).val() == ""){
+			$("#handlerSelect").attr("disabled", "disabled");
+		} else {
+			$("#handlerSelect").removeAttr("disabled");
+		}
 	})
 
 	$("#reset").click(function () {
@@ -48,6 +54,10 @@ require(["head","service","common","component","jquery","bootstrap"], function (
 	})
 
 	$("#btnSubmit").click(function () {
+		if($("#handlerSelect").val() == "") {
+			alert("换件人不可为空");
+			return false;
+		}
 		ajaxSubmit();
 	})
 
@@ -228,7 +238,7 @@ require(["head","service","common","component","jquery","bootstrap"], function (
 
 	function ajaxSubmit () {
 		repares = packComponent();
-		console.log(repares);
+		// console.log(repares);
 		//数据包装完全包裹成功才submit
 		if(repares) {
 			$.ajax({
@@ -281,6 +291,7 @@ require(["head","service","common","component","jquery","bootstrap"], function (
 		$("#leftNodeSelectLi").addClass("active");
 		resetPage();
 		$("#messageAlert").hide();
+		getHandlerTeams();
 	}
 
 	function resetPage () {
@@ -455,4 +466,43 @@ require(["head","service","common","component","jquery","bootstrap"], function (
 		$("#componentsTable>tbody").html("");
 	}
 
+	function getHandlerTeams () {
+		$.ajax({
+			url: service.GET_HANDLER_TEAMS,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplTeamSelect").render(response.data);
+					// console.log(options);
+					$("#teamSelect").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function getHandlers (team) {
+		$("#handlerSelect").html("<option value=''>换件人</option>");
+		$.ajax({
+			url: service.GET_HANDLERS,
+			dataType: "json",
+			data: {
+				"team": team
+			},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplHandlerSelect").render(response.data);
+					$("#handlerSelect").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
 });

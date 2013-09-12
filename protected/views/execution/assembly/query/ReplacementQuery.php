@@ -21,6 +21,9 @@
         #tableDetail {
             font-size: 12px;
         }
+        #tableCostTrend .alignRight {
+            text-align: right;
+        }
         </style>		
         <script data-main="/bms/rjs/replacementQuery.js" src="/bms/rjs/lib/require.js"></script>
 	</head>
@@ -139,10 +142,22 @@
                     <div class="tab-pane" id="tabCostDuty">
                         <div id="costDutyPlatoContainer" style="min-width: 400px; height: 400px; margin: 0 auto">
                         </div>
-                        <table id="tablecostDutyPlato" class="table table-condensed table-bordered">
+                        <table id="tableCostDutyPlato" class="table table-condensed table-bordered">
                             <thead />
                             <tbody />
                         </table>
+                        <script id="tmplCostDutyPlatoName" type="text/x-jsrander">
+                            <td>{{:name}}</td>
+                        </script>
+                        <script id="tmplCostDutyPlatoCost" type="text/x-jsrander">
+                            <td>{{:sum}}</td>
+                        </script>
+                        <script id="tmplCostDutyPlatoUnitCost" type="text/x-jsrander">
+                            <td>{{:unitCost}}</td>
+                        </script>
+                        <script id="tmplCostDutyPlatoPercentage" type="text/x-jsrander">
+                            <td>{{:percentage}}</td>
+                        </script>
                     </div>
                 </div>
             </div><!-- bodyright -->

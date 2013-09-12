@@ -171,6 +171,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 				if(response.success) {
 					costDuty.ajaxData = response.data;
 					costDuty.drawCharts();
+					costDuty.updateCostDutyTable();
 				} else {
 					alert(response.message);
 				}
@@ -204,7 +205,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
             },
             yAxis: {
                 title: {
-                    text: '金额(元)'
+                    text: '单车成本'
                 },
                 labels: {
                     formatter: function() {
@@ -224,10 +225,10 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
                 	$.each(this.points, function(i, point) {
                 		value = point.y === null ? 0:point.y;
                     	ss += '<tr><td style="text-align: right; color: '+ point.series.color +'">'+ point.series.name +': </td>' +
-            					'<td style="text-align: right;color: '+ point.series.color +'"><b>'+ value +'元</b></td></tr>';
+            					'<td style="text-align: right;color: '+ point.series.color +'">￥<b>'+ value +'</b></td></tr>';
             			total += value;
                 	});
-                	s += '<tr><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;"><b>'+ total +'元</b></td></tr>';
+                	s += '<tr><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;"><b>总计:</b></td><td style="text-align: right;border-bottom-style:solid;border-bottom-width: 1px;">￥<b>'+ total +'</b></td></tr>';
                 	s += ss;
                 	s += '</table>';
                 	return s;
@@ -279,22 +280,22 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 	        totalTotal = 0;
 			$.each(carSeries, function (index, series) {
 	            $("<td />").html(series).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
-	            $("<td />").html(total[series]).appendTo($("#tableCostTrend tr:eq(" + (index*1+1) + ")"));
-	            totalTotal += total[series];
+	            $("<td />").addClass("alignRight").html(total[series]).appendTo($("#tableCostTrend tr:eq(" + (index*1+1) + ")"));
+	            totalTotal += parseFloat(total[series]);
 	        });
 
 	        var totalTr =  $("<tr />").appendTo($("#tableCostTrend tbody"));
 	        $("<td />").html('总计').appendTo(totalTr);
-	        $("<td />").html(totalTotal).appendTo(totalTr);
+	        $("<td />").addClass("alignRight").html(totalTotal).appendTo(totalTr);
 
 			$.each(detail, function (index,value) {
 				$("<td />").html(value.time).appendTo(thTr);
 				detailTotal = 0;
 				$.each(carSeries, function (index,series) {
-					$("<td />").html(value[series]).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
-					detailTotal += parseInt(value[series]);
+					$("<td />").addClass("alignRight").html(value[series]).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
+					detailTotal += parseFloat(value[series]);
 				});
-				$("<td />").html(detailTotal).appendTo(totalTr);
+				$("<td />").addClass("alignRight").html(detailTotal).appendTo(totalTr);
 			});
 
 	    },
@@ -337,7 +338,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
                     }
                 },
                 title: {
-                    text: '金额(元)'
+                    text: '单车成本'
                 },
                 plotLines: [{
                     value: 0,
@@ -349,7 +350,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y;
+                        this.x +': ￥'+ this.y + "";
                 }
             },
             legend: {
@@ -389,14 +390,14 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 	        $("<th />").html("合计").appendTo(thTr);
 			$.each(carSeries, function (index, series) {
 	            $("<td />").html(series).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
-	            $("<td />").html(total[series]).appendTo($("#tableCostTrend tr:eq(" + (index*1+1) + ")"));
+	            $("<td />").addClass("alignRight").html(total[series]).appendTo($("#tableCostTrend tr:eq(" + (index*1+1) + ")"));
 	        });
 
 			$.each(detail, function (index,value) {
 				$("<td />").html(value.time).appendTo(thTr);
 
 				$.each(carSeries, function (index,series) {
-					$("<td />").html(value[series]).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
+					$("<td />").addClass("alignRight").html(value[series]).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
 				});
 			});
 		},
@@ -425,15 +426,16 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 			tooltip: {
 				formatter: function() {
                     var s;
+                    console.log(this.series.name);
                     if (this.point.name) { // the pie chart
                         s = ''+
                             this.point.name +': '+ (this.y * 100).toFixed(1) + '%';
-                    } else if(this.y > 0 && this.y < 1){	//percentage
+                    } else if(this.series.name == "百分率" || this.series.name == "累计百分率"){	//percentage
                     	s =	''+
-                    		this.x  +': '+ (this.y * 100).toFixed(1) + '%';
+                    		this.x  +': '+ (this.y * 100).toFixed(0) + '%';
                     }else{		//column
                         s = ''+
-                            this.x  +': '+ this.y +'元';
+                            this.x  +': ￥'+ this.y;
                     }
                     return s;
                 }
@@ -520,7 +522,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
                     	//y: -30,
             			color: Highcharts.getOptions().colors[4],
             			formatter: function() {
-            				return this.y + "元";
+            				return "￥" +this.y;
             			}
 					}
 				}, {
@@ -596,7 +598,13 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 		},
 
 		updateCostDutyTable: function() {
+			data = this.ajaxData.detail.dutyDepartment;
+			trName = $("<tr />").append("<td>责任</td>").append($.templates("#tmplCostDutyPlatoName").render(data));
+			trCost = $("<tr />").append("<td>金额</td>").append($.templates("#tmplCostDutyPlatoCost").render(data));
+			trUnitCost = $("<tr />").append("<td>单车成本</td>").append($.templates("#tmplCostDutyPlatoUnitCost").render(data));
+			trPercentate = $("<tr />").append("<td>百分率</td>").append($.templates("#tmplCostDutyPlatoPercentage").render(data));
 
+			$("#tableCostDutyPlato>tbody").append(trName).append(trCost).append(trUnitCost).append(trPercentate);
 		}
 	}
 })

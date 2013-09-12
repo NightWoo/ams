@@ -483,7 +483,7 @@ class OrderSeeker
 					$boardRelease = $data['max_relaese'];
 				}
 
-				//计算成品库周期，出库完成时间-激活时间
+				//计算备车周期，出库完成时间-激活时间
 				$data['warehousePeriod'] = strtotime($boardOutFinish) - strtotime($boardActivate);
 				$warehousePeriod += $data['warehousePeriod'] ;
 				//计算储运周期，车道释放时间-完成时间
@@ -502,11 +502,11 @@ class OrderSeeker
 			}
 
 			$dataSeriesX[] = $queryTime['point'];
-			$dataSeriesY['成品库周期'][] = $warehousePeriodAvg;
+			$dataSeriesY['备车周期'][] = $warehousePeriodAvg;
 			$dataSeriesY['储运周期'][] = $transportPeriodAvg;
 			$dataSeriesY['totalPeriod'][] = $totalPeriodAvg;
 
-			$temp['成品库周期'] = $warehousePeriodAvg;
+			$temp['备车周期'] = $warehousePeriodAvg;
 			$temp['储运周期'] = $transportPeriodAvg;
 			$temp['totalPeriod'] = $totalPeriodAvg;
 			$detail[] = array_merge(array('time' => $queryTime['point']), $temp);
@@ -528,7 +528,7 @@ class OrderSeeker
 			}
 
 		return array(
-			'periodSeries' => array('储运周期','成品库周期'),
+			'periodSeries' => array('储运周期','备车周期'),
 			'detail' => $detail,
 			'total' => $retTotal,
 			'series' => array(

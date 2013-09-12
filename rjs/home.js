@@ -43,13 +43,14 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 		$("#shortcutContainer").css("max-height", $(window).height() - 80 + "px");
 		getEfficiency();
 		getQuality();
+		getCost();
 	}
 
 	function getEfficiency () {
 		$.ajax({
 			type: "get",//使用get方法访问后台
 			dataType: "json",//返回json格式的数据
-			url: service.SHOW_HOME_INFO,//ref:  /bms/js/service.js
+			url: service.SHOW_HOME_EFFICIENCY_INFO,//ref:  /bms/js/service.js
 			data: {"section" : $("#section").val()},
 			success:function (response) {
 				if (response.success){
@@ -77,6 +78,25 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 				$("#vq2").html("VQ2：" + response.data.DPU.VQ2 + " / " + response.data.DRR.VQ2);
 				$("#vq3").html("VQ3：" + response.data.DPU.VQ3 + " / " + response.data.DRR.VQ3);
 				$("#pauseTime").html(response.data.pause_time.total);
+			}
+		})
+	}
+
+	function getCost () {
+		$.ajax({
+			url: service.SHOW_HOME_COST_INFO,
+			type: "get",
+			dataType: "json",
+			data:{},
+			success: function (response) {
+				if(response.success) {
+					$("#uintCost").html(response.data['total'])
+					$("#costF0").html("F0：" + response.data['F0']);
+					$("#costM6").html("M6：" + response.data['M6']);
+					$("#cost6B").html("思锐：" + response.data['6B']);
+				} else {
+					alert(response.message);
+				}
 			}
 		})
 	}

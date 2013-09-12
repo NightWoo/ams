@@ -95,8 +95,16 @@ class SparesSeeker
 				$curCondition = empty($condition) ? $curCondition : $curCondition . " AND " . $condition;
 				$sql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $curCondition";
 				$sum = Yii::app()->db->createCommand($sql)->queryScalar();
-				$temp[self::$SERIES_NAME[$series]] = $sum;
-				$dataSeriesY[self::$SERIES_NAME[$series]][] = empty($sum) ? null : round($sum,2);
+
+				$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$st' AND assembly_time<'$et' AND series='$series'";
+				if(!empty($line)) $carSql .= "AND assembly_line='$line'";
+				$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
+
+				$temp[self::$SERIES_NAME[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sum/$cars, 2)) ;
+				$dataSeriesY[self::$SERIES_NAME[$series]][] = empty($cars) ? null : round($sum/$cars, 2);;
+				// $temp[self::$SERIES_NAME[$series]] = $sum;
+				// $dataSeriesY[self::$SERIES_NAME[$series]][] = empty($sum) ? null : round($sum,2);
+
 			}
 			$ret[] = array_merge(array('time'=>$queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
@@ -107,7 +115,7 @@ class SparesSeeker
 			$totalCondition = empty($condition) ? $totalCondition : $totalCondition . " AND " . $condition;
 			$totalSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $totalCondition";
 			$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
-			$retTotal[self::$SERIES_NAME[$series]] = round($sumTotal, 2);
+			$retTotal[self::$SERIES_NAME[$series]] = sprintf("%.2f", round($sumTotal, 2));
 			$carSeries[] = self::$SERIES_NAME[$series];
 		}
 
@@ -125,26 +133,34 @@ class SparesSeeker
 		}
 
 		$conditions = array("replace_time>='$stime'","replace_time<'$etime'");
+		$carConditions = array("assembly_time>='$stime'", "assembly_time<'$etime'");
 		if(!empty($series)) {
 			$arraySeries = $this->parseSeries($series);
 			foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
 	        }
-	        $conditions[] = "(" . join(' OR ', $cTmp) . ")";
+	        $seriesText = "(" . join(' OR ', $cTmp) . ")";
+	        $conditions[] = $seriesText;
+	        $carConditions[] = $seriesText;
 		}
 		if(!empty($line)) {
 			$conditions[] = "assembly_line='$line'";
+			$carConditions[] = "assembly_line='$line'";
 		}
 		if(!empty($dutyId)) {
 			$conditions[] = "duty_department_id=$dutyId";
 		}
-		$condition = join(" AND ", $conditions);
 
+		$condition = join(" AND ", $conditions);
 		$dataSql = "SELECT duty_department_name as duty,unit_price,duty_area,treatment FROM view_spare_replacement WHERE $condition";
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
 		$totalSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $condition";
 		$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
+
+		$carCondition = join(" AND ", $carConditions);
+		$carsSql = "SELECT COUNT(*) FROM car WHERE $carCondition";
+		$cars = Yii::app()->db->createCommand($carsSql)->queryScalar();
 
 		$dutyChartDataTmp = array();
 		$areaChartData = array();
@@ -153,15 +169,15 @@ class SparesSeeker
 			if(empty($dutyChartDataTmp[$data['duty']])) {
 				$dutyChartDataTmp[$data['duty']] = array('name'=>$data['duty'], 'sum'=>0);
 			}
-			if(empty($areaChartData[$data['duty']])) {
-				$areaChartData[$data['duty']] = array('name'=>$data['duty_area'], 'sum'=>0);
+			if(empty($areaChartData[$data['duty_area']])) {
+				$areaChartData[$data['duty_area']] = array('name'=>$data['duty_area'], 'sum'=>0);
 			}
 			// if(empty($treatmentData[$data['duty']])) {
 			// 	$treatmentData[$data['duty']] = array('name'=>$data['treatment'], 'sum'=>0);
 			// }
 
 			$dutyChartDataTmp[$data['duty']]['sum'] += $data['unit_price'];
-			$areaChartData[$data['duty']]['sum'] += $data['unit_price'];
+			$areaChartData[$data['duty_area']]['sum'] += $data['unit_price'];
 			// $treatmentData[$data['duty']]['sum'] += $data['unit_price'];
 		}
 
@@ -180,6 +196,7 @@ class SparesSeeker
 			$dSeriesP[] = $percentage;
 			$dSeriesX[] = $data['name'];
 			$data['percentage'] = empty($percentage) ? 0 : $percentage * 100 ."%";
+			$data['unitCost'] = empty($cars) ? 0 : sprintf("%.2f", round($data['sum'] / intval($cars), 2));
 			$detail['dutyDepartment'][] = $data;
 		}
 
@@ -201,6 +218,37 @@ class SparesSeeker
 							'cSeries' => $cSeries,
 						   ),
 			   );
+	}
+
+	public function queryUnitCost ($stime, $etime, $series='', $line='') {
+		$seriesArray = $this->parseSeries($series);
+		$costSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE replace_time>='$stime' AND replace_time<'$etime'";
+		$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
+		if(!empty($series)) {
+			$costSql .= " AND series='$series'";
+			$carSql .= " AND series='$series'";
+		}
+		if(!empty($line)) {
+			$costSql .= "AND assembly_line='$line'";
+			$carSql .= "AND assembly_line='$line'";
+		}
+		$cost = Yii::app()->db->createCommand($costSql)->queryScalar();
+		$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
+
+		$unitCost = empty($cars) ? 0 : round($cost/$cars, 2);
+		return $unitCost;
+	}
+
+	public function getHandlerTeams () {
+		$sql = "SELECT DISTINCT team FROM replacement_handler";
+		$teams = Yii::app()->db->createCommand($sql)->queryAll();
+		return $teams;
+	}
+
+	public function getHandlers ($team) {
+		$sql = "SELECT team,handler_name FROM replacement_handler WHERE team='$team'";
+		$names = Yii::app()->db->createCommand($sql)->queryAll();
+		return $names;
 	}
 
 	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  

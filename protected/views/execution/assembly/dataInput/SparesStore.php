@@ -85,13 +85,21 @@
 								<span class="add-on">责任</span>
 								<select id="dutySelect" class="input-medium"></select>
 							</div>
-							<div class="input-prepend">
+							<div class="input-prepend input-append">
 								<span class="add-on">换件人</span>
-								<select id="handlerSelect" class="input-medium">
+								<select id="teamSelect" class="input-small">
+									<option value="">班组</option>
+								</select>
+								<select id="handlerSelect" class="input-medium" style="border-radius: 0 4px 4px 0; border-left:none;" disabled="disabled">
 									<option value=""></option>
-									<option value="苏福山">苏福山</option>
 								</select>
 							</div>
+							<script id="tmplTeamSelect" type="text/x-jsrander">
+								<option value='{{:team}}'>{{:team}}</option>
+							</script>
+							<script id="tmplHandlerSelect" type="text/x-jsrander">
+								<option value='{{:handler_name}}'>{{:handler_name}}</option>
+							</script>
 							<table id="componentsTable" class="table">
 								<thead>
 									<tr>

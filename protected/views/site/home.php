@@ -84,14 +84,24 @@
                 <li class="span3">
                   <div id="fieldPannel" class="thumbnail pannel" style="background-color:#F09609;">
                     <div>
-                        <h4><i class="icon-check"></i>&nbsp;现场</h4>
+                        <h4><i class="icon-map-marker"></i>&nbsp;现场</h4>
                     </div>
                   </div>
                 </li>
                 <li class="span3">
                   <div id="costPannel" class="thumbnail pannel" style="background-color:#E671B8;">
                     <div>
-                        <h4><i class="icon-money"></i>&nbsp;成本</h4>
+                        <div>
+                            <div class="mainData pull-right">
+                              <span>￥</span><span id="uintCost">-</span>
+                            </div>
+                            <h4><i class="icon-money"></i>&nbsp;成本</h4>
+                        </div>
+                        <ul>
+                          <li id="costF0"></li>
+                          <li id="costM6"></li>
+                          <li id="cost6B"></li>
+                        </ul>
                     </div>
                   </div>
                 </li>
@@ -116,10 +126,10 @@
 				<legend>捷径</legend>
 				<div id="shortcutContainer">
             <ul id="shortcutUl" class="thumbnails">
-                <li class="span2" href="/bms/execution/index">
+                <li class="span2" href="/bms/execution/query?type=ManufactureQuery">
                   <div class="thumbnail shortcut">
                     <div>
-                        <h5>数据录入</h5>
+                        <h5>生产查询</h5>
                     </div>
                   </div>
                 </li>
