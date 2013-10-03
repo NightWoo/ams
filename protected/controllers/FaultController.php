@@ -149,7 +149,7 @@ class FaultController extends BmsBaseController
 
             $node = Node::createByName($nodeName);
             $car->detectStatus($nodeName);
-
+            $car->vq1finish();
             $this->renderJsonBms(true, 'OK');
             $transaction->commit();
         } catch(Exception $e) {
@@ -218,7 +218,7 @@ class FaultController extends BmsBaseController
             $car = Car::create($vin);
             $node = Node::createByName("VQ2");
             $car->detectStatus("VQ2");
-
+            $car->vq2finish();
             $transaction->commit();
             $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {

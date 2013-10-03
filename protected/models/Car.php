@@ -128,6 +128,43 @@ class Car
 		}
 	}
 
+	public function vq1Finish () {
+		if($this->car->finish_time > '0000-00-00 00:00:00' && $this->car->vq2_finish_time == '0000-00-00 00:00:00') {
+			switch($this->car->assembly_line){
+				case  "I" :
+					$tablePrefix = "VQ1_STATIC_TEST_";
+					break;
+				case "II" :
+					$tablePrefix = "VQ1_STATIC_TEST_2_";
+					break;
+				default :
+					$tablePrefix = "VQ1_STATIC_TEST_";
+			}
+
+			$fault = Fault::createSeeker();
+            $exist = $fault->exist($this, '未修复', array($tablePrefix));
+
+            if(empty($exist)) {
+				$this->car->vq1_finish_time = date('YmdHis');
+				$this->car->save();
+			}
+		}
+	}
+
+	public function vq2Finish () {
+		if($this->car->vq1_finish_time > '0000-00-00 00:00:00' && $this->car->warehouse_time == '0000-00-00 00:00:00') {
+			$fault = Fault::createSeeker();
+            $exist = $fault->exist($this, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
+            if(empty($exist)) {
+            	if($this->car->vq1_finish_time ==  '0000-00-00 00:00:00') {
+					$this->car->vq1_finish_time = date('YmdHis');
+            	}
+				$this->car->vq2_finish_time = date('YmdHis');
+				$this->car->save();
+            }
+		}
+	}
+
 	public function warehouseTime () {
 		if($this->car->warehouse_time == '0000-00-00 00:00:00') {
 			$this->car->warehouse_time = date('YmdHis');
@@ -1181,6 +1218,7 @@ class Car
             $this->car->warehouse_id = $rowWDI->id;
             $this->car->status = 'WDI';
             $this->car->area = 'WDI';
+            $this->car->standby_time = date("YmdHis");
             $this->car->save();
 
             $data['area'] = $rowWDI->area;
@@ -1227,6 +1265,12 @@ class Car
 			$this->car->warehouse_id = 0;
 			$this->car->area = '';
 			$this->car->warehouse_time = "0000-00-00 00:00:00";
+			if($goTo == "VQ1") {
+				$this->car->vq1_finish_time = "0000-00-00 00:00:00";
+				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
+			} else if($goTo == "VQ2") {
+				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
+			}
 		}
 
 		$onlyOnce=false;
@@ -1290,6 +1334,7 @@ class Car
 			$this->car->distributor_name='';
 			$this->car->distributor_code='';
 			$this->car->distribute_time = '0000-00-00 00:00:00';
+			$this->car->standby_time = '0000-00-00 00:00:00';
 			$this->car->save();
 		}
 	}

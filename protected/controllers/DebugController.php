@@ -15,13 +15,24 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			$date = "2013-02-28";
-			$nextDay = strtotime("+1 day", strtotime($date));
-			$ret = date("Y-m-d", $nextDay) . " 08:00:00";
+			$ret = $this->periodInterval(129);
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
+	}
+
+	private function periodInterval ($span,$intercept=4) {
+		$segments = ceil($span/$intercept);
+		$periodInterval = array();
+		for($i=0;$i<$segments;$i++) {
+			$low = $i * $intercept;
+			$high = ($i + 1) * $intercept;
+			$text = $low . "-" . $high . "H";
+			$periodInterval[$text] = array('low'=>$low, 'high'=>$high);
+		}
+
+		return $periodInterval;
 	}
 
 	private function getLC0Type () {

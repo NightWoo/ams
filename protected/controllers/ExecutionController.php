@@ -223,10 +223,10 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus($enterNode->name);
             $transaction->commit();
 
-			if($nodeName == 'T32' || $nodeName == 'T32_2'){
+            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
+            if($nodeName == 'T32' || $nodeName == 'T32_2'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
             }
-            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -248,10 +248,8 @@ class ExecutionController extends BmsBaseController
             $data = $car->generateCheckTraceData();
             $transaction->commit();
 
-            // if($nodeName == 'F20'){
-                $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
-            // }
             $this->renderJsonBms(true, 'OK', $data);
+            $vinMessage = $car->throwVinAssembly($car->vin, 'I线_F20');
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -309,12 +307,12 @@ class ExecutionController extends BmsBaseController
 
             $car->detectStatus($nodeName);
             $car->finish();
+            $car->vq1finish();
             $transaction->commit();
 
             $car->throwTestlineCarInfo();
-			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
             $this->renderJsonBms(true, 'OK', null);
-
+			$vinMessage = $car->throwVinAssembly($car->vin, '总装下线');
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -376,15 +374,15 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus($nodeName);
             $transaction->commit();
 
+
+            $this->renderJsonBms(true, 'OK', null);
 			$testlineTrace = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($car->car->id,13));
             if(!empty($testlineTrace)){
                 $testlineTime = $testlineTrace->pass_time;
                 $shift='总装1线A班';
                 $vinMessage = $car->throwVinAssembly($car->vin, '检测线', $shift, $testlineTime);
             }
-
 			$vinMessage = $car->throwVinAssembly($car->vin, '路试');
-            $this->renderJsonBms(true, 'OK', null);
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -422,10 +420,11 @@ class ExecutionController extends BmsBaseController
             $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
             $car->detectStatus($nodeName);
+            $car->vq2finish();
             $transaction->commit();
 
-			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
             $this->renderJsonBms(true, 'OK', $vin);
+			$vinMessage = $car->throwVinAssembly($car->vin, '淋雨');
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -471,8 +470,8 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus($nodeName);
             $transaction->commit();
 
-			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
             $this->renderJsonBms(true, 'OK', $vin);
+			$vinMessage = $car->throwVinAssembly($car->vin, '面漆预检');
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -590,8 +589,8 @@ class ExecutionController extends BmsBaseController
             $host='10.23.86.172';
             $ret = $rpc->openGate($host);
             
-			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
             $this->renderJsonBms(true, $message, $data);
+			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
         } catch(Exception $e) {
             $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage());
@@ -720,8 +719,8 @@ class ExecutionController extends BmsBaseController
             $rpc = new RpcService();
             $host='10.23.86.3';
             $ret = $rpc->openGate($host);
-			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
             $this->renderJsonBms(true, $message, $data);
+			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
         } catch(Exception $e) {
             $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage());
@@ -1388,9 +1387,9 @@ class ExecutionController extends BmsBaseController
             $driverName = '樊后来';
             $inDate = $car->car->warehouse_time;
 
-            $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
 
             $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
+            $vinMessage = $car->throwVinStoreIn($car->vin, $row, $driverName, $inDate);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
@@ -1406,8 +1405,8 @@ class ExecutionController extends BmsBaseController
             $orderDetailId = $order->order_detail_id;
             $outDate = $car->car->distribute_time;
             
-            $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
             $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
+            $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }

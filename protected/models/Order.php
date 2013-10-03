@@ -327,9 +327,10 @@ class Order
 				
 				$matchedCar->order_id = $matchedOrder->id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
-				$matchedCar->warehouse_id = 1;		//WDI
+				$matchedCar->warehouse_id = 1;
 				$matchedCar->status = 'WDI';
 				$matchedCar->area = 'WDI';
+				$matchedCar->standby_time = date("YmdHis");
 				$matchedCar->save();
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);

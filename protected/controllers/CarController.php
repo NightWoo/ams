@@ -169,10 +169,10 @@ class CarController extends BmsBaseController
 			$car->leftNode('ROAD_TEST_FINISH');
 
             $fault = Fault::createSeeker();
-            $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
-            if(!empty($exist)) {
-                throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
-            }
+            // $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
+            // if(!empty($exist)) {
+            //     throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
+            // }
 			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ2路试还有未修复的故障');

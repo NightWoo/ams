@@ -396,11 +396,7 @@ $(document).ready(function () {
 					}
 
 					$('<td />').html(value.old_row).appendTo(tr);
-					if(value.series == "6B"){
-						$('<td />').html("思锐").appendTo(tr);
-					}{
-						$('<td />').html(value.series).appendTo(tr);
-					}
+					$('<td />').html(byd.SeriesName[value.series]).appendTo(tr);
 					$('<td />').html(value.type_config).appendTo(tr);
 					$('<td />').html(value.cold).appendTo(tr);
 					$('<td />').html(value.color).appendTo(tr);

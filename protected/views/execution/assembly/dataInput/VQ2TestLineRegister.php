@@ -19,15 +19,11 @@
 		?>
 		<div class="offhead">
 			<?php
-				require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
+				// require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
 			?>
 			<div id="bodyright" class="offset2"><!-- Main体 -->
-				<div ><ul class="breadcrumb"><!-- 面包屑 -->
-						<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-						<li><a href="#">总装</a><span class="divider">&gt;</span></li>
-						<li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-						<li class="active">检测线注册</li>                
-				</ul></div><!-- end 面包屑 -->
+				<legend>检测线注册
+	            </legend>
 				<div ><!-- 内容主体 -->
 					<form id="form" class="well form-search">
 						<label>VIN</label>

@@ -528,8 +528,8 @@ class MonitorSeeker
 		$now = time();
 		$planPauseTime = 0;
 		foreach($linePauses as $linePause) {
-			$tRecover = strtotime($linePause->recover);
-			$tPause = strtotime($linePause->pause);
+			$tRecover = strtotime($linePause->recover_time);
+			$tPause = strtotime($linePause->pause_time);
 			if($linePause->status == 1 || ($now > $tPause && $now < $tRecover)) {
 				$planPauseTime += ($now - $tPause);
 			} else if($now > $tRecover) {
