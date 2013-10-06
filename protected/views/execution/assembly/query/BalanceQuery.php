@@ -10,6 +10,7 @@
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/balanceQuery.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -53,9 +54,16 @@
                                     <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
                                 </td> -->
     							<td>
-    								<select name="" id="selectState" class="input-medium">
+                                    <select id="selectArea" class="input-small">
                                         <option value="assembly">总装</option>
-                                        <option value="WH">成品库</option>
+                                        <option value="pbs">PBS</option>
+                                        <option value="online">产线</option>
+                                        <option value="VQ">VQ周转</option>
+                                        <option value="warehouse">成品库</option>
+                                    </select>
+    								<select name="" id="selectState" class="input-small">
+                                        <option value="assembly">全部</option>
+                                        <!-- <option value="WH">成品库</option>
                                         <option value="WHin">成品库可备</option>
                                         <option value="recycle">周转车</option>
                                         <option value="VQ3">VQ3</option>
@@ -64,8 +72,11 @@
                                         <option value="VQ1">VQ1</option>
                                         <option value="onLine">I线</option>
                                         <option value="onLine-2">II线</option>
-                                        <option value="PBS">PBS</option>
+                                        <option value="PBS">PBS</option> -->
     								</select>
+                                    <script id="tmplSelectStateOption" type="text/x-jsrander">
+                                        <option value='{{:value}}'>{{:text}}</option>
+                                    </script>
     							</td>
                                 <td>
                                     <select name="" id="selectSeries" class="input-small">
@@ -89,7 +100,7 @@
                         <ul id="tabs" class="nav nav-pills">
                             <li id="carsDetail"><a href="#dataList" data-toggle="tab">结存明细</a></li>
                             <li><a href="#carsDistribute" data-toggle="tab">车辆分布</a></li>
-                            <li id="recyclePeriodLi"><a href="#recyclePeriod" data-toggle="tab">VQ周期</a></li>
+                            <li id="recyclePeriodLi"><a href="#recyclePeriod" data-toggle="tab">周期分布</a></li>
                             <!-- <li><a href="#balanceTrendLine" data-toggle="tab">区域趋势</a></li> -->
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
@@ -155,20 +166,14 @@
                         </div>
 
                         <div class="tab-pane" id="recyclePeriod">
-                            <div class="tableContainer span8 pull-left">
-                                <table id="tableRecyclePeriod" class="table table-condensed table-hover table-bordered">
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                                <div><p class="text-info">VQ周期(小时) = 当前时间 - 下线时间</p></div>
+                            <div class="chartContainer carsDistributeContainer">
+                                <div><p id="intervalInfo" class="text-warning"></p></div>
+                                <div id="periodContainer" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
                             </div>
-                            <div class="chartContainer carsDistributeContainer offset8">
-                                <div id="recycleDonutContainer" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
-                            </div>
+                            <table id="tableBalancePeriod" class="table table-condensed table-hover table-bordered">
+                                <thead />
+                                <tbody />
+                            </table>
                         </div>
 
                         <!-- <div class="tab-pane" id="balanceTrend">

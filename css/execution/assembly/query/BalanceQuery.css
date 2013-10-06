@@ -60,3 +60,7 @@
 #resultTable thead th{
 	vertical-align: middle;
 }
+
+#tableBalancePeriod thead tr:first-child > th:first-child{
+	min-width:40px;
+}

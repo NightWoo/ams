@@ -15,24 +15,27 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			$ret = $this->periodInterval(129);
+			$seeker = new BalanceSeeker();
+			$ret = $seeker->queryBalancePeriod ('onLine-all', '');
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
 
-	private function periodInterval ($span,$intercept=4) {
+	private function periodSegmentArray ($span=16,$intercept=8) {
 		$segments = ceil($span/$intercept);
-		$periodInterval = array();
+		$periodSegmentArray = array();
 		for($i=0;$i<$segments;$i++) {
 			$low = $i * $intercept;
 			$high = ($i + 1) * $intercept;
-			$text = $low . "-" . $high . "H";
-			$periodInterval[$text] = array('low'=>$low, 'high'=>$high);
+			$text = $low . "-" . $high;
+			$periodSegmentArray[$text] = array('low'=>$low, 'high'=>$high);
 		}
+		$lastText = ">". $span;
+		$periodSegmentArray[$lastText] = array('low'=>$span, 'high'=>0);
 
-		return $periodInterval;
+		return $periodSegmentArray;
 	}
 
 	private function getLC0Type () {
