@@ -10,9 +10,9 @@ $(document).ready(function(e) {
 	})
 	
 	$("#tableResult").live("click", function(e) {
+		var thisTr = $(e.target).closest("tr");
 		if($(e.target).html()==="编辑") {
 			var siblings = $(e.target).parent("td").siblings();
-			var thisTr = $(e.target).closest("tr");
 			$("#editDutyDepartment").val(siblings[3].innerHTML);
 			$("#editRemark").val(siblings[4].innerHTML);
 			$("#editModal").data("id", thisTr.data("id"));
@@ -22,6 +22,10 @@ $(document).ready(function(e) {
 			$("#standardName").html("");
 			
 			$("#editModal").modal("show");	
+		} else if($(e.target).html()==="删除") {
+			if(confirm("是否删除该停线记录？（注意该操作不可恢复！）")) {
+				ajaxDelete(thisTr.data("id"));
+			}
 		}
 	})
 	
@@ -103,8 +107,9 @@ $(document).ready(function(e) {
 						}else{
 							$("<td />").html(value.recover_time.substring(0,16)).appendTo(tr);
 						}
-						var editTd =$("<td />");
-						$("<button />").addClass("btn-link").html("编辑").appendTo(editTd);
+						var editTd = $("<td />").html(" ¦ ");
+						$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
+						$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
 						editTd.appendTo(tr);
 						
 						tr.data("id",value.id);
@@ -170,6 +175,27 @@ $(document).ready(function(e) {
 					ajaxQuery();
 					emptyEditModal();
 					$("#editModal").modal("hide");	
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function() {
+				alertError();
+			}
+		})
+	}
+
+	function ajaxDelete(pauseId) {
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: PAUSE_DELETE,
+			data: {
+				"id": pauseId,
+			},
+			success: function(response) {
+				if(response.success){
+					ajaxQuery();
 				} else {
 					alert(response.message);
 				}

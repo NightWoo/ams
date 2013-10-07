@@ -767,7 +767,8 @@ $(document).ready(function () {
             yAxis: {
                 min: 0,
                 title: {
-                    text: '数量（辆）'
+                    enabled: false,
+                    // text: '数量（辆）'
                 },
                 stackLabels: {
                     enabled: true,

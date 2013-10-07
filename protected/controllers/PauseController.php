@@ -211,7 +211,7 @@ class PauseController extends BmsBaseController
             $user = User::model()->findByPk($opUserId);
             if(!$user->admin) {
                 BmsLogger::warning($opUserId . " try to delete plan pause record @ " .$id);
-                throw new Exception ('不要做坏事，有记录的！！');
+                throw new Exception ('您的账号无权删除停线记录！！');
             }
 			$pause = PauseAR::model()->findByPk($id);
 			if(!empty($pause)){

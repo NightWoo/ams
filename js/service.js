@@ -264,6 +264,9 @@ var QUERY_SHIFT_RECORD = "/bms/shift/query";
 var SHIFT_RECORD_SAVE = "/bms/shift/save";
 var SHIFT_RECORD_DELETE = "/bms/shift/delete";
 
+var DEVICE_PARAMETER_QUERY = "/bms/deviceParameter/query";
+var DEVICE_PARAMETER_SAVE = "/bms/deviceParameter/save";
+
 //added by wujun
 //order maintain
 var GET_ORIGIANAL_ORDERS = "/bms/order/getOriginalOrders";

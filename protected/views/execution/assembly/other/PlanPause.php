@@ -43,6 +43,7 @@
    	   			<ul id="tabUl" class="nav nav-pills">
                     <li class="active"><a href="#tabPlanPause" data-toggle="tab">计划停线</a></li>
                     <li><a class="queryUse" href="#tabShiftMaintain" data-toggle="tab">班次维护</a></li>
+                    <li id="lineSpeedLi"><a class="" href="#tabLineSpeedMaintain" data-toggle="tab">线速维护</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tabPlanPause">
@@ -129,6 +130,26 @@
 
 							</tbody>
 						</table>
+                    </div>
+
+                    <div class="tab-pane" id="tabLineSpeedMaintain">
+                    	<form id="form" class="well form-search">
+							<table>
+								<tr>
+									<td>线速</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>
+										<input type="text" class="input-small" placeholder="线速(秒)..." id="lineSpeedText"/>
+									</td>
+									<td>
+										<!-- <input id="btnShiftQuery" type="button" class="btn btn-primary" value="查询"></input> -->
+										<input id="btnLineSpeedConfirm" type="button" class="btn btn-danger" value="修改"></input>
+									</td>
+								</tr>
+							</table>
+						</form>
                     </div>
                 </div>
 

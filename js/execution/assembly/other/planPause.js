@@ -110,6 +110,14 @@ $(document).ready(function(e) {
 	    selectOtherMonths: true,
 	});
 
+	$("#lineSpeedLi").click(function () {
+		ajaxQueryLineSpeed();
+	})
+
+	$("#btnLineSpeedConfirm").click(function () {
+		ajaxLineSpeedSave();
+	})
+
 
 	function initPage() {
 		$("#headEfficiencyLi").addClass("active");
@@ -354,6 +362,46 @@ $(document).ready(function(e) {
 			},
 			error: function(){
 				alertError();
+			}
+		})
+	}
+
+	function ajaxQueryLineSpeed () {
+		$.ajax({
+			url: DEVICE_PARAMETER_QUERY,
+			type: "get",
+			dataType: "json",
+			data: {
+				"parameterName" : "line_speed"
+			},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					$("#lineSpeedText").val(response.data.value);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function ajaxLineSpeedSave () {
+		$.ajax({
+			url: DEVICE_PARAMETER_SAVE,
+			type: "get",
+			dataType: "json",
+			data: {
+				"parameterName": "line_speed",
+				"parameterValue": $("#lineSpeedText").val()
+			},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					$("#lineSpeedText").val(response.data.value);
+					alert("修改成功！");
+				} else {
+					alert(response.message);
+				}
 			}
 		})
 	}

@@ -64,3 +64,17 @@
 #tableBalancePeriod thead tr:first-child > th:first-child{
 	min-width:40px;
 }
+
+#tabs {
+	margin-bottom: 5px;
+}
+
+#intervalInfo {
+	margin-bottom: 5px;
+	padding-left: 12px;
+	font-size: 12px;
+}
+
+#tableBalancePeriod {
+	font-size: 12px;
+}
