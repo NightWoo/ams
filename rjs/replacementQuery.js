@@ -171,7 +171,9 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 				if(response.success) {
 					costDuty.ajaxData = response.data;
 					costDuty.drawCharts();
-					costDuty.updateCostDutyTable();
+					if(response.data.detail.dutyDepartment){
+						costDuty.updateCostDutyTable();
+					}
 				} else {
 					alert(response.message);
 				}
@@ -598,6 +600,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 		},
 
 		updateCostDutyTable: function() {
+			$("#tableCostDutyPlato>tbody").html("");
 			data = this.ajaxData.detail.dutyDepartment;
 			trName = $("<tr />").append("<td>责任</td>").append($.templates("#tmplCostDutyPlatoName").render(data));
 			trCost = $("<tr />").append("<td>金额</td>").append($.templates("#tmplCostDutyPlatoCost").render(data));

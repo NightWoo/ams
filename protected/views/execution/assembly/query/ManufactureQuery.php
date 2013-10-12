@@ -136,6 +136,8 @@
                             <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
                             <li id="planDetail"><a href="#dataPlanDetail" data-toggle="tab">计划明细</a></li>
                             <li id="completion"><a href="#planCompletionRate" data-toggle="tab">计划完成率</a></li>
+                            <li class="dividerLi"><p class="divider">&nbsp;|&nbsp;</p></li>
+                            <li id="completion"><a href="#manufacturePeriod" data-toggle="tab">生产周期</a></li>
                             <div id="paginationCars" class="pagination pagination-small pagination-right" style="display: none;">
                                 <ul>
                                     <li id="exportCars"><a href="" rel="tooltip" data-toggle="tooltip" data-placement="top" title="精确到分钟删除重复项"><span id="totalCars"></span></a></li>
@@ -239,7 +241,7 @@
                                   责任部门
                                 </label>
                             </div> -->
-                            <div id="pauseAnalysisContainer" style="min-width: 400px; height: 500px; margin: 0 auto">
+                            <div id="pauseAnalysisContainer" style="min-width: 800px; height: 500px; margin: 0 auto">
                             </div>
                             <table id="tablePauseAnalysis" class="table table-condensed table-bordered">
                                 <thead />
@@ -248,7 +250,7 @@
                         </div>
 
                         <div class="tab-pane" id="paneUseRate">
-                            <div id="useRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                            <div id="useRateContainer" style="min-width: 800px; height: 300px; margin: 0 auto"></div>
                             <table id="tableUseRate" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
@@ -291,8 +293,16 @@
                         </div>
 
                         <div class="tab-pane" id="planCompletionRate">
-                            <div id="completionRateContainer" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
-                            <table id="tablecompletionRate" class="table table-condensed table-bordered">
+                            <div id="completionRateContainer" style="min-width: 800px; height: 300px; margin: 0 auto"></div>
+                            <table id="tableCompletionRate" class="table table-condensed table-bordered">
+                                <thead />
+                                <tbody />
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="manufacturePeriod">
+                            <div id="manufacturePeriodContainer" style="min-width: 800px; height: 300px; margin: 0 auto"></div>
+                            <table id="tableManufacturePeriod" class="table table-condensed table-bordered">
                                 <thead />
                                 <tbody />
                             </table>

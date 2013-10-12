@@ -1765,71 +1765,66 @@ class Car
 	}
 
 	public function throwVinAssembly ($vin, $point, $shift='总装1线A班', $time='') {
-		// if(YII_DEBUG) {
-		// 	return;
-		// }
-		// $ponit = iconv('UTF-8', 'GB2312', $ponit);
-		// $shift = iconv('UTF-8', 'GB2312', $shift);
-
-		$client = new SoapClient(Yii::app()->params['ams2vin_assembly']);
-		// $client->soap_defencoding = 'utf-8';
-		// $client->decode_utf8 = false;
-		$params = array(
-			'Vincode'=>$vin, 
-			'Work'=>$point, 
-			'Team'=>$shift
-		);
-		if(!empty($time)){
-			$params['Date'] = $time;
+		ini_set('default_socket_timeout', 10);
+		try{
+			$client = @new SoapClient(Yii::app()->params['ams2vin_assembly']);
+			$params = array(
+				'Vincode'=>$vin, 
+				'Work'=>$point, 
+				'Team'=>$shift
+			);
+			if(!empty($time)){
+				$params['Date'] = $time;
+			}
+			$result = (array)$client->Assembly($params);
+		} catch(Exception $e) {
+			$result = $e->getMessage();
 		}
-		$result = (array)$client -> Assembly($params);
 
 		return $result;
 	}
 
 	public function throwVinStoreIn ($vin, $row, $driverName='', $inTime='') {
 		
-		// $row = iconv('UTF-8', 'GB2312', $row);
-		// $driverName = iconv('UTF-8', 'GB2312', $driverName);
-
-		$client = new SoapClient(Yii::app()->params['ams2vin_store_in']);
-		// $client->soap_defencoding = 'utf-8';
-		// $client->decode_utf8 = false;
-		$params = array(
-			'Vincode'=>$vin, 
-			'Area'=>$row, 
-			'EmpName'=>$driverName
-		);
-		if(!empty($inTime)){
-			$params['Date'] = $inTime;
+		ini_set('default_socket_timeout', 10);
+		try{
+			$client = @new SoapClient(Yii::app()->params['ams2vin_store_in']);
+			$params = array(
+				'Vincode'=>$vin, 
+				'Area'=>$row, 
+				'EmpName'=>$driverName
+			);
+			if(!empty($inTime)){
+				$params['Date'] = $inTime;
+			}
+			$result = $client->StoreIn($params);
+		} catch(Exception $e) {
+			$result = $e->getMessage();
 		}
-		$result = $client -> StoreIn($params);
 
 		return $result;
 	}
 
 	public function throwVinStoreOut ($vin, $lane, $orderNumber, $orderDetailId, $distributorName, $engineCode, $outTime='') {
 		
-		// if(YII_DEBUG) {
-		// 	return;
-		// }
-		// $distributorName = iconv('UTF-8', 'GB2312', $distributorName);
-
-		$client = new SoapClient(Yii::app()->params['ams2vin_store_out']);
-		// $client->soap_defencoding = 'utf-8';
-		// $client->decode_utf8 = false;
-		$params = array(
-			'Vincode'=>$vin, 
-			'Area'=>$lane, 
-			'Order'=>$orderNumber,
-			'OrderID'=>$orderDetailId,
-			'VenName'=>$distributorName,
-			'AutoEngine'=>$engineCode
-		);
-		if(!empty($outTime)){
-			$params['Date'] = $outTime;
+		ini_set('default_socket_timeout', 10);
+		try{
+			$client = @new SoapClient(Yii::app()->params['ams2vin_store_out']);
+			$params = array(
+				'Vincode'=>$vin, 
+				'Area'=>$lane, 
+				'Order'=>$orderNumber,
+				'OrderID'=>$orderDetailId,
+				'VenName'=>$distributorName,
+				'AutoEngine'=>$engineCode
+			);
+			if(!empty($outTime)){
+				$params['Date'] = $outTime;
+			}
+			$result = $client->StoreOut($params);
+		} catch(Exception $e) {
+			$result = $e->getMessage();
 		}
-		$result = $client -> StoreOut($params);
 
 		return $result;
 	}
@@ -1844,8 +1839,6 @@ class Car
 		
 		$vin = $this->car->vin;
 		$client = new SoapClient(Yii::app()->params['IRemote_test_result']);
-		// $client->soap_defencoding = 'utf-8';
-		// $client->decode_utf8 = false;
 		$params = array(
 			'vin'=>$vin, 
 		);

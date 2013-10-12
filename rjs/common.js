@@ -95,4 +95,4 @@ define(['service'], function(service) {
 		    });	
 		}
 	}
-})
+});

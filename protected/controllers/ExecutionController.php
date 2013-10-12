@@ -581,6 +581,7 @@ class ExecutionController extends BmsBaseController
             $car->warehouseTime();
             
             $transaction->commit();
+            $this->renderJsonBms(true, $message, $data);
 
             //open gate
             $rpc = new RpcService();
@@ -589,7 +590,6 @@ class ExecutionController extends BmsBaseController
             $host='10.23.86.172';
             $ret = $rpc->openGate($host);
             
-            $this->renderJsonBms(true, $message, $data);
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
         } catch(Exception $e) {
             $transaction->rollback();
@@ -713,13 +713,13 @@ class ExecutionController extends BmsBaseController
 			$orderDetailId = $order->order_detail_id;
 			
             $transaction->commit();
+            $this->renderJsonBms(true, $message, $data);
             //open gate
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data['clientIp'] = $clientIp;
             $rpc = new RpcService();
             $host='10.23.86.3';
             $ret = $rpc->openGate($host);
-            $this->renderJsonBms(true, $message, $data);
 			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
         } catch(Exception $e) {
             $transaction->rollback();

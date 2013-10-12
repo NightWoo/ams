@@ -727,6 +727,109 @@ class CarSeeker
 		return $vin;
 	}
 
+	public function queryManufacturePeriod($stime, $etime, $series='') {
+		$queryTimes = $this->parseQueryTime($stime,$etime);
+		$seriesArray = $this->parseSeries($series);
+		$seriesName = $this->seriesName();
+
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$detail = array();
+		$avgTotal = array();
+
+		$periodArray = array(
+			'装配' => array('start'=>'assembly_time', 'end'=>'finish_time'),
+			'VQ1' => array('start'=>'finish_time', 'end'=>'vq1_finish_time'),
+			'VQ2' => array('start'=>'vq1_finish_time', 'end'=>'vq2_finish_time'),
+			'VQ3' => array('start'=>'vq2_finish_time', 'end'=>'warehouse_time'),
+			// '库存周期' => array('start'=>'warehouse_time', 'end'=>'standby_time'),
+			// '备车周期' => array('start'=>'standby_time', 'end'=>'distribute_time'),
+		);
+
+		foreach($periodArray as $key => $period) {
+			$avgTotal[$key] = array(
+				'hourTotal' => 0,
+				'carCount' => 0,
+				'hourAvg' => 0
+			);
+		}
+
+		foreach($queryTimes as $queryTime) {
+			$columnSeriesX[] = $queryTime['point'];
+			$total = array();
+			$count = array();
+			$avg = array();
+			foreach($periodArray as $key => $period) {
+				$total[$key] = 0;
+				$count[$key] = 0;
+			}
+			$cars = $this->queryPeiodCars($queryTime['stime'], $queryTime['etime'], $series);
+			foreach($cars as &$car){
+				foreach($periodArray as $key => $period) {
+					if($car[$period['start']] > "0000-00-00 00:00:00");{
+						$hours = $this->calculatePeriod($car[$period['start']], $car[$period['end']]);
+						$total[$key] += $hours;
+						$count[$key]++;
+
+						$avgTotal[$key]['hourTotal'] += $hours;
+						$avgTotal[$key]['carCount']++;
+					}
+				}
+			}
+			foreach($periodArray as $key => $period) {
+				$avg[$key] = empty($count[$key]) ? null : round($total[$key] / $count[$key] / 3600, 1);
+				$columnSeriesY[$key][] = $avg[$key];
+				$temp[$key] = array(
+					'hourTotal' => $total[$key],
+					'carCount' => $count[$key],
+					'hourAvg' => is_null($avg[$key]) ? 0 : $avg[$key]
+				);
+			}
+			$detail[] = array_merge(array('time'=>$queryTime['point']), $temp);
+		}
+
+		foreach($periodArray as $key => $period) {
+			$avgTotal[$key]['hourAvg'] = empty($avgTotal[$key]['carCount']) ? 0 : round($avgTotal[$key]['hourTotal'] / $avgTotal[$key]['carCount'] / 3600, 1);
+		}
+
+		return array(
+			'periodArray' => $periodArray,
+			'detail' => $detail,
+			'avgTotal' => $avgTotal,
+			'series' => array(
+				'x' => $columnSeriesX,
+				'y' => $columnSeriesY
+			)
+		);
+
+	}
+
+	public function queryPeiodCars ($stime, $etime, $series='') {
+		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
+		$arraySeries = $this->parseSeries($series);
+		if(!(empty($series) || $series == 'all')){
+			$seriesConditons = array();
+		    foreach($arraySeries as $series) {
+		        $seriesConditons[] = "series = '$series'";
+		    }
+		    $seriesConditon = "(" . join(' OR ', $seriesConditons) . ")";
+		    $condition .= " AND $seriesConditon";
+		}
+		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time
+				FROM car
+				WHERE $condition";
+		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		return $cars;
+	}
+
+	private function calculatePeriod ($start, $end) {
+		$time = 0;
+		if($start > '0000-00-00 00:00:00') {
+			$time = $end > '0000-00-00 00:00:00' ? $time = (strtotime($end) - strtotime($start)) : ($time = time() - strtotime($start));
+		}
+		return $time;
+	}
+
 	public function queryTestlineRecord ($vin) {
 		$sql = "SELECT * FROM view_testline_summary WHERE vin='$vin'";
 		$record = Yii::app()->db->createCommand($sql)->queryRow();
@@ -936,6 +1039,88 @@ class CarSeeker
 		$data = Yii::app()->db->createCommand($sql)->queryRow();
 
 		return array("areaMin"=>$data['areaMin'], "areaMax"=>$data['areaMax']);
+	}
+
+	public function parseQueryTime($stime,$etime) {
+		$s = strtotime($stime);
+		$e = strtotime($etime);
+
+		$sd = date('Ymd', $s);
+		$ed = date('Ymd', $e);
+
+		$lastHour = ($e - $s) / 3600;
+		$lastDay = (strtotime($ed) - strtotime($sd)) / 86400;
+
+		$ret = array();
+		if($lastHour <= 24) {
+			$pointFormat = 'H';
+			$format = 'Y-m-d H:i:s';
+			$slice = 3600;
+		} elseif($lastDay <= 31) {
+			$pointFormat = 'm-d';
+			$format = 'Y-m-d H:i:s';
+			$slice = 86400;
+		} else {
+			$pointFormat = 'Y-m';
+			$format = 'Y-m-d H:i:s';
+		}
+
+		//首个分割段
+		$t0 = $s;
+		if($pointFormat === 'H'){
+			$eNextH = strtotime('+1 hour', $t0);
+			$ee = date('Y-m-d H', $eNextH) . ":00:00";
+			$t = strtotime($ee);
+		} else if($pointFormat === 'm-d'){
+			$eNextD = strtotime('+1 day', $t0);
+			$ee = date(('Y-m-d'), $eNextD) . " 08:00:00";
+			$t = strtotime($ee);
+		} else if($pointFormat === 'Y-m'){
+			$lastDay = strtotime(date("Y-m-t", $t0));
+			$eNextM = strtotime('+1 day', $lastDay);
+			$ee = date('Y-m', $eNextM) . "-01 08:00:00";
+			$t = strtotime($ee);
+		}
+
+		if($pointFormat === 'H') {
+				$point = date($pointFormat, $t0) . '～' . date($pointFormat, $t) . '点';
+			} else {
+				$point = date($pointFormat, $t0);
+		}
+		$ret[] = array(
+				'stime' => date($format, $t0),
+				'etime' => date($format, $t),
+				'point' => $point,
+		);
+
+		// $t = $s;
+		while($t < $e) {
+			if($pointFormat === 'H') {
+				$point = date($pointFormat, $t) . '～' . date($pointFormat, $t + $slice) . '点';
+			} else {
+				$point = date($pointFormat, $t);
+			}
+
+			if($pointFormat === 'Y-m') {
+				$eNextM = strtotime('first day of next month', $t);
+				$ee = date('Y-m-d', $eNextM) . " 08:00:00";	//next month firstday
+				$etmp = strtotime($ee);	//next month firstday
+			} else {
+				$etmp = $t+$slice;
+			}
+			if($etmp>=$e){
+				$etmp=$e;
+			}
+
+			$ret[] = array(
+				'stime' => date($format, $t),
+				'etime' => date($format, $etmp),
+				'point' => $point,
+			);
+			$t = $etmp;
+		}
+
+		return $ret;
 	}
 
 }

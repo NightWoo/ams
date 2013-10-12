@@ -7,7 +7,7 @@ require.config({
 	"shim": {
 		"bootstrap": ["jquery"]
 	}
-})
+});
 
 require(["dateTimeUtil","head","service","common","jquery","bootstrap"], function(dateTimeUtil,head,service,common,$) {
 	head.doInit();
@@ -37,7 +37,7 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap"], functio
 
 	function querySimpleDaily () {
 		$.ajax({
-			url: service.QUERY_SIMPLE_Daily,
+			url: service.QUERY_SIMPLE_DAILY,
 			dataType: "json",
 			data:{},
 			error: function () {common.alertError();},

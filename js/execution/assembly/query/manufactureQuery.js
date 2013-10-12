@@ -27,7 +27,6 @@ $(document).ready(function () {
 
 		//if validate passed
 		var index = $("#tabs li").index($('#tabs .active'));
-		console.log(index);
 		if (index === 0)
 			ajaxQuery(1);
 		else if (index === 1)
@@ -42,6 +41,8 @@ $(document).ready(function () {
 			ajaxQueryPlan(1);
 		else if (index === 8)
 			ajaxCompletionRate();
+		else if (index === 10)
+			queryManufacturePeriod();
 		
 		return false;
 	}
@@ -228,9 +229,11 @@ $(document).ready(function () {
 	//监听tab切换事件，去取comp列表
 	$("#tabs li").click(function () {
 		var index = $("#tabs li").index(this);
-		if(index<9)
+		if(index<11)
 			$(".pagination").hide();
-		if (index == 1){
+		if (index === 0)
+			ajaxQuery(1);
+		else if (index == 1){
 			if(getSeriesChecked() === ''){
 				ajaxStatisticsAll();
 			}else{
@@ -247,8 +250,8 @@ $(document).ready(function () {
 			ajaxQueryPlan(1);
 		else if (index === 8)
 			ajaxCompletionRate();
-		else if (index === 0)
-			ajaxQuery(1);
+		else if (index ===10)
+			queryManufacturePeriod();
 	});
 
 	$("#resetST").click(function() {
@@ -866,35 +869,58 @@ $(document).ready(function () {
 		carSeries = data.carSeries;
 		detail = data.detail;
 		total = data.total;
-		$("#tablecompletionRate thead").html("<tr />");
-		$("#tablecompletionRate tbody").html("");
+		$("#tableCompletionRate thead").html("<tr />");
+		$("#tableCompletionRate tbody").html("");
 		$.each(carSeries, function (index, value) {
-			$("<tr /><tr /><tr />").appendTo($("#tablecompletionRate tbody"));
+			$("<tr /><tr /><tr />").appendTo($("#tableCompletionRate tbody"));
 		});
 
 		//get tr
         //first column descriptions
         $.each(carSeries, function (index,series) {
-            $("<td />").html(series + "_完成率").appendTo($("#tablecompletionRate tr:eq("+(index*3+1)+")"));
-            $("<td />").html(series + "_完成数").appendTo($("#tablecompletionRate tr:eq("+(index*3+2)+")"));
-            $("<td />").html(series + "_计划数").appendTo($("#tablecompletionRate tr:eq("+(index*3+3)+")"));
+            $("<td />").html(series + "_完成率").appendTo($("#tableCompletionRate tr:eq("+(index*3+1)+")"));
+            $("<td />").html(series + "_完成数").appendTo($("#tableCompletionRate tr:eq("+(index*3+2)+")"));
+            $("<td />").html(series + "_计划数").appendTo($("#tableCompletionRate tr:eq("+(index*3+3)+")"));
 
             $("<td />").html(total[series]['completionTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+1)+")"));
             $("<td />").html(total[series]['readyTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+2)+")"));
             $("<td />").html(total[series]['otalTotal']).appendTo($("#tablePassRate tr:eq("+(index*3+3)+")"));
         });
 
-        var thTr = $("#tablecompletionRate tr:eq(0)");
+        var thTr = $("#tableCompletionRate tr:eq(0)");
         $("<th />").html("日期").appendTo(thTr).addClass("wideTh");
 
         $.each(detail, function (index, value) {
         	$("<td />").html(value.time).appendTo(thTr);
         	$.each(carSeries, function (index, series) {
-        		$("<td />").html(value[series].completion).appendTo($("#tablecompletionRate tr:eq(" + (index*3+1) +")"));
-        		$("<td />").html(value[series].readySum).appendTo($("#tablecompletionRate tr:eq(" + (index*3+2) +")"));
-        		$("<td />").html(value[series].totalSum).appendTo($("#tablecompletionRate tr:eq(" + (index*3+3) +")"));
+        		$("<td />").html(value[series].completion).appendTo($("#tableCompletionRate tr:eq(" + (index*3+1) +")"));
+        		$("<td />").html(value[series].readySum).appendTo($("#tableCompletionRate tr:eq(" + (index*3+2) +")"));
+        		$("<td />").html(value[series].totalSum).appendTo($("#tableCompletionRate tr:eq(" + (index*3+3) +")"));
         	});
         });
+	}
+
+	function queryManufacturePeriod () {
+		$.ajax({
+			url: QUERY_MANUFACTURE_PERIOD,
+			type: "get",
+			dataType: "json",
+			data: {
+				"series": getSeriesChecked(),
+				"stime":$("#startTime").val(),
+				"etime":$("#endTime").val()
+			},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					mQuery.manufacturePeriod.ajaxData = response.data;
+					mQuery.manufacturePeriod.drawColumn();
+					mQuery.manufacturePeriod.updateTable();
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 	$('body').tooltip(
@@ -1485,6 +1511,132 @@ $(document).ready(function () {
 	    		return {x: index, y: item, show: false};
 	    	})
 	    }
+	}
+
+	window.mQuery.manufacturePeriod = {
+		ajaxData : {},
+
+		columnData: {
+			chart: {
+                type: 'column',
+                renderTo: 'manufacturePeriodContainer'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [],
+                labels: {
+                    rotation: -45,
+                    align: 'right'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+				layout: 'horizontal',
+				align: 'center',
+				verticalAlign: 'top',
+				floating: false,
+				backgroundColor: "white",
+				borderRadius: 2,
+				borderWidth: 0,
+			},
+            yAxis: {
+                min: 0,
+                title: {
+                	enabled: false,
+                    text: '周期（小时）'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                	stacking: 'normal',
+                    pointPadding: 0.1,
+                    borderWidth: 0,
+                    pointWidth: 15
+                }
+            },
+            series: []
+		},
+
+		drawColumn: function() {
+			columnSeries = [];
+			periodArray = this.ajaxData.periodArray;
+			columnSeriesData = this.ajaxData.series;
+			index=0;
+			$.each(periodArray, function (period, value) {
+				columnSeries[index++] = {
+					name: period,
+					data: columnSeriesData.y[period]
+				}
+			})
+
+			this.columnData.xAxis.categories = columnSeriesData.x;
+			this.columnData.series = columnSeries;
+			var chart;
+			chart = new Highcharts.Chart(this.columnData);
+		},
+
+		updateTable: function () {
+			var periodArray = this.ajaxData.periodArray;
+			var detail = this.ajaxData.detail;
+			var total = this.ajaxData.avgTotal;
+
+			$("#tableManufacturePeriod thead").html("<tr />");
+			tbody = $("#tableManufacturePeriod tbody").html("");
+			$.each(periodArray, function (period, value) {
+				$("<tr />").appendTo(tbody);
+			});
+
+			var thTr = $("#tableManufacturePeriod tr:eq(0)");
+			$("<th />").html("周期").appendTo(thTr);
+			$("<th />").html("合计").appendTo(thTr);
+
+			var totalTotal = 0;
+			var periodIndx = 0;
+			$.each(periodArray, function (period, value) {
+	            $("<td />").html(period).appendTo($("#tableManufacturePeriod tr:eq("+(periodIndx*1+1)+")"));
+	            $("<td />").html(Math.round(total[period]['hourAvg'] * 100) /100).appendTo($("#tableManufacturePeriod tr:eq(" + (periodIndx*1+1) + ")"));
+	            totalTotal += total[period]['hourAvg'];
+	            periodIndx++;
+	        });
+
+	        var totalTr = $("<tr />").appendTo(tbody);
+	        $("<td />").html('总计').appendTo(totalTr);
+	        $("<td />").html(Math.round(totalTotal * 100) / 100).appendTo(totalTr);
+
+	        $.each(detail, function (index, value) {
+	        	$("<td />").html(value.time).appendTo(thTr);
+	        	detailTotal = 0;
+	        	i = 0;
+	        	$.each(periodArray, function (period, timeValue) {
+	        		$("<td />").html(Math.round(value[period]['hourAvg'] * 100) /100).appendTo($("#tableManufacturePeriod tr:eq("+(i*1+1)+")"));
+	        		detailTotal +=value[period]['hourAvg'];
+	        		i++;
+	        	});
+	        	$("<td />").html(Math.round(detailTotal * 100) / 100).appendTo(totalTr);
+	        });
+		}
 	}
 });
 

@@ -6,7 +6,7 @@ require.config({
 	"shim": {
 		"bootstrap": ["jquery"]
 	}
-})
+});
 
 require(["service","common","jquery","bootstrap"], function(service,common,$) {
 	initPage();
@@ -19,7 +19,7 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 		"monitorPannel": "/bms/execution/monitoringIndex",
 		"qualityPannel": "/bms/execution/query?type=NodeQuery",
 		"efficiencyPannel": "/bms/site/pannelIndex?pannel=efficiencyPannel",
-		"fieldPannel": "",
+		"fieldPannel": "whatever",
 		"costPannel": "/bms/site/pannelIndex?pannel=costPannel",
 		"manpowerPannel": "/bms/managementSystem/workSummaryManpower",
 		"databasePannel": "/bms/generalInformation"
@@ -27,17 +27,17 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 
 	$(".pannel,#monitorPannel").click(function () {
 		window.location.href= tumbnailUrl[$(this).attr("id")];
-	})
+	});
 
 	$("#shortcutUl").on("click", ".shortcut", function (e) {
 		if($(e.target).closest("li").attr("href")) {
 			window.open($(e.target).closest("li").attr("href"),"_blank");
 		}
-	})
+	});
 
 	$(window).resize(function () {
 		$("#shortcutContainer").css("max-height", $(window).height() - 80 + "px");
-	})
+	});
 
 	function initPage() {
 		$("#shortcutContainer").css("max-height", $(window).height() - 80 + "px");

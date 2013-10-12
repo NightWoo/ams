@@ -15,8 +15,8 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			$seeker = new BalanceSeeker();
-			$ret = $seeker->queryBalancePeriod ('onLine-all', '');
+			// $seeker = new BalanceSeeker();
+			$ret  = @new SoapClient(Yii::app()->params['ams2vin_store_out'], array("connection_timeout" => 5, "exceptions"=>false));
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);

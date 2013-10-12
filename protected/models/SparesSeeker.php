@@ -252,6 +252,7 @@ class SparesSeeker
 	}
 
 	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
+        $key_array=array();
         if(is_array($multi_array)){  
             foreach ($multi_array as $row_array){  
                 if(is_array($row_array)){  

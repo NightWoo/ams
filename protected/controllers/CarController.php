@@ -903,7 +903,7 @@ class CarController extends BmsBaseController
         }
     }
 
-    public function actionQueryRecycleBalancePeriod() {
+    public function actionQueryRecycleBalancePeriod () {
         try{
             $state = $this->validateStringVal('state', 'recycle');
             $series = $this->validateStringVal('series', '');
@@ -915,7 +915,20 @@ class CarController extends BmsBaseController
         }
     }
 
-    public function actionQueryBalancePeriod() {
+    public function actionQueryManufacturePeriod () {
+        $stime = $this->validateStringVal('stime', '');
+        $etime = $this->validateStringVal('etime', '');
+        $series = $this->validateStringVal('series', '');
+        try{
+            $seeker = new CarSeeker();
+            $data = $seeker->queryManufacturePeriod($stime, $etime, $series);
+            $this->renderJsonBms(true,  'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionQueryBalancePeriod () {
         try{
             $state = $this->validateStringVal('state', 'recycle');
             $series = $this->validateStringVal('series', '');
