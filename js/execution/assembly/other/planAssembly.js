@@ -16,31 +16,7 @@ $(document).ready(function () {
 		$("#newModal").modal("hide");
 		$("#editModal").modal("hide");
 		
-		$("#planDate").val(currentDate());			//added by wujun
-		// $("#tablePlanAssembly>tbody").text("");
-					
-		//     			var tr = $("<tr />");
-		//     			$("<td />").html('<a href="#"><i class="icon-thumbs-up"></i></a><a href="#"><i class="icon-hand-up"></i></a>').appendTo(tr);
-		//     			$("<td />").html(0).appendTo(tr);
-		//     			$("<td />").html(50).appendTo(tr);
-		//     			$("<td />").html("value.configName").appendTo(tr);
-		//     			$("<td />").html("value.color").appendTo(tr);
-		    			
-		//     			if ("value.is_cold" == "1") {
-		//     				$("<td />").html("耐寒").appendTo(tr);
-		//     			} else {
-		//     				$("<td />").html("非耐寒").appendTo(tr);
-		//     			}
-		    			
-		//     			$("<td />").html("value.year").appendTo(tr);
-		//     			$("<td />").html("value.configType").appendTo(tr);
-		//     			var editTd = $("<td />").html(" ¦ ");
-		//     			$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
-		//     			$("<button />").addClass("btn-link").html("删除").appendTo(editTd);
-		//     			editTd.appendTo(tr);
-
-		    			
-		//     			$("#tablePlanAssembly tbody").append(tr);
+		$("#planDate").val(currentDate());
 	}
 
 	//modified by wujun
@@ -104,7 +80,7 @@ $(document).ready(function () {
 
 	$("#tablePlanAssembly").live("click", function (e) {
 		if ($(e.target).is("i")) {
-			if ($(e.target).hasClass("icon-thumbs-up")) {
+			if ($(e.target).hasClass("icon-thumbs-up-alt")) {
 				ajaxTop($(e.target).parent("a").parent("td").parent("tr").data("id"));
 			} else if($(e.target).hasClass("icon-hand-up")) {
 				ajaxUp($(e.target).parent("a").parent("td").parent("tr").data("id"));
@@ -224,9 +200,9 @@ $(document).ready(function () {
 		    			if(index == 0)
 		    				thumbTd.html('<a title="已至顶"><i class="icon-ban-circle"></i></a><a title="已至顶"><i class="icon-ban-circle"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
 		    			else if(index+1 < length)
-		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up-alt"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
 		    			else
-		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="已至底"><i class="icon-ban-circle"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up-alt"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="已至底"><i class="icon-ban-circle"></i></a>').appendTo(tr);
 		    			$("<td />").html(value.priority).appendTo(tr);
 						//$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
@@ -527,52 +503,6 @@ $(document).ready(function () {
 		return(uom);
 	}
 	
-	// function preBatchNumber(argument){
-	// 	var now = new Date();
-	// 	var year = now.getFullYear();       //年
-	// 	var month = now.getMonth() + 1;     //月
-	// 	var day = now.getDate() + 1;
-	// 	$.ajax({
-	// 		type: "get",//使用get方法访问后台
- //    	    dataType: "json",//返回json格式的数据
-	// 	    url: GET_YEAR_CODE,//ref:  /bms/js/service.js
-	// 	    data: {"year" : year},
-	// 	    success:function (response) {
-	// 	    	if(response.success){
-	// 	    		var preNumber = response.data;
-	// 				if(month < 10) preNubmer += '0';
-	// 					preNumber += month;
-	// 				if(day < 10) preNumber += '0';
-	// 					preNumber += day;
-	// 				$("#newBatchNumber").val(preNumber);
-	// 	    	}else{
-	// 	    		// $("#vinText").val("");
-	// 	    		alert(response.message);
-	// 	    	}
-	// 	    },
-	// 	    error:function(){alertError();}
-	// 	});
-	// }
-	
-	// function batchNumber(){
-	// 	$.ajax({
-	// 		type: "get",
-	// 		dataType: "json",
-	// 		url: GET_BATCH_NUMBER,
-	// 		data:{
-	// 			"plan_date" : $("#newPlanDate").val(),
-	// 		},
-	// 		success: function (response) {
-	// 			if(response.success) {
-	// 				$("#newBatchNumber").val(response.data);	
-	// 			}else {
-	// 				alert(response.message);
-	// 			}
-	// 		},
-	// 		error: function() {alertError();}	
-	// 	})
-	// }
-
 	function fillConfig(carSeries, carType, modPre){
 		$.ajax({
 			url: FILL_CONFIG,
