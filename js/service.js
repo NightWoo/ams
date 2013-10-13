@@ -191,6 +191,7 @@ var INC_PRI_PLAN = "/bms/plan/inc";
 var TOP_PRI_PLAN = "/bms/plan/top";
 var REDUCE_PRI_PLAN = "/bms/plan/reduce";		//added by wujun
 var QUERY_PLAN = "/bms/plan/query";
+var EXPORT_PLAN = "/bms/plan/export";
 var PLAN_QUERY_COMPLETION = "/bms/plan/queryCompletion";
 
 var QUERY_SECTION = "/bms/monitor/querySection";

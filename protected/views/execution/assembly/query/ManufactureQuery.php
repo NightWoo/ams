@@ -116,11 +116,6 @@
                                 <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
                                 <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
                             </td>
-                            <!-- <td>
-                                <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
-                                <input id="btnExport" class='btn btn-success' type="button" value="导出"></input>
-                                <label>with&nbsp;&nbsp;</label>
-                            </td> -->
                         </tr>    
 					</table> 
                 </form>      
@@ -160,6 +155,18 @@
                                     <li id="curPause" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
                                     <li id="nextPause" class="nextPage"><a href="#"><span>&gt;</span></a></li>
                                     <li id="lastPause"><a href="#"><span>&gt;&gt;</span></a></li>
+                                </ul>
+                            </div>
+                            <div id="paginationPlan" class="pagination pagination-small pagination-right" style="display: none;">
+                                <ul>
+                                    <li id="exportPlan"><a href=""><span id="totalPlan"></span></a></li>
+                                </ul>
+                                <ul>
+                                    <li id="firstPlan"><a href="#"><span>&lt;&lt;</span></a></li>
+                                    <li id="prePlan" class="prePage"><a href="#"><span>&lt;</span></a></li>
+                                    <li id="curPlan" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
+                                    <li id="nextPlan" class="nextPage"><a href="#"><span>&gt;</span></a></li>
+                                    <li id="lastPlan"><a href="#"><span>&gt;&gt;</span></a></li>
                                 </ul>
                             </div>
                         </ul>
@@ -260,6 +267,7 @@
                         <div class="tab-pane" id="dataPlanDetail">
                             <table id="tablePlan" class="table table-condensed table-hover" style="display: none;">
                                 <thead>
+                                    <th>线别</th>
                                     <th>批次号</th>
                                     <th>计划日期</th>
                                     <th>数量</th>
@@ -278,18 +286,6 @@
                         
                                 </tbody>
                             </table>
-                            <div id="paginationPlan" class="pagination" style="display: none;">
-                                <ul>
-                                    <li id="exportPlan"><a href=""><span id="totalPlan"></span></a></li>
-                                </ul>
-                                <ul>
-                                    <li id="firstPlan"><a href="#"><span>&lt;&lt;</span></a></li>
-                                    <li id="prePlan" class="prePage"><a href="#"><span>&lt;</span></a></li>
-                                    <li id="curPlan" class="active curPage" page="1"><a href="#"><span>1</span></a></li>
-                                    <li id="nextPlan" class="nextPage"><a href="#"><span>&gt;</span></a></li>
-                                    <li id="lastPlan"><a href="#"><span>&gt;&gt;</span></a></li>
-                                </ul>
-                            </div>
                         </div>
 
                         <div class="tab-pane" id="planCompletionRate">

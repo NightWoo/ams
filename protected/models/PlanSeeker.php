@@ -63,7 +63,7 @@ class PlanSeeker
 	}
 
 	//added by wujun
-	public function query($stime, $etime, $series, $line, $curPage, $perPage) {
+	public function query($stime, $etime, $series, $line, $curPage=0, $perPage=0) {
 		if(empty($stime) || empty($etime)){
 			throw new Exception("起始时间和结束时间均不可为空", 1);
 		} else {
@@ -94,10 +94,13 @@ class PlanSeeker
         }
         $sql = join(' UNION ', $sqls);
 
-        $limit = $perPage;
-		$offset = ($curPage - 1) * $perPage;
+       $limit = "";
+        if(!empty($perPage)) {
+            $offset = ($curPage - 1) * $perPage;
+            $limit = "LIMIT $offset, $perPage";
+        }
 
-        $sql .= " ORDER BY plan_date, batch_number ASC LIMIT $offset, $limit";
+        $sql .= " ORDER BY plan_date, batch_number ASC $limit";
         $datas = Yii::app()->db->createCommand($sql)->queryAll();
 
         $countSql = "SELECT count(*) FROM plan_assembly WHERE $condition";
@@ -110,6 +113,8 @@ class PlanSeeker
 			}
 			$data['config_name'] = $seeker->getName($data['config_id']);
 			$data['car_type_name'] = $this->cutCarType($data['car_type']);
+
+			$data['cold'] = $data['cold_resistant'] == 1 ? "耐寒" : "非耐寒";
 		}
 
         return array($total,  $datas);

@@ -230,7 +230,7 @@ class PlanController extends BmsBaseController
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');
-		$line = $this->validateStringVal('line', 'I');
+		$line = $this->validateStringVal('line', '');
 		$perPage = $this->validateIntVal('perPage', 10);
 		$curPage = $this->validateIntVal('curPage', 1);
 
@@ -249,6 +249,45 @@ class PlanController extends BmsBaseController
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionExport() {
+		$stime = $this->validateStringVal('stime', '');
+		$etime = $this->validateStringVal('etime', '');
+		$series = $this->validateStringVal('series', '');
+		$line = $this->validateStringVal('line', '');
+
+		try{
+			$seeker = new PlanSeeker();
+			list($total, $datas) = $seeker->query($stime, $etime, $series, $line, 0, 0);
+			$content = "#,线别,批次号,计划日期,计划数量,完成数量,车系,车型,配置,耐寒性,颜色,年份,订单类型,特殊单号,备注\n";
+			foreach($datas as $data) {
+				$content .= "{$data['id']},";
+				$content .= "{$data['assembly_line']},";
+				$content .= "{$data['batch_number']},";
+				$content .= "{$data['plan_date']},";
+				$content .= "{$data['total']},";
+				$content .= "{$data['ready']},";
+				$content .= "{$data['car_series']},";
+				$content .= "{$data['car_type_name']},";
+				$data['config_name'] = str_replace(PHP_EOL, '', $data['config_name']);
+				$data['config_name'] = str_replace(",", "，",$data['config_name']);
+				$content .= "{$data['config_name']},";
+				$content .= "{$data['cold']},";
+				$content .= "{$data['color']},";
+				$content .= "{$data['car_year']},";
+				$content .= "{$data['order_type']},";
+				$content .= "{$data['special_order']},";
+				$data['remark'] = str_replace(PHP_EOL, '', $data['remark']);
+				$data['remark'] = str_replace(",", "，",$data['remark']);
+				$content .= "{$data['remark']}";
+				$content .= "\n";
+			}
+			$export = new Export('计划明细_' . date('YmdHi'), $content);
+			$export->toCSV();
+		} catch(Exception $e) {
+			echo $e->getMessage();
 		}
 	}
 

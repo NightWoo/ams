@@ -216,12 +216,12 @@ $(document).ready(function () {
 		}
 	)
 
-	// $("#exportPlan").click(
-	// 	function () {
-	// 		ajaxExport();
-	// 		return false;
-	// 	}
-	// );
+	$("#exportPlan").click(
+		function () {
+			ajaxExportPlan();
+			return false;
+		}
+	);
 
 
 
@@ -692,7 +692,27 @@ $(document).ready(function () {
 		})
 	}
 
+	function getAssemblyLine () {
+		var line = "";
+		if($("#selectNode").val() == "T0") {
+			line = "I";
+		} else if($("#selectNode").val() == "T0_2") {
+			line = "II";
+		}
+		return line;
+	}
+
+	function ajaxExportPlan () {
+		window.open(EXPORT_PLAN +
+			"?&stime=" + $("#startTime").val() +
+			"&etime=" + $("#endTime").val() +
+			"&line=" + getAssemblyLine() +
+			"&series=" + getSeriesChecked()
+		);
+	}
+
 	function ajaxQueryPlan(targetPage) {
+		line = getAssemblyLine();
 		$.ajax({
 			type: "get",
 			dataType: "json",
@@ -700,7 +720,7 @@ $(document).ready(function () {
 			data: {
 				"stime": $("#startTime").val(),
 				"etime": $("#endTime").val(),
-				"line": "I",
+				"line": line,
 				"series": getSeriesChecked(),
 				"perPage": 10,
 				"curPage": targetPage || 1,
@@ -711,21 +731,15 @@ $(document).ready(function () {
 					length = response.data.length;
 					$.each(response.data.data,function (index,value) {
 		    			var tr = $("<tr />");
-						//$("<td />").html(value.id).appendTo(tr);
-						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun
+						$("<td />").html(value.assembly_line).appendTo(tr);
+						$("<td />").html(value.batch_number).appendTo(tr);
 		    			$("<td />").html(value.plan_date).appendTo(tr);
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
 		    			$("<td />").html(value.car_series).appendTo(tr);
-		    			$("<td />").html(value.car_type_name).appendTo(tr);		//added by wujun
+		    			$("<td />").html(value.car_type_name).appendTo(tr);	
 		    			$("<td />").html(value.config_name).appendTo(tr);
-		    			
-		    			if (value.cold_resistant == "1") {
-		    				$("<td />").html("耐寒").appendTo(tr);
-		    			} else {
-		    				$("<td />").html("非耐寒").appendTo(tr);
-		    			}
-		    			
+	    				$("<td />").html(value.cold).appendTo(tr);
 		    			$("<td />").html(value.color).appendTo(tr);
 		    			$("<td />").html(value.car_year).appendTo(tr);
 		    			$("<td />").html(value.order_type).appendTo(tr);
