@@ -696,7 +696,7 @@ class MonitorSeeker
 		$cars = 0;
 		$total = 0;
 		$nodeIdStr = $this->parseNodeId($node);
-		$arraySeries = $this->parseSeries('all');
+		$arraySeries = Series::parseSeries('all');
 
 		foreach($arraySeries as $series) {
 			$tables = $this->parseTables($node,$series);
@@ -719,7 +719,7 @@ class MonitorSeeker
 		$cars = 0;
 		$faults = 0;
 		$nodeIdStr = $this->parseNodeId($node);
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 
 
 		$conditions = array("status != '在线修复'");
@@ -1031,13 +1031,13 @@ class MonitorSeeker
 
 	}
 
-	private function parseSeries($series) {
-		if(empty($series) || $series === 'all') {
-			$series = array('F0', 'M6', '6B');
-		} else {
-			$series = explode(',', $series);
-		}
-		return $series;
-	}	
+	// private function parseSeries($series) {
+	// 	if(empty($series) || $series === 'all') {
+	// 		$series = array('F0', 'M6', '6B');
+	// 	} else {
+	// 		$series = explode(',', $series);
+	// 	}
+	// 	return $series;
+	// }	
 
 }

@@ -241,7 +241,7 @@ class Order
 		$condition = "standby_date=? AND status=1 AND amount>hold AND amount>count";
 
 		if(!empty($series)){
-	        $arraySeries = $this->parseSeries($series);
+	        $arraySeries = Series::parseSeries($series);
 	        $cTmp = array(); 
 	        foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
@@ -615,14 +615,14 @@ class Order
 		return $orderCarType;
 	}
 
-	private function parseSeries ($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries ($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
 	//lc0 unlock temp
 	private function getLC0Type () {

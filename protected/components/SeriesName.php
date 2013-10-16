@@ -1,14 +1,18 @@
 <?php
-class SeriesName
+Yii::import('application.models.AR.SeriesAR');
+class SeriesName extends CApplicationComponent
 {
-    private static $SERIES_NAME = array(
-            'F0' => 'F0',
-            'M6' => 'M6',
-            '6B' => '思锐'
-    );
-
 	public static function getName ($series) {
-        $seriesName = self::$SERIES_NAME[$series];
-        return $seriesName;
+        $seriesArray = self::getSeries();
+        return $seriesArray[$series];
+	}
+
+	public static function getSeries () {
+		$seriesName = array();
+		$seriesArray = SeriesAR::model()->findAll();
+    	foreach($seriesArray as $series){
+    		$seriesName[$series['series']] = $series['name'];
+    	}
+		return  $seriesName;
 	}
 }

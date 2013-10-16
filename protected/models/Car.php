@@ -12,7 +12,7 @@ class Car
 	private $carYear;	
 	private $config;
 	private $configList;
-	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
+	// private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐',"G6"=>"G6");
 	private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
 	protected function __construct($vin){
 		$this->vin = $vin;
@@ -86,8 +86,9 @@ class Car
 		if(!empty($this->car->skip_ratio_control)) return;
 		$ratioControl = OnlineRatioControlAR::model()->find("activated=1 AND line=?", array($line));
 		if(!empty($ratioControl) && $ratioControl->series != $this->car->series) {
-			$activatedSeriesName = self::$SERIES_NAME[$ratioControl->series]; 
-			$thisSeriesName = self::$SERIES_NAME[$this->car->series]; 
+			$seriesName = Series::getNameList();
+			$activatedSeriesName = $seriesName[$ratioControl->series]; 
+			$thisSeriesName = $seriesName[$this->car->series]; 
 			throw new Exception("按照上线比例控制，当前应上线[" . $activatedSeriesName . "]，此车为[" . $thisSeriesName . "]不可上线，如需跳过上线比例控制，请联系生产调度。");
 		}
 	}
@@ -846,7 +847,11 @@ class Car
 				}
 			}
 		}
-		$sortDatas = $this->multi_array_sort($datas, 'create_time');
+		if(!empty($datas)) {
+			$sortDatas = $this->multi_array_sort($datas, 'create_time');
+		} else {
+			$sortDatas = array();
+		}
 		// return $datas;
 		return $sortDatas;
 	}
@@ -1167,7 +1172,7 @@ class Car
         $carModel = $carType->car_model;
         $carTypeShort = $carType->short_name;
         $coldResistant = $this->car->cold_resistant==1? '/耐寒' : '';
-		$series =self::$SERIES_NAME[$this->car->series];
+		$series = Series::getName($this->car->series);
 
         $ret = array(
 			'vinBarCode' => "/bms/" .$vinBarCodePath,

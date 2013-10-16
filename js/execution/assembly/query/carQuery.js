@@ -103,7 +103,8 @@ $(document).ready(function () {
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
-				    $('#configName').html(car.config_name + "/" + car.cold);
+				    configCold = car.config_name == "" ? "" : car.config_name + "/" + car.cold;
+				    $('#configName').html(configCold);
 				    row = car.row == "" ? "" : "-" + car.row;
 				    lane = car.lane == "" ? "" : "-" + car.lane;
 				    distributor = car.distributor_name == "" ? "" : "-" + car.distributor_name 

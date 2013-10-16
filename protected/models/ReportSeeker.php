@@ -63,11 +63,11 @@ class ReportSeeker
 
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
 
-	private static $SERIES_NAME = array(
-			'F0' => 'F0',
-			'M6' => 'M6',
-			'6B' => '思锐'
-	);
+	// private static $SERIES_NAME = array(
+	// 		'F0' => 'F0',
+	// 		'M6' => 'M6',
+	// 		'6B' => '思锐'
+	// );
 
 	private static $PAUSE_CAUSE_TYPE = array(
 		"生产组织","品质异常","物料供给","设备故障","其他"
@@ -131,9 +131,11 @@ class ReportSeeker
 	public function queryManufactureDaily ($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
 		list($sMonth, $eDate) = $this->reviseDailyMonth($date);
+
+		$seriesList = Series::getNamelist();
 		$countArray = array();
 		foreach(self::$COUNT_POINT_DAILY as $key => $name){
-			foreach(self::$SERIES_NAME as $series => $seriesName){
+			foreach($seriesList as $series => $seriesName){
 				$countArray[$key][$series] = null;
 			}
 		}
@@ -172,7 +174,7 @@ class ReportSeeker
 			$completion = $this->queryPlanCompletion($sPlanDate, $ePlanDate, $line);
 			$assemblyPlanText = "assemblyPlan" . $i;
 			$completionText = "completion" . $i;
-			foreach(self::$SERIES_NAME as $series => $seriesName){
+			foreach($seriesList as $series => $seriesName){
 				$countArray[$completionText][$series] = $completion[$series]['completion'];
 				$countArray[$assemblyPlanText][$series] = $completion[$series]['total'];
 			} 
@@ -195,13 +197,13 @@ class ReportSeeker
 		$countArray["completion1"]['sum'] = empty($countArray["assemblyPlan1"]['sum']) ? "-" : ($countArray["assemblyCount1"]['sum'] == 0 ? 0 : round($countArray["assemblyCount1"]['sum']/$countArray["assemblyPlan1"]['sum'], 2)*100 . "%");
 		$countArray["completion2"]['sum'] = empty($countArray["assemblyPlan2"]['sum']) ? "-" : ($countArray["assemblyCount2"]['sum'] == 0 ? 0 : round($countArray["assemblyCount2"]['sum']/$countArray["assemblyPlan2"]['sum'], 2)*100 . "%");
 
-		$countSeries = $seriesName = self::$SERIES_NAME;
+		$countSeries = $seriesList;
 		$countSeries['sum'] = "总计";
 		$ret = array(
 			"countPoint" => self::$COUNT_POINT_DAILY,
 			"countSeries" => $countSeries,
 			"count" => $countArray,
-			"carSeries" => array_values($seriesName),
+			"carSeries" => array_values($seriesList),
 		);
 
 		return $ret;
@@ -210,7 +212,7 @@ class ReportSeeker
 	public function queryCompletion ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
-		$seriesArray = self::$SERIES_NAME;
+		$seriesArray = Series::getNamelist();
 		$countDetail = array();
 		$countTotal = array();
 		$completionDetail = array();
@@ -260,7 +262,7 @@ class ReportSeeker
 		}
 
 		$ret = array(
-			"carSeries" => array_values(self::$SERIES_NAME),
+			"carSeries" => array_values(Series::getNamelist()),
 			"series" => array(
 				'x' => $columnSeriesX,
 				'column' => $columnSeriesY,
@@ -595,7 +597,8 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$count = array();
-		foreach(self::$SERIES_NAME as $series => $seriesName){
+		$seriesList = Series::getNamelist();
+		foreach($seriesList as $series => $seriesName){
 			$count[$series] = null;
 		}
 
@@ -611,7 +614,8 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$count = array();
-		foreach(self::$SERIES_NAME as $series => $seriesName){
+		$seriesList = Series::getNamelist();
+		foreach($seriesList as $series => $seriesName){
 			$count[$series] = null;
 		}
 
@@ -627,7 +631,8 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$count = array();
-		foreach(self::$SERIES_NAME as $series => $seriesName){
+		$seriesList = Series::getNamelist();
+		foreach($seriesList as $series => $seriesName){
 			$count[$series] = null;
 		}
 
@@ -722,7 +727,7 @@ class ReportSeeker
 	public function queryWarehouseChart ($date, $timespan) {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
-		$seriesArray = self::$SERIES_NAME;
+		$seriesArray = Series::getNamelist();
 		$columnSeriesX = array();
 		$columnSeriesY = array();
 		$lineSeriesY = array();
@@ -749,7 +754,7 @@ class ReportSeeker
 		}
 
 		$ret = array(
-			"carSeries" => array_values(self::$SERIES_NAME),
+			"carSeries" => array_values(Series::getNamelist()),
 			"series" => array(
 				'x' => $columnSeriesX,
 				'column' => $columnSeriesY,
@@ -803,7 +808,7 @@ class ReportSeeker
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$boards = array();
 		foreach($orders as &$order){
-			$order['series_name'] = self::$SERIES_NAME[$order['series']];
+			$order['series_name'] = Series::getName($order['series']);
 			$order['cold'] = self::$COLD_RESISTANT[$order['cold_resistant']];
 			$order['car_type_config'] = $order['car_model'] . "/" . $order['config_name'] . "/" . $order['cold'];
 			$order['warehouse_period'] = round($order['warehouse_period']/3600, 1);
@@ -928,7 +933,7 @@ class ReportSeeker
 	public function queryQualification ($point, $date, $timespan, $seriesText="all") {
 		list($stime, $etime) = $this->reviseTime($date, $timespan);
 		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
-		$seriesArray = $this->parseSeries($seriesText);
+		$seriesArray = Series::parseSeriesName($seriesText);
 		$columnSeriesX = array();
 		$columnSeriesY = array();
 		$lineSeriesY = array();
@@ -968,7 +973,7 @@ class ReportSeeker
 
 		if($seriesText == "all") {
 			$passRateSub = array();
-			$seriesArray = $this->parseSeries($seriesText);
+			$seriesArray = Series::parseSeriesName($seriesText);
 			foreach($seriesArray as $series => $seriesName) {
 				$carCount = $this->countCarTrace($point, $stime, $etime, $series);
 				$countNG = $this->countNG($point, $series, $stime, $etime);
@@ -984,7 +989,7 @@ class ReportSeeker
 
 	public function queryFaultDaily ($point, $date, $seriesText="all") {
 		list($stime, $etime) = $this->reviseTime($date, "daily");
-		$seriesArray = $this->parseSeries($seriesText);
+		$seriesArray = Series::parseSeriesName($seriesText);
 		$column = array(
 			"columnSeriesX" => array(),
 			"columnSeriesY" => array(),
@@ -1455,15 +1460,15 @@ class ReportSeeker
 		return $ret;
 	}
 
-	private function parseSeries ($series) {
-		if(empty($series) || $series === 'all') {
-            $seriesArray = array('F0'=>'F0', 'M6'=>'M6', '6B'=>'思锐');
-        } else {
-            $series = explode(',', $series);
-            foreach($series as $one){
-            	$seriesArray[$one] = self::$SERIES_NAME[$one];
-            }
-        }
-		return $seriesArray;
-	}
+	// private function parseSeries ($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $seriesArray = array('F0'=>'F0', 'M6'=>'M6', '6B'=>'思锐');
+ //        } else {
+ //            $series = explode(',', $series);
+ //            foreach($series as $one){
+ //            	$seriesArray[$one] = self::$SERIES_NAME[$one];
+ //            }
+ //        }
+	// 	return $seriesArray;
+	// }
 }

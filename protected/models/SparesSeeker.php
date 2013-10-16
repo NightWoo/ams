@@ -8,7 +8,7 @@ class SparesSeeker
 	public function __construct(){
 	}
 
-	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
+	// private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
 
 	public function querySparesTrace ($traceId) {
 		if(empty($traceId)) {
@@ -29,7 +29,7 @@ class SparesSeeker
 
 		$conditions = array("replace_time>='$stime'","replace_time<'$etime'");
 		if(!empty($series)) {
-			$arraySeries = $this->parseSeries($series);
+			$arraySeries = Series::parseSeries($series);
 			foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
 	        }
@@ -55,6 +55,9 @@ class SparesSeeker
         			ORDER BY replace_time ASC
         			$limit";
         $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+        foreach($datas as &$data){
+        	$data['series_name'] = Series::getName($data['series']);
+        }
 
         $countSql = "SELECT COUNT(*) FROM view_spare_replacement WHERE $condition";
         $total = Yii::app()->db->createCommand($countSql)->queryScalar();
@@ -75,15 +78,17 @@ class SparesSeeker
 		}
 		$condition = join(" AND ", $conditions);
 
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 
 		$queryTimes = $this->parseQueryTime($stime,$etime);
 		$ret = array();
 		$dataSeriesX = array();
 		$dataSeriesY = array();
 		$retTotal = array();
+
+		$seriesList = Series::getNameList();
 		foreach($arraySeries as $series) {
-			$retTotal[self::$SERIES_NAME[$series]] = 0;
+			$retTotal[$seriesList[$series]] = 0;
 		}
 
 		foreach($queryTimes as $queryTime) {
@@ -100,8 +105,8 @@ class SparesSeeker
 				if(!empty($line)) $carSql .= "AND assembly_line='$line'";
 				$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
 
-				$temp[self::$SERIES_NAME[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sum/$cars, 2)) ;
-				$dataSeriesY[self::$SERIES_NAME[$series]][] = empty($cars) ? null : round($sum/$cars, 2);;
+				$temp[$seriesList[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sum/$cars, 2)) ;
+				$dataSeriesY[$seriesList[$series]][] = empty($cars) ? null : round($sum/$cars, 2);;
 				// $temp[self::$SERIES_NAME[$series]] = $sum;
 				// $dataSeriesY[self::$SERIES_NAME[$series]][] = empty($sum) ? null : round($sum,2);
 
@@ -115,8 +120,8 @@ class SparesSeeker
 			$totalCondition = empty($condition) ? $totalCondition : $totalCondition . " AND " . $condition;
 			$totalSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $totalCondition";
 			$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
-			$retTotal[self::$SERIES_NAME[$series]] = sprintf("%.2f", round($sumTotal, 2));
-			$carSeries[] = self::$SERIES_NAME[$series];
+			$retTotal[$seriesList[$series]] = sprintf("%.2f", round($sumTotal, 2));
+			$carSeries[] = $seriesList[$series];
 		}
 
 		return array(
@@ -135,7 +140,7 @@ class SparesSeeker
 		$conditions = array("replace_time>='$stime'","replace_time<'$etime'");
 		$carConditions = array("assembly_time>='$stime'", "assembly_time<'$etime'");
 		if(!empty($series)) {
-			$arraySeries = $this->parseSeries($series);
+			$arraySeries = Series::parseSeries($series);
 			foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
 	        }
@@ -221,7 +226,7 @@ class SparesSeeker
 	}
 
 	public function queryUnitCost ($stime, $etime, $series='', $line='') {
-		$seriesArray = $this->parseSeries($series);
+		$seriesArray = Series::parseSeries($series);
 		$costSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE replace_time>='$stime' AND replace_time<'$etime'";
 		$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
 		if(!empty($series)) {
@@ -268,14 +273,14 @@ class SparesSeeker
         return $multi_array;  
     } 
 
-	private function parseSeries ($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries ($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
 	private function parseQueryTime($stime, $etime) {
 		$format = 'Y-m-d';

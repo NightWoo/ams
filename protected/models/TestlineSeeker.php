@@ -18,7 +18,7 @@ class Testlineseeker
 		$condition = "$dateCol>='$stime' AND $dateCol<='$etime'";
 
 		if(!empty($series)){
-	        $arraySeries = $this->parseSeries($series);
+	        $arraySeries = Series::parseSeries($series);
 	        $cTmp = array(); 
 	        foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
@@ -84,12 +84,12 @@ class Testlineseeker
 		return array($stime, $etime);
 	}
 
-	private function parseSeries($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 }

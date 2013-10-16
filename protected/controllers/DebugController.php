@@ -10,17 +10,23 @@ class DebugController extends BmsBaseController
 		'6B' => '思锐',
 	);
 
+	private static $a = 1;
+
 	private static $STATES=array('onLine','onLine-2','VQ1','VQ2','VQ3','WH');
 
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			// $seeker = new BalanceSeeker();
-			$ret  = @new SoapClient(Yii::app()->params['ams2vin_store_out'], array("connection_timeout" => 5, "exceptions"=>false));
+			// $series = new SeriesName();
+			$ret  = Series::parseSeriesName("6B,F0");
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
+	}
+
+	public function a () {
+		return self::$a++;
 	}
 
 	private function periodSegmentArray ($span=16,$intercept=8) {

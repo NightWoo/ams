@@ -98,7 +98,7 @@ class NodeSeeker
         }
 
         if(!empty($series)){
-	        $arraySeries = $this->parseSeries($series);
+	        $arraySeries = Series::parseSeries($series);
 	        $cTmp = array();
 	        foreach($arraySeries as $series){
 	        	$cTmp[] = "car_series='$series'";
@@ -228,12 +228,12 @@ class NodeSeeker
 		return array($stime, $etime);
 	}
 
-	private function parseSeries($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 }

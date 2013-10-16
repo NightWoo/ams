@@ -225,8 +225,8 @@ class CarSeeker
 	}
 
 	public function queryAssemblyBalance ($state) { 
-		$seriesArray = $this->parseSeries('all');
-		$seriesName = $this->seriesName();
+		$seriesArray = Series::parseSeries('all');
+		$seriesName = Series::getNameList();
 		$stateArray = $this->stateArray($state);
 		$stateName = $this->stateName();
 
@@ -446,8 +446,8 @@ class CarSeeker
 	}
 
 	public function queryRecycleBalancePeriod ($state, $series) {
-		$seriesArray = $this->parseSeries($series);
-		$seriesName = $this->seriesName();
+		$seriesArray = Series::parseSeries($series);
+		$seriesName = Series::getNameList();
 		$stateArray = $this->stateArray($state);
 		$stateName = $this->stateName();
 		$periodArray = $this->periodArray();
@@ -729,8 +729,8 @@ class CarSeeker
 
 	public function queryManufacturePeriod($stime, $etime, $series='') {
 		$queryTimes = $this->parseQueryTime($stime,$etime);
-		$seriesArray = $this->parseSeries($series);
-		$seriesName = $this->seriesName();
+		$seriesArray = Series::parseSeries($series);
+		$seriesName = Series::getNameList();
 
 		$columnSeriesX = array();
 		$columnSeriesY = array();
@@ -806,7 +806,7 @@ class CarSeeker
 
 	public function queryPeiodCars ($stime, $etime, $series='') {
 		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 		if(!(empty($series) || $series == 'all')){
 			$seriesConditons = array();
 		    foreach($arraySeries as $series) {
@@ -901,24 +901,24 @@ class CarSeeker
         return $datas;
 	}
 
-	private function parseSeries ($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries ($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
-	private function seriesName () {
-		$seriesName = array(
-			'F0' => 'F0',
-			'M6' => 'M6',
-			'6B' => '思锐'
-		);
+	// private function seriesName () {
+	// 	$seriesName = array(
+	// 		'F0' => 'F0',
+	// 		'M6' => 'M6',
+	// 		'6B' => '思锐'
+	// 	);
 
-		return $seriesName;
-	}
+	// 	return $seriesName;
+	// }
 
 	private function stateArray ($state) {
 		$stateMap=array(

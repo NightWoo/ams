@@ -14,7 +14,7 @@ require.config({
 		"jquery-ui-timepicker-addon": ["jquery-ui"],
 		"highcharts": ["jquery"]
 	}
-})
+});
 
 require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstrap","jsrender","jquery-ui","jquery-ui-timepicker-addon"], function (head, service, common, dateTimeUtil, highcharts, $) {
 	initPage();
@@ -52,7 +52,7 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 
 	$("#exportDetail").click(function () {
 		ajaxExportReplacementDetail();
-	})
+	});
 
 
 	function initPage () {

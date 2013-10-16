@@ -58,8 +58,8 @@ class BalanceSeeker
 			'WHin' => 'inventory_period'
 		);
 
-		$seriesArray = $this->parseSeries($series);
-		$seriesName = $this->seriesName();
+		$seriesArray = Series::parseSeries($series);
+		$seriesName = Series::getNameList();
 		
 		$dataSeriesX = array();
 		$dataSeriesY = array();
@@ -190,24 +190,24 @@ class BalanceSeeker
 		return $periodSegmentArray;
 	}
 
-	private function parseSeries ($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries ($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
-	private function seriesName () {
-		$seriesName = array(
-			'F0' => 'F0',
-			'M6' => 'M6',
-			'6B' => '思锐'
-		);
+	// private function seriesName () {
+	// 	$seriesName = array(
+	// 		'F0' => 'F0',
+	// 		'M6' => 'M6',
+	// 		'6B' => '思锐'
+	// 	);
 
-		return $seriesName;
-	}
+	// 	return $seriesName;
+	// }
 
 	private function periodInterval () {
 		$intervalMap=array(

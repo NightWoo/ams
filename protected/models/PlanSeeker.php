@@ -81,7 +81,7 @@ class PlanSeeker
 
 		$values = array($sdate, $edate);
 
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 
 		if(!empty($line)) {
             $condition .= " AND assembly_line='$line'";
@@ -121,7 +121,7 @@ class PlanSeeker
 	}
 
 	public function queryCompletion($stime, $etime, $series, $line) {
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 		$queryTimes = $this->parseQueryTime($stime, $etime);
 		$detail = array();
 		$dataSeriesX = array();
@@ -215,14 +215,14 @@ class PlanSeeker
 				);
 	}
 
-	private function parseSeries($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
 	private function parseQueryTime($stime,$etime) {
 

@@ -13,7 +13,7 @@ define({
 	"GET_COMPONENT_CODE": "/bms/component/getCode",
 	"GET_COMPONENT_INFO": "/bms/component/getInfo",
 	"VALIDATE_BAR_CODE": "/bms/car/validateBarCode",
-	"RELACE_SPARES": "/bms/car/replaceSpares",
+	"REPLACE_SPARES": "/bms/car/replaceSpares",
 	"QUERY_SIMPLE_DAILY": "/bms/report/querySimpleDaily",
 	"SHOW_HOME_EFFICIENCY_INFO": "/bms/monitor/showHomeEfficiency",
 	"SHOW_HOME_COST_INFO": "/bms/monitor/showHomeCost",

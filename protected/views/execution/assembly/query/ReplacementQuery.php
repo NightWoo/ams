@@ -112,7 +112,7 @@
                             <script id="tmplReplacementDetail" type="text/x-jsrander">
                                 <tr>
                                     <td>{{:assembly_line}}</td>
-                                    <td>{{:series}}</td>
+                                    <td>{{:series_name}}</td>
                                     <td>{{:vin}}</td>
                                     <td>{{:component_code}}</td>
                                     <td>{{:component_name}}</td>

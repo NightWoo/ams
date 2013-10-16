@@ -6,16 +6,16 @@ Yii::import('application.models.Sms.SmsService');
 
 class SmsDailyCommand extends CConsoleCommand
 {
-	private static $SERIES = array(
-		'F0' => 'F0',
-		'M6' => 'M6',
-		'6B' => '思锐',
-	);
+	// private static $SERIES = array(
+	// 	'F0' => 'F0',
+	// 	'M6' => 'M6',
+	// 	'6B' => '思锐',
+	// );
 
 	private static $COUNT_POINT_DAILY = array(
 		"assemblyCount" => "上线",
 		"warehouseCount" => "入库",
-		"distributeCount" => "出库",
+		"distributeCount" => "出库"
 	);
 
 	public function actionProductionAfternoon () {
@@ -99,7 +99,8 @@ class SmsDailyCommand extends CConsoleCommand
 		$textArray = array();
 		foreach($countArray as $point => $count){
 			$total = 0;
-			foreach(self::$SERIES as $series => $seriesName){
+			$seriesList = Series::getNameList();
+			foreach($seriesList as $series => $seriesName){
 				$total += $count[$series];
 			}
 			$text = self::$COUNT_POINT_DAILY[$point] . $total ."[" . join("/", $count) . "]";

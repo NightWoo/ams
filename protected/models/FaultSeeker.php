@@ -86,12 +86,12 @@ class FaultSeeker
 	public function query($component, $mode, $series, $stime, $etime, $nodeName,$curPage, $perPage) {
 
 		//list($stime, $etime) = $this->reviseSETime($stime, $etime);		//added by wujun
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 		$tables = $this->parseTables($nodeName,$series);
 		if(empty($tables)) {//
 			return $this->queryNodeTrace($series, $stime, $etime, $nodeName,$curPage, $perPage);
 		}
-		$name = $this->seriesName();
+		$name = Series::getNameList();
 
 		$sql = "SELECT * FROM node";
 		$nodes = Yii::app()->db->createCommand($sql)->queryAll();
@@ -327,7 +327,7 @@ class FaultSeeker
 			return array(0, array());
 		}
 
-		$name = $this->seriesName();
+		$name = Series::getNameList();
 		$sql = "SELECT * FROM node";
         $nodes = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -461,7 +461,7 @@ class FaultSeeker
 		}
 		$nodeIdStr = $this->parseNodeId($node);
 
-		$name = $this->seriesName();
+		$name = Series::getNameList();
 		$sql = "SELECT * FROM node";
         $nodes = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -472,7 +472,7 @@ class FaultSeeker
 
         $dutyList = $this->dutyList();
 
-        $arraySeries = $this->parseSeries($series);
+        $arraySeries = Series::parseSeries($series);
         $traceSeriesConditon = array();
         foreach($arraySeries as $series) {
             $traceSeriesConditon[] = "car_series = '$series'";
@@ -575,7 +575,7 @@ class FaultSeeker
 
 	public function queryDPU($component, $mode, $series, $stime, $etime, $node) {
 		$tables = $this->parseTables($node,$series);
-		$name = $this->seriesName();
+		$name = Series::getNameList();
 		if(empty($tables)) {
 			return array();
 		}
@@ -594,7 +594,7 @@ class FaultSeeker
 		$dataSeriesY = array();
 		$retTotal = array();
 
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 
 		foreach($arraySeries as $series){
 				$retTotal[$name[$series]] = array(
@@ -691,7 +691,7 @@ class FaultSeeker
 		}
 		$nodeIdStr = $this->parseNodeId($node);
 
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
         $traceSeriesConditon = array();
         foreach($arraySeries as $series) {
             $traceSeriesConditon[] = "car_series = '$series'";
@@ -796,8 +796,8 @@ class FaultSeeker
 			return array();
 		}
 		$nodeIdStr = $this->parseNodeId($node);
-		$arraySeries = $this->parseSeries($series);
-		$name = $this->seriesName();
+		$arraySeries = Series::parseSeries($series);
+		$name = Series::getNameList();
 
 		$queryTimes = $this->parseQueryTime($stime,$etime);
 		$detail = array();
@@ -904,7 +904,7 @@ class FaultSeeker
 		if(!empty($returnNode)){
 			$traceTable = 'warehouse_return_trace';
 		}
-		$arraySeries = $this->parseSeries($series);
+		$arraySeries = Series::parseSeries($series);
 
 		$queryTimes = $this->parseQueryTime($stime,$etime);
 		$ret = array();
@@ -1080,14 +1080,14 @@ class FaultSeeker
 
 	}
 
-	private function parseSeries($series) {
-		if(empty($series) || $series === 'all') {
-            $series = array('F0', 'M6', '6B');
-        } else {
-            $series = explode(',', $series);
-        }
-		return $series;
-	}
+	// private function parseSeries($series) {
+	// 	if(empty($series) || $series === 'all') {
+ //            $series = array('F0', 'M6', '6B');
+ //        } else {
+ //            $series = explode(',', $series);
+ //        }
+	// 	return $series;
+	// }
 
 	//modified by wujun
 	public function parseQueryTime($stime,$etime) {
@@ -1222,15 +1222,15 @@ class FaultSeeker
 		return array($stime, $etime);
 	}
 
-	public function seriesName(){
-		$seriesName = array(
-			'F0' => 'F0',
-			'M6' => 'M6',
-			'6B' => '思锐'
-		);
+	// public function seriesName(){
+	// 	$seriesName = array(
+	// 		'F0' => 'F0',
+	// 		'M6' => 'M6',
+	// 		'6B' => '思锐'
+	// 	);
 
-		return $seriesName;
-	}
+	// 	return $seriesName;
+	// }
 
 	public function dutyList(){
 		$list = array();

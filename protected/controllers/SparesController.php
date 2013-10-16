@@ -55,8 +55,7 @@ class SparesController extends BmsBaseController
 			$content = "线别,车系,VIN,SAP编号,零部件编号,零部件名称,零部件条码,供应商,供应商代码,工厂代码,连带损,处理,责任部门,换件故障,换件区域,换件人,换件时间\n";
 			foreach($datas as $data) {
 				$content .= "{$data['assembly_line']},";
-				$seriesName = SeriesName::getName($data['series']);
-				$content .= "{$seriesName},";
+				$content .= "{$data['series_name']},";
 				$content .= "{$data['vin']},";
 				$content .= "{$data['sap_code']},";
 				$content .= "{$data['component_code']},";

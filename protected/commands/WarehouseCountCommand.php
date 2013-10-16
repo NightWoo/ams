@@ -3,16 +3,17 @@ Yii::import('application.models.AR.WarehouseCountDailyAR');
 Yii::import('application.models.OrderSeeker');
 class WarehouseCountCommand extends CConsoleCommand
 {	
-	private static $SERIES = array(
-		'F0' => 'F0',
-		'M6' => 'M6',
-		'6B' => '思锐',
-	);
+	// private static $SERIES = array(
+	// 	'F0' => 'F0',
+	// 	'M6' => 'M6',
+	// 	'6B' => '思锐',
+	// );
 
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
-		$seriesArray = self::$SERIES;
+		// $seriesArray = self::$SERIES;
+		$seriesArray = Series::getNameList();
 		$monthStart = date("Y-m", strtotime($lastDate)) . "-01 08:00:00";
 
 		$countDate = $curDate;
@@ -57,7 +58,8 @@ class WarehouseCountCommand extends CConsoleCommand
 	public function actionCountAfternoon() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
-		$seriesArray = self::$SERIES;
+		// $seriesArray = self::$SERIES;
+		$seriesArray = Series::getNameList();
 		$monthStart = date("Y-m", strtotime($curDate)) . "-01 08:00:00";
 
 		$countDate = $curDate;

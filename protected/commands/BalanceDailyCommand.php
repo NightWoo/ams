@@ -4,11 +4,11 @@ Yii::import('application.models.AR.BalancePlanningDivisionDailyAR');
 Yii::import('application.models.CarSeeker');
 class BalanceDailyCommand extends CConsoleCommand
 {
-	private static $SERIES = array(
-		'F0' => 'F0',
-		'M6' => 'M6',
-		'6B' => '思锐',
-	);
+	// private static $SERIES = array(
+	// 	'F0' => 'F0',
+	// 	'M6' => 'M6',
+	// 	'6B' => '思锐',
+	// );
 
 	private static $STATES=array('onLine','onLine-2','VQ1','VQ2','VQ3','WH');
 
@@ -20,7 +20,8 @@ class BalanceDailyCommand extends CConsoleCommand
 		$workDate = $lastDate;
 
 		foreach(self::$STATES as $state){
-			foreach(self::$SERIES as $series => $seriesName){
+			$seriesList = Series::getNameList();
+			foreach($seriesList as $series => $seriesName){
 				$balance =$this->countBalance($state, $series);
 				$this->countSave($state,$balance,$series,$countDate,$workDate);
 			}

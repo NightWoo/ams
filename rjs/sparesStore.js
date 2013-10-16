@@ -242,7 +242,7 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		//数据包装完全包裹成功才submit
 		if(repares) {
 			$.ajax({
-				url: service.RELACE_SPARES,
+				url: service.REPLACE_SPARES,
 				dataType: "json",
 				data:{
 					"vin": $("#vinText").val(),
