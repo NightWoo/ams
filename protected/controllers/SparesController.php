@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.SparesSeeker');
+Yii::import('application.models.Spares');
 class SparesController extends BmsBaseController 
 {
 	/**
@@ -133,4 +134,25 @@ class SparesController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
+
+	public function actionReplaceSpares () {
+        $vin = $this->validateStringVal('vin', '');
+        $spares = $this->validateStringVal('spares', '[]');
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+        	if(!empty($vin)){
+	            $car = Car::create($vin);
+	            list($nodeName, $traceId) = $car->enterNode('SPARES_STORE');
+	            $car->replaceSpares($spares, $traceId);
+        	} else {
+        		$objSpares = new Spares();
+        		$objSpares->replace($spares);
+        	}
+            $transaction->commit();
+            $this->renderJsonBms(true, 'OK', null);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
 }

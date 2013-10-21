@@ -8,7 +8,7 @@ require.config({
 		"bootstrap": ["jquery"],
 		"jsrender": ["jquery"]
 	}
-})
+});
 
 require(["head","service","common","component","jquery","bootstrap","jsrender"], function (head,service,common,component,$) {
 	head.doInit();
@@ -53,12 +53,27 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		addComponentTr();
 	})
 
-	$("#btnSubmit").click(function () {
+	$(".btnSubmit").click(function () {
 		if($("#handlerSelect").val() == "") {
 			alert("换件人不可为空");
 			return false;
 		}
 		ajaxSubmit();
+	})
+
+	$("#lineSelect, #seriesSelect").change(function () {
+		updateVinText();
+	})
+
+	$("#liNoVin").click(function () {
+		resetPage();
+		updateVinText();
+		$("#newFaultTr").show();
+		$("#faultsDiv, #faultsTable").show();
+	})
+
+	$("#liWithVin").click(function () {
+		resetPage();
 	})
 
 	// $("#componentsTable").on("focus", "input[name=componentName]" ,function (e) {
@@ -212,6 +227,8 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 				isScrap = $(tr).find("input").filter(".scrapCheck").prop( "checked" ) ? 1 : 0;
 
 				$(tr).data("carId", $("#vinText").data("carId"));
+				$(tr).data("series", $("#vinText").data("series"));
+				$(tr).data("line", $("#vinText").data("line"));
 				$(tr).data("faultId", $(":radio[name=choseFault]:checked").data("id"));
 				$(tr).data("faultComponentName", $(":radio[name=choseFault]:checked").data("component_name"));
 				$(tr).data("faultMode", $(":radio[name=choseFault]:checked").data("fault_mode"));
@@ -234,6 +251,13 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		}
 		var jsonText = JSON.stringify(dataObj);
 		return jsonText;
+	}
+
+	function updateVinText () {
+		series = $("#seriesSelect").val();
+		line = $("#lineSelect").val();
+		$("#vinText").data("carId", 0).data("line", line).data("series", series).val("");
+		$("#newLine").html(line+"线");
 	}
 
 	function ajaxSubmit () {
@@ -292,10 +316,12 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		resetPage();
 		$("#messageAlert").hide();
 		getHandlerTeams();
+		getLine();
+		getSeries();
 	}
 
 	function resetPage () {
-		$("#vinText").removeAttr("disabled").val("").focus();
+		$("#vinText").removeAttr("disabled").data("carId", 0).data("line", "").data("series", "").val("").focus();
 		$("#validateVinBtn").removeAttr("disabled");
 		$("#btnSubmit").attr("disabled", "");
 		toggleVinHint(true);
@@ -464,6 +490,42 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 
 		$("#componentsDiv").hide();
 		$("#componentsTable>tbody").html("");
+	}
+
+	function getLine () {
+		$.ajax({
+			url: service.GET_LINE_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplLineSelect").render(response.data);
+					$("#lineSelect").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: service.GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$("#seriesSelect").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 	function getHandlerTeams () {

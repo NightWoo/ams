@@ -6,6 +6,10 @@
 	display: none;
 }
 
+#tabs {
+	margin-bottom: 5px;
+}
+
 #componentsTable input, #componentsTable select {
 	margin-bottom: 0;
 }

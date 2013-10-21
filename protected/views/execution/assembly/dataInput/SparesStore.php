@@ -23,29 +23,60 @@
 
 			<div><!-- mainbody -->
 				<div>
-					<form id="formVin" class="well form-search">
-						<div>
-							<div class="input-prepend input-append">
-								<span class="add-on">VIN</span>
-								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
-								<a id="validateVinBtn" class="btn validateVinBtn appendBtn"><i class="icon-search"></i></a>
-							</div>
-							<button type="button" id="btnSubmit" class="btn btn-primary">提交</button>
-							<button type="button" id="reset" class="btn">清空</button>
-							<input type="hidden" id="currentNod" name="currentNode" value="<?php echo $node?>">
-							<div class="help-inline" id="vinHint">请输入VIN后回车</div>
-							<div class="help-inline" id="carInfo">
-								<span class="label label-info" rel="tooltip" title="流水号" id="serialNumberInfo"></span>
-								<span class="label label-info" rel="tooltip" title="车系" id="seriesInfo"></span>
-								<span class="label label-info" rel="tooltip" title="车型" id="typeInfo"></span>
-								<span class="label label-info" rel="tooltip" title="耐寒" id="coldInfo"></span>
-								<span class="label label-info" rel="tooltip" title="颜色" id="colorInfo"></span>
-                        		<span class="label label-info" rel="tooltip" title="状态" id="statusInfo"></span>
-                        		<span class="label label-info" rel="tooltip" title="库区" id="rowInfo"></span>
-							</div>
-						</div>
-						<div id="messageAlert" class="alert"></div>
-					</form>
+					<div>
+                    	<ul id="tabs" class="nav nav-pills">
+                            <li class="active" id="liWithVin"><a href="#withVin" data-toggle="tab">车辆换件</a></li>
+                            <li id="liNoVin"><a href="#noVin" data-toggle="tab">产线换件</a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                    	<div id="withVin" class="tab-pane active">
+                    		<form id="formWithVin" class="well form-search">
+								<div>
+									<div class="input-prepend input-append">
+										<span class="add-on">VIN</span>
+										<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
+										<a id="validateVinBtn" class="btn validateVinBtn appendBtn"><i class="icon-search"></i></a>
+									</div>
+									<button type="button" id="btnSubmit" class="btn btn-primary btnSubmit">提交</button>
+									<button type="button" id="reset" class="btn">清空</button>
+									<input type="hidden" id="currentNod" name="currentNode" value="<?php echo $node?>">
+									<div class="help-inline" id="vinHint">请输入VIN后回车</div>
+									<div class="help-inline" id="carInfo">
+										<span class="label label-info" rel="tooltip" title="流水号" id="serialNumberInfo"></span>
+										<span class="label label-info" rel="tooltip" title="车系" id="seriesInfo"></span>
+										<span class="label label-info" rel="tooltip" title="车型" id="typeInfo"></span>
+										<span class="label label-info" rel="tooltip" title="耐寒" id="coldInfo"></span>
+										<span class="label label-info" rel="tooltip" title="颜色" id="colorInfo"></span>
+		                        		<span class="label label-info" rel="tooltip" title="状态" id="statusInfo"></span>
+		                        		<span class="label label-info" rel="tooltip" title="库区" id="rowInfo"></span>
+									</div>
+								</div>
+							</form>
+                    	</div>
+                    	<div id="noVin" class="tab-pane">
+                    		<form id="formWithVin" class="well form-search">
+								<div>
+									<div class="input-prepend">
+										<span class="add-on">线别</span>
+										<select id="lineSelect" class="input-small"></select>
+									</div>
+									<script id="tmplLineSelect" type="text/x-jsrander">
+										<option value='{{:line}}'>{{:line}}</option>
+									</script>
+									<div class="input-prepend">
+										<span class="add-on">车系</span>
+										<select id="seriesSelect" class="input-small"></select>
+									</div>
+									<script id="tmplSeriesSelect" type="text/x-jsrander">
+										<option value='{{:series}}'>{{:name}}</option>
+									</script>
+									<button type="button" id="btnSubmitNoVin" class="btn btn-primary btnSubmit">提交</button>
+								</div>
+							</form>
+                    	</div>
+                    </div>
+					<div id="messageAlert" class="alert"></div>
 					<div id="checkAlert"></div>
 					<div class="row-fluid">
 						<div id="faultsDiv" class="span4">

@@ -1941,6 +1941,8 @@ class Car
 		foreach($spares as $spare) {
 			$replacementAr = new SpareReplacementAR();
 			$replacementAr->car_id = $this->car->id;
+			$replacementAr->series = $spare['series'];
+			$replacementAr->assembly_line = $spare['line'];
 			$replacementAr->node_trace_id = $traceId;
 			$replacementAr->component_id = $spare['componentId'];
 			$replacementAr->duty_area = $spare['dutyArea'];

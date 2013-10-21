@@ -2,6 +2,9 @@ define({
 	"SPARES_STORE_VALIDATE": "/bms/car/validateSparesStore",
 	"QUERY_DUTY_DEPARTMENT": "/bms/query/queryDutyDepartment",
 
+	"GET_SERIES_LIST": "/bms/common/getSeriesList",
+	"GET_LINE_LIST": "/bms/common/getLineList",
+
 	"QUERY_REPLACEMENT_DETAIL": "/bms/spares/queryReplacementDetail",
 	"EXPORT_REPLACEMENT_DETAIL": "/bms/spares/exportReplacementDetail",
 	"QUERY_REPLACEMENT_COST_TREND": "/bms/spares/queryCostTrend",
@@ -13,7 +16,7 @@ define({
 	"GET_COMPONENT_CODE": "/bms/component/getCode",
 	"GET_COMPONENT_INFO": "/bms/component/getInfo",
 	"VALIDATE_BAR_CODE": "/bms/car/validateBarCode",
-	"REPLACE_SPARES": "/bms/car/replaceSpares",
+	"REPLACE_SPARES": "/bms/spares/replaceSpares",
 	"QUERY_SIMPLE_DAILY": "/bms/report/querySimpleDaily",
 	"SHOW_HOME_EFFICIENCY_INFO": "/bms/monitor/showHomeEfficiency",
 	"SHOW_HOME_COST_INFO": "/bms/monitor/showHomeCost",
