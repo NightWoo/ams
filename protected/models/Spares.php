@@ -1,6 +1,7 @@
 <?php
+Yii::import('application.models.AR.SpareReplacementAR');
 
-class Spare
+class Spares
 {
 	public function replace ($spares) {
 		$spares = is_array($spares) ? $spares : CJSON::decode($spares);

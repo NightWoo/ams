@@ -63,6 +63,8 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 
 	$("#lineSelect, #seriesSelect").change(function () {
 		updateVinText();
+		$("#newFaultComponent").val("");
+		disableNewFault();
 	})
 
 	$("#liNoVin").click(function () {
@@ -336,6 +338,9 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		options = common.getDutyOptions("SparesStore", true);
 		$("#dutySelect").append(options);
 		configList = [];
+
+		$("#dutySelect option:first-child, #teamSelect option:first-child").prop("selected", true);
+		getHandlers("");
 	}
 
 	function toggleVinHint (showVinHint) {

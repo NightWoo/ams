@@ -2,6 +2,7 @@
 Yii::import('application.models.Component');
 Yii::import('application.models.AR.ComponentAR');
 Yii::import('application.models.AR.NodeTraceAR');
+Yii::import('application.models.AR.CarSeriesAR');
 
 class SparesSeeker 
 {
