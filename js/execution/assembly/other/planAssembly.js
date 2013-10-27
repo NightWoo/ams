@@ -590,7 +590,7 @@ $(document).ready(function () {
 			dataType: "json",
 			data: {},
 			async: false,
-			error: function () {common.alertError();},
+			error: function () {alertError();},
 			success: function (response) {
 				if(response.success){
 					options = $.templates("#tmplSeriesSelect").render(response.data);

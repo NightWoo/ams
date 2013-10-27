@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
     <script type="text/javascript" src="/bms/js/jquery.form.js"></script>
 	<script type="text/javascript" src="/bms/js/generalInformation/basicData/faultMaintain.js"></script>
@@ -60,11 +61,14 @@
 						</tr>
 						<tr>
 							<td>
-								<select id="selectCarSeries" class="span1">
-									<option value="F0" selected>F0</option>
+								<select id="selectCarSeries" class="span1 carSeries">
+									<!-- <option value="F0" selected>F0</option>
 									<option value="M6">M6</option>
-									<option value="6B">思锐</option>
+									<option value="6B">思锐</option> -->
 								</select>
+								<script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
 							</td>
 							<td>
 								<select id="selectFaultKind" class="input-small">
@@ -161,10 +165,10 @@
   			<div class="control-group">
 			    <label class="control-label" for="newSeries">车系 </label>
 			    <div class="controls">
-			      	<select id="newSeries" class="span2">
-						<option value="F0">F0</option>
+			      	<select id="newSeries" class="span2 carSeries">
+						<!-- <option value="F0">F0</option>
 						<option value="M6">M6</option>
-						<option value="6B">思锐</option>
+						<option value="6B">思锐</option> -->
 					</select>
 			    </div>
 			</div>
@@ -244,11 +248,10 @@
   			<div class="control-group">
 			    <label class="control-label" for="inputSeries">车系 </label>
 			    <div class="controls">
-			      	<select id="inputSeries" class="span2" disabled="disabled">
-						<option value="F0">F0</option>
+			      	<select id="inputSeries" class="span2 carSeries" disabled="disabled">
+						<!-- <option value="F0">F0</option>
 						<option value="M6">M6</option>
-						<option value="6B">思锐</option>
-						
+						<option value="6B">思锐</option> -->
 					</select>
 			    </div>
 			</div>

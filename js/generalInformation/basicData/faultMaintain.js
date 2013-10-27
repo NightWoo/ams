@@ -61,6 +61,7 @@ $(document).ready( function () {
 	function initPage () {
 		$("#headGeneralInformationLi").addClass("active");
 		$("#leftFaultMaintainLi").addClass("active");
+		getSeries();
 
 		$('#editModal').modal({
 			"show" : false
@@ -73,6 +74,24 @@ $(document).ready( function () {
 			"show" : false
 		});
 		$(".pagination").hide();
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$(".carSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 	$(window).bind('keydown', enterHandler);

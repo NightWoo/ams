@@ -48,9 +48,9 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap"], functio
 					})
 
 					$.each(response.data.qualificationDaily, function (key, value) {
-						$("." + key).filter(".total").html(value.total*100 + "%");
+						$("." + key).filter(".total").html((value.total*100).toFixed(0) + "%");
 						$.each(value.sub, function (series, subValue) {
-							$("." + key).filter(".sub").filter("." + series).html(subValue*100 + "%");
+							$("." + key).filter(".sub").filter("." + series).html((subValue*100).toFixed(0) + "%");
 						})
 					})
 				}

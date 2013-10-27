@@ -43,6 +43,7 @@
                             <li class="active" id="liF0"><a href="#F0" data-toggle="tab">F0</a></li>
                             <li id="liM6"><a href="#M6" data-toggle="tab">M6</a></li>
                             <li id="li6B"><a href="#6B" data-toggle="tab">思锐</a></li>
+                            <li id="liG6"><a href="#G6" data-toggle="tab">G6</a></li>
                         </ul>
                     </div>
 
@@ -167,6 +168,46 @@
 										</table>
                 				</form>
 							</div>
+
+							<div id="G6" class="tab-pane">
+								<form id="formG6">
+										<table>
+											<tr>
+												<td><label>类别</label></td>
+												<td><label>零部件名称</label></td>
+												<td><label>编号</label></td>
+												<td><label></label></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>
+													<select id="selectCategoryG6" class="input-small">
+														<option value="0" selected>全部</option>
+														<option value="1">车身</option>
+														<option value="2">动力</option>
+														<option value="3">底盘</option>
+														<option value="4">电器</option>
+														<option value="5">内外饰</option>
+														<option value="6">附件</option>
+														<option value="7">其他</option>
+													</select>
+												</td>
+												<td><input id="inputNameG6" type="text" class="span3" placeholder="零部件名称"></td>
+												<td><input id="inputCodeG6" type="text" class="span2" placeholder="零部件编号"></td>
+												<td>
+													<button id="btnQueryG6" type="reset" class="btn btn-primary">查询</button>                       	
+													<button id="btnAddG6" type="reset" class="btn">新增</button>
+												</td>
+												<td>
+													<label class="checkbox">
+														<input type="checkbox" id="isFaultG6" value="1" checked>故障件
+													</label>
+												</td>
+											</tr>
+										</table>
+                				</form>
+							</div>
 						</div>  <!-- div form  end -->
            	  			               
 						                 	
@@ -224,6 +265,7 @@
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
 						<option value="6B">思锐</option>
+						<option value="G6">G6</option>
 					</select>
 			    </div>
 			</div>
@@ -315,6 +357,7 @@
 						<option value="F0">F0</option>
 						<option value="M6">M6</option>
 						<option value="6B">思锐</option>
+						<option value="G6">G6</option>
 					</select>
 			    </div>
 			</div>

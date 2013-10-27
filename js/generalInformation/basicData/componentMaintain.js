@@ -243,6 +243,9 @@ $(document).ready( function () {
 			} else if($("#li6B").hasClass("active")){
 				var isFault = Number($("#isFault6B").attr("checked") === "checked");
 				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(), isFault, parseInt($(".curPage").attr("page")));
+			} else if($("#liG6").hasClass("active")){
+				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
+				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(), isFault, parseInt($(".curPage").attr("page")));
 			}
 	}
 
@@ -293,6 +296,13 @@ $(document).ready( function () {
 	$("#btnQuery6B").click(function () {
 		var isFault = Number($("#isFault6B").attr("checked") === "checked");
 		ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
+			isFault);
+		return false;
+	});
+
+	$("#btnQueryG6").click(function () {
+		var isFault = Number($("#isFaultG6").attr("checked") === "checked");
+		ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(),
 			isFault);
 		return false;
 	});
@@ -357,6 +367,11 @@ $(document).ready( function () {
 		$('#newModal').modal("toggle");
 	});
 
+	$("#btnAddG6").click(function () {
+		$('#newSeries').attr("value", "G6");
+		$('#newModal').modal("toggle");
+	});
+
 	$("#btnEditConfirm").click(function () {
 		ajaxEdit();
 	});
@@ -389,6 +404,10 @@ $(document).ready( function () {
 				var isFault = Number($("#isFault6B").attr("checked") === "checked");
 				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
 					isFault, parseInt($(".curPage").attr("page")) - 1);
+			} else if(($("#liG6").hasClass("active"))) {
+				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
+				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(),
+					isFault, parseInt($(".curPage").attr("page")) - 1);
 			}
 		}
 	);
@@ -406,6 +425,10 @@ $(document).ready( function () {
 			} else if(($("#li6B").hasClass("active"))) {
 				var isFault = Number($("#isFault6B").attr("checked") === "checked");
 				ajaxQuery("6B", $("#inputName6B").val(), $("#inputCode6B").val(), $("#selectCategory6B").val(),
+					isFault, parseInt($(".curPage").attr("page")) + 1);
+			} else if(($("#liG6").hasClass("active"))) {
+				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
+				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(),
 					isFault, parseInt($(".curPage").attr("page")) + 1);
 			}
 		}
