@@ -2,13 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>车辆查询.总装</title>
+		<title>车辆查询</title>
     	<!-- Le styles -->
     	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 		<link href="/bms/css/common.css" rel="stylesheet">		
         <script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
     	<script type="text/javascript" src="/bms/js/execution/assembly/query/carQuery.js"></script>
 
@@ -58,10 +59,13 @@
                             <td>
                                 <select name="" id="selectSeries" class="input-small">
                                     <option value="" selected>不限</option>
-                                    <option value="F0">F0</option>
+                                    <!-- <option value="F0">F0</option>
                                     <option value="M6">M6</option>
-                                    <option value="6B">思锐</option>
+                                    <option value="6B">思锐</option> -->
                                 </select>
+                                <script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
                             </td>
                             <td>
                                 <input type="text" class="input-small" placeholder="流水号" id="serialText" />

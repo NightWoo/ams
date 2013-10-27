@@ -12,6 +12,9 @@
         .well {
             margin-bottom: 10px;
         }
+        #seriesCheckboxDiv {
+            display: inline-block;
+        }
         .checkbox{
             margin-left: 5px;
         }
@@ -53,11 +56,14 @@
                         </div>
                         <div class="input-prepend">
                             <span class="add-on">线别</span>
-                            <select id="line" class="input-small">
+                            <select id="line" class="input-small lineSelect">
                                 <option value="" selected>全部</option>
-                                <option value="I">I线</option>
-                                <option value="II">II线</option>
+                                <!-- <option value="I">I线</option>
+                                <option value="II">II线</option> -->
                             </select>
+                            <script id="tmplLineSelect" type="text/x-jsrander">
+                                <option value='{{:line}}'>{{:line}}线</option>
+                            </script>
                         </div>
                         <div class="input-prepend">
                             <span class="add-on">责任</span>
@@ -65,9 +71,11 @@
                                 <option value='0' selected>全部</option>
                             </select>
                         </div>
-                        <label class="checkbox"><input type="checkbox" id="checkboxF0" value="F0">F0</input></label>
-                        <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
-                        <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
+                        <div class="seriesCheckbox" id="seriesCheckboxDiv">
+                        </div>
+                        <script id="tmplSeriesCheckbox" type="text/x-jsrander">
+                            <label class='checkbox'><input type='checkbox' id='checkbox{{:series}}' value='{{:series}}'>{{:name}}</input></label>
+                        </script>
                 </form>
                 <div>
                     <ul id="tabs" class="nav nav-pills">

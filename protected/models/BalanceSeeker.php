@@ -87,10 +87,14 @@ class BalanceSeeker
 		foreach($seriesArray as $series){
 			$cars = $this->queryBalanceCars($state, $series, $whAvailableOnly);
 			foreach($cars as &$car) {
+				$vq1StartTime = $car['vq1_return_time'] > "0000-00-00 00:00:00" ? $car['vq1_return_time'] : $car['finish_time'];
+				$vq2StartTime = $car['vq2_return_time'] > "0000-00-00 00:00:00" ? $car['vq2_return_time'] : $car['vq1_finish_time'];
+				$vq3StartTime = $car['vq3_return_time'] > "0000-00-00 00:00:00" ? $car['vq3_return_time'] : $car['vq2_finish_time'];
+
 				$car['assembly_period'] = $this->calculatePeriod($car['assembly_time'], $car['finish_time']) / 3600;
-				$car['vq1_period'] = $this->calculatePeriod($car['finish_time'], $car['vq1_finish_time']) / 3600;
-				$car['vq2_period'] = $this->calculatePeriod($car['vq1_finish_time'], $car['vq2_finish_time']) / 3600;
-				$car['vq3_period'] = $this->calculatePeriod($car['vq2_finish_time'], $car['warehouse_time']) / 3600;
+				$car['vq1_period'] = $this->calculatePeriod($vq1StartTime, $car['vq1_finish_time']) / 3600;
+				$car['vq2_period'] = $this->calculatePeriod($vq2StartTime, $car['vq2_finish_time']) / 3600;
+				$car['vq3_period'] = $this->calculatePeriod($vq3StartTime, $car['warehouse_time']) / 3600;
 				$car['inventory_period'] = $this->calculatePeriod($car['warehouse_time'], $car['standby_time']) / 3600;
 				$car['standby_period'] = $this->calculatePeriod($car['standby_time'], $car['distribute_time']) / 3600;
 				$car['manufacture_period'] = $car['assembly_period'] + $car['vq1_period'] + $car['vq2_period'] + $car['vq3_period'];
@@ -145,7 +149,7 @@ class BalanceSeeker
 			$condition .= " AND warehouse_id > 1 AND warehouse_id < 1000 AND special_property=0";
 		}
 
-		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time
+		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time, vq1_return_time, vq2_return_time, vq3_return_time
 				FROM car 
 				WHERE $condition";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();

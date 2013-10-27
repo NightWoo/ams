@@ -738,10 +738,10 @@ class CarSeeker
 		$avgTotal = array();
 
 		$periodArray = array(
-			'装配' => array('start'=>'assembly_time', 'end'=>'finish_time'),
-			'VQ1' => array('start'=>'finish_time', 'end'=>'vq1_finish_time'),
-			'VQ2' => array('start'=>'vq1_finish_time', 'end'=>'vq2_finish_time'),
-			'VQ3' => array('start'=>'vq2_finish_time', 'end'=>'warehouse_time'),
+			'装配' => array('start'=>'assembly_time', 'end'=>'finish_time', 'return'=>'assembly_time'),
+			'VQ1' => array('start'=>'finish_time', 'end'=>'vq1_finish_time', 'return'=>'vq1_return_time'),
+			'VQ2' => array('start'=>'vq1_finish_time', 'end'=>'vq2_finish_time', 'return'=>'vq2_return_time'),
+			'VQ3' => array('start'=>'vq2_finish_time', 'end'=>'warehouse_time', 'return'=>'vq3_return_time'),
 			// '库存周期' => array('start'=>'warehouse_time', 'end'=>'standby_time'),
 			// '备车周期' => array('start'=>'standby_time', 'end'=>'distribute_time'),
 		);
@@ -767,7 +767,8 @@ class CarSeeker
 			foreach($cars as &$car){
 				foreach($periodArray as $key => $period) {
 					if($car[$period['start']] > "0000-00-00 00:00:00");{
-						$hours = $this->calculatePeriod($car[$period['start']], $car[$period['end']]);
+						$startTime = $period['return'] > "0000-00-00 00:00:00" ? $period['return'] : $period['start'];
+						$hours = $this->calculatePeriod($startTime, $car[$period['end']]);
 						$total[$key] += $hours;
 						$count[$key]++;
 
@@ -815,7 +816,7 @@ class CarSeeker
 		    $seriesConditon = "(" . join(' OR ', $seriesConditons) . ")";
 		    $condition .= " AND $seriesConditon";
 		}
-		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time
+		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time, vq1_finish_time, vq2_finish_time, vq3_finish_time
 				FROM car
 				WHERE $condition";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();

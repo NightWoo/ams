@@ -75,6 +75,9 @@ $(document).ready(function () {
 
 		// $("#startTime").val(currentDate8());
 		// $("#endTime").val(currentDate16());
+
+		getSeries();
+		
 		resetAll();
 	}
 	
@@ -237,6 +240,10 @@ $(document).ready(function () {
 	// 		$("#recyclePeriodLi").hide();
 	// 	}
 	// })
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });
 
 //-------------------END event bindings -----------------------
 
@@ -538,11 +545,26 @@ $(document).ready(function () {
 			}
 		})
 	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$("#selectSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
 	
-	$('body').tooltip(
-        {
-         selector: "select[rel=tooltip], a[rel=tooltip]"
-    });
+
 //-------------------END ajax query -----------------------
 
 });

@@ -3,7 +3,7 @@ Yii::import('application.models.AR.SeriesAR');
 class Series
 {
 	public static function getName ($series) {
-        $seriesName = CarSeriesAR::model()->find('series=?', array($series))->name;
+        $seriesName = SeriesAR::model()->find('series=?', array($series))->name;
         return $seriesName;
 	}
 

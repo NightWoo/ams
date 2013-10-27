@@ -81,10 +81,13 @@
                                 <td>
                                     <select name="" id="selectSeries" class="input-small">
                                         <option value="">全车系</option>
-                                        <option value="F0">F0</option>
+                                        <!-- <option value="F0">F0</option>
                                         <option value="M6">M6</option>
-                                        <option value="6B">思锐</option>
+                                        <option value="6B">思锐</option> -->
                                     </select>
+                                    <script id="tmplSeriesSelect" type="text/x-jsrander">
+                                        <option value='{{:series}}'>{{:name}}</option>
+                                    </script>
                                 </td>
                                 <!-- <td colspan="2">
                                     <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   

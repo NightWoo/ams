@@ -18,6 +18,7 @@
         <script type="text/javascript" src="/bms/js/bootstrap.js"></script>
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script> -->
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/componentQuery.js"></script>
         <!-- <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script> -->
@@ -51,10 +52,13 @@
 								<input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
 								<!-- <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input> -->
 								<select name="" id="series" class="input-small">
-									<option value="f0">F0</option>
+									<!-- <option value="f0">F0</option>
 									<option value="m6">M6</option>
-									<option value="6b">思锐</option>
+									<option value="6b">思锐</option> -->
 								</select>
+								<script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
 							</td>
 							
 						</tr>

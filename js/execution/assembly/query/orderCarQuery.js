@@ -11,6 +11,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftOrderCarQueryLi").addClass("active");
+		getSeries();
 		$("#divInfo").hide();
 		$("#tableOrderCars, #tableOrderDetail").hide();	//add by wujun
 		$("#standbyDate, #standbyDateEnd").val(window.byd.DateUtil.currentDate);
@@ -432,6 +433,23 @@ $(document).ready(function () {
 		}
 	}
  
+ function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$("#selectSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
  	
 
 });

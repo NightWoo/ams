@@ -15,20 +15,11 @@ $(document).ready(function () {
 		$("#startTime").val(currentDate8());
 		$("#endTime").val(currentDate16());
 
+		getSeries();
+
 		resetAll();
 	}
 
-	$("#selectNode").change(function () {
-		var nV = this.value;
-
-		if (nV === "CHECK_LINE") {
-			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").hide();
-			$("#selectItem").show();
-		} else {
-			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").show();
-			$("#selectItem").val("").hide();
-		}
-	});
 	function currentDate8 (argument) {
 		var now = new Date();
 	        var year = now.getFullYear();       //年
@@ -77,6 +68,24 @@ $(document).ready(function () {
 		$("#selectItem").hide();
 	}
 
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesCheckbox").render(response.data);
+					$("#seriesCheckboxDiv").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
 /*
  * ----------------------------------------------------------------
  * Event bindings
@@ -89,6 +98,18 @@ $(document).ready(function () {
 		    return false;
 		}
 	}
+
+	$("#selectNode").change(function () {
+		var nV = this.value;
+
+		if (nV === "CHECK_LINE") {
+			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").hide();
+			$("#selectItem").show();
+		} else {
+			$("#dpuTab,#passRateTab,#platoTab,#dutyDistributionTab").show();
+			$("#selectItem").val("").hide();
+		}
+	});
 	
 	$("#btnQuery").bind("click",toQuery);
 	function toQuery() {
@@ -270,20 +291,35 @@ $(document).ready(function () {
 
 
 
-function getSeriesChecked () {
-	var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-	var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-	var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
-	
-	var temp = [];
-	if (f0Checked)
-		temp.push($("#checkboxF0").val());
-	if (m6Checked)
-		temp.push($("#checkboxM6").val());
-	if (_6BChecked)
-		temp.push($("#checkbox6B").val());
-	return temp.join(",");
-}
+	function getSeriesChecked () {
+		seriesArray = getSeriesArray();
+		var temp = [];
+		$.each(seriesArray, function (series, seriesName) {
+			if($("#checkbox" + series).prop("checked")) {
+				temp.push($("#checkbox" + series).val())
+			}
+		})
+		return temp.join(",");
+	}
+
+	function getSeriesArray () {
+		var seriesArray = {};
+		$.ajax({
+			url: GET_SERIES_ARRAY,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					seriesArray = response.data;
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return seriesArray;
+	}
 /*
  * ----------------------------------------------------------------
  * Ajax query

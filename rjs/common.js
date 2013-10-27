@@ -1,8 +1,32 @@
 define(['service'], function(service) {
-	SeriesArray = {
-		"F0" : "F0",
-		"M6" : "M6",
-		"6B" : "思锐"
+	// SeriesArray = {
+	// 	"F0" : "F0",
+	// 	"M6" : "M6",
+	// 	"6B" : "思锐"
+	// }
+
+	function getSeriesArray () {
+		var seriesArray = {};
+		$.ajax({
+			url: service.GET_SERIES_ARRAY,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					seriesArray = response.data;
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return seriesArray;
+	}
+
+	function alertError (message) {
+		message = message || 'ajax error';
+			alert(message);
 	}
 
 	function fadeMessageAlert (message,alertClass) {
@@ -48,23 +72,60 @@ define(['service'], function(service) {
 	}
 
 	function getSeriesChecked () {
-		var f0Checked = $("#checkboxF0").prop("checked");
-		var m6Checked = $("#checkboxM6").prop("checked");
-		var _6BChecked = $("#checkbox6B").prop("checked");
-		
+		seriesArray = getSeriesArray();
 		var temp = [];
-		if (f0Checked)
-			temp.push($("#checkboxF0").val());
-		if (m6Checked)
-			temp.push($("#checkboxM6").val());
-		if (_6BChecked)
-			temp.push($("#checkbox6B").val());
+		$.each(seriesArray, function (series, seriesName) {
+			if($("#checkbox" + series).prop("checked")) {
+				temp.push($("#checkbox" + series).val())
+			}
+		})
 		return temp.join(",");
+	}
+
+	function fillSeriesCheckbox () {
+		$.ajax({
+			url: service.GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesCheckbox").render(response.data);
+					$(".seriesCheckbox").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function fillLineSelect () {
+		$.ajax({
+			url: service.GET_LINE_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplLineSelect").render(response.data);
+					$(".lineSelect").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 	return {
 		seriesName: function (series) {
+			SeriesArray = getSeriesArray();
 			return SeriesArray[series];
+		},
+
+		getSeriesArray: function () {
+			return getSeriesArray();
 		},
 
 		fadeMessageAlert: function (message, alertClass) {
@@ -84,8 +145,15 @@ define(['service'], function(service) {
 		},
 
 		alertError: function (message) {
-			message = message || 'ajax error';
-			// alert(message);
+			return alertError(message);
+		},
+
+		fillSeriesCheckbox: function () {
+			return fillSeriesCheckbox();
+		},
+
+		fillLineSelect: function () {
+			return fillLineSelect();
 		},
 
 		attachTooltip: function () {

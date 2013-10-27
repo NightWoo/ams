@@ -15,6 +15,7 @@ $(document).ready(function () {
 		$("#startTime").val(window.byd.DateUtil.currentDate8);
 		// $("#endTime").val(currentDate16());
 		$("#endTime").val(window.byd.DateUtil.currentTime);
+		getSeries();
 
 		resetAll();
 	}
@@ -61,18 +62,33 @@ $(document).ready(function () {
 	}
 
 	function getSeriesChecked () {
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
-		
+		seriesArray = getSeriesArray();
 		var temp = [];
-		if (f0Checked)
-			temp.push($("#checkboxF0").val());
-		if (m6Checked)
-			temp.push($("#checkboxM6").val());
-		if (_6BChecked)
-			temp.push($("#checkbox6B").val());
+		$.each(seriesArray, function (series, seriesName) {
+			if($("#checkbox" + series).prop("checked")) {
+				temp.push($("#checkbox" + series).val())
+			}
+		})
 		return temp.join(",");
+	}
+
+	function getSeriesArray () {
+		var seriesArray = {};
+		$.ajax({
+			url: GET_SERIES_ARRAY,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					seriesArray = response.data;
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return seriesArray;
 	}
 
 /*
@@ -281,6 +297,11 @@ $(document).ready(function () {
 	    duration: "fast",
 	    buttonImageOnly: true,
 	});
+
+	$('body').tooltip(
+        {
+         selector: "select[rel=tooltip], a[rel=tooltip]"
+    });
 
 //-------------------END event bindings -----------------------
 
@@ -937,10 +958,23 @@ $(document).ready(function () {
 		})
 	}
 
-	$('body').tooltip(
-        {
-         selector: "select[rel=tooltip], a[rel=tooltip]"
-    });
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesCheckbox").render(response.data);
+					$("#seriesCheckboxDiv").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
 
 //-------------------END ajax query -----------------------
 

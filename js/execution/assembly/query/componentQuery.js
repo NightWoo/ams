@@ -11,6 +11,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftComponentQueryLi").addClass("active");
+		getSeries();
 		resetAll();
 	}
 
@@ -119,23 +120,7 @@ $(document).ready(function () {
  * Ajax query
  * ----------------------------------------------------------------
  */	
-	 function getSeriesChecked () {
-		var f0Checked = $("#checkboxF0").attr("checked") === "checked";
-		var m6Checked = $("#checkboxM6").attr("checked") === "checked";
-		var _6BChecked = $("#checkbox6B").attr("checked") === "checked";
-		
-		var temp = [];
-		if (f0Checked)
-			temp.push($("#checkboxF0").val());
-		if (m6Checked)
-			temp.push($("#checkboxM6").val());
-		if (_6BChecked)
-			temp.push($("#checkbox6B").val());
-		return temp.join(",");
-	}
-
 	function ajaxQuery (targetPage) {
-		// series = getSeriesChecked();
 		$("#pagination").hide();
 		$("#resultTable").hide();
 		$("#resultTable tbody").html("");
@@ -206,7 +191,6 @@ $(document).ready(function () {
 	}
 
 	function ajaxExport () {
-		// series = getSeriesChecked();
 		window.open(COMPONENT_EXPORT + 
 			"?vin=" + $('#vinText').val() + 
 			"&node=" + $("#selectNode").val() + 
@@ -217,6 +201,24 @@ $(document).ready(function () {
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
 		);
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$("#series").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 //-------------------END ajax query -----------------------
 

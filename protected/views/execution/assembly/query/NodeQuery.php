@@ -16,6 +16,7 @@
         <script type="text/javascript" src="/bms/js/jquery-ui-timepicker-addon.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script> -->
         <!-- <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
         <script type="text/javascript" src="/bms/js/head.js"></script>
@@ -101,9 +102,14 @@
                                 <input type="text" class="span3" placeholder="故障模式..." id="faultModeText" />
                             </td>
                             <td>
-                                <label class="checkbox"><input type="checkbox" id="checkboxF0" value="F0">F0</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
-                                <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
+                                <div id="seriesCheckboxDiv">
+                                    <!-- <label class="checkbox"><input type="checkbox" id="checkboxF0" value="F0">F0</input></label>
+                                    <label class="checkbox"><input type="checkbox" id="checkboxM6" value="M6">M6</input></label>
+                                    <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label> -->
+                                </div>
+                                <script id="tmplSeriesCheckbox" type="text/x-jsrander">
+                                    <label class='checkbox'><input type='checkbox' id='checkbox{{:series}}' value='{{:series}}'>{{:name}}</input></label>
+                                </script>
                             </td>
                         </tr>
 					</table> 

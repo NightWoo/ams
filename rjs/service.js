@@ -3,6 +3,7 @@ define({
 	"QUERY_DUTY_DEPARTMENT": "/bms/query/queryDutyDepartment",
 
 	"GET_SERIES_LIST": "/bms/common/getSeriesList",
+	"GET_SERIES_ARRAY": "/bms/common/getSeriesArray",
 	"GET_LINE_LIST": "/bms/common/getLineList",
 
 	"QUERY_REPLACEMENT_DETAIL": "/bms/spares/queryReplacementDetail",

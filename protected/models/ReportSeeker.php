@@ -152,8 +152,12 @@ class ReportSeeker
 		$countArray["warehouseMonth"] = $this->countCarByPoint($sMonth, $eDate, "warehouse");
 		$countArray["distributeMonth"] = $this->countCarByPoint($sMonth, $eDate, "distribute");
 
-		$countArray["recycleBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
-		$countArray["warehouseBalance"] = array("F0"=>"","M6"=>"","6B"=>"");
+		$seriesArray = Series::getArray();
+		$count = array();
+		foreach($seriesArray as $series){
+			$countArray["recycleBalance"][$series] = "";
+			$countArray["warehouseBalance"][$series] = "";
+		}
 		$curDate = DateUtil::getCurDate();
 		if(strtotime($date) < strtotime($curDate)){
 			$nextDay = date("Y-m-d", strtotime('+1 day', strtotime($date)));
@@ -279,11 +283,12 @@ class ReportSeeker
 		$sql .= " GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
-		$count = array(
-			"F0"=>array(),
-			"M6"=>array(),
-			"6B"=>array(),
-		);
+
+		$seriesArray = Series::getArray();
+		$count = array();
+		foreach($seriesArray as $series){
+			$count[$series] = array();
+		}
 		foreach($count as $key => &$one){
 			$one = array('total'=>null, 'ready'=>null, 'completion'=>null);
 		}
@@ -844,11 +849,11 @@ class ReportSeeker
 		$sql .= " GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
-		$count = array(
-			"F0"=>0,
-			"M6"=>0,
-			"6B"=>0,
-		);
+		$seriesArray = Series::getArray();
+		$count = array();
+		foreach($seriesArray as $series){
+			$count[$series] = 0;
+		}
 		foreach($datas as $data){
 			$count[$data['series']] = intval($data['count']);
 		}
@@ -882,11 +887,12 @@ class ReportSeeker
 
 		$sql = "SELECT series, COUNT(id) as `count` FROM car $condition GROUP BY  series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		$count = array(
-			"F0"=>0,
-			"M6"=>0,
-			"6B"=>0,
-		);
+
+		$seriesArray = Series::getArray();
+		$count = array();
+		foreach($seriesArray as $series){
+			$count[$series] = 0;
+		}
 		foreach($datas as $data){
 			$count[$data['series']] = intval($data['count']);
 		}
@@ -1275,7 +1281,8 @@ class ReportSeeker
 
 		$tables = array();
 		if(empty($series) || $series === 'all') {
-			$series = array('F0', 'M6', '6B');
+			// $series = array('F0', 'M6', '6B');
+			$series = Series::getArray();
 		} else {
 			$series = explode(',', $series);
 		}

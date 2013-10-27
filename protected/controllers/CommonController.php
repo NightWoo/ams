@@ -32,4 +32,17 @@ class CommonController extends BmsBaseController
             $this->renderJsonBms(false , $e->getMessage());
         }
 	}
+
+	public function actionGetSeriesArray () {
+		try{
+			$seriesArray = SeriesAR::model()->findAll();
+			$data = array();
+			foreach($seriesArray as $one) {
+				$data[$one['series']] = $one['name'];
+			}
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
+        }
+	}
 }

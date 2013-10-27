@@ -11,6 +11,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headAssemblyLi").addClass("active");
 		$("#leftCarQueryLi").addClass("active");
+		getSeries();
 		$("#carTag").hide();
 		$("#resultTable").hide();
 		$("#tabTestLine").hide();
@@ -215,6 +216,24 @@ $(document).ready(function () {
 						$("#sparesDetail>tbody").append(tr);
 					});
 					$("#sparesModal").modal("show");
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$("#selectSeries").append(options);
 				} else {
 					alert(response.message);
 				}

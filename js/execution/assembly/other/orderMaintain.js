@@ -268,9 +268,8 @@ $("document").ready(function() {
 	function initPage() {
 		$("#headEfficiencyLi").addClass("active");
 		$("#leftOrderMaintainLi").addClass("active");
-
+		getSeries();
 		$("#standbyDate").val(window.byd.DateUtil.currentDate);
-
 	}
 
 	function ajaxGetOriginalOrders() {
@@ -1247,6 +1246,24 @@ $("document").ready(function() {
 			temp.push($("#checkClosed").val());
 		return temp.join(",");
 		}
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$(".selectSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 	$('body').tooltip(

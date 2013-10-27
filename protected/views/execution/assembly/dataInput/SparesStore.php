@@ -62,7 +62,7 @@
 										<select id="lineSelect" class="input-small"></select>
 									</div>
 									<script id="tmplLineSelect" type="text/x-jsrander">
-										<option value='{{:line}}'>{{:line}}</option>
+										<option value='{{:line}}'>{{:line}}线</option>
 									</script>
 									<div class="input-prepend">
 										<span class="add-on">车系</span>

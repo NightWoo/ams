@@ -1,6 +1,11 @@
 
 var SERVER_ADDRESS = "";
 
+//common
+GET_SERIES_LIST = "/bms/common/getSeriesList";
+GET_SERIES_ARRAY = "/bms/common/getSeriesArray";
+GET_LINE_LIST = "/bms/common/getLineList";
+
 //获得车辆原始信息
 var GET_CAR = "/bms/car/getCar";
 

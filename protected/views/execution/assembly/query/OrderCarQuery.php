@@ -12,6 +12,7 @@
         <script type="text/javascript" src="/bms/js/service.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
@@ -83,10 +84,13 @@
                         <div class="help-inline"  style="padding-left:0; margin-top:5px ">
                             <select name="" id="selectSeries" class="input-small">
                                 <option value="">全车系</option>
-                                <option value="F0">F0</option>
+                                <!-- <option value="F0">F0</option>
                                 <option value="M6">M6</option>
-                                <option value="6B">思锐</option>
+                                <option value="6B">思锐</option> -->
                             </select>
+                            <script id="tmplSeriesSelect" type="text/x-jsrander">
+                                <option value='{{:series}}'>{{:name}}</option>
+                            </script>
                             <label class="checkbox"><input type="checkbox" id="checkboxActive" value="1">激活</input></label>
                             <label class="checkbox"><input type="checkbox" id="checkFreeze" value="0">冻结</input></label>
                             <label class="checkbox"><input type="checkbox" id="checkClosed" value="2">完成</input></label>

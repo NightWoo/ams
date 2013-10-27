@@ -38,6 +38,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headGeneralInformationLi").addClass("active");
 		$("#leftQualityReportLi").addClass("active");
+		getSeries();
 		$("#divLeft,#divHead,#divFoot").addClass("notPrintable");
 		$("#startTime").val(window.byd.DateUtil.lastWorkDate());
 
@@ -49,6 +50,24 @@ $(document).ready(function () {
 
 	function resetAll (argument) {
 		$(".initHide").hide();
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesRadio").render(response.data);
+					$(".seriesRadio").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 
 //END commonfunction --------------------

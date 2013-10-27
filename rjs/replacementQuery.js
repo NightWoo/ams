@@ -62,6 +62,11 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 
 		options = common.getDutyOptions("SparesStore", true);
 		$("#dutyDepartment").append(options);
+
+		console.log(common.getSeriesArray());
+
+		common.fillSeriesCheckbox();
+		common.fillLineSelect();
 	}
 
 	function ajaxQueryReplacementDetail (targetPage) {

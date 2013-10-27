@@ -12,6 +12,7 @@
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/other/planAssembly.js"></script>
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
@@ -48,17 +49,23 @@
                                 <input type="text" class="input-medium" placeholder="执行日期..." id="planDate"/>
                             </td>
                             <td>
-                                <select name="" id="carSeries" class="input-small">
-                                    <option value="F0" selected>F0</option>
+                                <select name="" id="carSeries" class="input-small carSeries">
+                                    <!-- <option value="F0" selected>F0</option>
                                     <option value="M6">M6</option>
-                                    <option value="6B">思锐</option>
+                                    <option value="6B">思锐</option> -->
                                 </select>
+                                <script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
                             </td>
                             <td>
-                                <select name="" id="assemblyLine" class="input-small">
-                                    <option value="I" selected>I线</option>
-                                    <option value="II">II线</option>
+                                <select name="" id="assemblyLine" class="input-small assemblyLine">
+                                    <!-- <option value="I" selected>I线</option>
+                                    <option value="II">II线</option> -->
                                 </select>
+                                <script id="tmplLineSelect" type="text/x-jsrander">
+                                    <option value='{{:line}}'>{{:line}}线</option>
+                                </script>
                             </td>
                             <td>
                                 <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
@@ -130,21 +137,20 @@
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;线别</label>
                 <div class="controls">
-                    <select name="" id="newLine" class="input-small">
-                        <option value="I" selected>I线</option>
-                        <option value="II">II线</option>
+                    <select name="" id="newLine" class="input-small assemblyLine">
+                        <!-- <option value="I" selected>I线</option>
+                        <option value="II">II线</option> -->
                     </select>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="newCarSeries">*&nbsp;车系</label>
                 <div class="controls">
-                    <select id="newSeries" class="input-small">
+                    <select id="newSeries" class="input-small carSeries">
                         <option value="" selected>请选择</option>
-                        <option value="F0">F0</option>
+                        <!-- <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B">思锐</option>
-
+                        <option value="6B">思锐</option> -->
                     </select>
                 </div>
             </div>
@@ -261,20 +267,20 @@
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;线别</label>
                 <div class="controls">
-                    <select name="" id="editLine" class="input-small" disabled>
-                        <option value="I" selected>I线</option>
-                        <option value="II">II线</option>
+                    <select name="" id="editLine" class="input-small assemblyLine" disabled>
+                        <!-- <option value="I" selected>I线</option>
+                        <option value="II">II线</option> -->
                     </select>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="editSeries">*&nbsp;车系</label>
                 <div class="controls">
-                    <select id="editSeries" class="input-small" disabled>
+                    <select id="editSeries" class="input-small carSeries" disabled>
                         <option value=""></option>
-                        <option value="F0">F0</option>
+                        <!-- <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B">思锐</option>
+                        <option value="6B">思锐</option> -->
                         
                     </select>
                 </div>

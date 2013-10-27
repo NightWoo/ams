@@ -20,6 +20,7 @@
         <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
         <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
         <script type="text/javascript" src="/bms/js/head.js"></script>
         <script type="text/javascript" src="/bms/js/common.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/report/qualityReport.js"></script>
@@ -46,22 +47,12 @@
                 <legend>质量报表
                     <span class="">
                         <input type="text" class="input-small"  placeholder="日期..." id="startTime"/>
-                        <label class="radio inline">
-                          <input type="radio" name="seriesRadios" id="optionsRadiosAll" value="all" checked>
-                          全部
-                        </label>
-                        <label class="radio inline">
-                          <input type="radio" name="seriesRadios" id="optionsRadiosF0" value="F0">
-                          F0
-                        </label>
-                        <label class="radio inline">
-                          <input type="radio" name="seriesRadios" id="optionsRadiosM6" value="M6">
-                          M6
-                        </label>
-                        <label class="radio inline">
-                          <input type="radio" name="seriesRadios" id="optionsRadios6B" value="6B">
-                          思锐
-                        </label>
+                        <span class="seriesRadio">
+                            <label class="radio inline"><input type="radio" name="seriesRadios" id="optionsRadiosAll" value="all" checked>全部</label>
+                        </span>
+                        <script id="tmplSeriesRadio" type="text/x-jsrander">
+                            <label class='radio inline'><input type='radio' name='seriesRadios' id='optionsRadios{{:series}}' value='{{:series}}'>{{:name}}</label>
+                        </script>
                     </span>
                     <span class="pull-right printable">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>

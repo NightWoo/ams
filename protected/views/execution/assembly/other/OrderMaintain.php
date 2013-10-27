@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
 	<script type="text/javascript" src="/bms/js/common.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/orderMaintain.js"></script>
@@ -124,12 +125,15 @@
 							    	</div>
 	                           </td>
 	                           <td>
-	                           		<select name="" id="selectSeries" class="input-small">
+	                           		<select name="" id="selectSeries" class="input-small selectSeries">
 		                                <option value="">全车系</option>
-		                                <option value="F0">F0</option>
+		                                <!-- <option value="F0">F0</option>
 		                                <option value="M6">M6</option>
-		                                <option value="6B">思锐</option>
+		                                <option value="6B">思锐</option> -->
 		                            </select>
+		                            <script id="tmplSeriesSelect" type="text/x-jsrander">
+	                                    <option value='{{:series}}'>{{:name}}</option>
+	                                </script>
 	                           </td>
 	                            <td>
 	                                <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
@@ -392,11 +396,11 @@
             <div class="control-group">
                 <label class="control-label" for="editSeries">*&nbsp;车系</label>
                 <div class="controls">
-                    <select id="editSeries" class="input-small">
+                    <select id="editSeries" class="input-small selectSeries">
                         <option value="" selected>请选择</option>
-                        <option value="F0">F0</option>
+                        <!-- <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B">思锐</option>
+                        <option value="6B">思锐</option> -->
                     </select>
                 </div>
             </div>
@@ -511,11 +515,11 @@
             <div class="control-group">
                 <label class="control-label" for="internalSeries">*&nbsp;车系</label>
                 <div class="controls">
-                    <select id="internalSeries" class="input-small">
+                    <select id="internalSeries" class="input-small selectSeries">
                         <option value="" selected>请选择</option>
-                        <option value="F0">F0</option>
+                        <!-- <option value="F0">F0</option>
                         <option value="M6">M6</option>
-                        <option value="6B">思锐</option>
+                        <option value="6B">思锐</option> -->
                     </select>
                 </div>
             </div>

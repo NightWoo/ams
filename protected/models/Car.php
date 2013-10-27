@@ -1270,11 +1270,17 @@ class Car
 			$this->car->warehouse_id = 0;
 			$this->car->area = '';
 			$this->car->warehouse_time = "0000-00-00 00:00:00";
+			$this->car->vq3_return_time = "0000-00-00 00:00:00";
 			if($goTo == "VQ1") {
+				$this->car->vq1_return_time = date("YmdHis");
 				$this->car->vq1_finish_time = "0000-00-00 00:00:00";
+				$this->car->vq2_return_time = "0000-00-00 00:00:00";
 				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
 			} else if($goTo == "VQ2") {
+				$this->car->vq2_return_time = date("YmdHis");
 				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
+			} else if($goTo == "VQ3") {
+				$this->car->vq3_return_time = date("YmdHis");
 			}
 		}
 
