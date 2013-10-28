@@ -114,7 +114,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
-		
+		getSeries();
 		$("#btnAdd").attr("disabled", "disabled");
 		$("#btnCopy").attr("disabled", "disabled");
 		
@@ -123,6 +123,24 @@ $(document).ready(function() {
 		$("#copyModal").modal("hide");
 		
 		$("#tableAccessoryList").hide();
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$(".carSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 	
 	function ajaxQuery() {

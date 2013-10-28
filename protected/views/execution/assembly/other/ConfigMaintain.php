@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/execution/assembly/other/configMaintain.js"></script>
 </head>
@@ -49,12 +50,15 @@
 						</tr>
 						<tr>
 							<td>
-								<select name="" id="carSeries" class="input-small">
+								<select name="" id="carSeries" class="input-small carSeries">
 									<option value="" selected>请选择</option>
-									<option value="F0">F0</option>
+									<!-- <option value="F0">F0</option>
 									<option value="M6">M6</option>
-                                    <option value="6B">思锐</option>
+                                    <option value="6B">思锐</option> -->
 								</select>
+								<script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
 							</td>
 							<td>
 								<select name="" id="carType" class="input-xlarge">
@@ -108,11 +112,11 @@
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
-			      	<select id="newCarSeries" class="input-small">
+			      	<select id="newCarSeries" class="input-small carSeries">
 						<option value="" selected>请选择</option>
-						<option value="F0" selected>F0</option>
+						<!-- <option value="F0" selected>F0</option>
 						<option value="M6">M6</option>
-                        <option value="6B">思锐</option>
+                        <option value="6B">思锐</option> -->
 					</select>
 			    </div>
 			</div>
@@ -216,11 +220,11 @@
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
-			      	<select id="editCarSeries" class="input-medium">
+			      	<select id="editCarSeries" class="input-medium carSeries">
 						<option value="" selected>请选择</option>
-						<option value="F0">F0</option>
+						<!-- <option value="F0">F0</option>
 						<option value="M6">M6</option>
-                        <option value="6B">思锐</option>
+                        <option value="6B">思锐</option> -->
 					</select>
 			    </div>
 			</div>

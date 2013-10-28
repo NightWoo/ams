@@ -17,9 +17,13 @@ class PlanSeeker
 			$condition = "plan_date>=?";
 		}
 		$values = array($date);
+
 		if(!empty($series)) {
-			$condition .= " AND car_series=?";
-			$values[] = $series;
+			$seriesArray = Series::parseSeries($series);
+			$cc = join("','", $seriesArray);
+
+			$condition .= " AND car_series IN ('$cc')";
+			// $values[] = $series;
 		}
 		if(!empty($line)) {
             $condition .= " AND assembly_line=?";

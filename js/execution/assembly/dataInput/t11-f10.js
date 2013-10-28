@@ -241,7 +241,7 @@ $("document").ready(function() {
 				simpleCode = compCode.substring(0,7);
 			else if(compCode.length == 15)	//liandian ECU
 				simpleCode = compCode.substring(0,3);
-			else if(compCode.length == 3)
+			else if(compCode.length == 3 || compCode.length == 6)
 				simpleCode = compCode;
 			else if(compCode.length == 14)	//4G69 engine
 				simpleCode = compCode.substring(0,4);
@@ -360,9 +360,14 @@ $("document").ready(function() {
 
 		//modified by wujun
 		if(event.keyCode == "13" || event.keyCode == "10"){
-			if(jQuery.trim($('#compCodeText').val()) != ""){
-				// console.log($('#compCodeText').val());
-				var index = getCompIndex(jQuery.trim($('#compCodeText').val()));	//modified by wujun
+			compText = jQuery.trim($('#compCodeText').val());
+			if(compText != ""){
+				if(compText.length == 21){
+					compText = compText.substr(3);
+					console.log(compText);
+				}
+
+				var index = getCompIndex(compText);	//modified by wujun
 				if(index != -1){
 					// if(!compArray[index].bar_code){
 					if(!$("#comp"+index).html()){

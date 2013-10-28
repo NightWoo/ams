@@ -4,7 +4,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
-
+		getSeries();
 		$("#btnAdd, #btnQuery").attr("disabled", "disabled");
 		$("#newModal").modal("hide");
 		$("#editModal").modal("hide");
@@ -355,7 +355,7 @@ function fillType(carSeries) {
 	return ret;
 }
 
-function fillOrderConfig(carSeries, carType){
+	function fillOrderConfig(carSeries, carType){
 		var options = '<option value="0" selected>请选择</option>';
 		$.ajax({
 			url: FILL_ORDER_CONFIG,
@@ -379,5 +379,23 @@ function fillOrderConfig(carSeries, carType){
 		    }
 		})
 		return options;
+	}
+
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$(".carSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 //changed

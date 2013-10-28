@@ -10,7 +10,7 @@ $("document").ready(function() {
 			data: {
 				"plan_date": date || byd.DateUtil.workDate,
 				"assembly_line" : $("#line").attr("value"),
-				"car_series" : "6B,M6",
+				"car_series" : "6B,M6,G6",
 			},
 			success: function(response) {
 				if(response.success){

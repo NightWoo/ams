@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
 	<script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
 	<script type="text/javascript" src="/bms/js/head.js"></script>
 	<script type="text/javascript" src="/bms/js/uploadify/jquery.uploadify-3.1.js"></script>
 	<link rel="stylesheet" type="text/css" href="/bms/js/uploadify/uploadify.css">
@@ -57,12 +58,15 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 						</tr>
 						<tr>
 							<td>
-								<select name="" id="series" class="input-small">
+								<select name="" id="series" class="input-small carSeries">
 									<option value="" selected></option>
-									<option value="F0" >F0</option>
+									<!-- <option value="F0" >F0</option>
 									<option value="M6">M6</option>
-                                    <option value="6B">思锐</option>
+                                    <option value="6B">思锐</option> -->
 								</select>
+								<script id="tmplSeriesSelect" type="text/x-jsrander">
+                                    <option value='{{:series}}'>{{:name}}</option>
+                                </script>
 							</td>
 							<td>
 								<select name="" id="carType" class="input-xlarge">

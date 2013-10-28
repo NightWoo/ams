@@ -4,7 +4,7 @@ $(document).ready(function() {
 	function initPage() {
 		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
-
+		getSeries();
 		$("#btnAdd, #btnQuery").attr("disabled", "disabled");
 		$("#newModal").modal("hide");
 		$("#editModal").modal("hide");
@@ -230,6 +230,24 @@ $(document).ready(function() {
 		$("#newRemark").text("");	
 	}
 
+	function getSeries () {
+		$.ajax({
+			url: GET_SERIES_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplSeriesSelect").render(response.data);
+					$(".carSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
 });
 
 function fillOrderCarType(carSeries) {
@@ -283,3 +301,4 @@ function fillCarType(carSeries) {
 	})
 	return ret;
 }
+

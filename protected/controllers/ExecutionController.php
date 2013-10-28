@@ -587,7 +587,7 @@ class ExecutionController extends BmsBaseController
             $rpc = new RpcService();
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data['clientIp'] = $clientIp;
-            $host='10.23.86.172';
+            $host='10.23.86.80';
             $ret = $rpc->openGate($host);
             
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
@@ -718,7 +718,7 @@ class ExecutionController extends BmsBaseController
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data['clientIp'] = $clientIp;
             $rpc = new RpcService();
-            $host='10.23.86.3';
+            $host='10.23.86.82';
             $ret = $rpc->openGate($host);
 			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
         } catch(Exception $e) {
@@ -850,7 +850,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -860,6 +860,7 @@ class ExecutionController extends BmsBaseController
 				$data['type'] = str_replace(",", "，",$data['type']);
                 $content .= "{$data['type']},";
                 $content .= "{$data['type_config']},";
+                $content .= "{$data['config_name']},";
                 $content .= "{$data['cold_resistant']},";
                 $content .= "{$data['status']},";
                 $content .= "{$data['pass_time']},";
