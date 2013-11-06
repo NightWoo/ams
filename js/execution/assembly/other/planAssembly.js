@@ -97,15 +97,13 @@ $(document).ready(function () {
 				fillColor(tr.data("car_series"),"edit");
 				fillConfig(tr.data("car_series"), tr.data("car_type"), "edit");
 				
-				$("#editPlanDate").val($(e.target).parent("td").parent("tr").data("plan_date"));
-				//$("#editPlanId").val($(e.target).parent("td").parent("tr").data("id"));		//added by wujun
-				//$("#editBatchNumber").val(siblings[3].innerHTML);
+				$("#editPlanDate").val(tr.data("plan_date"));
 				$("#editPlanAmount").val(siblings[3].innerHTML);
-				$("#editLine").val($(e.target).parent("td").parent("tr").data("assembly_line"));
-				$("#editSeries").val($(e.target).parent("td").parent("tr").data("car_series"));
-				$("#editCarType").val($(e.target).parent("td").parent("tr").data("car_type"));
-				$("#editConfig").val(siblings[5].innerHTML);
-				$("#editCarBody").val(siblings[7].innerHTML);	//added by wujun
+				$("#editLine").val(tr.data("assembly_line"));
+				$("#editSeries").val(tr.data("car_series"));
+				$("#editCarType").val(tr.data("car_type"));
+				$("#editConfig").val(tr.data("config_id"));
+				$("#editCarBody").val(siblings[7].innerHTML);
 				$("#editColor").attr("value",siblings[8].innerHTML);
 				if (siblings[9].innerHTML === '耐寒') {
 					$("#checkboxEditColdResistant").attr("checked", "checked");
@@ -114,10 +112,8 @@ $(document).ready(function () {
 				}
 				$("#editCarYear").attr("value",siblings[10].innerHTML);
 				$("#editOrderType").attr("value",siblings[11].innerHTML);
-				console.log(siblings[12].innerHTML);
-				$("#editSpecialOrder").attr("value",$(e.target).parent("td").parent("tr").data("special_order"));
+				$("#editSpecialOrder").attr("value",tr.data("special_order"));
 				$("#editRemark").val(siblings[12].innerHTML);
-				console.log(tr.data("isFrozen"));
 
 				if (tr.data("isFrozen") == 1) {
 					$("#checkboxEditFrozen").attr("checked", "checked");
@@ -129,7 +125,6 @@ $(document).ready(function () {
 				$("#editModal").modal("show");
 
 			} else {
-				//ajaxDelete($(this).closest("tr").data("planId"));		//"planId" should be "id", and "$(this)" ≠ "$(e.target)" in here????		
 				if(confirm('是否删除本条计划？')){
 					ajaxDelete($(e.target).closest("tr").data("id"));
 				}
@@ -240,7 +235,7 @@ $(document).ready(function () {
 		    			tr.data("car_series", value.car_series);
 		    			tr.data("car_type", value.car_type);
 		    			tr.data("special_order", value.special_order);
-						//tr.data("batch_number",value.batch_number);		//added by wujun
+						tr.data("config_id",value.config_id);
 
 		    			$("#tablePlanAssembly tbody").append(tr);
 
@@ -267,14 +262,13 @@ $(document).ready(function () {
 		    url: SAVE_PLAN,//ref:  /bms/js/service.js
 		    data: {
 				"id" : 0,
-				//"batch_number": $("#newBatchNumber").val()		//added by wujun
 		    	"plan_date" : $("#newPlanDate").val(),
 		    	"total" : $("#newPlanAmount").val(),
 				"assembly_line" : $("#newLine").val(),
 				"car_series" : $("#newSeries").val(),
 				"car_type" : $("#newCarType").val(),
 				"config" : $("#newConfig").val(),
-				"car_body" : $("#newCarBody").val(),		//added by wujun
+				"car_body" : $("#newCarBody").val(),
 				"color" : $("#newColor").val(),
 				"cold_resistant" : isCold,
 				"car_year" : $("#newCarYear").val(),
@@ -285,13 +279,10 @@ $(document).ready(function () {
 			},
 		    success:function (response) {
 		    	if (response.success) {
-		    		// alert(response.message);
-		    		//$('#newModal').modal('hide');
 		    		$("#planDate").val($("#newPlanDate").val());
 					ajaxQuery();
 					emptyNewModal();
 		    	} else {
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -316,15 +307,13 @@ $(document).ready(function () {
 		    url: SAVE_PLAN,//ref:  /bms/js/service.js
 		    data: {
 				"id" : $('#editModal').data("id"),
-				//"id" : $('#editPlanId').val(),
-				//"batch_number": $("#editModal").data("batch_number")		//added by wujun
 		    	"plan_date" : $("#editPlanDate").val(),
 		    	"total" : $("#editPlanAmount").val(),
 				"assembly_line" : $("#editLine").val(),
 				"car_series" : $("#editSeries").val(),
 				"car_type" : $("#editCarType").val(),
 				"config" : $("#editConfig").val(),
-				"car_body" : $("#editCarBody").val(),		//added by wujun
+				"car_body" : $("#editCarBody").val(),
 				"color" : $("#editColor").val(),
 				"cold_resistant" : isCold,
 				"car_year" : $("#editCarYear").val(),
@@ -336,13 +325,11 @@ $(document).ready(function () {
 			},
 		    success:function (response) {
 		    	if (response.success) {
-		    		// alert("修改成功！");
 		    		$('#editModal').modal('hide');
 		    		$("#planDate").val($("#editPlanDate").val());
 		    		ajaxQuery();
 		    		emptyEditModal();
 		    	} else {
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -361,7 +348,6 @@ $(document).ready(function () {
 		    		// alert(response.message);
 		    		ajaxQuery();
 		    	}else{
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -378,9 +364,7 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		ajaxQuery();
-		    		// alert(response.message);
 		    	}else{
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -397,9 +381,7 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		ajaxQuery();
-		    		// alert(response.message);
 		    	}else{
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -416,9 +398,7 @@ $(document).ready(function () {
 		    success:function (response) {
 		    	if(response.success){
 		    		ajaxQuery();
-		    		// alert(response.message);
 		    	}else{
-		    		// $("#vinText").val("");
 		    		alert(response.message);
 		    	}
 		    },
@@ -433,35 +413,29 @@ $(document).ready(function () {
 		$("#editSeries").val("");
 		$("#editCarType").val("");
 		$("#editConfig").val("");
-		$("#editCarBody").val(""),		//added by wujun
+		$("#editCarBody").val("");
 		$("#editColor").val("");
 		$("#editCarYear").val("");
 		$("#editOrderType").val("");
 		$("#editSpecialOrder").val("");
 		$("#editRemark").val("");
-		$("#checkboxEditColdResistant").removeAttr("checked");	//added by wujun
-		$("#checkboxEditFrozen").removeAttr("checked");	//added by wujun
-		//$("#editPlanId").val("");									//added by wujun
-		//$("#editBatchNumber").val("");							//added by wujun
+		$("#checkboxEditColdResistant").removeAttr("checked");
+		$("#checkboxEditFrozen").removeAttr("checked");
 	}
-	
-	//added by wujun
+
 	function emptyNewModal (argument) {
-		//$("#newPlanDate").val("");
     	$("#newPlanAmount").val("");
 		$("#newLine").val("");
 		$("#newSeries").val("");
 		$("#newCarType").val("");
 		$("#newConfig").val("");
-		$("#newCarBody").val(""),		//added by wujun
+		$("#newCarBody").val("");
 		$("#newColor").val("");
 		$("#newCarYear").val("2013");
 		$("#newOrderType").val("");
 		$("#newSpecialOrder").val("");
 		$("#newRemark").val("");
-		$("#checkboxNewColdResistant").removeAttr("checked"); 	//added by wujun
-		//$("#newPlanId").val("");								//added by wujun
-		//$("#newBatchNumber").val("");
+		$("#checkboxNewColdResistant").removeAttr("checked");
 	}
 	
 	//added by wujun
@@ -484,7 +458,7 @@ $(document).ready(function () {
 			//clock += "08:00";
 
 			return(clock); 
-		}
+	}
 	function tomorrowDate (argument) {
 		//获取系统时间 
 		var now = new Date();
@@ -520,7 +494,7 @@ $(document).ready(function () {
 					var option = '<option value="" selected>请选择</option>';	
 					$.each(response.data, function(index,value){
 						// option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
-						option +='<option value="' + value.config_name +'">'+ value.config_name +'</option>';	
+						option +='<option value="' + value.config_id +'">'+ value.config_name +'</option>';	
 					});
 				 	$("#" + modPre + "Config").html(option);
 				 

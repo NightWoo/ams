@@ -1,14 +1,15 @@
 <?php
 Yii::import('application.models.Config');
 Yii::import('application.models.ConfigSeeker');
+Yii::import('application.models.FileUpload.FileUpload');
 Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.OrderConfigAR');
 Yii::import('application.models.AR.CarColorMapAR');
 Yii::import('application.models.AR.CarConfigListAR');
 Yii::import('application.models.AR.CarAccessoryListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
-Yii::import('application.models.FileUpload.FileUpload');
 Yii::import('application.models.AR.SubConfigCarQueueAR');
+Yii::import('application.models.AR.OilFillingAR');
 
 class ConfigController extends BmsBaseController 
 {
@@ -46,6 +47,8 @@ class ConfigController extends BmsBaseController
 		$markClime = $this->validateStringVal('mark_clime','国内');
 		$exportCountry = $this->validateStringVal('export_country','');
 		$sideGlass = $this->validateStringVal('side_glass','');
+		$oilFillingCold = $this->validateIntval("oil_filling_id_cold", 0);
+		$oilFillingNormal = $this->validateIntval("oil_filling_id_normal", 0);
 		$tyre = $this->validateStringVal('tyre','');
 		$steering = $this->validateStringVal('assisted_steering','液压');
 		$certificateNote = $this->validateStringVal('certificate_note','');
@@ -81,6 +84,9 @@ class ConfigController extends BmsBaseController
 			$config->mark_clime = $markClime;
 			$config->export_country = $exportCountry;
 			$config->side_glass = $sideGlass;
+			$config->aircondition = $aircondition;
+			$config->oil_filling_id_cold = $oilFillingCold;
+			$config->oil_filling_id_normal = $oilFillingNormal;
 			$config->aircondition = $aircondition;
 			$config->tyre = $tyre;
 			$config->assisted_steering = $steering;
@@ -209,13 +215,24 @@ class ConfigController extends BmsBaseController
 		}	
 	}
 
-	public function actionGetCarColor() {
+	public function actionGetCarColor () {
 		$carSeries = $this->validateStringVal('carSeries','');
 		try {
 			$condition = "series=?";
 			$params = array($carSeries);
-			$carColor = CarColorMapAR::model()->findAll($condition, $params);
-			$data = $carColor;
+			$data = CarColorMapAR::model()->findAll($condition, $params);
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());	
+		}	
+	}
+
+	public function actionGetOilFilling () {
+		$series = $this->validateStringVal('series','');
+		try {
+			$condition = "series=?";
+			$params = array($series);
+			$data = OilFillingAR::model()->findAll($condition, $params);
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	

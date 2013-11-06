@@ -350,7 +350,12 @@ class Order
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
 				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';
-				$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
+				$lane = LaneAR::model()->findByPk($order->lane_id)->name;
+				if(empty($lane)) {
+					throw new Exception("订单" . $data['order_number'] . "-" . $matchedOrder->board_number . " 未指定发车道");
+				} else {
+					$data['lane'] = $lane->name;
+				}
 			}
 		} else {
 			throw new Exception('暂无可备车辆');

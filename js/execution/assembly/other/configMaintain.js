@@ -23,8 +23,10 @@ $(document).ready(function() {
 	})
 	
 	$("#newCarSeries").change(function () {
-		$("#newCarType").html(fillType($("#newCarSeries").val()));
-		$("#newOrderConfig").html(fillOrderConfig($("#newCarSeries").val()));
+		series = $("#newCarSeries").val();
+		$("#newCarType").html(fillType(series));
+		$("#newOrderConfig").html(fillOrderConfig(series));
+		$(".newOilFilling").html(getOilFilling(series));
 		if($("#newCarSeries").val() == "M6"){
 			$("#newSideGlass").removeAttr("disabled");
 		} else {
@@ -60,10 +62,12 @@ $(document).ready(function() {
 
 	$("#btnAdd").click(function (argument){
 		emptyNewModal();
+		series = $("#carSeries").val();
 		$("#newModal").modal("show");
-		$("#newCarSeries").val($("#carSeries").val());
-		$("#newCarType").html(fillType($("#newCarSeries").val()));
-		$("#newOrderConfig").html(fillOrderConfig($("#newCarSeries").val()));
+		$("#newCarSeries").val(series);
+		$("#newCarType").html(fillType(series));
+		$("#newOrderConfig").html(fillOrderConfig(series));
+		$(".newOilFilling").html(getOilFilling(series));
 		if($("#newCarSeries").val() == "M6"){
 			$("#newSideGlass").removeAttr("disabled");
 		}
@@ -106,8 +110,12 @@ $(document).ready(function() {
 
 			$("#editCarType").html(fillType(tr.data("car_series")));
 			$("#editOrderConfig").html(fillOrderConfig(tr.data("car_series")));
+			$(".editOilFilling").html(getOilFilling(tr.data("car_series")));
+
 			$("#editCarSeries").val(tr.data("car_series"));
 			$("#editCarType").val(tr.data("car_type"));
+			$("#editOilFillingCold").val(tr.data("oil_filling_id_cold"));
+			$("#editOilFillingNormal").val(tr.data("oil_filling_id_normal"));
 			$("#editConfigName").val(tr.data("name"));
 			$("#editOrderConfig").val(tr.data("order_config_id"));
 			$("#editClime").val(tr.data("mark_clime"));
@@ -211,6 +219,8 @@ $(document).ready(function() {
 				"mark_clime" : $("#newClime").val(),
 				"export_country" : $("#newExportCountry").val(),
 				"side_glass" : $("#newSideGlass").val(),
+				"oil_filling_id_cold" : $("#newOilFillingCold").val(),
+				"oil_filling_id_normal" : $("#newOilFillingNormal").val(),
 				"tyre" : $("#newTyre").val(),
 				"assisted_steering" : $("#newSteering").val(),
 				"certificate_note" : $("#newCertificateNote").val(),
@@ -252,6 +262,8 @@ $(document).ready(function() {
 				"order_config_id" : $("#editOrderConfig").val(),
 				"mark_clime" : $("#editClime").val(),
 				"export_country" : $("#editExportCountry").val(),
+				"oil_filling_id_cold" : $("#editOilFillingCold").val(),
+				"oil_filling_id_normal" : $("#editOilFillingNormal").val(),
 				"side_glass" : $("#editSideGlass").val(),
 				"tyre" : $("#editTyre").val(),
 				"assisted_steering" : $("#editSteering").val(),
@@ -397,5 +409,27 @@ function fillType(carSeries) {
 				}
 			}
 		})
+	}
+
+	function getOilFilling (series) {
+		var otions = ""; 
+		$.ajax({
+			url: GET_OIL_FILLING,
+			dataType: "json",
+			data: {
+				"series": series
+			},
+			async: false,
+			error: function () {common.alertError();},
+			success: function (response) {
+				if(response.success){
+					optionText = "<option value={{:id}}>{{:name}}【{{:engine_oil_type}}/{{:gear_oil_type}}】</option>"
+					options = $.templates(optionText).render(response.data);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return options；
 	}
 //changed

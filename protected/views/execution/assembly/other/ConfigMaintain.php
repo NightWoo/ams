@@ -157,6 +157,20 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label" for="">*&nbsp;耐寒机油</label>
+				<div class="controls">
+					<select name="" id="newOilFillingCold" class="input-xlarge newOilFilling">
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="">*&nbsp;非耐寒机油</label>
+				<div class="controls">
+					<select name="" id="newOilFillingNormal" class="input-xlarge newOilFilling">
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label" for="">*&nbsp;侧门玻璃</label>
 				<div class="controls">
 					<input type="text" id="newSideGlass" class="input-medium" placeholder="侧门玻璃...">
@@ -220,7 +234,7 @@
   			<div class="control-group">
 			    <label class="control-label" for="">*&nbsp;车系</label>
 			    <div class="controls">
-			      	<select id="editCarSeries" class="input-medium carSeries">
+			      	<select id="editCarSeries" class="input-medium carSeries" dieabled>
 						<option value="" selected>请选择</option>
 						<!-- <option value="F0">F0</option>
 						<option value="M6">M6</option>
@@ -262,6 +276,20 @@
 				<label class="control-label" for="">出口国家</label>
 				<div class="controls">
 					<input type="text" id="editExportCountry" class="input-medium" placeholder="出口国家...">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="">*&nbsp;耐寒机油</label>
+				<div class="controls">
+					<select name="" id="editOilFillingCold" class="input-xlarge editOilFilling">
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="">*&nbsp;非耐寒机油</label>
+				<div class="controls">
+					<select name="" id="editOilFillingNormal" class="input-xlarge editOilFilling">
+					</select>
 				</div>
 			</div>
 			<div class="control-group">

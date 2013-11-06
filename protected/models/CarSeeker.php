@@ -748,7 +748,7 @@ class CarSeeker
 
 		foreach($periodArray as $key => $period) {
 			$avgTotal[$key] = array(
-				'hourTotal' => 0,
+				'secondTotal' => 0,
 				'carCount' => 0,
 				'hourAvg' => 0
 			);
@@ -766,13 +766,13 @@ class CarSeeker
 			$cars = $this->queryPeiodCars($queryTime['stime'], $queryTime['etime'], $series);
 			foreach($cars as &$car){
 				foreach($periodArray as $key => $period) {
-					if($car[$period['start']] > "0000-00-00 00:00:00");{
-						$startTime = $period['return'] > "0000-00-00 00:00:00" ? $period['return'] : $period['start'];
-						$hours = $this->calculatePeriod($startTime, $car[$period['end']]);
-						$total[$key] += $hours;
+					if($car[$period['start']] > "0000-00-00 00:00:00"){
+						$startTime = $car[$period['return']] > "0000-00-00 00:00:00" ? $car[$period['return']] : $car[$period['start']];
+						$seconds = $this->calculatePeriod($startTime, $car[$period['end']]);
+						$total[$key] += $seconds;
 						$count[$key]++;
 
-						$avgTotal[$key]['hourTotal'] += $hours;
+						$avgTotal[$key]['secondTotal'] += $seconds;
 						$avgTotal[$key]['carCount']++;
 					}
 				}
@@ -781,7 +781,7 @@ class CarSeeker
 				$avg[$key] = empty($count[$key]) ? null : round($total[$key] / $count[$key] / 3600, 1);
 				$columnSeriesY[$key][] = $avg[$key];
 				$temp[$key] = array(
-					'hourTotal' => $total[$key],
+					'secondTotal' => $total[$key],
 					'carCount' => $count[$key],
 					'hourAvg' => is_null($avg[$key]) ? 0 : $avg[$key]
 				);
@@ -790,7 +790,7 @@ class CarSeeker
 		}
 
 		foreach($periodArray as $key => $period) {
-			$avgTotal[$key]['hourAvg'] = empty($avgTotal[$key]['carCount']) ? 0 : round($avgTotal[$key]['hourTotal'] / $avgTotal[$key]['carCount'] / 3600, 1);
+			$avgTotal[$key]['hourAvg'] = empty($avgTotal[$key]['carCount']) ? 0 : round($avgTotal[$key]['secondTotal'] / $avgTotal[$key]['carCount'] / 3600, 1);
 		}
 
 		return array(
@@ -826,7 +826,7 @@ class CarSeeker
 	private function calculatePeriod ($start, $end) {
 		$time = 0;
 		if($start > '0000-00-00 00:00:00') {
-			$time = $end > '0000-00-00 00:00:00' ? $time = (strtotime($end) - strtotime($start)) : ($time = time() - strtotime($start));
+			$time = $end > '0000-00-00 00:00:00' ? (strtotime($end) - strtotime($start)) : (time() - strtotime($start));
 		}
 		return $time;
 	}

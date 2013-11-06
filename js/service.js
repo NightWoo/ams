@@ -221,6 +221,7 @@ var SEARCH_CONFIG = "/bms/config/search";
 var SEARCH_ORDER_CONFIG = "/bms/config/searchOrderConfig";
 var SAVE_CONFIG = "/bms/config/save";
 var DELETE_CONFIG = "/bms/config/delete";
+var GET_OIL_FILLING = "/bms/config/getOilFilling";
 
 //added by wujun
 //plan maintain

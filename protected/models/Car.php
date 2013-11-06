@@ -535,11 +535,13 @@ class Car
 		if(empty($code)) {
 			return;
 		}
-		$allSeries = array(
-			'F0',
-			'M6',
-			'6B',
-		);
+		// $allSeries = array(
+		// 	'F0',
+		// 	'M6',
+		// 	'6B',
+		// 	'G6'
+		// );
+		$allSeries = Series::getArray();
 
 		foreach($allSeries as $series) {
 			$ctClass = "ComponentTrace{$series}AR";

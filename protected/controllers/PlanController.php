@@ -8,13 +8,13 @@ class PlanController extends BmsBaseController
 	/**
 	 * Declares class-based actions.
 	 */
-	public function actions()
+	public function actions ()
 	{
 		return array(
 		);
 	}
 
-	public function actionSearch() {
+	public function actionSearch () {
 		$curDate = DateUtil::getCurDate();
         $date = $this->validateStringVal('plan_date', $curDate);
 		$series = $this->validateStringVal('car_series', '');
@@ -28,14 +28,15 @@ class PlanController extends BmsBaseController
         }
     }
 
-	public function actionSave() {
+	public function actionSave () {
 		$id = $this->validateIntVal('id', 0);
 		$date = $this->validateStringVal('plan_date', date('Y-m-d'));
 		$series = $this->validateStringVal('car_series', 'F0');
 		$total = $this->validateIntVal('total', 0);
 		$carType = $this->validateStringVal('car_type', '');
-		$configName = $this->validateStringVal('config', '');
-		$carBody = $this->validateStringVal('car_body', '');	//added by wujun
+		// $configName = $this->validateStringVal('config', '');
+		$configId = $this->validateIntVal('config', '');
+		$carBody = $this->validateStringVal('car_body', '');
 		$color = $this->validateStringVal('color', '');
 		$carYear = $this->validateStringVal('car_year', '');
 		$carOrder = $this->validateStringVal('order_type', '');
@@ -47,9 +48,9 @@ class PlanController extends BmsBaseController
 		$isFrozen = $this->validateIntVal('isFrozen', 0);
 		//$batchNumber = $this->validateStringVal('batch_number', '');
 		try{
-			$config = CarConfigAR::model()->find('name=?', array($configName));
+			$config = CarConfigAR::model()->find('id=?', array($configId));
 			if(empty($config)) {
-				throw new Exception("配置 $configName 不存在");
+				throw new Exception("配置 $config 不存在");
 			}
 			
 			if(empty($id)) {
@@ -63,18 +64,6 @@ class PlanController extends BmsBaseController
 			} else {
 				$plan = PlanAR::model()->findByPk($id);
 			}
-
-			//added by wujun
-			//$plan = PlanAR::model()->findByPk($id);
-			//if(empty($plan)) {
-			//	$plan = new PlanAR();
-			//	$plan->id = $id;
-			//	$max = PlanAR::model()->find('plan_date=? order by priority desc', array($date));
-			//	$plan->priority = 0;
-			//	if(!empty($max)) {
-			//		$plan->priority = $max->priority + 1;
-			//	}	
-			//}
 						
 			$samePriority = PlanAR::model()->find('plan_date=? AND priority=? order by priority desc', array($date,$plan->priority));
 			if(!empty($samePriority) && $samePriority->id != $id){
@@ -95,15 +84,14 @@ class PlanController extends BmsBaseController
 			$plan->color = $color;
 			$plan->car_year = $carYear;
 			$plan->order_type = $carOrder;
-			$plan->config_id = $config->id;
-			$plan->car_body = $carBody;		//added by wujun
+			$plan->config_id = $configId;
+			$plan->car_body = $carBody;
 			$plan->special_order = $specialOrder;
 			$plan->assembly_line = $assemblyLine;
 			$plan->cold_resistant = $coldResistant;
 			$plan->remark = $remark;
 			$plan->special_property = $specialProperty;
 			$plan->is_frozen = $isFrozen;
-			//$plan->batch_number = $batchNumber;
 			$plan->user_id = Yii::app()->user->id;
 			$plan->modify_time = date("YmdHis");
 			$plan->save();
@@ -113,7 +101,7 @@ class PlanController extends BmsBaseController
         }
 	}
 
-	public function actionRemove() {
+	public function actionRemove () {
 		$id = $this->validateIntVal('id', 0);
         try{
 			$plan = PlanAR::model()->findByPk($id);
@@ -136,7 +124,7 @@ class PlanController extends BmsBaseController
 	}
 
 
-	public function actionInc() {
+	public function actionInc () {
 		$id = $this->validateIntVal('id', 0);
         try{
             $plan = PlanAR::model()->findByPk($id);
@@ -157,7 +145,7 @@ class PlanController extends BmsBaseController
         }
 	}
 	
-	public function actionTop() {
+	public function actionTop () {
         $id = $this->validateIntVal('id', 0);
         try{
             $plan = PlanAR::model()->findByPk($id);
@@ -179,7 +167,7 @@ class PlanController extends BmsBaseController
     }
 
     //added by wujun
-    public function actionReduce() {
+    public function actionReduce () {
 		$id = $this->validateIntVal('id', 0);
         try{
             $plan = PlanAR::model()->findByPk($id);
@@ -201,7 +189,7 @@ class PlanController extends BmsBaseController
 	}
 	
 	//added by wujun
-	public function actionGetYearCode($year){
+	public function actionGetYearCode ($year){
 			$year = $this->validateStringVal('year', '');
 			try{
 				$yearCode=CarYear::getYearCode($year);
@@ -212,7 +200,7 @@ class PlanController extends BmsBaseController
 	}
 	
 	//added by wujun
-	public function actionGetBatchNumber() {
+	public function actionGetBatchNumber () {
 		$planDate = $this->validateStringVal('plan_date', '');
 		
 		try {
@@ -226,7 +214,7 @@ class PlanController extends BmsBaseController
 	}
 
 	//added by wujun
-	public function actionQuery() {
+	public function actionQuery () {
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');
@@ -252,7 +240,7 @@ class PlanController extends BmsBaseController
 		}
 	}
 
-	public function actionExport() {
+	public function actionExport () {
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');
@@ -291,7 +279,7 @@ class PlanController extends BmsBaseController
 		}
 	}
 
-	public function actionQueryCompletion() {
+	public function actionQueryCompletion () {
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
 		$series = $this->validateStringVal('series', '');

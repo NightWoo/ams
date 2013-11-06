@@ -291,7 +291,7 @@ class ExecutionController extends BmsBaseController
                 }
 
                 $checkTrace = $car->checkTraceComponentByConfig();
-                if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
+                if($car->car->series != 'G6' && $checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
                 
                 $vinValidate = $car->validateVin();
                 if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
