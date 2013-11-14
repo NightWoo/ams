@@ -120,11 +120,12 @@
 	    			<th style="width:150px">出库时间</th>
 	    			<th style="width:50px">证件</th>
 	    			<th style="width:200px">经销商</th>
-	    			<th style="width:30px">车系</th>
+	    			<th style="width:40px">车系</th>
 	    			<th style="width:200px">车型/配置</th>
-	    			<th style="width:50px">耐寒性</th>
+	    			<th style="width:50px">耐寒</th>
 	    			<th style="width:50px">颜色</th>
 	    			<th style="width:50px">发动机号</th>
+	    			<th style="width:200px">备注</th>
     			</tr>
     		</thead>
     		<tbody>

@@ -225,6 +225,9 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 						}
 					}
 				}
+
+				quantity = $(tr).find("select").filter(".quantity").val();
+				console.log(quantity);
 				isCollateral = $(tr).find("input").filter(".collateralCheck").prop( "checked" ) ? 1 : 0;
 				isScrap = $(tr).find("input").filter(".scrapCheck").prop( "checked" ) ? 1 : 0;
 
@@ -240,6 +243,7 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 				$(tr).data("barCode", barCode);
 				$(tr).data("isCollateral", isCollateral);
 				$(tr).data("isScrap", isScrap);
+				$(tr).data("quantity", quantity);
 
 				dataArray.push($(tr).data());
 			}
@@ -370,6 +374,15 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 				.attr("rel", "tooltip").attr("data-toggle", "tooltip").attr("title", "删除此行")
 				.addClass('removeTr')
 				.html("<i class='icon-trash'></i>"));
+		quantityOptions = "";
+		for(i=1;i<7;i++) {
+			option = "<option value="+ i +">"+ i +"</option>";
+			quantityOptions += option;
+		}
+		quantity = $("<td />")
+			.append($("<select />")
+				.addClass("input-mini quantity")
+					.append(quantityOptions));
 		componentName = $("<td />")
 			.append($("<input>")
 				.attr("type", "text").attr("name", "componentName")
@@ -395,7 +408,7 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 				.attr("type", "checkBox").attr("disabled", "disabled").attr("name", "scrapCheck")
 				.addClass("scrapCheck"));
 
-		tr.append(remove).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck).append(scrapCheck);
+		tr.append(remove).append(quantity).append(componentName).append(componentCode).append(provider).append(barCode).append(collateralCheck).append(scrapCheck);
 		$("#componentsTable>tbody").prepend(tr);
 	}
 

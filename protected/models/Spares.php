@@ -19,6 +19,7 @@ class Spares
 			$replacementAr->is_collateral = $spare['isCollateral'];
 			$replacementAr->treatment = empty($spare['isScrap']) ? "返修" : "报废";
 			$replacementAr->unit_price = $spare['unitPrice'];
+			$replacementAr->quantity = $spare['quantity'];
 			$replacementAr->bar_code = $spare['barCode'];
 			$replacementAr->replace_time = date("YmdHis");
 			$replacementAr->handler = $spare['handler'];

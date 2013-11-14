@@ -55,7 +55,7 @@ class OrderController extends BmsBaseController
 		try{
 			$details = $this->validateStringVal('orderDetails', '{}');
 			$order = new Order();
-			$order->genernate($details);
+			$order->generate($details);
 			$transaction->commit();
 			$this->renderJsonBms(true, 'OK', null);
 		} catch(Exception $e) {

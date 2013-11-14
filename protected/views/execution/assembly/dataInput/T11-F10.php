@@ -83,18 +83,18 @@
 								
 							</div>
 							<div id="ComponentInfo">	
-									<table class="table table-striped table-condensed" id="componentTable">
-										<thead>
-										  <tr>
-											<th class="lingbujianmingchen">零部件名称</th>
-											<th class="lingbujiantiaoma">零部件条码</th>
-										  </tr>
-										</thead>
-										<tbody>
-										  
-										</tbody>
-									</table>
-								</div>
+								<table class="table table-striped table-condensed" id="componentTable">
+									<thead>
+									  <tr>
+										<th class="lingbujianmingchen">零部件名称</th>
+										<th class="lingbujiantiaoma">零部件条码</th>
+									  </tr>
+									</thead>
+									<tbody>
+									  
+									</tbody>
+								</table>
+							</div>
 							
 						</div>
 										

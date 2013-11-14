@@ -35,10 +35,16 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=bms',
 			'emulatePrepare' => true,
-			// 'username' => 'root',
-			// 'password' => '',
 			'username' => 'bms_w',
 			'password' => '123',
+			'charset' => 'utf8',
+		),
+		'dbAdmin'=>array(
+			'class' => 'CDbConnection',
+			'connectionString' => 'mysql:host=localhost;dbname=bms',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'admin@bms',
 			'charset' => 'utf8',
 		),
 		'dbTest'=>array(

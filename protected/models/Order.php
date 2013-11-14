@@ -30,7 +30,7 @@ class Order
 		return $data;
 	}
 	
-	public function genernate ($details) {
+	public function generate ($details) {
 		$orders = CJSON::decode($details);
 		if(empty($orders)){
 			return;
@@ -289,7 +289,7 @@ class Order
 				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
 				$matchCondition .= $LC0Condition;
 				
-				$matchCondition .= "  ORDER BY warehouse_time ASC";
+				$matchCondition .= "  ORDER BY fifo_time ASC";
 				$matchedCar = CarAR::model()->find($matchCondition, $values);
 				if(!empty($matchedCar)){
 			 		$matchedOrder = $order;
@@ -350,11 +350,10 @@ class Order
 				$data['order_id'] = $matchedOrder->id;
 				$data['row'] = $warehouse->row;
 				$data['cold_resistant'] = ($matchedCar->cold_resistant == 1)? '耐寒':'非耐寒';
-				$lane = LaneAR::model()->findByPk($order->lane_id)->name;
-				if(empty($lane)) {
+				if(empty($order->lane_id)) {
 					throw new Exception("订单" . $data['order_number'] . "-" . $matchedOrder->board_number . " 未指定发车道");
 				} else {
-					$data['lane'] = $lane->name;
+					$data['lane'] = LaneAR::model()->findByPk($order->lane_id)->name;
 				}
 			}
 		} else {

@@ -3,8 +3,6 @@ $("document").ready(function() {
 	initPage();
 	var compArray = [];
 	var recordArray = [];
-	// console.log($("#currentNode").attr("value"));
-	//$("#myNode").html($("#currentNode").attr("value"));
 
 //------------------- ajax -----------------------	
 	//校验
@@ -90,13 +88,10 @@ $("document").ready(function() {
 		var obj = {};
 		if(compArray.length > 0){
 			for (var i = 0; i < recordArray.length; i++) {
-				// console.log(recordArray[i]);
-				// console.log(compArray[recordArray[i]].id + "#" + $("#comp"+recordArray[i]).html());
 				obj[compArray[recordArray[i]].id] = $("#comp"+recordArray[i]).html();
 			};
 		}
 		var jsonText = JSON.stringify(obj);
-		// console.log(jsonText);
 
 		$.ajax({
 			type: "post",//使用get方法访问后台
@@ -109,8 +104,8 @@ $("document").ready(function() {
 				if(response.success){
 					carInfo = response.data;
 				  	fadeMessageAlert(response.message,"alert-success");
-				  	$("#vinHint").html("上一辆" + carInfo.vinCode);	//added by wujun
-				  	recordArray = [];		//added by wujun
+				  	$("#vinHint").html("上一辆" + carInfo.vinCode);
+				  	// recordArray = [];
 
 				  	if($("#currentNode").val() == 'C21' || $("#currentNode").val() == 'C21_2'){
 					  	$("#carSeriesInfo").html(carInfo.series);
@@ -176,6 +171,7 @@ $("document").ready(function() {
 		//$('#compCodeText').attr("disabled","disabled");
 		// clear componentTable
 		$("#componentTable tbody").text("");
+		recordArray = [];
 	}
 
 	//toggle 车辆信息和提示信息
@@ -215,7 +211,6 @@ $("document").ready(function() {
 		validate 
 	*/
 	function getCompIndex (compCode) {
-		// console.log(compCode);
 		var simpleCode = "";
 		var providerCode = "";
 		if(compCode.length == 17){//零部件代码为 6-8位
@@ -247,11 +242,9 @@ $("document").ready(function() {
 				simpleCode = compCode.substring(0,4);
 		}
 
-		// console.log("simpleCode:" + simpleCode);
 		for (var i = 0; i < compArray.length; i++) {
 			//判断规则
 			if(compArray[i].simple_code == simpleCode){
-				// console.log("match" + i);
 				if(compArray[i].provider_code == "" ||
 					compArray[i].provider_code == providerCode)
 					return i;
@@ -364,7 +357,6 @@ $("document").ready(function() {
 			if(compText != ""){
 				if(compText.length == 21){
 					compText = compText.substr(3);
-					console.log(compText);
 				}
 
 				var index = getCompIndex(compText);	//modified by wujun
@@ -382,8 +374,6 @@ $("document").ready(function() {
 					}
 				}
 				$(this).val("");
-				// console.log(compArray.length);
-				// console.log(recordArray.length);
 				if(compArray.length == recordArray.length){
 					$("#btnSubmit").focus();
 				}

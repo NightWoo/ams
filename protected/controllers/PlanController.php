@@ -1,5 +1,6 @@
 <?php
 Yii::import('application.models.PlanSeeker');
+Yii::import('application.models.Plan');
 Yii::import('application.models.AR.PlanAR');
 Yii::import('application.models.AR.CarConfigAR');
 
@@ -28,77 +29,116 @@ class PlanController extends BmsBaseController
         }
     }
 
+	// public function actionSavePlan () {
+	// 	$id = $this->validateIntVal('id', 0);
+	// 	$date = $this->validateStringVal('plan_date', date('Y-m-d'));
+	// 	$series = $this->validateStringVal('car_series', 'F0');
+	// 	$total = $this->validateIntVal('total', 0);
+	// 	$carType = $this->validateStringVal('car_type', '');
+	// 	// $configName = $this->validateStringVal('config', '');
+	// 	$configId = $this->validateIntVal('config', '');
+	// 	$carBody = $this->validateStringVal('car_body', '');
+	// 	$color = $this->validateStringVal('color', '');
+	// 	$carYear = $this->validateStringVal('car_year', '');
+	// 	$orderType = $this->validateStringVal('order_type', '');
+	// 	$specialOrder = $this->validateStringVal('special_order', '');
+	// 	$assemblyLine = $this->validateStringVal('assembly_line', '');
+	// 	$coldResistant = $this->validateIntVal('cold_resistant', 0);
+	// 	$remark = $this->validateStringVal('remark', '');
+	// 	$specialProperty = $this->validateStringVal('specialProperty', '');
+	// 	$isFrozen = $this->validateIntVal('isFrozen', 0);
+	// 	//$batchNumber = $this->validateStringVal('batch_number', '');
+	// 	$transaction = Yii::app()->db->beginTransaction();
+	// 	try{
+	// 		$config = CarConfigAR::model()->find('id=?', array($configId));
+	// 		if(empty($config)) {
+	// 			throw new Exception("配置 $config 不存在");
+	// 		}
+	// 		// $planObj = new Plan();
+	// 		if(empty($id)) {
+	// 			// $planNumber = $planObj->createInSap($material, $quantity, $startDate, $endDate="", $type="", $prodVersion="", $plant="");
+	// 			$plan = new PlanAR();
+	// 			//get the max priority for the date
+	// 			$max = PlanAR::model()->find('plan_date=? order by priority desc', array($date));
+	// 			$plan->priority = 0;
+	// 			if(!empty($max)) {
+	// 				$plan->priority = $max->priority + 1;
+	// 			}
+	// 		} else {
+	// 			$plan = PlanAR::model()->findByPk($id);
+	// 		}
+						
+	// 		$samePriority = PlanAR::model()->find('plan_date=? AND priority=? order by priority desc', array($date,$plan->priority));
+	// 		if(!empty($samePriority) && $samePriority->id != $id){
+	// 			$max = PlanAR::model()->find('plan_date=? order by priority desc', array($date));
+	// 			$plan->priority = $max->priority + 1;
+	// 		}
+
+	// 		if(empty($plan->batch_number)){
+	// 			$seeker = new PlanSeeker();
+	// 			$batchNumber = $seeker->generateBatchNumber($date);
+	// 			$plan->batch_number = $batchNumber;
+	// 		}
+			
+	// 		$plan->plan_date = $date;
+	// 		$plan->car_series = $series;
+	// 		$plan->total = $total;
+	// 		$plan->car_type = $carType;
+	// 		$plan->color = $color;
+	// 		$plan->car_year = $carYear;
+	// 		$plan->order_type = $orderType;
+	// 		$plan->config_id = $configId;
+	// 		$plan->car_body = $carBody;
+	// 		$plan->special_order = $specialOrder;
+	// 		$plan->assembly_line = $assemblyLine;
+	// 		$plan->cold_resistant = $coldResistant;
+	// 		$plan->remark = $remark;
+	// 		$plan->special_property = $specialProperty;
+	// 		$plan->is_frozen = $isFrozen;
+	// 		$plan->user_id = Yii::app()->user->id;
+	// 		$plan->modify_time = date("YmdHis");
+	// 		$plan->save();
+
+	// 		$transaction->commit();
+ //            $this->renderJsonBms(true, 'OK', '');
+ //        } catch(Exception $e) {
+ //        	$transaction->rollback();
+ //            $this->renderJsonBms(false , $e->getMessage());
+ //        }
+	// }
+
 	public function actionSave () {
 		$id = $this->validateIntVal('id', 0);
-		$date = $this->validateStringVal('plan_date', date('Y-m-d'));
-		$series = $this->validateStringVal('car_series', 'F0');
-		$total = $this->validateIntVal('total', 0);
-		$carType = $this->validateStringVal('car_type', '');
-		// $configName = $this->validateStringVal('config', '');
-		$configId = $this->validateIntVal('config', '');
-		$carBody = $this->validateStringVal('car_body', '');
-		$color = $this->validateStringVal('color', '');
-		$carYear = $this->validateStringVal('car_year', '');
-		$carOrder = $this->validateStringVal('order_type', '');
-		$specialOrder = $this->validateStringVal('special_order', '');
-		$assemblyLine = $this->validateStringVal('assembly_line', '');
-		$coldResistant = $this->validateIntVal('cold_resistant', 0);
-		$remark = $this->validateStringVal('remark', '');
-		$specialProperty = $this->validateStringVal('specialProperty', '');
-		$isFrozen = $this->validateIntVal('isFrozen', 0);
-		//$batchNumber = $this->validateStringVal('batch_number', '');
-		try{
-			$config = CarConfigAR::model()->find('id=?', array($configId));
-			if(empty($config)) {
-				throw new Exception("配置 $config 不存在");
-			}
-			
-			if(empty($id)) {
-				$plan = new PlanAR();
-				//get the max priority for the date
-				$max = PlanAR::model()->find('plan_date=? order by priority desc', array($date));
-				$plan->priority = 0;
-				if(!empty($max)) {
-					$plan->priority = $max->priority + 1;
-				}
+		$data['plan_date'] = $this->validateStringVal('plan_date', date('Y-m-d'));
+		$data['car_series'] = $this->validateStringVal('car_series', 'F0');
+		$data['total'] = $this->validateIntVal('total', 0);
+		$data['car_type'] = $this->validateStringVal('car_type', '');
+		$data['config_id'] = $this->validateIntVal('config', '');
+		$data['car_body'] = $this->validateStringVal('car_body', '');
+		$data['color'] = $this->validateStringVal('color', '');
+		$data['car_year'] = $this->validateStringVal('car_year', '');
+		$data['order_type'] = $this->validateStringVal('order_type', '');
+		$data['special_order'] = $this->validateStringVal('special_order', '');
+		$data['assembly_line'] = $this->validateStringVal('assembly_line', '');
+		$data['cold_resistant'] = $this->validateIntVal('cold_resistant', 0);
+		$data['remark'] = $this->validateStringVal('remark', '');
+		$data['special_property'] = $this->validateStringVal('specialProperty', '');
+		$data['is_frozen'] = $this->validateIntVal('isFrozen', 0);
+		
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$plan = Plan::createById($id);
+			if(empty($id)){
+				$plan->generate($data);
 			} else {
-				$plan = PlanAR::model()->findByPk($id);
+				$plan->modify($data);
 			}
-						
-			$samePriority = PlanAR::model()->find('plan_date=? AND priority=? order by priority desc', array($date,$plan->priority));
-			if(!empty($samePriority) && $samePriority->id != $id){
-				$max = PlanAR::model()->find('plan_date=? order by priority desc', array($date));
-				$plan->priority = $max->priority + 1;
-			}
-
-			if(empty($plan->batch_number)){
-				$seeker = new PlanSeeker();
-				$batchNumber = $seeker->generateBatchNumber($date);
-				$plan->batch_number = $batchNumber;
-			}
-			
-			$plan->plan_date = $date;
-			$plan->car_series = $series;
-			$plan->total = $total;
-			$plan->car_type = $carType;
-			$plan->color = $color;
-			$plan->car_year = $carYear;
-			$plan->order_type = $carOrder;
-			$plan->config_id = $configId;
-			$plan->car_body = $carBody;
-			$plan->special_order = $specialOrder;
-			$plan->assembly_line = $assemblyLine;
-			$plan->cold_resistant = $coldResistant;
-			$plan->remark = $remark;
-			$plan->special_property = $specialProperty;
-			$plan->is_frozen = $isFrozen;
-			$plan->user_id = Yii::app()->user->id;
-			$plan->modify_time = date("YmdHis");
-			$plan->save();
+			$transaction->commit();
             $this->renderJsonBms(true, 'OK', '');
-        } catch(Exception $e) {
+		} catch(Exception $e) {
+			$transaction->rollback();
             $this->renderJsonBms(false , $e->getMessage());
-        }
+		}
 	}
 
 	public function actionRemove () {

@@ -26,7 +26,7 @@ define(['service'], function(service) {
 
 	function alertError (message) {
 		message = message || 'ajax error';
-			alert(message);
+		// alert(message);
 	}
 
 	function fadeMessageAlert (message,alertClass) {

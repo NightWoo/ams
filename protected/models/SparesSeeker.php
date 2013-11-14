@@ -50,7 +50,7 @@ class SparesSeeker
             $limit = "LIMIT $offset, $perPage";
         }
 
-        $dataSql = "SELECT assembly_line, series, vin, component_code, sap_code, component_name, provider_name,provider_code,factory_code, bar_code, is_collateral,treatment, unit_price, duty_department_name, fault_component_name, fault_mode, duty_area, replace_time, handler
+        $dataSql = "SELECT assembly_line, series, vin, component_code, sap_code, component_name, provider_name,provider_code,factory_code, bar_code, is_collateral,treatment, unit_price, quantity, duty_department_name, fault_component_name, fault_mode, duty_area, replace_time, handler
         			FROM view_spare_replacement
         			WHERE $condition
         			ORDER BY replace_time ASC
@@ -99,7 +99,7 @@ class SparesSeeker
 			foreach($arraySeries as $series) {
 				$curCondition = "replace_time>='$st' AND replace_time<'$et' AND series='$series'";
 				$curCondition = empty($condition) ? $curCondition : $curCondition . " AND " . $condition;
-				$sql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $curCondition";
+				$sql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE $curCondition";
 				$sum = Yii::app()->db->createCommand($sql)->queryScalar();
 
 				$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$st' AND assembly_time<'$et' AND series='$series'";
@@ -119,7 +119,7 @@ class SparesSeeker
 		foreach($arraySeries as $series) {
 			$totalCondition = "replace_time>='$stime' AND replace_time<'$etime' AND series='$series'";
 			$totalCondition = empty($condition) ? $totalCondition : $totalCondition . " AND " . $condition;
-			$totalSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $totalCondition";
+			$totalSql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE $totalCondition";
 			$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
 			$retTotal[$seriesList[$series]] = sprintf("%.2f", round($sumTotal, 2));
 			$carSeries[] = $seriesList[$series];
@@ -158,10 +158,10 @@ class SparesSeeker
 		}
 
 		$condition = join(" AND ", $conditions);
-		$dataSql = "SELECT duty_department_name as duty,unit_price,duty_area,treatment FROM view_spare_replacement WHERE $condition";
+		$dataSql = "SELECT duty_department_name as duty, unit_price*quantity as amount,duty_area,treatment FROM view_spare_replacement WHERE $condition";
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
 
-		$totalSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE $condition";
+		$totalSql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE $condition";
 		$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
 
 		$carCondition = join(" AND ", $carConditions);
@@ -182,9 +182,9 @@ class SparesSeeker
 			// 	$treatmentData[$data['duty']] = array('name'=>$data['treatment'], 'sum'=>0);
 			// }
 
-			$dutyChartDataTmp[$data['duty']]['sum'] += $data['unit_price'];
-			$areaChartData[$data['duty_area']]['sum'] += $data['unit_price'];
-			// $treatmentData[$data['duty']]['sum'] += $data['unit_price'];
+			$dutyChartDataTmp[$data['duty']]['sum'] += $data['amount'];
+			$areaChartData[$data['duty_area']]['sum'] += $data['amount'];
+			// $treatmentData[$data['duty']]['sum'] += $data['amount'];
 		}
 
 		$dutyChartData = $this->multi_array_sort($dutyChartDataTmp,'sum', SORT_DESC);
@@ -228,7 +228,7 @@ class SparesSeeker
 
 	public function queryUnitCost ($stime, $etime, $series='', $line='') {
 		$seriesArray = Series::parseSeries($series);
-		$costSql = "SELECT SUM(unit_price) FROM view_spare_replacement WHERE replace_time>='$stime' AND replace_time<'$etime'";
+		$costSql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE replace_time>='$stime' AND replace_time<'$etime'";
 		$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime'";
 		if(!empty($series)) {
 			$costSql .= " AND series='$series'";

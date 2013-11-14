@@ -7,6 +7,10 @@ label {
 	margin-top: 20px;
 }
 
+#messageAlert {
+	margin-bottom: 0;
+}
+
 #tabs {
 	/*margin-top: 20px;*/
 	/*margin-bottom: 10px;*/
@@ -23,4 +27,18 @@ label {
 
 .table th, .table td{
 	vertical-align: middle;
+}
+
+#componentTable {
+	margin-bottom: 0;
+	margin-top: 10px;
+}
+
+#formBarCode {
+	margin-bottom: 10px;
+}
+
+#checkAlert .alert {
+	margin-top: 5px;
+	margin-bottom: 0;
 }

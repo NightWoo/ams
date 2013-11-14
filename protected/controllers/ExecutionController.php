@@ -179,7 +179,7 @@ class ExecutionController extends BmsBaseController
             $car->ratioControlNext($line);
             $car->addVinLaserQueue();
             if($currentNode === 'T0'){
-                $subTypes = array('subEngine','subFrontAxle','subInstrument');
+                $subTypes = array('subEngine','subFrontAxle','subInstrument','subTyre');
                 $car->addSubConfig($subTypes);
             }
 
@@ -339,8 +339,8 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
-			$bagCode = $this->validateStringVal('bag', '');
-            $driverId = $this->validateStringVal('driver', 0);
+			$barCode = $this->validateStringVal('barCode', '');
+            $driverId = $this->validateIntVal('driver', 0);
             $temperature = $this->validateStringVal('temperature', 0);
             
             $fault = Fault::createSeeker();
@@ -349,6 +349,7 @@ class ExecutionController extends BmsBaseController
                 throw new Exception('必须选择驾驶员');
             }
 
+            $enterNode = Node::createByName("ROAD_TEST_FINISH");
             $car = Car::create($vin);
             $car->checkAlreadyOut();
 			$car->checkAlreadyWarehouse();
@@ -369,7 +370,8 @@ class ExecutionController extends BmsBaseController
             $fault = Fault::create('VQ2_ROAD_TEST',$vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
 
-            $car->addGasBagTraceCode($bagCode);
+            // $car->addGasBagTraceCode($bagCode);
+            $car->addTraceComponents($enterNode, $barCode);
             $car->recordTemperature($temperature, $traceId, $driverId);
             $car->detectStatus($nodeName);
             $transaction->commit();
@@ -395,7 +397,7 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
 			$faults = $this->validateStringVal('fault', '[]');
-            $driverId = $this->validateStringVal('driver', 0);
+            $driverId = $this->validateIntVal('driver', 0);
 
 			
             if(empty($driverId)) {
@@ -642,6 +644,7 @@ class ExecutionController extends BmsBaseController
                 $data = $warehouse->checkin($vin);
                 $message = $vin . '已重新分配库位，请开往' . $data['row'];
                 $car->car->warehouse_id = $data['warehouse_id'];
+                $car->car->fifo_time = date("YmdHis");
                 $car->car->area = $data['area'];
                 $car->car->save();
 

@@ -59,8 +59,8 @@ $(document).ready(function () {
 	};
 	// console.log(markMap['T1']);
 	//add head class
-	$("#headEfficiencyLi").addClass("active");
-	$("#leftMonitoringLi").addClass("active");
+	$("#headMonitoringLi").addClass("active");
+	// $("#leftMonitoringLi").addClass("active");
 
 	$("#rangeT1").data("sectionName","T1");
 	$("#rangeT2").data("sectionName","T2");

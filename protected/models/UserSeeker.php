@@ -55,16 +55,22 @@ class UserSeeker
 		return $userList;
 	}
 
-	public function checkCardNumber($number) {
+	public function checkCardNumber($number,$point="") {
+		$table = "user";
+		$idText = "id";
+		if(!empty($point)) {
+			$table = "view_driver";
+			$idText = "user_id";
+		}
 		if(strlen($number) == 10){
-			$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_8H10D = '$number'";
+			$sql = "SELECT $idText as user_id, card_number, display_name as name FROM $table WHERE card_8H10D = '$number' AND isdelete=0";
 			$user = Yii::app()->db->createCommand($sql)->queryRow();
-			if(empty($user) || $user['card_number'] == '0'){
-				$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_number = '$number'";
+			if(empty($point) && (empty($user) || $user['card_number'] == '0')){
+				$sql = "SELECT $idText as user_id, card_number, display_name as name FROM $table WHERE card_number = '$number' AND isdelete=0";
 				$user = Yii::app()->db->createCommand($sql)->queryRow();
 			}
 		} else {
-			$sql = "SELECT id as user_id, card_number, display_name as name FROM user WHERE card_number = '$number'";
+			$sql = "SELECT $idText as user_id, card_number, display_name as name FROM $table WHERE card_number = '$number' AND isdelete=0";
 			$user = Yii::app()->db->createCommand($sql)->queryRow();
 		}
 		return $user;

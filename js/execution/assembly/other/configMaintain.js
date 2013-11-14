@@ -430,6 +430,5 @@ function fillType(carSeries) {
 				}
 			}
 		})
-		return options；
+		return options;
 	}
-//changed

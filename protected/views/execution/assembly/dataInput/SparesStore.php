@@ -135,11 +135,12 @@
 								<thead>
 									<tr>
 										<th><a id="addComponent" rel="tooltip" data-toggle="tooltip" title="添加换件"><i class="icon-plus"></i></a></th>
+										<th>数量</th>
 										<th>零部件名称</th>
 										<th>零部件编码</th>
 										<th>供应商</th>
 										<th>零部件条码</th>
-										<th>连带损</th>
+										<th>连损</th>
 										<th>报废</th>
 									</tr>
 								</thead>

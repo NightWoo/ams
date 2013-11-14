@@ -30,6 +30,8 @@ var T11_F10_VALIDATE_BAR_CODE = "/bms/car/validateBarCode";
 //T11  提交已填写的条码
 var T11_F10_SUBMIT_PARTS = "/bms/execution/enterNode";
 
+var CHECK_CONFIG_LIST = "/bms/car/checkConfigList";
+
 //F20 扫描
 var F20_GET_INFO = "/bms/car/validateF20";
 //F20 打印检验跟单

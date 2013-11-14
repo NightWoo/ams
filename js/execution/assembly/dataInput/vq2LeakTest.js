@@ -19,7 +19,8 @@ $(document).ready(function  () {
 			    	$("#vinText").val(response.data.vin)	//added by wujun
 			    	//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
-					$("#driver").removeAttr("disabled");
+					// $("#driver").removeAttr("disabled");
+					$("#cardText").removeAttr("disabled").focus();
 					//show car infomation
 			    	toggleVinHint(false);
 			    	//render car info data,include serialNumber,series,type and color
@@ -69,8 +70,59 @@ $(document).ready(function  () {
         });
 	}
 
+		function ajaxCheckCard(point) {
+		$.ajax({
+			url: CHECK_CARD_NUMBER,
+			type: "get",
+			dataType: "json",
+			data: {
+				"point": "VQ2",
+				"cardNumber" : $("#cardText").val()
+			},
+			async: false,
+			success: function (response) {
+				if(response.success){
+					driver = response.data;
+					$("#cardText").attr("value", driver.card_number).attr("cardid", driver.user_id).attr("disabled", "disabled");
+					ajaxSubmit();
+				}else{
+					// resetPage();
+					$("#cardText").attr("value", "").attr("cardid", "");
+					fadeMessageAlert(response.message, 'alert-error');
+				}
+			},
+			error: function(){alertError();}
+		});
+	}
+
 	//进入
 	function ajaxSubmit (sendData){
+		var sendData = {};
+		sendData.vin = $('#vinText').val();
+		sendData.bag = $("#inputBag").val();
+		sendData.driver = $("#cardText").attr("cardid");
+		sendData.fault = [];
+		console.log($("#tabContent tr").length);
+		var selects = $("#tabContent tr select").filter(".fault-type");
+
+		$.each(selects,function (index,value) {
+			value = $(value).find("option:selected");
+			if($(value).val() != ""){
+				var obj = {};
+				obj.faultId = $(value).val();
+				console.log($(value).parent().parent().parent().html());
+				var tr = $(value).parent().parent().parent();
+				console.log($(tr).find("input[type='checkbox']").attr("checked"));
+				// obj.fixed = false;
+				// if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
+				// 	obj.fixed = true;
+				obj.componentId = $(tr).find("input[type='hidden']").val();
+				obj.dutyDepartment = $(tr).find(".duty").val();
+				console.log(obj.componentId);
+				sendData.fault.push(obj);
+			}
+		})
+		sendData.fault = JSON.stringify(sendData.fault);
 		$.ajax({
 			type: "get",//使用get方法访问后台
         	dataType: "json",//返回json格式的数据
@@ -194,7 +246,8 @@ $(document).ready(function  () {
 		//to show vin input hint
 		toggleVinHint(true);
 		//disable submit button
-		$("#btnSubmit, #driver").attr("disabled","disabled");
+		// $("#btnSubmit, #driver").attr("disabled","disabled");
+		$("#cardText").attr("value", "").attr("cardid", "").attr("disabled", "disabled");
 		$("#tableGeneral tbody").text("");
 		
 		$("#divDetail").hide();
@@ -263,46 +316,57 @@ $(document).ready(function  () {
 		}
 	});
 
-	$('#driver').change(function(){
-		if($('#driver').val() === ''){
-			$('#btnSubmit').attr('disabled', 'disabled');
-		} else {
-			$('#btnSubmit').removeAttr('disabled');
+	$("#cardText").bind('keydown', function(event) {
+		if($(this).attr("disabled") == "disabled")
+			return false;
+		if(event.keyCode == "13"){
+			if(jQuery.trim($("#cardText").val()) != ""){
+				ajaxCheckCard();
+			}
+			return false;
 		}
-	})
+	});
+
+	// $('#driver').change(function(){
+	// 	if($('#driver').val() === ''){
+	// 		$('#btnSubmit').attr('disabled', 'disabled');
+	// 	} else {
+	// 		$('#btnSubmit').removeAttr('disabled');
+	// 	}
+	// })
 
 	//提交
 	//构造提交的json，包括以下 vin 和fault，fault如下
 	// fault:[{"componentId":1,"faultId":1,"fixed":false},{}]
 	$("#btnSubmit").click(function() {		
 		//vin号，和故障数组
-		var sendData = {};
-		sendData.vin = $('#vinText').val();
-		sendData.bag = $("#inputBag").val();
-		sendData.driver = $("#driver").val();
-		sendData.fault = [];
-		console.log($("#tabContent tr").length);
-		var selects = $("#tabContent tr select").filter(".fault-type");
+		// var sendData = {};
+		// sendData.vin = $('#vinText').val();
+		// sendData.bag = $("#inputBag").val();
+		// sendData.driver = $("#cardText").attr("cardid");
+		// sendData.fault = [];
+		// console.log($("#tabContent tr").length);
+		// var selects = $("#tabContent tr select").filter(".fault-type");
 
-		$.each(selects,function (index,value) {
-			value = $(value).find("option:selected");
-			if($(value).val() != ""){
-				var obj = {};
-				obj.faultId = $(value).val();
-				console.log($(value).parent().parent().parent().html());
-				var tr = $(value).parent().parent().parent();
-				console.log($(tr).find("input[type='checkbox']").attr("checked"));
-				// obj.fixed = false;
-				// if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
-				// 	obj.fixed = true;
-				obj.componentId = $(tr).find("input[type='hidden']").val();
-				obj.dutyDepartment = $(tr).find(".duty").val();
-				console.log(obj.componentId);
-				sendData.fault.push(obj);
-			}
-		})
-		sendData.fault = JSON.stringify(sendData.fault);
-		ajaxSubmit(sendData);
+		// $.each(selects,function (index,value) {
+		// 	value = $(value).find("option:selected");
+		// 	if($(value).val() != ""){
+		// 		var obj = {};
+		// 		obj.faultId = $(value).val();
+		// 		console.log($(value).parent().parent().parent().html());
+		// 		var tr = $(value).parent().parent().parent();
+		// 		console.log($(tr).find("input[type='checkbox']").attr("checked"));
+		// 		// obj.fixed = false;
+		// 		// if($(tr).find("input[type='checkbox']").attr("checked") == "checked")
+		// 		// 	obj.fixed = true;
+		// 		obj.componentId = $(tr).find("input[type='hidden']").val();
+		// 		obj.dutyDepartment = $(tr).find(".duty").val();
+		// 		console.log(obj.componentId);
+		// 		sendData.fault.push(obj);
+		// 	}
+		// })
+		// sendData.fault = JSON.stringify(sendData.fault);
+		ajaxSubmit();
 		return false;
 	});
 

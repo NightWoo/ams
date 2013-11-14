@@ -58,7 +58,7 @@
                                         <option value="assembly">总装</option>
                                         <option value="pbs">PBS</option>
                                         <option value="online">产线</option>
-                                        <option value="VQ">VQ周转</option>
+                                        <option value="VQ">VQ</option>
                                         <option value="warehouse">成品库</option>
                                     </select>
     								<select name="" id="selectState" class="input-small">

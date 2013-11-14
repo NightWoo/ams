@@ -723,7 +723,7 @@ class OrderSeeker
 	}
 
 	public function queryCarsById($orderId){
-		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code, old_wh_id 
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code, old_wh_id, remark 
 				FROM car 
 				WHERE order_id=$orderId ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();

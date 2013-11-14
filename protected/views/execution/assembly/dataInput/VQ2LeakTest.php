@@ -35,9 +35,15 @@
 					<div>
 						<form id="formFailure" class="well form-search">
 							<div>
-								<label>VIN</label>
-								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
-								<select name="" id="driver" class="input-small" disalbled='disabled'>
+								<div class="input-prepend">
+									<span class="add-on" id="vinLabel">VIN</span>
+									<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
+								</div>
+								<div class="input-prepend">
+									<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+									<input type="text" class="span3" placeholder="请贴厂牌或输入工号完成提交..." id="cardText" disabled="disabled">
+								</div>
+								<!-- <select name="" id="driver" class="input-small" disalbled='disabled'>
 									<option value="" selected>驾驶员</option>
 									<option value="149">陈亚军</option>
 									<option value="112">樊后来</option>
@@ -93,8 +99,8 @@
 									<option value="300">蒋其名</option>
 									<option value="301">王定钊</option>
 									<option value="302">鄢佳斌</option>
-								</select>
-								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
+								</select> -->
+								<!-- <button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button> -->
 								<button id="reset" type="reset" class="btn">清空</button>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 								<span class="help-inline" id="vinHint">请输入VIN后回车</span>

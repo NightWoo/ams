@@ -53,7 +53,7 @@ class SparesController extends BmsBaseController
 		try {
 			$seeker = new SparesSeeker();
 			list($total, $datas) = $seeker->queryReplacementDetail($stime,$etime,$series,$line,$dutyId,0,0);
-			$content = "线别,车系,VIN,SAP编号,零部件编号,零部件名称,零部件条码,供应商,供应商代码,工厂代码,连带损,处理,责任部门,换件故障,换件区域,换件人,换件时间\n";
+			$content = "线别,车系,VIN,SAP编号,零部件编号,零部件名称,数量,零部件条码,供应商,供应商代码,工厂代码,连带损,处理,责任部门,换件故障,换件区域,换件人,换件时间\n";
 			foreach($datas as $data) {
 				$content .= "{$data['assembly_line']},";
 				$content .= "{$data['series_name']},";
@@ -61,6 +61,7 @@ class SparesController extends BmsBaseController
 				$content .= "{$data['sap_code']},";
 				$content .= "{$data['component_code']},";
 				$content .= "{$data['component_name']},";
+				$content .= "{$data['quantity']},";
 				$content .= "{$data['bar_code']},";
 				$content .= "{$data['provider_name']},";
 				$content .= "{$data['provider_code']},";

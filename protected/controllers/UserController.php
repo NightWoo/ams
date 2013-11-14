@@ -205,9 +205,10 @@ class UserController extends BmsBaseController
 
 	public function actionCheckCardNumber() {
 		$number = $this->validateStringVal('cardNumber', '');
+		$point = $this->validateStringVal('point', '');
 		try{
 			$seeker = User::createSeeker();
-			$data = $seeker->checkCardNumber($number);
+			$data = $seeker->checkCardNumber($number, $point);
 			if(!empty($data)){
 				$this->renderJsonBms(true, 'OK', $data);
 			} else {

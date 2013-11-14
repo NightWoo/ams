@@ -85,7 +85,7 @@ $("document").ready(function() {
 					$.each(one.orders, function (index, order) {
 						tr = tmp.children("tr:eq("+ index +")");
 						$("<td />").html(order.order_number).appendTo(tr);
-						$("<td />").html(order.series).appendTo(tr);
+						$("<td />").html(byd.SeriesName[order.series]).appendTo(tr);
 						$("<td />").html(order.car_type_config).appendTo(tr);
 						$("<td />").html(order.cold).appendTo(tr);
 						$("<td />").html(order.color).appendTo(tr);
@@ -166,11 +166,12 @@ $("document").ready(function() {
 					// $('<td />').html(value.status).appendTo(tr);
 					$('<td />').html('新证').appendTo(tr);
 					$('<td />').html(value.distributor_name).appendTo(tr);
-					$('<td />').html(value.series).appendTo(tr);
+					$('<td />').html(byd.SeriesName[value.series]).appendTo(tr);
 					$('<td />').html(value.type_config).appendTo(tr);
 					$('<td />').html(value.cold).appendTo(tr);
 					$('<td />').html(value.color).appendTo(tr);
 					$('<td />').html(value.engine_code).appendTo(tr);
+					$('<td />').html(value.remark).appendTo(tr);
 
 					$("#tableDetail tbody").append(tr);
 

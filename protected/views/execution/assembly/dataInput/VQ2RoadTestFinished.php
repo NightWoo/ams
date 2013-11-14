@@ -34,66 +34,15 @@
 					<div>
 						<form id="formFailure" class="well form-search">
 							<div>
-								<label>&nbsp;VIN</label>
-								<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
-								<select name="" id="driver" class="input-small" disalbled='disabled'>
-									<option value="" selected>驾驶员</option>
-									<option value="149">陈亚军</option>
-									<option value="112">樊后来</option>
-									<option value="152">凡鹏飞</option>
-									<option value="142">方祥</option>
-									<option value="135">郭胜军</option>
-									<option value="145">郭振华</option>
-									<option value="146">何征兵</option>
-									<option value="148">胡亚南</option>
-									<option value="140">黄彬</option>
-									<option value="156">黄水江</option>
-									<option value="143">刘泮胜</option>
-									<option value="137">毛保林</option>
-									<option value="141">糜芳</option>
-									<option value="153">石仕全</option>
-									<option value="151">孙昌伍</option>
-									<option value="136">滕向军</option>
-									<option value="138">田佳岸</option>
-									<option value="167">王泽鹏</option>
-									<option value="139">肖志虎</option>
-									<option value="147">杨思强</option>
-									<option value="144">杨自西</option>
-									<option value="150">曾海龙</option>
-									<option value="154">赵松</option>
-                                    <option value="227">顾善军</option>
-                                    <option value="234">单炯</option>
-                                    <option value="276">刘琪</option>
-									<option value="277">苏新胜</option>
-									<option value="278">简成伟</option>
-									<option value="279">周超</option>
-									<option value="280">谢文强</option>
-									<option value="281">王安</option>
-									<option value="282">黄兴</option>
-									<option value="283">刘斌</option>
-									<option value="284">艾梅彬</option>
-									<option value="215">朱志鹏</option>
-									<option value="285">黎江</option>
-									<option value="286">毛光玉</option>
-									<option value="169">汪辉</option>
-									<option value="287">彭鹭云</option>
-									<option value="288">尹彦德</option>
-									<option value="289">贺锦</option>
-									<option value="290">刘山东</option>
-									<option value="291">熊闯</option>
-									<option value="292">周思来</option>
-									<option value="293">刘嘉伟</option>
-									<option value="294">谌勇</option>
-									<option value="295">周颂雄</option>
-									<option value="296">赵鑫鹏</option>
-									<option value="297">田双全</option>
-									<option value="298">王文明</option>
-									<option value="299">黄双喜</option>
-									<option value="300">蒋其名</option>
-									<option value="301">王定钊</option>
-									<option value="302">鄢佳斌</option>
-								</select>
-								<button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button>
+								<div class="input-prepend">
+									<span class="add-on" id="vinLabel">V</span>
+									<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
+								</div>
+								<div class="input-prepend">
+									<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+									<input type="text" class="span3" placeholder="请贴厂牌或输入工号完成提交..." id="cardText" disabled="disabled">
+								</div>
+								<!-- <button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button> -->
 								<button id="reset" type="reset" class="btn">清空</button>
 								<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 								<span class="help-inline" id="vinHint">请输入VIN后回车</span>
@@ -112,9 +61,17 @@
 								<div id="messageAlert" class="alert"></div>    
 							</div> <!-- end 提示信息 --> 
 							</form>
-							<form id="formBag" class="well form-search">
-								<label>气囊</label>
-								<input id="inputBag" type="text" class="span3" placeholder="请扫描/输入主驾气囊条码...">
+							<form id="formBarCode" class="well form-search">
+								<div class="input-prepend">
+									<span class="add-on" id="barcodeLabel"><i class="icon-barcode"></i></span>
+									<input id="compCodeText" type="text" class="span3" placeholder="请扫描/输入条码...">
+								</div>
+									<table class="table table-striped table-condensed" id="componentTable">
+										<tbody>
+										  
+										</tbody>
+									</table>
+								<div id="checkAlert"></div>
 							</form>
 							<form id="divDetail" class="well form-search">
 								<div>

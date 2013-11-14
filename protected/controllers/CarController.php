@@ -141,6 +141,7 @@ class CarController extends BmsBaseController
 
 	public function actionValidateRTF() {
         $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', '');
         try{
             $car = Car::create($vin);
 
@@ -153,8 +154,15 @@ class CarController extends BmsBaseController
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
             //$car->passNode('VQ3');
-            $data = $car->car;
-
+            if(empty($car->config->name)){
+                throw new Exception($vin . '无配置');
+            }
+            $configName = $car->config->name;
+            $data = array(
+                'car' => $car->car,
+                'components' => $car->getConfigDetail($nodeName),
+                'config' => $configName,
+            );
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
@@ -343,6 +351,25 @@ class CarController extends BmsBaseController
             $this->renderJsonBms(true, 'OK' , $barCode);
         } catch(Exception $e){
             $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionCheckConfigList () {
+        $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', '');
+        try{
+            $car = Car::create($vin);
+            $configId =$car->car->config_id;
+            $enterNode = Node::createByName($nodeName);
+            $nodeId = $enterNode->id;
+
+            $sql = "SELECT count(*) FROM car_config_list WHERE config_id=$configId AND node_id=$nodeId";
+            $exist = Yii::app()->db->createCommand($sql)->queryScalar();
+            $data = !empty($exist);
+
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false , $e->getMessage());
         }
     }
 

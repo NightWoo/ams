@@ -106,6 +106,7 @@
                                     <th>VIN</th>
                                     <th>零部件编号</th>
                                     <th>零部件名称</th>
+                                    <th>数量</th>
                                     <th>供应商</th>
                                     <th>连带损</th>
                                     <th>责任部门</th>
@@ -124,6 +125,7 @@
                                     <td>{{:vin}}</td>
                                     <td>{{:component_code}}</td>
                                     <td>{{:component_name}}</td>
+                                    <td>{{:quantity}}</td>
                                     <td>{{:provider_name}}</td>
                                     <td>
                                         {{if is_collateral==1}}是

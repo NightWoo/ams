@@ -279,6 +279,12 @@
     width: 160px;
 }
 
+.node-tyre {
+	left: 320px;
+    top: -985px;
+    width: 36px;
+}
+
 
 div.thumbnail:hover, div.thumbnail:focus {
     border-color: #0088CC;

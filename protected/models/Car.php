@@ -168,7 +168,9 @@ class Car
 
 	public function warehouseTime () {
 		if($this->car->warehouse_time == '0000-00-00 00:00:00') {
-			$this->car->warehouse_time = date('YmdHis');
+			$now = date('YmdHis');
+			$this->car->warehouse_time = $now;
+			$this->car->fifo_time = $now;
 			$this->car->save();
 		}
 	}
@@ -187,7 +189,7 @@ class Car
 			$snClass = "SerialNumber" . strtoupper($series) . "_2AR";
 		}
 		
-		$curYear = date('Y');
+		$curYear = DateUtil::getCurYear();
 		$logYear = CurrentYearAR::model()->find('series=? AND cur_year=?', array($series, $curYear));
 		if(empty($logYear)) {//must truncate SerialNumber
 			$tableName = $snClass::model()->tableName();
@@ -451,7 +453,7 @@ class Car
 	public function addTraceComponents ($node, $componentCodeText) {
 		$codeList = CJSON::decode($componentCodeText);
 		if(empty($codeList)){
-			return;
+			return $codeList;
 		}
 		$nodeId = $node->id;
 		$series = strtoupper($this->car->series);
@@ -686,7 +688,8 @@ class Car
 			return;
 		}
 		$node = Node::createByName('ROAD_TEST_FINISH');	
-	    $this->addTraceComponents($node, '{692:"'.$gasBagCode.'"}');	
+	    $ret = $this->addTraceComponents($node, '{"692":"'.$gasBagCode.'"}');	
+	    return $ret;
 	}
 
 	public function recordTemperature ($temperature=0, $traceId=0, $recorderId=0){
@@ -704,6 +707,7 @@ class Car
 			"F0"=>array("faultId"=>"14174","componentId"=>"683","dutyDepartment"=>"0"),
 			"M6"=>array("faultId"=>"14175","componentId"=>"2892","dutyDepartment"=>"0"),
 			"6B"=>array("faultId"=>"14176","componentId"=>"3396","dutyDepartment"=>"0"),
+			"G6"=>array("faultId"=>"18758","componentId"=>"6311","dutyDepartment"=>"0"),
 		);
 
 		return $faultArray[$series];
@@ -958,7 +962,7 @@ class Car
 		return $ret;
 	}
 	
-	public function addSubConfig ($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle')) {
+	public function addSubConfig ($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle','subTyre')) {
 		// $types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
 		foreach($types as $type) {
 			$subConfig = SubConfigCarQueueAR::model()->find('car_id=? AND type=?', array($this->car->id,$type));
@@ -1257,7 +1261,9 @@ class Car
             $this->car->warehouse_id = $data['warehouse_id'];
             $this->car->area = $data['area'];
 
-            $this->car->warehouse_time = date("YmdHis");
+            $now = date("YmdHis");
+            $this->car->warehouse_time = $now;
+            $this->car->fifo_time = $now;
             $this->car->save();
 
 		} else {
@@ -1272,6 +1278,7 @@ class Car
 			$this->car->warehouse_id = 0;
 			$this->car->area = '';
 			$this->car->warehouse_time = "0000-00-00 00:00:00";
+			$this->car->fifo_time = "0000-00-00 00:00:00";
 			$this->car->vq3_return_time = "0000-00-00 00:00:00";
 			if($goTo == "VQ1") {
 				$this->car->vq1_return_time = date("YmdHis");
@@ -1962,6 +1969,7 @@ class Car
 			$replacementAr->is_collateral = $spare['isCollateral'];
 			$replacementAr->treatment = empty($spare['isScrap']) ? "返修" : "报废";
 			$replacementAr->unit_price = $spare['unitPrice'];
+			$replacementAr->quantity = $spare['quantity'];
 			$replacementAr->bar_code = $spare['barCode'];
 			$replacementAr->replace_time = date("YmdHis");
 			$replacementAr->handler = $spare['handler'];
