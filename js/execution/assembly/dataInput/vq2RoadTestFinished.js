@@ -123,12 +123,18 @@ $(document).ready(function  () {
 	function ajaxSubmit (){
 		temperature = $.trim($("#inputTemperature").val());
 		// if(temperature == "" || !(/^\d*$/.test(temperature))){
-		if(temperature == "" || !(temperature>0 && temperature<40)){
+		if(!isAllRecord()){
 			$("#cardText").attr("value", "").attr("cardid", 0).removeAttr("disabled");
-			$("#inputTemperature").removeAttr("disabled").val("").focus();
-			alert("必须输入空调温度，且填写的必须是小于40的整数");
 			return false;
 		}
+
+		if(temperature == "" || !(temperature>0 && temperature<40)){
+			alert("必须输入空调温度，且填写的必须是小于40的整数");
+			$("#cardText").attr("value", "").attr("cardid", 0).removeAttr("disabled");
+			$("#inputTemperature").removeAttr("disabled").val("").focus();
+			return false;
+		}
+
 
 		//vin号，和故障数组
 		var sendData = {};
@@ -333,6 +339,31 @@ $(document).ready(function  () {
 				return true;
 		};
 		return false;
+	}
+
+	function isAllRecord () {
+		if(compArray.length == 0 || (compArray.length != 0 && compArray.length == recordArray.length)){
+			return true;
+		}
+
+		if(recordArray.length < compArray.length){
+			var unRecordComp = "";
+			var unRecordCount = 0
+			for (var i = 0; i < compArray.length; i++) {
+				if(!ifExistInRecordArray(i,recordArray)){
+					unRecordComp += "-" + compArray[i].display_name + "-\n";
+					++unRecordCount;
+				}
+			};
+			if(unRecordCount != 0){
+				alert("还有" + unRecordCount + "个零部件未扫描:\n\n" + 
+					unRecordComp + "\n无法提交");
+				$("#compCodeText").val("").focus();
+				return false;
+			}else{
+				return true;
+			}
+		}
 	}
 
 	function addCheckMessage (message) {

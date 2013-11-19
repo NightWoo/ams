@@ -53,7 +53,12 @@ class SparesController extends BmsBaseController
 		try {
 			$seeker = new SparesSeeker();
 			list($total, $datas) = $seeker->queryReplacementDetail($stime,$etime,$series,$line,$dutyId,0,0);
-			$content = "线别,车系,VIN,SAP编号,零部件编号,零部件名称,数量,零部件条码,供应商,供应商代码,工厂代码,连带损,处理,责任部门,换件故障,换件区域,换件人,换件时间\n";
+			$content = "线别,车系,VIN,SAP编号,零部件编号,零部件名称,数量,零部件条码,供应商,供应商代码,工厂代码,连带损,处理,责任部门,换件故障,换件区域,换件人,换件时间";
+			$unitPricePrivilage = Yii::app()->permitManager->checkPrivilage('COMPONENT_UNIT_PRICE');
+			if($unitPricePrivilage){
+				$content .= ",单价";
+			}
+			$content .= "\n";
 			foreach($datas as $data) {
 				$content .= "{$data['assembly_line']},";
 				$content .= "{$data['series_name']},";
@@ -75,6 +80,9 @@ class SparesController extends BmsBaseController
 				$content .= "{$data['duty_area']},";
 				$content .= "{$data['handler']},";
 				$content .= "{$data['replace_time']},";
+				if($unitPricePrivilage) {
+					$content .= "{$data['unit_price']},";
+				}
 				$content .= "\n";
 			}
 

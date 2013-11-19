@@ -6,7 +6,7 @@
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
-	<link href="/bms/css/execution/assembly/other/ConfigMaintain.css" rel="stylesheet">	
+	<link href="/bms/css/execution/assembly/other/ConfigMaintain.css" rel="stylesheet">
 	<!-- Le script -->
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
@@ -337,6 +337,41 @@
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 	    <button class="btn btn-primary" id="btnEditConfirm">确认编辑</button>
+  	</div>
+</div>
+
+<!-- sap edit -->
+<div class="modal" id="sapEditModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h3></h3>
+  	</div>
+  	<div class="modal-body">
+  		<table id="sapEditTable" class="table table-condensed table-hover" style="">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>颜色</th>
+					<th>SAP物料编号</th>
+					<th>SAP物料描述</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+			<script id="tmplSapTr" type="text/x-jsrander">
+				<tr sapId="{{:config_id}}">
+					<td class="id">{{:id}}</td>
+					<td class="color">{{:color}}</td>
+					<td><input type='text' class='input-medium material_code' value='{{:material_code}}'></td>
+					<td><input type='text' class='span5 description' value='{{:description}}'></td>
+				</tr>
+            </script>
+		</table>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" id="btnSapConfirm">确认编辑</button>
   	</div>
 </div>
   	

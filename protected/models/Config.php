@@ -1,6 +1,8 @@
 <?php
 Yii::import('application.models.AR.CarConfigAR');
 Yii::import('application.models.AR.CarConfigListAR');
+Yii::import('application.models.AR.ConfigSapMapAR');
+Yii::import('application.models.AR.CarColorMapAR');
 class Config
 {
 	private $configAR;
@@ -9,10 +11,14 @@ class Config
 		$this->configAR = $configAR;
 	}
 
-	public static function create($configId) {
-		$configAR = CarConfigAR::model()->findByPk($configId);
-		if(empty($configAR)) {
-			throw new Exception('no such car config');
+	public static function create($configId=0) {
+		if(empty($configId)){
+			$configAR = new CarConfigAR();
+		} else {
+			$configAR = CarConfigAR::model()->findByPk($configId);
+			if(empty($configAR)) {
+				throw new Exception('no such car config');
+			}
 		}
 		$c = __class__;
         $config = new $c($configAR);
@@ -30,9 +36,38 @@ class Config
         $config = new $c($configAR);
 
 		return $config;
+	}
+
+	public function save ($data) {
+		$data['user_id'] = Yii::app()->user->id;
+		$data['modify_time'] = date("YmdHis");
+
+		foreach($data as $key => $value) {
+			$this->configAR->$key = $value;
+		}
+		$this->configAR->save();
+	}
+
+	public function getConfigSap () {
+		$series = $this->configAR->car_series;
+		$sql = "SELECT color FROM car_color_map WHERE series='$series'";
+		$colors = Yii::app()->db->createCommand($sql)->queryColumn();
+		$sapArray = array();
+		foreach($colors as $color) {
+			$sap = ConfigSapMapAR::model()->find('config_id=? AND color=?', array($this->configAR->id, $color));
+			if(empty($sap)) {
+				$sap = new ConfigSapMapAR();
+				$sap->series = $series;
+				$sap->config_id = $this->configAR->id;
+				$sap->color= $color;
+				$sap->save();
+			}
+			$sapArray[] = $sap;
+		}
+		return $sapArray;
 	}	
 
-	public function getDetail($car, $nodeName, $trace = 1) {
+	public function getDetail($car, $nodeName) {
 		$node = Node::createByName($nodeName);
         if(!$node->exist()) {
             throw new Exception('node ' . $nodeName . ' is not exit');
@@ -41,10 +76,10 @@ class Config
 		$ctClass = "ComponentTrace{$series}AR";
 		Yii::import('application.models.AR.' .$ctClass);
 		if(empty($node)) {
-            $configLists = CarConfigListAR::model()->findAll('config_id=? AND istrace!=0', array($this->configAR->id));
+            $configLists = CarConfigListAR::model()->findAll('config_id=? AND istrace>0', array($this->configAR->id));
 			$traceComponents = $ctClass::model()->findAll('car_id=?',array($car->id));
         } else {
-        	$configLists = CarConfigListAR::model()->findAll('config_id=? AND node_id=? AND istrace!=0', array($this->configAR->id, $node->id));
+        	$configLists = CarConfigListAR::model()->findAll('config_id=? AND node_id=? AND istrace>0', array($this->configAR->id, $node->id));
 			//$traceComponents = $ctClass::model()->findAll('car_id=? AND node_id=?',array($car->id,$node->id));
 			// modify by wujun
 			// 检查某辆车某是否有某零部件的条码的记录，与当时条码在那个node扫描记录无关，

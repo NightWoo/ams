@@ -6,3 +6,13 @@
 .btn-primary {
 	margin-left: 2px;
 }
+
+#sapEditModal{
+	margin: 0 0 0 -410px;
+	width: 800px;
+	font-size: 12px;
+}
+
+#sapEditTable input{
+	margin-bottom: 0
+}

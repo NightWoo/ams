@@ -96,34 +96,48 @@ class SparesSeeker
 			$st = $queryTime['stime'];
 			$et = $queryTime['etime'];
 			$temp = array();
+			$totalCars = 0;
+			$totalSum = 0; 
 			foreach($arraySeries as $series) {
 				$curCondition = "replace_time>='$st' AND replace_time<'$et' AND series='$series'";
 				$curCondition = empty($condition) ? $curCondition : $curCondition . " AND " . $condition;
 				$sql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE $curCondition";
 				$sum = Yii::app()->db->createCommand($sql)->queryScalar();
+				$totalSum += $sum;
 
 				$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$st' AND assembly_time<'$et' AND series='$series'";
 				if(!empty($line)) $carSql .= "AND assembly_line='$line'";
 				$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
+				$totalCars += $cars;
 
-				$temp[$seriesList[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sum/$cars, 2)) ;
-				$dataSeriesY[$seriesList[$series]][] = empty($cars) ? null : round($sum/$cars, 2);;
+				$temp[$seriesList[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sum/$cars, 2));
+				$dataSeriesY[$seriesList[$series]][] = empty($cars) ? null : round($sum/$cars, 2);
 				// $temp[self::$SERIES_NAME[$series]] = $sum;
 				// $dataSeriesY[self::$SERIES_NAME[$series]][] = empty($sum) ? null : round($sum,2);
 
 			}
+			$temp['total'] = empty($totalCars) ? "0.00" : sprintf("%.2f", round($totalSum/$totalCars, 2));
 			$ret[] = array_merge(array('time'=>$queryTime['point']), $temp);
 			$dataSeriesX[] = $queryTime['point'];
 		}
 
+		$totalCarsTotal = 0;
+		$totalSumTotal = 0;
 		foreach($arraySeries as $series) {
 			$totalCondition = "replace_time>='$stime' AND replace_time<'$etime' AND series='$series'";
 			$totalCondition = empty($condition) ? $totalCondition : $totalCondition . " AND " . $condition;
 			$totalSql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE $totalCondition";
 			$sumTotal = Yii::app()->db->createCommand($totalSql)->queryScalar();
-			$retTotal[$seriesList[$series]] = sprintf("%.2f", round($sumTotal, 2));
+			$totalSumTotal += $sumTotal;
+
+			$carSql = "SELECT COUNT(*) FROM car WHERE assembly_time>='$stime' AND assembly_time<'$etime' AND series='$series'";
+			$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
+			$totalCarsTotal += $cars;
+
+			$retTotal[$seriesList[$series]] = sprintf("%.2f", round($sumTotal/$cars, 2));
 			$carSeries[] = $seriesList[$series];
 		}
+		$retTotal['total'] = empty($totalCarsTotal) ? "0.00" : sprintf("%.2f", round($totalSumTotal/$totalCarsTotal, 2));
 
 		return array(
 			'carSeries'=>$carSeries, 

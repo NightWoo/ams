@@ -10,6 +10,7 @@ Yii::import('application.models.AR.CarAccessoryListAR');
 Yii::import('application.models.AR.CarTypeMapAR');
 Yii::import('application.models.AR.SubConfigCarQueueAR');
 Yii::import('application.models.AR.OilFillingAR');
+Yii::import('application.models.AR.ConfigSapMapAR');
 
 class ConfigController extends BmsBaseController 
 {
@@ -39,64 +40,42 @@ class ConfigController extends BmsBaseController
 	//added by wujun
 	public function actionSave() {
 		$id = $this->validateIntVal('id',0);
-		$isDisabled = $this->validateIntVal('isDisabled', 0);
-		$series = $this->validateStringVal('car_series','');
-		$type = $this->validateStringVal('car_type','');
-		$configName = $this->validateStringVal('config_name','');
-		$orderConfigId = $this->validateIntVal('order_config_id',0);
-		$markClime = $this->validateStringVal('mark_clime','国内');
-		$exportCountry = $this->validateStringVal('export_country','');
-		$sideGlass = $this->validateStringVal('side_glass','');
-		$oilFillingCold = $this->validateIntval("oil_filling_id_cold", 0);
-		$oilFillingNormal = $this->validateIntval("oil_filling_id_normal", 0);
-		$tyre = $this->validateStringVal('tyre','');
-		$steering = $this->validateStringVal('assisted_steering','液压');
-		$certificateNote = $this->validateStringVal('certificate_note','');
-		$remark = $this->validateStringVal('remark','');
-		$aircondition = $this->validateIntVal('aircondition','');
+		$data['is_disabled'] = $this->validateIntVal('isDisabled', 0);
+		$data['car_series'] = $this->validateStringVal('car_series','');
+		$data['car_type'] = $this->validateStringVal('car_type','');
+		$data['name'] = $this->validateStringVal('config_name','');
+		$data['order_config_id'] = $this->validateIntVal('order_config_id',0);
+		$data['mark_clime'] = $this->validateStringVal('mark_clime','国内');
+		$data['export_country'] = $this->validateStringVal('export_country','');
+		$data['side_glass'] = $this->validateStringVal('side_glass','');
+		$data['oil_filling_id_cold'] = $this->validateIntval("oil_filling_id_cold", 0);
+		$data['oil_filling_id_normal'] = $this->validateIntval("oil_filling_id_normal", 0);
+		$data['tyre'] = $this->validateStringVal('tyre','');
+		$data['assisted_steering'] = $this->validateStringVal('assisted_steering','液压');
+		$data['certificate_note'] = $this->validateStringVal('certificate_note','');
+		$data['remark'] = $this->validateStringVal('remark','');
+		$data['aircondition'] = $this->validateIntVal('aircondition','');
 		
 		try {
-			if(empty($series)) {
+			if(empty($data['car_series'])) {
 				throw new Exception("车系不能为空");
 			}
-			if(empty($type)) {
+			if(empty($data['tyre'])) {
 				throw new Exception("车型不能为空");
 			}
-			if(empty($configName)) {
+			if(empty($data['name'])) {
 				throw new Exception("配置名称不能为空");
 			} else if(empty($id)) {
-				$exist = CarConfigAR::model()->find('name=?', array($configName));
+				$data['create_time'] = date("YmdHis");
+				$exist = CarConfigAR::model()->find('name=?', array($data['name']));
 				if(!empty($exist)){
-					throw new Exception("配置名称 $configName 已经存在，请重新命名");
+					throw new Exception("配置名称 {$data['name']} 已经存在，请重新命名");
 				}
 			}
-			if(empty($id)) {
-				$config = new CarConfigAR();
-				$config->create_time = date("YmdHis");
-			} else {
-				$config = CarConfigAR::model()->findByPk($id);
-			}
-			
-			$config->car_series = $series;
-			$config->car_type = $type;
-			$config->name = $configName;
-			$config->order_config_id = $orderConfigId;
-			$config->mark_clime = $markClime;
-			$config->export_country = $exportCountry;
-			$config->side_glass = $sideGlass;
-			$config->aircondition = $aircondition;
-			$config->oil_filling_id_cold = $oilFillingCold;
-			$config->oil_filling_id_normal = $oilFillingNormal;
-			$config->aircondition = $aircondition;
-			$config->tyre = $tyre;
-			$config->assisted_steering = $steering;
-			$config->certificate_note = $certificateNote;
-			$config->remark = $remark;
-			$config->is_disabled = $isDisabled;
-			$config->user_id = Yii::app()->user->id;
-			$config->modify_time = date("YmdHis");
-			
-			$config->save();
+
+			$config = Config::create($id);
+			$config->save($data);
+
 			$this->renderJsonBms(true, 'OK', '');
 		}catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());
@@ -237,6 +216,35 @@ class ConfigController extends BmsBaseController
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage());	
 		}	
+	}
+
+	public function actionGetConfigSap () {
+		$configId = $this->validateIntVal("configId", 0);
+		try {
+			$config = Config::create($configId);
+			$data = $config->getConfigSap();
+			$this->renderJsonBms(true, 'OK', $data);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+
+	}
+
+	public function actionSaveConfigSapAll () {
+		$saveData = $this->validateStringVal("saveData", "[]");
+		try {
+			$saps = CJSON::decode($saveData);
+			foreach($saps as $sap) {
+				$ar = ConfigSapMapAR::model()->findByPk($sap['id']);
+				$ar->material_code = $sap['material_code'];
+				$ar->description = $sap['description'];
+				$ar->save();
+			}
+			$this->renderJsonBms(true, 'OK', null);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
+
 	}
 	
 	public function actionSearchConfigList () {

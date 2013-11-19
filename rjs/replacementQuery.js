@@ -284,25 +284,21 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 	        $("<th />").html("车系").appendTo(thTr);    
 	        $("<th />").html("合计").appendTo(thTr);
 
-	        totalTotal = 0;
 			$.each(carSeries, function (index, series) {
 	            $("<td />").html(series).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
 	            $("<td />").addClass("alignRight").html(parseFloat(total[series]).toFixed(2)).appendTo($("#tableCostTrend tr:eq(" + (index*1+1) + ")"));
-	            totalTotal += parseFloat(total[series]);
 	        });
 
 	        var totalTr =  $("<tr />").appendTo($("#tableCostTrend tbody"));
-	        $("<td />").html('总计').appendTo(totalTr);
-	        $("<td />").addClass("alignRight").html(totalTotal.toFixed(2)).appendTo(totalTr);
+	        $("<td />").html('综合').appendTo(totalTr);
+	        $("<td />").addClass("alignRight").html(total['total']).appendTo(totalTr);
 
 			$.each(detail, function (index,value) {
 				$("<td />").html(value.time).appendTo(thTr);
-				detailTotal = 0;
 				$.each(carSeries, function (index,series) {
 					$("<td />").addClass("alignRight").html(value[series]).appendTo($("#tableCostTrend tr:eq("+(index*1+1)+")"));
-					detailTotal += parseFloat(value[series]);
 				});
-				$("<td />").addClass("alignRight").html(detailTotal.toFixed(2)).appendTo(totalTr);
+				$("<td />").addClass("alignRight").html(value['total']).appendTo(totalTr);
 			});
 
 	    },

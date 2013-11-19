@@ -37,7 +37,9 @@
 						<div>
 		                    <legend><?php echo $nodeDisplayName;?>
 		                    	<span class="pull-right">
-			                    	<a href="/bms/execution/carLabelAssembly" id="linkCarLabel" style="display:none"><i class="icon-link"></i>&nbsp;车辆标签</a>
+			                    	<a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="icon-link"></i>&nbsp;条码补录</a>
+			                    	<span class="linkCarLabel" style="display:none">/</span>
+			                    	<a href="/bms/execution/carLabelAssembly" class="linkCarLabel" style="display:none"><i class="icon-link"></i>&nbsp;车辆标签</a>
 			                    </span>
 		                    </legend>
 		                </div>

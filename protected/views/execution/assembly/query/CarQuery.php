@@ -49,6 +49,7 @@
                 <form class="well form-search">
                     <table>
                         <tr>
+                            <td>线别</td>
                             <td>车系</td>
                             <td>整车编号</td>
                             <td>VIN</td>
@@ -56,6 +57,13 @@
                             <td></td>
                         </tr>
                         <tr>
+                            <td>
+                                <select id="lineSelect" class="input-small lineSelect">
+                                </select>
+                                <script id="tmplLineSelect" type="text/x-jsrander">
+                                    <option value='{{:line}}'>{{:line}}线</option>
+                                </script>
+                            </td>
                             <td>
                                 <select name="" id="selectSeries" class="input-small">
                                     <option value="" selected>不限</option>
@@ -97,6 +105,7 @@
                     <span class="label label-info" rel="tooltip" title="配置" id="configName"></span>
                     <span class="label label-info" rel="tooltip" title="颜色" id="color"></span>
                     <span class="label label-info" rel="tooltip" title="车辆区域" id="statusInfo"></span>
+                    <span class="label label-info" rel="tooltip" title="备注" id="remarkInfo"></span>
                 </div>
                 <table id="resultTable" class="table table-bordered">
                     <thead>

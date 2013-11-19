@@ -98,9 +98,9 @@ $(document).ready(function() {
 	})
 	
 	$("#tableConfig").live("click", function(e) {
+		var tr = $(e.target).closest("tr");
 		if($(e.target).html()==="编辑"){
 			emptyEditModal();
-			var tr = $(e.target).closest("tr");
 
 			if (tr.data("isDisabled") == "1") {
 				$("#editIsDisabled").attr("checked", "checked");
@@ -141,9 +141,15 @@ $(document).ready(function() {
 			$("#editModal").data("id",tr.data("id"));
 			$("#editModal").modal("show");
 			
-		} else if($(e.target).html()==="删除"){
-			// ajaxDelete($(e.target).closest("tr").data("id"));
+		} else if($(e.target).html()==="SAP料号"){
+			$("#sapEditModal>.modal-header>h3").html(tr.data("name"));
+			getSap(tr.data("id"));
+			$("#sapEditModal").modal("show");
 		}	
+	})
+
+	$("#btnSapConfirm").click(function () {
+		saveSapAll();
 	})
 	
 	function ajaxQuery (argument) {
@@ -170,10 +176,10 @@ $(document).ready(function() {
 						$("<td />").html(value.modify_time).appendTo(tr);
 						$("<td />").html(value.user_name).appendTo(tr);
 						$("<td />").html(value.remark).appendTo(tr);
-						// var editTd = $("<td />").html(" ¦ ");
-						var editTd = $("<td />");
-						$("<button />").addClass("btn-link").html("编辑").appendTo(editTd);
-						// $("<button />").addClass("btn-link").html("删除").appendTo(editTd);
+						var editTd = $("<td />").html(" ¦ ");
+						// var editTd = $("<td />");
+						$("<button />").addClass("btn-link").html("编辑").prependTo(editTd);
+						$("<button />").addClass("btn-link").html("SAP料号").appendTo(editTd);
 						editTd.appendTo(tr);
 						
 						tr.data("isDisabled", value.is_disabled);
@@ -296,14 +302,66 @@ $(document).ready(function() {
 				if(response.success){
 					ajaxQuery();	
 				} else {
-					alert(respose.message);
+					alert(response.message);
 				}	
 			},
 			error: function () {
-				aleatError();
+				alertError();
 			}
 				
 		});
+	}
+
+	function getSap (configId) {
+		$("#sapEditTable>tbody").html("");
+		$.ajax({
+			url: GET_CONFIG_SAP,
+			type: "get",
+			dataType: "json",
+			data: {"configId": configId},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					trs = $.templates("#tmplSapTr").render(response.data);
+					$("#sapEditTable>tbody").append(trs);
+				} else {
+					alert(response.message)
+				}
+			}
+		})
+	}
+
+	function saveSapAll () {
+		var dataArray = [];
+		$("#sapEditTable>tbody>tr").each(function (index, tr) {
+			$(tr).data("id", $(tr).find("td").filter(".id").html());
+			$(tr).data("material_code", $(tr).find("input").filter(".material_code").val());
+			$(tr).data("description", $(tr).find("input").filter(".description").val());
+			dataArray.push($(tr).data());
+		});
+		var dataObj = {};
+		for(var i=0;i<dataArray.length;i++) {
+			dataObj[i] = dataArray[i];
+		}
+		var jsonText = JSON.stringify(dataObj);
+
+		$.ajax({
+			url: SAVE_CONFIG_SAP_ALL,
+			type: "get",
+			dataType: "json",
+			data: {
+				"saveData": jsonText
+			},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					$("#sapEditModal").modal("hide");
+					$("#sapEditTable>tbody").html("");
+				} else {
+					alert(response.message);
+				}
+			}
+		})
 	}
 	
 	function emptyEditModal (argument) {

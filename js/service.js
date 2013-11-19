@@ -52,6 +52,8 @@ var VQ1_SUBMIT_EXCEPTION = "/bms/fault/saveVQ1";
 var CHECKPAPER_VALIDATE = "/bms/car/validateCheckPaper";
 var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 
+var RECORD_BARCODE = "/bms/execution/recodeBarcode";
+
 var CONFIGPAPER_MAIN_SUBMIT = "/bms/execution/configPaperMainPrint";
 var CAR_VALIDATE = "/bms/car/validateCar";
 
@@ -224,7 +226,8 @@ var SEARCH_ORDER_CONFIG = "/bms/config/searchOrderConfig";
 var SAVE_CONFIG = "/bms/config/save";
 var DELETE_CONFIG = "/bms/config/delete";
 var GET_OIL_FILLING = "/bms/config/getOilFilling";
-
+var GET_CONFIG_SAP = "/bms/config/getConfigSap";
+var SAVE_CONFIG_SAP_ALL = "/bms/config/saveConfigSapAll";
 //added by wujun
 //plan maintain
 var GET_YEAR_CODE = "/bms/plan/getYearCode";

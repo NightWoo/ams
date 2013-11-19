@@ -28,6 +28,8 @@
                         <a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception"><i class="icon-link"></i>&nbsp;VQ1异常</a>
                         /
                         <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
+                        /
+                        <a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="icon-link"></i>&nbsp;条码补录</a>
                     </span>
                 </legend>
 				

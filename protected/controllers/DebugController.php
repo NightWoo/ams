@@ -17,8 +17,8 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			$car = Car::create("LC0C14AA4D0082092");
-			$ret  = $car->addGasBagTraceCode("109616029D02201367");
+			$config = Config::create(144);
+			$ret  = $config->checkConfigSapMap();
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);

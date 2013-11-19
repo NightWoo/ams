@@ -114,7 +114,7 @@
 						<div id="componentsDiv" class="span8">
 							<div class="input-prepend">
 								<span class="add-on">责任</span>
-								<select id="dutySelect" class="input-medium"></select>
+								<select id="dutySelect" class=""></select>
 							</div>
 							<div class="input-prepend input-append">
 								<span class="add-on">换件人</span>

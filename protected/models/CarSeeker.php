@@ -706,7 +706,7 @@ class CarSeeker
 		return array($total, $datas);
 	}
 
-	public function queryCar ($vin='',$series='',$serial='') {
+	public function queryCar ($vin='',$series='',$serial='',$line='I') {
 		$conditions = array();
 
 		if(!empty($vin)){
@@ -716,7 +716,7 @@ class CarSeeker
 			$conditions[] = "series='$series'";
 		};
 		if(!empty($serial)){
-			$conditions[] = "serial_number LIKE '%$serial'";
+			$conditions[] = "serial_number LIKE '%$serial' AND assembly_line='$line'";
 		}
 		if(!empty($conditions)){
 			$condition = join(' AND ', $conditions);

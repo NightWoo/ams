@@ -317,14 +317,14 @@ class CarController extends BmsBaseController
                 throw new Exception('node cannot be empty');
             }
             $enterNode = Node::createByName($nodeName);
-            $leftNode = $enterNode->getParentNode();
+            // $leftNode = $enterNode->getParentNode();
+            //$car->leftNode($leftNode->name);
 
             $car = Car::create($vin);
             $line = $car->car->assembly_line;
             if( ($line == "I" && strpos($nodeName,"_2")) || ($line == "II" && !strpos($nodeName,"_2")) ){
                 throw new Exception($car->car->vin . "是" . $line ."线车辆，无法录入该节点，请确认车辆或录入节点是否正确");
             }
-            //$car->leftNode($leftNode->name);
 			if(empty($car->config->name)){
 				throw new Exception($vin . '无配置');
 			}
@@ -374,13 +374,14 @@ class CarController extends BmsBaseController
     }
 
 	public function actionShowTrace() {
-		$vin = $this->validateStringVal('vin', '');
-        $node = $this->validateStringVal('node', '');
+        $vin = $this->validateStringVal('vin', '');
+		$line = $this->validateStringVal('line', '');
         $series = $this->validateStringVal('series', '');
-		$serialNumber = $this->validateStringVal('serialNumber', '');
+        $serialNumber = $this->validateStringVal('serialNumber', '');
+        $node = $this->validateStringVal('node', '');
         try{
             $seeker = new CarSeeker();
-            $vin = $seeker->queryCar($vin,$series,$serialNumber);
+            $vin = $seeker->queryCar($vin,$series,$serialNumber,$line);
             if(empty($vin)){
                 throw new Exception('查无车辆');
             }

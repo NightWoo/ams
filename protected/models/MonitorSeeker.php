@@ -524,7 +524,7 @@ class MonitorSeeker
 		//    $lineRunTime += $lrET - $lrST;
 		//}
 		$lineRunTime = strtotime($etime) - strtotime($stime);	
-		$linePauses = LinePauseAR::model()->findAll("pause_time>? AND pause_time<=? AND pause_type=?" , array($stime, $etime, '计划停线'));
+		$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($stime, $etime, '计划停线'));
 		$now = time();
 		$planPauseTime = 0;
 		foreach($linePauses as $linePause) {

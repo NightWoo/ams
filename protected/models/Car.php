@@ -537,12 +537,6 @@ class Car
 		if(empty($code)) {
 			return;
 		}
-		// $allSeries = array(
-		// 	'F0',
-		// 	'M6',
-		// 	'6B',
-		// 	'G6'
-		// );
 		$allSeries = Series::getArray();
 
 		foreach($allSeries as $series) {
@@ -554,7 +548,7 @@ class Car
 				if($exist->car_id == $this->car->id && $exist->component_id=$componentId) {
 					continue;
 				}
-				throw new Exception("条码" .$code . " 已经存在!");
+				throw new Exception("条码" . $code . " 已经存在!");
 			}
 		}
 	}
@@ -832,9 +826,9 @@ class Car
 				}
 				$trace['fault_status'] = '-';
 				if(!empty($trace['driver_id'])){
-					$trace['user_name'] = $userInfos[$trace['driver_id']];
+					$trace['user_name'] = !empty($userInfos[$trace['driver_id']]) ? $userInfos[$trace['driver_id']] : "-";
 				} else {
-					$trace['user_name'] = $userInfos[$trace['user_id']];
+					$trace['user_name'] = !empty($userInfos[$trace['user_id']]) ? $userInfos[$trace['user_id']] : "-";
 				}
 				$trace['modify_time'] = '-';
 				$datas[] = $trace;

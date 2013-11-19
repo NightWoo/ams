@@ -12,6 +12,7 @@ $(document).ready(function () {
 		$("#headAssemblyLi").addClass("active");
 		$("#leftCarQueryLi").addClass("active");
 		getSeries();
+		fillLineSelect();
 		$("#carTag").hide();
 		$("#resultTable").hide();
 		$("#tabTestLine").hide();
@@ -92,6 +93,7 @@ $(document).ready(function () {
 		    data: {
 		    	"vin": $('#vinText').val(),
 		    	"series": $('#selectSeries').val(),
+		    	"line": $('#lineSelect').val(),
 		    	"serialNumber": $('#serialText').val(),
 		    	"node":$("#selectNode").val()
 		    },
@@ -100,10 +102,11 @@ $(document).ready(function () {
 		    		var car = response.data.car;
 		    		// $("#vinText").val(car.vin);
 		    		$("#vin, .vinText").html(car.vin);
-		    		$('#serialNumber').html(car.serial_number);
+		    		$('#serialNumber').html(car.assembly_line + "-" +car.serial_number);
 		    	 	$('#series').html(car.series);
 			    	$('#color').html(car.color);
 				    $('#type').html(car.type);
+				    $('#remarkInfo').html(car.remark);
 				    configCold = car.config_name == "" ? "" : car.config_name + "/" + car.cold;
 				    $('#configName').html(configCold);
 				    row = car.row == "" ? "" : "-" + car.row;
@@ -234,6 +237,24 @@ $(document).ready(function () {
 				if(response.success){
 					options = $.templates("#tmplSeriesSelect").render(response.data);
 					$("#selectSeries").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function fillLineSelect () {
+		$.ajax({
+			url: GET_LINE_LIST,
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success){
+					options = $.templates("#tmplLineSelect").render(response.data);
+					$(".lineSelect").append(options);
 				} else {
 					alert(response.message);
 				}

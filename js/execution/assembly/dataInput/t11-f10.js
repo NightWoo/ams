@@ -143,7 +143,7 @@ $("document").ready(function() {
 		$("#messageAlert").hide();
 
 		if($("#currentNode").val() == "C21" || $("#currentNode").val() == "C21_2") {
-			$("#linkCarLabel").show();
+			$(".linkCarLabel").show();
 		}
 	}
 

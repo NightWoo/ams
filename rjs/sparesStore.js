@@ -324,6 +324,10 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		getHandlerTeams();
 		getLine();
 		getSeries();
+
+		options = common.getDutyOptions("SparesStore", true);
+		$("#dutySelect").append(options);
+		$("#dutySelect option:first-child, #teamSelect option:first-child").prop("selected", true);
 	}
 
 	function resetPage () {
@@ -339,10 +343,7 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 		disableNewFault();
 		$("#newFaultComponent").val("");
 
-		options = common.getDutyOptions("SparesStore", true);
-		$("#dutySelect").append(options);
 		configList = [];
-
 		$("#dutySelect option:first-child, #teamSelect option:first-child").prop("selected", true);
 		getHandlers("");
 	}

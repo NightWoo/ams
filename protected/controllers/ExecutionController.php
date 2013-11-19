@@ -779,6 +779,24 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionRecodeBarcode() {
+        $vin = $this->validateStringVal('vin', '');
+        $nodeName = $this->validateStringVal('currentNode', 'T11');
+        $componentCode = $this->validateStringVal('componentCode', '{}');
+        $transaction = Yii::app()->db->beginTransaction();
+        try{
+            $enterNode = Node::createByName($nodeName);
+            $car = Car::create($vin);
+            $car->addTraceComponents($enterNode, $componentCode);
+            $data = $car->vin;
+            $transaction->commit();
+            $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
     public function actionCarLabelAssemblyPrint() {
         try{
             $vin = $this->validateStringVal('vin', '');
@@ -1315,6 +1333,16 @@ class ExecutionController extends BmsBaseController
         try{
             Yii::app()->permitManager->check('FAULT_DUTY_EDIT');
             $this->render('assembly/other/FaultDutyEdit');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
+    public function actionCompleteBarCodeRecord() {
+        try{
+            Yii::app()->permitManager->check('COMPLETE_BAR_CODE_RECORD');
+            $this->render('assembly/other/CompleteBarcodeRecord');  
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
