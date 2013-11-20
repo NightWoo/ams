@@ -648,7 +648,7 @@ class Car
 
 		$notFound = array();
 		foreach($traceList as $trace){
-			if(in_array($trace['component_id'], $componentIds) || in_array($trace['replacement_id'], $componentIds) || $trace['node_id'] == 15) continue;
+			if(in_array($trace['component_id'], $componentIds) || in_array($trace['replacement_id'], $componentIds) || $trace['node_id'] == 15 || $trace['node_id'] == 0) continue;
 			$notFound[$trace['component_id']]['name'] = ComponentAR::model()->findByPk($trace['component_id'])->display_name;
 			$notFound[$trace['component_id']]['node'] = NodeAR::model()->findByPk($trace['node_id'])->display_name;
 			$notGood = true;

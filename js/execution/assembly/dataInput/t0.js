@@ -266,6 +266,7 @@ $("document").ready(function() {
 		$("#btnSubmit").attr("disabled","disabled")
 		ajaxGetPlan();
 		ajaxPlanTomorrow();
+		$(".configPaper img").attr("src", "");
 		//$(".printable").removeClass("toPrint");		
 	}
 
