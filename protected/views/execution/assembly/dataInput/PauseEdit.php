@@ -33,7 +33,7 @@
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <legend>停线编辑
         		<span class="pull-right">
-        			<a href="/bms/execution/child?view=T0&node=T0"><i class="icon-link"></i>&nbsp;T0</a>
+        			<a href="/bms/execution/child?view=T0&node=T0"><i class="fa fa-link"></i>&nbsp;T0</a>
         		</span>
         	</legend>
    	   		<div><!-- 主体 -->

@@ -37,7 +37,7 @@
                 <div>
                     <legend>库位整理
                         <!-- <span class="pull-right">
-                            <i class="icon-link"></i>&nbsp;
+                            <i class="fa fa-link"></i>&nbsp;
                             <a href="/bms/execution/OutStandbyMaintain">发车道分配</a>
                         </span> -->
                     </legend>

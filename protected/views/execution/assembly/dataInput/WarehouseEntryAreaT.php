@@ -33,9 +33,9 @@
 					<div>
 		            	<legend>入库临时区
 		            		<span class="pull-right">
-		            			 <a href="/bms/execution/warehouseRelocate"><i class="icon-link"></i>&nbsp;重新分配库位</a>
+		            			 <a href="/bms/execution/warehouseRelocate"><i class="fa fa-link"></i>&nbsp;重新分配库位</a>
 		            			 /
-		            			 <a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntry"><i class="icon-link"></i>&nbsp;入成品库</a>
+		            			 <a href="/bms/execution/child?node=CHECK_IN&view=WarehouseEntry"><i class="fa fa-link"></i>&nbsp;入成品库</a>
 		            		</span>
 		            	</legend>
 		            </div>
@@ -57,7 +57,7 @@
 									<tr>
 										<td>
 											<div class="input-prepend">
-												<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+												<span class="add-on" id="cardLabel"><i class="fa fa-credit-card"></i></span>
 												<input type="text" class="span3" placeholder="请贴厂牌完成入库..." id="cardText" disabled="disabled">
 											</div>
 												<input type="button" class="btn btn-danger" disabled="disabled" id ="btnSubmit" value ="入库临时区" style="width:156px">

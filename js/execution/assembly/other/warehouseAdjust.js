@@ -26,7 +26,7 @@ jQuery(document).ready(function($) {
 					$.each(response.data, function(indes, value) {
 						var tr = $("<tr />");
 						var editTd = $("<td />");
-						var reset = "<a class='btn btn-link' href='#' rel='tooltip' data-placement='top' title='整理空位'><i class='icon-retweet'></i></a>";
+						var reset = "<a class='btn btn-link' href='#' rel='tooltip' data-placement='top' title='整理空位'><i class='fa fa-retweet'></i></a>";
 						editTd.html(reset).appendTo(tr);
 
 						$("<td />").html(value.row).appendTo(tr);
@@ -166,7 +166,7 @@ jQuery(document).ready(function($) {
 	$("#tableResult").live("click", function(e) {
 		if($(e.target).is("i")){
 			var tr = $(e.target).closest("tr");
-			if($(e.target).hasClass("icon-retweet")){
+			if($(e.target).hasClass("fa-retweet")){
 				if(confirm("是否整理" + tr.data("row"))){
 					ajaxResetRow(tr.data("warehouseId"));
 				}

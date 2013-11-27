@@ -1,8 +1,9 @@
 $("document").ready(function() {
-	
-	initPage();
+	// var checkEngine = ($("#currentNode").val()==="C10" || $("#currentNode").val()==="C10_2") ? true : false;
+	var checkEngine = false;
 	var compArray = [];
 	var recordArray = [];
+	initPage();
 
 //------------------- ajax -----------------------	
 	//校验
@@ -14,15 +15,17 @@ $("document").ready(function() {
 			data: {"vin": $('#vinText').attr("value"),"currentNode":$("#currentNode").attr("value")},
 			success: function(response) {
 				if(response.success){
-					$("#vinText").val(response.data.car.vin);	//added by wujun
+					$("#vinText").val(response.data.car.vin);
 					//disable vinText and open submit button
 			    	$("#vinText").attr("disabled","disabled");
 					$("#btnSubmit").removeAttr("disabled");
 					//show car infomation
 			    	toggleVinHint(false);
+			    	$("#engineCodeText").attr("code", response.data.car.engine_code);
 			    	//focus compCodeText
-			    	$('#compCodeText').removeAttr("disabled");	//added by wujun
-			    	$("#compCodeText").focus();
+			    	barcodeInputFocus();
+			    	// $('#compCodeText').removeAttr("disabled");
+			    	// $("#compCodeText").focus();
 			    	//render car info data,include series,type and color
 					var car = response.data.car;
 					$('#serialNumber').html(car.serial_number);
@@ -145,32 +148,21 @@ $("document").ready(function() {
 		if($("#currentNode").val() == "C21" || $("#currentNode").val() == "C21_2") {
 			$(".linkCarLabel").show();
 		}
+
+		if(!checkEngine) {
+			$(".engineCode").hide();
+		}
 	}
 
-	/*
-		to resetPage:
-		1.enable and empty vinText
-		2.focus vinText
-		3.show vin hint
-		4.disable submit
-		5.clear componentText
-		6.clear componentTable
-	*/
 	function resetPage () {
-		//empty vinText
-		$("#vinText").removeAttr("disabled");
-		$("#vinText").attr("value","");
-		//聚焦到vin输入框上
-		$("#vinText").focus();
-		//to show vin input hint
 		toggleVinHint(true);
-		//disable submit button
+		$("#vinText").removeAttr("disabled").val('').focus();
 		$("#btnSubmit").attr("disabled","disabled");
-		// clear compCodeText
-		$('#compCodeText').val("").attr("disabled","disabled");		//added by wujun
-		//$('#compCodeText').attr("disabled","disabled");
-		// clear componentTable
-		$("#componentTable tbody").text("");
+
+		$("#compCodeText").val("").attr("disabled","disabled");	
+		$("#engineCodeText").val("").attr("code" , "").attr("disabled","disabled");	
+
+		$("#componentTable tbody").text('');
 		recordArray = [];
 	}
 
@@ -188,6 +180,25 @@ $("document").ready(function() {
 			$("#vinHint").hide();
 			$("#carInfo").fadeIn(1000);
 		}
+	}
+
+	function barcodeInputFocus () {
+		if(checkEngine) {
+			$("#engineCodeText").removeAttr("disabled").focus();
+		} else {
+			$("#compCodeText").removeAttr("disabled").focus();
+		}
+	}
+
+	function validateEngineCode () {
+		if($("#engineCodeText").attr("code") == $("#engineCodeText").val()) {
+			$("#engineCodeText").attr("disabled", "disabled");
+			$("#compCodeText").removeAttr("disabled").focus();
+		} else {
+			addCheckMessage("发动机号与VIN号不对应");
+			$("#engineCodeText").val('').focus();
+		}
+		return false;
 	}
 
 	/*
@@ -343,8 +354,15 @@ $("document").ready(function() {
 		return false;
 	});
 
+	$("#engineCodeText").bind("keypress", function (event) {
+		if(event.keyCode == "13" || event.keyCode == "10"){
+			validateEngineCode();
+			return false;
+		}
+	})
+
 	//
-	$('#compCodeText').bind('keypress',function (event) {
+	$('#compCodeText').bind('keypress', function (event) {
 		
 		//debug回车换行wujun
 		//if(event.keyCode <= "48" && event.keyCode != "13" && event.keyCode != "8" && event.keyCode != "48") {
@@ -363,7 +381,8 @@ $("document").ready(function() {
 				if(index != -1){
 					// if(!compArray[index].bar_code){
 					if(!$("#comp"+index).html()){
-						barCode = jQuery.trim($(this).val());
+						// barCode = jQuery.trim($(this).val());
+						barCode = compText;
 						ajaxValidateBarCode(index, barCode);
 
 						//$("#comp"+index).html(jQuery.trim($(this).val()));	//modified by wujun

@@ -37,9 +37,9 @@
 						<div>
 		                    <legend><?php echo $nodeDisplayName;?>
 		                    	<span class="pull-right">
-			                    	<a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="icon-link"></i>&nbsp;条码补录</a>
+			                    	<a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="fa fa-link"></i>&nbsp;条码补录</a>
 			                    	<span class="linkCarLabel" style="display:none">/</span>
-			                    	<a href="/bms/execution/carLabelAssembly" class="linkCarLabel" style="display:none"><i class="icon-link"></i>&nbsp;车辆标签</a>
+			                    	<a href="/bms/execution/carLabelAssembly" class="linkCarLabel" style="display:none"><i class="fa fa-link"></i>&nbsp;车辆标签</a>
 			                    </span>
 		                    </legend>
 		                </div>
@@ -52,11 +52,15 @@
 												<span class="add-on">V</span>
 												<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText" />
 											</div>
+											<div class="input-prepend">
+												<span class="add-on engineCode">发动机号</span>
+												<input type="text" class="span3 engineCode" placeholder="请扫描/输入发动机号..." id="engineCodeText" code="" disabled />
+											</div>
+											<button class="btn" id="reset">清空</button>
 											<span class="help-inline" id="vinHint">请输入VIN后回车</span>
 											<div class="help-inline" id="carInfo">
 												<span class="label label-info" rel="tooltip" title="流水号" id="serialNumber"></span>
 												<span class="label label-info" rel="tooltip" title="车系" id="series"></span>
-												<!--<span class="label label-info" rel="tooltip" title="Vin号" id="vin"></span>-->
 												<span class="label label-info" rel="tooltip" title="车型" id="type"></span>
 												<span class="label label-info" rel="tooltip" title="配置" id="config"></span>
 												<span class="label label-info" rel="tooltip" title="耐寒性" id="cold"></span>
@@ -68,12 +72,11 @@
 									<tr>
 										<td>
 											<div class="input-prepend">						
-												<span class="add-on"><i class="icon-barcode"></i></span>
+												<span class="add-on"><i class="fa fa-barcode"></i></span>
 												<input type="text" class="input" id="compCodeText" placeholder="扫描零部件条码">				
 											</div>
 											<input type="button" class="btn btn-primary" id='btnSubmit' value='提交'></input> 
 											<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>		
-											<button class="btn" id="reset">清空</button>
 										</td>
 									</tr>
 								</table>

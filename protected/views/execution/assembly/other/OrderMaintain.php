@@ -34,64 +34,22 @@
             <div>
             	<legend>发车计划
             		<span class="">
-            			<a id="addOrder" href="#"><i class="icon-plus"></i>&nbsp;普通</a>
+            			<a id="addOrder" href="#"><i class="fa fa-plus"></i>&nbsp;普通</a>
             			|
-            			<a id="addSpecialOrder" href="#"><i class="icon-plus"></i>&nbsp;出口</a>
+            			<a id="addSpecialOrder" href="#"><i class="fa fa-plus"></i>&nbsp;出口</a>
             			|
-            			<a id="addInternalOrder" href="#"><i class="icon-plus"></i>&nbsp;内部</a>
+            			<a id="addInternalOrder" href="#"><i class="fa fa-plus"></i>&nbsp;内部</a>
             		</span>
             	</legend>
             </div>
             
    	   		<div><!-- 主体 -->
-			    <!-- <div class="accordion span4 pull-left" id="accordionLane">
-			    	<div class="accordion-group" id="laneGroup1">
-			    		<div class="accordion-heading">
-			    			<div class="headBadge">
-		    				 	<span class="label label-success" id="freeGroup1">2</span>
-		    				 	<span class="label label-info" id="loadingGroup1">3</span>
-			    				<span class="label label-warning" id="fullGroup1">5</span>
-			    			</div>
-			    		</div>
-			    		<div id="collapse1" class="accordion-body collapse in">
-			    			<div class="accordion-inner">
-			    				<div class="block">
-			    					<div>
-				    					<div class="pull-left laneContainer">
-					    					<a class="thumbnail" href="#">
-												<p class="pull-left">#01</p>
-												<div class="progress progress-warning">
-													<div class="bar" style="width:100%">10/10</div>
-												</div>
-											</a>
-										</div>
-										<a class="btn btn-link distribution"><i class="icon-list"></i></a>
-										<a class="btn btn-link resetLane"><i class="icon-undo"></i></a>
-									</div>
-
-									<div>
-				    					<div class="pull-left laneContainer">
-					    					<a class="thumbnail" href="#">
-												<p class="pull-left">#02</p>
-												<div class="progress progress-warning">
-													<div class="bar" style="width:100%">10/10</div>
-												</div>
-											</a>
-										</div>
-										<a class="btn btn-link distribution"><i class="icon-list"></i></a>
-										<a class="btn btn-link resetLane"><i class="icon-undo"></i></a>
-									</div>
-								</div>
-			    			</div>
-			    		</div>
-			    	</div>
-			    </div> -->
 
 			    <div class="">
 			    	<form id="form" class="well form-inline">
 	                    <table>
 	                        <tr>
-	                            <td>备车日期&nbsp;<a href="#" id="refreshDate"><i class="icon-refresh"></i></a></td>
+	                            <td>备车日期&nbsp;<a href="#" id="refreshDate"><i class="fa fa-refresh"></i></a></td>
 	                            <td>备板编号</td>
 	                            <td>订单号</td>
 	                            <td>经销商</td>
@@ -103,25 +61,25 @@
 	                            	<div class="input-append">
 								      	<!-- <input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."onClick="WdatePicker({el:'standbyDate',dateFmt:'yyyy-MM-dd'});"/> -->
 								      	<input id="standbyDate"  type="text" class="input-small" placeholder="备车日期..."/>
-							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+							      		<a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
 							    	</div>
 	                            </td>
 	                        	<td>
 	                        		<div class="input-append">
 		                        		<input id="boardNumber" type="text" class="input-small" placeholder="备板号...">
-							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+							      		<a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
 							    	</div>
 	                        	</td>
 	                        	<td>
 	                        		<div class="input-append">
 		                        		<input id="orderNumber" type="text" class="input-medium" placeholder="订单号...">
-							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+							      		<a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
 							    	</div>
 	                        	</td>
 	                           <td>
 		                           	<div class="input-append">
 		                           		<input id="distributor" type="text" class="input-medium" placeholder="经销商...">
-							      		<a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+							      		<a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
 							    	</div>
 	                           </td>
 	                           <td>
@@ -199,12 +157,12 @@
 			    <div class="controls">
 			    	<div class="input-append">
 				      	<input type="text" id="newOrderNumber" class="input-medium" placeholder="订单号...">
-			      		<a class="btn appendBtn" id="newGetOrder"><i class="icon-search"></i></a>
+			      		<a class="btn appendBtn" id="newGetOrder"><i class="fa fa-search"></i></a>
 			    	</div>
 			    	<span class="help-inline" id="hint">请输入订单号取得订单明细</span>
 			      	<div class="help-inline" id="orderInfo" style="display:none">
 						<!-- <span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span> -->
-			      		<a class="btn btn-link" id="newClearOrder"><i class="icon-remove"></i></a>
+			      		<a class="btn btn-link" id="newClearOrder"><i class="fa fa-times"></i></a>
 					</div>
 			    </div>
 			</div> 	  
@@ -275,12 +233,12 @@
 			    <div class="controls">
 			    	<div class="input-append">
 				      	<input type="text" id="specialOrderNumber" class="input-medium" placeholder="订单号...">
-			      		<a class="btn appendBtn" id="specialGetOrder"><i class="icon-search"></i></a>
+			      		<a class="btn appendBtn" id="specialGetOrder"><i class="fa fa-search"></i></a>
 			    	</div>
 			    	<span class="help-inline" id="specialHint">请输入特殊订单号取得订单明细</span>
 			      	<div class="help-inline" id="specialOrderInfo" style="display:none">
 						<!-- <span class="label label-info" rel="tooltip" title="经销商" id="newDistributor" code=""></span> -->
-			      		<a class="btn btn-link" id="specialClearOrder"><i class="icon-remove"></i></a>
+			      		<a class="btn btn-link" id="specialClearOrder"><i class="fa fa-times"></i></a>
 					</div>
 			    </div>
 			</div>
@@ -647,7 +605,7 @@
 			    <label class="control-label" for="">*&nbsp;VIN</label>
 			    <div class="controls">
 				    <textarea id="manualVinText" class="input-xlarge"rows="3"></textarea>
-				    <a class="btn" id="manualSearch" style="vertical-align: top;"><i class="icon-search"></i>查询</a>
+				    <a class="btn" id="manualSearch" style="vertical-align: top;"><i class="fa fa-search"></i>查询</a>
 				    <span class="help-inline" id="manualHint" style="vertical-align: top; margin-top:8px;">请以逗号、空格、换行、tab分隔VIN</span>
 				</div>
 			</div> 	  

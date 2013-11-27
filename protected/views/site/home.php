@@ -17,7 +17,7 @@
           <span class="pull-right">
             <a href="/bms/generalInformation/accountMaintain" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="账户管理"><?php echo Yii::app()->user->display_name; ?></a>
   					&nbsp;
-            <a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="icon-signout"></i></a>
+            <a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="fa fa-signout"></i></a>
           </span>
 				</legend>
 				<div>
@@ -25,25 +25,25 @@
               <li class="span3">
                 <div id="managementSystemPannel" class="thumbnail pannel" style="background-color:#2b5797;">
                   <div>
-                      <h4><i class="icon-sitemap"></i>&nbsp;体系</h4>
+                      <h4><i class="fa fa-sitemap"></i>&nbsp;体系</h4>
                   </div>
                 </div>
               </li>
               <li class="span3">
                   <div id="technologyPannel" class="thumbnail pannel" style="background-color:#ffc40d;">
-                  <h4><i class="icon-cogs"></i>&nbsp;技术</h4>
+                  <h4><i class="fa fa-cogs"></i>&nbsp;技术</h4>
                   <h3 class="maindata"></h3>
                 </div>
               </li>
               <li class="span3">
                   <div id="manufacturePannel" class="thumbnail pannel" style="background-color:#1BA1E2;">
-                  <h4><i class="icon-wrench"></i>&nbsp;生产</h4>
+                  <h4><i class="fa fa-wrench"></i>&nbsp;生产</h4>
                   <h3 class="maindata"></h3>
                 </div>
               </li>
               <li class="span9">
                   <div id="monitorPannel" class="thumbnail">
-                    <h4 class="pull-right"><i class="icon-desktop"></i>&nbsp;监控</h4>
+                    <h4 class="pull-right"><i class="fa fa-desktop"></i>&nbsp;监控</h4>
                     <!-- <img src="/bms/img/workshop_thumbnail.jpg" alt=""> -->
                   </div>
               </li>
@@ -54,7 +54,7 @@
                         <div class="mainData pull-right">
                           <span id="DRR">-</span>
                         </div>
-                        <h4><i class="icon-thumbs-up-alt"></i>&nbsp;质量</h4>
+                        <h4><i class="fa fa-thumbs-up"></i>&nbsp;质量</h4>
                       </div>
                       <ul>
                       	<li id="vq1"></li>
@@ -71,7 +71,7 @@
                             <div class="mainData pull-right">
                               <span id="workingTimePercentage">-</span> / <span id="pauseTime">-</span><span class="unit">min</span>
                             </div>
-                            <h4><i class="icon-dashboard"></i>&nbsp;效率</h4>
+                            <h4><i class="fa fa-dashboard"></i>&nbsp;效率</h4>
                         </div>
                         <ul>
                         	<li id="onLine"></li>
@@ -84,7 +84,7 @@
                 <li class="span3">
                   <div id="fieldPannel" class="thumbnail pannel" style="background-color:#F09609;">
                     <div>
-                        <h4><i class="icon-map-marker"></i>&nbsp;现场</h4>
+                        <h4><i class="fa fa-map-marker"></i>&nbsp;现场</h4>
                     </div>
                   </div>
                 </li>
@@ -95,7 +95,7 @@
                             <div class="mainData pull-right">
                               <span>￥</span><span id="uintCost">-</span>
                             </div>
-                            <h4><i class="icon-money"></i>&nbsp;成本</h4>
+                            <h4><i class="fa fa-money"></i>&nbsp;成本</h4>
                         </div>
                         <ul>
                           <li id="costF0"></li>
@@ -108,14 +108,14 @@
                 <li class="span3">
                   <div id="manpowerPannel" class="thumbnail pannel" style="background-color:#00ABA9;">
                     <div>
-                        <h4><i class="icon-group"></i>&nbsp;人事</h4>
+                        <h4><i class="fa fa-group"></i>&nbsp;人事</h4>
                     </div>
                   </div>
                 </li>
                 <li class="span3">
                   <div id="databasePannel" class="thumbnail pannel" style="background-color:#A200FF;">
                     <div>
-                        <h4><i class="icon-list-alt"></i>&nbsp;数据</h4>
+                        <h4><i class="fa fa-list-alt"></i>&nbsp;数据</h4>
                     </div>
                   </div>
                 </li>
@@ -182,20 +182,20 @@
                     </div>
                   </div>
                 </li>
-                <li class="span2" href="/bms/execution/warehouseReturn">
+<!--                 <li class="span2" href="/bms/execution/warehouseReturn">
                   <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>成品库退库</h5>
                     </div>
                   </div>
-                </li>
-                <li class="span2" href="/bms/execution/DetectShopAccess">
+                </li> -->
+<!--                 <li class="span2" href="/bms/execution/DetectShopAccess">
                   <div id="" class="thumbnail shortcut">
                     <div>
                         <h5>车辆门禁</h5>
                     </div>
                   </div>
-                </li>
+                </li> -->
             </ul>
         </div>
 			</div>

@@ -28,8 +28,9 @@ class ManagementSystemController extends BmsBaseController
 		$this->render($view);
 	}
 
-	public function actionScene() {
-		$this->render('MSScene');
+	public function actionField() {
+		$view = $this->validateStringVal('view', '');
+		$this->render($view);
 	}
 
 	public function actionManpower() {

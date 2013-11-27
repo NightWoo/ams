@@ -2,7 +2,8 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="cache-control" content="no-cache, must-revalidate">
+		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+		<meta http-equiv="expires" content="0" />
 		<title><?php echo $nodeDisplayName;?></title>
     	<!-- Le styles -->
     	<link href="/bms/css/common.css" rel="stylesheet">
@@ -39,9 +40,9 @@
 					<div>
 		            	<legend><?php echo $nodeDisplayName;?>
 		            		<span class="pull-right">
-		            			<a href="/bms/execution/pauseEdit"><i class="icon-link"></i>&nbsp;停线编辑</a>
+		            			<a href="/bms/execution/pauseEdit"><i class="fa fa-link"></i>&nbsp;停线编辑</a>
 		            			/
-		            			<a href="/bms/execution/configPaperMain"><i class="icon-link"></i>&nbsp;主配置单打印</a>
+		            			<a href="/bms/execution/configPaperMain"><i class="fa fa-link"></i>&nbsp;主配置单打印</a>
 		            		</span>
 		            	</legend>
 		            </div>

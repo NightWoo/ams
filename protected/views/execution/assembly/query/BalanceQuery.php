@@ -55,7 +55,7 @@
                                 </td> -->
     							<td>
                                     <select id="selectArea" class="input-small">
-                                        <option value="assembly">总装</option>
+                                        <option value="assembly">全部(总装)</option>
                                         <option value="pbs">PBS</option>
                                         <option value="online">产线</option>
                                         <option value="VQ">VQ</option>

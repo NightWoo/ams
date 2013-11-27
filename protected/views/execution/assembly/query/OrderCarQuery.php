@@ -36,7 +36,7 @@
                 <div>
                     <legend>发车查询
                         <span class="pull-right">
-                            <!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
+                            <!-- <a href="/bms/execution/orderMaintain"><i class="fa fa-link"></i>&nbsp;订单维护</a> -->
                         </span>
                     </legend>
                 </div>
@@ -44,17 +44,17 @@
                         <div class="input-prepend input-append">
                             <span class="add-on">板号</span>
                             <input type="text" class="input-small" placeholder="备板号..." id="boardNumberText" style="width:70px"/>
-                            <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+                            <a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
                         </div>
                     	<div class="input-prepend input-append">
 							<span class="add-on">单号</span>
 							<input type="text" class="input-medium" placeholder="订单号..." id="orderNumberText" />
-                            <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+                            <a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
                         </div>
                         <div class="input-prepend input-append">
                             <span class="add-on">商家</span>
                             <input type="text" class="input-medium" placeholder="经销商..." id="distributorText" />
-                            <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+                            <a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
                         </div>
                         <div class="help-inline"  style="padding-left:0; margin-top:5px ">
                             <!-- <span class="add-on">物流</span> -->
@@ -67,7 +67,7 @@
                                 <option value="兴达">兴达</option>
                                 <option value="远志达">远志达</option>
                             </select>
-                            <!-- <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a> -->
+                            <!-- <a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a> -->
                         </div>
                         <!-- <input type="button" class="btn btn-primary" id ="btnQuery" value ="查询"></input> -->
                         <br>
@@ -78,8 +78,8 @@
                             <span class="add-on" style="padding:4px 0">-</span>
                             <!-- <input id="standbyDateEnd"  type="text" class="input-small" placeholder="发车日期..."onClick="WdatePicker({el:'standbyDateEnd',dateFmt:'yyyy-MM-dd'});"/> -->
                             <input id="standbyDateEnd"  type="text" class="input-small" placeholder="结束日期..."/>
-                            <!-- <a class="btn resetDate appendBtn"><i class="icon-undo"></i></a> -->
-                            <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a>
+                            <!-- <a class="btn resetDate appendBtn"><i class="fa fa-undo"></i></a> -->
+                            <a class="btn clearinput appendBtn"><i class="fa fa-times"></i></a>
                         </div>
                         <div class="help-inline"  style="padding-left:0; margin-top:5px ">
                             <select name="" id="selectSeries" class="input-small">
@@ -209,7 +209,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-                <!-- <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint icon-print"></i>&nbsp;打印全部</button> -->
+                <!-- <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint fa fa-print"></i>&nbsp;打印全部</button> -->
             </div>
         </div>
     </body>

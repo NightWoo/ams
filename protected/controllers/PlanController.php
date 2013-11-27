@@ -146,6 +146,9 @@ class PlanController extends BmsBaseController
         try{
 			$plan = PlanAR::model()->findByPk($id);
 			if(!empty($plan)) {
+				if($plan->ready>0) {
+					throw new Exception("此计划已进行，无法删除！");
+				}
 				$lowers = PlanAR::model()->findAll('priority>? AND plan_date=?' ,array($plan->priority, $plan->plan_date));
                 if(!empty($lowers)) {
                     foreach($lowers as $lower) {

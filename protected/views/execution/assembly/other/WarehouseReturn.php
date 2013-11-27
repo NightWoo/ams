@@ -26,7 +26,7 @@
 				<div>
 		            	<legend>成品库异常
 		            		<!-- <span class="pull-right">
-		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;备车</a>
+		            			<a href="/bms/execution/outStandby"><i class="fa fa-link"></i>&nbsp;备车</a>
 		            		</span> -->
 		            	</legend>
 		            </div>

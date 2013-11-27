@@ -44,7 +44,7 @@
 			    <div class="accordion span4" id="accordionLane">
 			    	<div class="accordion-group" id="laneGroup1">
 			    		<div class="accordion-heading">
-			    			<a href="#" id="refreshLane"><i class="icon-refresh pull-right"></i></a>
+			    			<a href="#" id="refreshLane"><i class="fa fa-refresh pull-right"></i></a>
 			    			<p class="text-success" id="totalOK">0</p>
 			    		</div>
 			    		<div id="collapse1" class="accordion-body collapse in" style="overflow-y: scroll; height:500px">
@@ -71,15 +71,15 @@
 			    	<div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">VIN</span>
                         <input type="text" class="input-medium" placeholder="VIN号..." id="vinInput"/>
-                        <a class="btn queryVinBtn appendBtn"><i class="icon-search"></i></a>
+                        <a class="btn queryVinBtn appendBtn"><i class="fa fa-search"></i></a>
                     </div>
 			    	<!-- <div class="input-prepend input-append" style="margin-top:15px;margin-bottom: 14px;">
                         <span class="add-on">板号</span>
                         <input type="text" class="input-small" placeholder="备板号..." id="boardNumberInput"/>
-                        <a class="btn queryBoardBtn appendBtn"><i class="icon-search"></i></a>
+                        <a class="btn queryBoardBtn appendBtn"><i class="fa fa-search"></i></a>
                     </div> -->
                     <div id="hintDiv" class="help-inline">通过VIN查询所在板车的订单及随附件清单</div>
-                    <div id="printBtnDiv" class="help-inline" style="margin-top: 5px;"><span class="boardNumberText"></span><span>&nbsp;&nbsp;<i class="icon-arrow-right"></i>&nbsp;&nbsp;</span><a id="printList"><i class="icon-print"></i>打印附件清单</a></div>
+                    <div id="printBtnDiv" class="help-inline" style="margin-top: 5px;"><span class="boardNumberText"></span><span>&nbsp;&nbsp;<i class="fa fa-arrow-right"></i>&nbsp;&nbsp;</span><a id="printList"><i class="fa fa-print"></i>打印附件清单</a></div>
                     <!-- <div class="boardNumberText"></div> -->
                     <div style="overflow-y: scroll; height:500px">
 		                <table id="tableOrders" class="table table-condensed table-bordered" style="font-size:12px; display:none">
@@ -148,7 +148,7 @@
     			</tr>
     		</thead>
     		<tbody>
-    			<!-- <td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint icon-print"></i></a></td>
+    			<!-- <td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint fa fa-print"></i></a></td>
             	<td>LGXC34CG6D1014718</td>
     			<td></td>
             	<td>瑞亚银</td>
@@ -160,14 +160,14 @@
   	</div>
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
+	    <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint fa fa-print"></i>&nbsp;打印全部</button>
   	</div>
 </div>
 
 <div class="modal" id="spinModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;top:25%">
   	<div class="modal-body">
   		<div style="margin: 0 auto; width:40px;">
-  		<i class="icon-spin icon-spinner" style="font-size:40px;line-height: 36px"></i>
+  		<i class="fa fa-spin fa fa-spinner" style="font-size:40px;line-height: 36px"></i>
 	  	</div>
   	</div>
 </div>

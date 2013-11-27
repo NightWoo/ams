@@ -75,7 +75,7 @@
 									<option value="6">I线_C10</option>
 									<option value="7">I线_C21</option>
 									<option value="8">I线_F10</option>
-									<option value="15">路试完成</option>
+									<option value="15">VQ2路试</option>
 									<option value="202">II线_T11</option>
 									<option value="203">II线_T21</option>
 									<option value="204">II线_T32</option>
@@ -154,7 +154,7 @@
 						<option value="6">I线_C10</option>
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>
-						<option value="15">路试完成</option>
+						<option value="15">VQ2路试</option>
 						<option value="202">II线_T11</option>
 						<option value="203">II线_T21</option>
 						<option value="204">II线_T32</option>
@@ -234,7 +234,7 @@
 						<option value="6">I线_C10</option>
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>
-						<option value="15">路试完成</option>
+						<option value="15">VQ2路试</option>
 						<option value="202">II线_T11</option>
 						<option value="203">II线_T21</option>
 						<option value="204">II线_T32</option>

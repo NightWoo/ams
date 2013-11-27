@@ -29,20 +29,20 @@
 	            <div>
 	            	<legend>出口车厂检单、合格证打印数据传输
 	            		<span class="pull-right">
-           					<a href="/bms/execution/warehousePrint"><i class="icon-link"></i>&nbsp;出库打印</a>
-           					/
-	            			<a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
+           					<a href="/bms/execution/warehousePrint"><i class="fa fa-link"></i>&nbsp;出库打印</a>
+<!--            					/
+	            			<a href="/bms/execution/warehousePrintOrderInBoard"><i class="fa fa-link"></i>&nbsp;板内订单方式传输</a> -->
 	            		</span>
 	            	</legend>
 					<div id="form" class="well form-inline">
 						<div class="input-prepend  input-append">
 							<span class="add-on">特殊订单号</span>
 							<input type="text"  id="specialOrder" class="specialOrderText span3" placeholder="请输入特殊订单号..." />
-							<!-- <a class="btn clearinput appendBtn"><i class="icon-remove"></i></a> -->
-							<a class="btn goSearch appendBtn" id="search-remove" style="width: 11px;"><i class="icon-search"></i></a>
+							<!-- <a class="btn clearinput appendBtn"><i class="fa fa-remove"></i></a> -->
+							<a class="btn goSearch appendBtn" id="search-remove" style="width: 11px;"><i class="fa fa-search"></i></a>
 						</div>
-						<!-- <button class="btn btn-primary" id="check"><i class="icon-search"></i></button> -->
-						<button class="btn btn-primary btnPrint" id="printAll" disabled><i class="icon-print"></i>&nbsp;打印</button>
+						<!-- <button class="btn btn-primary" id="check"><i class="fa fa-search"></i></button> -->
+						<button class="btn btn-primary btnPrint" id="printAll" disabled><i class="fa fa-print"></i>&nbsp;打印</button>
 						<label class="checkbox"><input type="checkbox" id="checkboxForce" value="1">将已传输过车辆一同传输</input></label>
 						<span class="help-inline" id="orderHint">请输入特殊订单号后回车进行校验</span>
 						<div class="help-inline" id="orderInfo">
@@ -86,7 +86,7 @@
 <div class="modal" id="spinModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;top:25%">
   	<div class="modal-body">
   		<div style="margin: 0 auto; width:40px;">
-  		<i class="icon-spin icon-spinner" style="font-size:40px;line-height: 36px"></i>
+  		<i class="fa fa-spin fa-spinner" style="font-size:40px;line-height: 36px"></i>
 	  	</div>
   	</div>
 </div>

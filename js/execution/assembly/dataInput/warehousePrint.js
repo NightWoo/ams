@@ -93,7 +93,7 @@ $("document").ready(function() {
 						$("<td />").html(order.hold).appendTo(tr);
 						$("<td />").html(order.count).appendTo(tr);
 						tdBtn = $("<td />");
-						tdBtn.html("<a class='btn btn-link goDetail' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='车辆明细'><i class='btnDetail icon-list'></i></a><a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印此单' disabled><i class='btnPrint icon-print'></i></a>");
+						tdBtn.html("<a class='btn btn-link goDetail' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='车辆明细'><i class='btnDetail fa fa-list'></i></a><a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印此单' disabled><i class='btnPrint fa fa-print'></i></a>");
 						tdBtn.appendTo(tr);
 						if(order.count == order.amount){
 							tdBtn.children(".goPrint").removeAttr("disabled");
@@ -117,7 +117,7 @@ $("document").ready(function() {
 					laneTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(one.lane).prependTo(firstTr);
 
 					printTd = $("<td />").attr("rowspan", num).attr("style", "text-align:center;").addClass("rowSpanTd")
-					a = $("<button />").addClass("btn printGroup").attr("disabled", "disabled").html("<i class='btnPrint icon-print'></i>&nbsp;打印此组");
+					a = $("<button />").addClass("btn printGroup").attr("disabled", "disabled").html("<i class='btnPrint fa fa-print'></i>&nbsp;打印此组");
 					a.data("orderIds", one.orderIds);
 					a.appendTo(printTd);
 					printTd.prependTo(firstTr);
@@ -129,7 +129,7 @@ $("document").ready(function() {
 				})
 				
 				trPrintAll = $("<tr />");
-				$("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary printAllByBoard' id='boardPrintAll' disabled><i class='btnPrint icon-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
+				$("<td />").attr("colspan", "12").attr("style", "text-align:center").html("<button class='btn btn-primary printAllByBoard' id='boardPrintAll' disabled><i class='btnPrint fa fa-print'></i>&nbsp;打印整板</button>").appendTo(trPrintAll);
 				if(response.data.remainTotal == '0'){
 					trPrintAll.children("td").children(".printAllByBoard").removeAttr("disabled");
 				}
@@ -155,7 +155,7 @@ $("document").ready(function() {
 				$.each(cars, function (index, value) {
 					tr = $("<tr />");
 					// tdBtn = $("<td />");
-					// tdBtn.html("<a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印' disabled><i class='btnPrint icon-print'></i></a>");
+					// tdBtn.html("<a class='btn btn-link goPrint' href='#' rel='tooltip' data-toggle='tooltip' data-placement='top' title='打印' disabled><i class='btnPrint fa fa-print'></i></a>");
 					// tdBtn.appendTo(tr);
 					$('<td />').html(value.vin).appendTo(tr);
 					if(value.distribute_time === '0000-00-00 00:00:00'){

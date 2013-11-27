@@ -53,7 +53,7 @@ $(document).ready( function () {
 		    				}
 		    			}
 		    			providerText = providerNames.join("/");
-		    			providerText = providerText == "" ? "<i class='icon-plus'></i>添加" : "<i class='icon-edit'></i>" + providerText;
+		    			providerText = providerText == "" ? "<i class='fa fa-plus'></i>添加" : "<i class='fa fa-edit'></i>" + providerText;
 		    			$("<a />").addClass("editProvider").html( providerText).appendTo(providerTd);
 		    			$("<td />").html(value.unit_price).appendTo(tr);
 		    			$("<td />").html(value.remark).appendTo(tr);
@@ -342,7 +342,7 @@ $(document).ready( function () {
 				for(i=1;i<=3;i++){
 					$("#editProviderName" + i).val(tr.data("provider_display_name_" + i));
 					$("#editProviderId" + i).val(tr.data("provider_" + i));
-    				providerCode = tr.data("provider_" + i) == "0" ? "" : "<i class='icon-ok'></i>[" + tr.data("provider_code_" + i) + "]";
+    				providerCode = tr.data("provider_" + i) == "0" ? "" : "<i class='fa fa-check'></i>[" + tr.data("provider_code_" + i) + "]";
     				$("#editProviderCode" + i).html(providerCode);
     			}
     			$("#editProviderModal").data("componentId", tr.data("componentId"));
@@ -438,7 +438,7 @@ $(document).ready( function () {
 	    source: function (input, process) {
 	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
 	        	if(data.data == '') {
-	        		$("#editProviderCode1").html("<i class='icon-remove'></i>");
+	        		$("#editProviderCode1").html("<i class='fa fa-times'></i>");
 	        		$("#editProviderId1").val("0");
 	        	}
 	        	return process(data.data);
@@ -447,7 +447,7 @@ $(document).ready( function () {
 
 	    updater:function (item) {
 	    	code = getProviderCode(item).provider_code;
-			$("#editProviderCode1").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderCode1").html("<i class='fa fa-check'></i>[" + code + "]");
 			$("#editProviderId1").val(getProviderCode(item).provider_id);
 			return item;
     	}
@@ -456,7 +456,7 @@ $(document).ready( function () {
 	    source: function (input, process) {
 	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
 	        	if(data.data == '') {
-	        		$("#editProviderCode2").html("<i class='icon-remove'></i>");
+	        		$("#editProviderCode2").html("<i class='fa fa-times'></i>");
 	        		$("#editProviderId2").val("0");
 	        	}
 	        	return process(data.data);
@@ -465,7 +465,7 @@ $(document).ready( function () {
 
 	    updater:function (item) {
 	    	code = getProviderCode(item).provider_code;
-			$("#editProviderCode2").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderCode2").html("<i class='fa fa-check'></i>[" + code + "]");
 			$("#editProviderId2").val(getProviderCode(item).provider_id);
 			return item;
     	}
@@ -474,7 +474,7 @@ $(document).ready( function () {
 	    source: function (input, process) {
 	        $.get(GET_PROVIDER_NAME_LIST, {"providerName":input}, function (data) {
 	        	if(data.data == '') {
-	        		$("#editProviderCode3").html("<i class='icon-remove'></i>");
+	        		$("#editProviderCode3").html("<i class='fa fa-times'></i>");
 	        		$("#editProviderId3").val("0");
 	        	}
 	        	return process(data.data);
@@ -483,7 +483,7 @@ $(document).ready( function () {
 
 	    updater:function (item) {
 	    	code = getProviderCode(item).provider_code;
-			$("#editProviderCode3").html("<i class='icon-ok'></i>[" + code + "]");
+			$("#editProviderCode3").html("<i class='fa fa-check'></i>[" + code + "]");
 			$("#editProviderId3").val(getProviderCode(item).provider_id);
 			return item;
     	}

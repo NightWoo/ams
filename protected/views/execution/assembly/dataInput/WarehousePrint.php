@@ -30,9 +30,9 @@
             <div>
             	<legend>合格证与厂检单传输打印
             		<span class="pull-right">
-            			<!-- <a href="/bms/execution/warehousePrintOrderInBoard"><i class="icon-link"></i>&nbsp;板内订单方式传输</a>
+            			<!-- <a href="/bms/execution/warehousePrintOrderInBoard"><i class="fa fa-link"></i>&nbsp;板内订单方式传输</a>
             			/ -->
-            			<a href="/bms/execution/warehousePrintExport"><i class="icon-link"></i>&nbsp;出口车批量传输</a>
+            			<a href="/bms/execution/warehousePrintExport"><i class="fa fa-link"></i>&nbsp;出口车批量传输</a>
             		</span>
             	</legend>
             </div>
@@ -44,7 +44,7 @@
 			    			<!-- <div class="headBadge">
 		    				 	<span class="label label-success" id="totalOK">2</span>
 			    			</div> -->
-			    			<a href="#" id="refreshLane"><i class="icon-refresh pull-right"></i></a>
+			    			<a href="#" id="refreshLane"><i class="fa fa-refresh pull-right"></i></a>
 			    			<p class="text-success" id="totalOK">0</p>
 			    			<!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionLane" href="#collapse1">
 			    				01-10
@@ -95,8 +95,8 @@
 	                    <tbody>
 	                        <tr>
 	                        	<td>
-	                        		<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="车辆明细"><i class="btnDetail icon-list"></i></a>
-		            				<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印" disabled><i class="btnPrint icon-print"></i></a>
+	                        		<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="车辆明细"><i class="btnDetail fa fa-list"></i></a>
+		            				<a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印" disabled><i class="btnPrint fa fa-print"></i></a>
 	                        	</td>
 	                        </tr>
 	                    </tbody>
@@ -129,7 +129,7 @@
     			</tr>
     		</thead>
     		<tbody>
-    			<!-- <td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint icon-print"></i></a></td>
+    			<!-- <td><a class="btn btn-link" href="#" rel="tooltip" data-toggle="tooltip" data-placement="top" title="打印"><i class="btnPrint fa fa-print"></i></a></td>
             	<td>LGXC34CG6D1014718</td>
     			<td></td>
             	<td>瑞亚银</td>
@@ -141,14 +141,14 @@
   	</div>
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint icon-print"></i>&nbsp;打印全部</button>
+	    <button class="btn btn-primary" id="detailPrintAll" disabled><i class="btnPrint fa fa-print"></i>&nbsp;打印全部</button>
   	</div>
 </div>
 
 <div class="modal" id="spinModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;top:25%">
   	<div class="modal-body">
   		<div style="margin: 0 auto; width:40px;">
-  		<i class="icon-spin icon-spinner" style="font-size:40px;line-height: 36px"></i>
+  		<i class="fa fa-spin fa fa-spinner" style="font-size:40px;line-height: 36px"></i>
 	  	</div>
   	</div>
 </div>

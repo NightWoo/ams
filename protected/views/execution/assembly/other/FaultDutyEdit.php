@@ -31,15 +31,15 @@
                 <div>
                     <legend>故障责任编辑
                         <span class="pull-right">
-                        <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="icon-link"></i>&nbsp;I线VQ1</a>
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="fa fa-link"></i>&nbsp;I线VQ1</a>
                         /
-                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="icon-link"></i>&nbsp;II线VQ1</a>
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="fa fa-link"></i>&nbsp;II线VQ1</a>
                         /
-                        <a href="/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished"><i class="icon-link"></i>&nbsp;VQ2路试</a>
+                        <a href="/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished"><i class="fa fa-link"></i>&nbsp;VQ2路试</a>
                         /
-                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"></i>&nbsp;VQ2淋雨</a>
+                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"><i class="fa fa-link"></i>&nbsp;VQ2淋雨</a>
                         /
-                        <a href="/bms/execution/child?node=VQ3&view=VQ3"><i class="icon-link"></i>&nbsp;VQ3</a>
+                        <a href="/bms/execution/child?node=VQ3&view=VQ3"><i class="fa fa-link"></i>&nbsp;VQ3</a>
                     </span>
                     </legend>
                 </div>

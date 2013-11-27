@@ -29,9 +29,9 @@
         <div id="bodyright" class="offset2"><!-- 页体 -->
             <div>
             	<legend>发车道管理
-			    	<a href="#" id="refresh"><i class="icon-refresh"></i></a>
+			    	<a href="#" id="refresh"><i class="fa fa-refresh"></i></a>
             		<span class="pull-right">
-            			<!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
+            			<!-- <a href="/bms/execution/orderMaintain"><i class="fa fa-link"></i>&nbsp;订单维护</a> -->
             		</span>
             	</legend>
             </div>

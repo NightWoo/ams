@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+		<meta http-equiv="expires" content="0" />
         <title>总装录入节点</title>
 		<!-- Le styles -->
         <link href="/bms/css/bootstrap.css" rel="stylesheet" type="text/css">
@@ -86,10 +88,10 @@
 							出库
 						</div>
 						<div class="node-rect node-FCD" onclick="window.location.href='/bms/execution/laneManage'">发车道</div>
-						<div class="node-rect node-YBFZ" onclick="window.location.href='/bms/execution/child?node=仪表分装&view=sub&type=subInstrument'">仪表</div>
+						<div class="node-rect node-YBFZ" onclick="window.location.href='/bms/execution/child?node=subInstrument&view=sub&type=subInstrument'">仪表</div>
 						<!-- <div class="node-fz0 node-HQFZ" onclick="window.location.href='/bms/execution/child?node=后桥分装&view=sub&type=subRearAxle'">后桥分装</div> -->
-						<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=前桥分装&view=sub&type=subFrontAxle'">前桥</div>
-						<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=发动机分装&view=sub&type=subEngine'">发动机</div>
+						<div class="node-rect node-QQFZ" onclick="window.location.href='/bms/execution/child?node=subFrontAxle&view=sub&type=subFrontAxle'">前桥</div>
+						<div class="node-rect node-FDJFZ" onclick="window.location.href='/bms/execution/child?node=subEngine&view=sub&type=subEngine'">发动机</div>
 
 						<!-- II线 -->
 						<div class="node-rgl node-T0_2" onclick="window.location.href='/bms/execution/child?view=T0&node=T0_2&line=II'">
@@ -123,12 +125,12 @@
 						<div class="node-rect node-S1" onclick="window.location.href='/bms/execution/child?node=S1&view=SPSPoint&point=S1'">S1</div>
 						<div class="node-rect node-S2" onclick="window.location.href='/bms/execution/child?node=S2&view=SPSPoint&point=S2'">S2</div>
 						<div class="node-rect node-S3" onclick="window.location.href='/bms/execution/child?node=S3&view=SPSPoint&point=S3'">S3</div>
-						<div class="warehousePrint"><a href="/bms/execution/warehousePrint"><i class="icon-print"></i>&nbsp;合格证</a></div>
-						<div class="accessoryListPrint"><a href="/bms/execution/accessoryListPrint"><i class="icon-print"></i>&nbsp;随车件</a></div>
-						<div class="warehouseReturn"><a href="/bms/execution/warehouseReturn"><i class="icon-reply"></i>&nbsp;退库</a></div>
-						<div class="frontBumper"><a href="/bms/execution/child?node=frontBumper&view=SPSPoint&point=frontBumper"><i class="icon-th"></i>&nbsp;JIS前保</a></div>
-						<div class="rearBumper"><a href="/bms/execution/child?node=rearBumper&view=SPSPoint&point=rearBumper"><i class="icon-th"></i>&nbsp;JIS后保</a></div>
-						<div class="node-rect node-tyre" onclick="window.location.href='/bms/execution/child?node=车轮装配&view=sub&type=subTyre'">车轮</div>
+						<div class="warehousePrint"><a href="/bms/execution/warehousePrint"><i class="fa fa-print"></i>&nbsp;合格证</a></div>
+						<div class="accessoryListPrint"><a href="/bms/execution/accessoryListPrint"><i class="fa fa-print"></i>&nbsp;随车件</a></div>
+						<div class="warehouseReturn"><a href="/bms/execution/warehouseReturn"><i class="fa fa-reply"></i>&nbsp;退库</a></div>
+						<div class="frontBumper"><a href="/bms/execution/child?node=frontBumper&view=SPSPoint&point=frontBumper"><i class="fa fa-th"></i>&nbsp;JIS前保</a></div>
+						<div class="rearBumper"><a href="/bms/execution/child?node=rearBumper&view=SPSPoint&point=rearBumper"><i class="fa fa-th"></i>&nbsp;JIS后保</a></div>
+						<div class="node-rect node-tyre" onclick="window.location.href='/bms/execution/child?node=subTyre&view=sub&type=subTyre'">车轮</div>
 					</div><!-- end main -->
 				</div>
 			</div><!-- end offset-->

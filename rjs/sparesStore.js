@@ -374,7 +374,7 @@ require(["head","service","common","component","jquery","bootstrap","jsrender"],
 			.append($("<a />")
 				.attr("rel", "tooltip").attr("data-toggle", "tooltip").attr("title", "删除此行")
 				.addClass('removeTr')
-				.html("<i class='icon-trash'></i>"));
+				.html("<i class='fa fa-trash-o'></i>"));
 		quantityOptions = "";
 		for(i=1;i<7;i++) {
 			option = "<option value="+ i +">"+ i +"</option>";

@@ -123,7 +123,7 @@ $("document").ready(function() {
 	}
 
 	function queryBoardNumberByVin(){
-		toggleSeachIcon(".queryVinBtn","icon-spinner icon-spin");
+		toggleSeachIcon(".queryVinBtn","fa fa-spinner fa fa-spin");
 		$.ajax({
 			url: QUERY_BOARD_NUMBER_BY_VIN,
 			type: "get",
@@ -132,11 +132,11 @@ $("document").ready(function() {
 				"vin": $.trim($("#vinInput").val()),
 			},
 			error: function(){
-				toggleSeachIcon(".queryVinBtn","icon-search");
+				toggleSeachIcon(".queryVinBtn","fa fa-search");
 				alertError();
 			},
 			success: function(response) {
-				toggleSeachIcon(".queryVinBtn","icon-search");
+				toggleSeachIcon(".queryVinBtn","fa fa-search");
 				if(response.success){
 					toggleHint(false);
 					queryOrdersByBoardNumber(response.data);

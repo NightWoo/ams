@@ -48,7 +48,7 @@
                     <div>
                         <legend><?php echo $spsPointName[$nodeDisplayName];?>
                             <span class="pull-right">
-                                <a href="/bms/execution/spsQueueMaintain"><i class="icon-link"></i>&nbsp;SPS队列维护</a>
+                                <a href="/bms/execution/spsQueueMaintain"><i class="fa fa-link"></i>&nbsp;SPS队列维护</a>
                                 <!-- /
                                 <a href="/bms/execution/configPaperMain"><i class="icon-link"></i>&nbsp;主配置单打印</a> -->
                             </span>
@@ -64,10 +64,10 @@
 
                        	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
                                     <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
-                                    <!-- <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button> -->
-                                    <button id="btnTopOut" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-tag"></i>&nbsp;分拣</button>
+                                    <!-- <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="fa fa-print"></i>&nbsp;打印</button> -->
+                                    <button id="btnTopOut" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="fa fa-tag"></i>&nbsp;分拣</button>
                                      
-                                    <button id="btnClear" type="reset" class="btn btn-danger"><i class="icon-repeat icon-white"></i>&nbsp;清空</button>
+                                    <button id="btnClear" type="reset" class="btn btn-danger"><i class="fa fa-repeat"></i>&nbsp;指定</button>
                               		<span class="help-inline" id="vinHint">如需打印指定车辆分拣单，请清空</span>
                                     <div class="help-inline" id="carInfo">
                                         <span class="label label-info" rel="tooltip" title="车系" id="infoSeries">x</span>
@@ -82,7 +82,7 @@
                                     <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                                     <span>-</span>
                                     <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
-                                    <button id="btnRefresh" type="button" class="btn btn-success"><i class="icon-refresh icon-white"></i>&nbsp;刷新</button>
+                                    <button id="btnRefresh" type="button" class="btn btn-success"><i class="fa fa-refresh"></i>&nbsp;刷新</button>
                                 </div>
                             </form>                       
                         </div>

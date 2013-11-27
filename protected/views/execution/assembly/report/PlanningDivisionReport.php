@@ -18,14 +18,14 @@
                     <span class="">
                     	<div id="timeQueryInputDiv" class="input-append">
 			                <input type="text" class="input-small"  placeholder="日期..." id="startTime"/>
-		                    <button type="button" class="btn help-inline" id="btnQuery"><i class="icon-search"></i></button>
+		                    <button type="button" class="btn help-inline" id="btnQuery"><i class="fa fa-search"></i></button>
 	                	</div>
                     </span>
                     <!-- <span class="pull-right printable">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
                     </span> -->
                     <!-- <span class="pull-right">
-                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="icon-link"></i>&nbsp;质量报表</a>
+                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="fa fa-link"></i>&nbsp;质量报表</a>
                     </span> -->
                 </legend>
 				<div>

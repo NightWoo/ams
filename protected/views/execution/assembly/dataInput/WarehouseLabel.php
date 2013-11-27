@@ -37,9 +37,13 @@
 					<div>
 		            	<legend>成品库标签打印
 		            		<span class="pull-right">
-		            			<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;成品库备车</a>
+		            			<a href="/bms/execution/outStandby"><i class="fa fa-link"></i>&nbsp;成品库备车</a>
 		            			/
-		            			<a href="/bms/execution/outStandby35"><i class="icon-link"></i>&nbsp;35#厂房备车</a>
+		            			<a href="/bms/execution/outStandby35"><i class="fa fa-link"></i>&nbsp;35#厂房备车</a>
+		            			/
+		            			<a href="/bms/execution/outStandby27"><i class="fa fa-link"></i>&nbsp;27#厂房备车</a>
+		            			/
+		            			<a href="/bms/execution/outStandby14"><i class="fa fa-link"></i>&nbsp;14#厂房备车</a>
 		            		</span>
 		            	</legend>
 		            </div>
@@ -49,7 +53,7 @@
 								<span class="add-on" id="vinLabel">VIN</span>
 								<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 							</div>
-							<button class="btn btn-primary" id='btnSubmit' value=''><i class="icon-print"></i>&nbsp;打印标签</button>
+							<button class="btn btn-primary" id='btnSubmit' value=''><i class="fa fa-print"></i>&nbsp;打印标签</button>
 							<input type="button" class="btn" id ="reset" value ="清空">
 							<input type="hidden" id='standbyArea' name='standbyArea' value="0"></input>
 							<span class="help-inline" id="vinHint">请输入VIN后回车</span>

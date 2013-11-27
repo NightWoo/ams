@@ -87,7 +87,7 @@
 									<tr>
 										<td>
 											<div class="input-prepend">						
-												<span class="add-on"><i class="icon-barcode"></i></span>
+												<span class="add-on"><i class="fa fa-barcode"></i></span>
 												<input type="text" class="input" id="compCodeText" placeholder="扫描零部件条码">				
 											</div>
 											<select id="nodeSelect" class="span2">

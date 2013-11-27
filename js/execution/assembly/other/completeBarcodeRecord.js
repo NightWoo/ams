@@ -324,7 +324,8 @@ $("document").ready(function() {
 				var index = getCompIndex(compText);
 				if(index != -1){
 					if(!$("#comp"+index).html()){
-						barCode = jQuery.trim($(this).val());
+						// barCode = jQuery.trim($(this).val());
+						barCode = compText;
 						ajaxValidateBarCode(index, barCode);
 					}else{
 						message = "此车辆已记录" + compArray[index].name + "条码：" + $("#comp"+index).html()

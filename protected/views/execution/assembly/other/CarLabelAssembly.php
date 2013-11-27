@@ -37,9 +37,9 @@
                     <div>
                         <legend>车辆标签打印
                             <span class="pull-right">
-                                <a href="/bms/execution/child?view=F10&node=F10"><i class="icon-link"></i>&nbsp;I线_F10</a>
+                                <a href="/bms/execution/child?view=F10&node=C21"><i class="fa fa-link"></i>&nbsp;I线_C10</a>
                                 /
-                                <a href="/bms/execution/child?view=F10_2&node=F10_2"><i class="icon-link"></i>&nbsp;II线_F10</a>
+                                <a href="/bms/execution/child?view=F10_2&node=C21_2"><i class="fa fa-link"></i>&nbsp;II线_C10</a>
                             </span>
                         </legend>
                     </div>
@@ -49,7 +49,7 @@
     						<label>VIN</label>
     						<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
     						<button type="button" class="btn btn-primary" id ="btnSubmit" 
-    							disabled="disabled"><i class="icon-print"></i>&nbsp;车辆标签</button>
+    							disabled="disabled"><i class="fa fa-print"></i>&nbsp;车辆标签</button>
     						<input type="button" class="btn" id ="reset" value ="清空"></input>
     						<span class="help-inline" id="vinHint">请输入VIN后回车</span>
     						<div class="help-inline" id="carInfo">

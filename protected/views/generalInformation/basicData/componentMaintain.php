@@ -25,7 +25,7 @@
      
         <div id="bodyright" class="offset2"><!-- 页体 -->
         	<!--<div style="position:absolute;top:50%;left:0;" id="chevron">
-				<i class="icon-chevron-right" style="opacity:0.3"> </i>
+				<i class="fa fa-chevron-right" style="opacity:0.3"> </i>
 			</div>-->
             <div><!-- breadcrumb -->
             	<ul class="breadcrumb">

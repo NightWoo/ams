@@ -94,7 +94,19 @@ class Plan {
 	}
 
 	public function createInSap ($material, $quantity, $startDate, $endDate="", $type="", $prodVersion="", $plant="") {
-		$orderData = array();
+		try {
+			$client = @new SoapClient(Yii::app()->params['saprfc']);
+			$params = array(
+				"material"=>$material,
+				"quantity"=>$quantity,
+				"date"=>$startDate
+			);
+			$result = $client->createPlan($params);
+			$ret = (array)$result->createPlanResult;
+			return $ret;
+		} catch(Exception $e) {
+			$ret = array("fail", "", "", "createInSap fail");
+		}
 	}
 
 	public function modifyInSap ($planNumber, $quantity, $startDate, $endDate="", $prodVersion="") {

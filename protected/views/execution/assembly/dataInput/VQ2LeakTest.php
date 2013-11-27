@@ -25,9 +25,9 @@
             <div id="bodyright" class="offset2"><!-- Main -->  
            		<legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=漏雨&view=VQ2LeakTestException"><i class="icon-link"></i>&nbsp;VQ2异常.漏雨</a>
+                        <a href="/bms/execution/child?node=漏雨&view=VQ2LeakTestException"><i class="fa fa-link"></i>&nbsp;VQ2异常.漏雨</a>
                         /
-                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
+                        <a href="/bms/execution/faultDutyEdit"><i class="fa fa-link"></i>&nbsp;故障责任编辑</a>
                     </span>
 	            </legend>
             
@@ -40,7 +40,7 @@
 									<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 								</div>
 								<div class="input-prepend">
-									<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+									<span class="add-on" id="cardLabel"><i class="fa fa-credit-card"></i></span>
 									<input type="text" class="span3" placeholder="请贴厂牌或输入工号完成提交..." id="cardText" disabled="disabled">
 								</div>
 								<!-- <select name="" id="driver" class="input-small" disalbled='disabled'>

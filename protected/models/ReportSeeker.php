@@ -1121,7 +1121,7 @@ class ReportSeeker
 		$dutyList = $this->dutyList();
 		foreach($datas as &$data) {
 			$data['duty'] = $dutyList[$data['duty_department']];
-			if(!(stripos($data['duty'], "总装") === false)) $data['duty'].= "_" . $data['assembly_line'];
+			// if(!(stripos($data['duty'], "总装") === false)) $data['duty'].= "_" . $data['assembly_line'];
 			$data['percentage'] = $data['count'] / $total;
 		}
 

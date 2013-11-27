@@ -729,28 +729,45 @@ class CarController extends BmsBaseController
 	}
 
 	public function actionPrintSubConfig() {
-		try{
-            $vin = $this->validateStringVal('vin', '');
-			$type = $this->validateStringVal('type', 'subInstrument');
+		$vin = $this->validateStringVal('vin', '');
+        $type = $this->validateStringVal('type', 'subInstrument');
+        $barCode = $this->validateStringVal('barCode', '');
+        $nodeName = $this->validateStringVal('currentNode', '');
+        $transaction = Yii::app()->db->beginTransaction();
+        try{
+
             $car = Car::create($vin);
+
+            $node = Node::createByName($nodeName);
+            $car->addTraceComponents($node, $barCode);
 			$datas = $car->generateSubConfigData($type);
-			
+
+			$transaction->commit();
             $this->renderJsonBms(true, 'OK', $datas);
         } catch(Exception $e) {
+            $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
 
 	}
 
 	public function actionValidateSubConfig() {
-		try{
-            $vin = $this->validateStringVal('vin', '');
-            $type = $this->validateStringVal('type', 'subInstrument');
+        $vin = $this->validateStringVal('vin', '');
+        $type = $this->validateStringVal('type', 'subInstrument');
+        $nodeName = $this->validateStringVal('currentNode', '');
+        try{
 			
 			$seeker = new SubConfigSeeker($type);
 			$seeker->validate($vin);
 
-			$data = VinManager::getCar($vin);
+            $car = Car::create($vin);
+            $components = $car->getConfigDetail($nodeName);
+			// $data = VinManager::getCar($vin);
+
+            $data = array(
+                "car" => $car->car,
+                "components" => $components,
+            );
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {

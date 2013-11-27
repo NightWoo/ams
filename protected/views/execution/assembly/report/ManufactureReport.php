@@ -47,7 +47,7 @@
                     <span class="">
                         <input type="text" class="input-small"  placeholder="日期..." id="startTime"/>
                         <!-- <div id="btnGroupPrint" class="btn-group">
-                              <button class="btn btn-mini"><i class="icon-print"></i>&nbsp;全部</button>
+                              <button class="btn btn-mini"><i class="fa fa-print"></i>&nbsp;全部</button>
                               <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                               </button>
@@ -63,7 +63,7 @@
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
                     </span>
                     <span class="pull-right">
-                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="icon-link"></i>&nbsp;质量报表</a>
+                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="fa fa-link"></i>&nbsp;质量报表</a>
                     </span>
                 </legend>
             </div >
@@ -73,7 +73,7 @@
                         <li class="notPrintable"><a class="queryUse" href="#tabManufactureUse" data-toggle="tab"><span class="screenHide">2.&nbsp;</span>停线时间与生产利用率</a></li>
                         <li class="notPrintable"><a class="queryRecycle" href="#tabRecycle" data-toggle="tab"><span class="screenHide">3.&nbsp;</span>周转车与生产周期</a></li>
                         <li class="notPrintable"><a class="queryWarehouse" href="#tabWarehouse" data-toggle="tab"><span class="screenHide">4.&nbsp;</span>发车与成品库周期</a></li>
-                        <li class="notPrintable"><a class="print" href="#"><i class="icon-print"></i></a></li>
+                        <li class="notPrintable"><a class="print" href="#"><i class="fa fa-print"></i></a></li>
                         <li class="dropdown pull-right notPrintable">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 月明细
@@ -104,13 +104,13 @@
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="completionMonthlyChart" class="completionChart" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="completionYearlyChart" class="completionChart" timespan="yearly"></div>
                                 </div>
@@ -128,13 +128,13 @@
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="useMonthlyChart" class="useChart" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="useYearlyChart" class="useChart" timespan="yearly"></div>
                                 </div>
@@ -164,13 +164,13 @@
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="recycleMonthlyChart" class="recycleChart" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="recycleYearlyChart" class="recycleChart" timespan="yearly"></div>
                                 </div>
@@ -199,13 +199,13 @@
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="divLoading" timespan="monthly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="warehouseMonthlyChart" class="warehouseChart" timespan="monthly"></div>
                                 </div>
                                 <div class="span4">
                                     <div class="divLoading" timespan="yearly">
-                                        <span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                                        <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                                     </div>
                                     <div id="warehouseYearlyChart" class="warehouseChart" timespan="yearly"></div>
                                 </div>
@@ -225,7 +225,7 @@
                                             <th style="min-width:30px">已备</th>
                                             <th style="min-width:30px">出库</th>
                                             <th style="min-width:120px">指令激活</th>
-                                            <th><i class="icon-time"></i></th>
+                                            <th><i class="fa fa-clock-o"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody>

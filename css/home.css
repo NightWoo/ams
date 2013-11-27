@@ -35,12 +35,13 @@ div.thumbnail {
   margin-top: 10px;
 }
 #shortcut {
-	width: 170px;
+  /*width: 170px;*/
+	width: 140px;
 	margin-left:50px;
 }
 #shortcutContainer {
-	max-height:600px;
-	overflow-y: scroll;
+	/*max-height:600px;*/
+	/*overflow-y: scroll;*/
 }
 .pannel {
   color: white;
@@ -53,7 +54,8 @@ div.thumbnail {
   opacity: 0.7;
 }
 #shortcutUl li .shortcut {
-  height:120px;
+  /*height:120px;*/
+  height:45px;
   border-color:none;
   color: white;
   background: #bbb;

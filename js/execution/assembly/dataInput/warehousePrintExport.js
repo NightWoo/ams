@@ -84,19 +84,19 @@ $(document).ready(function() {
 						}
 						$("<td />").html(value.remark).appendTo(tr);
 						if(value.iPrinted){
-							$("<td />").html("<i class='icon-print'></i>").addClass("alignCenter").appendTo(tr);
+							$("<td />").html("<i class='fa fa-print'></i>").addClass("alignCenter").appendTo(tr);
 						} else {
 							if(value.inspectionSheet === 'OK'){
-								$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
+								$("<td />").html("<i class='fa fa-check'></i>").addClass("alignCenter").appendTo(tr);
 							} else {
 								$("<td />").html("").appendTo(tr);
 							}
 						}
 						if(value.cPrinted){
-							$("<td />").html("<i class='icon-print'></i>").addClass("alignCenter").appendTo(tr);
+							$("<td />").html("<i class='fa fa-print'></i>").addClass("alignCenter").appendTo(tr);
 						}else{
 							if(value.certificatePaper === 'OK'){
-								$("<td />").html("<i class='icon-ok'></i>").addClass("alignCenter").appendTo(tr);
+								$("<td />").html("<i class='fa fa-check'></i>").addClass("alignCenter").appendTo(tr);
 							} else {
 								$("<td />").html("").appendTo(tr);
 							}
@@ -177,10 +177,10 @@ $(document).ready(function() {
 	function toggleSerachRemove(isSearch){
 	 	if(isSearch){
 	 		$("#search-remove").removeClass("clearinput").addClass("goSearch");
-	 		$("#search-remove i").removeClass("icon-remove").addClass("icon-search");
+	 		$("#search-remove i").removeClass("fa fa-times").addClass("fa fa-search");
 	 	}else{
 	 		$("#search-remove").removeClass("goSearch").addClass("clearinput");
-	 		$("#search-remove i").removeClass("icon-search").addClass("icon-remove");
+	 		$("#search-remove i").removeClass("fa fa-search").addClass("fa fa-times");
 	 	}
 	}
 

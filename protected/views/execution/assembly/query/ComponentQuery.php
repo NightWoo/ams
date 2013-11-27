@@ -103,7 +103,7 @@
 					</table>  
                 </form>
                 <div class="divLoading">
-                	<span><i class="icon-spinner icon-spin icon-4x" style="height:1em;"></i></span>
+                	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
                 </div>   
                 <!--<div style="display:none">
                     <h5 class='pull-left'>查询结果:<span id='totalText'></span></h5>  

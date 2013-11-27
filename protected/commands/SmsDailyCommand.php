@@ -106,7 +106,7 @@ class SmsDailyCommand extends CConsoleCommand
 			$text = self::$COUNT_POINT_DAILY[$point] . $total ."[" . join("/", $count) . "]";
 			$textArray[] = $text;
 		}
-		$productionText = "(1)生产情况(F0/M6/思锐)\r";
+		$productionText = "(1)完成(F0/M6/思锐/G6)\r";
 		$productionText.= "    -" . join(";\r    -", $textArray) . ".\r";
 
 		return $productionText;

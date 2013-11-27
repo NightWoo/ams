@@ -81,11 +81,11 @@ $(document).ready(function () {
 
 	$("#tablePlanAssembly").live("click", function (e) {
 		if ($(e.target).is("i")) {
-			if ($(e.target).hasClass("icon-thumbs-up-alt")) {
+			if ($(e.target).hasClass("fa-thumbs-o-up")) {
 				ajaxTop($(e.target).parent("a").parent("td").parent("tr").data("id"));
-			} else if($(e.target).hasClass("icon-hand-up")) {
+			} else if($(e.target).hasClass("fa-hand-o-up")) {
 				ajaxUp($(e.target).parent("a").parent("td").parent("tr").data("id"));
-			} else if($(e.target).hasClass("icon-hand-down")){
+			} else if($(e.target).hasClass("fa-hand-o-down")){
 				ajaxDown($(e.target).parent("a").parent("td").parent("tr").data("id"));
 			}
 		} else if ($(e.target).is("button")) {
@@ -194,11 +194,11 @@ $(document).ready(function () {
 		    			var tr = $("<tr />");
 		    			var thumbTd = $("<td />");
 		    			if(index == 0)
-		    				thumbTd.html('<a title="已至顶"><i class="icon-ban-circle"></i></a><a title="已至顶"><i class="icon-ban-circle"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a rel="tooltip" title="已至顶"><i class="fa fa-ban"></i></a>&nbsp;<a rel="tooltip" title="已至顶"><i class="fa fa-ban"></i></a>&nbsp;<a rel="tooltip" title="下调一位"><i class="fa fa-hand-o-down"></i></a>').appendTo(tr);
 		    			else if(index+1 < length)
-		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up-alt"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="下调一位"><i class="icon-hand-down"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a rel="tooltip" title="置顶"><i class="fa fa-thumbs-o-up"></i></a>&nbsp;<a rel="tooltip" title="上调一位"><i class="fa fa-hand-o-up"></i></a>&nbsp;<a rel="tooltip" title="下调一位"><i class="fa fa-hand-o-down"></i></a>').appendTo(tr);
 		    			else
-		    				thumbTd.html('<a title="置顶"><i class="icon-thumbs-up-alt"></i></a><a title="上调一位"><i class="icon-hand-up"></i></a><a title="已至底"><i class="icon-ban-circle"></i></a>').appendTo(tr);
+		    				thumbTd.html('<a rel="tooltip" title="置顶"><i class="fa fa-thumbs-o-up"></i></a>&nbsp;<a rel="tooltip" title="上调一位"><i class="fa fa-hand-o-up"></i></a>&nbsp;<a rel="tooltip" title="已至底"><i class="fa fa-ban"></i></a>').appendTo(tr);
 		    			$("<td />").html(value.priority).appendTo(tr);
 						//$("<td />").html(value.id).appendTo(tr);
 						$("<td />").html(value.batch_number).appendTo(tr);		//added by wujun

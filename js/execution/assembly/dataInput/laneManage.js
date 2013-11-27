@@ -35,7 +35,7 @@ $("document").ready(function() {
 					$.each(lanes, function(lane, value){
 						tr = tmp.children("tr:eq(" + laneIndex +")");
 						$("<td />").html(value.laneName).appendTo(tr);
-						orderTd = $("<td />").html("<a class='btn btn-link goRelease' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='释放'><i class='btnRelease icon-truck'></i></a>").appendTo(tr);
+						orderTd = $("<td />").html("<a class='btn btn-link goRelease' href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='释放'><i class='btnRelease fa fa-truck'></i></a>").appendTo(tr);
 						var progressTd = $("<td />");
 						var a = $("<a />").addClass("thumbnail lane").attr("href", "#").attr("laneid", lane);
 						var progress = $("<div />").addClass("progress progress-info lane").attr("laneid", lane);
@@ -64,7 +64,7 @@ $("document").ready(function() {
 					
 					boardStandbyFinishTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd");
 					if(value.boardStandbyFinishTime === '0000-00-00 00:00:00'){
-						boardStandbyFinishTd.html("<i class='icon-time'></i>" + value.boardStandbyLast + "H").insertAfter(firstTr.children("td:eq(4)"));
+						boardStandbyFinishTd.html("<i class='fa fa-clock-o'></i>" + value.boardStandbyLast + "H").insertAfter(firstTr.children("td:eq(4)"));
 						if(value.boardStandbyLast >= 12){
 							boardStandbyFinishTd.addClass("text-error");
 						}
@@ -77,7 +77,7 @@ $("document").ready(function() {
 						if(value.boardStandbyFinishTime === '0000-00-00 00:00:00'){
 							boardOutFinishTd.html("未备齐").insertAfter(firstTr.children("td:eq(5)"));
 						}else{
-							boardOutFinishTd.html("<i class='icon-time'></i>" + value.boardOutLast + "H").insertAfter(firstTr.children("td:eq(5)"));
+							boardOutFinishTd.html("<i class='fa fa-clock-o'></i>" + value.boardOutLast + "H").insertAfter(firstTr.children("td:eq(5)"));
 							if(value.boardOutLast >= 12){
 								boardOutFinishTd.addClass("text-error");
 							}

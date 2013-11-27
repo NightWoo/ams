@@ -26,9 +26,9 @@
 			<div id="bodyright" class="offset2"><!-- 页体 -->
 				<legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
-                        <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="icon-link"></i>&nbsp;I线_VQ1</a>
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1"><i class="fa fa-link"></i>&nbsp;I线_VQ1</a>
                         /
-                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="icon-link"></i>&nbsp;II线_VQ1</a>
+                        <a href="/bms/execution/child?view=VQ1&node=VQ1_2"><i class="fa fa-link"></i>&nbsp;II线_VQ1</a>
 
                     </span>
                 </legend>

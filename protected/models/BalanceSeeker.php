@@ -160,7 +160,11 @@ class BalanceSeeker
 	private function calculatePeriod ($start, $end) {
 		$time = 0;
 		if($start > '0000-00-00 00:00:00') {
-			$time = $end > '0000-00-00 00:00:00' ? $time = (strtotime($end) - strtotime($start)) : ($time = time() - strtotime($start));
+			if($end == '0000-00-00 00:00:00') {
+				$time = time() - strtotime($start);
+			} else if ($end > $start) {
+				$time = strtotime($end) - strtotime($start);
+			}
 		}
 		return $time;
 	}

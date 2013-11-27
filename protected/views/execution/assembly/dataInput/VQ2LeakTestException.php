@@ -25,7 +25,7 @@
             <div id="bodyright" class="offset2"><!-- Main -->  
 				<legend>VQ2异常.淋雨
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"><i class="icon-link"></i>&nbsp;VQ2-淋雨</a>
+                        <a href="/bms/execution/child?node=VQ2&view=VQ2LeakTest"><i class="fa fa-link"></i>&nbsp;VQ2-淋雨</a>
                     </span>
                 </legend>
             

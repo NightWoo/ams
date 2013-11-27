@@ -26,7 +26,7 @@
                
                 <legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=VQ3&view=VQ3"><i class="icon-link"></i>&nbsp;VQ3外观检验</a>
+                        <a href="/bms/execution/child?node=VQ3&view=VQ3"><i class="fa fa-link"></i>&nbsp;VQ3外观检验</a>
                     </span>
                 </legend>
                 

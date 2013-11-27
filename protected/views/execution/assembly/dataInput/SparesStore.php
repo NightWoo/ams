@@ -36,7 +36,7 @@
 									<div class="input-prepend input-append">
 										<span class="add-on">VIN</span>
 										<input id="vinText" type="text" class="span3" placeholder="请扫描/输入VIN...">
-										<a id="validateVinBtn" class="btn validateVinBtn appendBtn"><i class="icon-search"></i></a>
+										<a id="validateVinBtn" class="btn validateVinBtn appendBtn"><i class="fa fa-search"></i></a>
 									</div>
 									<button type="button" id="btnSubmit" class="btn btn-primary btnSubmit">提交</button>
 									<button type="button" id="reset" class="btn">清空</button>
@@ -134,7 +134,7 @@
 							<table id="componentsTable" class="table">
 								<thead>
 									<tr>
-										<th><a id="addComponent" rel="tooltip" data-toggle="tooltip" title="添加换件"><i class="icon-plus"></i></a></th>
+										<th><a id="addComponent" rel="tooltip" data-toggle="tooltip" title="添加换件"><i class="fa fa-plus"></i></a></th>
 										<th>数量</th>
 										<th>零部件名称</th>
 										<th>零部件编码</th>

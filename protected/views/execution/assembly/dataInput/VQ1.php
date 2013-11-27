@@ -25,11 +25,11 @@
 			<div id="bodyright" class="offset2"><!-- 页体 -->
 				<legend><?php echo $nodeDisplayName;?>静态检验
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception"><i class="icon-link"></i>&nbsp;VQ1异常</a>
+                        <a href="/bms/execution/child?node=VQ1异常&view=VQ1Exception"><i class="fa fa-link"></i>&nbsp;VQ1异常</a>
                         /
-                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
+                        <a href="/bms/execution/faultDutyEdit"><i class="fa fa-link"></i>&nbsp;故障责任编辑</a>
                         /
-                        <a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="icon-link"></i>&nbsp;条码补录</a>
+                        <a href="/bms/execution/completeBarcodeRecord" id="linkCompleteBarcodeRecord"><i class="fa fa-link"></i>&nbsp;条码补录</a>
                     </span>
                 </legend>
 				

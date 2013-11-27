@@ -25,9 +25,9 @@
 		<div id="bodyright" class="offset2"><!-- Main体 -->        
             <legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=路试&view=VQ2RoadTestException"><i class="icon-link"></i>&nbsp;VQ2异常.路试</a>/
+                        <a href="/bms/execution/child?node=路试&view=VQ2RoadTestException"><i class="fa fa-link"></i>&nbsp;VQ2异常.路试</a>
                         /
-                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
+                        <a href="/bms/execution/faultDutyEdit"><i class="fa fa-link"></i>&nbsp;故障责任编辑</a>
                     </span>
             </legend>
 				<div><!-- 内容主体 -->
@@ -39,7 +39,7 @@
 									<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
 								</div>
 								<div class="input-prepend">
-									<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+									<span class="add-on" id="cardLabel"><i class="fa fa-credit-card"></i></span>
 									<input type="text" class="span3" placeholder="请贴厂牌或输入工号完成提交..." id="cardText" disabled="disabled">
 								</div>
 								<!-- <button id="btnSubmit" type="submit" class="btn btn-danger" disalbled='disabled'>提交故障记录</button> -->
@@ -63,7 +63,7 @@
 							</form>
 							<form id="formBarCode" class="well form-search">
 								<div class="input-prepend">
-									<span class="add-on" id="barcodeLabel"><i class="icon-barcode"></i></span>
+									<span class="add-on" id="barcodeLabel"><i class="fa fa-barcode"></i></span>
 									<input id="compCodeText" type="text" class="span3" placeholder="请扫描/输入条码...">
 								</div>
 									<table class="table table-striped table-condensed" id="componentTable">

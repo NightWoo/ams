@@ -94,7 +94,7 @@
                             <th class="" style="width:120px">列队时间</th>
                             <th class="" style="width:150px">VIN号</th>
                             <th class="" style="width:30px">车系</th>
-                            <th class="" style="width:230px">车型/配置</th>
+                            <th class="" style="width:400px">车型/配置</th>
                             <th class="" style="width:50px">耐寒性</th>
                             <th class="" style="width:50px">颜色</th>
                             <!-- <th class="" style="width:50px">年份</th>

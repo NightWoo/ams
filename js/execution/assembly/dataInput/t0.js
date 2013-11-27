@@ -204,7 +204,7 @@ $("document").ready(function() {
 							}
 
 							$(".maxPage").html(maxPage);
-							setTimeout(function (){window.print();},1500);
+							setTimeout(function (){window.print();},3000);
 							fadeMessageAlert(response.message,"alert-success");
 						}
 					} else if($("#currentNode").val() == 'T0_2') {

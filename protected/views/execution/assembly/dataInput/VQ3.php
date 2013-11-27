@@ -27,9 +27,9 @@
             <div>
                 <legend><?php echo $nodeDisplayName;?>
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=VQ3异常&view=VQ3Exception"><i class="icon-link"></i>&nbsp;VQ3异常</a>
+                        <a href="/bms/execution/child?node=VQ3异常&view=VQ3Exception"><i class="fa fa-link"></i>&nbsp;VQ3异常</a>
                         /
-                        <a href="/bms/execution/faultDutyEdit"><i class="icon-link"></i>&nbsp;故障责任编辑</a>
+                        <a href="/bms/execution/faultDutyEdit"><i class="fa fa-link"></i>&nbsp;故障责任编辑</a>
                     </span>
                 </legend>
             </div>

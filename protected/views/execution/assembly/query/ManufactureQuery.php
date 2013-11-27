@@ -49,8 +49,8 @@
 					<table>
                         <tr>
                             <td>工段 / 节点</td>
-                            <td>开始时间&nbsp;<a href="#" id="resetST"><i class="icon-undo"></i></a></td>
-                            <td>结束时间&nbsp;<a href="#" id="refreshET"><i class="icon-refresh"></i></a></td>
+                            <td>开始时间&nbsp;<a href="#" rel="tooltip" title="重设为当天08:00 A.M" id="resetST"><i class="fa fa-undo"></i></a></td>
+                            <td>结束时间&nbsp;<a href="#" rel="tooltip" title="重设为当前时间" id="refreshET"><i class="fa fa-refresh"></i></a></td>
                             <td></td>
                             <td class="withSection">停线类型</td>
                             <td class="withSection">责任部门</td>

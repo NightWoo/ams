@@ -37,9 +37,9 @@
 					<div>
 		            	<legend>27#厂房备车
 		            		<span class="pull-right">
-				            	<a href="/bms/execution/warehouseLabel"><i class="icon-link"></i>&nbsp;成品库标签</a>
+				            	<a href="/bms/execution/warehouseLabel"><i class="fa fa-link"></i>&nbsp;成品库标签</a>
 			            		/
-			            		<a href="/bms/execution/outStandby"><i class="icon-link"></i>&nbsp;成品库备车</a>
+			            		<a href="/bms/execution/outStandby"><i class="fa fa-link"></i>&nbsp;成品库备车</a>
 		            		</span>
 		            	</legend>
 		            </div>
@@ -51,7 +51,7 @@
 	                            <label class="checkbox"><input type="checkbox" id="checkbox6B" value="6B">思锐</input></label>
 		            		</div>
 							<div class="input-prepend">
-								<span class="add-on" id="cardLabel"><i class="icon-credit-card"></i></span>
+								<span class="add-on" id="cardLabel"><i class="fa fa-credit-card"></i></span>
 								<input type="text" id="cardNumber" class="span3" placeholder="请贴厂牌/输入工号...">
 							</div>
 							<input type="button" class="btn btn-success" id='btnSubmit' value='27#厂房备车'>

@@ -27,7 +27,7 @@
 		<div id="bodyright" class="offset2"><!-- Main体 -->           
             <legend><?php echo $nodeDisplayName;?>
                    <!--  <span class="pull-right">
-                        <a href=""><i class="icon-link"></i>&nbsp;WDI异常</a>
+                        <a href=""><i class="fa fa-link"></i>&nbsp;WDI异常</a>
                     </span> -->
             </legend>
 				<div><!-- 内容主体 -->

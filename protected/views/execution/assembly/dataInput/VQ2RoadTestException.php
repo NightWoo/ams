@@ -26,7 +26,7 @@
 				
 				<legend>VQ2异常.路试
                     <span class="pull-right">
-                        <a href="/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished"><i class="icon-link"></i>&nbsp;VQ2-路试</a>
+                        <a href="/bms/execution/child?node=ROAD_TEST_FINISH&view=VQ2RoadTestFinished"><i class="fa fa-link"></i>&nbsp;VQ2-路试</a>
                     </span>
 	            </legend>
 				

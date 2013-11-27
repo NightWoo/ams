@@ -83,8 +83,6 @@
                   </div>
                 </div>
               </li>
-            </ul>
-            <ul class="thumbnails">
               <li>
                 <div class="">
                   <a href="#formViewModalGWMX" class="thumbnail" data-toggle="modal">
@@ -126,6 +124,54 @@
                     <div>
                     <a class="pull-right btn-link" href="/bms/doc/excel/JiXiaoChuFaJianYi_20130123.xlsx">下载</a>
                     <h4>员工绩效考核/处罚建议</h4>
+                    </div>
+                    <div class="description">
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="">
+                  <a href="#formViewModalCAR1" class="thumbnail" data-toggle="modal">
+                    <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_1_thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/excel/CorrectiveActionReport-model_1.xlsx">下载</a>
+                    <h4>纠正预防措施报告-模板1</h4>
+                    </div>
+                    <div class="description">
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="">
+                  <a href="#formViewModalCAR2" class="thumbnail" data-toggle="modal">
+                    <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_2_thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/excel/CorrectiveActionReport-model_2.xlsx">下载</a>
+                    <h4>纠正预防措施报告-模板2</h4>
+                    </div>
+                    <div class="description">
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="">
+                  <a href="#formViewModalCAR3" class="thumbnail" data-toggle="modal">
+                    <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_3_thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/CorrectiveActionReport-model_3.pptx">下载</a>
+                    <h4>纠正预防措施报告-模板3</h4>
                     </div>
                     <div class="description">
                       <p></p>
@@ -222,6 +268,48 @@
         <a class="btn btn-primary" href="/bms/doc/excel/JiXiaoChuFaJianYi_20130123.xlsx">下载</a>
       </div>
     </div>
+
+    <div id="formViewModalCAR1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="">纠正预防措施报告-模板1</h3>
+        </div>
+      <div class="modal-body">
+        <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_1_view.jpg" alt="">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <a class="btn btn-primary" href="/bms/doc/excel/CorrectiveActionReport-model_1.xlsx">下载</a>
+      </div>
+    </div>
     
+
+    <div id="formViewModalCAR2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="">纠正预防措施报告-模板2</h3>
+        </div>
+      <div class="modal-body">
+        <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_2_view.jpg" alt="">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <a class="btn btn-primary" href="/bms/doc/excel/CorrectiveActionReport-model_2.xlsx">下载</a>
+      </div>
+    </div>
+
+    <div id="formViewModalCAR3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="">纠正预防措施报告-模板3</h3>
+        </div>
+      <div class="modal-body">
+        <img src="/bms/doc/browse/managementSystem/standardFrom/CorrectiveActionReport-model_3_view.jpg" alt="">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <a class="btn btn-primary" href="/bms/doc/ppt/CorrectiveActionReport-model_3.pptx">下载</a>
+      </div>
+    </div>
     </body>
 </html>

@@ -125,16 +125,16 @@ $("document").ready(function() {
 			var siblings = $(e.target).closest("td").siblings();
 			var tr = $(e.target).closest("tr");
 
-			if($(e.target).hasClass("icon-step-forward")) {
+			if($(e.target).hasClass("fa-step-forward")) {
 				// ajaxTop(tr.data("id"));
 				ajaxSetBoardTop(tr.data("boardNumber"));
-			// } else if($(e.target).hasClass("icon-hand-up")){
+			// } else if($(e.target).hasClass("fa-hand-up")){
 			// 	ajaxUp(tr.data("id"));
-			} else if($(e.target).hasClass("icon-trash")) {
+			} else if($(e.target).hasClass("fa-trash-o")) {
 				if(confirm('是否删除本订单？')){
 					ajaxDelete(tr.data("id"));
 				}	
-			} else if($(e.target).hasClass("icon-edit")) {
+			} else if($(e.target).hasClass("fa-edit")) {
 				emptyEditModal();
 				carSeries = tr.data("series");
 				carType = tr.data("carType");
@@ -171,11 +171,11 @@ $("document").ready(function() {
 				$("#editModal").data("id", tr.data("id"));
 
 				$("#editModal").modal("show");
-			// } else if($(e.target).hasClass("icon-resize-full")){
+			// } else if($(e.target).hasClass("fa-resize-full")){
 			// 	emptySplitModal();
 			// 	$("#splitModal").data("id",tr.data("id"));
 			// 	$("#splitModal").modal("show");
-			} else if($(e.target).hasClass("icon-tags")){
+			} else if($(e.target).hasClass("fa-tags")){
 				if($(e.target).parent().attr("disabled") != "disabled"){
 					emptyManualModal();
 					tr = $(e.target).closest("tr");
@@ -307,11 +307,7 @@ $("document").ready(function() {
 						tdAmount = "<input type='text' class='input-mini newAmount' value='"+ value.amount +"'/>";
 						$("<td />").html(tdAmount).appendTo(tr);
 						// $("<td />").html(value.amount).appendTo(tr);
-						if(value.series === '6B'){
-							$("<td />").html('思锐').appendTo(tr);
-						} else {
-							$("<td />").html(value.series).appendTo(tr);
-						}
+						$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 						$("<td />").html(value.car_type).appendTo(tr);
 						if(value.cold_resistant == '1'){
 							$("<td />").html("耐寒").appendTo(tr);
@@ -423,19 +419,15 @@ $("document").ready(function() {
 					console.log(selectLane);
 					$.each(response.data, function (index, value) {
 						var tr = $("<tr />");
-						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='icon-resize-full specialSplit'></i></a>";
+						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='fa fa-resize-full specialSplit'></i></a>";
 						$("<td />").html(tdCheck).appendTo(tr);
 
-						// tdSplit = "<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='icon-resize-full'></i></a>";
+						// tdSplit = "<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='fa fa-resize-full'></i></a>";
 						// $("<td />").html(tdSplit).appendTo(tr);
 
 						tdAmount = "<input type='text' class='input-mini specialAmount' value='"+ value.amount +"'/>";
 						$("<td />").html(tdAmount).appendTo(tr);
-						if(value.series === '6B'){
-							$("<td />").html('思锐').appendTo(tr);
-						} else {
-							$("<td />").html(value.series).appendTo(tr);
-						}
+						$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 						$("<td />").html(value.car_type).appendTo(tr);
 						if(value.cold_resistant == '1'){
 							$("<td />").html("耐寒").appendTo(tr);
@@ -617,20 +609,16 @@ $("document").ready(function() {
 		    			$.each(value.orders, function (index, order) {
 		    				tr = tmp.children("tr:eq("+ index +")");
 		    				editTd = $("<td />");
-		    				editTd.html('<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="icon-trash"></i></a>'
-		    					+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="icon-edit"></i></a>'
-								+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="icon-tags"></i></a>').appendTo(tr);
+		    				editTd.html('<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-trash-o"></i></a>'
+		    					+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></a>'
+								+'&nbsp;<a class="btn btn-link iconBtn" rel="tooltip" data-toggle="tooltip" data-placement="top" title="手动配单"><i class="fa fa-tags"></i></a>').appendTo(tr);
 							editTd.appendTo(tr);
 							laneName = order.lane_name == "" ? "-" : order.lane_name
 		    				$("<td />").html(laneName).appendTo(tr);
 
 		    				$("<td />").html(order.order_number).appendTo(tr);
 		    				$("<td />").html(order.distributor_name).appendTo(tr);
-		    				if(order.series == '6B'){
-			    				$("<td />").html('思锐').appendTo(tr);
-		    				} else {
-			    				$("<td />").html(order.series).appendTo(tr);
-		    				};
+		    				$("<td />").html(byd.SeriesName[order.series]).appendTo(tr);
 		    				$("<td />").html(order.car_type_config + "/" + order.cold).appendTo(tr);
 		    				$("<td />").html(order.color).appendTo(tr);
 		    				$("<td />").html(order.amount).appendTo(tr);
@@ -638,7 +626,7 @@ $("document").ready(function() {
 		    				$("<td />").html(order.count).appendTo(tr);
 
 
-							countIcon = order.to_count == "1" ? "<i class='icon-pushpin'></i>" : "";
+							countIcon = order.to_count == "1" ? "<i class='fa fa-thumb-tack'></i>" : "";
 		    				if(order.short < 0){
 		    					$(tr).removeClass('info warning success');
 		    					$(tr).addClass('warning');
@@ -692,7 +680,7 @@ $("document").ready(function() {
 		    			if(value.boardShort <0 && value.boardStatus==0) statusA="库存不足";
 		    			statusTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(statusA).prependTo(firstTr);
 		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(value.boardPriority).prependTo(firstTr);
-		    			reorderA = value.boardPriority != 0 ? "<a class='btn btn-link iconBtn' rel='tooltip' data-toggle='tooltip' data-placement='top' title='置顶此板'><i class='icon-step-forward  icon-rotate-270'></i></a>" : "";
+		    			reorderA = value.boardPriority != 0 ? "<a class='btn btn-link iconBtn' rel='tooltip' data-toggle='tooltip' data-placement='top' title='置顶此板'><i class='fa fa-step-forward fa-rotate-270'></i></a>" : "";
 		    			priorityTd = $("<td />").attr("rowspan", num).addClass("rowSpanTd").html(reorderA).prependTo(firstTr);
 
 		    			$("#tableResult>tbody").append(tmp.children("tr"));
@@ -950,7 +938,7 @@ $("document").ready(function() {
 						}
 						$("<td />").html(tdCheck).appendTo(tr);
 						$("<td />").html(value.vin).appendTo(tr);
-						$("<td />").html(value.series).appendTo(tr);
+						$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 						$("<td />").html(value.order_config_name).appendTo(tr);
 						$("<td />").html(value.cold).appendTo(tr);
 						$("<td />").html(value.color).appendTo(tr);

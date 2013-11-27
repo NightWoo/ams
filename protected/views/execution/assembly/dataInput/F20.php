@@ -33,7 +33,7 @@
                 <div>
                     <legend><?php echo $nodeDisplayName;?>
                         <span class="pull-right">
-                            <a href="/bms/execution/checkPaper"><i class="icon-link"></i>&nbsp;检验跟单</a>
+                            <a href="/bms/execution/checkPaper"><i class="fa fa-link"></i>&nbsp;检验跟单</a>
                         </span>
                     </legend>
                 </div>
@@ -42,8 +42,8 @@
 					<form id="form" class="well form-search">
 						<label>VIN</label>
 						<input type="text" class="span3" placeholder="请扫描/输入VIN..." id="vinText">
-						<input type="button" class="btn btn-primary" id ="btnSubmit" 
-							disabled="disabled" value ="打印检验跟单"></input>
+						<button type="button" class="btn btn-primary" id ="btnSubmit" 
+							disabled="disabled" value ="打印检验跟单"><i class="fa fa-print"></i>&nbsp;打印检验跟单</button>
 						<input type="button" class="btn" id ="reset" value ="清空"></input>
 						<input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 						<span class="help-inline" id="vinHint">请输入VIN后回车</span>

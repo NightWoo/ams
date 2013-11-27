@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
         <meta http-equiv="cache-control" content="no-cache, must-revalidate">
+        <meta http-equiv="expires" content="0" />
 		<title>BMS.Ver0.1</title>
 	<!-- Le styles -->
 	<link href="/bms/css/bootstrap.css" rel="stylesheet"  media="screen">
@@ -11,6 +12,24 @@
     <style type="text/css" media="screen">
         .printable{
             display: none;
+        }
+        #componentTable {
+            margin-bottom: 0;
+            margin-top: 10px;
+        }
+
+        #formVIN {
+            margin-bottom: 10px;
+        }
+
+        #formBarCode {
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        #checkAlert .alert {
+            margin-top: 5px;
+            margin-bottom: 0;
         }
     </style>
     <style type="text/css" media="print">
@@ -30,21 +49,11 @@
                     require_once(dirname(__FILE__)."/../../../common/head.php");
                 ?>
             <div class="offhead">
-                <?php
-                    // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
-                ?>
-     
-		
                 <div id="bodyright" class="offset2"><!-- 页体 -->
-                    <div><!-- breadcrumb -->
-                    	<ul class="breadcrumb">
-                    		<li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                            <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-                            <li><a href="child?node=NodeSelect">数据录入</a><span class="divider">&gt;</span></li>
-                        	<li class="active"><?php echo $nodeDisplayName;?></li>                
-                    	</ul>
-                    </div><!-- end of breadcrumb -->
-                    
+                    <div>
+                        <legend><?php echo $nodeDisplayName;?>
+                        </legend>
+                    </div>
            	   		<div><!-- 主体 -->
         				<div>
                    	  		<form id="formVIN" class="well form-search">
@@ -54,11 +63,11 @@
 
                        	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
                                     <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
-                                    <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-print icon-white"></i>&nbsp;打印</button>
-                                    <button id="btnTopOut" type="submit" class="btn btn-info"><i class="icon-tag"></i>&nbsp;顶出</button>
+                                    <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="fa fa-print"></i>&nbsp;打印</button>
+                                    <button id="btnTopOut" type="submit" class="btn btn-info"><i class="fa fa-tag"></i>&nbsp;顶出</button>
                                      
-                                    <button id="btnClear" type="reset" class="btn btn-danger"><i class="icon-repeat icon-white"></i>&nbsp;清空</button>
-                              		<span class="help-inline" id="vinHint">如需打印指定车辆配置单，请清空</span>
+                                    <button id="btnClear" type="reset" class="btn btn-danger"><i class="fa fa-repeat"></i>&nbsp;指定</button>
+                              		<span class="help-inline" id="vinHint"></span>
                                     <div class="help-inline" id="carInfo">
                                         <span class="label label-info" rel="tooltip" title="车系" id="infoSeries">x</span>
                                         <span class="label label-info" rel="tooltip" title="车型" id="infoType">x</span>
@@ -72,9 +81,22 @@
                                     <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                                     <span>-</span>
                                     <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
-                                    <button id="btnRefresh" type="button" class="btn btn-success"><i class="icon-refresh icon-white"></i>&nbsp;刷新</button>
+                                    <button id="btnRefresh" type="button" class="btn btn-success"><i class="fa fa-refresh"></i>&nbsp;刷新</button>
+                                    <span class="help-inline">如需打印指定车辆配置单，请清空</span>
                                 </div>
-                            </form>                       
+                            </form>
+                            <form id="formBarCode" class="well form-search">
+                                <div class="input-prepend">
+                                    <span class="add-on" id="barcodeLabel"><i class="icon-barcode"></i></span>
+                                    <input id="compCodeText" type="text" class="span3" placeholder="请扫描/输入条码...">
+                                </div>
+                                    <table class="table table-striped table-condensed" id="componentTable">
+                                        <tbody>
+                                          
+                                        </tbody>
+                                    </table>
+                                <div id="checkAlert"></div>
+                            </form>                     
                         </div>
                         
                         <div id="messageAlert" class="alert alert-success">LGXC16DGXC1234666仪表分装配置单已打印，请输入下一辆车VIN</div>
@@ -127,11 +149,12 @@
 	    <div class="printable" style="width:560pt;height:820pt; padding-top:10pt; font-size:18pt">
             <table class="" style="width:100%; margin-top:10pt;">
                 <tr>
-                    <td rowspan="2" width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
+                    <td width="40%" style="padding-left:10pt"><img src="" class="printBarCode" width="80%"></td>
                     <td width="50%" class="printType" style="font-size:14pt"></td>
                     <td style="text-align:right; font-size:14pt; width=10%; padding-right:10pt" class="printSeries"></td>
                 </tr>
                 <tr>
+                    <td class="printEngineCode" style="font-size:14pt; padding-left:1px;"></td>
                     <td class="printConfig" style="font-size:14pt"></td>
                     <td style="text-align:right; font-size:14pt; padding-right:10pt" class="printSerialNumber"></td>
                 </tr>
@@ -139,7 +162,7 @@
             <img src="" width="" height="" class="printFrontImage" style="display: block; margin:0 auto">
             <table style="width:100%;margin-top:10pt;">
                 <tr>
-                    <td class="printRemark" style="font-size:14pt; padding-left:10pt"></td>
+                    <td class="printRemark" style="font-size:12pt; padding-left:10pt"></td>
                     <!-- <td align="right" style="text-align:right; font-size:18pt; padding-right:10pt">1/2</td> -->
                 </tr>
             </table>

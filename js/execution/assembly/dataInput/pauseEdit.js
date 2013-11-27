@@ -283,14 +283,14 @@ $(document).ready(function(e) {
 	    source: function (input, process) {
 	        $.get(GET_PAUSE_DUTY_DEPARTMENT_LIST, {"departmentName":input}, function (data) {
 	        	if(data.data == '') {
-	        		$("#standardName").html("<i class='icon-remove'></i>");
+	        		$("#standardName").html("<i class='fa fa-times'></i>");
 	        	}
 	        	return process(data.data);
 	        },'json');
 	    },
 	    updater:function (item) {
 			if(item != '') {
-				$("#standardName").html("<i class='icon-ok'></i>");
+				$("#standardName").html("<i class='fa fa-check'></i>");
 			}
 
 			return item;

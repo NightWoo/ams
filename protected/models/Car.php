@@ -481,6 +481,11 @@ class Car
 			$trace->provider = $this->calProvider($code, $componentId);
 			$trace->bar_code = $code;
 			$trace->save();
+
+			if($this->isEnginCode($componentId)) {
+				$this->car->engine_code = $code;
+				$this->car->save();
+			}
 		}
 			
 	}
@@ -571,6 +576,12 @@ class Car
 		}
 			
 		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
+	}
+
+	public function isEnginCode ($componentId) {
+		$sql = "SELECT engine_component_id FROM car_engine WHERE car_series='{$this->car->series}' AND engine_component_id=$componentId ";
+		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
+		return !empty($componentIds);
 	}
 
 	//变速箱总成
@@ -955,6 +966,18 @@ class Car
 		);
 		return $ret;
 	}
+
+	public function addAssemblyQueue () {
+		$queue = AssemblyQueueAR::model()->find('car_id=?', array($this->car->id));
+		if(empty($queue)) {
+			$queue = new AssemblyQueueAR();
+			$queue->car_id = $this->car->id;
+			$queue->vin = $this->car->vin;
+			$queue->line = $this->car->assembly_line;
+			$queue->assembly_time = date('Y-m-d H:i:s'); 
+			$queue->save();
+		}
+	}
 	
 	public function addSubConfig ($types = array('subInstrument','subEngine','subFrontAxle','subRearAxle','subTyre')) {
 		// $types = array('subInstrument','subEngine','subFrontAxle','subRearAxle');
@@ -1032,6 +1055,9 @@ class Car
         $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+        // $engineBarCodePath = "tmp/" .$this->car->vin . "_engine.png";
+        $engineCode = $this->car->engine_code;
+		// $barcodeGenerator->generate($engineCode,'./' . $engineBarCodePath);
 		$config = CarConfigAR::model()->findByPk($this->car->config_id);
 
 		$images = array();
@@ -1047,6 +1073,8 @@ class Car
 
         $ret = array(
             'vinBarCode' => "/bms/" .$vinBarCodePath,
+            // 'engineBarCode' => "/bms/" .$engineBarCodePath,
+            'engineCode' => $engineCode,
             'type' => $this->car->type,
             'serialNumber' => $this->car->serial_number,
 			'series' => $this->car->series,
@@ -1856,7 +1884,7 @@ class Car
 		$params = array(
 			'vin'=>$vin, 
 		);
-		$result = $client -> GetIRemoteTestResult($params);
+		$result = $client->GetIRemoteTestResult($params);
 
 		$ret = $result->GetIRemoteTestResultResult;
 		if($ret->Result){

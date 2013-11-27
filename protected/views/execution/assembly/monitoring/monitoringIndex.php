@@ -35,11 +35,11 @@
 				<div>
 	            	<legend>监控面板
 	            		<span class="pull-right">
-	            			<i class="icon-link"></i>
+	            			<i class="fa fa-link"></i>
 	            			welcome
 	            			<a id="welcomeShop" href="#">&nbsp;车间板</a>
 	            			/
-	            			<a id="welcomeSection" href="#">&nbsp;工段板</a>
+	            			<a id="welcomeSection" href="#">工段板</a>
 	            		</span>
 	            	</legend>
 	            </div>
@@ -203,11 +203,11 @@
 		      				</div>
 
 		      				<div id="divWarehousePeriod">
-		      					<span id="warehousePeriod"><i class="icon-time"></i>-H</span>
+		      					<span id="warehousePeriod"><i class="fa fa-clock-o"></i>-H</span>
 		      				</div>
 
 		      				<div id="divTransportPeriod">
-		      					<span id="transportPeriod"><i class="icon-time"></i>-H</span>
+		      					<span id="transportPeriod"><i class="fa fa-clock-o"></i>-H</span>
 		      				</div>
 	      				</div>
 

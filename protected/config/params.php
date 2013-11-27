@@ -68,5 +68,7 @@ return array(
 	'IRemote_test_result' => "http://10.9.31.22/IRemoteControlWebService/IRemoteControl.asmx?wsdl",
 
 	'rpc.gate' => array('host' => '127.0.0.1' ,'port' => 60000),
+
+	'saprfc' => "http://10.23.86.221/saprfc/SAPRFCservice.asmx?wsdl",
 	
 );

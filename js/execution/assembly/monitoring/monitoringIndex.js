@@ -493,8 +493,8 @@ function ajaxGetStock (argument) {
 	    		$(".area-wdi").html(response.data.area_quantity.WDI);
 				$(".area-total-amount").html(response.data.warehourse_cars.all);
 
-				$("#warehousePeriod").html("<i class='icon-time'></i>" + response.data.period.warehousePeriod + "H");
-				$("#transportPeriod").html("<i class='icon-time'></i>" + response.data.period.transportPeriod + "H");
+				$("#warehousePeriod").html("<i class='fa fa-clock-o'></i>" + response.data.period.warehousePeriod + "H");
+				$("#transportPeriod").html("<i class='fa fa-clock-o'></i>" + response.data.period.transportPeriod + "H");
 
 	    	} else {
 	    		alert(response.message);
@@ -712,7 +712,7 @@ function ajaxLaneInfo (){
 	    			var p = $("<p />").addClass("pull-left").text("#"+value.lane_name);
 	    			var pLast
 	    			if(value.last != ''){
-		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='icon-time'></i>"+value.last + 'H');
+		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='fa fa-clock-o'></i>"+value.last + 'H');
 		    			if(value.last >=3 && value.last <6){
 		    				pLast.addClass("text-info");
 		    			}
@@ -723,7 +723,7 @@ function ajaxLaneInfo (){
 		    				pLast.addClass("text-error");
 		    			}
 	    			}else{
-		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='icon-time'></i>"+value.last + 'H');
+		    			pLast = $("<p />").addClass("pull-right lastTime muted").html("<i class='fa fa-clock-o'></i>"+value.last + 'H');
 	    			}
 	    			var progress = $("<div />").addClass("progress");
 	    			var bar = $("<div />").addClass("bar").attr("style", "width:" + (parseInt(value.count) / parseInt(value.amount) * 100) + "%").text(value.count + "/" + value.amount);
