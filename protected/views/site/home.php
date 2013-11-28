@@ -17,7 +17,7 @@
           <span class="pull-right">
             <a href="/bms/generalInformation/accountMaintain" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="账户管理"><?php echo Yii::app()->user->display_name; ?></a>
   					&nbsp;
-            <a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="fa fa-signout"></i></a>
+            <a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="fa fa-sign-out"></i></a>
           </span>
 				</legend>
 				<div>

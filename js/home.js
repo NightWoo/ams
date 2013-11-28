@@ -1,4 +1,4 @@
-$(function () {
+$("document").ready(function () {
 	initPage();
 		
 	$("#logout").click(function(){

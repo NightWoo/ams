@@ -82,8 +82,8 @@
                                     <option value="OutStandby">WH/备车</option>
                                     <option value="CHECK_OUT">WH/出库</option>
                                     <option value="WAREHOUSE_RETURN">WH/退库</option>
-                                    <option value="DETECT_SHOP_LEAVE">检测间离开</option>
-                                    <option value="DETECT_SHOP_RETURN">检测间归还</option>
+                                    <!-- <option value="DETECT_SHOP_LEAVE">检测间离开</option>
+                                    <option value="DETECT_SHOP_RETURN">检测间归还</option> -->
 								</select>
                                 
 							</td>
