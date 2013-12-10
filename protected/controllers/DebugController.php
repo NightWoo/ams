@@ -17,9 +17,10 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		try {
-			$config = Config::create(144);
-			$ret  = $config->checkConfigSapMap();
-			$this->renderJsonBms(true, 'OK', $ret);
+			$sql = "SELECT SUM(total) FROM plan_assembly WHERE id=2";
+			$total = Yii::app()->db->createCommand($sql)->queryScalar();
+			$total += 2;
+			$this->renderJsonBms(true, $total, $total);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}

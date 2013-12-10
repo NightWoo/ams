@@ -309,12 +309,12 @@ $(document).ready( function () {
 
 	$("#tableComponent").click(function (e) {
 		if($(e.target).is("button")) {
+			var tr = $(e.target).closest("tr");
 			if ($(e.target).html() === "编辑") {
 
 				$('#editModal').modal("toggle");
 
 				var siblings = $(e.target).parent("td").siblings();
-				var tr = $(e.target).closest("tr");
 				$("#inputSeries").val(tr.data("carSeries"));
 				$("#inputCate").val(tr.data("categoryId"));
 				$("#inputSapCode").val(tr.data("sapCode"));

@@ -61,7 +61,7 @@
                                     <input type="hidden" id='currentNode' name='currentNode' value='<?php echo $node?>'></input>
 									<input type="hidden" id='subType' name='subType' value='<?php echo $type;?>'></input>
 
-                       	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
+                       	  			<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIN</label>
                                     <input id="vinText" type="text" placeholder="请扫描/输入VIN..." value="">
                                     <button id="btnSubmit" type="submit" class="btn btn-primary" style="margin-left: 10px;"><i class="fa fa-print"></i>&nbsp;打印</button>
                                     <button id="btnTopOut" type="submit" class="btn btn-info"><i class="fa fa-tag"></i>&nbsp;顶出</button>
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div style="margin-top:10px;">
-                                    <label>列队时间</label>
+                                    <label>T0时间</label>
                                     <input type="text" class="span3" placeholder="请输入开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
                                     <span>-</span>
                                     <input type="text" class="span3" placeholder="请输入结束时间..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm'});"/>
@@ -101,46 +101,65 @@
                         
                         <div id="messageAlert" class="alert alert-success">LGXC16DGXC1234666仪表分装配置单已打印，请输入下一辆车VIN</div>
 
-        				<table id="tableList" class="table table-condensed">
-                            <thead>
-                                <tr class="active">
-                                    <th class="">整车编号</th>
-                                    <th class="">列队时间</th>
-                                    <th class="">VIN号</th>
-                                    <th class="">车系</th>
-                                    <th class="">车型/配置</th>
-                                    <th class="">耐寒性</th>
-                                    <th class="">颜色</th>
-                                    <!-- <th class="">年份</th> -->
-                                    <th class="">特殊单号</th>
-                                    <th class="">备注</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               <!--  <tr id="row0" class="info">
-                                    <td>C12356</td>
-                                    <td>F0</td>
-                                    <td>LGXC16DG4C1234564</td>
-                                    <td>QCJ7100L（1.0排量尊舒适型）</td>
-                                    <td>德兰黑</td>
-                                    <td>2012</td>
-                                    <td>1.0舒适标准</td>
-                                    <td>-</td>
-                                    <td>北京，耐寒型，QA-5</td>                                    
-                                </tr>
-                                <tr>
-                                    <td>C123457</td>
-                                    <td>F0</td>
-                                    <td>LGXC16DG7C1654321</td>
-                                    <td>QCJ7100L（1.0排量尊舒适型）</td>
-                                    <td>德兰黑</td>
-                                    <td>2012</td>
-                                    <td>1.0舒适标准</td>
-                                    <td>-</td>
-                                    <td>QA-5</td>                                   
-                                </tr>          -->                                      
-                            </tbody>
-                        </table>
+                        <div class="accordion" id="accordionQueue">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a id="queueViewToggle" class="accordion-toggle" 
+                                    data-toggle="collapse" data-parent="#accordionQueue" href="#collapseQueue"><span id="today"></span>待上分装线[<span id="infoCount"></span><span>]</span></a>
+                                </div>
+                                <div id="collapseQueue" class="accordion-body collapse">
+                                    <div class="accordion-inner" id="queueDiv">
+                                        <table id="tableList" class="table table-condensed">
+                                            <thead>
+                                                <tr class="active">
+                                                    <th class="">车系</th>
+                                                    <th class="">整车编号</th>
+                                                    <th class="">T0时间</th>
+                                                    <th class="">VIN号</th>
+                                                    <th class="">车型/配置</th>
+                                                    <th class="">耐寒性</th>
+                                                    <th class="">颜色</th>
+                                                    <th class="">特殊单号</th>
+                                                    <th class="">备注</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a id="queueDoneToggle" class="accordion-toggle" 
+                                    data-toggle="collapse" data-parent="#accordionQueue" href="#collapseQueueDone">已上分装线，未装车</a>
+                                </div>
+                                <div id="collapseQueueDone" class="accordion-body collapse">
+                                    <div class="accordion-inner" id="queueDoneDiv">
+                                        <table id="tableDoneList" class="table table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">车系</th>
+                                                    <th class="">整车编号</th>
+                                                    <th class="">T0时间</th>
+                                                    <th class="">VIN号</th>
+                                                    <th class="">车型/配置</th>
+                                                    <th class="">耐寒性</th>
+                                                    <th class="">颜色</th>
+                                                    <th class="">特殊单号</th>
+                                                    <th class="">备注</th>
+                                                    <th class="">发动机号</th>
+                                                    <th class="">打印</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                      
+                        </div>
+        				
         		  	</div><!-- end of 主体 -->
                 </div><!-- end of 页体 -->
             </div>

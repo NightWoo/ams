@@ -127,7 +127,7 @@
                                     <div class="accordion-inner" id="queueDoneDiv">
                                         <table id="tableDoneList" class="table table-condensed">
                                             <thead>
-                                                <tr class="active">
+                                                <tr>
                                                     <th class="">SPS编号</th>
                                                     <th class="">分拣时间</th>
                                                     <th class="">状态</th>

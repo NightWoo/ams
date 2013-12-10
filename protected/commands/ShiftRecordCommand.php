@@ -35,7 +35,7 @@ class ShiftRecordCommand extends CConsoleCommand
 
 		//早例行休息
 		$stime = $lastDate . " 09:50:00";
-		$etime = $lastDate . " 10:05:00";
+		$etime = $lastDate . " 10:00:00";
 		$this->addPlanPause($stime, $etime, "早例行休息");
 
 		//白班午休增加半小时
@@ -45,17 +45,17 @@ class ShiftRecordCommand extends CConsoleCommand
 
 		//午例行休息
 		$stime = $lastDate . " 15:50:00";
-		$etime = $lastDate . " 16:05:00";
+		$etime = $lastDate . " 16:00:00";
 		$this->addPlanPause($stime, $etime, "午例行休息");
 
 		//夜例行休息
 		$stime = $lastDate . " 22:50:00";
-		$etime = $lastDate . " 23:05:00";
+		$etime = $lastDate . " 23:00:00";
 		$this->addPlanPause($stime, $etime, "夜例行休息");
 
 		//凌晨例行休息
 		$stime = $curDate . " 03:50:00";
-		$etime = $curDate . " 04:05:00";
+		$etime = $curDate . " 04:00:00";
 		$this->addPlanPause($stime, $etime, "凌晨例行休息");
 	}
 
@@ -76,7 +76,7 @@ class ShiftRecordCommand extends CConsoleCommand
 
 		//早例行休息
 		$stime = $curDate . " 09:50:00";
-		$etime = $curDate . " 10:05:00";
+		$etime = $curDate . " 10:00:00";
 		$this->addPlanPause($stime, $etime, "早例行休息");
 
 		// //白班午休增加半小时
@@ -86,36 +86,36 @@ class ShiftRecordCommand extends CConsoleCommand
 
 		//午例行休息
 		$stime = $curDate . " 15:50:00";
-		$etime = $curDate . " 16:05:00";
+		$etime = $curDate . " 16:00:00";
 		$this->addPlanPause($stime, $etime, "午例行休息");
 	}
 
 	public function actionAddShiftMorning() {
 		$shift = 1;
-		$lineSpeed = $this->getLineSpeed();
+		// $lineSpeed = $this->getLineSpeed();
 
-		$curDate = DateUtil::getCurDate();
-		$lastDate = DateUtil::getLastDate();
+		// $curDate = DateUtil::getCurDate();
+		// $lastDate = DateUtil::getLastDate();
 
-		$ar = new ShiftRecordAR();
-		$ar->line = 'I';
-		$ar->shift = $shift;
-		$ar->shift_date = $lastDate;
-		$ar->line_speed = $lineSpeed;
-		$ar->start_time = $lastDate . ' 20:00:00';
-		$ar->end_time = $curDate . ' 07:59:59';
+		// $ar = new ShiftRecordAR();
+		// $ar->line = 'I';
+		// $ar->shift = $shift;
+		// $ar->shift_date = $lastDate;
+		// $ar->line_speed = $lineSpeed;
+		// $ar->start_time = $lastDate . ' 20:00:00';
+		// $ar->end_time = $curDate . ' 07:59:59';
 
-		$ar->save();
+		// $ar->save();
 
-		//夜例行休息
-		$stime = $lastDate . " 22:50:00";
-		$etime = $lastDate . " 23:05:00";
-		$this->addPlanPause($stime, $etime, "夜例行休息");
+		// //夜例行休息
+		// $stime = $lastDate . " 22:50:00";
+		// $etime = $lastDate . " 23:00:00";
+		// $this->addPlanPause($stime, $etime, "夜例行休息");
 
-		//凌晨例行休息
-		$stime = $curDate . " 03:50:00";
-		$etime = $curDate . " 04:05:00";
-		$this->addPlanPause($stime, $etime, "凌晨例行休息");
+		// //凌晨例行休息
+		// $stime = $curDate . " 03:50:00";
+		// $etime = $curDate . " 04:00:00";
+		// $this->addPlanPause($stime, $etime, "凌晨例行休息");
 	}
 
 	public function actionAddCapacityDaily() {

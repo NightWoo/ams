@@ -28,7 +28,7 @@
 						<a href="/bms/execution/query?type=NodeQuery"  data-toggle="tooltip" data-placement="bottom" title="质量"><i class="fa fa-thumbs-up"></i>&nbsp;质量</a>
 					</li>
 					<li>
-						<a href="#" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="icon-map-marker"></i>&nbsp;现场</a>
+						<a href="#" data-toggle="tooltip" data-placement="bottom" title="现场"><i class="fa fa-map-marker"></i>&nbsp;现场</a>
 					</li>
 					<li id="headCostLi">
 						<!-- <a href="/bms/managementSystem/workSummaryCost" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="icon-money"></i>&nbsp;成本</a> -->

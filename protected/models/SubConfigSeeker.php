@@ -8,10 +8,13 @@ class SubConfigSeeker
 
 
 	//0 not print , 1 printed, 2 forbid print
-	public function queryAll($vin = null, $status = 0, $stime = null, $etime = null, $top=0) {
+	public function queryAll($vin = null, $status = 0, $stime = null, $etime = null, $top=0, $sortType="ASC", $closed=0) {
 		$conditions = array("q.type='{$this->type}'");
 		if($status != -1) {
 			$conditions[] = "q.status = $status";
+		}
+		if($closed != -1) {
+			$conditions[] = "q.closed = $closed";
 		}
 		if(!empty($stime)) {
 			$conditions[] = "q.queue_time >= '$stime'";
@@ -22,11 +25,12 @@ class SubConfigSeeker
 		if(!empty($vin)) {
 			$conditions = array("q.type='{$this->type}'", "q.vin='$vin'");
 		}
+
 		$conditions[] = "q.car_id=c.id";
 		$conditions[] = "c.config_id=cc.id";
 
 		$condition = join(' AND ', $conditions);
-		$sql = "SELECT c.serial_number,c.vin,c.series,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time as queueTime,q.status FROM sub_config_car_queue q,car c,car_config cc WHERE $condition ORDER BY queueTime ASC";
+		$sql = "SELECT c.serial_number,c.vin,c.series,c.type,c.cold_resistant,c.color,c.special_order,c.remark,cc.name as config_name,q.id,q.queue_time as queueTime,q.status,c.engine_code FROM sub_config_car_queue q,car c,car_config cc WHERE $condition ORDER BY queue_time $sortType";
 		if(!empty($top)){
 			$sql .= " LIMIT 0,$top";
 		}
@@ -36,9 +40,28 @@ class SubConfigSeeker
 		//added by wujun
 		foreach($datas as &$data){
 			$data['type_name'] = $this->cutCarType($data['type']);
+			$data['cold'] = $data['cold_resistant'] == 0 ? "非耐寒" : "耐寒";
 		}
 
 		return $datas;
+	}
+
+	public function countQueue($status = 0, $stime = null, $etime = null) {
+		$conditions = array("q.type='{$this->type}'");
+		if($status != -1) {
+			$conditions[] = "q.status = $status";
+		}
+		if(!empty($stime)) {
+			$conditions[] = "q.queue_time >= '$stime'";
+		}
+		if(!empty($etime)) {
+			$conditions[] = "q.queue_time <= '$etime'";
+		}
+		$condition = join(' AND ', $conditions);
+		$countSql = "SELECT count(*) FROM sub_config_car_queue q WHERE $condition";
+		$count = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+		return $count;
 	}
 
 	public function validate($vin) {

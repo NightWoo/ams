@@ -288,7 +288,7 @@
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;车型</label>
                 <div class="controls">
-                    <select name="" id="editCarType" class="input-large">
+                    <select name="" id="editCarType" class="input-large" disabled>
                         <option value="" selected>请选择</option>
                     </select>
                 </div>
@@ -296,7 +296,7 @@
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;配置</label>
                 <div class="controls">
-                    <select name="" id="editConfig" class="input-large">
+                    <select name="" id="editConfig" class="input-large" disabled>
                         <option value="" selected>请选择配置</option>
                     </select>
                 </div>
@@ -312,7 +312,7 @@
             <div class="control-group">
                 <label class="control-label" for="">*&nbsp;颜色</label>
                 <div class="controls">
-                    <select name="" id="editColor" class="input-small">
+                    <select name="" id="editColor" class="input-small" disabled>
                         <option value="" selected>请选择</option>
                     </select>
                 </div>

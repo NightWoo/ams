@@ -650,20 +650,54 @@ class ReportSeeker
 
 	public function queryAssemblyPeriod ($stime, $etime) {
 		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
-		$sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time,TIMESTAMPDIFF(second,assembly_time,warehouse_time) AS howlong FROM car WHERE $condition";
+		// $sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time,TIMESTAMPDIFF(second,assembly_time,warehouse_time) AS howlong FROM car WHERE $condition";
+		$sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time, vq1_finish_time,vq1_return_time,vq2_finish_time,vq2_return_time,vq3_return_time,
+		TIMESTAMPDIFF(second,assembly_time,finish_time) AS manufacture_period, 
+		IF(TIMESTAMPDIFF(second,finish_time,vq1_finish_time)<TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time)),TIMESTAMPDIFF(second,finish_time,vq1_finish_time),TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time)) as vq1_period,
+		IF(TIMESTAMPDIFF(second,vq1_finish_time,vq2_finish_time)<TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time)),TIMESTAMPDIFF(second,vq1_finish_time,vq2_finish_time),TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time)) as vq2_period,
+		IF(TIMESTAMPDIFF(second,vq2_finish_time,warehouse_time)<TIMESTAMPDIFF(second,vq3_return_time,warehouse_time) OR ISNULL(TIMESTAMPDIFF(second,vq3_return_time,warehouse_time)),TIMESTAMPDIFF(second,vq2_finish_time,warehouse_time),TIMESTAMPDIFF(second,vq3_return_time,warehouse_time)) as vq3_period
+		FROM car WHERE $condition";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 		$countSql = "SELECT COUNT(DISTINCT id) FROM car WHERE $condition";
 		$count = intval(Yii::app()->db->createCommand($countSql)->queryScalar());
-
 		$howlong = null;
 		foreach($cars as &$car){
-			if(is_null($car['howlong'])) $car['howlong'] = (strtotime(date("Y-m-d H:i:s")) - strtotime($car['assembly_time']));
+			// if(is_null($car['howlong'])) $car['howlong'] = (strtotime(date("Y-m-d H:i:s")) - strtotime($car['assembly_time']));
+			// $howlong += $car['howlong'];
+			
+			// $vq1Start = $car['vq1_return_time'] > $car['finish_time'] ? $car['vq1_return_time'] : $car['finish_time'];
+			// $vq1Period = $this->calculatePeriod($vq1Start, $car['vq1_finish_time']);
+			// $vq2Start = $car['vq2_return_time'] > $car['vq1_finish_time'] ? $car['vq2_return_time'] : $car['vq1_finish_time'];
+			// $vq2Period = $this->calculatePeriod($vq2Start, $car['vq2_finish_time']);
+			// $vq3Start = $car['vq3_return_time'] > $car['vq2_finish_time'] ? $car['vq3_return_time'] : $car['vq2_finish_time'];
+			// $vq3Period = $this->calculatePeriod($vq3Start, $car['warehouse_time']);
+			if(is_null($car['manufacture_period'])) {
+				$manufacturePeriod = time()- strtotime($car['assembly_time']);
+				if($car['finish_time']>"0000-00-00 00:00:00" || $car['vq1_finish_time']>"0000-00-00 00:00:00" || $car['vq2_finish_time']>"0000-00-00 00:00:00" || $car["warehouse_time"] >"0000-00-00 00:00:00" ){
+					$manufacturePeriod = 0;
+				}
+			} else {
+				$manufacturePeriod = $car['manufacture_period'];
+			}
+			// $car['howlong'] = $manufacturePeriod + $vq1Period + $vq2Period + $vq3Period;
+			$car['howlong'] = $manufacturePeriod + $car['vq1_period'] + $car['vq2_period'] + $car['vq3_period'];
 			$howlong += $car['howlong'];
 		}
 		$period = empty($count) ? null : $howlong / $count;
 		$period = empty($period) ? null : round(($period / 3600), 1);
 
 		return $period;
+	}
+
+	private function calculatePeriod ($start, $end) {
+		$time = 0;
+		if($start > '0000-00-00 00:00:00') {
+			$time = $end > '0000-00-00 00:00:00' ? (strtotime($end) - strtotime($start)) : (time() - strtotime($start));
+			if($start>$end) {
+				$time = 0;
+			}
+		}
+		return $time;
 	}
 
 	public function countOnline ($stime, $etime, $line='I'){
@@ -673,11 +707,22 @@ class ReportSeeker
 	}
 
 	public function queryOvertimeCars(){
-		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,assembly_time,CURRENT_TIMESTAMP) AS recycle_period, `status`
+		// $sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, warehouse_time, TIMESTAMPDIFF(hour,assembly_time,CURRENT_TIMESTAMP) AS recycle_period, `status`
+		$sql = "SELECT id as car_id, serial_number, vin, type, series,config_id,color, assembly_line, finish_time, vq1_finish_time, vq1_return_time, vq2_finish_time,vq2_return_time,vq3_return_time, warehouse_time, `status`,
+				TIMESTAMPDIFF(hour,assembly_time,finish_time) as manufacture_period,
+				IF(TIMESTAMPDIFF(hour,finish_time,vq1_finish_time)<TIMESTAMPDIFF(hour,vq1_return_time,vq1_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time)),TIMESTAMPDIFF(hour,finish_time,vq1_finish_time),TIMESTAMPDIFF(hour,vq1_return_time,vq1_finish_time)) as vq1_period,
+				IF(TIMESTAMPDIFF(hour,vq1_finish_time,vq2_finish_time)<TIMESTAMPDIFF(hour,vq2_return_time,vq2_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time)),TIMESTAMPDIFF(hour,vq1_finish_time,vq2_finish_time),TIMESTAMPDIFF(hour,vq2_return_time,vq2_finish_time)) as vq2_period,
+				IF(TIMESTAMPDIFF(hour,vq2_finish_time,warehouse_time)<TIMESTAMPDIFF(hour,vq3_return_time,warehouse_time) OR ISNULL(TIMESTAMPDIFF(second,vq3_return_time,warehouse_time)),TIMESTAMPDIFF(hour,vq2_finish_time,warehouse_time),TIMESTAMPDIFF(hour,vq3_return_time,warehouse_time)) as vq3_period
 				FROM car
-				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>'' AND TIMESTAMPDIFF(hour,assembly_time,CURRENT_TIMESTAMP)>=96
-				ORDER BY recycle_period DESC LIMIT 0,10";
+				WHERE finish_time>'0000-00-00 00:00:00' AND warehouse_time='0000-00-00 00:00:00' AND `status`>''
+				-- ORDER BY recycle_period DESC LIMIT 0,10";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach($cars as &$car) {
+			$car["recycle_period"] = $car['manufacture_period'] + $car['vq1_period'] + $car['vq2_period'] + $car['vq3_period'];
+		}
+
+		$cars = $this->multi_array_sort($cars, 'recycle_period', SORT_DESC);
+		$cars = array_slice($cars, 0, 10);
 
 		$tablePrefixMap=array(
 			"VQ1异常" => "VQ1_STATIC_TEST",
@@ -711,6 +756,22 @@ class ReportSeeker
 
 		return $cars;
 	}
+
+	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
+        if(is_array($multi_array)){  
+            foreach ($multi_array as $row_array){  
+                if(is_array($row_array)){  
+                    $key_array[] = $row_array[$sort_key];  
+                }else{  
+                    return -1;  
+                }  
+            }  
+        }else{  
+            return -1;  
+        }  
+        array_multisort($key_array,$sort,$multi_array);  
+        return $multi_array;  
+    } 
 
 	public function queryUnsolvedFaults ($carId, $table) {
 		$sql = "SELECT CONCAT(component_name,fault_mode) AS fault
@@ -909,7 +970,12 @@ class ReportSeeker
 
 		$configName = $this->configNameList();
 		$configName[0] = "";
+
+		list($materialCodes, $materialDescriptions) = $this->materialList();
 		foreach($datas as &$data){
+			$materialKey = $data['series'] . $data['config_id'] . $data['color'];
+        	$data['material_code'] = empty($materialCodes[$materialKey]) ? '' : $materialCodes[$materialKey];
+        	$data['material_description'] = empty($materialDescriptions[$materialKey]) ? '' : $materialDescriptions[$materialKey];
 			if($data['series'] == '6B') $data['series'] = '思锐';
 			$data['config_name'] = $configName[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
@@ -1396,6 +1462,20 @@ class ReportSeeker
 			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
 		}
 		return $configName;
+	}
+
+	private function materialList () {
+		$sql = "SELECT series, config_id, color, material_code, description FROM config_sap_map";
+        $materials = Yii::app()->db->createCommand($sql)->queryAll();
+        $materialCodes = array();
+        $materialDescriptions = array();
+        foreach($materials as $material) {
+        	$key = $material['series'] . $material['config_id'] . $material['color'];
+        	$materialCodes[$key] = $material['material_code'];
+        	$materialDescriptions[$key] = $material['description'];
+        }
+
+        return array($materialCodes, $materialDescriptions);
 	}
 
 	public function parseQueryTime ($stime, $etime, $timespan) {

@@ -55,6 +55,14 @@ return array(
 			'password' => '123',
 			'charset' => 'utf8',
 		),
+		'dbDms'=>array(
+			'class' => 'CDbConnection',
+			'connectionString' => 'oci:dbname=//10.9.37.77:1521/BYDDMS',
+			'emulatePrepare' => true,
+			'username' => 'POBC',
+			'password' => '1234@byd',
+			'charset' => 'utf8',
+		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
             	'errorAction'=>'site/error',

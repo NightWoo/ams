@@ -95,6 +95,7 @@
 												<option value="T11">I线_T11</option>
 												<option value="T21">I线_T21</option>
 												<option value="T32">I线_T32</option>
+												<option value="subEngine">发动机分装</option>
 												<option value="C10">I线_C10</option>
 												<option value="C21">I线_C21</option>
 												<option value="F10">I线_F10</option>

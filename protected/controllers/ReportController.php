@@ -53,7 +53,7 @@ class ReportController extends BmsBaseController
 		try{
 	        $seeker = new ReportSeeker();
 			$datas = $seeker->queryCarDetail($date, $point, $timespan);
-            $content = "carID,线别,流水号,VIN,车系,车型,配置,耐寒性,颜色,发动机号,状态,上线时间,下线时间,入库时间,出库时间,备注,库位,订单号,经销商,发车道\n";
+            $content = "carID,线别,流水号,VIN,车系,车型,配置,耐寒性,颜色,发动机号,状态,上线时间,下线时间,入库时间,出库时间,备注,库位,订单号,经销商,发车道,SAP料号,SAP物料描述\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['assembly_line']},";
@@ -78,6 +78,8 @@ class ReportController extends BmsBaseController
                 $content .= "{$data['order_number']},";
                 $content .= "{$data['distributor_name']},";
                 $content .= "{$data['lane']},";
+                $content .= "{$data['material_code']},";
+                $content .= "{$data['material_description']},";
                 $content .= "\n";
             }
             $export = new Export($point . '_detail_'. $timespan. "_" .date('YmdHi'), $content);

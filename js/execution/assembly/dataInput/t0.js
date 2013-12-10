@@ -160,6 +160,7 @@ $("document").ready(function() {
 				"line" : $("#line").attr("value"),
 			},
 			async: false,
+			cache: false,
 			success: function(response) {
 				resetPage();
 				if(response.success){

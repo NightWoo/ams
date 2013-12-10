@@ -419,7 +419,7 @@ $("document").ready(function() {
 					console.log(selectLane);
 					$.each(response.data, function (index, value) {
 						var tr = $("<tr />");
-						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='fa fa-resize-full specialSplit'></i></a>";
+						tdCheck = "<input class='choose' type='checkbox' checked='checked' />&nbsp;&nbsp;<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='fa fa-expand specialSplit'></i></a>";
 						$("<td />").html(tdCheck).appendTo(tr);
 
 						// tdSplit = "<a href='#'' rel='tooltip' data-toggle='tooltip' data-placement='top' title='分拆''><i class='fa fa-resize-full'></i></a>";

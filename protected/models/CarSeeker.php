@@ -827,6 +827,9 @@ class CarSeeker
 		$time = 0;
 		if($start > '0000-00-00 00:00:00') {
 			$time = $end > '0000-00-00 00:00:00' ? (strtotime($end) - strtotime($start)) : (time() - strtotime($start));
+			if($start>$end) {
+				$time = 0;
+			}
 		}
 		return $time;
 	}

@@ -260,7 +260,7 @@ class Order
 
         		switch($standbyArea){
         			case 0 :
-        				$matchCondition = "warehouse_id>1 AND warehouse_id<=200 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        				$matchCondition = "warehouse_id>1 AND warehouse_id<=300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
         				break;
         			case 14 :	
 						$matchCondition = "warehouse_id>=400 AND warehouse_id<500 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
@@ -293,7 +293,6 @@ class Order
 				$matchedCar = CarAR::model()->find($matchCondition, $values);
 				if(!empty($matchedCar)){
 			 		$matchedOrder = $order;
-			 		// $matchedCar = $car;
 			 		break;
 				 }
 			}
@@ -306,8 +305,6 @@ class Order
 				$matchedOrder->saveCounters(array('hold'=>1));
 
 				if($matchedOrder->hold == $matchedOrder->amount){
-					// $standby_finish_time = date('YmdHis');
-					// $matchedOrder->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
 					$matchedOrder->standby_finish_time = date('YmdHis');
 					$matchedOrder->save();
 				}
@@ -318,7 +315,6 @@ class Order
 					$warehouse->color = '';
 					$warehouse->order_config_id = 0;
 					$warehouse->cold_resistant = 0;
-					//$warehouse->car_year = '';
 
 					$warehouse->free_seat = $warehouse->capacity;
 					$warehouse->status = 0;
@@ -332,6 +328,8 @@ class Order
 				$matchedCar->area = 'WDI';
 				$matchedCar->standby_time = date("YmdHis");
 				$matchedCar->save();
+				$car = Car::create($matchedCar->vin);
+				$car->periodFinish("inventory");
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
 				$rowWDI->saveCounters(array('quantity'=>1));
@@ -395,6 +393,10 @@ class Order
 
 				if($car->car->distribute_time > '0000-00-00 00:00:00'){
 					throw new Exception($vin. "已出库，不可匹配订单", 1);
+				}
+
+				if($car->car->special_property == 9){
+					throw new Exception($vin. "被锁定，不可配单", 1);
 				}
 
 				$warehouseId = $car->car->warehouse_id;
@@ -641,6 +643,16 @@ class Order
 		$LC0ConfigArray = Yii::app()->db->createCommand($sql)->queryColumn();
 		$LC0Config = "(" . join(",", $LC0ConfigArray) . ")";
 		return array($LC0ConfigArray,$LC0Config);
+	}
+
+	private function getLC0TypeColor () {
+		// $sql = "SELECT car_type,car_colors FROM lc0_unlock WHERE category='type_color'";
+		// $datas = Yii::app()->db->createCommand($sql)->queryAll();
+		// $retArray = array();
+		// foreach($datas as $data){
+		// 	$retArray[] = array('type'=>$data['car_type'],'colors'=>$data['car_colors']); 
+		// }
+
 	}
 
 	private function getLC0TypeColorText () {

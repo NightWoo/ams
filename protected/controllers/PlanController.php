@@ -144,21 +144,23 @@ class PlanController extends BmsBaseController
 	public function actionRemove () {
 		$id = $this->validateIntVal('id', 0);
         try{
-			$plan = PlanAR::model()->findByPk($id);
-			if(!empty($plan)) {
-				if($plan->ready>0) {
-					throw new Exception("此计划已进行，无法删除！");
-				}
-				$lowers = PlanAR::model()->findAll('priority>? AND plan_date=?' ,array($plan->priority, $plan->plan_date));
-                if(!empty($lowers)) {
-                    foreach($lowers as $lower) {
-                        $lower->priority = $lower->priority - 1;
-                        $lower->save();
-                    }
-                }
+        	$plan = Plan::createById($id);
+        	$plan->remove();
+			// $plan = PlanAR::model()->findByPk($id);
+			// if(!empty($plan)) {
+			// 	if($plan->ready>0) {
+			// 		throw new Exception("此计划已进行，无法删除！");
+			// 	}
+			// 	$lowers = PlanAR::model()->findAll('priority>? AND plan_date=?' ,array($plan->priority, $plan->plan_date));
+   //              if(!empty($lowers)) {
+   //                  foreach($lowers as $lower) {
+   //                      $lower->priority = $lower->priority - 1;
+   //                      $lower->save();
+   //                  }
+   //              }
 
-				$plan->delete();
-			}
+			// 	$plan->delete();
+			// }
             $this->renderJsonBms(true, 'OK', '');
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());

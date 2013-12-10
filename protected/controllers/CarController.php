@@ -123,7 +123,6 @@ class CarController extends BmsBaseController
 			$enterNode = Node::createByName($nodeName);
             $leftNode = $enterNode->getParentNode();
             $car->leftNode($leftNode->name);
-			// $car->passNode('LEFT_WORK_SHOP');
             $checkTrace = $car->checkTraceComponentByConfig();
             $vinValidate = $car->validateVin();
             if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
@@ -145,15 +144,17 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
 
-			$car->leftNode('CHECK_LINE');
+            if($car->car->vq1_finish_time == "0000-00-00 00:00:00") {
+                throw new Exception($car->car->vin . "未完成VQ1");
+            }
 
+			$car->leftNode('CHECK_LINE');
 			$car->checkTestLinePassed();
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-            //$car->passNode('VQ3');
             if(empty($car->config->name)){
                 throw new Exception($vin . '无配置');
             }
@@ -175,17 +176,11 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
 			
 			$car->leftNode('ROAD_TEST_FINISH');
-
             $fault = Fault::createSeeker();
-            // $exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_'));
-            // if(!empty($exist)) {
-            //     throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
-            // }
 			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ2路试还有未修复的故障');
             }
-            //$car->passNode('VQ3');
             $data = $car->car;
 
             $this->renderJsonBms(true, 'OK', $data);
@@ -202,10 +197,8 @@ class CarController extends BmsBaseController
                 throw new Exception('node cannot be empty');
             }
             $enterNode = Node::createByName($nodeName);
-            // $leftNode = $enterNode->getParentNode();
             
             $car = Car::create($vin);
-            //$car->leftNode($leftNode->name);
             if($car->car->warehouse_time === '0000-00-00 00:00:00'){
                 throw new Exception($vin . '未入库，无法操作退回');
             }
@@ -594,9 +587,11 @@ class CarController extends BmsBaseController
 
             $car = Car::create($vin);
 			
-			//if($car->car->series != 'M6'){
-				$car->leftNode('VQ2');
-			//}
+			$car->leftNode('VQ2');
+            if($car->car->vq2_finish_time == "0000-00-00 00:00:00") {
+                throw new Exception($car->car->vin . "未完成VQ2淋雨");
+                
+            }
 
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_', 'VQ2_LEAK_TEST_'));
@@ -717,15 +712,18 @@ class CarController extends BmsBaseController
 
 	public function actionSearchSubConfigQueue() {
 		$type = $this->validateStringVal('type', 'subInstrument');
-		$stime = $this->validateStringVal('stime');
-		$etime = $this->validateStringVal('etime');
+		$stime = $this->validateStringVal('stime', '');
+		$etime = $this->validateStringVal('etime', '');
 		$status = $this->validateIntVal('status', 0);
-		$vin = $this->validateStringVal('vin');
+        $vin = $this->validateStringVal('vin' ,'');
         $top  =$this->validateIntVal("top", 0);
+		$sortType = $this->validateStringVal('sortType', 'ASC');
 		
 		$seeker = new SubConfigSeeker($type);
-		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top);
-		$this->renderJsonBms(true, 'OK', $datas);
+		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
+        $count = $seeker->countQueue($status, $stime, $etime);
+        $ret = array("datas"=>$datas, "countAll"=>$count);
+		$this->renderJsonBms(true, 'OK', $ret);
 	}
 
 	public function actionPrintSubConfig() {
@@ -735,11 +733,11 @@ class CarController extends BmsBaseController
         $nodeName = $this->validateStringVal('currentNode', '');
         $transaction = Yii::app()->db->beginTransaction();
         try{
-
             $car = Car::create($vin);
-
-            $node = Node::createByName($nodeName);
-            $car->addTraceComponents($node, $barCode);
+            if(!empty($nodeName)) {
+                $node = Node::createByName($nodeName);
+                $car->addTraceComponents($node, $barCode);
+            }
 			$datas = $car->generateSubConfigData($type);
 
 			$transaction->commit();
@@ -748,7 +746,6 @@ class CarController extends BmsBaseController
             $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
-
 	}
 
 	public function actionValidateSubConfig() {

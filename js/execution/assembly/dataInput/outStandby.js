@@ -38,6 +38,7 @@ $(document).ready(function() {
 			url: CHECK_CARD_NUMBER,
 			type:"get",
 			dataType: "json",
+			async:false,
 			data: {
 				"cardNumber": $("#cardNumber").val(),
 			},

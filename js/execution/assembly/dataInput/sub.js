@@ -48,6 +48,7 @@ $("document").ready(function() {
 					}
 			    }
 			    else{
+			    	ajaxGetDoneList()
 			    	ajaxGetPrintList();
 					fadeMessageAlert(response.message,"alert-error");
 				}
@@ -81,6 +82,7 @@ $("document").ready(function() {
 				"barCode" : barCode
 			},
 			async:false,
+		    cache:false,
 			success: function(response){
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
@@ -107,6 +109,7 @@ $("document").ready(function() {
 					fadeMessageAlert(response.message,"alert-success");
 				}
 				resetPage();
+				ajaxGetDoneList()
 				ajaxGetPrintList();
 			},
 			error:function(){alertError();}
@@ -124,40 +127,114 @@ $("document").ready(function() {
 		    	"type": $("#subType").val(),
 		    	"stime":$("#startTime").val(),
 				"etime":$("#endTime").val(),
-				"top" :20,
+				"top" :50,
 		    },//vin
 		    async:false,
 		    success: function(response){
 		    	$("#tableList tbody").text("");
-		    	$(response.data).each(function (index, value) {
+		    	$("#infoCount").html(response.data.countAll);
+		    	$(response.data.datas).each(function (index, value) {
 		    		var tr = $("<tr />");
 		    		if (index == 0) {
 		    			tr.addClass("info");
 		    		}
+		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
 		    		$("<td />").html(value.serial_number).appendTo(tr);
 		    		$("<td />").html(value.queueTime).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
-		    		$("<td />").html(value.series).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		if(value.cold_resistant == "1"){
-						$("<td />").html('耐寒').appendTo(tr);						
-					}else{
-						$("<td />").html('非耐寒').appendTo(tr);						
-					}
+		    		$("<td />").html(value.cold).appendTo(tr);	
 		    		$("<td />").html(value.color).appendTo(tr);
-		    		// $("<td />").html(value.year).appendTo(tr);
-		    		// $("<td />").html(value.order_type).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
 		    		tr.appendTo($("#tableList tbody"));
-
-		    		//after fetch,set the 1st car to the print place
-		    		
 		    	});
 		    	setFirstCarToPrint();
 		    },
 		    error:function(){}
        });
+	}
+
+	function ajaxGetDoneList() {
+		$.ajax({
+		    type: "get",//使用get方法访问后台
+    	    dataType: "json",//返回json格式的数据
+		    url: SUB_CONFIG_SEARCH,//ref:  /bms/js/service.js
+		    data: {
+		    	"type": $("#subType").val(),
+		    	"stime":$("#startTime").val(),
+				"etime":$("#endTime").val(),
+				"status": 1,
+				"top" :50,
+				"sortType": "DESC",
+		    },//vin
+		    async:false,
+		    success: function(response){
+		    	$("#tableDoneList tbody").text("");
+		    	$(response.data.datas).each(function (index, value) {
+		    		var tr = $("<tr />");
+		    		$("<td />").html(byd.SeriesName[value.series]).appendTo(tr);
+		    		$("<td />").html(value.serial_number).appendTo(tr);
+		    		$("<td />").html(value.queueTime).appendTo(tr);
+		    		$("<td />").html(value.vin).appendTo(tr);
+		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
+					$("<td />").html(value.cold).appendTo(tr);						
+		    		$("<td />").html(value.color).appendTo(tr);
+		    		$("<td />").html(value.special_order).appendTo(tr);
+		    		$("<td />").html(value.remark).appendTo(tr);
+		    		$("<td />").html(value.engine_code).appendTo(tr);
+		    		a = "<a><i class='fa fa-print'></i></a>"
+		    		$("<td />").html(a).appendTo(tr);
+		    		tr.appendTo($("#tableDoneList tbody"));
+
+		    		tr.data("vin", value.vin);
+		    		//after fetch,set the 1st car to the print place
+		    		
+		    	});
+		    },
+		    error:function(){}
+       });
+	}
+
+		function ajaxPrintOne(vin){
+
+		$.ajax({
+			type: "get",//使用get方法访问后台
+        	dataType: "json",//返回json格式的数据
+			url: SUB_CONFIG_PRINT,//ref:  /bms/js/service.js
+			data: {
+				"vin": vin,
+				"type": $("#subType").val(),
+			},
+			async:false,
+		    cache:false,
+			success: function(response){
+				//fill data to print
+				$(".printBarCode").attr("src", response.data.vinBarCode);
+				$(".printFrontImage").attr("src", response.data.image);
+				// $(".printBackImage").attr("src", response.data.image);
+				$(".printEngineCode").html(response.data.engineCode);
+				$(".printType").html(response.data.type);
+				$(".printSeries").html(response.data.series);
+				if(response.data.coldResistant == "1"){
+					$(".printConfig").html(response.data.config +'/'+ '耐寒');							
+				}else{
+					$(".printConfig").html(response.data.config +'/'+ '非耐寒');							
+				}
+				$(".printSerialNumber").html(response.data.serialNumber);
+				$(".printRemark").html("备注：" + response.data.remark);
+				if (response.data.image == "") {
+					fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
+				} else {
+					setTimeout(function (){window.print();},800);
+					fadeMessageAlert(response.message,"alert-success");
+				}
+				resetPage();
+				ajaxGetDoneList()
+				ajaxGetPrintList();
+			},
+			error:function(){alertError();}
+		});
 	}
 
 
@@ -301,6 +378,7 @@ $("document").ready(function() {
 		// $("#startTime").val(window.byd.DateUtil.todayBeginTime);
 		$("#startTime").val(byd.DateUtil.firstDayOfTheMonth);
 		$("#endTime").val(byd.DateUtil.todayEndTime);
+		ajaxGetDoneList();
 		ajaxGetPrintList();
 
 		resetPage();
@@ -322,7 +400,7 @@ $("document").ready(function() {
 		if ($("#tableList tr").length > 1) {
 			$("#vinText").attr("disabled", "disabled");
 			//获取第一行的VIN号
-			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(2)").text());
+			$("#vinText").attr("value", $("#tableList tr:eq(1) td:eq(3)").text());
 			ajaxValidate();
 			// $("#btnSubmit, #btnTopOut").removeAttr("disabled");
 		} else {
@@ -402,6 +480,7 @@ $("document").ready(function() {
 
 	$("#btnRefresh").live("click", function () {
 		resetPage();
+		ajaxGetDoneList()
 		ajaxGetPrintList();
 	});
 	//清空
@@ -440,6 +519,11 @@ $("document").ready(function() {
 			return false;
 		}
 	});
+
+	$("#tableDoneList").on("click", "a", function (e) {
+		vin = $(e.target).closest("tr").data("vin");
+		ajaxPrintOne(vin);
+	})
 
 //-------------------END event bindings -----------------------
 

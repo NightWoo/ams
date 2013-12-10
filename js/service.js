@@ -52,7 +52,7 @@ var VQ1_SUBMIT_EXCEPTION = "/bms/fault/saveVQ1";
 var CHECKPAPER_VALIDATE = "/bms/car/validateCheckPaper";
 var CHECKPAPER_SUBMIT = "/bms/execution/checkPaperPrint";
 
-var RECORD_BARCODE = "/bms/execution/recodeBarcode";
+var RECORD_BARCODE = "/bms/execution/recordBarcode";
 
 var CONFIGPAPER_MAIN_SUBMIT = "/bms/execution/configPaperMainPrint";
 var CAR_VALIDATE = "/bms/car/validateCar";

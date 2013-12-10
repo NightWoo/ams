@@ -1,6 +1,6 @@
 $("document").ready(function() {
-	// var checkEngine = ($("#currentNode").val()==="C10" || $("#currentNode").val()==="C10_2") ? true : false;
-	var checkEngine = false;
+	var checkEngine = ($("#currentNode").val()==="C10" || $("#currentNode").val()==="C10_2") ? true : false;
+	// var checkEngine = false;
 	var compArray = [];
 	var recordArray = [];
 	initPage();

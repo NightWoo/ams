@@ -96,7 +96,7 @@
 							<li>
 								<ul>
                                     <li class="text-info"><a href="/bms/download/browser/Firefox.zip">Firefox</a></li>
-									<!-- <li class="text-info"><a href="/bms/download/browser/Chrome.zip">Chrome(安装版)</a></li> -->
+									<li class="text-info"><a href="/bms/download/browser/Chrome.zip"></a>Chrome</li>
 								</ul>
 							</li>
                         </ul>   
@@ -119,8 +119,8 @@
             <h4 class="alert-heading">抱歉，AMS系统不支持低版本IE浏览器</h4>
             <p style="margin-top: 15px">请使用Firefox或Chrome浏览器访问AMS。为此带来的不便，还请见谅。</p>
             <p style="margin-top: 15px;text-align: right">
-                <a class='btn btn-primary' href="/bms/download/browser/Firefox.zip">下载Firefox浏览器</a>
-                <!-- <a class='btn btn-success' href="/bms/download/browser/Chrome.zip">下载Chrome浏览器</a> -->
+                <a class='btn btn-primary' href="/bms/download/browser/Firefox.zip">Firefox</a>
+                <a class='btn btn-success' href="/bms/download/browser/Chrome.zip">Chrome</a>
             </p>
         </div>
     </div>

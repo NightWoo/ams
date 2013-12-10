@@ -119,6 +119,8 @@ class Car
 		if($this->car->assembly_time == '0000-00-00 00:00:00') {
 			$this->car->assembly_time = date('YmdHis');
 			$this->car->save();
+
+			$this->periodStart("manufacture");
 		}
 	}
 
@@ -126,6 +128,7 @@ class Car
 		if($this->car->finish_time == '0000-00-00 00:00:00') {
 			$this->car->finish_time = date('YmdHis');
 			$this->car->save();
+			$this->periodFinish("manufacture");
 		}
 	}
 
@@ -148,6 +151,7 @@ class Car
             if(empty($exist)) {
 				$this->car->vq1_finish_time = date('YmdHis');
 				$this->car->save();
+				$this->periodFinish("VQ1");
 			}
 		}
 	}
@@ -162,6 +166,7 @@ class Car
             	}
 				$this->car->vq2_finish_time = date('YmdHis');
 				$this->car->save();
+				$this->periodFinish("VQ2");
             }
 		}
 	}
@@ -171,7 +176,14 @@ class Car
 			$now = date('YmdHis');
 			$this->car->warehouse_time = $now;
 			$this->car->fifo_time = $now;
+			if($this->car->vq1_finish_time ==  '0000-00-00 00:00:00') {
+				$this->car->vq1_finish_time = $now;
+			}
+        	if($this->car->vq2_finish_time ==  '0000-00-00 00:00:00') {
+				$this->car->vq2_finish_time = $now;
+        	}
 			$this->car->save();
+			$this->periodFinish("VQ3");
 		}
 	}
 
@@ -179,6 +191,7 @@ class Car
 		if($this->car->distribute_time == '0000-00-00 00:00:00') {
 			$this->car->distribute_time = date('YmdHis');
 			$this->car->save();
+			$this->periodFinish("standby");
 		}
 	}
 
@@ -287,6 +300,19 @@ class Car
 		return array($node->name, $trace->id); 
 	}
 
+	public function subUnitAssembled ($nodeName) {
+		$map = array("C10"=>"subEngine","C10_2"=>"subEngine");
+		if(!empty($map[$nodeName])) {
+			$queue = SubConfigCarQueueAR::model()->find("car_id=? AND type=?", array($this->car->id, $map[$nodeName]));
+			if(!empty($queue) && empty($queue->closed) && "0000-00-00 00:00:00" == $queue->closed_time) {
+				$queue->closed = 1;
+				$queue->closed_time = date("YmdHis");
+				$queue->update(array("closed", "closed_time"));
+			}
+		}
+
+	}
+
 	public function enterNodeWDI ($passtime,$driverId = 0) {
 		$node = Node::createByName('WDI');
 		if(!$node->exist()){
@@ -386,7 +412,7 @@ class Car
         }
 
 		$this->car->status = $zone;
-		$this->car->save();
+		$this->car->update(array("status"));
 	}
 
 	public function recordWarehouseReturnTrace ($nodeTraceId, $returnTo) {
@@ -402,15 +428,16 @@ class Car
         if(!$node->exist()){
             throw new Exception('不存在名字为' . $nodeName . '的节点');
         }
-
-		//if(YII_DEBUG) {
-		// 	return;
-		//}
 		
         $nodeId = $node->id;
-        $exist = NodeTraceAR::model()->find('car_id =? AND node_id=?', array($this->car->id,$nodeId));
+        $exist = NodeTraceAR::model()->find('car_id =? AND node_id=? ORDER BY pass_time DESC', array($this->car->id,$nodeId));
         if(empty($exist)){
-            throw new Exception($this->vin .'还没录入' .$node->display_name);
+            throw new Exception($this->vin .'还未录入' . $node->display_name);
+        } else if($nodeName == "CHECK_LINE" || $nodeName == "ROAD_TEST_FINISH") {
+        	$traceReturn = NodeTraceAR::model()->find('car_id =? AND node_id=? ORDER BY pass_time DESC', array($this->car->id,97));
+        	if(!empty($traceReturn) && $traceReturn->pass_time > $exist->pass_time) {
+        		throw new Exception($this->vin . "退库后还未录入" . $node->display_name);
+        	}
         }
 	}
 
@@ -482,9 +509,12 @@ class Car
 			$trace->bar_code = $code;
 			$trace->save();
 
-			if($this->isEnginCode($componentId)) {
+			if($this->isEngineCode($componentId)) {
 				$this->car->engine_code = $code;
-				$this->car->save();
+				$carId = $this->car->id;
+				$sql = "UPDATE car SET engine_code='$code' WHERE id=$carId";
+				Yii::app()->db->createCommand($sql)->execute();
+				// $this->car->save();
 			}
 		}
 			
@@ -578,7 +608,7 @@ class Car
 		return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
 	}
 
-	public function isEnginCode ($componentId) {
+	public function isEngineCode ($componentId) {
 		$sql = "SELECT engine_component_id FROM car_engine WHERE car_series='{$this->car->series}' AND engine_component_id=$componentId ";
 		$componentIds = Yii::app()->db->createCommand($sql)->queryColumn();
 		return !empty($componentIds);
@@ -1253,6 +1283,7 @@ class Car
             $this->car->area = 'WDI';
             $this->car->standby_time = date("YmdHis");
             $this->car->save();
+            $this->periodFinish("inventory");
 
             $data['area'] = $rowWDI->area;
             $data['row'] = $rowWDI->row;
@@ -1284,9 +1315,10 @@ class Car
             $this->car->area = $data['area'];
 
             $now = date("YmdHis");
-            $this->car->warehouse_time = $now;
+            // $this->car->warehouse_time = $now;
             $this->car->fifo_time = $now;
             $this->car->save();
+            $this->periodStart("inventory");
 
 		} else {
 			$status = $goTo . "退库" ;
@@ -1307,11 +1339,14 @@ class Car
 				$this->car->vq1_finish_time = "0000-00-00 00:00:00";
 				$this->car->vq2_return_time = "0000-00-00 00:00:00";
 				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
+				$this->periodStart("VQ1",1);
 			} else if($goTo == "VQ2") {
 				$this->car->vq2_return_time = date("YmdHis");
 				$this->car->vq2_finish_time = "0000-00-00 00:00:00";
+				$this->periodStart("VQ2",1);
 			} else if($goTo == "VQ3") {
 				$this->car->vq3_return_time = date("YmdHis");
+				$this->periodStart("VQ3",1);
 			}
 		}
 
@@ -1345,6 +1380,35 @@ class Car
 	public function checkAlreadyWarehouse () {
 		if($this->car->warehouse_time > '0000-00-00 00:00:00'){
 			throw new Exception($this->car->vin . '已入库');
+		}
+	}
+
+	public function periodStart ($type, $isReturned=0) {
+		$ar = new CarPeriodAR();
+		$ar->car_id = $this->car->id;
+		$ar->type = $type;
+		$ar->is_returned = $isReturned;
+		$ar->start_time = date("YmdHis");
+		$ar->save();
+	}
+
+	public function periodFinish () {
+		$nextType = array(
+			"manufacture" => "VQ1",
+			"VQ1" => "VQ2",
+			"VQ2" => "VQ3",
+			"VQ3" => "inventory",
+			"inventory" => "standby",
+		);
+		$time = date("YmdHis");
+		$ar = CarPeriodAR::model()->find("car_id=? AND finish_time='0000-00-00 00:00:00' ORDER BY start_time DESC", array($this->car->id));
+		if(!empty($ar)) {
+			$ar->finish_time = $time;
+			$ar->save();
+			$type = $ar->type;
+			if(!empty($nextType[$type])){
+				$this->periodStart($nextType[$type], $ar->is_returned);
+			}
 		}
 	}
 	
@@ -1422,6 +1486,7 @@ class Car
 		if($this->car->config_id == 45) {
 			return;
 		}
+
 		$vin = $this->car->vin;
 		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
 		FROM Summary WHERE vin='$vin'";
@@ -1869,6 +1934,29 @@ class Car
 		}
 
 		return $result;
+	}
+
+	public function applyTimeTicketInSap ($planNumber, $yield=1, $operation="0010") {
+		try {
+			$plan = PlanAR::model()->findByPk($this->car->plan_id);
+			if(!empty($plan)){
+				$planNumber = $plan->plan_number;
+				$client = @new SoapClient(Yii::app()->params['saprfc']);
+				$params = array(
+					"orderNumber"=>$planNumber,
+					"yield"=>$yield,
+					"operation"=>$operation
+				);
+				$result = $client->applyTimeTicket($params);
+				$retArray = (array)$result->checkOrderResult;
+				$ret = $retArray['string'];
+			} else {
+				$ret = array("fail", "E", "applyTimeTicketInSap fail", "");
+			}
+		} catch(Exception $e) {
+			$ret = array("fail", "E", "applyTimeTicketInSap fail", "");
+		}
+		return $ret;
 	}
 
 

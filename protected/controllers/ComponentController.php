@@ -60,12 +60,13 @@ class ComponentController extends BmsBaseController
 			list($total, $datas) = $seeker->query($vin, $barcode, $node, $stime, $etime, $provider, $component, $series, 0, 0);
 
 			$content = "车系,车型,VIN号,零部件名称,零部件条码,供应商,节点,录入人员,录入时间,备注\n";
-			foreach($datas as $data) {
+			foreach($datas as &$data) {
 				$content .= "{$data['car_series']},";
-				$data['type'] = str_replace(",", "，",$data['car_type']);
+				$data['car_type'] = str_replace(",", "，",$data['car_type']);
 				$content .= "{$data['car_type']},";
 				$content .= "{$data['vin']},";
 				$content .= "{$data['component_name']},";
+				$data['bar_code'] = "=\"" . $data['bar_code'] . "\"";
 				$content .= "{$data['bar_code']},";
 				$content .= "{$data['provider']},";
 				$content .= "{$data['node_name']},";

@@ -72,6 +72,7 @@
 									<option value="3">I线_T11</option>
 									<option value="4">I线_T21</option>
 									<option value="5">I线_T32</option>
+									<option value="101">发动机分装</option>
 									<option value="6">I线_C10</option>
 									<option value="7">I线_C21</option>
 									<option value="8">I线_F10</option>
@@ -151,6 +152,7 @@
 						<option value="3">I线_T11</option>
 						<option value="4">I线_T21</option>
 						<option value="5">I线_T32</option>
+						<option value="101">发动机分装</option>
 						<option value="6">I线_C10</option>
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>
@@ -231,6 +233,7 @@
 						<option value="3">I线_T11</option>
 						<option value="4">I线_T21</option>
 						<option value="5">I线_T32</option>
+						<option value="101">发动机分装</option>
 						<option value="6">I线_C10</option>
 						<option value="7">I线_C21</option>
 						<option value="8">I线_F10</option>

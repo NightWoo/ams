@@ -88,6 +88,16 @@ class NodeSeeker
             $nodeInfos[$node['id']] = $node['display_name'];
         }
 
+        $sql = "SELECT series, config_id, color, material_code, description FROM config_sap_map";
+        $materials = Yii::app()->db->createCommand($sql)->queryAll();
+        $materialCodes = array();
+        $materialDescriptions = array();
+        foreach($materials as $material) {
+        	$key = $material['series'] . $material['config_id'] . $material['color'];
+        	$materialCodes[$key] = $material['material_code'];
+        	$materialDescriptions[$key] = $material['description'];
+        }
+
 		$conditions = array("node_id=$nodeId");
 
 		if(!empty($stime)) {
@@ -133,6 +143,9 @@ class NodeSeeker
         $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
         $ret = array();
         foreach($datas as &$data){
+        	$materialKey = $data['series'] . $data['config_id'] . $data['color'];
+        	$data['material_code'] = empty($materialCodes[$materialKey]) ? '' : $materialCodes[$materialKey];
+        	$data['material_description'] = empty($materialDescriptions[$materialKey]) ? '' : $materialDescriptions[$materialKey];
         	if($data['series'] == '6B') $data['series'] = '思锐';
 
         	if($data['cold_resistant'] == 1){
@@ -165,6 +178,7 @@ class NodeSeeker
         		$data['config_name'] = '';
 	        	$data['order_config_name'] = '';
 	        	$data['type_config'] = $data['type'];
+	        	
         	}
 
         	$data['order_number']='-';

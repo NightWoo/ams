@@ -214,16 +214,17 @@ class ExecutionController extends BmsBaseController
             //$car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 
-            //throw T32 data to vinm
-
             //save component trace
             $car->addTraceComponents($enterNode, $componentCode);
 
             $data = $car->generateInfoPaperData();
             $car->detectStatus($enterNode->name);
+            $car->subUnitAssembled($enterNode->name);
             $transaction->commit();
 
             $this->renderJsonBms(true, $vin . '成功录入' . $nodeName , $data);
+
+            //throw T32 data to vinm
             if($nodeName == 'T32' || $nodeName == 'T32_2'){
                 $vinMessage = $car->throwVinAssembly($car->vin, 'I线_T32');
             }
@@ -308,6 +309,11 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus($nodeName);
             $car->finish();
             $car->vq1finish();
+            // $applySapRet = $car->applyTimeTicketInsap();
+            // if($applySapRet[0] == "fail" || $applySapRet[1] == "E" || $applySapRet[1] == "A" || $applySapRet[1] == "W") {
+            //     throw new Exception("SAP报工失败，无法下线。消息类型[". $applySapRet[1] . "]，描述[". $applySapRet[2] ."]");
+            // }
+
             $transaction->commit();
 
             $car->throwTestlineCarInfo();
@@ -589,7 +595,8 @@ class ExecutionController extends BmsBaseController
             $rpc = new RpcService();
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data['clientIp'] = $clientIp;
-            $host='10.23.86.80';
+            // $host='10.23.86.80';
+            $host = $clientIp;
             $ret = $rpc->openGate($host);
             
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
@@ -683,6 +690,9 @@ class ExecutionController extends BmsBaseController
             if(empty($car->car->engine_code)){
                 throw new Exception($car->car->vin . "系统未记录发动机号，无法出库");
             }
+            if($car->car->special_property == 9){
+                throw new Exception($car->car->vin . "被锁定，无法出库");
+            }
 
             if($car->car->series == 'F0'){
                 $absTrace = $car->checkTraceABS();
@@ -721,7 +731,8 @@ class ExecutionController extends BmsBaseController
             $clientIp = $_SERVER["REMOTE_ADDR"];
             $data['clientIp'] = $clientIp;
             $rpc = new RpcService();
-            $host='10.23.86.82';
+            // $host = '10.23.86.82';
+            $host = $clientIp;
             $ret = $rpc->openGate($host);
 			$vinMessage = $car->throwVinStoreOut($vin, $data['lane'], $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code);
         } catch(Exception $e) {
@@ -779,7 +790,7 @@ class ExecutionController extends BmsBaseController
         }
     }
 
-    public function actionRecodeBarcode() {
+    public function actionRecordBarcode() {
         $vin = $this->validateStringVal('vin', '');
         $nodeName = $this->validateStringVal('currentNode', 'T11');
         $componentCode = $this->validateStringVal('componentCode', '{}');
@@ -871,7 +882,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,SAP料号,SAP物料描述\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -899,6 +910,8 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['user_name']},";
                 $content .= "{$data['order_number']},";
                 $content .= "{$data['engine_code']},";
+                $content .= "{$data['material_code']},";
+                $content .= "{$data['material_description']},";
                 $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);

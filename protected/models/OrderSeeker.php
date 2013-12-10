@@ -256,7 +256,7 @@ class OrderSeeker
 	        	$configId = Yii::app()->db->createCommand($sql)->queryColumn();
 	        	$configId = "(" . join(',', $configId) . ")";
 
-				$matchCondition = "warehouse_id>1 AND warehouse_id< 1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00'";
+				$matchCondition = "warehouse_id>1 AND warehouse_id< 1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00' AND special_property<9";
 				
 				// $LC0Type = self::$LC0_TYPE;
 				// $LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR (type='QCJ7100L(1.0排量舒适型)' AND color='法兰红') OR config_id IN (7,9) OR (type IN ('QCJ7152ET1(1.5TI尊贵型)','QCJ7152ET1(1.5TI尊享型)','QCJ7152ET2(1.5TID尊贵型)') AND color<>'巧克力棕' AND color<>'德兰黑') )";
