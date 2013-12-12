@@ -1936,8 +1936,12 @@ class Car
 		return $result;
 	}
 
-	public function applyTimeTicketInSap ($planNumber, $yield=1, $operation="0010") {
+	public function applyTimeTicketInSap ($yield=1, $operation="0010") {
 		try {
+			if(1 == $this->car->yielded) {
+				$ret = array("success", "I", "already yielded", "");
+				return $ret;
+			}
 			$plan = PlanAR::model()->findByPk($this->car->plan_id);
 			if(!empty($plan)){
 				$planNumber = $plan->plan_number;
@@ -1948,8 +1952,12 @@ class Car
 					"operation"=>$operation
 				);
 				$result = $client->applyTimeTicket($params);
-				$retArray = (array)$result->checkOrderResult;
+				$retArray = (array)$result->applyTimeTicketResult;
 				$ret = $retArray['string'];
+				if("success" == $ret[0] && "E" != $ret[1] && "A" != $ret[1] && "W" != $ret[1]) {
+					$this->car->yielded = 1;
+					$this->car->update(array("yielded"));
+				}
 			} else {
 				$ret = array("fail", "E", "applyTimeTicketInSap fail", "");
 			}

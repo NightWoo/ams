@@ -16,11 +16,13 @@ class DebugController extends BmsBaseController
 
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
+		$date = $this->validateStringVal('date', '');
 		try {
-			$sql = "SELECT SUM(total) FROM plan_assembly WHERE id=2";
-			$total = Yii::app()->db->createCommand($sql)->queryScalar();
-			$total += 2;
-			$this->renderJsonBms(true, $total, $total);
+			$seeker= new ReportSeeker();
+	        $date = "2013-08-29";
+	        $ret = $seeker -> planningDivisionSms($date);
+
+			$this->renderJsonBms(true, $ret, $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}

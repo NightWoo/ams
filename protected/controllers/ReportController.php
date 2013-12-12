@@ -8,13 +8,13 @@ class ReportController extends BmsBaseController
 
 	public function actionDebug(){
         $seeker= new ReportSeeker();
-        $workDate = DateUtil::getLastDate();
-        $workDateTime = strtotime($workDate);
+        // $workDate = DateUtil::getLastDate();
+        // $workDateTime = strtotime($workDate);
         $date = "2013-08-29";
         // $ret = date("n月j日", $workDateTime);
         // $ret = $seeker -> countCarGroupByPdType ("2013-07-01 08:00:00","2013-08-01 08:00:00",$point="assembly",$line="");
-        $ret = $seeker -> queryPlanningDivisionReportDaily ($date);
-		$this->renderJsonBms(true, 'OK', $ret);
+        $ret = $seeker -> planningDivisionSms($date);
+		$this->renderJsonBms(true, $ret, $ret);
 	}
 
 	public function actionQueryManufactureDaily() {
@@ -219,6 +219,17 @@ class ReportController extends BmsBaseController
         try{
             $seeker = new ReportSeeker();
             $data = $seeker->queryPlanningDivisionReportDaily($date);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryPlanningDivisionSmsDaily () {
+        $date = $this->validateStringVal("date", "");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->planningDivisionSms($date);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());

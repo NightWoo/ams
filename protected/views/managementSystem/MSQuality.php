@@ -51,6 +51,7 @@
                   </div>
                 </div>
               </li>
+
               <li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=controllLoop" class="thumbnail">
@@ -63,6 +64,42 @@
                     </div>
                     <div class="description">
                       <p>认识质量控制环</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="span3">
+                <div class="">
+                  <a href="/bms/ManagementSystem/quality?view=ControlLoop-1" class="thumbnail">
+                    <img src="/bms/doc/browse/managementSystem/quality/AMS-Q-P3.1_ControlLoop-1/thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/AMS-Q-P3.1_ControlLoop-1.pptx">下载</a>
+                    <h4>质量控制环-1</h4>
+                    </div>
+                    <div class="description">
+                      <p>质量控制环1（CL1）定义了生产线建立并保证达到产品质量标准的流程和方法。CL1通过引导/监控每一个员工和生产管理人员的职责和行为，以确保他们按照工艺文件（SOP）和质量标准文件执行。
+</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="span3">
+                <div class="">
+                  <a href="/bms/ManagementSystem/quality?view=ControlLoop-2" class="thumbnail">
+                    <img src="/bms/doc/browse/managementSystem/quality/AMS-Q-P3.2_ControlLoop-2/thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/AMS-Q-P3.2_ControlLoop-2.pptx">下载</a>
+                    <h4>质量控制环-2</h4>
+                    </div>
+                    <div class="description">
+                      <p>质量控制环2（CL2）定义了检查/评估零部件和装配质量特性的方法，通过在生产线末端设置质量关卡进行区域检验，以及在生产线中设置工段检验以检查那些在后工段被覆盖而无法检查的零部件和操作内容。
+</p>
                     </div>
                   </div>
                 </div>

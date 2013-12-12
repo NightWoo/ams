@@ -3,12 +3,6 @@ Yii::import('application.models.AR.WarehouseCountDailyAR');
 Yii::import('application.models.OrderSeeker');
 class WarehouseCountCommand extends CConsoleCommand
 {	
-	// private static $SERIES = array(
-	// 	'F0' => 'F0',
-	// 	'M6' => 'M6',
-	// 	'6B' => '思锐',
-	// );
-
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
@@ -24,6 +18,9 @@ class WarehouseCountCommand extends CConsoleCommand
 		$etime = $curDate . " 08:00:00";
 		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
+			$assembly = $this->countAssembly($stime, $etime, $series);
+			$this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
+
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
 			$this->throwTextData('入库',$checkin,$seriesName,$countDate,$log);
@@ -71,6 +68,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
+			$assembly = $this->countAssembly($stime, $etime, $series);
+			$this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
+
 			$checkin = $this->countCheckin($stime, $etime, $series);
 			$this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
 			$this->throwTextData('入库',$checkin,$seriesName,$countDate,$log);
@@ -108,6 +108,18 @@ class WarehouseCountCommand extends CConsoleCommand
 		return $count;
 	}
 
+	private function countAssembly($stime,$etime,$series) {
+		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND assembly_time>='$stime' AND assembly_time<'$etime'";
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
+	}
+
+	private function countFinish($stime,$etime,$series) {
+		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND finish_time>='$stime' AND finish_time<'$etime'";
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
+	}
+
 	private function countCheckin($stime,$etime,$series) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND warehouse_time>='$stime' AND warehouse_time<'$etime'";
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
@@ -133,7 +145,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	}
 
 	private function countUndistributed($etime) {
-		$seriesArray = array('F0', 'M6', '6B');
+		$seriesArray = array('F0', 'M6', '6B', 'G6');
 
 		$stime = "2013-06-04 08:00:00";
 		//初始时间2013-06-04 08:00前的未发值
@@ -141,6 +153,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	    	'F0' => 2829,
 	    	'M6' => 603,
 	    	'6B' => 382,
+	    	'G6' => 0,
 	    );
 
 		////初始时间2013-06-04 08:00时的最大DATAK40_DGMXID为1746208

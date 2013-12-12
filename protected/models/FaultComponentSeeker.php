@@ -26,7 +26,7 @@ class FaultComponentSeeker
 		
 		//falut mode
 		if(!empty($component)) {
-			$sql = "SELECT id,level,mode FROM fault_standard WHERE component_id={$component['component_id']}";
+			$sql = "SELECT id,level,mode FROM fault_standard WHERE component_id={$component['component_id']} AND isenabled=1";
 			$component['fault_mode'] = Yii::app()->db->createCommand($sql)->queryAll();
 		}
 		return $component;

@@ -1275,6 +1275,19 @@ class ReportSeeker
 		return $count;
 	}
 
+	public function planningDivisionSms ($date) {
+		$seriesList = Series::getNamelist();
+		$sql = "SELECT series, count, count_type, log FROM warehouse_count_daily WHERE count_date='$date'";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		$nextDay = date("Y-m-d" ,strtotime("+1 day", strtotime($date)));
+		$log = array("0800","1730");
+		// $ret = array("moring"=>array(),"afternoon"=>array());
+		foreach($datas as $data) {
+			$ret[$log[$data['log']]][$seriesList[$data['series']]][$data['count_type']] = $data['count'];
+		}
+		return $ret;
+	}
+
 	public function countCarGroupByPdType ($stime,$etime,$point="assembly",$line="") {
 		$point .= "_time";
 		$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE $point>='$stime' AND $point<'$etime'";
