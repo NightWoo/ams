@@ -57,9 +57,9 @@ return array(
 		),
 		'dbDms'=>array(
 			'class' => 'CDbConnection',
-			'connectionString' => 'oci:dbname=10.9.37.77:1521/BYDDMS',
+			// 'connectionString' => 'oci:dbname=10.9.37.77:1521/BYDDMS',
 			// 'connectionString' => 'oci:dbname=//10.9.37.77:1521/BYDDMS',
-		    // 'connectionString'=>'oci:dbname=//10.9.37.77:1521/orcl;charset=UTF-8'
+		    'connectionString'=>'oci:dbname=//10.9.37.77:1521/BYDDMS;charset=AL32UTF8',
 			'emulatePrepare' => true,
 			'username' => 'POBC',
 			'password' => '1234@byd',
