@@ -147,20 +147,13 @@
                                 </div>
                               </div>
                             </li>
-                            <!-- <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
+                            <li class="span2">
+                              <div id="configPaperMaintain" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5></h5>
+                                    <h5>配置跟单</h5>
                                 </div>
                               </div>
                             </li>
-                            <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5></h5>
-                                </div>
-                              </div>
-                            </li> -->
                         </ul>
                     </div>
                 </div>

@@ -163,7 +163,16 @@ $(".btnDelect").live("click",function () {
 		$("#headPlanLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
 		getSeries();
+		hideMaintain();
 	}
+
+	// function hideMaintain () {
+	// 	if(maintainPermit()) {
+	// 		$(".maintian").show();
+	// 	} else {
+	// 		$(".maintian").hide();
+	// 	}
+	// }
 
 	function resetConfigItem () {
 		$(".config-item button").removeClass().addClass("btn btn-primary");
@@ -171,6 +180,7 @@ $(".btnDelect").live("click",function () {
 		$(".config-item .btnDelect").hide();
 		$(".config-item .viewImage").hide();
 		$(".config-item .notyet").show();
+		hideMaintain();
 		// $('.uploadify').uploadify('disable', false);
 	}
 
@@ -180,7 +190,7 @@ $(".btnDelect").live("click",function () {
 			dataType: "json",
 			data: {},
 			async: false,
-			error: function () {common.alertError();},
+			error: function () {alertError();},
 			success: function (response) {
 				if(response.success){
 					options = $.templates("#tmplSeriesSelect").render(response.data);
@@ -190,6 +200,33 @@ $(".btnDelect").live("click",function () {
 				}
 			}
 		})
+	}
+
+	function hideMaintain () {
+		var permit = false;
+		$.ajax({
+			url: CHECK_PRIVILAGE,
+			dataType: "json",
+			data: {
+				"privilagePoint" : "DATA_MAINTAIN_ASSEMBLY"
+			},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					permit = response.data;
+					if(permit) {
+						console.log(permit);
+						$(".maintain").show();
+					} else {
+						$(".maintain").hide();
+					}
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return permit;
 	}
 
 	var ajaxSender = {
@@ -301,6 +338,8 @@ $(".btnDelect").live("click",function () {
 							$(".config-item .notyet").eq(index).hide();
 							// $('.uploadify').eq(index).uploadify('disable', true);
 						}
+
+						hideMaintain();
 					}else{
 						alert(response.message);
 					}
@@ -321,6 +360,7 @@ $(".btnDelect").live("click",function () {
 						$(".config-item .btnDelect").eq(index).hide();
 						$(".config-item .viewImage").eq(index).hide();
 						$(".config-item .notyet").eq(index).show();
+						hideMaintain();
 					}
 					else{
 

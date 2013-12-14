@@ -25,6 +25,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 		.uploadify{display: inline-block;}
 		.config-item label{width: 90px;text-align: right;}
 		.config-item{margin-bottom: 10px;}
+		#configContainer .maintain{display: none;}
 	</style>
 </head>
 <body>
@@ -40,9 +41,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
             <div>
             	<legend>生产配置跟单维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
+            			<a href="/bms/execution/configMaintain"><i class="fa fa-link"></i>&nbsp;生产配置</a>
             			/
-            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细 </a>
+            			<a href="/bms/execution/configList"><i class="fa fa-link"></i>&nbsp;配置明细 </a>
             		</span>
             	</legend>
             </div>
@@ -80,7 +81,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 							</td>
 							<td> 
 								<!-- <input type="button" class="btn btn-primary" id="" value="全部上传"></input> -->
-								<button type="button" class="btn btn-primary" id="queryRefresh" value=""><i class="icon-refresh"></i>&nbsp;刷新</button>
+								<button type="button" class="btn btn-primary" id="queryRefresh" value=""><i class="fa fa-refresh"></i>&nbsp;刷新</button>
 								 
 							</td>
 						</tr>
@@ -92,10 +93,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="frontForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							主 1/4
-							<input type="file" name="front" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="front" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form>
 					</div>
@@ -103,10 +104,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="backForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							主 2/4 
-							<input type="file" name="back" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="back" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
 					</div>
@@ -114,10 +115,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="front2Form" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							主 3/4
-							<input type="file" name="front2" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="front2" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form>
 					</div>
@@ -125,10 +126,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="back2Form" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							主 4/4
-							<input type="file" name="back2" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="back2" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
 					</div>
@@ -137,10 +138,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="subInstrumentForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							仪表台
-							<input type="file" name="subInstrument" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="subInstrument" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
 					</div>
@@ -148,10 +149,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.25);}
 					<div class="config-item">
 						<form name="front" id="subEngineForm" method="post" enctype="multipart/form-data" action="/bms/config/upload"> 
 							发动机
-							<input type="file" name="subEngine" />
-							<input type="submit" value="上传" class="btn btn-primary"/>
-							<span class="help-inline btnDelect" id="del"><a class="text-error"><i class="icon-trash"></i>删除</a></span>
-							<span class="help-inline viewImage"><a class="text-success"><i class="icon-eye-open"></i>预览</a></span>
+							<input class="maintain" type="file" name="subEngine" />
+							<input type="submit" value="上传" class="btn btn-primary maintain"/>
+							<span class="help-inline btnDelect maintain"><a class="text-error"><i class="fa fa-trash-o"></i>删除</a></span>
+							<span class="help-inline viewImage"><a class="text-success"><i class="fa fa-eye"></i>预览</a></span>
 							<span class="help-inline notyet"><p class="text-muted">尚未上传配置单</p></span>
 						</form> 
 					</div>

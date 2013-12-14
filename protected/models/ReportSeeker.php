@@ -1281,7 +1281,7 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$nextDay = date("Y-m-d" ,strtotime("+1 day", strtotime($date)));
 		$log = array("0800","1730");
-		// $ret = array("moring"=>array(),"afternoon"=>array());
+		$ret = array();
 		foreach($datas as $data) {
 			$ret[$log[$data['log']]][$seriesList[$data['series']]][$data['count_type']] = $data['count'];
 		}

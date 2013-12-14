@@ -82,9 +82,9 @@ class UserController extends BmsBaseController
 				$mailer->sendMail('init password', $password, 'bmsadmin@163.com:admin,' . $user->email);
 				BmsLogger::info('init ' .$user->username .' password to ' . $password);
 			}
-			$this->renderJSONBms(true,'OK', $password);
+			$this->renderJsonBms(true,'OK', $password);
 		} catch(Exception $e) {
-			$this->renderJSONBms(true, $e->getMessage());
+			$this->renderJsonBms(true, $e->getMessage());
 		}
 	}
 
@@ -101,9 +101,9 @@ class UserController extends BmsBaseController
                 $mailer->sendMail('reset password', $newPassword, $user->email . ':' . $user->display_name);
                 BmsLogger::info('user ' .$user->username . ' reset password');
             }
-			$this->renderJSONBms(true,'OK');
+			$this->renderJsonBms(true,'OK');
         } catch(Exception $e) {
-            $this->renderJSONBms(false, $e->getMessage());
+            $this->renderJsonBms(false, $e->getMessage());
         }
     }
 
@@ -163,9 +163,9 @@ class UserController extends BmsBaseController
  			}
 			$user->save();
 			
-            $this->renderJSONBms(true, 'OK');
+            $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
-            $this->renderJSONBms(false, $e->getMessage());
+            $this->renderJsonBms(false, $e->getMessage());
         }
 	}
 
@@ -189,13 +189,21 @@ class UserController extends BmsBaseController
 				$user->disable();
             }
 
-			$this->renderJSONBms(true, 'OK');
+			$this->renderJsonBms(true, 'OK');
 
         } catch(Exception $e) {
-            $this->renderJSONBms(false, $e->getMessage());
+            $this->renderJsonBms(false, $e->getMessage());
         }
+	}
 
-
+	public function actionCheckPrivilage () {
+		$point = $this->validateStringVal("privilagePoint", "");
+		try {
+			$permit = Yii::app()->permitManager->checkPrivilage($point);
+			$this->renderJsonBms(true, 'OK', $permit);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
 	}
 
 	public function actionDebug() {

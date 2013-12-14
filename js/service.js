@@ -2,9 +2,10 @@
 var SERVER_ADDRESS = "";
 
 //common
-GET_SERIES_LIST = "/bms/common/getSeriesList";
-GET_SERIES_ARRAY = "/bms/common/getSeriesArray";
-GET_LINE_LIST = "/bms/common/getLineList";
+var GET_SERIES_LIST = "/bms/common/getSeriesList";
+var GET_SERIES_ARRAY = "/bms/common/getSeriesArray";
+var GET_LINE_LIST = "/bms/common/getLineList";
+var CHECK_PRIVILAGE ="/bms/user/checkPrivilage";
 
 //获得车辆原始信息
 var GET_CAR = "/bms/car/getCar";

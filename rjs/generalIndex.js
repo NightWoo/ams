@@ -20,7 +20,8 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap"], functio
 		"faultMaintain": "/bms/generalInformation/faultMaintain",
 		"providerMaintain": "/bms/generalInformation/providerMaintain",
 		"distributorMaintain": "/bms/generalInformation/distributorMaintain",
-		"configMaintain": "/bms/execution/configMaintain"
+		"configMaintain": "/bms/execution/configMaintain",
+		"configPaperMaintain": "/bms/execution/ConfigPaper"
 	}
 
 	$(".thumbnail").click(function () {

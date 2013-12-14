@@ -50,6 +50,11 @@ class ExecutionController extends BmsBaseController
         'T11_2' => array('DATA_INPUT_T11_F10_2'),'T21_2' => array('DATA_INPUT_T11_F10_2'),'T32_2' => array('DATA_INPUT_T11_F10_2'),'C10_2' => array('DATA_INPUT_T11_F10_2'),'C21_2' => array('DATA_INPUT_T11_F10_2'),'F10_2' => array('DATA_INPUT_T11_F10_2'),
         'CHECK_IN' => array('DATA_INPUT_WAREHOUSE'),'OutStandby'=>array('DATA_INPUT_WAREHOUSE'), 'CHECK_OUT' => array('DATA_INPUT_WAREHOUSE'),
     );
+
+    public static $CONFIG_PAPER_PRIVILAGE = array(
+        "CONFIG_PAPAER_MAINTAIN",
+        "CONFIG_PAPAER_PREVIEW"
+    );
 	/**
 	 * Declares class-based actions.
 	 */
@@ -1163,7 +1168,7 @@ class ExecutionController extends BmsBaseController
 	//added by wujun
 	public function actionConfigPaper() {
         try{
-            Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
+            Yii::app()->permitManager->check(self::$CONFIG_PAPER_PRIVILAGE);
             $this->render('assembly/other/ConfigPaper');	
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')

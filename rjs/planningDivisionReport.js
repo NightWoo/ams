@@ -114,17 +114,17 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
                             num = 0,
                             assemblyTotal = 0, 
                             warehouseTotal = 0,
-                            distributeTotal = 0,
-                            distributeMonthTotal = 0,
+                            distributedTotal = 0,
+                            distributedMonthTotal = 0,
                             warehouseMonthTotal = 0,
                             inventoryTotal = 0,
-                            unDistributeTotal = 0,
+                            unDistributedTotal = 0,
 
                             seriesArr = [];
-                            distributeMonthArr = [];
+                            distributedMonthArr = [];
                             warehouseMonthArr = [];
                             inventoryArr = [];
-                            unDistributeArr = [];
+                            unDistributedArr = [];
                         var tmp = $("<tbody />");
 
                         $.each(seriesNames, function (series, datas) {
@@ -132,58 +132,58 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
                             tr = $("<tr />");
                             assembly = parseInt(datas['上线']) || 0;
                             warehouse = parseInt(datas['入库']) || 0;
-                            distribute = parseInt(datas['出库']) || 0;
-                            distributeMonth = parseInt(datas['已发']) || 0;
+                            distributed = parseInt(datas['出库']) || 0;
+                            distributedMonth = parseInt(datas['已发']) || 0;
                             warehouseMonth = parseInt(datas['已入']) || 0;
                             inventory = parseInt(datas['库存']) || 0;
-                            unDistribute = parseInt(datas['未发']) || 0;
+                            unDistributed = parseInt(datas['未发']) || 0;
                             $("<td />").html(series).appendTo(tr);
                             $("<td />").html(assembly).appendTo(tr);
                             $("<td />").html(warehouse).appendTo(tr);
-                            $("<td />").html(distribute).appendTo(tr);
-                            $("<td />").html(distributeMonth).appendTo(tr);
+                            $("<td />").html(distributed).appendTo(tr);
+                            $("<td />").html(distributedMonth).appendTo(tr);
                             $("<td />").html(warehouseMonth).appendTo(tr);
                             $("<td />").html(inventory).appendTo(tr);
-                            $("<td />").html(unDistribute).appendTo(tr);
+                            $("<td />").html(unDistributed).appendTo(tr);
                             tr.appendTo(tmp);
                             num++;
                             
                             assemblyTotal += assembly;
                             warehouseTotal += warehouse;
-                            distributeTotal += distribute;
-                            distributeMonthTotal += distributeMonth;
-                            warehouseMonthTotal += distributeMonth;
+                            distributedTotal += distributed;
+                            distributedMonthTotal += distributedMonth;
+                            warehouseMonthTotal += warehouseMonth;
                             inventoryTotal += inventory;
-                            unDistributeTotal += unDistribute;
+                            unDistributedTotal += unDistributed;
 
-                            textSeries += " 上" + assembly + " 入" + warehouse + " 发" + distribute;
+                            textSeries += " 上" + assembly + " 入" + warehouse + " 发" + distributed;
                             seriesArr.push(textSeries); 
 
-                            // textDistributeMonth = series + ":" + distributeMonth;
+                            // textDistributedMonth = series + ":" + distributedMonth;
                             // textWarehouseMonth = series + ":" + warehouseMonth;
                             // textInventory = series + ":" + inventory;
-                            // textUndistribute = series + ":" + unDistribute;
-                            distributeMonthArr.push(series + ":" + distributeMonth);
+                            // textUndistributed = series + ":" + unDistributed;
+                            distributedMonthArr.push(series + ":" + distributedMonth);
                             warehouseMonthArr.push(series + ":" + warehouseMonth);
                             inventoryArr.push(series + ":" + inventory);
-                            unDistributeArr.push(series + ":" + unDistribute);
+                            unDistributedArr.push(series + ":" + unDistributed);
                         })
                         firstTr = tmp.children("tr:eq(0)");
                         $("<td />").html(time).attr("rowspan", num).prependTo(firstTr);
                         $("#tableSms tbody").append(tmp.children("tr"));
 
                         seriesText = seriesArr.join("\n");
-                        seriesText += "\n合计 上" + assemblyTotal + " 入" + warehouseTotal + " 发" + distributeTotal;
+                        seriesText += "\n合计 上" + assemblyTotal + " 入" + warehouseTotal + " 发" + distributedTotal;
 
-                        distributeMonthText = "\n已发" + distributeMonthTotal + " " + distributeMonthArr.join(" ");
+                        distributedMonthText = "\n已发" + distributedMonthTotal + " " + distributedMonthArr.join(" ");
                         warehouseMonthText = "\n已入" + warehouseMonthTotal + " " + warehouseMonthArr.join(" ");
                         inventoryText = "\n库存" + inventoryTotal + " " + inventoryArr.join(" ");
-                        unDistributeText = "\n未发" + unDistributeTotal + " " + unDistributeArr.join(" ");
+                        unDistributedText = "\n未发" + unDistributedTotal + " " + unDistributedArr.join(" ");
 
                         textAll ="【长沙基地生产统计】" + $("#startTime").val() + " " + time + "\n"
                                 +seriesText
                                 + "\n" 
-                                + distributeMonthText + warehouseMonthText + inventoryText + unDistributeText;
+                                + distributedMonthText + warehouseMonthText + inventoryText + unDistributedText;
                         console.log(time);
                         console.log(textAll);
                         console.log($("#" + time));

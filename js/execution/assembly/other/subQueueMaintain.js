@@ -39,15 +39,15 @@ $(document).ready(function() {
 	// 	language: "zh-CN"
  //    });
 
-    $('.datetimepicker').datetimepicker({
-		timeFormat: "HH:mm:ss",
-		changeMonth: true,
-	    changeYear: true,
-	    showOtherMonths: true,
-	    selectOtherMonths: true,
-	    duration: "fast",
-	    buttonImageOnly: true,
-	});
+ //    $('.datetimepicker').datetimepicker({
+	// 	timeFormat: "HH:mm:ss",
+	// 	changeMonth: true,
+	//     changeYear: true,
+	//     showOtherMonths: true,
+	//     selectOtherMonths: true,
+	//     duration: "fast",
+	//     buttonImageOnly: true,
+	// });
 
 	function ajaxQuery() {
 		$.ajax({

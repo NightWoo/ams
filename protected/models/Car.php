@@ -808,7 +808,7 @@ class Car
 			switch($trace['node_id']) {
 				case 10:
 					foreach($vq1s as $vq1){
-						if(strtotime($vq1['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($temperature['trace_id'] == $trace['id'] || strtotime($vq1['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq1;
 						}
 					}
@@ -817,7 +817,7 @@ class Car
 					break;
 				case 15:
 					foreach($roads as $road){
-						if(strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($temperature['trace_id'] == $trace['id'] || strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $road;
 						}
 					}
@@ -829,21 +829,21 @@ class Car
 					break;
 				case 16:
 					foreach($leaks as $leak){
-						if(strtotime($leak['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($leak['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($temperature['trace_id'] == $trace['id'] || strtotime($leak['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($leak['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $leak;
 						}
 					}
                     break;
 				case 17:
 					foreach($vq3s as $vq3){
-						if(strtotime($vq3['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq3['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($temperature['trace_id'] == $trace['id'] || strtotime($vq3['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq3['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq3;
 						}
 					}
                     break;
                 case 209:
 					foreach($vq1_2s as $vq1_2){
-						if(strtotime($vq1_2['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1_2['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($temperature['trace_id'] == $trace['id'] || strtotime($vq1_2['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1_2['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq1_2;
 						}
 					}
