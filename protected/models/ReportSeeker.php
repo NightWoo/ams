@@ -127,6 +127,24 @@ class ReportSeeker
 		return $data;
 	}
 
+	public function queryCostSimple($date) {
+		list($stime, $etime) = $this->reviseTime($date, "daily");
+		$seriesArray = Series::parseSeriesName();
+		$carCountAll = 0;
+		$costTotal = 0;
+		$ret = array();
+		foreach($seriesArray as $series => $seriesName){
+			$carCount = $this->countCarByPointMixSeries($stime, $etime, $series, $point="assembly",$line="");
+			$carCountAll += $carCount;
+			$cost = $this->replacementCost($stime, $etime, $series);
+			$costTotal += $cost;
+			$ret[$series] = empty($carCount) ? "-" : round($cost / $carCount, 2);
+		}
+		$ret['Total'] = empty($carCountAll) ? '-' : round($costTotal / $carCountAll, 2);
+
+		return $ret;
+	}
+
 
 	public function queryManufactureDaily ($date) {
 		list($stime, $etime) = $this->reviseDailyTime($date);
@@ -932,6 +950,18 @@ class ReportSeeker
 		return $count;
 	}
 
+	public function countCarByPointMixSeries ($stime, $etime, $seriesText, $point="assembly",$line="") {
+		$point .= "_time";
+		$seriesArray = Series::parseSeries($seriesText);
+		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
+		$sql = "SELECT COUNT(id) as `count` FROM car WHERE $point>='$stime' AND $point<'$etime' AND $seriesCondition";
+		if(!empty($line)){
+			$sql .= " AND assembly_line='$line'";
+		}
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $count;
+	}
+
 	public function countCarByState ($state) {
 		if(!is_array($state)) {
 			if(!empty(self::$NODE_BALANCE_STATE[$state])) {
@@ -1192,6 +1222,138 @@ class ReportSeeker
 		}
 
 		return $datas;
+	}
+
+	public function queryReplacementCost ($date, $timespan, $seriesText="all") {
+		list($stime, $etime) = $this->reviseTime($date, $timespan);
+		$timeArray = $this->parseQueryTime($stime, $etime, $timespan);
+		$seriesArray = Series::parseSeriesName($seriesText);
+		$columnSeriesX = array();
+		$columnSeriesY = array();
+		$lineSeriesY = array();
+		foreach($seriesArray as $series => $seriesName){
+			$countTotal[$seriesName] = 0;
+			$columnSeriesY[$seriesName] = array();
+		}
+
+		foreach($timeArray as $queryTime){
+			$carCountAll = 0;
+			$costTotal = 0;
+			foreach($seriesArray as $series => $seriesName){
+				$carCount = $this->countCarByPointMixSeries($queryTime['stime'], $queryTime['etime'], $series, $point="assembly",$line="");
+				$carCountAll += $carCount;
+				$cost = $this->replacementCost($queryTime['stime'], $queryTime['etime'], $series);
+				$costTotal += $cost;
+				$columnSeriesY[$seriesName][] = empty($carCount) ? null : round($cost / $carCount, 2);
+			}
+			$lineSeriesY[] = empty($carCountAll) ? null : round($costTotal / $carCountAll, 2);
+			$columnSeriesX[] = $queryTime['point'];
+		}
+
+		$ret = array(
+			"carSeries" => array_values($seriesArray),
+			"series" => array(
+				'x' => $columnSeriesX,
+				'column' => $columnSeriesY,
+				'line' => $lineSeriesY,
+			),
+		);
+
+		return $ret;
+	}
+
+	public function queryCostDistribute ($date, $seriesText="all") {
+		list($stime, $etime) = $this->reviseTime($date, "monthly");
+		$seriesArray = Series::parseSeriesName($seriesText);
+		$column = array(
+			"columnSeriesX" => array(),
+			"columnSeriesY" => array(),
+		);
+		$donut = array();
+		$costDuty = $this->queryCostDuty($stime, $etime, $seriesText);
+		$tmp = array();
+		$carCount = $this->countCarByPointMixSeries($stime, $etime, $seriesText, $point="assembly",$line="");
+		foreach($costDuty as $one){
+			if(empty($tmp[$one['duty']])) {
+				$tmp[$one['duty']]['sum'] = 0;
+				foreach($seriesArray as $series => $seriesName){
+					$tmp[$one['duty']][$seriesName] = 0;
+				}
+			}
+			$tmp[$one['duty']][$seriesArray[$one['series']]] += $one['sum'];
+			$tmp[$one['duty']]['sum'] += $one['sum'];
+		}
+		$sortTmp = array();
+		foreach($tmp as $duty => $data) {
+			$arrayTmp = array("duty"=>$duty,"sum"=>$data['sum']);
+			foreach($seriesArray as $series => $seriesName){
+				$arrayTmp[$seriesName] = empty($carCount) ? null : round($data[$seriesName] / $carCount, 2);
+			}
+			$sortTmp[] = $arrayTmp;
+		}
+		$sortCostDuty = $this->multi_array_sort($sortTmp, "sum", SORT_DESC);
+		foreach($sortCostDuty as $duty) {
+			$column['columnSeriesX'][] = $duty['duty'];
+			foreach($seriesArray as $series=>$seriesName){
+				$column['columnSeriesY'][$seriesName][] = $duty[$seriesName];
+			}
+		}
+
+		$costArea = $this->queryCostArea($stime, $etime, $seriesText);
+		$total = 0;
+		foreach($costArea as $one){
+			$total += $one['cost'];
+		}
+		foreach($costArea as $one){
+			$donut[$one['duty_area']]['y'] = empty($total) ? null : $one['cost'] / $total;
+		}
+
+		$ret = array(
+			"carSeries" => array_values($seriesArray),
+			"columnData" => $column,
+			"donutData" => $donut,
+		);
+		return $ret;
+	}
+
+	public function queryCostDuty($stime, $etime, $seriesText="all") {
+		$seriesArray = Series::parseSeries($seriesText);
+		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
+		$sql = "SELECT SUM(unit_price*quantity) AS sum, duty_department_name as duty, series 
+				FROM view_spare_replacement 
+				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition 
+				GROUP BY duty , series
+				ORDER BY sum DESC";
+		$ret = Yii::app()->db->createCommand($sql)->queryAll();
+		// $carCount = $this->countCarByPointMixSeries($stime, $etime, $seriesText, $point="assembly",$line="");
+		// foreach($ret as &$one) {
+		// 	$one['cost'] = empty($carCount) ? null : round($one['sum']/$carCount, 2);
+		// }
+		return $ret;
+	}
+
+	public function queryCostArea($stime, $etime, $seriesText="all") {
+		$seriesArray = Series::parseSeries($seriesText);
+		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
+		$sql = "SELECT SUM(unit_price*quantity) AS sum, duty_area
+				FROM view_spare_replacement 
+				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition 
+				GROUP BY duty_area 
+				ORDER BY sum DESC";
+		$ret = Yii::app()->db->createCommand($sql)->queryAll();
+		$carCount = $this->countCarByPointMixSeries($stime, $etime, $seriesText, $point="assembly",$line="");
+		foreach($ret as &$one) {
+			$one['cost'] = empty($carCount) ? null : round($one['sum']/$carCount, 2);
+		}
+		return $ret;
+	}
+
+	public function replacementCost($stime, $etime, $seriesText="") {
+		$seriesArray = Series::parseSeries($seriesText);
+		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
+		$sql = "SELECT SUM(unit_price*quantity) FROM view_spare_replacement WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition";
+		$cost = Yii::app()->db->createCommand($sql)->queryScalar();
+		return $cost;
 	}
 
 	public function queryPlanningDivisionReportDaily ($date) {

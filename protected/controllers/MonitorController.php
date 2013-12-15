@@ -10,7 +10,7 @@ class MonitorController extends BmsBaseController
 		'F' => '最终',
 	);
 
-	private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
+	// private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐');
 
 	public function actionDebug() {
 		$dpu1 = "20.33%";
@@ -304,7 +304,8 @@ class MonitorController extends BmsBaseController
 		list($stime, $etime) = $this->getSETime();
 		$seeker = new SparesSeeker();
 		$data = array();
-		foreach(self::$SERIES_NAME as $series=>$seriesName) {
+		$seriesList = Series::getNameList();
+		foreach($seriesList as $series=>$seriesName) {
 			$unitCost = $seeker->queryUnitCost($stime, $etime, $series, 'I');
 			$data[$series] = sprintf("%.2f", $unitCost);
 		}

@@ -59,7 +59,7 @@
 </div>
 <div id="toggle-top" href="">
 	<div id="icon-top-container">
-		<i id="icon-top" class="icon-chevron-up"></i>
+		<i id="icon-top" class="fa fa-caret-up"></i>
 	</div>
 </div>
 </div>

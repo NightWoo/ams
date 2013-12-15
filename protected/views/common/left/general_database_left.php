@@ -4,7 +4,7 @@
 		<li class="nav-header">基础数据库</li>
 		<li id="leftComponentMaintainLi"><a href="/bms/generalInformation/componentMaintain">整车零部件清单</a></li>
 		<li id="leftProviderMaintainLi"><a href="/bms/generalInformation/providerMaintain">供应商名录</a></li>
-		<li id="leftDistributorMaintainLi"><a href="/bms/generalInformation/distributorMaintain">经销商名录</a></li>
+		<!-- <li id="leftDistributorMaintainLi"><a href="/bms/generalInformation/distributorMaintain">经销商名录</a></li> -->
 		<li id="leftFaultMaintainLi"><a href="/bms/generalInformation/faultMaintain">故障标准库</a></li>
 		<li id="leftConfigMaintainLi"><a href="/bms/execution/configMaintain">配置维护</a></li>
 		<!-- <li><a href="#">故障标准化手册</a></li> -->
@@ -17,6 +17,6 @@
 <div id="toggle-left" href="">
 	<div id="leftHandle">
 	</div>
-	<i id="icon-left" class="icon-caret-right icon-large"></i>	
+	<i id="icon-left" class="fa fa-caret-right fa-lg"></i>	
 </div>
 </div>

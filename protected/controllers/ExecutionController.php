@@ -1388,6 +1388,16 @@ class ExecutionController extends BmsBaseController
         }
     }
 
+    public function actionWarehouseCountRevise () {
+        try{
+            Yii::app()->permitManager->check('WAREHOUSE_COUNT_REVISE');
+            $this->render('assembly/other/WarehouseCountRevise');  
+        } catch(Exception $e) {
+            if($e->getMessage() == 'permission denied')
+                $this->render('../site/permissionDenied');
+        }
+    }
+
     //added by wujun
     public function actionWelcomeShop() {
         $this->render('assembly/monitoring/workshopWelcome');

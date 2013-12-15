@@ -28,9 +28,9 @@
             <div>
             	<legend>生产配置明细维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
+            			<a href="/bms/execution/configMaintain"><i class="fa fa-link"></i>&nbsp;生产配置</a>
             			/
-            			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
+            			<a href="/bms/execution/configPaper"><i class="fa fa-link"></i>&nbsp;配置跟单</a>
             		</span>
             	</legend>
             </div>

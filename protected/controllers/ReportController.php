@@ -36,9 +36,11 @@ class ReportController extends BmsBaseController
             $seeker = new ReportSeeker();
             $manufactureDaily = $seeker->queryManufactureSimple($date);
             $qualificationDaily = $seeker->queryQualificationSimple($date);
+            $costDaily = $seeker->queryCostSimple($date);
 
             $data['manufactureDaily'] = $manufactureDaily;
             $data['qualificationDaily'] = $qualificationDaily;
+            $data['costDaily'] = $costDaily;
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -213,6 +215,32 @@ class ReportController extends BmsBaseController
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
+
+    public function actionQueryReplacementCost() {
+        $date = $this->validateStringVal("date", "");
+        $timespan = $this->validateStringVal("timespan", "monthly");
+        $series = $this->validateStringVal("series", "all");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryReplacementCost($date, $timespan, $series);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryCostDistribute() {
+        $date = $this->validateStringVal("date", "");
+        $series = $this->validateStringVal("series", "all");
+        try{
+            $seeker = new ReportSeeker();
+            $data = $seeker->queryCostDistribute($date, $series);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
 
     public function actionQueryPlanningDivisionDaily () {
         $date = $this->validateStringVal("date", "");

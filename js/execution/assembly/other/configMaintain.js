@@ -2,7 +2,7 @@ $(document).ready(function() {
 	initPage();
 	
 	function initPage() {
-		$("#headPlanLi").addClass("active");
+		$("#headGeneralInformationLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
 		getSeries();
 		$("#btnAdd, #btnQuery").attr("disabled", "disabled");

@@ -29,9 +29,9 @@
             <div>
             	<legend>订单配置维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
+            			<a href="/bms/execution/configMaintain"><i class="fa fa-link"></i>&nbsp;生产配置</a>
             			/
-            			<a href="/bms/execution/accessoryListMaintain"><i class="icon-link"></i>&nbsp;随车附件</a>
+            			<a href="/bms/execution/accessoryListMaintain"><i class="fa fa-link"></i>&nbsp;随车附件</a>
             		</span>
             	</legend>
             </div>

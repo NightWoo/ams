@@ -1,6 +1,7 @@
 require.config({
 	"paths" : {
-		"jquery": "lib/jquery-2.0.3.min",
+		// "jquery": "lib/jquery-2.0.3.min",
+		"jquery": "lib/jquery-1.8.0.min",
 		"bootstrap": "lib/bootstrap.min",
 		"jsrender": "lib/jsrender.min",
 		"jquery-ui": "lib/jquery-ui-1.10.3.custom.min",
@@ -63,7 +64,6 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 		options = common.getDutyOptions("SparesStore", true);
 		$("#dutyDepartment").append(options);
 
-		console.log(common.getSeriesArray());
 
 		common.fillSeriesCheckbox();
 		common.fillLineSelect();
@@ -225,7 +225,6 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
                 // valueSuffix: ' min'
                 useHTML: true,
                 formatter: function() {
-                	console.log(this);
                 	var s = this.points[0].key +'<table>';
                 	var ss = '';
                 	total = 0;
@@ -429,7 +428,6 @@ require(["head","service","common","dateTimeUtil","highcharts","jquery","bootstr
 			tooltip: {
 				formatter: function() {
                     var s;
-                    console.log(this.series.name);
                     if (this.point.name) { // the pie chart
                         s = ''+
                             this.point.name +': '+ (this.y * 100).toFixed(1) + '%';

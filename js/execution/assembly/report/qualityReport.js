@@ -26,9 +26,6 @@ $(document).ready(function () {
     	window.print();
     })
 
-    $(":radio[name=seriesRadios]").click(function(){
-    	series = $(":radio[name=seriesRadios]:checked").val();
-    });
 //END event bindings -------------------------
 
 

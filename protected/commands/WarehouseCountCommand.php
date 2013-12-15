@@ -127,7 +127,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	private function countCheckout($stime,$etime,$series,$noExport=false) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND distribute_time>='$stime' AND distribute_time<'$etime'";
 		if($noExport){
-			$sql .= " AND special_property=0";
+			$sql .= " AND special_property!=1";
 		}
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;

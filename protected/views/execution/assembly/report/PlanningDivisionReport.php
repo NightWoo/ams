@@ -21,12 +21,9 @@
 		                    <button type="button" class="btn help-inline" id="btnQuery"><i class="fa fa-search"></i></button>
 	                	</div>
                     </span>
-                    <!-- <span class="pull-right printable">
-                        <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
-                    </span> -->
-                    <!-- <span class="pull-right">
-                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="fa fa-link"></i>&nbsp;质量报表</a>
-                    </span> -->
+                    <span class="pull-right">
+                        <a class="notPrintable" href="/bms/execution/warehouseCountRevise"><i class="fa fa-link"></i>&nbsp;未发值修正</a>
+                    </span>
                 </legend>
                 <div>
 					<ul id="tabs" class="nav nav-pills">

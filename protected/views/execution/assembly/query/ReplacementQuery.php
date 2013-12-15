@@ -80,7 +80,7 @@
                 <div>
                     <ul id="tabs" class="nav nav-pills">
                         <li><a href="#tabDetail" data-toggle="tab">明细报表</a></li>
-                        <li><a href="#tabCostTrend" data-toggle="tab">成本趋势</a></li>
+                        <li><a href="#tabCostTrend" data-toggle="tab">CPU趋势</a></li>
                         <li><a href="#tabCostDuty" data-toggle="tab">换件责任</a></li>
                         <div id="paginationDetail" class="pagination pagination-small pagination-right" style="display: none;">
                             <ul>

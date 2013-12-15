@@ -20,15 +20,15 @@ define(function() {
 		$("#toggle-top").on("click", function() {
 			if($("#bmsHead").css("display") == "none"){
 				$(".offhead").animate({"margin-top":"55px"});
-				$("#icon-top").removeClass("icon-chevron-down");
-				$("#icon-top").addClass("icon-chevron-up");
+				$("#icon-top").removeClass("fa fa-caret-down");
+				$("#icon-top").addClass("fa fa-caret-up");
 				$("#toggle-top").animate({"top":"41px"});
 				$("#bmsHead").slideDown();
-			} else if($("#bmsHead").css("display") == "block"){
-			$("#bmsHead").slideUp();
+			} else if($("#bmsHead").css("display") == "block") {
+				$("#bmsHead").slideUp();
 				$("#toggle-top").animate({"top":"0"});
-				$("#icon-top").removeClass("icon-chevron-up");
-				$("#icon-top").addClass("icon-chevron-down");
+				$("#icon-top").removeClass("fa fa-caret-up");
+				$("#icon-top").addClass("fa fa-caret-down");
 				$(".offhead").animate({"margin-top":"20px"});
 			}
 		})

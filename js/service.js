@@ -7,6 +7,10 @@ var GET_SERIES_ARRAY = "/bms/common/getSeriesArray";
 var GET_LINE_LIST = "/bms/common/getLineList";
 var CHECK_PRIVILAGE ="/bms/user/checkPrivilage";
 
+//database maintain
+var WAREHOUSE_COUNT_REVISE_QUERY = "/bms/dataBase/queryWarehouseCountRevise";
+var WAREHOUSE_COUNT_REVISE_SAVE = "/bms/dataBase/saveWarehouseCountRevise";
+
 //获得车辆原始信息
 var GET_CAR = "/bms/car/getCar";
 
@@ -362,6 +366,8 @@ var QUERY_WAREHOUSE_CHART = "/bms/report/queryWarehouseChart";
 var QUERY_OVERTIME_ORDERS = "/bms/report/queryOvertimeOrders";
 var QUERY_QUALIFICATION_REPORT = "/bms/report/queryQualification";
 var QUERY_FAULT_DISTRIBUTE_REPORT = "/bms/report/queryFaultDistribute";
+var QUERY_REPLACEMENT_COST_REPORT = "/bms/report/queryReplacementCost";
+var QUERY_COST_DISTRIBUTE_REPORT = "/bms/report/queryCostDistribute";
 
 // ---- SOBIN 2013/7/19
 var QUERY_TOOLS_HOME_MAKER = "/bms/toolsManagement/searchMaker";

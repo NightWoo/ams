@@ -101,6 +101,7 @@
                           <li id="costF0"></li>
                           <li id="costM6"></li>
                           <li id="cost6B"></li>
+                          <li id="costG6"></li>
                         </ul>
                     </div>
                   </div>

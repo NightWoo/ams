@@ -15,13 +15,15 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap"], functio
 	tumbnailUrl = {
 		"manufactureReport": "/bms/execution/report?type=ManufactureReport",
 		"qualityReport": "/bms/execution/report?type=QualityReport",
+		"costReport": "/bms/execution/report?type=CostReport",
 		"planningDivisionReport": "/bms/execution/report?type=PlanningDivisionReport",
 		"componentMaintain": "/bms/generalInformation/componentMaintain",
 		"faultMaintain": "/bms/generalInformation/faultMaintain",
 		"providerMaintain": "/bms/generalInformation/providerMaintain",
 		"distributorMaintain": "/bms/generalInformation/distributorMaintain",
 		"configMaintain": "/bms/execution/configMaintain",
-		"configPaperMaintain": "/bms/execution/ConfigPaper"
+		"configPaperMaintain": "/bms/execution/configPaper",
+		"warehouseCountRevise": "/bms/execution/warehouseCountRevise"
 	}
 
 	$(".thumbnail").click(function () {
@@ -46,14 +48,18 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap"], functio
 				if(response.success) {
 					$.each(response.data.manufactureDaily, function (key, value) {
 						$("#" + key).html(value);
-					})
+					});
 
 					$.each(response.data.qualificationDaily, function (key, value) {
 						$("." + key).filter(".total").html((value.total*100).toFixed(0) + "%");
 						$.each(value.sub, function (series, subValue) {
 							$("." + key).filter(".sub").filter("." + series).html((subValue*100).toFixed(0) + "%");
-						})
-					})
+						});
+					});
+
+					$.each(response.data.costDaily, function (key, value) {
+						$("#cost" + key).html(value);
+					});
 				}
 			}
 		})

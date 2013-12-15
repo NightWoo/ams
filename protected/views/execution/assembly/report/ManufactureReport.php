@@ -62,8 +62,10 @@
                     <span class="pull-right printable">
                         <div class="logo"><img src="/bms/img/byd-auto.jpg" alt="" ></div>
                     </span>
-                    <span class="pull-right">
-                        <a class="notPrintable" href="/bms/execution/report?type=QualityReport"><i class="fa fa-link"></i>&nbsp;质量报表</a>
+                    <span class="pull-right notPrintable">
+                        <a href="/bms/execution/report?type=QualityReport"><i class="fa fa-link"></i>&nbsp;质量报表</a>
+                        /   
+                        <a href="/bms/execution/report?type=CostReport"><i class="fa fa-link"></i>&nbsp;成本报表</a>
                     </span>
                 </legend>
             </div >

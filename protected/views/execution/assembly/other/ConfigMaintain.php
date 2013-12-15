@@ -29,13 +29,13 @@
             <div>
             	<legend>生产配置维护
             		<span class="pull-right">
-            			<a href="/bms/execution/configPaper"><i class="icon-link"></i>&nbsp;配置跟单</a>
+            			<a href="/bms/execution/configPaper"><i class="fa fa-link"></i>&nbsp;配置跟单</a>
             			/
-            			<a href="/bms/execution/configList"><i class="icon-link"></i>&nbsp;配置明细</a>
+            			<a href="/bms/execution/configList"><i class="fa fa-link"></i>&nbsp;配置明细</a>
             			/
-            			<a href="/bms/execution/orderConfigMaintain"><i class="icon-link"></i>&nbsp;订单配置</a>
+            			<a href="/bms/execution/orderConfigMaintain"><i class="fa fa-link"></i>&nbsp;订单配置</a>
             			/
-            			<a href="/bms/execution/accessoryListMaintain"><i class="icon-link"></i>&nbsp;随车附件</a>
+            			<a href="/bms/execution/accessoryListMaintain"><i class="fa fa-link"></i>&nbsp;随车附件</a>
             		</span>
             	</legend>
             </div>

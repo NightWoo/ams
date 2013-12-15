@@ -43,13 +43,26 @@
                             <li class="span4">
                               <div id="qualityReport" class="thumbnail" style="height:160px">
                                 <div>
-                                    <h5>质量报表(F0/M6/思锐)</h5>
+                                    <h5>质量报表(F0/M6/思锐/G6)</h5>
                                     <ul>
-                                        <li>VQ1: <span class='VQ1 total'></span>[<span class="VQ1 sub F0"></span> / <span class="VQ1 sub M6"></span> / <span class="VQ1 sub 6B"></span>]</li>
-                                        <li>VQ1-II线: <span class='VQ1_2 total'></span></li>
-                                        <li>VQ2-路试: <span class='VQ2_ROAD_TEST total'></span>[<span class="VQ2_ROAD_TEST sub F0"></span> / <span class="VQ2_ROAD_TEST sub M6"></span> / <span class="VQ2_ROAD_TEST sub 6B"></span>]</li>
-                                        <li>VQ2-淋雨: <span class='VQ2_LEAK_TEST total'></span>[<span class="VQ2_LEAK_TEST sub F0"></span> / <span class="VQ2_LEAK_TEST sub M6"></span> / <span class="VQ2_LEAK_TEST sub 6B"></span>]</li>
-                                        <li>VQ3: <span class='VQ3 total'></span>[<span class="VQ3 sub F0"></span> / <span class="VQ3 sub M6"></span> / <span class="VQ3 sub 6B"></span>]</li>
+                                        <li>VQ1: <span class='VQ1 total'></span>[<span class="VQ1 sub F0"></span> / <span class="VQ1 sub M6"></span> / <span class="VQ1 sub 6B"></span> / <span class="VQ1 sub G6"></span>]</li>
+                                        <!-- <li>VQ1-II线: <span class='VQ1_2 total'></span></li> -->
+                                        <li>VQ2-路试: <span class='VQ2_ROAD_TEST total'></span>[<span class="VQ2_ROAD_TEST sub F0"></span> / <span class="VQ2_ROAD_TEST sub M6"></span> / <span class="VQ2_ROAD_TEST sub 6B"></span> / <span class="VQ2_ROAD_TEST sub G6"></span>]</li>
+                                        <li>VQ2-淋雨: <span class='VQ2_LEAK_TEST total'></span>[<span class="VQ2_LEAK_TEST sub F0"></span> / <span class="VQ2_LEAK_TEST sub M6"></span> / <span class="VQ2_LEAK_TEST sub 6B"></span> / <span class="VQ2_LEAK_TEST sub G6"></span>]</li>
+                                        <li>VQ3: <span class='VQ3 total'></span>[<span class="VQ3 sub F0"></span> / <span class="VQ3 sub M6"></span> / <span class="VQ3 sub 6B"></span> / <span class="VQ3 sub G6"></span>]</li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span4">
+                              <div id="costReport" class="thumbnail" style="height:160px">
+                                <div>
+                                    <h5>成本报表[<span id="costTotal"></span>]</h5>
+                                    <ul>
+                                        <li>F0:<span id="costF0"></span></li>
+                                        <li>M6:<span id="costM6"></span></li>
+                                        <li>思锐:<span id="cost6B"></span></li>
+                                        <li>G6:<span id="costG6"></span></li>
                                     </ul>
                                 </div>
                               </div>
@@ -134,13 +147,6 @@
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="distributorMaintain" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5>经销商名录</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
                               <div id="configMaintain" class="thumbnail" style="height:120px">
                                 <div>
                                     <h5>配置维护</h5>
@@ -151,6 +157,13 @@
                               <div id="configPaperMaintain" class="thumbnail" style="height:120px">
                                 <div>
                                     <h5>配置跟单</h5>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="span2">
+                              <div id="warehouseCountRevise" class="thumbnail" style="height:120px">
+                                <div>
+                                    <h5>未发值修正</h5>
                                 </div>
                               </div>
                             </li>

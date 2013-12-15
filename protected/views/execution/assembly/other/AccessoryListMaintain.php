@@ -28,9 +28,9 @@
             <div>
             	<legend>随车附件明细维护
             		<span class="pull-right">
-            			<a href="/bms/execution/orderConfigMaintain"><i class="icon-link"></i>&nbsp;订单配置</a>
+            			<a href="/bms/execution/orderConfigMaintain"><i class="fa fa-link"></i>&nbsp;订单配置</a>
             			/
-            			<a href="/bms/execution/configMaintain"><i class="icon-link"></i>&nbsp;生产配置</a>
+            			<a href="/bms/execution/configMaintain"><i class="fa fa-link"></i>&nbsp;生产配置</a>
             		</span>
             	</legend>
             </div>

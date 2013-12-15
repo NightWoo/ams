@@ -94,6 +94,7 @@ require(["service","common","jquery","bootstrap"], function(service,common,$) {
 					$("#costF0").html("F0：" + response.data['F0']);
 					$("#costM6").html("M6：" + response.data['M6']);
 					$("#cost6B").html("思锐：" + response.data['6B']);
+					$("#costG6").html("G6：" + response.data['G6']);
 				} else {
 					alert(response.message);
 				}

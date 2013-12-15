@@ -134,7 +134,7 @@ class SparesSeeker
 			$cars = Yii::app()->db->createCommand($carSql)->queryScalar();
 			$totalCarsTotal += $cars;
 
-			$retTotal[$seriesList[$series]] = sprintf("%.2f", round($sumTotal/$cars, 2));
+			$retTotal[$seriesList[$series]] = empty($cars) ? "0.00" : sprintf("%.2f", round($sumTotal/$cars, 2));
 			$carSeries[] = $seriesList[$series];
 		}
 		$retTotal['total'] = empty($totalCarsTotal) ? "0.00" : sprintf("%.2f", round($totalSumTotal/$totalCarsTotal, 2));

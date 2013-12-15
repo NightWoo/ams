@@ -16,6 +16,6 @@
 <div id="toggle-left" href="">
 	<div id="leftHandle">
 	</div>
-	<i id="icon-left" class="icon-caret-right icon-large"></i>
+	<i id="icon-left" class="fa fa-caret-right fa-lg"></i>
 </div>
 </div>

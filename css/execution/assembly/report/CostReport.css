@@ -1,0 +1,70 @@
+.screenHide {
+	display: none;
+}
+
+#startTime {
+	height: 15px;
+    margin: 0 10px 5px 10px
+}
+
+#btnGroupPrint {
+	margin-bottom: 5.5px;
+}
+
+#tabUl{
+	margin-bottom: 5px;
+}
+
+legend {
+	margin-bottom: 5px;
+}
+
+.tab-pane{
+	min-height: 400px;
+}
+
+.replacementCostChart, .dutyChart, .dutyAreaChart{
+	height: 300px;
+}
+
+.divLoading {
+	height: 200px;
+	margin: 100px auto 0;
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+.alignCenterDaily {
+	width: 120px;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#tablePause .alignRight{
+	text-align: right;
+	padding-right: 15px;
+}
+
+.thickBorder td{
+	border-top-width: 3px;
+}
+.rowSpanTd{
+	background-color: white; 
+}
+
+.alignCenter{
+	text-align: center;
+}
+
+.radio.inline{
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+
+.row-2 {
+	margin-top: 10px;
+}

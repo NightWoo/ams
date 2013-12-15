@@ -160,7 +160,7 @@ $(".btnDelect").live("click",function () {
 	})
 
 	function initPage() {
-		$("#headPlanLi").addClass("active");
+		$("#headGeneralInformationLi").addClass("active");
 		$("#leftConfigMaintainLi").addClass("active");
 		getSeries();
 		hideMaintain();
