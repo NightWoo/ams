@@ -25,5 +25,7 @@ define({
 	"QUERY_PLANNING_DIVISION_DAILY": "/bms/report/queryPlanningDivisionDaily",
 	"QUERY_PLANNING_DIVISION_SMS_DAILY": "/bms/report/queryPlanningDivisionSmsDaily",
 	"SEARCH_PART": "/bms/fault/search",
-	"VQ1_VIEW_MODES": "/bms/fault/view"
+	"VQ1_VIEW_MODES": "/bms/fault/view",
+	"123": "123",
+	"456": "4556"
 });

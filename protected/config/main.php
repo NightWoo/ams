@@ -55,11 +55,11 @@ return array(
 			'password' => '123',
 			'charset' => 'utf8',
 		),
-		'dbDms'=>array(
+		'dbCRM'=>array(
 			'class' => 'CDbConnection',
 			// 'connectionString' => 'oci:dbname=10.9.37.77:1521/BYDDMS',
 			// 'connectionString' => 'oci:dbname=//10.9.37.77:1521/BYDDMS',
-		    'connectionString'=>'oci:dbname=//10.9.37.77:1521/BYDDMS;charset=AL32UTF8',
+		    'connectionString'=>'oci:dbname=//10.9.37.77:1521/BYDCRM;charset=AL32UTF8',
 			'emulatePrepare' => true,
 			'username' => 'POBC',
 			'password' => '1234@byd',

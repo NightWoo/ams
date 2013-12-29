@@ -31,6 +31,9 @@
             margin-top: 5px;
             margin-bottom: 0;
         }
+        #tableList, #tableDoneList {
+            font-size: 12px;
+        }
     </style>
     <style type="text/css" media="print">
         td,th{border:none;}

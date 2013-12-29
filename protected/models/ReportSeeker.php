@@ -297,6 +297,13 @@ class ReportSeeker
 
 	public function queryPlanCompletion ($sDate, $eDate, $line="") {
 		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		if(strtotime($eDate) - strtotime($sDate) <= 24*3600) {
+			$batchNumber = substr($this->generateBatchNumber($sDate), 0, 5);
+			$sql .= " AND LEFT(batch_number,5)='$batchNumber'";
+		} else {
+			$batchNumber = substr($this->generateBatchNumber($sDate),0 ,3);
+            $sql .= " AND LEFT(batch_number,3)='$batchNumber'";
+		}
 		if(!empty($line)) $sql .= " AND assembly_line='$line'";
 		$sql .= " GROUP BY series";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
@@ -319,6 +326,24 @@ class ReportSeeker
 		}
 
 		return $count;
+	}
+
+	public function generateBatchNumber($planDate) {
+		$date = strtotime($planDate);
+		$year = date("Y", $date);
+		$yearCode = CarYear::getYearCode($year);
+		$monthDay = date("md", $date);
+
+		$ret = $yearCode . $monthDay;
+
+		$sql = "SELECT batch_number FROM plan_assembly WHERE batch_number LIKE '$ret%' ORDER BY batch_number DESC";
+		$lastSerial = Yii::app()->db->createCommand($sql)->queryScalar();
+		$lastKey = intval(substr($lastSerial, 5 , 3));
+
+		$ret .= sprintf("%03d", (($lastKey + 1) % 1000));
+
+		return $ret;
+
 	}
 
 	public function queryPlanCompletionAllSeries ($sDate, $eDate, $line="") {

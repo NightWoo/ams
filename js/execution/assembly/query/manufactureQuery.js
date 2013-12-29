@@ -20,7 +20,7 @@ $(document).ready(function () {
 		resetAll();
 	}
 
-	$("#btnQuery").bind("click",toQuery);
+	// $("#btnQuery").bind("click",toQuery);
 	function toQuery() {
 		//clear last
 		$("#tableCars tbody").html("");
@@ -96,154 +96,124 @@ $(document).ready(function () {
  * Event bindings
  * ----------------------------------------------------------------
  */	
- 	$(window).bind('keydown', enterHandler);
-	function enterHandler (event) {
-		if (event.keyCode == "13"){
-		    toQuery();
-		    return false;
-		}
-	}
+ // 	$(window).on('keydown', enterHandler);
+	// function enterHandler (event) {
+	// 	if (event.keyCode == "13"){
+	// 	    toQuery();
+	// 	    return false;
+	// 	}
+	// }
 
 	//car pagination
-	$("#preCars").click(
-		function (){
-			if(parseInt($("#curCars").attr("page")) > 1){
-				$("#tableCars tbody").html("");
-				ajaxQuery(parseInt($("#curCars").attr("page")) - 1);
-			}
+	$("#preCars").on("click", function () {
+		if(parseInt($("#curCars").attr("page")) > 1){
+			$("#tableCars tbody").html("");
+			ajaxQuery(parseInt($("#curCars").attr("page")) - 1);
 		}
-	);
+	});
 
-	$("#nextCars").click(
-		function (){
-			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
+	$("#nextCars").on("click", function () {
+		if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
 			$("#tableCars tbody").html("");
 			ajaxQuery(parseInt($("#curCars").attr("page")) + 1);
 		}
-		}
-	);
+	});
 
-	$("#firstCars").click(
-		function () {
-			if(parseInt($("#curCars").attr("page")) > 1){
-				$("#tableCars tbody").html("");
-				ajaxQuery(parseInt(1));
-			}
+	$("#firstCars").on("click", function () {
+		if(parseInt($("#curCars").attr("page")) > 1){
+			$("#tableCars tbody").html("");
+			ajaxQuery(parseInt(1));
 		}
-	);
+	});
 
-	$("#lastCars").click(
-		function () {
-			if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
-				$("#tableCars tbody").html("");
-				totalPage = parseInt($("#totalCars").attr("total"))%20 === 0 ? parseInt($("#totalCars").attr("total"))/20 : parseInt($("#totalCars").attr("total"))/20 + 1;
-				ajaxQuery(parseInt(totalPage));
-			}
+	$("#lastCars").on("click", function () {
+		if(parseInt($("#curCars").attr("page")) * 20 < parseInt($("#totalCars").attr("total")) ){
+			$("#tableCars tbody").html("");
+			totalPage = parseInt($("#totalCars").attr("total"))%20 === 0 ? parseInt($("#totalCars").attr("total"))/20 : parseInt($("#totalCars").attr("total"))/20 + 1;
+			ajaxQuery(parseInt(totalPage));
 		}
-	)
+	});
 
-	$("#exportCars").click(
-		function () {
-			ajaxExportNodeTrace ();
-			return false;
-		}
-	);
+	$("#exportCars").on("click", function () {
+		ajaxExportNodeTrace ();
+		return false;
+	});
 
 	//pause pagination
-	$("#prePause").click(
-		function (){
-			if(parseInt($("#curPause").attr("page")) > 1){
-				$("#tablePause tbody").html("");
-				ajaxQueryPause(parseInt($("#curPause").attr("page")) - 1);
-			}
+	$("#prePause").on("click", function () {
+		if(parseInt($("#curPause").attr("page")) > 1){
+			$("#tablePause tbody").html("");
+			ajaxQueryPause(parseInt($("#curPause").attr("page")) - 1);
 		}
-	);
+	});
 
-	$("#nextPause").click(
-		function (){
-			if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
+	$("#nextPause").on("click", function () {
+		if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
 			$("#tablePause tbody").html("");
 			ajaxQueryPause(parseInt($("#curPause").attr("page")) + 1);
 		}
-		}
-	);
+	});
 
-	$("#firstPause").click(
-		function () {
-			if(parseInt($("#curPause").attr("page")) > 1){
-				$("#tablePause tbody").html("");
-				ajaxQueryPause(parseInt(1));
-			}
+	$("#firstPause").on("click", function () {
+		if(parseInt($("#curPause").attr("page")) > 1){
+			$("#tablePause tbody").html("");
+			ajaxQueryPause(parseInt(1));
 		}
-	);
+	});
 
-	$("#lastPause").click(
-		function () {
-			if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
-				$("#tablePause tbody").html("");
-				totalPage = parseInt($("#totalPause").attr("total"))%10 === 0 ? parseInt($("#totalPause").attr("total"))/10 : parseInt($("#totalPause").attr("total"))/10 + 1;
-				ajaxQueryPause(parseInt(totalPage));
-			}
+	$("#lastPause").on("click", function () {
+		if(parseInt($("#curPause").attr("page")) * 10 < parseInt($("#totalPause").attr("total")) ){
+			$("#tablePause tbody").html("");
+			totalPage = parseInt($("#totalPause").attr("total"))%10 === 0 ? parseInt($("#totalPause").attr("total"))/10 : parseInt($("#totalPause").attr("total"))/10 + 1;
+			ajaxQueryPause(parseInt(totalPage));
 		}
-	)
+	});
 
-	$("#exportPause").click(
-		function () {
-			ajaxExportPauseRecord();
-			return false;
-		}
-	);
+	$("#exportPause").on("click", function () {
+		ajaxExportPauseRecord();
+		return false;
+	});
 
 	//plan pagination
-	$("#prePlan").click(
-		function (){
-			if(parseInt($("#curPlan").attr("page")) > 1){
-				$("#tablePlan tbody").html("");
-				ajaxQueryPlan(parseInt($("#curPlan").attr("page")) - 1);
-			}
+	$("#prePlan").on("click", function (){
+		if(parseInt($("#curPlan").attr("page")) > 1){
+			$("#tablePlan tbody").html("");
+			ajaxQueryPlan(parseInt($("#curPlan").attr("page")) - 1);
 		}
-	);
+	});
 
-	$("#nextPlan").click(
-		function (){
-			if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
+	$("#nextPlan").on("click", function (){
+		if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
 			$("#tablePlan tbody").html("");
 			ajaxQueryPlan(parseInt($("#curPlan").attr("page")) + 1);
 		}
-		}
-	);
+	});
 
-	$("#firstPlan").click(
-		function () {
-			if(parseInt($("#curPlan").attr("page")) > 1){
-				$("#tablePlan tbody").html("");
-				ajaxQueryPlan(parseInt(1));
-			}
+	$("#firstPlan").on("click", function () {
+		if(parseInt($("#curPlan").attr("page")) > 1){
+			$("#tablePlan tbody").html("");
+			ajaxQueryPlan(parseInt(1));
 		}
-	);
+	});
 
-	$("#lastPlan").click(
-		function () {
-			if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
-				$("#tablePlan tbody").html("");
-				totalPage = parseInt($("#totalPlan").attr("total"))%10 === 0 ? parseInt($("#totalPlan").attr("total"))/10 : parseInt($("#totalPlan").attr("total"))/10 + 1;
-				ajaxQueryPlan(parseInt(totalPage));
-			}
+	$("#lastPlan").on("click", function () {
+		if(parseInt($("#curPlan").attr("page")) * 10 < parseInt($("#totalPlan").attr("total")) ){
+			$("#tablePlan tbody").html("");
+			totalPage = parseInt($("#totalPlan").attr("total"))%10 === 0 ? parseInt($("#totalPlan").attr("total"))/10 : parseInt($("#totalPlan").attr("total"))/10 + 1;
+			ajaxQueryPlan(parseInt(totalPage));
 		}
-	)
+	});
 
-	$("#exportPlan").click(
-		function () {
-			ajaxExportPlan();
-			return false;
-		}
-	);
+	$("#exportPlan").on("click", function () {
+		ajaxExportPlan();
+		return false;
+	});
 
 
 
 
 	//监听tab切换事件，去取comp列表
-	$("#tabs li").click(function () {
+	$("#tabs li").on("click", function () {
 		var index = $("#tabs li").index(this);
 		if(index<11)
 			$(".pagination").hide();
@@ -270,11 +240,11 @@ $(document).ready(function () {
 			queryManufacturePeriod();
 	});
 
-	$("#resetST").click(function() {
-		$("#startTime").val(currentDate8());
+	$("#resetST").on("click", function() {
+		$("#startTime").val(window.byd.DateUtil.currentDate8);
 	});
 
-	$("#refreshET").click(function() {
+	$("#refreshET").on("click", function() {
 		$("#endTime").val(window.byd.DateUtil.currentTime);
 	});
 
@@ -543,12 +513,11 @@ $(document).ready(function () {
 	var distinctLabel = [];
 
 	function prepare (dataArray) {
-            return $(dataArray).map(function (index, item) {
-                if ($.inArray(index, distinctLabel) !== -1)
-                    return { y: item, show: false};
-                return { y: item, show: true};
-            });
-             
+        return $(dataArray).map(function (index, item) {
+            if ($.inArray(index, distinctLabel) !== -1)
+                return { y: item, show: false};
+            return { y: item, show: true};
+        });   
     }
 
 	function ajaxExportNodeTrace () {
@@ -1100,7 +1069,6 @@ $(document).ready(function () {
 				crosshairs: true,
 				useHTML: true,
                 formatter: function() {
-                	console.log(this);
                 	var s = this.points[0].key +'<table>';
                 
                 	$.each(this.points, function(i, point) {
@@ -1135,10 +1103,6 @@ $(document).ready(function () {
             		point: {
 		                events: {
 		                    click: function() {
-		                        // console.log(this.series.name);
-		                        console.log(this.series.name);
-                        		console.log("len:" + this.series.chart.series.length);
-		                        console.log(this.x + ":" + this.y);
 		                        mQuery.useRate.toggleClickPointData(this.x, this.y, this.series.index);
 		                        var chart;
 								chart = new Highcharts.Chart(mQuery.useRate.useRateChartData);
@@ -1209,7 +1173,6 @@ $(document).ready(function () {
 		},
 
 		toggleClickPointData : function (x, y, index) {
-			console.log(this.useRateChartData);
 			$(this.useRateChartData.series[index].data).each(function (index, value) {
 				if(value.y == y && value.x == x) {
 					value.show = !value.show;
@@ -1472,7 +1435,6 @@ $(document).ready(function () {
                 // valueSuffix: ' min'
                 useHTML: true,
                 formatter: function() {
-                	console.log(this);
                 	var s = this.points[0].key +'<table>';
                 	var ss = '';
                 	total = 0;

@@ -36,6 +36,8 @@ $(document).ready(function () {
 		$('#rightModal').modal({
 			"show" : false
 		});
+
+		ajaxGetSmsDuty();
 	}
 
 	$("#btnEmailChange").click( 
@@ -54,12 +56,20 @@ $(document).ready(function () {
 	});
 	
 
-	$("#btnQuery").click (function () {
+	$("#btnQuery").click(function () {
 		//clear last
 		$("#resultTable tbody").text("");
 		ajaxQuery();
 		return false;
 	});
+
+	$("#btnPauseSms").click(function () {
+		if(checkPrivilage("SUBSCRIPTION_SMS_PAUSE")) {
+			$("#pauseSmsSubscriptionModal").modal("show");
+		} else {
+			alert("您无订阅停线短信的权限，如工作需要，可向总装生产部申请获得，具体请联系AMS系统管理员。");
+		}
+	})
 
 	$(".prePage").click(
 		function (){
@@ -260,7 +270,7 @@ $(document).ready(function () {
 				    			}).appendTo(groupDiv);
 				    			$("<input />", {
 				    				'type' : 'button',
-				    				"class" : "btn btn-danger btn-small optRight",
+				    				"class" : "btn btn-warning btn-small optRight",
 				    				'value' : "权限编辑"
 				    			}).appendTo(groupDiv);
 				    			$("<input />", {
@@ -473,6 +483,51 @@ $(document).ready(function () {
 		});
 		$('#rightModal').modal("toggle");
 	}
+
+	function ajaxGetSmsDuty () {
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			url: GET_DUTY_GROUP_LIST,
+			data: {"type":"停线"},
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					options = $.templates("#tmplDutyCheckbox").render(response.data);
+					$("#dutyDiv").append(options);
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
+	function checkPrivilage (point) {
+		var permit = false;
+		$.ajax({
+			url: CHECK_PRIVILAGE,
+			dataType: "json",
+			data: {
+				"privilagePoint" : point
+			},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				if(response.success) {
+					permit = response.data;
+					if(permit) {
+						console.log(permit);
+						$(".maintain").show();
+					} else {
+						$(".maintain").hide();
+					}
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+		return permit;
+	} 
 
 	function emptyNewModal(){
 		$("#newModal input[type=text]").val("");

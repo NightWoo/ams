@@ -13,7 +13,7 @@ class Car
 	private $config;
 	private $configList;
 	// private static $SERIES_NAME = array('F0'=>'F0','M6'=>'M6','6B'=>'思锐',"G6"=>"G6");
-	private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
+	// private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
 	protected function __construct($vin){
 		$this->vin = $vin;
 		$this->car = VinManager::getCar($vin);
@@ -502,12 +502,14 @@ class Car
 				$trace->component_name = $this->getComponentName($componentId);
 				$trace->node_id = $nodeId;
 				$trace->create_time = date('YmdHis');
+				$trace->user_id = Yii::app()->user->id;
+				$trace->user_display_name = Yii::app()->user->display_name;
+				$trace->provider = $this->calProvider($code, $componentId);
+				$trace->bar_code = $code;
+				$trace->save();
+			} else {
+				throw new Exception ("该车已经记录[" . $this->getComponentName($componentId) . "]的条码！");
 			}
-			$trace->user_id = Yii::app()->user->id;
-			$trace->user_display_name = Yii::app()->user->display_name;
-			$trace->provider = $this->calProvider($code, $componentId);
-			$trace->bar_code = $code;
-			$trace->save();
 
 			if($this->isEngineCode($componentId)) {
 				$this->car->engine_code = $code;
@@ -808,7 +810,7 @@ class Car
 			switch($trace['node_id']) {
 				case 10:
 					foreach($vq1s as $vq1){
-						if($temperature['trace_id'] == $trace['id'] || strtotime($vq1['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($vq1['trace_id'] == $trace['id'] || strtotime($vq1['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq1;
 						}
 					}
@@ -817,7 +819,7 @@ class Car
 					break;
 				case 15:
 					foreach($roads as $road){
-						if($temperature['trace_id'] == $trace['id'] || strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($road['trace_id'] == $trace['id'] || strtotime($road['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($road['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $road;
 						}
 					}
@@ -829,21 +831,21 @@ class Car
 					break;
 				case 16:
 					foreach($leaks as $leak){
-						if($temperature['trace_id'] == $trace['id'] || strtotime($leak['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($leak['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($leak['trace_id'] == $trace['id'] || strtotime($leak['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($leak['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $leak;
 						}
 					}
                     break;
 				case 17:
 					foreach($vq3s as $vq3){
-						if($temperature['trace_id'] == $trace['id'] || strtotime($vq3['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq3['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($vq3['trace_id'] == $trace['id'] || strtotime($vq3['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq3['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq3;
 						}
 					}
                     break;
                 case 209:
 					foreach($vq1_2s as $vq1_2){
-						if($temperature['trace_id'] == $trace['id'] || strtotime($vq1_2['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1_2['create_time']) >= (strtotime($trace['pass_time']) - 2)){
+						if($vq1_2['trace_id'] == $trace['id'] || strtotime($vq1_2['create_time']) <= (strtotime($trace['pass_time']) + 2) && strtotime($vq1_2['create_time']) >= (strtotime($trace['pass_time']) - 2)){
 							$values[] = $vq1_2;
 						}
 					}
@@ -1120,7 +1122,7 @@ class Car
 
 		if(!empty($subConfig)) {
 			$subConfig->status = 1;
-			$subConfig->save();
+			$subConfig->update(array("status"));
 		}
 
 		return $ret;

@@ -44,6 +44,7 @@ var F20_PRINT_CHECK_LIST = "/bms/execution/enterF20";
 
 //
 var QUERY_DUTY_DEPARTMENT = "/bms/query/queryDutyDepartment";
+var GET_DUTY_GROUP_LIST = "/bms/query/getDutyGroupList";
 
 //VQ1校验      需返回车系、颜色、车身、VIN号
 var VQ1_VALIDATE = "/bms/car/validateVQ1";

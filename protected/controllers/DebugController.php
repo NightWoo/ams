@@ -4,23 +4,17 @@ Yii::import('application.models.*');
 
 class DebugController extends BmsBaseController
 {
-	private static $SERIES = array(
-		'F0' => 'F0',
-		'M6' => 'M6',
-		'6B' => '思锐',
-	);
-
-	private static $a = 1;
-
-	private static $STATES=array('onLine','onLine-2','VQ1','VQ2','VQ3','WH');
 
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		$date = $this->validateStringVal('date', '');
 		try {
-			$seeker= new ReportSeeker();
-	        $date = "2013-08-29";
-	        $ret = $seeker -> planningDivisionSms($date);
+			// $seeker= new ReportSeeker();
+	        $ss = "2013-08-29";
+	        $ee = "2013-08-30";
+	        if(strtotime($ee)-strtotime($ss) <= 24*3600) $ret = "OK";
+	        else $ret = "NG";
+	        // $ret = $seeker -> planningDivisionSms($date);
 
 			$this->renderJsonBms(true, $ret, $ret);
 		} catch(Exception $e) {
@@ -28,49 +22,98 @@ class DebugController extends BmsBaseController
 		}
 	}
 
-	public function a () {
-		return self::$a++;
-	}
-
-	private function periodSegmentArray ($span=16,$intercept=8) {
-		$segments = ceil($span/$intercept);
-		$periodSegmentArray = array();
-		for($i=0;$i<$segments;$i++) {
-			$low = $i * $intercept;
-			$high = ($i + 1) * $intercept;
-			$text = $low . "-" . $high;
-			$periodSegmentArray[$text] = array('low'=>$low, 'high'=>$high);
+	public function actionCheckAndSend () {
+		$sql = "SELECT * FROM view_pause_sms WHERE closed=0";
+		$unclosed = Yii::app()->db->createCommand($sql)->queryAll();
+		if(!empty($unclosed)){
+			foreach($unclosed as $pause) {
+				if(0 == $pause['status']) {
+					$this->sendClosed($pause);
+				} else if (1 == $pause['status']) {
+					$this->sendLevel($pause);
+				}
+			}
 		}
-		$lastText = ">". $span;
-		$periodSegmentArray[$lastText] = array('low'=>$span, 'high'=>0);
-
-		return $periodSegmentArray;
 	}
 
-	private function getLC0Type () {
-		$sql = "SELECT car_type FROM lc0_unlock WHERE category='type'";
-		$LC0TypeArray = Yii::app()->db->createCommand($sql)->queryColumn();
-		$LC0Type = "('" . join("','", $LC0TypeArray) . "')";
-		return array($LC0TypeArray,$LC0Type);
-	}
-
-	private function getLC0Config () {
-		$sql = "SELECT car_config FROM lc0_unlock WHERE category='config' AND car_config>0";
-		$LC0ConfigArray = Yii::app()->db->createCommand($sql)->queryColumn();
-		$LC0Config = "(" . join(",", $LC0ConfigArray) . ")";
-		return array($LC0ConfigArray,$LC0Config);
-	}
-
-	private function getLC0TypeColorText () {
-		$sql = "SELECT car_type,car_colors FROM lc0_unlock WHERE category='type_color'";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		$textArray = array();
-		foreach($datas as $data){
-			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
+	public function sendClosed ($pause) {
+		$level = $this->checkLevel($pause);
+		$phoneNumbers = $this->getPhoneNumbers($pause, $level, true);
+		$content = $this->makeContent($pause);
+		if(!empty($phoneNumbers)){
+			$SmsService = new SmsService();
+			$SmsService->send($content, $phoneNumbers);
 		}
+		$pauseSms = PauseSmsAR::model()->findByPk($pause['id']);
+		$pauseSms->closed = 1;
+		$pauseSms->update(array("closed"));
+	}
 
-		$text = join(" OR ", $textArray);
+	public function sendLevel ($pause) {
+		$level = $this->checkLevel($pause);
+		for($i=0;$i<=$level;$i++) {
+			$underLevel = "level_" . $i;
+			if($pause[$underLevel] == 0) {
+				$phoneNumbers = $this->getPhoneNumbers($pause, $i, false);
+				$content = $this->makeContent($pause);
+				if(!empty($phoneNumbers)){
+					$SmsService = new SmsService();
+					$SmsService->send($content, $phoneNumbers);
+				}
+				$pauseSms = PauseSmsAR::model()->findByPk($pause['id']);
+				$pauseSms->$underLevel = 1;
+				$pauseSms->update(array($underLevel));
+			}
+		}
+	}
 
-		return $text;
+	public function checkLevel ($pause) {
+		$end = $pause['recover_time'] == "0000-00-00 00:00:00" ? date("Y-m-d H:i:s") : $pause['recover_time'];
+		$minutes = (strtotime($end) - strtotime($pause['pause_time']))/60;
+		$level = 0;
+		if(!empty($pause['duty_department'])) {
+			switch ($minutes) {
+				case ($minutes<10) : 
+					$level = 1;
+					break;
+				case ($minutes<30) :
+					$level = 2;
+					break;
+				case ($minutes<60) :
+					$level = 3;
+					break;
+				default :
+					$level = 4;
+			}
+		}
+		return $level;
+	}
+
+	public function getPhoneNumbers($pause, $level, $underLevel = false) {
+		$levelCon = $underLevel ? "`level`<=$level" : "`level`=$level";
+		$sql = "SELECT DISTINCT(cellphone) FROM view_pause_receiver WHERE `section`='{$pause['section']}' AND $levelCon";
+		if(!empty($level)) $sql .= " AND `duty_group`='{$pause['duty_group']}'";
+		$numberArray = Yii::app()->db->createCommand($sql)->queryColumn();
+		$numberText = join(",", $numberArray);
+		return $numberText;
+	}
+
+	public function makeContent ($pause) {
+		$end = $pause['recover_time'] == "0000-00-00 00:00:00" ? date("Y-m-d H:i:s") : $pause['recover_time'];
+		$minutes = floor((strtotime($end) - strtotime($pause['pause_time']))/60);
+
+		$textHead = "【总装长沙停线通知】\n";
+		$textStart = "开始: " . substr($pause['pause_time'], 5, 11) . "\n";
+		$textEnd = $pause['status'] == 1 ? "停线中" : substr($pause['recover_time'], 5, 11) . "\n";
+		$textEnd = "结束: " . $textStatus;
+		$textMinutes = "时长: " . $minutes . "分钟\n";
+		$textSection = "工位: " . $pause['node_display_name'] . "\n";
+		$textDuty = "责任: " . $pause['duty_department'] . "\n";
+		$textCause = "原因: " . $pause['remark'] . "\n";
+		$textFoot = "【十一部AMS】";
+
+		$content = "(" . $textHead . $textStart . $textEnd . $textMinutes . $textSection . $textDuty . $textCause . $textFoot .")";
+
+		return $content;
 	}
 }

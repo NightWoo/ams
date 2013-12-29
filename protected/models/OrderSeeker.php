@@ -14,8 +14,8 @@ class OrderSeeker
 	}
 
 	private static $COLD_RESISTANT = array('非耐寒','耐寒');
-	private static $LC0_TYPE = "('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)')";
-	private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
+	// private static $LC0_TYPE = "('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)')";
+	// private static $LC0_TYPE_ARRAY = array('QCJ7152ET2(1.5TID豪华型)','QCJ7152ET2(1.5TID尊贵型加全景)','QCJ7100L(1.0排量舒适型)','QCJ7100L(1.0排量实用型)','QCJ7152ET1(1.5TI豪华型)','QCJ6480M1(2.4排量舒适型,无后空调)','QCJ6480M1(2.4排量舒适型)','QCJ6480M(2.0排量舒适型)','BYD7100L3(1.0排量实用型)','BYD7100L3(1.0排量舒适型)','QCJ7100L(1.0排量实用型,加液压)','QCJ7100L5(1.0排量实用型北京)','QCJ7100L5(1.0排量舒适型北京)','QCJ7100L5(1.0排量尊贵型北京)','BYD6480MA5(2.4排量豪华型国五)','BYD6480MA5(2.4排量舒适型国五)','BYD6480MA5(2.4排量尊贵型国五)','BYD6480M5(2.0排量舒适型国五)','BYD6480M5(2.0排量舒适型国五,无后空调)','BYD7152ET2(1.5TID尊贵型国五)','BYD7152ET2(1.5TID尊贵型加全景国五)','BYD7152ET1(1.5TI尊贵型国五)','BYD7152ET1(1.5TI尊享型国五)','QCJ7152ET2(1.5TID旗舰型公务版)');
 	public function getOriginalOrders($orderNumber) {
         if(empty($orderNumber)){
         	throw new Exception ('订单号不能为空');
@@ -843,7 +843,7 @@ class OrderSeeker
 	}
 
 	public function getLaneList() {
-		$sql = "SELECT id, name FROM lane";
+		$sql = "SELECT id, name FROM lane WHERE disabled=0";
 		$lanes = Yii::app()->db->createCommand($sql)->queryAll();
 		$datas = array();
 		foreach($lanes as $lane){

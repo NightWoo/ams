@@ -1,5 +1,6 @@
 <?php
 Yii::import("application.models.query.*");
+Yii::import("application.models.AR.*");
 class QueryController extends BmsBaseController
 {
 	public function actionQueryDutyDepartment() {
@@ -11,6 +12,16 @@ class QueryController extends BmsBaseController
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
         }
+	}
 
+	public function actionGetDutyGroupList () {
+		$type = $this->validateStringVal('type', '');
+		try {
+			$seeker = new DepartmentSeeker();
+			$nameList = $seeker->getDutyGroupList($type);
+			$this->renderJsonBms(true, 'OK', $nameList);
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage());
+		}
 	}
 }

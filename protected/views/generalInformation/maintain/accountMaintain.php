@@ -5,9 +5,16 @@
 	<title>Accounts</title>
 	<link href="/bms/css/bootstrap.css" rel="stylesheet">
 	<link href="/bms/css/common.css" rel="stylesheet">
+	<style type="text/css">
+		#sectionDiv label.checkbox  {
+			margin-left:0;
+			margin-right:10px;
+		}
+	</style>
 	<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="/bms/js/service.js"></script>
     <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bms/rjs/lib/jsrender.min.js"></script>
     <script type="text/javascript" src="/bms/js/head.js"></script>
     <script type="text/javascript" src="/bms/js/generalInformation/maintain/accountMaintain.js"></script>
 </head>
@@ -17,7 +24,7 @@
 	?>
         <div class="offhead">
            <?php
-            require_once(dirname(__FILE__)."/../../common/left/assembly_dataInput_left.php");
+            // require_once(dirname(__FILE__)."/../../common/left/assembly_dataInput_left.php");
             ?>
 
         	<!-- Main体 -->	
@@ -53,6 +60,7 @@
 					                	<a class='btn btn-small' href="#emailModal" id="modifySelf">个人信息</a>
 										<a class='btn btn-primary btn-small' href="#passwordModal" data-toggle="modal">修改密码</a>
 						            </div>
+						            <a class="btn btn-link" id="btnPauseSms">停线短信订阅</a>
                               	</td>
                             </tr>
                         </tbody>
@@ -89,7 +97,7 @@
                             	<th style="width:80px">账号</th>
                               	<th style="width:80px">用户名</th>
                               	<th style="width:180px">邮箱</th>
-                              	<th>操作</th>
+                              	<th>管理</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -319,7 +327,6 @@
   	</div>
 </div>
 
-
 <div class="modal" id="rightModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -354,6 +361,96 @@
   	<div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 	    <button class="btn btn-primary" id="btnRight">确认修改</button>
+  	</div>
+</div>
+
+<div class="modal" id="pauseSmsSubscriptionModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-420px">
+  	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   	 	<h4 style="margin-bottom:0;">停线短信订阅</h4>
+  	</div>
+  	<div class="modal-body">
+  		<form class="form-horizontal">
+		  <div class="control-group" id="pauseSmsSubscription">
+		  	<div style="margin-left:10px;">
+			  	<label class="radio">
+					<input type="radio" name="level" id="noSubscription" value="noSubscription" checked>
+					不订阅停线短信通知
+				</label>
+		  		<label class="radio">
+					<input type="radio" name="level" id="level_0" value="level_0">
+					level-0（立即发送）建议领班、调度使用
+				</label>
+				<label class="radio">
+					<input type="radio" name="level" id="level_1" value="level_1">
+					level-1（立即发送）建议责任工程师使用
+				</label>
+				<label class="radio">
+					<input type="radio" name="level" id="level_2" value="level_2">
+					level-2（&lt;&nbsp;10Min）建议责任部门主管使用
+				</label>
+				<label class="radio">
+					<input type="radio" name="level" id="level_3" value="level_3">
+					level-3（&lt;&nbsp;30Min）建议责任部门经理使用
+				</label>
+				<label class="radio">
+					<input type="radio" name="level" id="level_4" value="level_4">
+					level-4（&lt;&nbsp;60Min）建议总经理使用
+				</label>
+		  	</div>
+		  	<legend style="margin-top:15px;margin-bottom:10px">工段
+		  		<label style="margin-left:5px;padding-bottom:8px" class="checkbox inline">
+				    <input id="checkboxSectionAll" type="checkbox" name="sectionAll" value="all">全选
+			    </label>
+		  	</legend>
+		  	<div id="sectionDiv" style="margin-left:10px;">
+			  	<label class="checkbox inline">
+				    <input type="checkbox" name="section" value="T0">T0
+			    </label>
+		  	    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="T1">T1
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="T2">T2
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="T3">T3
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="C1">C1
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="C2">C2
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="C3">C3
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="F1">F1
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="F2">F2
+			    </label>
+			    <label class="checkbox inline">
+				    <input type="checkbox" name="section" value="VQ1">VQ1
+			    </label>
+		  	</div>
+		  	<legend style="margin-top:20px;margin-bottom:10px">责任
+		  		<label style="margin-left:5px;padding-bottom:8px" class="checkbox inline">
+				    <input id="checkboxDutyAll" type="checkbox" name="dutyAll" value="all">全选
+			    </label>
+		  	</legend>
+		  	<div id="dutyDiv" style="margin-left:10px;">
+		  	</div>
+		  	<script id="tmplDutyCheckbox" type="text/x-jsrander">
+                <label style='margin-left:0;margin-right:10px;' class='checkbox inline'><input type='checkbox' name='duty' value='{{:duty_group}}'>{{:duty_group}}</input></label>
+            </script>
+		  </div>
+		</form>
+  	</div>
+  	<div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" id="btnConfirmscription">确认订阅</button>
   	</div>
 </div>
 </body>

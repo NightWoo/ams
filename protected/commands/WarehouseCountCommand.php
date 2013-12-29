@@ -136,7 +136,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	private function countBalance($series, $all=false) {
 		$sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND (`status`='成品库' OR `status`='WDI')";
 		if(!$all){
-			$sql .= " AND warehouse_id <= 2001 AND warehouse_id <> 1000 AND special_property < 9";
+			$sql .= " AND warehouse_id < 3000 AND warehouse_id <> 1000 AND special_property < 9";
 		}
 		$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $count;
