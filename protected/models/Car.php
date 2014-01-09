@@ -1945,7 +1945,10 @@ class Car
 				return $ret;
 			}
 			$plan = PlanAR::model()->findByPk($this->car->plan_id);
-			if(!empty($plan)){
+			if(empty($plan) || empty($plan->plan_number)) {
+				$ret = array("success", "I", "no plan_number to yielded", "");
+				return $ret;
+			} else {
 				$planNumber = $plan->plan_number;
 				$client = @new SoapClient(Yii::app()->params['saprfc']);
 				$params = array(
@@ -1960,8 +1963,6 @@ class Car
 					$this->car->yielded = 1;
 					$this->car->update(array("yielded"));
 				}
-			} else {
-				$ret = array("fail", "E", "applyTimeTicketInSap fail", "");
 			}
 		} catch(Exception $e) {
 			$ret = array("fail", "E", "applyTimeTicketInSap fail", "");

@@ -4,21 +4,39 @@ Yii::import('application.models.*');
 
 class DebugController extends BmsBaseController
 {
+	public function actionIndex () {
+		$this->render('test');
+	}
 
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		$date = $this->validateStringVal('date', '');
 		try {
 			// $seeker= new ReportSeeker();
-	        $ss = "2013-08-29";
-	        $ee = "2013-08-30";
-	        if(strtotime($ee)-strtotime($ss) <= 24*3600) $ret = "OK";
-	        else $ret = "NG";
+	        $ss = "20130829";
+	        $ee = "ZCDG-20130506106448";
+	        // if(strtotime($ee)-strtotime($ss) <= 24*3600) $ret = "OK";
+	        // $ret = explode("-", $ss)[0];
+	        // $ret2 = explode("-", $ee)[0];
+	        $ret['12'] = $ss;
+	        $ret['123'] = $ee;
 	        // $ret = $seeker -> planningDivisionSms($date);
 
 			$this->renderJsonBms(true, $ret, $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionTestCRM () {
+		$orderNumber = $this->validateStringVal('orderNumber', '');
+		try {
+			$test = new Test();
+			$ret['xf'] = $test->getOriginalOrders($orderNumber, "XF");
+			$ret['crm'] = $test->getOriginalOrders($orderNumber, "CRM");
+			$this->renderJsonBms(true, 'Ok', $ret);
+		} catch(Exception $e) {
+			$this->renderJsonBms(true, $e->getMessage(), null);
 		}
 	}
 

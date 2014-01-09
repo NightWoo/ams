@@ -29,25 +29,25 @@ class Plan {
 		if(empty($config)) {
 			throw new Exception("配置不存在");
 		}
-		// $configSap = ConfigSapMapAR::model()->find('config_id=? AND color=?', array($data['config_id'], $data['color']));
-		// if(empty($configSap)) {
-		// 	throw new Exception("SAP料号不存在");
-		// } else {
-		// 	$materialCode = $configSap->material_code;
-		// 	$data['material_code'] = $materialCode;
-		// }
-		// $prodVersionAr = ProductionVersionAR::model()->find("series=? AND line=?", array($data['car_series'], $data['assembly_line']));
-		// $prodVersion = empty($prodVersionAr) ? "" : $prodVersionAr->production_version;
-		// $dateTime = strtotime($data['plan_date']);
-		// $startDate = date("Ymd", $dateTime);
-		// $endDate = date("Ymd", strtotime("+2 day", $dateTime));
+		$configSap = ConfigSapMapAR::model()->find('config_id=? AND color=?', array($data['config_id'], $data['color']));
+		if(empty($configSap)) {
+			throw new Exception("SAP料号不存在");
+		} else {
+			$materialCode = $configSap->material_code;
+			$data['material_code'] = $materialCode;
+		}
+		$prodVersionAr = ProductionVersionAR::model()->find("series=? AND line=?", array($data['car_series'], $data['assembly_line']));
+		$prodVersion = empty($prodVersionAr) ? "" : $prodVersionAr->production_version;
+		$dateTime = strtotime($data['plan_date']);
+		$startDate = date("Ymd", $dateTime);
+		$endDate = date("Ymd", strtotime("+2 day", $dateTime));
 
-		// $sapCreate = $this->createInSap($materialCode, $data['total'], $startDate, $endDate, $prodVersion);
-		// if(!empty($sapCreate) && "success" == $sapCreate[0] && !empty($sapCreate[3])){
-		// 	$data['plan_number'] = $sapCreate[3];
-		// } else {
-		// 	throw new Exception("SAP计划编号生成失败，无法完成新增。消息类型[". $sapCreate[1] . "]，描述[". $sapCreate[2] ."]");
-		// }
+		$sapCreate = $this->createInSap($materialCode, $data['total'], $startDate, $endDate, $prodVersion);
+		if(!empty($sapCreate) && "success" == $sapCreate[0] && !empty($sapCreate[3])){
+			$data['plan_number'] = $sapCreate[3];
+		} else {
+			throw new Exception("SAP计划编号生成失败，无法完成新增。消息类型[". $sapCreate[1] . "]，描述[". $sapCreate[2] ."]");
+		}
 
 		$this->save($data);
 	}

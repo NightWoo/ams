@@ -294,9 +294,10 @@ class PlanController extends BmsBaseController
 		try{
 			$seeker = new PlanSeeker();
 			list($total, $datas) = $seeker->query($stime, $etime, $series, $line, 0, 0);
-			$content = "#,线别,批次号,计划日期,计划数量,完成数量,车系,车型,配置,耐寒性,颜色,年份,订单类型,特殊单号,备注\n";
+			$content = "#,SAP订单号,线别,批次号,计划日期,计划数量,完成数量,车系,车型,配置,耐寒性,颜色,年份,订单类型,特殊单号,备注\n";
 			foreach($datas as $data) {
 				$content .= "{$data['id']},";
+				$content .= "{$data['plan_number']},";
 				$content .= "{$data['assembly_line']},";
 				$content .= "{$data['batch_number']},";
 				$content .= "{$data['plan_date']},";

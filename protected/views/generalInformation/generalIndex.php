@@ -72,51 +72,37 @@
                 </div>
 
                 <div>
-                    <legend>定制报表</legend>
+                    <legend>计划处定制报表</legend>
                     <div>
                         <ul class="thumbnails">
                             <li class="span2">
                               <div id="planningDivisionReport" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5>计划处日报</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <!-- <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5></h5>
+                                    <h5>日报</h5>
                                 </div>
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
+                              <div id="planningDivisionFourTech" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5></h5>
+                                    <h5>四大工艺完成</h5>
                                 </div>
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
+                              <div id="planningDivisionNewOrder" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5></h5>
+                                    <h5>新增订单</h5>
                                 </div>
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
+                              <div id="planningDivisionSalesVolume" class="thumbnail" style="height:120px">
                                 <div>
-                                    <h5></h5>
+                                    <h5>终端销量</h5>
                                 </div>
                               </div>
                             </li>
-                            <li class="span2">
-                              <div id="" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5></h5>
-                                </div>
-                              </div>
-                            </li> -->
                         </ul>
                     </div>
                 </div>

@@ -272,6 +272,7 @@ class ReportSeeker
 					$columnSeriesY[$seriesName][] = $assemblyCount[$series];
 				}
 				$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
+				$rate = $rate > 1 ? 1 : $rate;  
 				$lineSeriesY[] = $rate;
 			} else {
 				foreach($seriesArray as $series => $seriesName){
@@ -296,35 +297,60 @@ class ReportSeeker
 	}
 
 	public function queryPlanCompletion ($sDate, $eDate, $line="") {
-		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
-		if(strtotime($eDate) - strtotime($sDate) <= 24*3600) {
-			$batchNumber = substr($this->generateBatchNumber($sDate), 0, 5);
-			$sql .= " AND LEFT(batch_number,5)='$batchNumber'";
-		} else {
-			$batchNumber = substr($this->generateBatchNumber($sDate),0 ,3);
-            $sql .= " AND LEFT(batch_number,3)='$batchNumber'";
-		}
-		if(!empty($line)) $sql .= " AND assembly_line='$line'";
-		$sql .= " GROUP BY series";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		// $sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		// if(strtotime($eDate) - strtotime($sDate) <= 24*3600) {
+		// 	$batchNumber = substr($this->generateBatchNumber($sDate), 0, 5);
+		// 	$sql .= " AND LEFT(batch_number,5)='$batchNumber'";
+		// } else {
+		// 	$batchNumber = substr($this->generateBatchNumber($sDate),0 ,3);
+  //           $sql .= " AND LEFT(batch_number,3)='$batchNumber'";
+		// }
+		// if(!empty($line)) $sql .= " AND assembly_line='$line'";
+		// $sql .= " GROUP BY series";
+		// $datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 
 		$seriesArray = Series::getArray();
 		$count = array();
 		foreach($seriesArray as $series){
-			$count[$series] = array();
+			$count[$series] = array('total'=>0, 'ready'=>0, 'completion'=>0);
 		}
-		foreach($count as $key => &$one){
-			$one = array('total'=>null, 'ready'=>null, 'completion'=>null);
+		// foreach($count as $key => &$one){
+		// 	$one = array('total'=>null, 'ready'=>null, 'completion'=>null);
+		// }
+		$readySql = "SELECT car_series as series, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		$totalSql = "SELECT car_series as series, SUM(total) as total FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		if(strtotime($eDate) - strtotime($sDate) <= 24*3600) {
+			$batchNumber = substr($this->generateBatchNumber($sDate), 0, 5);
+			$readySql .= " AND LEFT(batch_number,5)='$batchNumber'";
+			$totalSql .= " AND LEFT(batch_number,5)='$batchNumber'";
+		} else {
+			$batchNumber = substr($this->generateBatchNumber($sDate),0 ,3);
+            $readySql .= " AND LEFT(batch_number,3)='$batchNumber'";
+            $totalSql .= " AND DATE_FORMAT(plan_date,'%m%d')<=SUBSTRING(batch_number,2,4)";
 		}
-		foreach($datas as $data){
-			$totalValue = intval($data['total']);
-			$readyValue = intval($data['ready']);
-			$count[$data['series']]['total'] = isset($data['total']) ? $totalValue : 0;
-			$count[$data['series']]['ready'] = isset($data['ready']) ? $readyValue : 0;
-			$count[$data['series']]['completion'] = empty($totalValue) ? null : round(($readyValue/$totalValue) , 2);
+		if(!empty($line)) {
+			$readySql .= " AND assembly_line='$line'";
+			$totalSql .= " AND assembly_line='$line'";
+		}
+		$readySql .= " GROUP BY series";
+		$totalSql .= " GROUP BY series";
+		$readyDatas = Yii::app()->db->createCommand($readySql)->queryAll();
+		$totalDatas = Yii::app()->db->createCommand($totalSql)->queryAll();
+		foreach($readyDatas as $readyData){
+			$readyValue = intval($readyData['ready']);
+			$count[$readyData['series']]['ready'] = isset($readyData['ready']) ? $readyValue : 0;
 		}
 
+		foreach($totalDatas as $totalData){
+			$totalValue = intval($totalData['total']);
+			$readyValue = isset($count[$totalData['series']]['ready']) ? $count[$totalData['series']]['ready'] : 0;
+			$count[$totalData['series']]['ready'] = isset($count[$totalData['series']]['ready']) ? $readyValue : 0;
+			$count[$totalData['series']]['total'] = isset($totalData['total']) ? $totalValue : 0;
+			$count[$totalData['series']]['completion'] = empty($totalValue) ? null : round(($readyValue/$totalValue) , 2);
+		}
+
+		
 		return $count;
 	}
 
@@ -347,10 +373,43 @@ class ReportSeeker
 	}
 
 	public function queryPlanCompletionAllSeries ($sDate, $eDate, $line="") {
-		$sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
-		if(!empty($line)) $sql .= " AND assembly_line='$line'";
-		$data = Yii::app()->db->createCommand($sql)->queryRow();
-		$completion = empty($data['total']) ? null : round($data['ready'] / $data['total'], 2);
+		// $sql = "SELECT car_series as series, SUM(total) as total, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		// if(!empty($line)) $sql .= " AND assembly_line='$line'";
+		// $data = Yii::app()->db->createCommand($sql)->queryRow();
+		// $completion = empty($data['total']) ? null : round($data['ready'] / $data['total'], 2);
+
+		$readySql = "SELECT car_series as series, SUM(ready) as ready FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		$totalSql = $sql = "SELECT car_series as series, SUM(total) as total FROM plan_assembly WHERE plan_date>='$sDate' AND plan_date<'$eDate'";
+		if(strtotime($eDate) - strtotime($sDate) <= 24*3600) {
+			$batchNumber = substr($this->generateBatchNumber($sDate), 0, 5);
+			$readySql .= " AND LEFT(batch_number,5)='$batchNumber'";
+			$totalSql .= " AND LEFT(batch_number,5)='$batchNumber'";
+		} else {
+			$batchNumber = substr($this->generateBatchNumber($sDate),0 ,3);
+            $readySql .= " AND LEFT(batch_number,3)='$batchNumber'";
+            $totalSql .= " AND DATE_FORMAT(plan_date,'%m%d')<=SUBSTRING(batch_number,2,4)";
+		}
+		if(!empty($line)) {
+			$readySql .= " AND assembly_line='$line'";
+			$totalSql .= " AND assembly_line='$line'";
+		}
+		$readySql .= " GROUP BY series";
+		$readyDatas = Yii::app()->db->createCommand($readySql)->queryAll();
+		$totalDatas = Yii::app()->db->createCommand($totalSql)->queryAll();
+		foreach($readyDatas as $data){
+			$readyValue = intval($data['ready']);
+			$count[$data['series']]['ready'] = isset($data['ready']) ? $readyValue : 0;
+		}
+
+		foreach($totalDatas as $data){
+			$totalValue = intval($data['total']);
+			$count[$data['series']]['total'] = isset($data['total']) ? $totalValue : 0;
+			$count[$data['series']]['completion'] = empty($totalValue) ? null : round(($count[$data['series']]['ready']/$totalValue) , 2);
+		}
+		$readyData = Yii::app()->db->createCommand($readySql)->queryRow();
+		$totalData = Yii::app()->db->createCommand($totalSql)->queryRow();
+
+		$completion = empty($data['total']) ? null : round($reayData['ready'] / $totalData['total'], 2);
 		return $completion;
 	}
 

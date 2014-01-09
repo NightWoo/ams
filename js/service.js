@@ -380,6 +380,8 @@ var QUERY_TOOLS_TOOLSASSIGN = "/bms/toolsManagement/searchAssign";
 var QUERY_TOOLS_TOOLSCHECK = "/bms/toolsManagement/searchCheck";
 // ---- SOBIN 2013/7/19
 
+var DEBUG_TEST_CRM = "/bms/debug/testCRM";
+
 function alertError (message) {
 	message = 'ajax error'
 	// alert(message);

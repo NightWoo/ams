@@ -5,7 +5,7 @@ return array(
 	// this is displayed in the header section
 	'title'=>'BMS',
 	// this is used in error pages
-	'adminEmail'=>'wu.jun9@byd.com',
+	'adminEmail'=>'xu.yuanyuan1@byd.com',
 	// number of posts displayed per page
 	'postsPerPage'=>10,
 	// maximum number of comments that can be displayed in recent comments portlet

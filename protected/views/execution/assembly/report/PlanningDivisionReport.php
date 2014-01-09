@@ -18,7 +18,7 @@
                     <span class="">
                     	<div id="timeQueryInputDiv" class="input-append">
 			                <input type="text" class="input-small"  placeholder="日期..." id="startTime"/>
-		                    <button type="button" class="btn help-inline" id="btnQuery"><i class="fa fa-search"></i></button>
+		                    <button type="button" class="btn btn-primary help-inline" id="btnQuery"><i class="fa fa-search"></i></button>
 	                	</div>
                     </span>
                     <span class="pull-right">
@@ -29,6 +29,13 @@
 					<ul id="tabs" class="nav nav-pills">
 						<li  class="active"><a href="#reportPanel" data-toggle="tab">日报</a></li>
 						<li><a href="#smsPanel" data-toggle="tab">短信</a></li>
+						<li><a href="#inventoryDeficiency" data-toggle="tab">库存与欠单</a></li>
+						<li><a href="#operation" data-toggle="tab">运营</a></li>
+						<!-- <li><a href="#four" data-toggle="tab">四大工艺</a></li> -->
+						<!-- <li><a href="#newOrder" data-toggle="tab">新增订单</a></li> -->
+						<!-- <li><a href="#" data-toggle="tab">终端销量</a></li> -->
+						<li><a href="#distributionNetwork" data-toggle="tab">红蓝网</a></li>
+						<li><a href="#undelivered" data-toggle="tab">未发车</a></li>
 					</ul>
 				</div>
 				<div id="tabContent" class="tab-content">
@@ -104,6 +111,885 @@
 							</thead>
 							<tbody>
 
+							</tbody>
+						</table>
+					</div>
+
+					<div class="tab-pane" id="inventoryDeficiency">
+						<div class="tabbale tabs-left">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#inventoryDeficiencyTabF0" data-toggle="tab">F0</a></li>
+								<li><a href="#inventoryDeficiencyTabM6" data-toggle="tab">M6</a></li>
+								<li><a href="#inventoryDeficiencyTab6B" data-toggle="tab">思锐</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="inventoryDeficiencyTabF0">
+									<table class="table table-bordered inventory-deficiency-F0">
+										<thead>
+											<tr>
+												<th colspan="2">车型</th>
+												<th style="width:80px">颜色</th>
+												<th style="width:80px">欠单</th>
+												<th style="width:80px">库存</th>
+												<th style="width:80px">车间结存</th>
+												<th style="width:80px">未计划</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="thickBorder">
+												<td rowspan="20">F0实用型</td>
+												<td rowspan="4">1.0L实用/非耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L实用/助力/非耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L实用/北京欧五</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L实用/耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L实用/助力/非耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="3" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="thickBorder">
+												<td rowspan="12">F0舒适型</td>
+												<td rowspan="4">1.0L舒适/非耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L舒适/北京欧五</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L舒适/耐寒</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="3" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="thickBorder">
+												<td rowspan="4">F0尊贵型</td>
+												<td rowspan="4">1.0L尊贵</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="3" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="thickBorder">
+												<td rowspan="8">F0-AMT</td>
+												<td rowspan="4">1.0L实用/助力/AMT</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td rowspan="4">1.0L舒适/AMT</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>冰岛蓝</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>法兰红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="3" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="thickBorder">
+												<td colspan="2">特殊订单</td>
+												<td class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="thickBorder warning">
+												<td colspan="3">总计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="tab-pane" id="inventoryDeficiencyTabM6">
+									<table class="table table-bordered inventory-deficiency-M6">
+										<thead>
+											<tr>
+												<td>车型</td>
+												<td style="width:80px">颜色</td>
+												<td style="width:80px">欠单</td>
+												<td style="width:80px">库存</td>
+												<td style="width:80px">车间结存</td>
+												<td style="width:80px">未计划</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td rowspan="4">2.0L舒适/483QB/有后空调</td>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>瑞亚银</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>皇家紫</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>麦加金</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="2" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div  class="tab-pane" id="inventoryDeficiencyTab6B">
+									<table class="table table-bordered inventory-deficiency-6B">
+										<thead>
+											<tr>
+												<td>车型</td>
+												<td style="width:80px">颜色</td>
+												<td style="width:80px">欠单</td>
+												<td style="width:80px">库存</td>
+												<td style="width:80px">车间结存</td>
+												<td style="width:80px">未计划</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td rowspan="5">1.5TI豪华</td>
+												<td>德兰黑</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>天山白</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>瑞亚银</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>巧克力棕</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr>
+												<td>宝石红</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+											<tr class="info">
+												<td colspan="2" class="alignRight">合计</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+												<td>0</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="operation">
+						<table class="table table-bordered" id="operationTable">
+							<thead>
+								<tr>
+									<th>车系</th>
+									<th>项目</th>
+									<th style="width:50px">1月</th>
+									<th style="width:50px">2月</th>
+									<th style="width:50px">3月</th>
+									<th style="width:50px">4月</th>
+									<th style="width:50px">5月</th>
+									<th style="width:50px">6月</th>
+									<th style="width:50px">7月</th>
+									<th style="width:50px">8月</th>
+									<th style="width:50px">9月</th>
+									<th style="width:50px">10月</th>
+									<th style="width:50px">11月</th>
+									<th style="width:50px">12月</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td rowspan="4">F0</td>
+									<td>已上线</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已入库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已出库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>库存</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td rowspan="4">M6</td>
+									<td>已上线</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已入库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已出库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>库存</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td rowspan="4">思锐</td>
+									<td>已上线</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已入库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>已出库</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>库存</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- <div class="tab-pane" id="four"></div> -->
+					<!-- <div class="tab-pane" id="newOrder"></div> -->
+					<!-- <div class="tab-pane" id=""></div> -->
+					<div class="tab-pane" id="distributionNetwork">
+						<div class="tabbale tabs-left">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#distributionNetworkTabF0" data-toggle="tab">F0</a></li>
+								<li><a href="#distributionNetworkTabM6" data-toggle="tab">M6</a></li>
+								<li><a href="#distributionNetworkTab6B" data-toggle="tab">思锐</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="distributionNetworkTabF0">
+									<table class="table table-bordered distribution-network-F0">
+										<thead>
+											<tr>
+												<th rowspan="2">项目</th>
+												<th colspan="5" class="net-blue">篮网</th>
+												<th colspan="5" class="net-red">红网</th>
+												<th rowspan="2">合计</th>
+											</tr>
+											<tr>
+												<th class="net-blue">数量</th>
+												<th class="net-blue">比例</th>
+												<th class="net-blue"><span clsss="month">7</span>月经销商数量</th>
+												<th class="net-blue">每家经销商能力</th>
+												<th class="net-blue">累计经销商数量</th>
+												<th class="net-red">数量</th>
+												<th class="net-red">比例</th>
+												<th class="net-red"><span clsss="month">7</span>月经销商数量</th>
+												<th class="net-red">每家经销商能力</th>
+												<th class="net-red">累计经销商数量</th>
+										</thead>
+										<tbody>
+											<tr>
+												<th>销量</th>
+												<td class="net-blue">295</td>
+												<td class="net-blue">91.61%</td>
+												<td class="net-blue">98</td>
+												<td class="net-blue">3</td>
+												<td class="net-blue">26</td>
+												<td class="net-red">27</td>
+												<td class="net-red">8.39%</td>
+												<td class="net-red">14</td>
+												<td class="net-red">2</td>
+												<td class="net-red">26</td>
+												<td>322</td>
+											</tr>
+											<tr>
+												<th>月新增</th>
+												<td class="net-blue">303</td>
+												<td class="net-blue">95.58%</td>
+												<td class="net-blue">44</td>
+												<td class="net-blue">7</td>
+												<td class="net-blue">26</td>
+												<td class="net-red">14</td>
+												<td class="net-red">4.42%</td>
+												<td class="net-red">5</td>
+												<td class="net-red">3</td>
+												<td class="net-red">26</td>
+												<td>317</td>
+											</tr>
+											<tr>
+												<th>年新增</th>
+												<td class="net-blue">2627</td>
+												<td class="net-blue">89.48%</td>
+												<td class="net-blue">179</td>
+												<td class="net-blue">15</td>
+												<td class="net-blue">36</td>
+												<td class="net-red">309</td>
+												<td class="net-red">10.52%</td>
+												<td class="net-red">36</td>
+												<td class="net-red">9</td>
+												<td class="net-red">36</td>
+												<td>2939</td>
+											</tr>
+											<tr>
+												<th>渠道库存</th>
+												<td class="net-blue">826</td>
+												<td class="net-blue">86.49%</td>
+												<td class="net-blue">159</td>
+												<td class="net-blue">5</td>
+												<td class="net-blue">30</td>
+												<td class="net-red">129</td>
+												<td class="net-red">13.51%</td>
+												<td class="net-red">30</td>
+												<td class="net-red">4</td>
+												<td class="net-red">30</td>
+												<td>955</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="undelivered">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th rowspan="2">车系</th>
+									<th rowspan="2">未发</th>
+									<th colspan="3">汽车销售公司-发运</th>
+									<th colspan="5">汽车销售公司-库存</th>
+								</tr>
+								<tr>
+									<th style="width:80px">总订单</th>
+									<th style="width:80px">限制发运</th>
+									<th style="width:80px">总计</th>
+									<th style="width:80px">可发欠单</th>
+									<th style="width:80px">昨日已发</th>
+									<th style="width:80px">库存</th>
+									<th style="width:80px">库存不足</th>
+									<th style="width:80px">昨日补库</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>F0</td>
+									<td>0</td>
+									<td>0</td>
+									<td><input type="text" class="input-mini limit" value="0"></td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>M6</td>
+									<td>0</td>
+									<td>0</td>
+									<td><input type="text" class="input-mini limit" value="0"></td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>思锐</td>
+									<td>0</td>
+									<td>0</td>
+									<td><input type="text" class="input-mini limit" value="0"></td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>合计</td>
+									<td>0</td>
+									<td>0</td>
+									<td><input type="text" class="input-mini limit" value="0"></td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

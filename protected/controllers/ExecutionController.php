@@ -314,10 +314,10 @@ class ExecutionController extends BmsBaseController
             $car->detectStatus($nodeName);
             $car->finish();
             $car->vq1finish();
-            // $applySapRet = $car->applyTimeTicketInsap();
-            // if($applySapRet[0] == "fail" || $applySapRet[1] == "E" || $applySapRet[1] == "A" || $applySapRet[1] == "W") {
-            //     throw new Exception("SAP报工失败，无法下线。消息类型[". $applySapRet[1] . "]，描述[". $applySapRet[2] ."]");
-            // }
+            $applySapRet = $car->applyTimeTicketInsap();
+            if($applySapRet[0] == "fail" || $applySapRet[1] == "E" || $applySapRet[1] == "A" || $applySapRet[1] == "W") {
+                throw new Exception("SAP报工失败，无法下线。消息类型[". $applySapRet[1] . "]，描述[". $applySapRet[2] ."]");
+            }
 
             $transaction->commit();
 
@@ -887,7 +887,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,SAP料号,SAP物料描述\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,SAP料号,SAP物料描述,SAP报功\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -917,6 +917,8 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['engine_code']},";
                 $content .= "{$data['material_code']},";
                 $content .= "{$data['material_description']},";
+                $yielded = empty($data['yielded']) ? "" : "OK";
+                $content .= "{$yielded},";
                 $content .= "\n";
             }
             $export = new Export('生产车辆明细_' .date('YmdHi'), $content);
