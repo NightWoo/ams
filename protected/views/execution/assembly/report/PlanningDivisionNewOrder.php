@@ -22,6 +22,13 @@
 		<div class="offhead">
 			<div class="container">
 				<legend>计划处报表-新增订单
+                    <span class="pull-right">
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionReport"><i class="fa fa-link"></i>&nbsp;日报</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionFourTech"><i class="fa fa-link"></i>&nbsp;四大工艺完成</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionSalesVolume"><i class="fa fa-link"></i>&nbsp;终端销量</a>
+                    </span>
                 </legend>
             	<div id="timeQueryInputDiv" class="input-append input-prepend">
                     <span class="add-on">日期</span>

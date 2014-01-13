@@ -45,9 +45,10 @@ class Plan {
 		$sapCreate = $this->createInSap($materialCode, $data['total'], $startDate, $endDate, $prodVersion);
 		if(!empty($sapCreate) && "success" == $sapCreate[0] && !empty($sapCreate[3])){
 			$data['plan_number'] = $sapCreate[3];
-		} else {
-			throw new Exception("SAP计划编号生成失败，无法完成新增。消息类型[". $sapCreate[1] . "]，描述[". $sapCreate[2] ."]");
-		}
+		} 
+		// else {
+		// 	throw new Exception("SAP计划编号生成失败，无法完成新增。消息类型[". $sapCreate[1] . "]，描述[". $sapCreate[2] ."]");
+		// }
 
 		$this->save($data);
 	}

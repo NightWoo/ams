@@ -29,7 +29,7 @@ class Order
 		}
 		return $data;
 	}
-	
+
 	public function generate ($details) {
 		$orders = CJSON::decode($details);
 		if(empty($orders)){
@@ -37,6 +37,9 @@ class Order
 		}
 		$orderCarType = $this->orderCarType();
 		foreach($orders as $order){
+			if(empty($order['orderConfigId'])) {
+				throw new Exception("必须选择配置！");
+			}
 			$ar = new OrderAR();
 			$ar->order_number = $order['orderNumber'];
 			$ar->order_detail_id = $order['orderDetailId'];
@@ -93,7 +96,7 @@ class Order
 		if($number > $remain){
 			throw new Exception('本订单需备数量：'. $old->amount . '，已备数量：'. $old->hold .'，待备数量小于分拆数量，无法完成分拆');
 		} else {
-			$old->amount -= $number; 
+			$old->amount -= $number;
 			$new = new OrderAR();
 			$new->order_number = $old->order_number;
 			$new->standby_date = $old->standby_date;
@@ -209,7 +212,7 @@ class Order
 		if(!empty($config)){
 			$orderConfigId = $config->order_config_id;
 		}
-		
+
 		$seeker = new OrderSeeker();
 		$order = $seeker->matchQuery($series, $carType, $orderConfigId, $color, $coldResistant, $date);
 
@@ -220,7 +223,7 @@ class Order
 				$standby_finish_time = date('YmdHis');
 				$saveSuccess=$order->saveAttributes(array("standby_finish_time"=>"$standby_finish_time"));
 			}
-			
+
 			$data['orderId'] = $order->id;
 			$data['orderNumber'] = $order->order_number;
 			$data['distributorName'] = $order->distributor_name;
@@ -242,7 +245,7 @@ class Order
 
 		if(!empty($series)){
 	        $arraySeries = Series::parseSeries($series);
-	        $cTmp = array(); 
+	        $cTmp = array();
 	        foreach($arraySeries as $series){
 	        	$cTmp[] = "series='$series'";
 	        }
@@ -252,7 +255,7 @@ class Order
         $condition .= " ORDER BY priority ASC";
 		$orders = OrderAR::model()->findAll($condition, array($standbyDate));
 		if(!empty($orders)){
-			
+
 			foreach($orders as $order) {
 				$sql = "SELECT id FROM car_config WHERE order_config_id = $order->order_config_id";
         		$configId = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -262,13 +265,13 @@ class Order
         			case 0 :
         				$matchCondition = "warehouse_id>1 AND warehouse_id<=300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
         				break;
-        			case 14 :	
+        			case 14 :
 						$matchCondition = "warehouse_id>=400 AND warehouse_id<500 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 						break;
-					case 27 :	
+					case 27 :
 						$matchCondition = "warehouse_id>=500 AND warehouse_id<600 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 						break;
-					case 35 :	
+					case 35 :
 						$matchCondition = "warehouse_id>=600 AND warehouse_id<700 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
 						break;
 					default :
@@ -288,7 +291,7 @@ class Order
 				$LC0TypeColorText = $this->getLC0TypeColorText();
 				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
 				$matchCondition .= $LC0Condition;
-				
+
 				$matchCondition .= "  ORDER BY fifo_time ASC";
 				$matchedCar = CarAR::model()->find($matchCondition, $values);
 				if(!empty($matchedCar)){
@@ -320,7 +323,7 @@ class Order
 					$warehouse->status = 0;
 				}
 				$warehouse->save();
-				
+
 				$matchedCar->order_id = $matchedOrder->id;
 				$matchedCar->old_wh_id = $matchedCar->warehouse_id;
 				$matchedCar->warehouse_id = 1;
@@ -333,7 +336,7 @@ class Order
 
 				$rowWDI = WarehouseAR::model()->findByPk(1);
 				$rowWDI->saveCounters(array('quantity'=>1));
-				
+
 				$configName = CarConfigAR::model()->findByPk($matchedCar->config_id)->name;
 				$carModel = CarTypeMapAR::model()->find('car_type=?', array($matchedCar->type))->car_model;
 
@@ -536,7 +539,7 @@ class Order
 		$vins = Yii::app()->db->createCommand($sql)->queryColumn();
 
 		$ret = $this->printByVins($vins, $specialOrder, $forceThrow);
-		
+
 		return $ret;
 	}
 
@@ -570,7 +573,7 @@ class Order
 						$certificateFailures[] = $vin;
 					}
 				} else {
-					++$certificateSuccess; 
+					++$certificateSuccess;
 				}
 				--$retry;
             } while ($ret === false &&  $retry>0);
@@ -650,7 +653,7 @@ class Order
 		// $datas = Yii::app()->db->createCommand($sql)->queryAll();
 		// $retArray = array();
 		// foreach($datas as $data){
-		// 	$retArray[] = array('type'=>$data['car_type'],'colors'=>$data['car_colors']); 
+		// 	$retArray[] = array('type'=>$data['car_type'],'colors'=>$data['car_colors']);
 		// }
 
 	}
@@ -660,7 +663,7 @@ class Order
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$textArray = array();
 		foreach($datas as $data){
-			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
+			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))";
 		}
 
 		$text = join(" OR ", $textArray);

@@ -27,13 +27,14 @@ class OrderSeeker
             $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
             $tdsUser = Yii::app()->params['tds_SELL_username'];
             $tdsPwd = Yii::app()->params['tds_SELL_password'];
-           
+
             $orders = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
         // } else {
         //     $orders = Yii::app()->dbCRM->createCommand($sql)->queryAll();
         // }
 
         foreach($orders as &$order){
+            // $order = array_change_key_case($order, CASE_LOWER);
         	if($order['series'] == '思锐'){
         		$order['series'] = '6B';
         	}
@@ -69,12 +70,12 @@ class OrderSeeker
 		$sql = "SELECT DATAK40_DGMXID AS order_detail_id, DATAK40_JXSMC AS distributor, DATAK40_DGDH AS order_number, DATAK40_CXMC AS series, DATAK40_CLDM AS car_type_code, DATAK40_CLXH AS sell_car_type, DATAK40_BZCX AS car_model, DATAK40_CXSM AS car_type_description, DATAK40_CLYS AS sell_color, DATAK40_VINMYS AS color, DATAK40_DGSL AS amount, DATAK40_XZPZ AS options, DATAK40_DDXZ AS order_nature, DATAK40_DDLX AS cold_resistant, DATAK40_NOTE AS remark, DATAK40_JZPZ AS additions, DATAK40_SSDW AS production_base, DATAK40_JXSDM AS distributor_code
                 FROM DATAK40_CLDCKMX
                 WHERE DATAK40_SSDW = '3' AND DATAK40_DGMXID = $$orderDetailId";
-		
+
 		$tdsSever = Yii::app()->params['tds_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
         $tdsUser = Yii::app()->params['tds_SELL_username'];
         $tdsPwd = Yii::app()->params['tds_SELL_password'];
-       
+
         $datas = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
 
         $order = $datas[0];
@@ -109,14 +110,14 @@ class OrderSeeker
 		$specialNumber = strtoupper($specialNumber);
 
 		$sql = "SELECT COUNT(id) AS amount, series, type AS car_type, order_config_id, order_config_name,cold_resistant, color, special_order,remark,export_country,mark_clime
-				FROM view_car_info_order_config 
-				WHERE UPPER(special_order) = '$specialNumber' OR UPPER(remark) LIKE '%$specialNumber%' 
+				FROM view_car_info_order_config
+				WHERE UPPER(special_order) = '$specialNumber' OR UPPER(remark) LIKE '%$specialNumber%'
 				GROUP BY series, type,order_config_id, order_config_name,cold_resistant, color";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 
 		foreach($orders as &$order){
 			$sumSql = "SELECT SUM(amount)
-						FROM `order` 
+						FROM `order`
 						WHERE UPPER(order_number)='$specialNumber' AND series='{$order['series']}' AND car_type='{$order['car_type']}' AND order_config_id='{$order['order_config_id']}' AND cold_resistant='{$order['cold_resistant']}' AND color='{$order['color']}'";
 			$amountSum = Yii::app()->db->createCommand($sumSql)->queryScalar();
 			$order['amount'] -= $amountSum;
@@ -127,7 +128,7 @@ class OrderSeeker
 	}
 
 	public function mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql){
-		//php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+		//php 5.4 linux use pdo cannot connet to ms sqlsrv db
         //use mssql_XXX instead
 
 		$mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
@@ -135,10 +136,10 @@ class OrderSeeker
             throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
         }
         mssql_select_db($tdsDB ,$mssql);
-        
+
         //query
         $result = mssql_query($sql);
-        $datas = array(); 
+        $datas = array();
         while($ret = mssql_fetch_assoc($result)){
         	$datas[] = $ret;
         }
@@ -159,7 +160,7 @@ class OrderSeeker
 
 		$statusArray = $this->parseStatus($status);
 		$condition = "`status` IN(" . join(",", $statusArray) . ")";
-		
+
 		if(!empty($standbyDate)){
 			if(empty($standbyDateEnd)){
 				$standbyDateEnd = $standbyDate;
@@ -186,7 +187,7 @@ class OrderSeeker
 		if(!empty($carrier)){
 			$condition .= " AND carrier LIKE '%$carrier'";
 		}
-		
+
 		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, remark, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed, lane_release_time, to_count, carrier, order_nature FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 		if(empty($orderList)){
@@ -198,7 +199,7 @@ class OrderSeeker
 				$detail['order_config_name'] = OrderConfigAR::model()->findByPk($detail['order_config_id'])->name;
 			}
 			$detail['car_model'] = CarTypeMapAR::model()->find("car_type=?", array($detail['car_type']))->car_model;
-			
+
 			$detail['lane_name'] = '';
 			$lane = LaneAR::model()->findByPk($detail['lane_id']);
 			if(!empty($lane)) $detail['lane_name'] = $lane->name;
@@ -214,7 +215,7 @@ class OrderSeeker
 			}
 
 			$detail['remain'] =  $detail['amount']; - $detail['hold'];
-			
+
 			$detail['standby_last'] = 0;
 			$detail['out_last'] = 0;
 			$detail['lane_last'] = 0;
@@ -259,7 +260,7 @@ class OrderSeeker
 	        	$configId = "(" . join(',', $configId) . ")";
 
 				$matchCondition = "warehouse_id>1 AND warehouse_id< 1000 AND series=? AND color=? AND cold_resistant=? AND config_id IN $configId AND warehouse_time >'0000-00-00 00:00:00' AND special_property<9";
-				
+
 				// $LC0Type = self::$LC0_TYPE;
 				// $LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR (type='QCJ7100L(1.0排量舒适型)' AND color='法兰红') OR config_id IN (7,9) OR (type IN ('QCJ7152ET1(1.5TI尊贵型)','QCJ7152ET1(1.5TI尊享型)','QCJ7152ET2(1.5TID尊贵型)') AND color<>'巧克力棕' AND color<>'德兰黑') )";
 				list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
@@ -270,7 +271,7 @@ class OrderSeeker
 
 				$values = array($order['series'], $order['color'], $order['cold_resistant']);
 				$matchCount = CarAR::model()->count($matchCondition, $values);
-				
+
 				$alreadyNeed = 0;
 				if($order['status'] == 1){
 					$sameSql = "SELECT SUM(amount) AS amount_sum, SUM(hold) AS hold_sum FROM `order` WHERE standby_date='{$order['standby_date']}' AND `status` =1 AND to_count=1 AND (priority<{$order['priority']} OR (priority={$order['priority']} AND id<{$order['id']})) AND series='{$order['series']}' AND color='{$order['color']}' AND cold_resistant={$order['cold_resistant']} AND order_config_id={$order['order_config_id']} AND id<>{$order['id']}";
@@ -314,7 +315,7 @@ class OrderSeeker
 		$orderBy='board_number,lane_id';
 		$sql = "SELECT id, order_number, board_number, priority, standby_date, amount, hold, count, series, car_type, color, cold_resistant, order_config_id, distributor_name, lane_id, lane_status, status, create_time, activate_time, standby_finish_time, out_finish_time, is_printed FROM bms.order WHERE $condition ORDER BY $orderBy ASC";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$countSql = "SELECT COUNT(DISTINCT lane_id) FROM `order` WHERE $condition";
 		$laneCount = Yii::app()->db->createCommand($countSql)->queryScalar();
 
@@ -362,7 +363,7 @@ class OrderSeeker
 
 			$laneNum = sizeof($boards[$order['board_number']]['lane']);
 			$boards[$order['board_number']]['laneNum'] = $laneNum;
-			
+
 			if($order['activate_time'] >'0000-00-00 00:00:00'){
 				if($boards[$order['board_number']]['boardActivateTime'] === '0000-00-00 00:00:00' || $order['activate_time'] < $boards[$order['board_number']]['boardActivateTime']){
 					$boards[$order['board_number']]['boardActivateTime'] = $order['activate_time'];
@@ -454,16 +455,16 @@ class OrderSeeker
 				$condition = 'WHERE ' . $condition;
 			}
 
-			$sql = "SELECT 	board_number, 
-							MIN(activate_time) AS min_activate, 
-							MAX(activate_time) AS max_activate, 
-							MIN(out_finish_time) AS min_out, 
+			$sql = "SELECT 	board_number,
+							MIN(activate_time) AS min_activate,
+							MAX(activate_time) AS max_activate,
+							MIN(out_finish_time) AS min_out,
 							MAX(out_finish_time) AS max_out,
 							MIN(lane_release_time) AS min_release,
-							MAX(lane_release_time) AS max_relaese 
+							MAX(lane_release_time) AS max_relaese
 					FROM 	`order` $condition
 					GROUP BY board_number";
-			$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` $condition"; 
+			$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` $condition";
 
 			$datas = Yii::app()->db->createCommand($sql)->queryAll();
 			$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
@@ -516,7 +517,7 @@ class OrderSeeker
 			$warehousePeriodSum +=  $warehousePeriod;
 			$transportPeriodSum +=  $transportPeriod;
 			$totalPeriodSum +=  $totalPeriod;
-			
+
 		}
 			$retTotal['boardCountSum'] = $boardCountSum;
 			if($boardCountSum == 0){
@@ -573,8 +574,8 @@ class OrderSeeker
 			$countSum = 0;
 			$amountSum = 0;
 			$toPrint = 0;
-			$sql = "SELECT id,amount,hold,count,lane_id,`status`,is_printed 
-					FROM `order` 
+			$sql = "SELECT id,amount,hold,count,lane_id,`status`,is_printed
+					FROM `order`
 					WHERE lane_id='{$lane['id']}' AND (`status`=1 OR `status`=2) AND is_printed=0";
 			$orders = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach($orders as $order){
@@ -614,7 +615,7 @@ class OrderSeeker
 				$order['order_config_name'] = OrderConfigAR::model()->findByPk($order['order_config_id'])->name;
 			}
 			$order['car_model'] = CarTypeMapAR::model()->find("car_type=?", array($order['car_type']))->car_model;
-			
+
 			$order['lane_name'] = '';
 			$lane = LaneAR::model()->findByPk($order['lane_id']);
 			if(!empty($lane)) $order['lane_name'] = $lane->name;
@@ -725,8 +726,8 @@ class OrderSeeker
 	}
 
 	public function queryCarsById($orderId){
-		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code, old_wh_id, remark 
-				FROM car 
+		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code, old_wh_id, remark
+				FROM car
 				WHERE order_id=$orderId ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 		$configName = $this->configNameList();
@@ -756,7 +757,7 @@ class OrderSeeker
 	public function queryCarsByIds($orderIds){
 		$orderIds = "(" . join(',', $orderIds) . ")";
 		$sql = "SELECT id as car_id,vin, order_id, series, type, config_id, cold_resistant,color, `status`, distribute_time, distributor_name, engine_code,lane_id
-				FROM car 
+				FROM car
 				WHERE order_id IN $orderIds ORDER BY distribute_time ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 		$configName = $this->configNameList();
@@ -780,9 +781,9 @@ class OrderSeeker
 		$specialOrder = strtoupper($specialOrder);
 		$condition = "(UPPER(special_order)='$specialOrder' OR UPPER(remark) LIKE '%$specialOrder%') AND special_property";
 
-		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code,finish_time, warehouse_time, remark 
+		$sql = "SELECT special_order, id, vin, serial_number, series, type, config_id, cold_resistant, color, `status`, engine_code,finish_time, warehouse_time, remark
 				FROM car
-				WHERE $condition 
+				WHERE $condition
 				ORDER BY serial_number ASC";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -793,7 +794,7 @@ class OrderSeeker
 			$car['type_config'] = $configName[$car['config_id']];
 			$car['cold'] = self::$COLD_RESISTANT[$car['cold_resistant']];
 			$testlinePassed = $this->checkTestLinePassed($car['vin']);
-			
+
 			if($testlinePassed){
 				$car['inspectionSheet'] = 'OK';
 			} else {
@@ -819,7 +820,7 @@ class OrderSeeker
 			if($isReportPrinted){
 				$car['iPrinted'] = true;
 			}
-			
+
 			++$total;
 		}
 
@@ -834,7 +835,7 @@ class OrderSeeker
 			$values[] = $carType;
 		}
 		$configs = OrderConfigAR::model()->findAll($condition . ' ORDER BY id ASC', $values);
-		
+
 		$datas = array();
 		foreach($configs as $config) {
 			$data['config_id'] = $config->id;
@@ -866,9 +867,9 @@ class OrderSeeker
 		$sql = "SELECT board_number FROM `order` WHERE board_number LIKE '$ret%' ORDER BY board_number DESC";
 		$lastSerial = Yii::app()->db->createCommand($sql)->queryScalar();
 		$lastKey = intval(substr($lastSerial, 5 , 3));
-		
+
 		$ret .= sprintf("%03d", (($lastKey + 1) % 1000));
-		
+
 		return $ret;
 	}
 
@@ -893,13 +894,13 @@ class OrderSeeker
 
 	public function checkTestLinePassed($vin) {
 		$flag = false;
-		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag 
+		$sql = "SELECT ToeFlag_F, LM_Flag, RM_Flag, RL_Flag, LL_Flag, Light_Flag, Slide_Flag, BrakeResistanceFlag_F, BrakeFlag_F, BrakeResistanceFlag_R, BrakeFlag_R, BrakeSum_Flag, ParkSum_Flag, Brake_Flag, Speed_Flag, GasHigh_Flag, GasLow_Flag, Final_Flag
 		FROM Summary WHERE vin='$vin'";
-			
+
 		$ret=Yii::app()->dbTest->createCommand($sql)->queryRow();
-		if($ret['Final_Flag'] === 'T') 
+		if($ret['Final_Flag'] === 'T')
 			$flag = true;
-		
+
 		return $flag;
 	}
 
@@ -934,16 +935,16 @@ class OrderSeeker
 		$ret = array();
 		if($lastDay <= 31) {
 			$pointFormat = 'm-d';
-		} else {	
+		} else {
 			$format = 'Y-m';
 			$stime = date($format, $s);
 			$etime = date($format, $e);
 			$pointFormat = 'Y-m';
 		}
-		
+
 		$t = $s;
 		while($t <= $e) {
-			
+
 			$point = date($pointFormat, $t);
 
 			if($pointFormat === 'm-d'){
@@ -953,7 +954,7 @@ class OrderSeeker
 					'etime' => date($format, $nextD),
 					'point' => $point,
 				);
-				$t = $nextD;	
+				$t = $nextD;
 			} else {
 				$nextM = strtotime('+1 month', $t);
 				$ret[] = array(
@@ -962,7 +963,7 @@ class OrderSeeker
 					'point' => $point,
 				);
 				$t = $nextM;
-			}		
+			}
 		}
 
 		return $ret;
@@ -973,7 +974,7 @@ class OrderSeeker
 		$tdsSever = Yii::app()->params['tds_HGZ'];
         $tdsDB = Yii::app()->params['tds_dbname_HGZ_DATABASE'];
         $tdsUser = Yii::app()->params['tds_HGZ_username'];
-        $tdsPwd = Yii::app()->params['tds_HGZ_password']; 
+        $tdsPwd = Yii::app()->params['tds_HGZ_password'];
 
 		$sql = "SELECT VIN,DGDH,DGMXID FROM Print_Table WHERE VIN='{$vin}'";
 		//connect
@@ -982,10 +983,10 @@ class OrderSeeker
             throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
         }
         mssql_select_db($tdsDB ,$mssql);
-        
+
         //execute insert
         $ret=mssql_query($sql);
-        
+
         //disconnect
         mssql_close($mssql);
 
@@ -998,7 +999,7 @@ class OrderSeeker
 
 	public function isReportPrinted($vin) {
 		$isPrinted = false;
-		$existsql = "SELECT vin,Order_ID,ReportPrinted FROM ShopPrint WHERE vin='{$vin}'";				
+		$existsql = "SELECT vin,Order_ID,ReportPrinted FROM ShopPrint WHERE vin='{$vin}'";
 		$exist=Yii::app()->dbTest->createCommand($existsql)->queryRow();
 		if(!empty($exist) && $exist['ReportPrinted'] == '已打印'){
 			$isPrinted = true;
@@ -1052,7 +1053,7 @@ class OrderSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$textArray = array();
 		foreach($datas as $data){
-			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))"; 
+			$textArray[] = "(type='" . $data['car_type'] . "' AND color IN (" . $data['car_colors'] ."))";
 		}
 
 		$text = join(" OR ", $textArray);

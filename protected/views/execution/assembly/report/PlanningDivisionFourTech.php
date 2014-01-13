@@ -22,6 +22,13 @@
 		<div class="offhead">
 			<div class="container">
 				<legend>计划处报表-四大工艺完成情况
+                    <span class="pull-right">
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionReport"><i class="fa fa-link"></i>&nbsp;日报</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionNewOrder"><i class="fa fa-link"></i>&nbsp;新增订单</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionSalesVolume"><i class="fa fa-link"></i>&nbsp;终端销量</a>
+                    </span>
                 </legend>
             	<div id="timeQueryInputDiv" class="input-append input-prepend">
                     <span class="add-on">日期</span>
@@ -50,7 +57,7 @@
                 <div>
                     <ul id="tabs" class="nav nav-pills">
                         <li class="active"><a href="#retTable" data-toggle="tab"><i class="fa fa-table"></i></a></li>
-                        <li class="disabled"><a href="#retChart"><i class="fa fa-bar-chart-o"></i></a></li>
+                        <li><a href="#retChart" data-toggle="tab"><i class="fa fa-bar-chart-o"></i></a></li>
                     </ul>
                 </div>
                 <div  id="tabContent" class="tab-content">
@@ -373,6 +380,9 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="tab-pane" id="retChart">
+                        <h3>这是趋势图</h3>
                     </div>
                 </div>
 			</div>

@@ -22,6 +22,12 @@
 	                	</div>
                     </span>
                     <span class="pull-right">
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionFourTech"><i class="fa fa-link"></i>&nbsp;四大工艺完成</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionNewOrder"><i class="fa fa-link"></i>&nbsp;新增订单</a>
+                        /
+                        <a class="notPrintable" href="/bms/execution/report?type=PlanningDivisionSalesVolume"><i class="fa fa-link"></i>&nbsp;终端销量</a>
+                        /
                         <a class="notPrintable" href="/bms/execution/warehouseCountRevise"><i class="fa fa-link"></i>&nbsp;未发值修正</a>
                     </span>
                 </legend>

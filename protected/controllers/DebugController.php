@@ -10,21 +10,39 @@ class DebugController extends BmsBaseController
 
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
-		$date = $this->validateStringVal('date', '');
+		$material = $this->validateStringVal('material', '');
 		try {
-			// $seeker= new ReportSeeker();
-	        $ss = "20130829";
-	        $ee = "ZCDG-20130506106448";
-	        // if(strtotime($ee)-strtotime($ss) <= 24*3600) $ret = "OK";
-	        // $ret = explode("-", $ss)[0];
-	        // $ret2 = explode("-", $ee)[0];
-	        $ret['12'] = $ss;
-	        $ret['123'] = $ee;
-	        // $ret = $seeker -> planningDivisionSms($date);
 
-			$this->renderJsonBms(true, $ret, $ret);
+			$sellTable = new SellTable();
+			$sellTable->getOrderView();
+			$sellTable->getSaleView();
+			$sellTable->getShipView();
+			$sellTable->getStockView();
+
+			$ret = 'OK';
+			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function createInSap ($material, $quantity, $startDate, $endDate="", $prodVersion="", $plant="C113", $type="QC01") {
+		try {
+			$client = @new SoapClient(Yii::app()->params['saprfc']);
+			$params = array(
+				"material"=>$material,
+				"quantity"=>$quantity,
+				"startDate"=>$startDate,
+				"endDate"=>$endDate,
+				"prodVersion"=>$prodVersion,
+				"plant"=>$plant,
+				"orderType"=>$type
+			);
+			$result = $client->createPlan($params);
+			$ret = (array)$result->createPlanResult;
+			return $ret['string'];
+		} catch(Exception $e) {
+			$ret = array("fail", "E", "createInSap fail", "");
 		}
 	}
 
@@ -91,7 +109,7 @@ class DebugController extends BmsBaseController
 		$level = 0;
 		if(!empty($pause['duty_department'])) {
 			switch ($minutes) {
-				case ($minutes<10) : 
+				case ($minutes<10) :
 					$level = 1;
 					break;
 				case ($minutes<30) :
