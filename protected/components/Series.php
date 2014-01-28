@@ -16,6 +16,15 @@ class Series
 		return  $nameList;
 	}
 
+    public static function getCodeList () {
+        $codeList = array();
+        $seriesArray = SeriesAR::model()->findAll();
+        foreach($seriesArray as $series){
+            $codeList[$series['name']] = $series['series'];
+        }
+        return $codeList;
+    }
+
 	public static function getArray () {
 		$sql = "SELECT series FROM series";
 		$arr = Yii::app()->db->createCommand($sql)->queryColumn();

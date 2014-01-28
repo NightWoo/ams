@@ -35,7 +35,7 @@ class FaultController extends BmsBaseController
 		try{
 			$fault = Fault::createSeeker();
 			$data = $fault->getAllByCategory($category,$mode, $series);
-			
+
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false , $e->getMessage());
@@ -62,7 +62,7 @@ class FaultController extends BmsBaseController
 		try{
 			if(empty($name)) {
 				throw new Exception('component cannot be null');
-			}	
+			}
             $fault = Fault::createSeekerByComponent($name, $series);
             $data = $fault->getAll();
 
@@ -118,14 +118,14 @@ class FaultController extends BmsBaseController
         }
 	}
 
-	
+
 	public function actionSaveVQ1() {
         $vin = $this->validateStringVal('vin', '');
-        $faults = $this->validateStringVal('fault', '[]'); 
+        $faults = $this->validateStringVal('fault', '[]');
         $transaction = Yii::app()->db->beginTransaction();
         try{
             $car = Car::create($vin);
-            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
+            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)" && $car->car->type != "BYD7202ET1(2.0TID豪华型)"){
                 $IRemote = $car->getIRemoteTestResult();
                 if(!($IRemote->Result) || $IRemote->TestState != "2"){
                     throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
@@ -134,7 +134,7 @@ class FaultController extends BmsBaseController
 
             $checkTrace = $car->checkTraceComponentByConfig();
             if($checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
-            
+
             $vinValidate = $car->validateVin();
             if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
 
@@ -143,8 +143,8 @@ class FaultController extends BmsBaseController
             if($car->car->assembly_line == "II"){
                 $tablePrefix = "VQ1_STATIC_TEST_2";
                 $nodeName = "VQ1_2";
-            }  
-			$fault = Fault::create($tablePrefix, $vin, $faults);	
+            }
+			$fault = Fault::create($tablePrefix, $vin, $faults);
 			$fault->save('离线');
 
             $node = Node::createByName($nodeName);
@@ -241,7 +241,7 @@ class FaultController extends BmsBaseController
     }
 
 
-	
+
 	public function actionSaveVQ3() {
         $vin = $this->validateStringVal('vin', '');
         $faults = $this->validateStringVal('fault', '[]');
@@ -254,7 +254,7 @@ class FaultController extends BmsBaseController
 
             $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults, $others);
             $fault->save('离线');
-			
+
 			$car = Car::create($vin);
             $node = Node::createByName("VQ3");
             $car->detectStatus("VQ3");
@@ -452,11 +452,11 @@ class FaultController extends BmsBaseController
 		$level = empty($_REQUEST['level']) ? array() : $_REQUEST['level'];
 		$perPage = $this->validateIntVal('perPage', 20);
         $curPage = $this->validateIntVal('curPage', 1);
-		
+
 		try{
             $fault = Fault::createBaseSeeker();
             list($total, $data) = $fault->query($faultKind, $series, $component, $mode, $status, $level, $curPage, $perPage);
-			
+
 			$ret = array(
                 'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
                 'data' => $data,
@@ -467,7 +467,7 @@ class FaultController extends BmsBaseController
         }
 
 
-		
+
 	}
 
 	public function actionGenerateFaultCode() {
@@ -533,8 +533,8 @@ class FaultController extends BmsBaseController
 			$standard->isenabled = $status;
 			$standard->description = $description;
 			$standard->save();
-			
-				
+
+
             $this->renderJsonBms(true, 'OK', $standard->id);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());
@@ -589,7 +589,7 @@ class FaultController extends BmsBaseController
 					$data[] = array('id' => $imageAR->id, 'image' => self::IMAGE_HTTP . $path);
 				}
             }
-			
+
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false , $e->getMessage());

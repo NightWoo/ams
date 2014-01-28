@@ -12,18 +12,87 @@ class DebugController extends BmsBaseController
 		$vin = $this->validateStringVal('vin', '');
 		$material = $this->validateStringVal('material', '');
 		try {
-
-			$sellTable = new SellTable();
-			$sellTable->getOrderView();
-			$sellTable->getSaleView();
-			$sellTable->getShipView();
-			$sellTable->getStockView();
-
-			$ret = 'OK';
+			// $seriesNameList = Series::getNameList();
+			// foreach($seriesNameList as $series => $seriesName) {
+			// 	$this->getSellTableDatas($series);
+			// }
+			$a = array();
+			$a[] = "";
+			$ret = empty($a);
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
+	}
+
+	public function actionGetOrderView () {
+		$series = $this->validateStringVal('series', '');
+		try {
+			$seriesNameList = Series::getNameList();
+			foreach($seriesNameList as $series => $seriesName) {
+				$sellTable = new SellTable();
+				$sellTable->getOrderView($series);
+			}
+
+			$this->renderJsonBms(true, 'OK', 'got it');
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionGetSaleView () {
+		$series = $this->validateStringVal('series', '');
+		try {
+			$seriesNameList = Series::getNameList();
+			foreach($seriesNameList as $series => $seriesName) {
+				$sellTable = new SellTable();
+				$sellTable->getSaleView($series);
+			}
+
+			$this->renderJsonBms(true, 'OK', 'got it');
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionGetShipView () {
+		$series = $this->validateStringVal('series', '');
+		try {
+			$seriesNameList = Series::getNameList();
+			foreach($seriesNameList as $series => $seriesName) {
+				$sellTable = new SellTable();
+				$sellTable->getShipView($series);
+			}
+
+			$this->renderJsonBms(true, 'OK', 'got it');
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	public function actionStockView () {
+		$series = $this->validateStringVal('series', '');
+		try {
+			$seriesNameList = Series::getNameList();
+			foreach($seriesNameList as $series => $seriesName) {
+				$sellTable = new SellTable();
+				$sellTable->getStockView($series);
+			}
+
+			$this->renderJsonBms(true, 'OK', 'got it');
+		} catch(Exception $e) {
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+	private function getSellTableDatas ($series) {
+		$sellTable = new SellTable();
+		$datas = array();
+		$datas[] = $sellTable->getOrderView($series);
+		$datas[] = $sellTable->getSaleView($series);
+		$datas[] = $sellTable->getShipView($series);
+		$datas[] = $sellTable->getStockView($series);
+		return $datas;
 	}
 
 	public function createInSap ($material, $quantity, $startDate, $endDate="", $prodVersion="", $plant="C113", $type="QC01") {

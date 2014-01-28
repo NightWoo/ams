@@ -4,7 +4,7 @@ Yii::import('application.models.AR.OrderAR');
 Yii::import('application.models.AR.LaneAR');
 Yii::import('application.models.AR.WarehouseAR');
 
-class PlanningDivisionReprotSeeker
+class PlanningDivisionReportSeeker
 {
     public function __construct () {}
 
@@ -13,11 +13,184 @@ class PlanningDivisionReprotSeeker
     public function queryOperationReport ($date) {
         list($stime, $etime) = $this->reviseYearlyTime($date);
         $seriesList = Series::getNameList();
-        $countArray = array();
 
+        $monthPoint = array();
+        $detail = array('monthPoint'=>array(), 'datas'=>array());
+        $total = array();
         $timeArray = $this->parseQueryTime($stime, $etime, 'yearly');
+        $pointArray = array('assembly' => '上线', 'warehouse'=>'入库', 'distribute'=>'出库');
+        foreach($seriesList as $series => $seriesName) {
+            $detail['datas'][$seriesName] = array();
+            $total[$seriesName] = array();
+            foreach($pointArray as $point=>$pointName) {
+                $detail['datas'][$seriesName][$pointName] = array();
+                $total[$seriesName][$pointName] = 0;
+            }
+        }
+
+        foreach($timeArray as $queryTime) {
+            foreach($pointArray as $point=>$pointName) {
+                $count = $this->countCarByPoint ($queryTime['stime'], $queryTime['etime'], $point);
+                foreach($seriesList as $series => $seriesName) {
+                    $detail['datas'][$seriesName][$pointName][] = $count[$series];
+                    $total[$seriesName][$pointName] += $count[$series];
+                }
+            }
+            $detail['monthPoint'][] = $queryTime['point'];
+        }
+
+        return array('detail'=>$detail, 'total'=>$total);
+    }
+
+    public function queryDistributionNetworkReport ($date) {
+        list($sMonth, $eMonth) = $this->reviseDailyMonth($date);
+        list($sYear, $eYear) = $this->reviseDailyYear($date);
+
+        $seriesList = Series::getNameList();
+        $nets = ['net-blue'=>'蓝网', 'net-red'=>'红网'];
+        $ret = array();
+        foreach($seriesList as $series => $seriesName) {
+            $saleDistributorCountMonth = array();
+            $saleDistributorCountAll = array();
+
+            $orderDistributorCountMonth = array();
+
+            $orderDistributorCountYear = array();
+
+            $orderDistributorCountAll = array();
+            foreach($nets as $net=>$netName) {
+                $sale[$net] = array();
+                $orderMonth[$net] = array();
+                $orderYear[$net] = array();
+            }
+            $sale['total']['count'] = 0;
+            $orderMonth['total']['count'] = 0;
+            $orderYear['total']['count'] = 0;
+            foreach($nets as $net => $netName) {
+                $saleCountMonth[$net] = $this->querySaleCount($sMonth, $eMonth, $series, $netName);
+                $sale['total']['count'] += $saleCountMonth[$net];
+                $saleDistributorCountMonth[$net] = $this->querySaleDistributorCount($sMonth, $eMonth, $series, $netName);
+                $saleDistributorCountAll[$net] = $this->querySaleDistributorCount('', '', $series, $netName);
 
 
+                $orderCountMonth[$net] = $this->queryorderCount($sMonth, $eMonth, $series, $netName);
+                if(empty($orderCountMonth[$net])) {
+                    $orderCountMonth[$net] = 0;
+                }
+                $orderMonth['total']['count'] += $orderCountMonth[$net];
+                $orderDistributorCountMonth[$net] = $this->queryOrderDistributorCount($sMonth, $eMonth, $series, $netName);
+
+                $orderCountYear[$net] = $this->queryorderCount($sYear, $eYear, $series, $netName);
+                if(empty($orderCountYear[$net])) {
+                    $orderCountYear[$net] = 0;
+                }
+                $orderYear['total']['count'] += $orderCountYear[$net];
+                $orderDistributorCountYear[$net] = $this->queryOrderDistributorCount($sYear, $eYear, $series, $netName);
+
+                $orderDistributorCountAll[$net] = $this->queryOrderDistributorCount('', '', $series, $netName);
+            }
+
+            foreach($nets as $net=>$netName) {
+
+                $sale[$net]['count'] = $saleCountMonth[$net];
+                $sale[$net]['rate'] = empty($sale['total']['count']) ? "-" : round($saleCountMonth[$net] / $sale['total']['count'] , 3) * 100 . "%";
+                $sale[$net]['distributor_count'] = $saleDistributorCountMonth[$net];
+                $sale[$net]['distributor_capacity'] = empty($saleDistributorCountMonth[$net]) ? "-" : round($saleCountMonth[$net] / $saleDistributorCountMonth[$net]);
+                $sale[$net]['distributor_total'] = $saleDistributorCountAll[$net];
+
+                $orderMonth[$net]['count'] = $orderCountMonth[$net];
+                $orderMonth[$net]['rate'] = empty($orderMonth['total']['count']) ? "-" : round($orderCountMonth[$net] / $orderMonth['total']['count'] , 3) * 100 . "%";
+                $orderMonth[$net]['distributor_count'] = $orderDistributorCountMonth[$net];
+                $orderMonth[$net]['distributor_capacity'] = empty($orderDistributorCountMonth[$net]) ? "-" : round($orderCountMonth[$net] / $orderDistributorCountMonth[$net]);
+                $orderMonth[$net]['distributor_total'] = $orderDistributorCountAll[$net];
+
+
+                $orderYear[$net]['count'] = $orderCountYear[$net];
+                $orderYear[$net]['rate'] = empty($orderYear['total']['count']) ? "-" : round($orderCountYear[$net] / $orderYear['total']['count'] , 3) * 100 . "%";
+                $orderYear[$net]['distributor_count'] = $orderDistributorCountYear[$net];
+                $orderYear[$net]['distributor_capacity'] = empty($orderDistributorCountYear[$net]) ? "-" : round($orderCountYear[$net] / $orderDistributorCountYear[$net]);
+                $orderYear[$net]['distributor_total'] = $orderDistributorCountAll[$net];
+            }
+
+            $detail[$series]['销量'] =  $sale;
+            $detail[$series]['月新订单'] =  $orderMonth;
+            $detail[$series]['年新订单'] =  $orderYear;
+        }
+
+        return $detail;
+    }
+
+    public function querySaleCount ($stime, $etime, $series="", $distribution_network="" ) {
+        $sql = "SELECT COUNT(*) FROM sell_sale_view WHERE register_time>='$stime' AND register_time<'$etime'";
+        if(!empty($series)) {
+            $sql .= " AND series='$series'";
+        }
+        if(!empty($distribution_network)) {
+            $sql .= " AND distribution_network='$distribution_network'";
+        }
+
+        $count = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $count;
+    }
+
+    public function queryOrderCount ($stime, $etime, $series="", $distribution_network="" ) {
+        $sql = "SELECT SUM(amount) FROM sell_order_view WHERE audit_time>='$stime' AND audit_time<'$etime' AND audit_conclusion=1";
+        if(!empty($series)) {
+            $sql .= " AND series='$series'";
+        }
+        if(!empty($distribution_network)) {
+            $sql .= " AND distribution_network='$distribution_network'";
+        }
+
+        $count = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $count;
+    }
+
+    public function querySaleDistributorCount ($stime="", $etime="", $series="", $distribution_network="") {
+        $conditions = array();
+        if(!empty($stime)) {
+            $conditions[] = "register_time>='$stime'";
+        }
+        if(!empty($etime)) {
+            $conditions[] = "register_time<'$etime'";
+        }
+        if(!empty($series)) {
+            $conditions[] = "series='$series'";
+        }
+        if(!empty($distribution_network)) {
+            $conditions[] = "distribution_network='$distribution_network'";
+        }
+        $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
+
+        $sql = "SELECT COUNT(DISTINCT distributor_code) FROM sell_sale_view $condition";
+        $count = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $count;
+    }
+
+    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $distribution_network="") {
+        $conditions = array();
+        if(!empty($stime)) {
+            $conditions[] = "audit_time>='$stime'";
+        }
+        if(!empty($etime)) {
+            $conditions[] = "audit_time<'$etime'";
+        }
+        if(!empty($series)) {
+            $conditions[] = "series='$series'";
+        }
+        if(!empty($distribution_network)) {
+            $conditions[] = "distribution_network='$distribution_network'";
+        }
+        $conditions[] = "audit_conclusion=1";
+        $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
+
+        $sql = "SELECT COUNT(DISTINCT distributor_code) FROM sell_order_view $condition";
+        $count = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $count;
     }
 
     public function countCarByPoint ($stime,$etime,$point="assembly",$line="") {
@@ -41,13 +214,22 @@ class PlanningDivisionReprotSeeker
         return $count;
     }
 
-    public function reviseDailyMonth($date) {
+    public function reviseDailyMonth ($date) {
         $d = strtotime($date);
         $sMonth = date("Y-m-01 08:00:00", $d);
         $nextDay = strtotime('+1 day', $d);
         $eDate = date("Y-m-d 08:00:00", $nextDay);
 
         return array($sMonth, $eDate);
+    }
+
+    public function reviseDailyYear ($date) {
+        $d = strtotime($date);
+        $sYear = date("Y-01-01 08:00:00", $d);
+        $nextDay = strtotime('+1 day', $d);
+        $eDate = date("Y-m-d 08:00:00", $nextDay);
+
+        return array($sYear, $eDate);
     }
 
     public function reviseMonthlyTime($date) {

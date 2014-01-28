@@ -1,8 +1,9 @@
 <?php
 Yii::import('application.models.AR.WarehouseCountDailyAR');
 Yii::import('application.models.OrderSeeker');
+Yii::import('application.models.SellTable');
 class WarehouseCountCommand extends CConsoleCommand
-{	
+{
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
@@ -18,6 +19,8 @@ class WarehouseCountCommand extends CConsoleCommand
 		$etime = $curDate . " 08:00:00";
 		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
+			$this->getSellTableDatas($series);
+
 			$assembly = $this->countAssembly($stime, $etime, $series);
 			$this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
 
@@ -42,13 +45,13 @@ class WarehouseCountCommand extends CConsoleCommand
 			$reviseCheckout = $this->getReviseCount($series, '已发');
 			// $monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
-			
+
 			$balance = $this->countBalance($series);
 			$this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
 			$this->throwTextData('库存',$balance,$seriesName,$countDate,$log);
 
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
-			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);			
+			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
 		}
 	}
 
@@ -68,6 +71,8 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
+			$this->getSellTableDatas($series);
+
 			$assembly = $this->countAssembly($stime, $etime, $series);
 			$this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
 
@@ -82,15 +87,15 @@ class WarehouseCountCommand extends CConsoleCommand
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
-			$this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log); 
+			$this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log);
 			$this->throwTextData('出库',$checkout,$seriesName,$countDate,$log);
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
-			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);			
+			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
 			// $reviseCheckout = $this->getReviseCount($series, '已发');
 			// $monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
-			
+
 			$balance = $this->countBalance($series);
 			$this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
 			$this->throwTextData('库存',$balance,$seriesName,$countDate,$log);
@@ -98,6 +103,14 @@ class WarehouseCountCommand extends CConsoleCommand
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
 		}
+	}
+
+	private function getSellTableDatas ($series) {
+		$sellTable = new SellTable();
+		$sellTable->getOrderView($series);
+		$sellTable->getSaleView($series);
+		$sellTable->getShipView($series);
+		$sellTable->getStockView($series);
 	}
 
 	private function getReviseCount($series, $countType) {
@@ -159,9 +172,9 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		////初始时间2013-06-04 08:00时的最大DATAK40_DGMXID为1746208
 		$sql = "SELECT SUM(DATAK40_DGSL) as sum,
-						DATAK40_CXMC as series 
-				FROM DATAK40_CLDCKMX 
-				WHERE DATAK40_DGMXID>1746208 AND DATAK40_SSDW=3 
+						DATAK40_CXMC as series
+				FROM DATAK40_CLDCKMX
+				WHERE DATAK40_DGMXID>1746208 AND DATAK40_SSDW=3
 				GROUP BY DATAK40_CXMC";
 		$tdsSever = Yii::app()->params['tds_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
@@ -182,7 +195,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	    // foreach($rets as $ret){
 		   //  $count[$ret['series']] -= $ret['sum'];
 	    // }
-	    
+
 	    //计算从初始时间2013-06-04 08:00开始到目前的出库量，并从未发值中减去
 	    $stime = "2013-06-04 08:00:00";
 	    $noExport=true;
@@ -197,8 +210,8 @@ class WarehouseCountCommand extends CConsoleCommand
 	private function throwTextData($countType,$count,$series,$date,$log) {
 		$client = new SoapClient(Yii::app()->params['ams2vin_note']);
 		$params = array(
-			'Date'=>$date, 
-			'AutoType'=>$series, 
+			'Date'=>$date,
+			'AutoType'=>$series,
 			'Sum'=>$count,
 			'StatType'=>$countType,
 			'NoteLog'=>$log,
@@ -223,7 +236,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	}
 
 	private function mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql){
-		//php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+		//php 5.4 linux use pdo cannot connet to ms sqlsrv db
         //use mssql_XXX instead
 
 		$mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
@@ -231,10 +244,10 @@ class WarehouseCountCommand extends CConsoleCommand
             throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
         }
         mssql_select_db($tdsDB ,$mssql);
-        
+
         //query
         $result = mssql_query($sql);
-        $datas = array(); 
+        $datas = array();
         while($ret = mssql_fetch_assoc($result)){
         	$datas[] = $ret;
         }

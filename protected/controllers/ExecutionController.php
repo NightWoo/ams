@@ -45,7 +45,7 @@ class ExecutionController extends BmsBaseController
         'frontBumper' => array('DATA_INPUT_SPS_FB'),
         'rearBumper' => array('DATA_INPUT_SPS_RB'),
         'T0' => array('DATA_INPUT_T0'),
-        'T0_2' => array('DATA_INPUT_T0_2'), 
+        'T0_2' => array('DATA_INPUT_T0_2'),
         'T11' => array('DATA_INPUT_T11_F10'), 'T21' => array('DATA_INPUT_T11_F10'), 'T32' => array('DATA_INPUT_T11_F10'), 'C10' => array('DATA_INPUT_T11_F10'),'C21' => array('DATA_INPUT_T11_F10'),'F10' => array('DATA_INPUT_T11_F10'),
         'T11_2' => array('DATA_INPUT_T11_F10_2'),'T21_2' => array('DATA_INPUT_T11_F10_2'),'T32_2' => array('DATA_INPUT_T11_F10_2'),'C10_2' => array('DATA_INPUT_T11_F10_2'),'C21_2' => array('DATA_INPUT_T11_F10_2'),'F10_2' => array('DATA_INPUT_T11_F10_2'),
         'CHECK_IN' => array('DATA_INPUT_WAREHOUSE'),'OutStandby'=>array('DATA_INPUT_WAREHOUSE'), 'CHECK_OUT' => array('DATA_INPUT_WAREHOUSE'),
@@ -99,9 +99,9 @@ class ExecutionController extends BmsBaseController
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
-        }        
+        }
     }
-	
+
 	public function actionChild() {
         $nodeName = $this->validateStringVal('node','NodeSelect');
 		$line = $this->validateStringVal('line','I');
@@ -112,7 +112,7 @@ class ExecutionController extends BmsBaseController
             if(in_array($nodeName, self::$NODE_MAP)) {
                 $view = self::$MERGED_VIEW;
             }
-            
+
             $node = Node::createByName($nodeName);
             if(array_key_exists($nodeName, self::$CHILD_NODE_PRIVILAGE)) {
                 Yii::app()->permitManager->check(self::$CHILD_NODE_PRIVILAGE[$nodeName]);
@@ -121,7 +121,7 @@ class ExecutionController extends BmsBaseController
                 Yii::app()->permitManager->check(self::$CHILD_VIEW_PRIVILAGE[$view]);
             }
 
-            $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));  
+            $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -250,7 +250,7 @@ class ExecutionController extends BmsBaseController
             //$car->leftNode('F10');
             $car->enterNode($nodeName);
             $car->detectStatus($nodeName);
-            //print check trace 
+            //print check trace
             $data = $car->generateCheckTraceData();
             $transaction->commit();
 
@@ -289,7 +289,7 @@ class ExecutionController extends BmsBaseController
                 }
             }
             if($shouldCheck){
-                if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
+                if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)" && $car->car->type != "BYD7202ET1(2.0TID豪华型)"){
                     $IRemote = $car->getIRemoteTestResult();
                     if(!($IRemote->Result) || $IRemote->TestState != "2"){
                         throw new Exception($car->car->vin . '未通过云系统测试，不可录入下线合格，请先完成云系统测试');
@@ -298,7 +298,7 @@ class ExecutionController extends BmsBaseController
 
                 $checkTrace = $car->checkTraceComponentByConfig();
                 if($car->car->series != 'G6' && $checkTrace['notGood']) throw new Exception("此车追溯零部件记录不完整，不可录入下线合格，请联系相关责任人补录数据");
-                
+
                 $vinValidate = $car->validateVin();
                 if(!$vinValidate['success']) throw new Exception("此车" . $vinValidate['message']);
             }
@@ -342,7 +342,7 @@ class ExecutionController extends BmsBaseController
             $this->renderJsonBms(true, 'OK', $vin);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
-        } 
+        }
     }
 
 	public function actionEnterRTF() {
@@ -353,9 +353,9 @@ class ExecutionController extends BmsBaseController
 			$barCode = $this->validateStringVal('barCode', '');
             $driverId = $this->validateIntVal('driver', 0);
             $temperature = $this->validateStringVal('temperature', 0);
-            
+
             $fault = Fault::createSeeker();
-           
+
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
@@ -365,7 +365,7 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOut();
 			$car->checkAlreadyWarehouse();
 			$car->leftNode('CHECK_LINE');
-            
+
 			$exist = $fault->exist($car, '未修复', array('VQ1_STATIC_TEST_','VQ1_STATIC_TEST_2_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
@@ -399,8 +399,8 @@ class ExecutionController extends BmsBaseController
         } catch(Exception $e) {
 			$transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
-        }   
-    }   
+        }
+    }
 
 
 	public function actionEnterVQ2Leak() {
@@ -410,26 +410,26 @@ class ExecutionController extends BmsBaseController
 			$faults = $this->validateStringVal('fault', '[]');
             $driverId = $this->validateIntVal('driver', 0);
 
-			
+
             if(empty($driverId)) {
                 throw new Exception('必须选择驾驶员');
             }
-			
+
             $car = Car::create($vin);
 			$car->checkAlreadyOut();
             $car->checkAlreadyWarehouse();
 			$car->leftNode('ROAD_TEST_FINISH');
 			$car->passNode('VQ3');
-            
+
             $fault = Fault::createSeeker();
             $exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
             }
-        
-            
+
+
             list($nodeName, $traceId) = $car->enterNode('VQ2', $driverId);
-            
+
             $fault = Fault::create('VQ2_LEAK_TEST',$vin, $faults, array("traceId"=>$traceId));
             $fault->save('在线');
             $car->detectStatus($nodeName);
@@ -459,25 +459,25 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ2还有未修复的故障');
             }
-			
+
 			if($car->car->warehouse_time>'0000-00-00 00:00:00') {
                 throw new Exception ($vin .'已入库，无法录入VQ3');
             }
-			
+
 			if($car->car->distribute_time>'0000-00-00 00:00:00') {
                 throw new Exception ($vin .'已出库，无法录入VQ3');
             }
-			
+
 			//只要进入VQ2，则可以多次进入VQ3
 			$car->leftNode('VQ2');
-            
+
 			$car->passNode('CHECK_IN');
             list($nodeName, $traceId) = $car->enterNode('VQ3', $driverId);
             $others = array(
                 'checker' => $driverId,
                 'traceId' => $traceId,
             );
-            
+
             $fault = Fault::create('VQ3_FACADE_TEST',$vin, $faults, $others);
             $fault->save('在线');
             $car->detectStatus($nodeName);
@@ -501,7 +501,7 @@ class ExecutionController extends BmsBaseController
 			$checker = $this->validateStringVal('checker', '');
 			$subChecker = $this->validateStringVal('subChecker', '');
             $car = Car::create($vin);
-	
+
             // $car->enterNode('WDI');
             list($nodeName, $traceId) = $car->enterNodeWDI($checkTime);
             $others = array(
@@ -556,9 +556,9 @@ class ExecutionController extends BmsBaseController
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}
-			
+
 			$car->checkAlreadyOut();
-			
+
             $onlyOnce = false;
             list($nodeName, $tarceId) = $car->enterNode('CHECK_IN', $driverId, $onlyOnce);
             $car->detectStatus($nodeName);
@@ -590,9 +590,9 @@ class ExecutionController extends BmsBaseController
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
-            
+
             $car->warehouseTime();
-            
+
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
 
@@ -603,14 +603,14 @@ class ExecutionController extends BmsBaseController
             // $host='10.23.86.80';
             $host = $clientIp;
             $ret = $rpc->openGate($host);
-            
+
 			$vinMessage = $car->throwVinStoreIn($car->vin, $data['row'], $driverName);
         } catch(Exception $e) {
             $transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
-	
+
 	public function actionWarehouseRelocateSubmit() {
         $transaction = Yii::app()->db->beginTransaction();
         try {
@@ -633,13 +633,13 @@ class ExecutionController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-            
+
 			// $car->checkTestLinePassed();
 			$car->leftNode('VQ3');
 			if($car->car->warehouse_id == 0 || $car->car->status != '成品库' || $car->car->warehouse_id <1000){
 				throw new Exception ('此车不在成品库中，状态为['. $car->car->status .']，不可重复分配库位');
 			}
-			
+
 			$car->checkAlreadyOut();
 
             $matched = false;
@@ -670,7 +670,7 @@ class ExecutionController extends BmsBaseController
 			} else {
 				$driverName = Yii::app()->user->display_name;
 			}
-			
+
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -720,7 +720,7 @@ class ExecutionController extends BmsBaseController
             $car->car->area = 'out';
             $car->car->save();
             $car->distributeTime();
-			
+
 			if(!empty($driverId)){
 				$driverName = User::model()->findByPk($driverId)->display_name;
 			} else {
@@ -729,7 +729,7 @@ class ExecutionController extends BmsBaseController
 			$order = OrderAR::model()->findByPk($car->car->order_id);
 			$orderNumber = $order->order_number;
 			$orderDetailId = $order->order_detail_id;
-			
+
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
             //open gate
@@ -758,11 +758,11 @@ class ExecutionController extends BmsBaseController
             $data = $car->warehouseReturn($goTo, $remark);
 
             if($goTo === "成品库") {
-                $message = $vin . "已成功退回库，请开往" . $data['row']; 
+                $message = $vin . "已成功退回库，请开往" . $data['row'];
             } else {
-                $message = $vin . "已成功退出库，请返回" . $goTo; 
+                $message = $vin . "已成功退出库，请返回" . $goTo;
             }
-            
+
             $transaction->commit();
             $this->renderJsonBms(true, $message, $data);
         } catch(Exception $e) {
@@ -946,7 +946,7 @@ class ExecutionController extends BmsBaseController
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }
-        
+
     }
 
     public function actionExportTestLineRecords() {
@@ -976,7 +976,7 @@ class ExecutionController extends BmsBaseController
                         $content .= "\n";
                     }
                     break;
-                
+
                 case "Light":
                     $content = "单位：发光强度(cd)、上下/左右偏角(cm/10m)、照射高度(cm)\n";
                     $content .= "carID,车系,VIN,左远发光强度,左远上下偏角,左远左右偏角,左远照射高度,左远评价,左近发光强度,左近上下偏角,左近左右偏角,左近照射高度,左近评价,右远发光强度,右远上下偏角,右远左右偏角,右远照射高度,右远评价,右近发光强度,右近上下偏角,右近左右偏角,右近照射高度,右近评价,总评价\n";
@@ -1097,11 +1097,11 @@ class ExecutionController extends BmsBaseController
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }
-        
+
     }
 
     public function actionMonitoringIndex() {
-		
+
         $this->render('assembly/monitoring/monitoringIndex');
         // $this->render('assembly/monitoring/monitoringIndex_2');
     }
@@ -1124,7 +1124,7 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
         }
     }
-	
+
 	//added by wujun
 	public function actionConfigMaintain() {
         try{
@@ -1155,7 +1155,7 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
         }
     }
-	
+
 	//added by wujun
 	public function actionConfigList() {
         try{
@@ -1166,34 +1166,34 @@ class ExecutionController extends BmsBaseController
                 $this->render('../site/permissionDenied');
         }
 	}
-	
+
 	//added by wujun
 	public function actionConfigPaper() {
         try{
             Yii::app()->permitManager->check(self::$CONFIG_PAPER_PRIVILAGE);
-            $this->render('assembly/other/ConfigPaper');	
+            $this->render('assembly/other/ConfigPaper');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
         }
 	}
-	
+
 	//added by wujun
 	public function actionPauseEdit() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
-    		$this->render('assembly/dataInput/PauseEdit');	
+    		$this->render('assembly/dataInput/PauseEdit');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
         }
 	}
-	
+
 	//added by wujun
 	public function actionOrderMaintain() {
         try{
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
-            $this->render('assembly/other/OrderMaintain');	
+            $this->render('assembly/other/OrderMaintain');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1203,7 +1203,7 @@ class ExecutionController extends BmsBaseController
     public function actionWarehouseAdjust() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
-            $this->render('assembly/other/WarehouseAdjust');  
+            $this->render('assembly/other/WarehouseAdjust');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1213,7 +1213,7 @@ class ExecutionController extends BmsBaseController
     public function actionWarehousePrint() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
-            $this->render('assembly/dataInput/WarehousePrint');  
+            $this->render('assembly/dataInput/WarehousePrint');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1223,7 +1223,7 @@ class ExecutionController extends BmsBaseController
     public function actionWarehousePrintOrderInBoard() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
-            $this->render('assembly/dataInput/WarehousePrintOrderInBoard');  
+            $this->render('assembly/dataInput/WarehousePrintOrderInBoard');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1233,7 +1233,7 @@ class ExecutionController extends BmsBaseController
     public function actionWarehousePrintExport() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
-            $this->render('assembly/dataInput/WarehousePrintExport');  
+            $this->render('assembly/dataInput/WarehousePrintExport');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1243,7 +1243,7 @@ class ExecutionController extends BmsBaseController
     public function actionlaneManage() {
         try{
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
-            $this->render('assembly/dataInput/LaneManage');  
+            $this->render('assembly/dataInput/LaneManage');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1254,7 +1254,7 @@ class ExecutionController extends BmsBaseController
     public function actionPlanPause() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
-            $this->render('assembly/other/PlanPause');  
+            $this->render('assembly/other/PlanPause');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1265,7 +1265,7 @@ class ExecutionController extends BmsBaseController
     public function actionSubQueueMaintain() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
-            $this->render('assembly/other/SubQueueMaintain');  
+            $this->render('assembly/other/SubQueueMaintain');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1275,7 +1275,7 @@ class ExecutionController extends BmsBaseController
     public function actionSpsQueueMaintain() {
         try{
             Yii::app()->permitManager->check('DATA_MAINTAIN_SPS');
-            $this->render('assembly/other/SPSQueueMaintain');  
+            $this->render('assembly/other/SPSQueueMaintain');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1286,7 +1286,7 @@ class ExecutionController extends BmsBaseController
     public function actionDataThrow() {
         try{
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
-            $this->render('assembly/other/DataThrow');  
+            $this->render('assembly/other/DataThrow');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1294,37 +1294,37 @@ class ExecutionController extends BmsBaseController
     }
 
     public function actionAccessoryListPrint() {
-        $this->render('assembly/dataInput/AccessoryListPrint');  
+        $this->render('assembly/dataInput/AccessoryListPrint');
     }
 
     public function actionOutStandby() {
-        $this->render('assembly/dataInput/OutStandby');  
+        $this->render('assembly/dataInput/OutStandby');
     }
 
     public function actionOutStandby35() {
-        $this->render('assembly/dataInput/OutStandby35');  
+        $this->render('assembly/dataInput/OutStandby35');
     }
 
     public function actionOutStandby27() {
-        $this->render('assembly/dataInput/OutStandby27');  
+        $this->render('assembly/dataInput/OutStandby27');
     }
 
     public function actionOutStandby14() {
-        $this->render('assembly/dataInput/OutStandby14');  
+        $this->render('assembly/dataInput/OutStandby14');
     }
 
     public function actionWarehouseLabel() {
-        $this->render('assembly/dataInput/WarehouseLabel');  
+        $this->render('assembly/dataInput/WarehouseLabel');
     }
-	
+
 	public function actionWarehouseRelocate() {
-        $this->render('assembly/dataInput/WarehouseRelocate');  
+        $this->render('assembly/dataInput/WarehouseRelocate');
     }
 
     public function actionWarehouseReturn() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
-            $this->render('assembly/other/WarehouseReturn');  
+            $this->render('assembly/other/WarehouseReturn');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1334,7 +1334,7 @@ class ExecutionController extends BmsBaseController
     public function actionCheckPaper() {
         try{
             Yii::app()->permitManager->check('CHECKPAPER_PRINT');
-            $this->render('assembly/other/CheckPaper');  
+            $this->render('assembly/other/CheckPaper');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1342,17 +1342,17 @@ class ExecutionController extends BmsBaseController
     }
 
     public function actionConfigPaperMain() {
-        $this->render('assembly/other/ConfigPaperMain');  
+        $this->render('assembly/other/ConfigPaperMain');
     }
 
     public function actionCarLabelAssembly() {
-        $this->render('assembly/other/CarLabelAssembly');  
+        $this->render('assembly/other/CarLabelAssembly');
     }
 
     public function actionFaultDutyEdit() {
         try{
             Yii::app()->permitManager->check('FAULT_DUTY_EDIT');
-            $this->render('assembly/other/FaultDutyEdit');  
+            $this->render('assembly/other/FaultDutyEdit');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1362,7 +1362,7 @@ class ExecutionController extends BmsBaseController
     public function actionCompleteBarCodeRecord() {
         try{
             Yii::app()->permitManager->check('COMPLETE_BAR_CODE_RECORD');
-            $this->render('assembly/other/CompleteBarcodeRecord');  
+            $this->render('assembly/other/CompleteBarcodeRecord');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1372,7 +1372,7 @@ class ExecutionController extends BmsBaseController
     public function actionDetectShopAccess() {
         try{
             Yii::app()->permitManager->check('CAR_ACCESS_CONTROL');
-            $this->render('assembly/dataInput/DetectShopAccess');  
+            $this->render('assembly/dataInput/DetectShopAccess');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1383,7 +1383,7 @@ class ExecutionController extends BmsBaseController
     public function actionHoldRelease() {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
-            $this->render('assembly/dataInput/HoldRelease');  
+            $this->render('assembly/dataInput/HoldRelease');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1393,7 +1393,7 @@ class ExecutionController extends BmsBaseController
     public function actionWarehouseCountRevise () {
         try{
             Yii::app()->permitManager->check('WAREHOUSE_COUNT_REVISE');
-            $this->render('assembly/other/WarehouseCountRevise');  
+            $this->render('assembly/other/WarehouseCountRevise');
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -1416,7 +1416,7 @@ class ExecutionController extends BmsBaseController
 		 try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            $ret = ($car->car->special_property==1 && $car->car->assembly_line=="I") ? 1:0; 
+            $ret = ($car->car->special_property==1 && $car->car->assembly_line=="I") ? 1:0;
             $this->renderJsonBms(true, $ret, $ret);
         } catch(Exception $e) {
             // $transaction->rollback();
@@ -1427,7 +1427,7 @@ class ExecutionController extends BmsBaseController
     public function actionThrowOutDataOne() {
         try{
             $vin = $this->validateStringVal('vin', '');
-            
+
             $car = Car::create($vin);
 
             $outDate = ($car->car->distribute_time > '0000-00-00 00:00:00') ? $car->car->distribute_time : date("Y-m-d h:m:s");
@@ -1444,7 +1444,7 @@ class ExecutionController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            
+
             $row = '';
             $driverName = '樊后来';
             $inDate = $car->car->warehouse_time;
@@ -1466,7 +1466,7 @@ class ExecutionController extends BmsBaseController
             $orderNumber = $order->order_number;
             $orderDetailId = $order->order_detail_id;
             $outDate = $car->car->distribute_time;
-            
+
             $this->renderJsonBms(true, $vin . '成功录入' , $vinMessage);
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
         } catch(Exception $e) {
@@ -1478,11 +1478,11 @@ class ExecutionController extends BmsBaseController
         try{
             $mailer = new BmsMailer();
             $mes = $mailer->sendMail('mailerTest', 'this is a test', 'wu.jun9@byd.com');
-            
-            // $fp = fsockopen("smtp.163.com",25,$errno,$errstr,60); 
-            // if(! $fp) 
-            //     $mes = '$errstr   ($errno) <br> \n '; 
-            // else 
+
+            // $fp = fsockopen("smtp.163.com",25,$errno,$errstr,60);
+            // if(! $fp)
+            //     $mes = '$errstr   ($errno) <br> \n ';
+            // else
             //     $mes = 'ok <br> \n ';
             $this->renderJsonBms(true, $mes, $mes);
         } catch(Exception $e) {

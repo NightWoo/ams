@@ -21,7 +21,7 @@ class CarController extends BmsBaseController
 		try{
 			$car = Car::create($vin);
 			$data = $car->car;
-			
+
 			$this->renderJsonBms(true, 'OK', $data);
 		} catch(Exception $e) {
 			$this->renderJsonBms(false , $e->getMessage());
@@ -32,7 +32,7 @@ class CarController extends BmsBaseController
 		$vin = $this->validateStringVal('vin', '');		//use webservice to get car data, added by wujun
 		VinManager::getCar($vin);						//use webservice to get car data, added by wujun
 	}													//use webservice to get car data, added by wujun
-	
+
 	public function actionValidatePbs() {
         $vin = $this->validateStringVal('vin', '');
         $line = $this->validateStringVal('line', 'I');
@@ -62,13 +62,13 @@ class CarController extends BmsBaseController
 			if(empty($nodeName)) {
 				throw new Exception('node cannot be empty');
 			}
-            
+
             $enterNode = Node::createByName($nodeName);
             $leftNode = $enterNode->getParentNode();
-            
+
             $car = Car::create($vin);
 			//$car->leftNode($leftNode->name);
-            
+
             $data = $car->car;
             if(!empty($data['warehouse_id'])){
                 $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
@@ -81,7 +81,7 @@ class CarController extends BmsBaseController
         }
     }
 
-	
+
 	public function actionValidateF20() {
         $vin = $this->validateStringVal('vin', '');
         $nodeName = $this->validateStringVal('currentNode', 'F20');
@@ -93,7 +93,7 @@ class CarController extends BmsBaseController
             }
 			//$car->leftNode('F10');
 			$car->checkTraceGasolineEngine();
-			
+
             if($car->car->series === 'F0'){
                 // $car->checkTraceGearBox();
 				$absTrace = $car->checkTraceABS();
@@ -103,7 +103,7 @@ class CarController extends BmsBaseController
 				}
             }
             $data = $car->car;
-			
+
 
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -125,7 +125,7 @@ class CarController extends BmsBaseController
             $car->leftNode($leftNode->name);
             $checkTrace = $car->checkTraceComponentByConfig();
             $vinValidate = $car->validateVin();
-            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)"){
+            if($car->car->series == "6B"  && $car->car->type != "QCJ7152ET1(1.5TI豪华型)" && $car->car->type != "QCJ7152ET2(1.5TID豪华型)" && $car->car->type != "BYD7202ET1(2.0TID豪华型)"){
                 $IRemote = $car->getIRemoteTestResult();
             } else {
                 $IRemote = array("Result"=>true,"TestState"=>2);
@@ -174,7 +174,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-			
+
 			$car->leftNode('ROAD_TEST_FINISH');
             $fault = Fault::createSeeker();
 			$exist = $fault->exist($car, '未修复', array('VQ2_ROAD_TEST_'));
@@ -197,12 +197,12 @@ class CarController extends BmsBaseController
                 throw new Exception('node cannot be empty');
             }
             $enterNode = Node::createByName($nodeName);
-            
+
             $car = Car::create($vin);
             if($car->car->warehouse_time === '0000-00-00 00:00:00'){
                 throw new Exception($vin . '未入库，无法操作退回');
             }
-            
+
             $data = $car->car;
             if(!empty($data['warehouse_id'])){
                 $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
@@ -221,7 +221,7 @@ class CarController extends BmsBaseController
             $car = Car::create($vin);
             $line = $car->car->assembly_line;
             $car->checkTraceGasolineEngine();
-            
+
             $data = $car->car;
 
             $this->renderJsonBms(true, 'OK', $data);
@@ -244,12 +244,12 @@ class CarController extends BmsBaseController
 
     public function actionValidateWarehouseLabel() {
         $vin = $this->validateStringVal('vin', '');
-        try{            
+        try{
             $car = Car::create($vin);
             if($car->car->warehouse_time == '0000-00-00 00:00:00'){
                 throw new Exception($vin . '未入库，无法打印标贴');
             }
-            
+
             $data = $car->car;
             if(!empty($data['warehouse_id'])){
                 $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
@@ -265,9 +265,9 @@ class CarController extends BmsBaseController
     public function actionValidateCarAccess() {
         $vin = $this->validateStringVal('vin', '');
         try{
-            
+
             $car = Car::create($vin);
-            
+
             $data = $car->car;
             if(!empty($data['warehouse_id'])){
                 $row = WarehouseAR::model()->findByPk($data['warehouse_id'])->row;
@@ -483,7 +483,7 @@ class CarController extends BmsBaseController
         try{
             $car = Car::create($vin);
             $datas = $car->getAllTrace($node);
-			
+
 			$title = "录入时间,节点,故障记录,故障状态,录入人员,备注\n";
 			$content = "";
 			foreach($datas as $data) {
@@ -547,7 +547,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         try{
             $car = Car::create($vin);
-				
+
 			// $car->leftNode('VQ1');
 
 			$fault = Fault::createSeeker();
@@ -586,11 +586,11 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
 
             $car = Car::create($vin);
-			
+
 			$car->leftNode('VQ2');
             if($car->car->vq2_finish_time == "0000-00-00 00:00:00") {
                 throw new Exception($car->car->vin . "未完成VQ2淋雨");
-                
+
             }
 
             $fault = Fault::createSeeker();
@@ -602,11 +602,11 @@ class CarController extends BmsBaseController
             if(!empty($exist)) {
                 throw new Exception ($vin .'车辆在VQ1还有未修复的故障');
             }
-			
+
 			if($car->car->warehouse_time>'0000-00-00 00:00:00') {
                 throw new Exception ($vin .'已入库，无法录入VQ3');
             }
-			
+
 			if($car->car->distribute_time>'0000-00-00 00:00:00') {
                 throw new Exception ($vin .'已出库，无法录入VQ3');
             }
@@ -662,7 +662,7 @@ class CarController extends BmsBaseController
 				$row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
 				throw new Exception ('此车状态为成品库_'. $row .'，不可重复入库');
 			}
-			
+
 			if($car->car->distribute_time != '0000-00-00 00:00:00'){
 				throw new Exception($vin . '已出库，不可再入库');
 			}
@@ -718,7 +718,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin' ,'');
         $top  =$this->validateIntVal("top", 0);
 		$sortType = $this->validateStringVal('sortType', 'ASC');
-		
+
 		$seeker = new SubConfigSeeker($type);
 		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
         $count = $seeker->countQueue($status, $stime, $etime);
@@ -753,7 +753,7 @@ class CarController extends BmsBaseController
         $type = $this->validateStringVal('type', 'subInstrument');
         $nodeName = $this->validateStringVal('currentNode', '');
         try{
-			
+
 			$seeker = new SubConfigSeeker($type);
 			$seeker->validate($vin);
 
@@ -776,7 +776,7 @@ class CarController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $point = $this->validateStringVal('point', 'S1');
-            
+
             $seeker = new SpsSeeker($point);
             $seeker->validate($vin);
 
@@ -797,7 +797,7 @@ class CarController extends BmsBaseController
         $vin = $this->validateStringVal('vin', '');
         $top  = $this->validateIntVal("top", 0);
         $sortType  = $this->validateStringVal("sortType", "ASC");
-        
+
         $seeker = new SpsSeeker($point);
         $datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
         $count = $seeker->countQueue($status, $stime, $etime);
@@ -812,7 +812,7 @@ class CarController extends BmsBaseController
             $point = $this->validateStringVal('point', 'S1');
             $car = Car::create($vin);
             $datas = $car->generateSpsData($point);
-            
+
             $this->renderJsonBms(true, 'OK', $datas);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -844,7 +844,7 @@ class CarController extends BmsBaseController
             $area = $this->validateStringVal('area', '');
             $curPage = $this->validateIntVal('curPage', 1);
             $perPage = $this->validateIntVal('perPage', 20);
-            
+
             $seeker = new CarSeeker();
             $whAvailableOnly = false;
             if($state === 'WHin'){
@@ -864,7 +864,7 @@ class CarController extends BmsBaseController
 
     public function actionQueryBalanceAssembly(){
         try{
-            $state = $this->validateStringVal('state', 'assembly'); 
+            $state = $this->validateStringVal('state', 'assembly');
             $seeker = new CarSeeker();
             $data = $seeker-> queryAssemblyBalance($state);
             $this->renderJsonBms(true, 'OK', $data);
@@ -914,7 +914,7 @@ class CarController extends BmsBaseController
                 $whAvailableOnly = true;
             }
             list($total, $datas) = $seeker->queryBalanceDetail($state, $series, 0, 0, $whAvailableOnly, $area);
-            
+
             $title = "carID,流水号,VIN,车系,颜色,车型,车型/配置,耐寒性,状态,下线时间,入库时间,特殊订单号,备注,库区\n";
             $content = "";
             foreach($datas as $data) {
@@ -999,7 +999,7 @@ class CarController extends BmsBaseController
     public function actionThrowOutPrintDataOne() {
         try{
             $vin = $this->validateStringVal('vin', '');
-            
+
             $car = Car::create($vin);
 
             $outDate = ($car->car->distribute_time > '0000-00-00 00:00:00') ? $car->car->distribute_time : date("Y-m-d h:m:s");
@@ -1015,7 +1015,7 @@ class CarController extends BmsBaseController
     public function actionThrowMarkPrint() {
         try{
             $vin = $this->validateStringVal('vin', '');
-            
+
             $car = Car::create($vin);
 
             $data = $car->throwMarkPrintData();
@@ -1029,7 +1029,7 @@ class CarController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            
+
             $shift = '总装1线A班';
             $time = $car->car->finish_time;
             $vinMessage = $car->throwVinAssembly($car->vin, '总装下线', $shift, $time);
@@ -1044,7 +1044,7 @@ class CarController extends BmsBaseController
         try{
             $vin = $this->validateStringVal('vin', '');
             $car = Car::create($vin);
-            
+
             $row = 'Z000';
             if(!empty($car->car->warehouse_id)){
                 $row = WarehouseAR::model()->findByPk($car->car->warehouse_id)->row;
@@ -1074,7 +1074,7 @@ class CarController extends BmsBaseController
             $orderNumber = $order->order_number;
             $orderDetailId = $order->order_detail_id;
             $outDate = $car->car->distribute_time;
-            
+
             $vinMessage = $car->throwVinStoreOut($vin, $lane, $orderNumber, $orderDetailId, $car->car->distributor_name, $car->car->engine_code, $outDate);
             $this->renderJsonBms(true, '操作完成，'. $vinMessage->StoreOutResult, $vinMessage);
         } catch(Exception $e) {

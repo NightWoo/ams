@@ -91,7 +91,7 @@ class ReportSeeker
 		$ePlanDate = substr($etime, 0, 10);
 		$lineArray = array(1=>"I",2=>"II");
 		foreach($lineArray as $i => $line) {
-			$assemblyCount = $this->countCarByPointAllSeries($stime, $etime, "assembly", $line); 
+			$assemblyCount = $this->countCarByPointAllSeries($stime, $etime, "assembly", $line);
 			$completion = $this->queryPlanCompletionAllSeries($sPlanDate, $ePlanDate, $line);
 
 			$assemblyCountText = "assemblyCount" . $i;
@@ -105,7 +105,7 @@ class ReportSeeker
 		foreach($pauseRecords as $pause) {
 			$data['pauseTime'] += $pause['howlong'];
 		}
-		$data['pauseTime'] = empty($data['pauseTime']) ? 0 : round($data['pauseTime']/60, 0); 
+		$data['pauseTime'] = empty($data['pauseTime']) ? 0 : round($data['pauseTime']/60, 0);
 		$useRate = $this->queryUseRate($stime,$etime);
 		$data['useRate'] = empty($useRate['useRate']) ? 0 : ($useRate['useRate']*100) . "%";
 
@@ -161,7 +161,7 @@ class ReportSeeker
 		$countArray["assemblyCount1"] = $this->countCarByPoint($stime, $etime, "assembly", "I");
 		$countArray["assemblyCount2"] = $this->countCarByPoint($stime, $etime, "assembly", "II");
 
-		
+
 
 		$countArray["warehouseCount"] = $this->countCarByPoint($stime, $etime, "warehouse");
 		$countArray["distributeCount"] = $this->countCarByPoint($stime, $etime, "distribute");
@@ -190,7 +190,7 @@ class ReportSeeker
 
 		$sPlanDate = substr($stime, 0, 10);
 		$ePlanDate = substr($etime, 0, 10);
-		
+
 		$lineArray = array(1=>"I",2=>"II");
 		foreach($lineArray as $i => $line){
 			$completion = $this->queryPlanCompletion($sPlanDate, $ePlanDate, $line);
@@ -199,7 +199,7 @@ class ReportSeeker
 			foreach($seriesList as $series => $seriesName){
 				$countArray[$completionText][$series] = $completion[$series]['completion'];
 				$countArray[$assemblyPlanText][$series] = $completion[$series]['total'];
-			} 
+			}
 		}
 
 		foreach($countArray as $point => &$count){
@@ -272,7 +272,7 @@ class ReportSeeker
 					$columnSeriesY[$seriesName][] = $assemblyCount[$series];
 				}
 				$rate = empty($totalSum) ? null : round(($readySum/$totalSum) , 2);
-				$rate = $rate > 1 ? 1 : $rate;  
+				$rate = $rate > 1 ? 1 : $rate;
 				$lineSeriesY[] = $rate;
 			} else {
 				foreach($seriesArray as $series => $seriesName){
@@ -350,7 +350,7 @@ class ReportSeeker
 			$count[$totalData['series']]['completion'] = empty($totalValue) ? null : round(($readyValue/$totalValue) , 2);
 		}
 
-		
+
 		return $count;
 	}
 
@@ -591,11 +591,11 @@ class ReportSeeker
 		$conditions[] = "(pause_type = '紧急停止' OR pause_type = '设备故障' OR pause_type = '质量关卡' OR pause_type = '工位呼叫')";
 		$conditions[] = "pause_time>='$stime' AND pause_time<'$etime'";
 		$condition = join(" AND ", $conditions);
-		$sql = "SELECT remark AS pause_reason,cause_type,node_id,duty_department, SUM(TIMESTAMPDIFF(second,pause_time,recover_time)) AS howlong 
-				FROM pause 
-				WHERE $condition 
+		$sql = "SELECT remark AS pause_reason,cause_type,node_id,duty_department, SUM(TIMESTAMPDIFF(second,pause_time,recover_time)) AS howlong
+				FROM pause
+				WHERE $condition
 				GROUP BY pause_reason,cause_type,duty_department
-				ORDER BY howlong DESC 
+				ORDER BY howlong DESC
 				LIMIT 0,5";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach($datas as &$data){
@@ -754,7 +754,7 @@ class ReportSeeker
 		$condition = "assembly_time>='$stime' AND assembly_time<'$etime'";
 		// $sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time,TIMESTAMPDIFF(second,assembly_time,warehouse_time) AS howlong FROM car WHERE $condition";
 		$sql = "SELECT id as car_id, vin, assembly_time,finish_time,warehouse_time, vq1_finish_time,vq1_return_time,vq2_finish_time,vq2_return_time,vq3_return_time,
-		TIMESTAMPDIFF(second,assembly_time,finish_time) AS manufacture_period, 
+		TIMESTAMPDIFF(second,assembly_time,finish_time) AS manufacture_period,
 		IF(TIMESTAMPDIFF(second,finish_time,vq1_finish_time)<TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time)),TIMESTAMPDIFF(second,finish_time,vq1_finish_time),TIMESTAMPDIFF(second,vq1_return_time,vq1_finish_time)) as vq1_period,
 		IF(TIMESTAMPDIFF(second,vq1_finish_time,vq2_finish_time)<TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time) OR ISNULL(TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time)),TIMESTAMPDIFF(second,vq1_finish_time,vq2_finish_time),TIMESTAMPDIFF(second,vq2_return_time,vq2_finish_time)) as vq2_period,
 		IF(TIMESTAMPDIFF(second,vq2_finish_time,warehouse_time)<TIMESTAMPDIFF(second,vq3_return_time,warehouse_time) OR ISNULL(TIMESTAMPDIFF(second,vq3_return_time,warehouse_time)),TIMESTAMPDIFF(second,vq2_finish_time,warehouse_time),TIMESTAMPDIFF(second,vq3_return_time,warehouse_time)) as vq3_period
@@ -766,7 +766,7 @@ class ReportSeeker
 		foreach($cars as &$car){
 			// if(is_null($car['howlong'])) $car['howlong'] = (strtotime(date("Y-m-d H:i:s")) - strtotime($car['assembly_time']));
 			// $howlong += $car['howlong'];
-			
+
 			// $vq1Start = $car['vq1_return_time'] > $car['finish_time'] ? $car['vq1_return_time'] : $car['finish_time'];
 			// $vq1Period = $this->calculatePeriod($vq1Start, $car['vq1_finish_time']);
 			// $vq2Start = $car['vq2_return_time'] > $car['vq1_finish_time'] ? $car['vq2_return_time'] : $car['vq1_finish_time'];
@@ -859,21 +859,21 @@ class ReportSeeker
 		return $cars;
 	}
 
-	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
-        if(is_array($multi_array)){  
-            foreach ($multi_array as $row_array){  
-                if(is_array($row_array)){  
-                    $key_array[] = $row_array[$sort_key];  
-                }else{  
-                    return -1;  
-                }  
-            }  
-        }else{  
-            return -1;  
-        }  
-        array_multisort($key_array,$sort,$multi_array);  
-        return $multi_array;  
-    } 
+	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {
+        if(is_array($multi_array)){
+            foreach ($multi_array as $row_array){
+                if(is_array($row_array)){
+                    $key_array[] = $row_array[$sort_key];
+                }else{
+                    return -1;
+                }
+            }
+        }else{
+            return -1;
+        }
+        array_multisort($key_array,$sort,$multi_array);
+        return $multi_array;
+    }
 
 	public function queryUnsolvedFaults ($carId, $table) {
 		$sql = "SELECT CONCAT(component_name,fault_mode) AS fault
@@ -888,7 +888,7 @@ class ReportSeeker
 		$sql = "SELECT remark FROM node_trace WHERE node_id=$nodeId AND car_id=$carId";
 		$remarks = Yii::app()->db->createCommand($sql)->queryColumn();
 		$remarks = array_unique($remarks);
-		
+
 		return $remarks;
 	}
 
@@ -939,16 +939,16 @@ class ReportSeeker
 		$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
 		if(empty($boardCount)) return null;
 
-		$sql = "SELECT 	board_number, 
-						MIN(activate_time) AS min_activate, 
-						MAX(activate_time) AS max_activate, 
-						MIN(out_finish_time) AS min_out, 
+		$sql = "SELECT 	board_number,
+						MIN(activate_time) AS min_activate,
+						MAX(activate_time) AS max_activate,
+						MIN(out_finish_time) AS min_out,
 						MAX(out_finish_time) AS max_out
 				FROM 	`order`
 				WHERE $condition
 				GROUP BY board_number";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$warehousePeriod = null;
 		foreach($datas as &$data){
 			//获得每板的激活、完成、释放这三个周期时间点
@@ -969,8 +969,8 @@ class ReportSeeker
 	}
 
 	public function queryOvertimeOrders () {
-		$sql = "SELECT id, order_number, board_number, TIMESTAMPDIFF(second,activate_time,CURRENT_TIMESTAMP) AS warehouse_period, standby_date, amount, hold, count, series, car_type, car_model, color, cold_resistant, order_config_id, config_name, distributor_name, lane_id,lane_name, status, activate_time, out_finish_time 
-				FROM view_order 
+		$sql = "SELECT id, order_number, board_number, TIMESTAMPDIFF(second,activate_time,CURRENT_TIMESTAMP) AS warehouse_period, standby_date, amount, hold, count, series, car_type, car_model, color, cold_resistant, order_config_id, config_name, distributor_name, lane_id,lane_name, status, activate_time, out_finish_time
+				FROM view_order
 				WHERE `status` = 1 AND amount>count AND activate_time>'0000-00-00 00:00:00' AND out_finish_time='0000-00-00 00:00:00'
 				ORDER BY warehouse_period DESC";
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1083,6 +1083,7 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$configName = $this->configNameList();
+		$manufactureConfigName = $this->manufactureConfigName();
 		$configName[0] = "";
 
 		list($materialCodes, $materialDescriptions) = $this->materialList();
@@ -1092,6 +1093,7 @@ class ReportSeeker
         	$data['material_description'] = empty($materialDescriptions[$materialKey]) ? '' : $materialDescriptions[$materialKey];
 			if($data['series'] == '6B') $data['series'] = '思锐';
 			$data['config_name'] = $configName[$data['config_id']];
+			$data['manufacture_config_name'] = $manufactureConfigName[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
 
 			$data['row'] = '-';
@@ -1259,7 +1261,7 @@ class ReportSeeker
 		$dutyList = $this->dutyList();
 		foreach($tables as $table=>$nodeName){
 			$tmp = explode("_", $table);
-			$series = end($tmp); 
+			$series = end($tmp);
 			$dataSql[] = "(SELECT '$series' AS series, car_id, fault_id, fault_mode, CONCAT(component_name,fault_mode) AS fault, duty_department, FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
 		}
 		$sql = join(" UNION ALL ", $datasql);
@@ -1274,7 +1276,7 @@ class ReportSeeker
 		$tables = $this->parseTables($point, $series);
 		foreach($tables as $table=>$nodeName){
 			$tmp = explode("_", $table);
-			$series = end($tmp); 
+			$series = end($tmp);
 			$dataSqls[] = "(SELECT '$series' AS series, car_id, fault_id, fault_mode, CONCAT(component_name,fault_mode) AS fault, duty_department FROM $table WHERE create_time>='$stime' AND create_time<'$etime')";
 		}
 		$datasql = join(" UNION ALL ", $dataSqls);
@@ -1403,9 +1405,9 @@ class ReportSeeker
 	public function queryCostDuty($stime, $etime, $seriesText="all") {
 		$seriesArray = Series::parseSeries($seriesText);
 		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
-		$sql = "SELECT SUM(unit_price*quantity) AS sum, duty_department_name as duty, series 
-				FROM view_spare_replacement 
-				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition 
+		$sql = "SELECT SUM(unit_price*quantity) AS sum, duty_department_name as duty, series
+				FROM view_spare_replacement
+				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition
 				GROUP BY duty , series
 				ORDER BY sum DESC";
 		$ret = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1420,9 +1422,9 @@ class ReportSeeker
 		$seriesArray = Series::parseSeries($seriesText);
 		$seriesCondition ="series IN ('" . join("','", $seriesArray) . "')";
 		$sql = "SELECT SUM(unit_price*quantity) AS sum, duty_area
-				FROM view_spare_replacement 
-				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition 
-				GROUP BY duty_area 
+				FROM view_spare_replacement
+				WHERE replace_time>='$stime' AND replace_time<'$etime' AND $seriesCondition
+				GROUP BY duty_area
 				ORDER BY sum DESC";
 		$ret = Yii::app()->db->createCommand($sql)->queryAll();
 		$carCount = $this->countCarByPointMixSeries($stime, $etime, $seriesText, $point="assembly",$line="");
@@ -1442,7 +1444,7 @@ class ReportSeeker
 
 	public function queryPlanningDivisionReportDaily ($date) {
 		$pdTypelist = $this->getPlanningDivisionTypeList();
-		
+
 		$pointArray = array(
 			"assembly" => array(
 				"daily" => array("domestic"=>0,"export"=>0, "sum"=>0),
@@ -1563,7 +1565,7 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$list = array();
 		foreach($datas as $data) {
-			$list[$data['series']][] = $data['pd_type_name'];	
+			$list[$data['series']][] = $data['pd_type_name'];
 		}
 
 		return $list;
@@ -1719,6 +1721,16 @@ class ReportSeeker
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($datas as $data){
 			$configName[$data['car_config_id']] = $data['car_model'] . '/' . $data['name'];
+		}
+		return $configName;
+	}
+
+	private function manufactureConfigName () {
+		$configName = array();
+		$sql = "SELECT id, name FROM car_config";
+		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($datas as $data){
+			$configName[$data['id']] = $data['name'];
 		}
 		return $configName;
 	}
