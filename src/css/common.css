@@ -1,0 +1,43 @@
+/*modify bootstrap*/
+html {
+  font-family: "Microsoft YaHei", sans-serif;
+}
+body {
+  font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/*end modify bootstrap*/
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .pannel-thumbnails .thumbnail {
+        height: 95px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .pannel-thumbnails .thumbnail {
+        height: 132px;
+    }
+}
+@media (min-width: 1200px) {
+    .pannel-thumbnails .thumbnail {
+        height: 165px;
+    }
+}
+
+.container > .row {
+    margin-bottom: 10px;
+}
+
+.pannel-thumbnails a.thumbnail:hover, .pannel-thumbnails a.thumbnail:focus, .pannel-thumbnails a.thumbnail.active {
+    border-color: #428bca;
+    text-decoration: none;
+}
+
+.thumbnail h5 {
+    margin-left: 10px;
+}

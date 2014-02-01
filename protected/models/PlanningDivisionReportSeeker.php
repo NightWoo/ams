@@ -135,7 +135,7 @@ class PlanningDivisionReportSeeker
     }
 
     public function queryOrderCount ($stime, $etime, $series="", $distribution_network="" ) {
-        $sql = "SELECT SUM(amount) FROM sell_order_view WHERE audit_time>='$stime' AND audit_time<'$etime' AND audit_conclusion=1";
+        $sql = "SELECT SUM(amount) FROM sell_order_view WHERE audit_time>='$stime' AND audit_time<'$etime' AND audit_status=1";
         if(!empty($series)) {
             $sql .= " AND series='$series'";
         }
@@ -184,7 +184,7 @@ class PlanningDivisionReportSeeker
         if(!empty($distribution_network)) {
             $conditions[] = "distribution_network='$distribution_network'";
         }
-        $conditions[] = "audit_conclusion=1";
+        $conditions[] = "audit_status=1";
         $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
 
         $sql = "SELECT COUNT(DISTINCT distributor_code) FROM sell_order_view $condition";

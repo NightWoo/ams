@@ -52,7 +52,7 @@ class BalanceDailyCommand extends CConsoleCommand
 	private function saveWarehousePlnningDivision ($countDate, $workDate) {
 		$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE status='成品库' OR status='WDI' GROUP BY series,PDType,special_property";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		foreach($datas as $data) {
 			$ar = new BalancePlanningDivisionDailyAR();
 			$ar->series = $data['series'];
@@ -66,6 +66,4 @@ class BalanceDailyCommand extends CConsoleCommand
 			$ar->save();
 		}
 	}
-
-
 }

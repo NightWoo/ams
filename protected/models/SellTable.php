@@ -59,7 +59,7 @@ class SellTable
         foreach($datas as $data){
             $ar = new SellOrderViewAR();
             foreach($data as $key => $value) {
-                if($key == 'series_name') {
+                if($key == "series_name") {
                     $ar->series = $seriesCodeList[$value];
                 } else {
                     $ar->$key = $value;
@@ -104,7 +104,7 @@ class SellTable
         foreach($datas as $data){
             $ar = new SellSaleViewAR();
             foreach($data as $key => $value) {
-                if($key == 'series_name') {
+                if($key == "series_name") {
                     $ar->series = $seriesCodeList[$value];
                 } else {
                     $ar->$key = $value;
@@ -157,7 +157,7 @@ class SellTable
         foreach($datas as $data){
             $ar = new SellShipViewAR();
             foreach($data as $key => $value) {
-                if($key == 'series_name') {
+                if($key == "series_name") {
                     $ar->series = $seriesCodeList[$value];
                 } else {
                     $ar->$key = $value;
@@ -200,7 +200,7 @@ class SellTable
         foreach($datas as $data){
             $ar = new SellStockViewAR();
             foreach($data as $key => $value) {
-                if($key == 'series_name') {
+                if($key == "series_name") {
                     $ar->series = $seriesCodeList[$value];
                 } else {
                     $ar->$key = $value;
@@ -208,6 +208,73 @@ class SellTable
             }
             $ar->save();
         }
+    }
+
+    public function updateOrderView () {
+        $sql = "SELECT order_id FROM sell_order_view WHERE audit_conclusion=0";
+        $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+        if(!empty($ids)) {
+            $idCondition = "(" . join(",", $ids) .")";
+            $mssql = "SELECT TOP 10000
+            xswl AS distribution_network,
+            yxbmc AS sales_department,
+            ssdq AS sales_region,
+            ssqy AS sales_area,
+            sssf AS sales_province,
+            sscs AS sales_city,
+            sccs AS deliver_city,
+            dgdh AS order_number,
+            dgxz AS order_nature,
+            ddxz AS cold_resistant,
+            fhdwmc AS delivery_unit,
+            dgdwbh AS distributor_code,
+            dgdw AS distributor_name,
+            cldm AS car_type_code,
+            cxmc AS series_name,
+            clxh AS sell_car_type,
+            cx AS sell_config_name,
+            VINxtcx AS car_type,
+            clys AS sell_color,
+            xzpz AS options,
+            dgsl AS amount,
+            yfsl AS delivered_count,
+            ydsl AS arrived_count,
+            wdsl AS not_arrived_count,
+            qxsl AS canceled_count,
+            qxyy AS cancel_reason,
+            convert(varchar(30),[dgrq],120) AS book_time,
+            jhzt AS order_plan_status,
+            convert(varchar(30),[jhrq],120) AS order_plan_date,
+            cwshjg AS audit_status,
+            cwshyj AS audit_comment,
+            convert(varchar(30),[cwshrq],120) AS audit_time,
+            shbz AS audit_flag,
+            shjg AS audit_conclusion,
+            ID AS order_id,
+            jzpz AS additions,
+            mxbz AS remark
+            FROM AMS_ORDERVIEW
+            WHERE ID IN $idCondition";
+            $datas = $this->sellMSSQL($mssql);
+            foreach($datas as $data) {
+                $ar = SellStockViewAR::model()->find("order_id", array($data['order_id']));
+                foreach($data as $key => $value) {
+                    if($key == "order_id") {
+                        continue;
+                    }
+                    if($key == "series_name") {
+                        $ar->series = $seriesCodeList[$value];
+                    } else {
+                        $ar->$key = $value;
+                    }
+                }
+                $ar->save();
+            }
+        }
+    }
+
+    public function stockDaily() {
+
     }
 
     public function sellMSSQL($sql){

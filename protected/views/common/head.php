@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/bms/css/font-awesome.min.css">
 <style type="text/css" media="screen">
-	#headNav > li > a {
+	#headNav>li>a {
 	    padding: 10px;
 	}
 </style>
@@ -35,7 +35,7 @@
 						<a href="/bms/site/pannelIndex?pannel=costPannel" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="fa fa-money"></i>&nbsp;成本</a>
 					</li>
 					<li id="headManpowerLi">
-						<a href="/bms/managementSystem/workSummaryManpower" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="fa fa-group"></i>&nbsp;人事</a>
+						<a href="/bms/humanResources" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="fa fa-group"></i>&nbsp;人事</a>
 					</li>
 					<li class="divider-vertical"></li>
 					<li id="headMonitoringLi">
@@ -52,16 +52,16 @@
          			 <li>
             			<a href="/bms/site/logout" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="注销"><i class="fa fa-sign-out"></i></a>
          			 </li>
-        		</ul>			
+        		</ul>
 			</div>
-		</div>	
+		</div>
 	</div>
 </div>
-<div id="toggle-top" href="">
+<!-- <div id="toggle-top" href="">
 	<div id="icon-top-container">
 		<i id="icon-top" class="fa fa-caret-up"></i>
 	</div>
-</div>
+</div> -->
 </div>
 <div id="divFoot">
 <div class="navbar navbar-fixed-bottom navbar-inverse" id="bmsFoot">
@@ -80,7 +80,7 @@
 					<li id=""><a href="/bms/execution/query?type=ReplacementQuery">换件</a></li>
 				</ul>
 			</div>
-		</div>	
+		</div>
 	</div>
 </div>
 </div>
