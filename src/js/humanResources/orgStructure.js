@@ -3,18 +3,299 @@ require.config({
 
     paths:{
         "jquery": "../../vendor/jquery/jquery-2.1.0.min",
-        "bootstrap": "../../vendor/bootstrap/js/bootstrap.min"
+        "jquery-ui": "../../vendor/jquery-ui/js/jquery-ui.custom.min",
+        "bootstrap": "../../vendor/bootstrap/js/bootstrap.min",
+        "primitives": "../../vendor/primitives/primitives.min"
     },
     shim: {
-        "bootstrap": ["jquery"]
+        "jquery-ui": ["jquery"],
+        "bootstrap": ["jquery-ui"],
+        "primitives": ["jquery-ui"]
     }
 });
 
-require(["head","service","common","jquery","bootstrap"], function(head,service,common,$) {
+require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "bootstrap"], function(head,service,common,$) {
+    var
+        $editModal = $('#editModal'),
+        $inputDisplayName = $('#inputDisplayName'),
+        $inputName = $('#inputName'),
+        $inputShortName = $('#inputShortName'),
+        $selectParentDept = $('#selectParentDept'),
+        $titleSuffix = $('#titleSuffix');
+
     head.doInit();
     initPage();
+    doPrimitives();
+
+    $('#editCommit').on('click', function (e) {
+        save();
+    });
+
+    $('#editCancel').on('click', function (e) {
+        emptyEditModel();
+    });
 
     function initPage () {
+        common.initGolbal();
+        common.maxHeightMain();
         $("#headManpowerLi").addClass("active");
+    }
+
+    function doPrimitives () {
+        $.ajax({
+            url: service.GET_ORG_STRUCTURE,
+            dataType: "json",
+            error: function () {
+                common.alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                    var options = new primitives.orgdiagram.Config(),
+                        items = [],
+                        colors = ['#428bca', '#f0ad4e', '#5cb85c', '#5bc0de', '#999999'];
+                    $.each(response.data, function (index, dept) {
+                        items.push(
+                            new primitives.orgdiagram.ItemConfig({
+                                id: dept.id,
+                                parent: dept.parent,
+                                title: dept.title,
+                                name: dept.name,
+                                display_name: dept.display_name,
+                                itemTitleColor: colors[dept.level],
+                                templateName: dept.templateName
+                            })
+                        );
+                    });
+
+                    options.hasSelectorCheckbox = primitives.common.Enabled.False;
+                    options.leavesPlacementType = primitives.common.ChildrenPlacementType.Vertical;
+                    options.hasButtons = primitives.common.Enabled.False;
+
+                    options.templates = [getorgStructureTpl()];
+                    options.onItemRender = onTemplateRender;
+                    options.onMouseClick = onMouseClick;
+                    options.defaultTemplateName = "orgStructureTpl";
+
+                    options.items = items;
+                    options.cursorItem = 0;
+                    $("#orgDiagram").orgDiagram(options);
+                    $("#orgDiagram").orgDiagram("update", primitives.orgdiagram.UpdateMode.Refresh);
+
+
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+
+        function onTemplateRender(event, data) {
+            switch (data.renderingMode) {
+                case primitives.common.RenderingMode.Create:
+                    /* Initialize widgets here */
+                    break;
+                case primitives.common.RenderingMode.Update:
+                    /* Update widgets here */
+                    break;
+            }
+
+            var itemConfig = data.context;
+
+            if (data.templateName == "orgStructureTpl") {
+                data.element.find("[name=titleBackground]")
+                    .css({
+                        "background": itemConfig.itemTitleColor
+                    });
+
+                var fields = ["title", "display_name"];
+                for (var index = 0; index < fields.length; index++) {
+                    var field = fields[index];
+
+                    var element = data.element.find("[name=" + field + "]");
+                    if (element.text() != itemConfig[field]) {
+                        element.text(itemConfig[field]);
+                    }
+                }
+            }
+        }
+
+        function getorgStructureTpl() {
+            var result = new primitives.orgdiagram.TemplateConfig();
+            result.name = "orgStructureTpl";
+
+            result.itemSize = new primitives.common.Size(120, 65);
+            result.minimizedItemSize = new primitives.common.Size(10, 10);
+            result.highlightPadding = new primitives.common.Thickness(3, 3, 2, 2);
+            result.cursorPadding = new primitives.common.Thickness(2, 2, 50, 2);
+
+            var itemTemplate = $(
+              '<div class="bp-item bp-corner-all bt-item-frame">'
+                + '<div class="bp-item-wrap">'
+                    + '<div name="titleBackground" class="bp-item bp-corner-all bp-title-frame">'
+                        + '<div name="title" class="bp-item bp-title">'
+                        + '</div>'
+                    + '</div>'
+                    + '<div name="display_name" class="bp-item bp-item-dispname"></div>'
+                + '</div>'
+            + '</div>'
+            );
+
+            result.itemTemplate = itemTemplate.wrap('<div>').parent().html();
+
+            var cursorTemplate = $("<div></div>")
+            .css({
+                position: "absolute",
+                overflow: "hidden",
+                width: (result.itemSize.width + result.cursorPadding.left + result.cursorPadding.right) + "px",
+                height: (result.itemSize.height + result.cursorPadding.top + result.cursorPadding.bottom) + "px"
+            });
+
+            var cursorBorder = $("<div></div>")
+            .css({
+                width: (result.itemSize.width + result.cursorPadding.left + 1) + "px",
+                height: (result.itemSize.height + result.cursorPadding.top + 1) + "px"
+            }).addClass("bp-item bp-corner-all bp-cursor-frame");
+            cursorTemplate.append(cursorBorder);
+
+            var bootStrapVerticalButtonsGroup = $("<div></div>")
+            .css({
+                position: "absolute",
+                overflow: "hidden",
+                top: result.cursorPadding.top + "px",
+                left: (result.itemSize.width + result.cursorPadding.left + 10) + "px",
+                width: "35px",
+                height: (result.itemSize.height + 1) + "px"
+            }).addClass("btn-group-vertical btn-group-xs");
+
+            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="new" type="button"><span class="glyphicon glyphicon-plus"></span></button>');
+            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="edit" type="button"><span class="glyphicon glyphicon-edit"></span></button>');
+            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="remove" type="button"><span class="glyphicon glyphicon-remove"></span></button>');
+
+            cursorTemplate.append(bootStrapVerticalButtonsGroup);
+
+            result.cursorTemplate = cursorTemplate.wrap('<div>').parent().html();
+
+            return result;
+        }
+
+        function onMouseClick(event, data) {
+            var target = $(event.originalEvent.target);
+            if (target.hasClass("btn") || target.parent(".btn").length > 0) {
+                var button = target.hasClass("btn") ? target : target.parent(".btn");
+                var buttonname = button.data("buttonname");
+                // alert(data.context.id);
+                // alert(data.parentItem.title)
+                emptyEditModel();
+                fillDepartmentSelect(data.context.id);
+
+                $editModal = $('#editModal');
+                switch (buttonname) {
+                    case 'new' :
+                        $titleSuffix.html('新增');
+                        $selectParentDept.val(data.context.id).attr('disabled', 'disabled');
+                        $editModal.modal('show');
+                        break;
+                    case 'edit' :
+                        $titleSuffix.html('编辑');
+                        $selectParentDept.val(data.context.parent).removeAttr('disabled');
+                        $inputDisplayName.val(data.context.display_name);
+                        $inputName.val(data.context.name);
+                        $inputShortName.val(data.context.title);
+                        $editModal.data('deptId', data.context.id).modal('show');
+                        break;
+                    case 'remove' :
+                        remove(data.context.id);
+                        break;
+                }
+
+                data.cancel = true;
+            }
+        }
+    }
+
+    function save () {
+        $.ajax({
+            url: service.SAVE_ORG_DEPT,
+            dataType: 'json',
+            data: {
+                'deptId' : $editModal.data('deptId'),
+                'deptData' : packEditData()
+            },
+            error: function () {
+                common.alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                    doPrimitives();
+                    $editModal.modal('hide');
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function remove (deptId) {
+        $.ajax({
+            url: service.REMOVE_ORG_DEPT,
+            dataType: 'json',
+            data: {
+                'deptId' : deptId
+            },
+            error: function () {
+                alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                    doPrimitives();
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function packEditData () {
+        var packData = {};
+        packData.name = $inputName.val();
+        packData.display_name = $inputDisplayName.val();
+        packData.short_name = $inputShortName.val();
+        packData.parent_id = $selectParentDept.val();
+
+        retData = JSON.stringify(packData);
+
+        return retData;
+    }
+
+    function fillDepartmentSelect (deptId) {
+        $.ajax({
+            url: service.GET_ORTHER_DEPTS,
+            dataType: 'json',
+            data: {
+                'id': deptId
+            },
+            async: false,
+            error: function () {
+                common.alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                    $allOpts = $('<div />');
+                    $.each(response.data, function (level, depts) {
+                        $options = $('<option />').attr('disabled', 'disabled').val('').html(level).appendTo($allOpts);
+                        $.each(depts, function (index, dept) {
+                            $opt = $('<option />').val(dept.id).html(dept.display_name).appendTo($allOpts);
+                        });
+                    });
+                    $('#selectParentDept').html('').html($allOpts.html());
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function emptyEditModel () {
+        $editModal.find('.form-control').val('');
+        $editModal.data('deptId', 0);
     }
 });

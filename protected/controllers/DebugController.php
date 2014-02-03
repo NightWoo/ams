@@ -11,10 +11,15 @@ class DebugController extends BmsBaseController
 	public function actionTest () {
 		$vin = $this->validateStringVal('vin', '');
 		$material = $this->validateStringVal('material', '');
+        $transaction = Yii::app()->db->beginTransaction();
 		try {
-			$ret = $this->updateOrderView();
+            $dept = OrgDepartment::createById(0);
+            $ret = $dept->save();
+			$ret = $dept->_parent;
+            $transaction->commit();
 			$this->renderJsonBms(true, 'OK', $ret);
 		} catch(Exception $e) {
+            $this->transaction->rollback();
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}

@@ -1,0 +1,103 @@
+<?php
+Yii::import('application.models.AR.OrgDepartmentAR');
+Yii::import('application.models.OrgDepartment');
+Yii::import('application.models.OrgStructureSeeker');
+
+class OrgStructureController extends BmsBaseController
+{
+    /**
+     * Declares class-based actions.
+     */
+    public function actions ()
+    {
+        return array(
+        );
+    }
+
+    public function actionIndex () {
+        $this->actionGetStructure();
+    }
+
+    public function actionGetStructure () {
+        try {
+            $seeker = new OrgStructureSeeker();
+            $datas = $seeker->getOrgStructure();
+            $this->renderJsonBms(true, 'get orgStructure success', $datas);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionDepartmentSave () {
+        $id = $this->validateIntVal('deptId', 0);
+        $deptData = $this->validateStringVal('deptData', '{}');
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $dept = OrgDepartment::createById($id);
+            if(empty($id)) {
+                $dept->generate($deptData);
+            } else {
+                $dept->modify($deptData);
+            }
+            $transaction->commit();
+            $this->renderJsonBms(true, 'save success', '');
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionDepartmentRemove () {
+        $id = $this->validateIntVal('deptId', 0);
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $dept = OrgDepartment::createById($id);
+            $dept->remove();
+            $transaction->commit();
+            $this->renderJsonBms(true, 'save success', '');
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionDepartmentSortUp () {
+        $id = $this->validateIntVal('id', 0);
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $dept = OrgDepartment::createById($id);
+            $dept->sortUp();
+            $transaction->commit();
+            $this->renderJsonBms(true, 'save success', '');
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionDepartmentSortDown () {
+        $id = $this->validateIntVal('id', 0);
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $dept = OrgDepartment::createById($id);
+            $dept->sortDown();
+            $transaction->commit();
+            $this->renderJsonBms(true, 'save success', '');
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGetOtherDepts () {
+        $id = $this->validateIntVal('id', 0);
+        try {
+            $dept = OrgDepartment::createById($id);
+            $data = $dept->getOtherDepts();
+            $this->renderJsonBms(true, 'get otherDepts success', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+}

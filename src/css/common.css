@@ -2,11 +2,22 @@
 html {
   font-family: "Microsoft YaHei", sans-serif;
 }
+
 body {
   font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 50px;
+}
+
+.navbar {
+    margin-bottom: 0;
 }
 
 /*end modify bootstrap*/
+
+.body-main {
+    overflow-y: auto;
+    padding-top: 20px;
+}
 
 @media (min-width: 768px) {
 
@@ -33,7 +44,9 @@ body {
     margin-bottom: 10px;
 }
 
-.pannel-thumbnails a.thumbnail:hover, .pannel-thumbnails a.thumbnail:focus, .pannel-thumbnails a.thumbnail.active {
+.pannel-thumbnails a.thumbnail:hover,
+.pannel-thumbnails a.thumbnail:focus,
+.pannel-thumbnails a.thumbnail.active {
     border-color: #428bca;
     text-decoration: none;
 }

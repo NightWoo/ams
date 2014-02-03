@@ -1,4 +1,17 @@
 define(['service'], function(service) {
+
+    function initGolbal () {
+        $(".body-main").css({
+            "max-height" : $(window).height() - 50 + "px"
+        });
+    }
+
+    function maxHeightMain () {
+        $(window).resize(function () {
+            $(".body-main").css("max-height", $(window).height() - 50 + "px");
+        });
+    }
+
     function getSeriesArray () {
         var seriesArray = {};
         $.ajax({
@@ -54,11 +67,11 @@ define(['service'], function(service) {
             },
             success: function (response) {
                 $.each(response.data, function (index, value) {
-                    if(!showDisabled && value.is_enabled == 0) {
+                    if(!showDisabled && ~~value.is_enabled === 0) {
                         return true;
                     }
                     option = $("<option value='"+ value.id +"'>"+ value.name +"</option>");
-                    if(value.is_enabled == 0) {
+                    if(~~value.is_enabled === 0) {
                         option.attr("disabled", "disabled");
                     }
                     option.appendTo(optionsDiv);
@@ -117,6 +130,14 @@ define(['service'], function(service) {
     }
 
     return {
+        initGolbal: function () {
+            initGolbal();
+        },
+
+        maxHeightMain: function () {
+            maxHeightMain();
+        },
+
         seriesName: function (series) {
             SeriesArray = getSeriesArray();
             return SeriesArray[series];
@@ -160,5 +181,5 @@ define(['service'], function(service) {
                  selector: "*[rel=tooltip]"
             });
         }
-    }
+    };
 });
