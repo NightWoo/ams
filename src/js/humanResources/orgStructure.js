@@ -16,12 +16,18 @@ require.config({
 
 require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "bootstrap"], function(head,service,common,$) {
     var
+        maintainPrivilage = common.checkPrivilage('ORG_STRUCTURE_MAINTAIN'),
         $editModal = $('#editModal'),
         $inputDisplayName = $('#inputDisplayName'),
         $inputName = $('#inputName'),
         $inputShortName = $('#inputShortName'),
         $selectParentDept = $('#selectParentDept'),
-        $titleSuffix = $('#titleSuffix');
+        $titleSuffix = $('#titleSuffix'),
+        $liChildrenSort = $('#liChildrenSort'),
+        $liDetailEdit = $('#liDetailEdit'),
+        $paneChildrenSort = $('#paneChildrenSort'),
+        $paneDetailEdit = $('#paneDetailEdit'),
+        $tbodyChildren = $('#tableChildren>tbody');
 
     head.doInit();
     initPage();
@@ -32,7 +38,28 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
     });
 
     $('#editCancel').on('click', function (e) {
-        emptyEditModel();
+        initEditModel();
+        doPrimitives();
+    });
+
+    $tbodyChildren.on('click', 'button', function (e) {
+        $target = $(e.target);
+        if ($target.hasClass("btn") || $target.parent(".btn").length > 0) {
+            var $btn = $target.hasClass("btn") ? $target : $target.parent(".btn");
+            var btnName = $btn.data("btn_name");
+            var deptId = $btn.closest('tr').data('dept_id');
+            var parentId = $editModal.data('dept_id');
+
+            switch (btnName) {
+                case 'sortUp' :
+                    sortUp(deptId);
+                    break;
+                case 'sortDown' :
+                    sortDown(deptId);
+                    break;
+            }
+            getChildren(parentId);
+        }
     });
 
     function initPage () {
@@ -58,7 +85,7 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
                             new primitives.orgdiagram.ItemConfig({
                                 id: dept.id,
                                 parent: dept.parent,
-                                title: dept.title,
+                                title: dept.short_name,
                                 name: dept.name,
                                 display_name: dept.display_name,
                                 itemTitleColor: colors[dept.level],
@@ -125,7 +152,11 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
             result.itemSize = new primitives.common.Size(120, 65);
             result.minimizedItemSize = new primitives.common.Size(10, 10);
             result.highlightPadding = new primitives.common.Thickness(3, 3, 2, 2);
-            result.cursorPadding = new primitives.common.Thickness(2, 2, 50, 2);
+            if(maintainPrivilage) {
+                result.cursorPadding = new primitives.common.Thickness(2, 2, 50, 2);
+            } else {
+                result.cursorPadding = new primitives.common.Thickness(0, 0, 0, 0);
+            }
 
             var itemTemplate = $(
               '<div class="bp-item bp-corner-all bt-item-frame">'
@@ -140,39 +171,40 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
             );
 
             result.itemTemplate = itemTemplate.wrap('<div>').parent().html();
+            if(maintainPrivilage) {
+                var cursorTemplate = $("<div></div>")
+                .css({
+                    position: "absolute",
+                    overflow: "hidden",
+                    width: (result.itemSize.width + result.cursorPadding.left + result.cursorPadding.right) + "px",
+                    height: (result.itemSize.height + result.cursorPadding.top + result.cursorPadding.bottom) + "px"
+                });
 
-            var cursorTemplate = $("<div></div>")
-            .css({
-                position: "absolute",
-                overflow: "hidden",
-                width: (result.itemSize.width + result.cursorPadding.left + result.cursorPadding.right) + "px",
-                height: (result.itemSize.height + result.cursorPadding.top + result.cursorPadding.bottom) + "px"
-            });
+                var cursorBorder = $("<div></div>")
+                .css({
+                    width: (result.itemSize.width + result.cursorPadding.left + 1) + "px",
+                    height: (result.itemSize.height + result.cursorPadding.top + 1) + "px"
+                }).addClass("bp-item bp-corner-all bp-cursor-frame");
+                cursorTemplate.append(cursorBorder);
 
-            var cursorBorder = $("<div></div>")
-            .css({
-                width: (result.itemSize.width + result.cursorPadding.left + 1) + "px",
-                height: (result.itemSize.height + result.cursorPadding.top + 1) + "px"
-            }).addClass("bp-item bp-corner-all bp-cursor-frame");
-            cursorTemplate.append(cursorBorder);
+                var bootStrapVerticalButtonsGroup = $("<div></div>")
+                .css({
+                    position: "absolute",
+                    overflow: "hidden",
+                    top: result.cursorPadding.top + "px",
+                    left: (result.itemSize.width + result.cursorPadding.left + 10) + "px",
+                    width: "35px",
+                    height: (result.itemSize.height + 1) + "px"
+                }).addClass("btn-group-vertical btn-group-xs");
 
-            var bootStrapVerticalButtonsGroup = $("<div></div>")
-            .css({
-                position: "absolute",
-                overflow: "hidden",
-                top: result.cursorPadding.top + "px",
-                left: (result.itemSize.width + result.cursorPadding.left + 10) + "px",
-                width: "35px",
-                height: (result.itemSize.height + 1) + "px"
-            }).addClass("btn-group-vertical btn-group-xs");
+                bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="edit" type="button"><span class="glyphicon glyphicon-edit"></span></button>');
+                bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="new" type="button"><span class="glyphicon glyphicon-plus"></span></button>');
+                bootStrapVerticalButtonsGroup.append('<button class="btn btn-danger" data-buttonname="remove" type="button"><span class="fa fa-trash-o fa-lg"></span></button>');
 
-            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="new" type="button"><span class="glyphicon glyphicon-plus"></span></button>');
-            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="edit" type="button"><span class="glyphicon glyphicon-edit"></span></button>');
-            bootStrapVerticalButtonsGroup.append('<button class="btn btn-default" data-buttonname="remove" type="button"><span class="glyphicon glyphicon-remove"></span></button>');
+                cursorTemplate.append(bootStrapVerticalButtonsGroup);
 
-            cursorTemplate.append(bootStrapVerticalButtonsGroup);
-
-            result.cursorTemplate = cursorTemplate.wrap('<div>').parent().html();
+                result.cursorTemplate = cursorTemplate.wrap('<div>').parent().html();
+            }
 
             return result;
         }
@@ -184,7 +216,7 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
                 var buttonname = button.data("buttonname");
                 // alert(data.context.id);
                 // alert(data.parentItem.title)
-                emptyEditModel();
+                initEditModel();
                 fillDepartmentSelect(data.context.id);
 
                 $editModal = $('#editModal');
@@ -192,6 +224,7 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
                     case 'new' :
                         $titleSuffix.html('新增');
                         $selectParentDept.val(data.context.id).attr('disabled', 'disabled');
+                        $liChildrenSort.hide();
                         $editModal.modal('show');
                         break;
                     case 'edit' :
@@ -200,10 +233,14 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
                         $inputDisplayName.val(data.context.display_name);
                         $inputName.val(data.context.name);
                         $inputShortName.val(data.context.title);
-                        $editModal.data('deptId', data.context.id).modal('show');
+                        $liChildrenSort.show();
+                        $editModal.data('dept_id', data.context.id).modal('show');
+                        getChildren(data.context.id);
                         break;
                     case 'remove' :
-                        remove(data.context.id);
+                        if( confirm('是否移除[' + data.context.display_name +']？\n注：移除的部门可从后台恢复') ) {
+                            remove(data.context.id);
+                        }
                         break;
                 }
 
@@ -217,7 +254,7 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
             url: service.SAVE_ORG_DEPT,
             dataType: 'json',
             data: {
-                'deptId' : $editModal.data('deptId'),
+                'deptId' : $editModal.data('dept_id'),
                 'deptData' : packEditData()
             },
             error: function () {
@@ -242,11 +279,48 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
                 'deptId' : deptId
             },
             error: function () {
-                alertError();
+                common.alertError();
             },
             success: function (response) {
                 if(response.success) {
                     doPrimitives();
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function sortUp (deptId) {
+        $.ajax({
+            url: service.SORT_UP_ORG_DEPT,
+            dataType: 'json',
+            data: {
+                'deptId' : deptId
+            },
+            error: function () {
+                common.alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+    function sortDown (deptId) {
+        $.ajax({
+            url: service.SORT_DOWN_ORG_DEPT,
+            dataType: 'json',
+            data: {
+                'deptId' : deptId
+            },
+            error: function () {
+                alertError();
+            },
+            success: function (response) {
+                if(response.success) {
                 } else {
                     alert(response.message);
                 }
@@ -268,10 +342,10 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
 
     function fillDepartmentSelect (deptId) {
         $.ajax({
-            url: service.GET_ORTHER_DEPTS,
+            url: service.GET_ORG_DEPT_LIST,
             dataType: 'json',
             data: {
-                'id': deptId
+                'deptId': deptId
             },
             async: false,
             error: function () {
@@ -294,8 +368,53 @@ require(["head", "service", "common", "jquery", "jquery-ui", "primitives", "boot
         });
     }
 
-    function emptyEditModel () {
-        $editModal.find('.form-control').val('');
-        $editModal.data('deptId', 0);
+    function getChildren (deptId) {
+        $.ajax({
+            url: service.GET_ORG_CHILDREN,
+            dataType: 'json',
+            data: {
+                'deptId': deptId
+            },
+            async: false,
+            error: function () {
+                common.alertError();
+            },
+            success: function (response) {
+                if(response.success) {
+                    $tbodyChildren.html('');
+                    $.each(response.data, function (index, dept) {
+                        $tr = $('<tr />');
+                        $btnUp = $('<button />').data('btn_name', 'sortUp').addClass('btn  btn-default btn-xs').append('<i class="fa fa-arrow-up"></i>');
+                        if( index === 0 ) {
+                            $btnUp.attr('disabled', 'disabled');
+                        }
+                        $btnDown = $('<button />').data('btn_name', 'sortDown').addClass('btn  btn-default btn-xs').append('<i class="fa fa-arrow-down"></i>');
+                        if( index === response.data.length - 1 ) {
+                            $btnDown.attr('disabled', 'disabled');
+                        }
+                        $btnGroup = $('<div />').addClass('btn-group btn-group-xs').append($btnUp).append($btnDown);
+                        $('<td />').append($btnGroup).appendTo($tr);
+                        $('<td />').html(dept.sort_number).appendTo($tr);
+                        $('<td />').html(dept.short_name).appendTo($tr);
+                        $('<td />').html(dept.display_name).appendTo($tr);
+
+                        $tr.data('dept_id', dept.id);
+                        $tbodyChildren.append($tr);
+                    });
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
     }
+
+    function initEditModel () {
+        $editModal.find('.form-control').val('');
+        $editModal.data('dept_id', 0);
+        $paneChildrenSort.removeClass('active in');
+        $liChildrenSort.removeClass('active');
+        $paneDetailEdit.addClass('active in');
+        $liDetailEdit.addClass('active');
+    }
+
 });

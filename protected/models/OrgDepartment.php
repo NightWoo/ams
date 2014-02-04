@@ -92,14 +92,43 @@ class OrgDepartment {
     }
 
     public function sortUp () {
-
+        $high = OrgDepartmentAR::model()->find("parent_id=? AND sort_number<? ORDER BY sort_number DESC", array($this->_ar->parent_id, $this->_ar->sort_number));
+        $highNum = 1;
+        if(!empty($high)) {
+            $highNum = $high->sort_number;
+            $high->sort_number = $this->_ar->sort_number;
+            $high->save();
+        }
+        $this->_ar->sort_number = $highNum;
+        $this->_ar->save();
+        $this->reorderSameParent();
     }
 
     public function sortDown () {
-
+        $low = OrgDepartmentAR::model()->find("parent_id=? AND sort_number>? ORDER BY sort_number ASC", array($this->_ar->parent_id, $this->_ar->sort_number));
+        $lowNum = 1;
+        if(!empty($low)) {
+            $lowNum = $low->sort_number;
+            $low->sort_number = $this->_ar->sort_number;
+            $low->save();
+        }
+        $this->_ar->sort_number = $lowNum;
+        $this->_ar->save();
+        $this->reorderSameParent();
     }
 
-    public function getOtherDepts () {
+    public function reorderSameParent () {
+        $siblings = OrgDepartmentAR::model()->findAll('parent_id=? ORDER BY sort_number ASC', array($this->_ar->parent_id));
+        if(!empty($siblings)) {
+            $i = 1;
+            foreach($siblings as $dept) {
+                $dept->sort_number = $i++;
+                $dept->save();
+            }
+        }
+    }
+
+    public function getDeptList () {
         $seeker = new OrgStructureSeeker();
         $datas = $seeker->getOrgStructure();
         $ret = array();
@@ -112,5 +141,11 @@ class OrgDepartment {
         }
 
         return $ret;
+    }
+
+    public function getChildren () {
+        $seeker = new OrgStructureSeeker();
+        $datas = $seeker->getOrgStructure($this->_ar->id);
+        return $datas;
     }
 }

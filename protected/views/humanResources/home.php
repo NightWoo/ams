@@ -56,7 +56,7 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6">
-                    <legend>培训、考核&amp;晋升</legend>
+                    <legend>员工发展</legend>
                     <div class="row pannel-thumbnails">
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <a href="#" class="thumbnail">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
-                    <legend>考勤、绩效&amp;薪酬</legend>
+                    <legend>绩效薪酬</legend>
                     <div class="row pannel-thumbnails">
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <a href="#" class="thumbnail">

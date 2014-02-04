@@ -63,7 +63,7 @@ class OrgStructureController extends BmsBaseController
     }
 
     public function actionDepartmentSortUp () {
-        $id = $this->validateIntVal('id', 0);
+        $id = $this->validateIntVal('deptId', 0);
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $dept = OrgDepartment::createById($id);
@@ -77,7 +77,7 @@ class OrgStructureController extends BmsBaseController
     }
 
     public function actionDepartmentSortDown () {
-        $id = $this->validateIntVal('id', 0);
+        $id = $this->validateIntVal('deptId', 0);
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $dept = OrgDepartment::createById($id);
@@ -90,12 +90,23 @@ class OrgStructureController extends BmsBaseController
         }
     }
 
-    public function actionGetOtherDepts () {
-        $id = $this->validateIntVal('id', 0);
+    public function actionGetDeptList () {
+        $id = $this->validateIntVal('deptId', 0);
         try {
             $dept = OrgDepartment::createById($id);
-            $data = $dept->getOtherDepts();
-            $this->renderJsonBms(true, 'get otherDepts success', $data);
+            $data = $dept->getDeptList();
+            $this->renderJsonBms(true, 'get DeptList success', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGetChildren () {
+        $id = $this->validateIntVal('deptId', 0);
+        try {
+            $dept = OrgDepartment::createById($id);
+            $data = $dept->getChildren();
+            $this->renderJsonBms(true, 'get childrenDepts success', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }

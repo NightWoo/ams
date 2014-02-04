@@ -1,3 +1,7 @@
+.org-level-label {
+    float: right;
+}
+
 .bp-item {
     font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -35,4 +39,8 @@
     padding-left: 5px;
     line-height: 20px;
     font-size: 12px;
+}
+
+#tableChildren {
+    margin-bottom: 0;
 }

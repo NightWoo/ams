@@ -17,7 +17,13 @@
     <div class="body-main">
         <div class="container">
             <legend>组织结构</legend>
-            <div id="orgDiagram" style="min-height: 1000px;">
+            <div class="org-level-label">
+              <span class="label label-primary">工厂</span>
+              <span class="label label-warning">科室</span>
+              <span class="label label-success">&nbsp;&nbsp;班&nbsp;&nbsp;</span>
+              <span class="label label-info">&nbsp;&nbsp;组&nbsp;&nbsp;</span>
+            </div>
+            <div id="orgDiagram" style="min-height: 720px;">
             </div>
         </div>
     </div>
@@ -30,34 +36,58 @@
             <h4 class="modal-title" id="editModalLabel">部门<span id="titleSuffix"></span></h4>
           </div>
           <div class="modal-body">
-            <form class="form-horizontal" role="form">
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">上级部门</label>
-                <div class="col-sm-10">
-                  <select class="form-control" id="selectParentDept">
-                  </select>
-                </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              <li id="liDetailEdit" class="active"><a href="#paneDetailEdit" data-toggle="tab">详情编辑</a></li>
+              <li id="liChildrenSort"><a href="#paneChildrenSort" data-toggle="tab">子部门排列</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content" id="editTabConent">
+              <div class="tab-pane fade in active" id="paneDetailEdit">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">上级部门</label>
+                    <div class="col-sm-10">
+                      <select class="form-control" id="selectParentDept">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputDisplayName" class="col-sm-2 control-label">部门名</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputDisplayName" placeholder="部门名...">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">英文名</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputName" placeholder="英文名...">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputShortName" class="col-sm-2 control-label">简称</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputShortName" placeholder="简称...">
+                    </div>
+                  </div>
+                </form>
               </div>
-              <div class="form-group">
-                <label for="inputDisplayName" class="col-sm-2 control-label">部门名</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputDisplayName" placeholder="部门名...">
-                </div>
+              <div class="tab-pane fade" id="paneChildrenSort">
+                <table class="table table-hover" id="tableChildren">
+                  <thead>
+                    <tr>
+                      <th style="width:70px"></th>
+                      <th style="width:50px">#</th>
+                      <th style="width:80px">简称</th>
+                      <th>部门名</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
-              <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">英文名</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputName" placeholder="英文名...">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputShortName" class="col-sm-2 control-label">简称</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputShortName" placeholder="简称...">
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+          </div><!-- /.modal-body -->
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" id="editCancel">取消</button>
             <button type="button" class="btn btn-primary"  id="editCommit">确定</button>

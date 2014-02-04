@@ -12,6 +12,10 @@ body {
     margin-bottom: 0;
 }
 
+.modal-body .nav-tabs {
+    margin-bottom: 30px;
+}
+
 /*end modify bootstrap*/
 
 .body-main {

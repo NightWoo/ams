@@ -31,6 +31,27 @@ define(['service'], function(service) {
         return seriesArray;
     }
 
+    function checkPrivilage (privilagePoint) {
+        var permit = false;
+        $.ajax({
+            url: service.CHECK_PRIVILAGE,
+            dataType: "json",
+            data: {
+                "privilagePoint" : privilagePoint
+            },
+            async: false,
+            error: function () {alertError();},
+            success: function (response) {
+                if(response.success) {
+                    permit = response.data;
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+        return permit;
+    }
+
     function alertError (message) {
         message = message || 'ajax error';
         // alert(message);
@@ -145,6 +166,10 @@ define(['service'], function(service) {
 
         getSeriesArray: function () {
             return getSeriesArray();
+        },
+
+        checkPrivilage: function (privilagePoint) {
+            return checkPrivilage(privilagePoint);
         },
 
         fadeMessageAlert: function (message, alertClass) {
