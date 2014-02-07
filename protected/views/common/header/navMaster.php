@@ -12,15 +12,15 @@
       <ul class="nav navbar-nav">
         <li id="headManagementSystemLi">
             <a class="visible-sm" href="/bms/ManagementSystem/home?chapter=0" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="体系"><i class="fa fa-sitemap"></i></a>
-            <a class="hidden-sm" href="/bms/ManagementSystem/home?chapter=0"><i class="fa fa-sitemap"></i><span class="hidden-sm">体系</span></a>
+            <a class="hidden-sm" href="/bms/ManagementSystem/home?chapter=0"><i class="fa fa-sitemap"></i>&nbsp;体系</a>
         </li>
         <li id="headTechnologyLi">
             <a class="visible-sm" href="" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="技术"><i class="fa fa-cogs"></i></a>
-            <a class="hidden-sm" href=""><i class="fa fa-cogs"></i>技术</a>
+            <a class="hidden-sm" href=""><i class="fa fa-cogs"></i>&nbsp;技术</a>
         </li>
         <li id="headAssemblyLi">
             <a class="visible-sm" href="/bms/execution" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="生产"><i class="fa fa-wrench"></i></a>
-            <a class="hidden-sm" href="/bms/execution"><i class="fa fa-wrench"></i>生产</a>
+            <a class="hidden-sm" href="/bms/execution"><i class="fa fa-wrench"></i>&nbsp;生产</a>
         </li>
         <li class="divider-vertical"></li>
         <li id="headEfficiencyLi">

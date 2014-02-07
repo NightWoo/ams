@@ -9,24 +9,21 @@
 </head>
 <body>
     <header class="navbar navbar-fixed-top navbar-default" role="banner">
-        <style type="text/css" media="screen">
-            body {padding-top: 70px;}
-        </style>
     	<?php require_once(dirname(__FILE__)."/../common//header/navMaster.php"); ?>
     </header>
-    <main>
+    <div class="body-main">
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6">
                     <legend>人员规划</legend>
                     <div class="row pannel-thumbnails">
-                        <div class="col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-sm-4">
                             <a href="/bms/humanResources/orgStructure" class="thumbnail">
                                 <h5>组织结构</h5>
                             </a>
                         </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4">
-                            <a href="#" class="thumbnail">
+                        <div class="col-sm-4">
+                            <a href="/bms/humanResources/positionSystem" class="thumbnail">
                                 <h5>岗位体系</h5>
                             </a>
                         </div>
@@ -97,7 +94,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
     <!-- <footer class="navbar-inverse  navbar-fixed-bottom" role="banner">
         <style type="text/css" media="screen">
             body {padding-bottom: 70px;}

@@ -1,9 +1,15 @@
-define(['service'], function(service) {
+define(["service", "jquery", "bootstrap", "bootbox"], function(service, $) {
 
     function initGolbal () {
         $(".body-main").css({
             "max-height" : $(window).height() - 50 + "px"
         });
+
+        $('body').tooltip({
+            selector: '*[rel=tooltip]',
+            container: 'body'
+        });
+        maxHeightMain();
     }
 
     function maxHeightMain () {
@@ -198,13 +204,6 @@ define(['service'], function(service) {
 
         fillLineSelect: function () {
             return fillLineSelect();
-        },
-
-        attachTooltip: function () {
-            $('body').tooltip(
-                {
-                 selector: "*[rel=tooltip]"
-            });
         }
     };
 });

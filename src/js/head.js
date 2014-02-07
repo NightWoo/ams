@@ -43,17 +43,10 @@ define(function() {
         );
     }
 
-    function attachTootip () {
-        $('body').tooltip({
-             selector: "*[rel=tooltip]"
-        });
-    }
-
     return {
         doInit: function() {
             // attachDropDown();
             // attachToggleTop();
-            attachTootip();
         }
     };
 });

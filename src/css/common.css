@@ -16,6 +16,30 @@ body {
     margin-bottom: 30px;
 }
 
+.modal-footer {
+    margin-top: 0;
+}
+
+li.list-group-item:hover, li.list-group-item:focus {
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.list-group-item>.btn, .list-group-item>.btn-group, .panel-heading>.btn, .panel-heading>.btn-group {
+    float: right;
+}
+
+li.list-group-item>a {
+    display: block;
+    text-decoration: none;
+}
+
+.panel-primary .btn-link {
+    color: #000;
+}.panel-primary .btn-link:hover {
+    color: #fff;
+}
+
 /*end modify bootstrap*/
 
 .body-main {

@@ -1,0 +1,174 @@
+#panelPositionPyramid {
+    overflow: auto;
+}
+
+#channelLabels .label {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.pyramid-grade {
+    position: absolute;
+    background: none;
+    font-size: 10px;
+    color: #999;
+    display: block;
+    height: 40px;
+
+}.pyramid-grade:hover, .pyramid-grade.active {
+    text-decoration: none;
+    color: #fff;
+}
+
+.pyramid-grade-text {
+    margin-top: 15px;
+    line-height: 10px;
+    text-align: center;
+    display: block;
+}
+
+.pyramid-triangle {
+    line-height: 20px;
+}
+
+.grade-mg {
+    width: 54px;
+    top: 61px;
+    left: 168px;
+}.grade-mg:hover, .grade-mg.active {
+    background: url('../../../img/hr/pyramidGrades.png') 0 0;
+}
+
+.pyramid-triangle .pyramid-grade-text {
+     margin-top: 22px;
+}
+
+.grade-chief {
+    width: 79px;
+    top: 100px;
+    left: 169px;
+}.grade-chief:hover, .grade-chief.active {
+    background: url('../../../img/hr/pyramidGrades.png') 0 -41px;
+}
+
+.grade-high-engineer {
+    width: 52px;
+    top: 100px;
+    left: 143px;
+}.grade-high-engineer:hover, .grade-high-engineer.active {
+    background: url('../../../img/hr/pyramidGrades.png') -80px -41px;
+}
+
+.grade-coach-3 {
+    width: 79px;
+    top: 141px;
+    left: 195px;
+}.grade-coach-3:hover, .grade-coach-3.active {
+    background: url('../../../img/hr/pyramidGrades.png') -0px -82px;
+}
+
+.grade-engineer {
+    width: 104px;
+    top: 141px;
+    left: 117px;
+}.grade-engineer:hover, .grade-engineer.active {
+    background: url('../../../img/hr/pyramidGrades.png') -80px -82px;
+}
+
+.grade-engineer-as {
+    width: 131px;
+    top: 181px;
+    left: 117px;
+}.grade-engineer-as:hover, .grade-engineer-as.active {
+    background: url('../../../img/hr/pyramidGrades.png') -134px -122px;
+}
+
+.grade-coach-2 {
+    width: 79px;
+    top: 181px;
+    left: 223px;
+}.grade-coach-2:hover, .grade-coach-2.active {
+    background: url('../../../img/hr/pyramidGrades.png') -0px -122px;
+}
+
+.grade-technician {
+    width: 52px;
+    top: 181px;
+    left: 89px;
+}.grade-technician:hover, .grade-technician.active {
+    background: url('../../../img/hr/pyramidGrades.png') -80px -122px;
+}
+
+.grade-mechanic {
+    width: 209px;
+    top: 221px;
+    left: 64px;
+}.grade-mechanic:hover, .grade-mechanic.active {
+    background: url('../../../img/hr/pyramidGrades.png') -80px -164px;
+}
+
+.grade-coach-1 {
+    width: 79px;
+    top: 221px;
+    left: 248px;
+}.grade-coach-1:hover, .grade-coach-1.active {
+    background: url('../../../img/hr/pyramidGrades.png') -0px -164px;
+}
+
+.grade-worker {
+    width: 318px;
+    top: 261px;
+    left: 37px;
+}.grade-worker:hover, .grade-worker.active {
+    background: url('../../../img/hr/pyramidGrades.png') -0px -205px;
+}
+
+
+
+
+#positionPyramid {
+    width: 328px;
+    height: 250px;
+    background: url('../../../img/hr/positionPyramid.png');
+}
+
+#gradeSelection {
+    height: 320px;
+}
+
+.list-group-item .btn-link, .list-group-item a {
+    color: #777;
+}
+
+.list-group-item .btn-group {
+    display: none;
+}
+.list-group-item:hover .btn-group,  .list-group .active .btn-group {
+    display: block;
+}
+
+.list-group-item .btn-link:hover, .list-group-item a:hover {
+    color: #333;
+}
+
+.list-group .active {
+    border-right: 3px solid #428bca;
+    padding-right: 12px;
+}
+
+.list-group-item .fa-edit:hover {
+    color: #428bca;
+}
+
+.list-group-item .fa-trash-o:hover {
+    color: #d9534f;
+}
+
+#currentPositionBtnGroup {
+    float: right;
+}
+
+.current-position-description dd {
+    margin-left: 30px;
+    margin-bottom: 10px
+}

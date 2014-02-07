@@ -18,4 +18,8 @@ class HumanResourcesController extends BmsBaseController
     public function actionOrgStructure () {
         $this->render("orgStructure", array(""));
     }
+
+    public function actionPositionSystem () {
+        $this->render("positionSystem", array(""));
+    }
 }
