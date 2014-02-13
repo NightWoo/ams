@@ -16,59 +16,74 @@
         <div class="container">
             <legend id="leg">岗位体系</legend>
             <div class="row">
-              <div class="col-sm-4">
-                <div id="gradeSelection" class="panel panel-default">
-                  <div class="panel-heading">                    <div id="gradeSelectionBtnGroup" class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="添加岗位" btn-name="add"><i class="fa fa-plus fa-lg"></i></button>
+              <div class="col-sm-9" style="height:680px">
+                <div id="PyramidSelection" class="panel panel-default">
+                  <div class="panel-heading">
+                    <span class="current-position-name">通道</span>
+                  </div>
+                  <div id="panelPositionPyramid" class="panel-body">
+
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <div id="positionLevel">
+                          <div class="position-level" level="1">D</div>
+                          <div class="position-level" level="2">E</div>
+                          <div class="position-level" level="3">F</div>
+                          <div class="position-level sub-level" level="4">G3</div>
+                          <div class="position-level sub-level" level="4">G2</div>
+                          <div class="position-level sub-level" level="4">G1</div>
+                          <div class="position-level sub-level" level="5">H3</div>
+                          <div class="position-level sub-level" level="5">H2</div>
+                          <div class="position-level sub-level" level="5">H1</div>
+                          <div class="position-level" level="6">I2</div>
+                        </div>
+                      </div>
+                      <div class="col-sm-10">
+                        <div id="channelLabels" class="pull-right">
+                          <h4><span class="label label-primary">管理</span></h4>
+                          <h4><span class="label label-success">技术专家</span></h4>
+                          <h4><span class="label label-warning">技能</span></h4>
+                        </div>
+                        <div id="positionPyramid">
+                          <a href="#" class="pyramid-grade pyramid-triangle grade-mg" level="1" channel="管理"><span class="pyramid-grade-text">经理</span></a>
+                          <a href="#" class="pyramid-grade grade-chief" level="2" channel="管理"><span class="pyramid-grade-text">科长</span></a>
+                          <a href="#" class="pyramid-grade grade-high-engineer" level="2"  channel="技术专家"><span class="pyramid-grade-text line-2">高级<br>工程师</span></a>
+                          <a href="#" class="pyramid-grade grade-engineer" level="3"  channel="技术专家"><span class="pyramid-grade-text">工程师</span></a>
+                          <a href="#" class="pyramid-grade grade-coach grade-coach-3" level="3"  channel="管理"><span class="pyramid-grade-text">三级<br>指导员</span></a>
+                          <a href="#" class="pyramid-grade grade-engineer-as" level="4"  channel="技术专家"><span class="pyramid-grade-text">助理工程师</span></a>
+                          <a href="#" class="pyramid-grade grade-coach grade-coach-2" level="4" channel="管理"><span class="pyramid-grade-text">二级<br>指导员</span></a>
+                          <a href="#" class="pyramid-grade pyramid-triangle grade-technician" level="4"  channel="技能"><span class="pyramid-grade-text">技师<br>初/中/高</span></a>
+                          <a href="#" class="pyramid-grade grade-mechanic" level="5" channel="技能"><span class="pyramid-grade-text">技工<br>初/中/高</span></a>
+                           <a href="#" class="pyramid-grade grade-coach grade-coach-1" level="5" channel="管理"><span class="pyramid-grade-text">一级<br>指导员</span></a>
+                            <a href="#" class="pyramid-grade grade-worker" level="6" channel="技能"><span class="pyramid-grade-text">普工</span></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="btn-group btn-group-xs">
+                      <button id="btnAdd" class="btn btn-link btn-xs" rel="tooltip" title="添加岗位" btn-name="add"><i class="fa fa-plus fa-lg"></i></button>
                     </div>
                     <span class="current-position-name">岗位</span>
                   </div>
-                  <div id="panelPositionPyramid" class="panel-body">
-                    <div id="channelLabels" class="pull-right">
-                        <span class="label label-primary">管理通道</span>
-                        <span class="label label-success">技术专家通道</span>
-                        <span class="label label-warning">技能通道</span>
-                    </div>
-                    <div id="positionPyramid">
-                      <a href="#" class="pyramid-grade pyramid-triangle grade-mg"  data-placement="right" rel="tooltip" title="D3-经理"><span class="pyramid-grade-text">经理</span></a>
-                      <a href="#" class="pyramid-grade grade-chief active"  data-placement="right" rel="tooltip" title="E3-科长"><span class="pyramid-grade-text">科长</span></a>
-                      <a href="#" class="pyramid-grade pyramid-triangle grade-high-engineer"  data-placement="left" rel="tooltip" title="E3-高级工程师"><span class="pyramid-grade-text">高工</span></a>
-                      <a href="#" class="pyramid-grade grade-engineer"  data-placement="left" rel="tooltip" title="F3-工程师"><span class="pyramid-grade-text">工程师</span></a>
-                      <a href="#" class="pyramid-grade grade-coach-3"  data-placement="right" rel="tooltip" title="F3-三级指导员"><span class="pyramid-grade-text">三指</span></a>
-                      <a href="#" class="pyramid-grade grade-engineer-as"  data-placement="left" rel="tooltip" title="G3-助理工程师"><span class="pyramid-grade-text">助理工程师</span></a>
-                      <a href="#" class="pyramid-grade grade-coach-2"  data-placement="right" rel="tooltip" title="G3-二级指导员"><span class="pyramid-grade-text">二指</span></a>
-                      <a href="#" class="pyramid-grade pyramid-triangle grade-technician"  data-placement="left" rel="tooltip" title="G1/G2/G3-技师"><span class="pyramid-grade-text">技师</span></a>
-                      <a href="#" class="pyramid-grade grade-mechanic"  data-placement="left" rel="tooltip" title="H1/H2/H3-技工"><span class="pyramid-grade-text">技工</span></a>
-                       <a href="#" class="pyramid-grade grade-coach-1"  data-placement="right" rel="tooltip" title="H3-一级指导员"><span class="pyramid-grade-text">一指</span></a>
-                        <a href="#" class="pyramid-grade grade-worker"  data-placement="left" rel="tooltip" title="I1/I2/I3-普工"><span class="pyramid-grade-text">普工</span></a>
-                    </div>
-                  </div>
+                  <ul id="positionList" class="list-group">
+                  </ul>
+                  <script id="tmplPositionList" type="text/x-jsrander">
+                    <li class="list-group-item" data-position-id={{:id}}>
+                      <div class="btn-group btn-group-xs">
+                        <button class="btn btn-link btn-xs" rel="tooltip" title="编辑" btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
+                        <button class="btn btn-link btn-xs" rel="tooltip" title="移除" btn-name="remove" data-display-name={{:display_name}}><i class="fa fa-trash-o fa-lg"></i></button>
+                      </div>
+                      <a href="#">{{:display_name}}({{:short_name}})</a>
+                    </li>
+                  </script>
                 </div>
-                <ul id="positionList" class="list-group">
-                  <li class="list-group-item active">
-                    <div class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="编辑" btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="移除" btn-name="remove"><i class="fa fa-trash-o fa-lg"></i></button>
-                    </div>
-                    <a href="">工段长</a>
-                  </li>
-                  <li class="list-group-item">
-                    <div class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="编辑"  btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="移除" btn-name="remove"><i class="fa fa-trash-o fa-lg"></i></button>
-                    </div>
-                    <a href="">工艺科长</a>
-                  </li>
-                  <li class="list-group-item">
-                    <div class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="编辑"  btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="移除" btn-name="remove"><i class="fa fa-trash-o fa-lg"></i></button>
-                    </div>
-                    <a href="">设备科长</a>
-                  </li>
-                </div>
-              </ul>
-              <div class="col-sm-8">
+              </div>
+<!--               <div class="col-sm-8">
                 <div class="panel panel-primary">
                   <div class="panel-heading">
                     <div id="currentPositionBtnGroup" class="btn-group btn-group-xs">
@@ -131,7 +146,7 @@
                     </dl>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
         </div>
     </div>
@@ -141,29 +156,35 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="editModalLabel">部门<span id="titleSuffix"></span></h4>
+            <h4 class="modal-title" id="editModalLabel">岗位<span id="titleSuffix"></span></h4>
           </div>
           <div class="modal-body">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-              <li id="liDetailEdit" class="active"><a href="#paneDetailEdit" data-toggle="tab">详情编辑</a></li>
-              <li id="liChildrenSort"><a href="#paneChildrenSort" data-toggle="tab">子部门排列</a></li>
+              <li id="liDefinition" class="active"><a href="#paneDefinition" data-toggle="tab">定义</a></li>
+              <li id="liDescription"><a href="#paneDescription" data-toggle="tab">描述</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content" id="editTabConent">
-              <div class="tab-pane fade in active" id="paneDetailEdit">
+              <div class="tab-pane fade in active" id="paneDefinition">
                 <form class="form-horizontal" role="form">
                   <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">上级部门</label>
+                    <label for="inputPositionNumber" class="col-sm-2 control-label">岗位编号</label>
                     <div class="col-sm-10">
-                      <select class="form-control" id="selectParentDept">
+                      <input type="text" class="form-control" id="inputPositionNumber" placeholder="岗位编号...">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="selectGrade" class="col-sm-2 control-label">岗位等级</label>
+                    <div class="col-sm-10">
+                      <select class="form-control" id="selectGrade">
                       </select>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputDisplayName" class="col-sm-2 control-label">部门名</label>
+                    <label for="inputName" class="col-sm-2 control-label">中文名</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="inputDisplayName" placeholder="部门名...">
+                      <input type="text" class="form-control" id="inputDisplayName" placeholder="中文名称...">
                     </div>
                   </div>
                   <div class="form-group">
@@ -178,21 +199,22 @@
                       <input type="text" class="form-control" id="inputShortName" placeholder="简称...">
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="textEducation" class="col-sm-2 control-label">学历</label>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" id="textEducation" rows="3"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="textExperiences" class="col-sm-2 control-label">专业/经验</label>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" id="textExperiences" rows="4"></textarea>
+                    </div>
+                  </div>
                 </form>
               </div>
-              <div class="tab-pane fade" id="paneChildrenSort">
-                <table class="table table-hover" id="tableChildren">
-                  <thead>
-                    <tr>
-                      <th style="width:70px"></th>
-                      <th style="width:50px">#</th>
-                      <th style="width:80px">简称</th>
-                      <th>部门名</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+              <div class="tab-pane fade" id="paneDescription">
+                <textarea class="form-control" id="textDescription" rows="20"></textarea>
               </div>
             </div>
           </div><!-- /.modal-body -->

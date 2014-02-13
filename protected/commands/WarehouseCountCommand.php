@@ -17,6 +17,7 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		$stime = $lastDate . " 08:00:00";
 		$etime = $curDate . " 08:00:00";
+
 		$undistributed = $this->countUndistributed($etime);
 		foreach($seriesArray as $series => $seriesName){
 			$this->getSellTableDatas($series);
@@ -31,7 +32,7 @@ class WarehouseCountCommand extends CConsoleCommand
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
 
-			$reviseMonthCheckin = $this->getReviseCount($series, '已入');
+			// $reviseMonthCheckin = $this->getReviseCount($series, '已入');
 			// $monthCheckin += $reviseMonthCheckin;
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
@@ -42,7 +43,7 @@ class WarehouseCountCommand extends CConsoleCommand
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
 
-			$reviseCheckout = $this->getReviseCount($series, '已发');
+			// $reviseCheckout = $this->getReviseCount($series, '已发');
 			// $monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
 
@@ -52,7 +53,12 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
+
+			// $sell->updateOrderView($series);
 		}
+
+		$sell = new SellTable();
+		$sell->getStockDaily();
 	}
 
 	public function actionCountAfternoon() {
@@ -102,15 +108,18 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
+
+			// $sell->updateOrderView($series);
 		}
 	}
 
 	private function getSellTableDatas ($series) {
 		$sellTable = new SellTable();
+		// $sellTable->updateOrderView($series);
 		$sellTable->getOrderView($series);
 		$sellTable->getSaleView($series);
 		$sellTable->getShipView($series);
-		$sellTable->getStockView($series);
+		// $sellTable->getStockView($series);
 	}
 
 	private function getReviseCount($series, $countType) {
@@ -167,7 +176,7 @@ class WarehouseCountCommand extends CConsoleCommand
 	 //    	'G6' => 0,
 	 //    );
 	    foreach($seriesArray as $series) {
-	    	$count[$series] = getReviseCount($series, '未发');
+	    	$count[$series] = $this->getReviseCount($series, '未发');
 	    }
 
 		////初始时间2013-06-04 08:00时的最大DATAK40_DGMXID为1746208

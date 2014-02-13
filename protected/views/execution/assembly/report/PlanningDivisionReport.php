@@ -666,7 +666,7 @@
 									<table class="table table-bordered distribution-network-F0">
 										<thead>
 											<tr>
-												<th rowspan="2">项目</th>
+												<th rowspan="2" style="width: 60px;">项目</th>
 												<th colspan="5" class="net-blue">蓝网</th>
 												<th colspan="5" class="net-red">红网</th>
 												<th rowspan="2">合计</th>
@@ -674,14 +674,14 @@
 											<tr>
 												<th class="net-blue">数量</th>
 												<th class="net-blue">比例</th>
-												<th class="net-blue"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-blue">每家经销商能力</th>
-												<th class="net-blue">累计经销商数量</th>
+												<th class="net-blue">商家</th>
+												<th class="net-blue">商家能力</th>
+												<th class="net-blue">累计商家</th>
 												<th class="net-red">数量</th>
 												<th class="net-red">比例</th>
-												<th class="net-red"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-red">每家经销商能力</th>
-												<th class="net-red">累计经销商数量</th>
+												<th class="net-red">商家</th>
+												<th class="net-red">商家能力</th>
+												<th class="net-red">累计商家</th>
 										</thead>
 										<tbody>
 										</tbody>
@@ -691,7 +691,7 @@
 									<table class="table table-bordered distribution-network-M6">
 										<thead>
 											<tr>
-												<th rowspan="2">项目</th>
+												<th rowspan="2" style="width: 60px;">项目</th>
 												<th colspan="5" class="net-blue">篮网</th>
 												<th colspan="5" class="net-red">红网</th>
 												<th rowspan="2">合计</th>
@@ -699,14 +699,14 @@
 											<tr>
 												<th class="net-blue">数量</th>
 												<th class="net-blue">比例</th>
-												<th class="net-blue"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-blue">每家经销商能力</th>
-												<th class="net-blue">累计经销商数量</th>
+												<th class="net-blue">商家</th>
+												<th class="net-blue">商家能力</th>
+												<th class="net-blue">累计商家</th>
 												<th class="net-red">数量</th>
 												<th class="net-red">比例</th>
-												<th class="net-red"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-red">每家经销商能力</th>
-												<th class="net-red">累计经销商数量</th>
+												<th class="net-red">月商家</th>
+												<th class="net-red">商家能力</th>
+												<th class="net-red">累计商家</th>
 										</thead>
 										<tbody>
 										</tbody>
@@ -716,7 +716,7 @@
 									<table class="table table-bordered distribution-network-6B">
 										<thead>
 											<tr>
-												<th rowspan="2">项目</th>
+												<th rowspan="2" style="width: 60px;">项目</th>
 												<th colspan="5" class="net-blue">篮网</th>
 												<th colspan="5" class="net-red">红网</th>
 												<th rowspan="2">合计</th>
@@ -724,14 +724,14 @@
 											<tr>
 												<th class="net-blue">数量</th>
 												<th class="net-blue">比例</th>
-												<th class="net-blue"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-blue">每家经销商能力</th>
-												<th class="net-blue">累计经销商数量</th>
+												<th class="net-blue">商家</th>
+												<th class="net-blue">商家能力</th>
+												<th class="net-blue">累计商家</th>
 												<th class="net-red">数量</th>
 												<th class="net-red">比例</th>
-												<th class="net-red"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-red">每家经销商能力</th>
-												<th class="net-red">累计经销商数量</th>
+												<th class="net-red">商家</th>
+												<th class="net-red">商家能力</th>
+												<th class="net-red">累计商家</th>
 										</thead>
 										<tbody>
 										</tbody>
@@ -741,7 +741,7 @@
 									<table class="table table-bordered distribution-network-G6">
 										<thead>
 											<tr>
-												<th rowspan="2">项目</th>
+												<th rowspan="2" style="width: 60px;">项目</th>
 												<th colspan="5" class="net-blue">篮网</th>
 												<th colspan="5" class="net-red">红网</th>
 												<th rowspan="2">合计</th>
@@ -749,14 +749,14 @@
 											<tr>
 												<th class="net-blue">数量</th>
 												<th class="net-blue">比例</th>
-												<th class="net-blue"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-blue">每家经销商能力</th>
-												<th class="net-blue">累计经销商数量</th>
+												<th class="net-blue">商家</th>
+												<th class="net-blue">商家能力</th>
+												<th class="net-blue">累计商家</th>
 												<th class="net-red">数量</th>
 												<th class="net-red">比例</th>
-												<th class="net-red"><span clsss="month">7</span>月经销商数量</th>
-												<th class="net-red">每家经销商能力</th>
-												<th class="net-red">累计经销商数量</th>
+												<th class="net-red">商家</th>
+												<th class="net-red">商家能力</th>
+												<th class="net-red">累计商家</th>
 										</thead>
 										<tbody>
 										</tbody>

@@ -1,11 +1,11 @@
 <?php
-Yii::import('application.models.AR.OrgDepartmentAR');
-Yii::import('application.models.OrgStructureSeeker');
+Yii::import('application.models.AR.HR.OrgDepartmentAR');
+Yii::import('application.models.HR.OrgStructureSeeker');
 
 class OrgDepartment {
     private $_ar;
     private $_parent;
-    public function __construct ($departmentId=0) {
+    public function __construct ($departmentId = 0) {
         if(empty($departmentId)) {
             $this->_ar = new OrgDepartmentAR();
         } else {

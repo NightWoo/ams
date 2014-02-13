@@ -3,6 +3,7 @@ Yii::import('application.models.AR.SellOrderViewAR');
 Yii::import('application.models.AR.SellSaleViewAR');
 Yii::import('application.models.AR.SellShipViewAR');
 Yii::import('application.models.AR.SellStockViewAR');
+Yii::import('application.models.AR.SellStockDailyAR');
 
 class SellTable
 {
@@ -210,12 +211,13 @@ class SellTable
         }
     }
 
-    public function updateOrderView () {
-        $sql = "SELECT order_id FROM sell_order_view WHERE audit_conclusion=0";
+    public function updateOrderView ($series) {
+        $seriesCodeList = Series::getCodeList();
+        $sql = "SELECT order_id FROM sell_order_view WHERE (((audit_conclusion=0 OR not_arrived_count>0) AND audit_time>'0000-00-00 00:00:00') OR (audit_status=0 AND book_time>'2013-01-01 00:00:00'))  AND series='$series' ORDER BY book_time DESC";
         $ids = Yii::app()->db->createCommand($sql)->queryColumn();
         if(!empty($ids)) {
             $idCondition = "(" . join(",", $ids) .")";
-            $mssql = "SELECT TOP 10000
+            $mssql = "SELECT
             xswl AS distribution_network,
             yxbmc AS sales_department,
             ssdq AS sales_region,
@@ -257,12 +259,11 @@ class SellTable
             WHERE ID IN $idCondition";
             $datas = $this->sellMSSQL($mssql);
             foreach($datas as $data) {
-                $ar = SellStockViewAR::model()->find("order_id", array($data['order_id']));
+                $ar = SellOrderViewAR::model()->find("order_id", array($data['order_id']));
                 foreach($data as $key => $value) {
                     if($key == "order_id") {
                         continue;
-                    }
-                    if($key == "series_name") {
+                    } else if($key == "series_name") {
                         $ar->series = $seriesCodeList[$value];
                     } else {
                         $ar->$key = $value;
@@ -273,8 +274,33 @@ class SellTable
         }
     }
 
-    public function stockDaily() {
-
+    public function getStockDaily () {
+        $seriesNameList = Series::getNameList();
+        $seriesCodeList = Series::getCodeList();
+        $seriesCondition = "('" . join("','", $seriesNameList) . "')";
+        $sql = "SELECT
+            COUNT(*) AS count,
+            xswl AS distribution_network,
+            jxsmc AS distributor_name,
+            cxmc AS series_name,
+            VINxtcx AS car_type,
+            clys AS sell_color
+            FROM AMS_STOCKVIEW
+            WHERE cxmc IN $seriesCondition
+            GROUP BY xswl,jxsmc,cxmc,VINxtcx,clys";
+        $datas = $this->sellMSSQL($sql);
+        foreach($datas as $data){
+            $ar = new SellStockDailyAR();
+            $ar->create_time = date("YmdHis");
+            foreach($data as $key => $value) {
+                if($key == "series_name") {
+                    $ar->series = $seriesCodeList[$value];
+                } else {
+                    $ar->$key = $value;
+                }
+            }
+            $ar->save();
+        }
     }
 
     public function sellMSSQL($sql){

@@ -22,4 +22,9 @@ class HumanResourcesController extends BmsBaseController
     public function actionPositionSystem () {
         $this->render("positionSystem", array(""));
     }
+
+    public function actionPositionDescription () {
+        $positionId = $this->validateIntVal('positionId', 0);
+        $this->renderPartial('positionDecription', array('positionId'=>$positionId));
+    }
 }

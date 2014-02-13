@@ -1,0 +1,11 @@
+# vendor src
+vendor/bootstrap-*
+vendor/jquery-ui/development-bundle
+vendor/jquery-ui-*
+
+# byd doc
+configImage
+doc
+
+# my config
+sftp-config.json

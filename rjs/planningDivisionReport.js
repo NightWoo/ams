@@ -32,7 +32,6 @@ require(["dateTimeUtil","head","service","common","jquery","bootstrap","bootstra
 
     $("#btnQuery").click(function () {
         selected = $('#tabs .active a').attr('href');
-        console.log(selected);
         goQuery(selected);
     });
 

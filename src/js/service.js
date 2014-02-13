@@ -9,10 +9,17 @@ define({
 	GET_ORG_STRUCTURE : '/bms/orgStructure/getStructure',
 	GET_ORG_DEPT_LIST : '/bms/orgStructure/getDeptList',
 	GET_ORG_CHILDREN : '/bms/orgStructure/getChildren',
-	SAVE_ORG_DEPT: '/bms/orgStructure/departmentSave',
-	REMOVE_ORG_DEPT: '/bms/orgStructure/departmentRemove',
-	SORT_UP_ORG_DEPT: '/bms/orgStructure/departmentSortUp',
-	SORT_DOWN_ORG_DEPT: '/bms/orgStructure/DepartmentSortDown',
+	SAVE_ORG_DEPT : '/bms/orgStructure/departmentSave',
+	REMOVE_ORG_DEPT : '/bms/orgStructure/departmentRemove',
+	SORT_UP_ORG_DEPT : '/bms/orgStructure/departmentSortUp',
+	SORT_DOWN_ORG_DEPT : '/bms/orgStructure/DepartmentSortDown',
+
+	//position system
+	GET_HR_GRADE_LIST : '/bms/positionSystem/getGradeList',
+	GET_POSITION_LIST : '/bms/positionSystem/getPositionList',
+	GET_POSITION_DETAIL : '/bms/positionSystem/getPositionDetail',
+	SAVE_POSITION_DETAIL : '/bms/positionSystem/savePosition',
+	REMOVE_POSITION : '/bms/positionSystem/removePosition',
 
 	last: ''
 });

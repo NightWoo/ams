@@ -143,7 +143,7 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOnline();
             $car->enterNode('PBS');
             $car->detectStatus('PBS');
-            if(($car->car->series == "6B" || $car->car->series == "M6" || $car->car->series == "G6") && empty($car->car->plan_id)){
+            if(empty($car->car->plan_id)){
                 $car->addToPlan($date, $planId);
                 $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
                 $car->addSpsQueue($spsPoints);

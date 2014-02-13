@@ -1,5 +1,5 @@
 <?php
-Yii::import('application.models.AR.OrgDepartmentAR');
+Yii::import('application.models.AR.HR.OrgDepartmentAR');
 class OrgStructureSeeker
 {
     public function __construct () {

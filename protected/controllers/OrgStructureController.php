@@ -1,7 +1,7 @@
 <?php
-Yii::import('application.models.AR.OrgDepartmentAR');
-Yii::import('application.models.OrgDepartment');
-Yii::import('application.models.OrgStructureSeeker');
+Yii::import('application.models.AR.HR.OrgDepartmentAR');
+Yii::import('application.models.HR.OrgDepartment');
+Yii::import('application.models.HR.OrgStructureSeeker');
 
 class OrgStructureController extends BmsBaseController
 {
