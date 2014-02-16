@@ -143,7 +143,7 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOnline();
             $car->enterNode('PBS');
             $car->detectStatus('PBS');
-            if(empty($car->car->plan_id)){
+            if( empty($car->car->plan_id) && ($car->car->series == '6B' || $car->car->series == 'M6' || $car->car->series == 'G6') ){
                 $car->addToPlan($date, $planId);
                 $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
                 $car->addSpsQueue($spsPoints);
@@ -887,7 +887,7 @@ class ExecutionController extends BmsBaseController
         try{
             $seeker = new NodeSeeker();
             list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
-            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,SAP料号,SAP物料描述,SAP报功\n";
+            $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,生产订单号,SAP料号,SAP物料描述,SAP报功\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
                 $content .= "{$data['serial_number']},";
@@ -915,6 +915,7 @@ class ExecutionController extends BmsBaseController
                 $content .= "{$data['user_name']},";
                 $content .= "{$data['order_number']},";
                 $content .= "{$data['engine_code']},";
+                $content .= "{$data['plan_number']},";
                 $content .= "{$data['material_code']},";
                 $content .= "{$data['material_description']},";
                 $yielded = empty($data['yielded']) ? "" : "OK";

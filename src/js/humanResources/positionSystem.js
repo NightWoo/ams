@@ -60,7 +60,9 @@ require(['commonConfig'], function () {
                 } else if(btnName === 'remove') {
                     var msg = '是否移除岗位[' + $btn.attr('data-display-name') +']？<br>注：移除的岗位可从后台恢复';
                     bootbox.confirm(msg, function(confirm) {
-                        removePosition(positionId);
+                        if(confirm) {
+                            removePosition(positionId);
+                        }
                     });
                 }
             } else {
@@ -73,6 +75,9 @@ require(['commonConfig'], function () {
             common.initGolbal();
             $("#headManpowerLi").addClass("active");
             fillGradeSelect();
+            if(maintainPrivilage) {
+                $btnAdd.show();
+            }
         }
 
         function initEditModal () {
@@ -131,6 +136,9 @@ require(['commonConfig'], function () {
                     if(response.success) {
                         $positionList.html('').hide();
                         $positionList.append($.templates("#tmplPositionList").render(response.data)).show();
+                        if(!maintainPrivilage) {
+                           $positionList.find('.btn-group').hide();
+                        }
                     } else {
                         bootbox.alert(response.message);
                     }

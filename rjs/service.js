@@ -22,10 +22,15 @@ define({
 	'SHOW_HOME_EFFICIENCY_INFO': '/bms/monitor/showHomeEfficiency',
 	'SHOW_HOME_COST_INFO': '/bms/monitor/showHomeCost',
 	'SHOW_MONITOR_INFO': '/bms/monitor/showInfo',
+
+	//planning division report
 	'QUERY_PLANNING_DIVISION_DAILY': '/bms/report/queryPlanningDivisionDaily',
 	'QUERY_PLANNING_DIVISION_SMS_DAILY': '/bms/report/queryPlanningDivisionSmsDaily',
 	'QUERY_PLANNING_DIVISION_OPERATION': '/bms/report/queryPlanningDivisionOperationReport',
 	'QUERY_PLANNING_DIVISION_DISTRIBUTION_NETWORK': '/bms/report/queryPlanningDivisionDistributionNetworkReport',
+	'QUERY_PLANNING_DIVISION_END_SALE': '/bms/report/queryPlanningDivisionEndSaleReport',
+
+	//
 	'SEARCH_PART': '/bms/fault/search',
 	'VQ1_VIEW_MODES': '/bms/fault/view'
 });

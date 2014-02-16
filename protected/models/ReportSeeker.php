@@ -1442,134 +1442,128 @@ class ReportSeeker
 		return $cost;
 	}
 
-	public function queryPlanningDivisionReportDaily ($date) {
-		$pdTypelist = $this->getPlanningDivisionTypeList();
+	// public function queryPlanningDivisionReportDaily ($date) {
+	// 	$pdTypelist = $this->getPlanningDivisionTypeList();
 
-		$pointArray = array(
-			"assembly" => array(
-				"daily" => array("domestic"=>0,"export"=>0, "sum"=>0),
-				"monthly" => array("domestic"=>0,"export"=>0),
-			),
-			"warehouse" => array(
-				"daily" => array("domestic"=>0,"export"=>0, "sum"=>0),
-				"monthly" => array("domestic"=>0,"export"=>0),
-				"yearly" => array("domestic"=>0,"export"=>0),
-			),
-			"distribute" => array(
-				"daily" => array("domestic"=>0,"export"=>0),
-				"monthly" => array("domestic"=>0,"export"=>0),
-				"yearly" => array("domestic"=>0,"export"=>0),
-			),
-		);
-		$countData = array();
-		foreach($pdTypelist as $series => $typeGroups) {
-			foreach($typeGroups as $typeGroup) {
-				$countData[$series][$typeGroup] = $pointArray;
-				$countData[$series][$typeGroup]['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
-			}
-			$countData[$series]['合计'] = $pointArray;
-			$countData[$series]['合计']['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
-		}
+	// 	$pointArray = array(
+	// 		"assembly" => array(
+	// 			"daily" => array("domestic"=>0,"export"=>0, "sum"=>0),
+	// 			"monthly" => array("domestic"=>0,"export"=>0),
+	// 		),
+	// 		"warehouse" => array(
+	// 			"daily" => array("domestic"=>0,"export"=>0, "sum"=>0),
+	// 			"monthly" => array("domestic"=>0,"export"=>0),
+	// 			"yearly" => array("domestic"=>0,"export"=>0),
+	// 		),
+	// 		"distribute" => array(
+	// 			"daily" => array("domestic"=>0,"export"=>0),
+	// 			"monthly" => array("domestic"=>0,"export"=>0),
+	// 			"yearly" => array("domestic"=>0,"export"=>0),
+	// 		),
+	// 	);
+	// 	$countData = array();
+	// 	foreach($pdTypelist as $series => $typeGroups) {
+	// 		foreach($typeGroups as $typeGroup) {
+	// 			$countData[$series][$typeGroup] = $pointArray;
+	// 			$countData[$series][$typeGroup]['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
+	// 		}
+	// 		$countData[$series]['合计'] = $pointArray;
+	// 		$countData[$series]['合计']['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
+	// 	}
 
-		$countTotal = $pointArray;
-		$countTotal['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
+	// 	$countTotal = $pointArray;
+	// 	$countTotal['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
 
 
-		foreach($pointArray as $point => $timespans) {
-			foreach($timespans as $timespan => $regions) {
-				$datas = $this->countPlnningDivisionCars($date, $timespan, $point);
-				foreach($datas as $data) {
-					if($data['special_property'] == '1') {
-						$countData[$data['series']][$data['pdType']][$point][$timespan]['export'] += intval($data['count']);
-						$countData[$data['series']]['合计'][$point][$timespan]['export'] += intval($data['count']);
-						$countTotal[$point][$timespan]['export'] += intval($data['count']);
-					} else {
-						$countData[$data['series']][$data['pdType']][$point][$timespan]['domestic'] += intval($data['count']);
-						$countData[$data['series']]['合计'][$point][$timespan]['domestic'] += intval($data['count']);
-						$countTotal[$point][$timespan]['domestic'] += intval($data['count']);
-					}
-					if(array_key_exists('sum', $countData[$data['series']][$data['pdType']][$point][$timespan])){
-						$countData[$data['series']][$data['pdType']][$point][$timespan]['sum'] += intval($data['count']);
-						$countData[$data['series']]['合计'][$point][$timespan]['sum'] += intval($data['count']);
-						$countTotal[$point][$timespan]['sum'] += intval($data['count']);
-					}
-				}
-			}
-		}
+	// 	foreach($pointArray as $point => $timespans) {
+	// 		foreach($timespans as $timespan => $regions) {
+	// 			$datas = $this->countPlnningDivisionCars($date, $timespan, $point);
+	// 			foreach($datas as $data) {
+	// 				if($data['special_property'] == '1') {
+	// 					$countData[$data['series']][$data['pdType']][$point][$timespan]['export'] += intval($data['count']);
+	// 					$countData[$data['series']]['合计'][$point][$timespan]['export'] += intval($data['count']);
+	// 					$countTotal[$point][$timespan]['export'] += intval($data['count']);
+	// 				} else {
+	// 					$countData[$data['series']][$data['pdType']][$point][$timespan]['domestic'] += intval($data['count']);
+	// 					$countData[$data['series']]['合计'][$point][$timespan]['domestic'] += intval($data['count']);
+	// 					$countTotal[$point][$timespan]['domestic'] += intval($data['count']);
+	// 				}
+	// 				if(array_key_exists('sum', $countData[$data['series']][$data['pdType']][$point][$timespan])){
+	// 					$countData[$data['series']][$data['pdType']][$point][$timespan]['sum'] += intval($data['count']);
+	// 					$countData[$data['series']]['合计'][$point][$timespan]['sum'] += intval($data['count']);
+	// 					$countTotal[$point][$timespan]['sum'] += intval($data['count']);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
 
-		$warehouseBalance = $this->balanceCountGroupByPdType($date,'WH');
-		foreach($warehouseBalance as $data) {
-			if($data['special_property'] == '1') {
-				$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['export'] += intval($data['count']);
-				$countData[$data['series']]['合计']['warehouseBalance']['daily']['export'] += intval($data['count']);
-				$countTotal['warehouseBalance']['daily']['export'] += intval($data['count']);
-			} else if ($data['special_property'] != '9') {
-				$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['domestic'] += intval($data['count']);
-				$countData[$data['series']]['合计']['warehouseBalance']['daily']['domestic'] += intval($data['count']);
-				$countTotal['warehouseBalance']['daily']['domestic'] += intval($data['count']);
-			}
-		}
+	// 	$warehouseBalance = $this->balanceCountGroupByPdType($date,'WH');
+	// 	foreach($warehouseBalance as $data) {
+	// 		if($data['special_property'] == '1') {
+	// 			$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['export'] += intval($data['count']);
+	// 			$countData[$data['series']]['合计']['warehouseBalance']['daily']['export'] += intval($data['count']);
+	// 			$countTotal['warehouseBalance']['daily']['export'] += intval($data['count']);
+	// 		} else if ($data['special_property'] != '9') {
+	// 			$countData[$data['series']][$data['pdType']]['warehouseBalance']['daily']['domestic'] += intval($data['count']);
+	// 			$countData[$data['series']]['合计']['warehouseBalance']['daily']['domestic'] += intval($data['count']);
+	// 			$countTotal['warehouseBalance']['daily']['domestic'] += intval($data['count']);
+	// 		}
+	// 	}
 
-		return array("countData"=>$countData,"countTotal"=>$countTotal);
-	}
+	// 	return array("countData"=>$countData,"countTotal"=>$countTotal);
+	// }
 
-	public function countPlnningDivisionCars ($date, $timespan, $point) {
-		list($stime, $etime) = $this->reviseTime($date, $timespan);
-		if($timespan == "monthly" || $timespan == "yearly") {
-			$nextDay = strtotime("+1 day", strtotime($date));
-			$etime = date("Y-m-d", $nextDay) . " 08:00:00";
-		}
-		$count = $this->countCarGroupByPdType($stime, $etime, $point);
-		return $count;
-	}
+	// public function countPlnningDivisionCars ($date, $timespan, $point) {
+	// 	list($stime, $etime) = $this->reviseTime($date, $timespan);
+	// 	if($timespan == "monthly" || $timespan == "yearly") {
+	// 		$nextDay = strtotime("+1 day", strtotime($date));
+	// 		$etime = date("Y-m-d", $nextDay) . " 08:00:00";
+	// 	}
+	// 	$count = $this->countCarGroupByPdType($stime, $etime, $point);
+	// 	return $count;
+	// }
 
-	public function planningDivisionSms ($date) {
-		$seriesList = Series::getNamelist();
-		$sql = "SELECT series, count, count_type, log FROM warehouse_count_daily WHERE count_date='$date'";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		$nextDay = date("Y-m-d" ,strtotime("+1 day", strtotime($date)));
-		$log = array("0800","1730");
-		$ret = array();
-		foreach($datas as $data) {
-			$ret[$log[$data['log']]][$seriesList[$data['series']]][$data['count_type']] = $data['count'];
-		}
-		return $ret;
-	}
+	// public function planningDivisionSms ($date) {
+	// 	$seriesList = Series::getNamelist();
+	// 	$sql = "SELECT series, count, count_type, log FROM warehouse_count_daily WHERE count_date='$date'";
+	// 	$datas = Yii::app()->db->createCommand($sql)->queryAll();
+	// 	$nextDay = date("Y-m-d" ,strtotime("+1 day", strtotime($date)));
+	// 	$log = array("0800","1730");
+	// 	$ret = array();
+	// 	foreach($datas as $data) {
+	// 		$ret[$log[$data['log']]][$seriesList[$data['series']]][$data['count_type']] = $data['count'];
+	// 	}
+	// 	return $ret;
+	// }
 
-	public function countCarGroupByPdType ($stime,$etime,$point="assembly",$line="") {
-		$point .= "_time";
-		$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE $point>='$stime' AND $point<'$etime'";
-		if(!empty($line)){
-			$sql .= " AND assembly_line='$line'";
-		}
-		$sql .= " GROUP BY series,PDType,special_property";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
+	// public function countCarGroupByPdType ($stime,$etime,$point="assembly",$line="") {
+	// 	$point .= "_time";
+	// 	$sql = "SELECT series,planning_division_type_name as pdType,special_property, COUNT(car_id) as `count` FROM view_car_info_main WHERE $point>='$stime' AND $point<'$etime'";
+	// 	if(!empty($line)){
+	// 		$sql .= " AND assembly_line='$line'";
+	// 	}
+	// 	$sql .= " GROUP BY series,PDType,special_property";
+	// 	$datas = Yii::app()->db->createCommand($sql)->queryAll();
 
-		// $count = array();
-		// foreach($datas as $data){
-		// 	$count[$data['series']][$data['pdType']][$data['special_property']] = intval($data['count']);
-		// }
+	// 	return $datas;
+	// }
 
-		// return $count;
-		return $datas;
-	}
+	// public function balanceCountGroupByPdType ($date, $state) {
+	// 	$sql = "SELECT series,planning_division_type_name as pdType,special_property, count FROM balance_planning_division_daily WHERE state='$state' AND work_date='$date'";
+	// 	$datas = Yii::app()->db->createCommand($sql)->queryAll();
+	// 	return $datas;
+	// }
 
-	public function balanceCountGroupByPdType ($date, $state) {
-		$sql = "SELECT series,planning_division_type_name as pdType,special_property, count FROM balance_planning_division_daily WHERE state='$state' AND work_date='$date'";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		return $datas;
-	}
+	// private function getPlanningDivisionTypeList () {
+	// 	$sql = "SELECT series, planning_division_type_name as pd_type_name FROM car_type_map GROUP BY series,planning_division_type_name ORDER BY series, planning_division_type_name ASC";
+	// 	$datas = Yii::app()->db->createCommand($sql)->queryAll();
+	// 	$list = array();
+	// 	foreach($datas as $data) {
+	// 		$list[$data['series']][] = $data['pd_type_name'];
+	// 	}
 
-	private function getPlanningDivisionTypeList () {
-		$sql = "SELECT series, planning_division_type_name as pd_type_name FROM car_type_map GROUP BY series,planning_division_type_name ORDER BY series, planning_division_type_name ASC";
-		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		$list = array();
-		foreach($datas as $data) {
-			$list[$data['series']][] = $data['pd_type_name'];
-		}
-
-		return $list;
-	}
+	// 	return $list;
+	// }
 
 	private function parseTables ($point, $series="all") {
 		$tablePrefixs = array(

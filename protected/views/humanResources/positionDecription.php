@@ -20,12 +20,12 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">
                     <div id="currentPositionBtnGroup" class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="编辑"  btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
+                      <!-- <button class="btn btn-link btn-xs" rel="tooltip" title="编辑"  btn-name="edit"><i class="fa fa-edit fa-lg"></i></button> -->
                       <button class="btn btn-link btn-xs" rel="tooltip" title="打印" btn-name="print"><i class="fa fa-print fa-lg"></i></button>
                     </div>
                     <span class="current-position-name" id="positionId"  data-position-id=<?php echo $positionId ?> position-detail="display_name">-</span>
                   </div>
-                  <div class="panel-body current-position-description">
+                  <div class="panel-body current-position-description" id="descriptionPrintContent">
                     <dl>
                       <dt>岗位编号</dt><dd position-detail="position_number">-</dd>
                       <dt>岗位名称</dt><dd position-detail="display_name">-</dd>

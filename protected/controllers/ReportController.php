@@ -20,7 +20,7 @@ class ReportController extends BmsBaseController
 	public function actionQueryManufactureDaily() {
 		$date = $this->validateStringVal("date", "");
 		if(empty($date)) $date = DateUtil::getCurDate();
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryManufactureDaily($date);
 
@@ -52,7 +52,7 @@ class ReportController extends BmsBaseController
 		$date = $this->validateStringVal("date", "");
 		$point = $this->validateStringVal("point", "assembly");
 		$timespan = $this->validateStringVal("timespan", "daily");
-		try{
+		try {
 	        $seeker = new ReportSeeker();
 			$datas = $seeker->queryCarDetail($date, $point, $timespan);
             $content = "carID,线别,流水号,VIN,车系,车型,配置,生产配置,耐寒性,颜色,发动机号,状态,上线时间,下线时间,入库时间,出库时间,备注,库位,订单号,经销商,发车道,SAP料号,SAP物料描述\n";
@@ -95,7 +95,7 @@ class ReportController extends BmsBaseController
     public function actionQueryCompletion() {
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryCompletion($date, $timespan);
 
@@ -108,7 +108,7 @@ class ReportController extends BmsBaseController
     public function actionQueryUse() {
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryManufactureUse($date, $timespan);
 
@@ -121,7 +121,7 @@ class ReportController extends BmsBaseController
     public function actionQueryRecycleChart() {
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryRecycleChart($date, $timespan);
 
@@ -135,7 +135,7 @@ class ReportController extends BmsBaseController
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
         if(empty($date)) $date = DateUtil::getCurDate();
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryWarehouseChart($date, $timespan);
 
@@ -146,7 +146,7 @@ class ReportController extends BmsBaseController
     }
 
     public function actionQueryOvertimeOrders() {
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryOvertimeOrders();
             $this->renderJsonBms(true, 'OK', $data);
@@ -157,7 +157,7 @@ class ReportController extends BmsBaseController
 
 
     public function actionQueryOvertimeCars() {
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryOvertimeCars();
             $this->renderJsonBms(true, 'OK', $data);
@@ -167,7 +167,7 @@ class ReportController extends BmsBaseController
     }
 
     public function actionUpdateCapacityMonthly() {
-        try{
+        try {
             $date = $this->validateStringVal("date", "");
             $seeker = new ReportSeeker();
             list($stime, $etime) = $seeker->reviseMonthlyTime($date);
@@ -195,7 +195,7 @@ class ReportController extends BmsBaseController
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
         $series = $this->validateStringVal("series", "all");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryQualification($point, $date, $timespan, $series);
             $this->renderJsonBms(true, 'OK', $data);
@@ -208,7 +208,7 @@ class ReportController extends BmsBaseController
         $point = $this->validateStringVal("point", "VQ1");
         $date = $this->validateStringVal("date", "");
         $series = $this->validateStringVal("series", "all");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryFaultDaily($point, $date, $series);
             $this->renderJsonBms(true, 'OK', $data);
@@ -221,7 +221,7 @@ class ReportController extends BmsBaseController
         $date = $this->validateStringVal("date", "");
         $timespan = $this->validateStringVal("timespan", "monthly");
         $series = $this->validateStringVal("series", "all");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryReplacementCost($date, $timespan, $series);
             $this->renderJsonBms(true, 'OK', $data);
@@ -233,7 +233,7 @@ class ReportController extends BmsBaseController
     public function actionQueryCostDistribute() {
         $date = $this->validateStringVal("date", "");
         $series = $this->validateStringVal("series", "all");
-        try{
+        try {
             $seeker = new ReportSeeker();
             $data = $seeker->queryCostDistribute($date, $series);
             $this->renderJsonBms(true, 'OK', $data);
@@ -245,8 +245,8 @@ class ReportController extends BmsBaseController
 
     public function actionQueryPlanningDivisionDaily () {
         $date = $this->validateStringVal("date", "");
-        try{
-            $seeker = new ReportSeeker();
+        try {
+            $seeker = new PlanningDivisionReportSeeker();
             $data = $seeker->queryPlanningDivisionReportDaily($date);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -256,8 +256,8 @@ class ReportController extends BmsBaseController
 
     public function actionQueryPlanningDivisionSmsDaily () {
         $date = $this->validateStringVal("date", "");
-        try{
-            $seeker = new ReportSeeker();
+        try {
+            $seeker = new PlanningDivisionReportSeeker();
             $data = $seeker->planningDivisionSms($date);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
@@ -267,7 +267,7 @@ class ReportController extends BmsBaseController
 
     public function actionQueryPlanningDivisionOperationReport () {
         $date = $this->validateStringVal("date", "");
-        try{
+        try {
             $seeker = new PlanningDivisionReportSeeker();
             $data = $seeker->queryOperationReport($date);
             $this->renderJsonBms(true, 'OK', $data);
@@ -278,9 +278,22 @@ class ReportController extends BmsBaseController
 
     public function actionQueryPlanningDivisionDistributionNetworkReport () {
         $date = $this->validateStringVal("date", "");
-        try{
+        try {
             $seeker = new PlanningDivisionReportSeeker();
             $data = $seeker->queryDistributionNetworkReport($date);
+            $this->renderJsonBms(true, 'OK', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionQueryPlanningDivisionEndSaleReport () {
+        $sDate = $this->validateStringVal("sDate", "");
+        $eDate = $this->validateStringVal("eDate", "");
+        $series = $this->validateStringVal("series", "");
+        try {
+            $seeker = new PlanningDivisionReportSeeker();
+            $data = $seeker->queryEndSale($sDate, $eDate, $series);
             $this->renderJsonBms(true, 'OK', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());

@@ -44,7 +44,7 @@
 						<!-- <li><a href="#undeliveredPanel" data-toggle="tab">未发车</a></li> -->
 					</ul>
 				</div>
-				<div id="tabContent" class="tab-content">
+				<div id="tabContent" class="tab-content" style="overflow-x: auto;">
 					<div class="tab-pane active" id="reportPanel">
 						<table id="tableDaily" class="table table-bordered table-condensed table-striped">
 							<thead>
@@ -60,6 +60,9 @@
 									<th colspan="2">月出货</th>
 									<th colspan="2">年出货</th>
 									<th colspan="2">库存</th>
+									<th rowspan="2">渠道</th>
+									<th rowspan="2">月销</th>
+									<th rowspan="2">年销</th>
 								</tr>
 								<tr>
 									<!-- 日上线 -->

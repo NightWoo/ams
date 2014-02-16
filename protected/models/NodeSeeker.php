@@ -131,7 +131,7 @@ class NodeSeeker
         	$joinTraceTable ="LEFT JOIN warehouse_return_trace AS r ON r.trace_id = n.id";
         }
 
-        $dataSql = "SELECT $returnParam n.node_id, n.car_id, n.user_id, n.pass_time,n.remark as node_remark, c.vin, c.series, c.serial_number, c.type, c.color, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code, c.yielded
+        $dataSql = "SELECT $returnParam n.node_id, n.car_id, n.user_id, n.pass_time,n.remark as node_remark, c.vin, c.series, c.serial_number, c.type, c.color,c.plan_id, c.config_id, c.remark, c.status, c.cold_resistant, c.special_order, c.distributor_name, c.order_id, c.engine_code, c.yielded
         		FROM $traceTable AS n
         		LEFT JOIN car AS c
         		ON n.car_id=c.id
@@ -178,15 +178,22 @@ class NodeSeeker
         		$data['config_name'] = '';
 	        	$data['order_config_name'] = '';
 	        	$data['type_config'] = $data['type'];
-	        	
+
         	}
 
-        	$data['order_number']='-';
+        	$data['order_number'] = '-';
         	if(!empty($data['order_id'])){
         		$sql = "SELECT order_number FROM `order` WHERE id = '{$data['order_id']}'";
         		$order_number = Yii::app()->db->createCommand($sql)->queryScalar();
         		$data['order_number']= $order_number;
         	}
+            $data['plan_number'] = '-';
+            if(!empty($data['plan_id'])) {
+                $sql = "SELECT plan_number FROM plan_assembly WHERE id='{$data['plan_id']}'";
+                $plan_number = Yii::app()->db->createCommand($sql)->queryScalar();
+                $data['plan_number'] = $plan_number;
+            }
+
         	$data['node_name'] = $nodeInfos[$data['node_id']];
 
         	$data['pass_time'] = substr($data['pass_time'],0,16);

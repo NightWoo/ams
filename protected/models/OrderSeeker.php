@@ -21,20 +21,20 @@ class OrderSeeker
         $sql = "SELECT DATAK40_DGMXID AS order_detail_id, DATAK40_JXSMC AS distributor, DATAK40_DGDH AS order_number, DATAK40_CXMC AS series, DATAK40_CLDM AS car_type_code, DATAK40_CLXH AS sell_car_type, DATAK40_BZCX AS car_model, DATAK40_CXSM AS car_type_description, DATAK40_CLYS AS sell_color, DATAK40_VINMYS AS color, DATAK40_DGSL AS amount, DATAK40_XZPZ AS options, DATAK40_DDXZ AS order_nature, DATAK40_DDLX AS cold_resistant, DATAK40_NOTE AS remark, DATAK40_JZPZ AS additions, DATAK40_SSDW AS production_base, DATAK40_JXSDM AS distributor_code
                 FROM DATAK40_CLDCKMX
                 WHERE DATAK40_SSDW = '3' AND DATAK40_DGDH = '$orderNumber'";
-		// $prefix = explode("-", $orderNumber)[0];
-        // if($prefix == "ZCDG") {
+		$prefix = explode("-", $orderNumber)[0];
+        if($prefix == "ZCDG") {
             $tdsSever = Yii::app()->params['tds_SELL'];
             $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
             $tdsUser = Yii::app()->params['tds_SELL_username'];
             $tdsPwd = Yii::app()->params['tds_SELL_password'];
 
             $orders = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
-        // } else {
-        //     $orders = Yii::app()->dbCRM->createCommand($sql)->queryAll();
-        // }
+        } else {
+            $orders = Yii::app()->dbCRM->createCommand($sql)->queryAll();
+        }
 
         foreach($orders as &$order){
-            // $order = array_change_key_case($order, CASE_LOWER);
+            $order = array_change_key_case($order, CASE_LOWER);
         	if($order['series'] == '思锐'){
         		$order['series'] = '6B';
         	}

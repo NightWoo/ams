@@ -17,13 +17,118 @@ class DebugController extends BmsBaseController
             foreach($seriesNameList as $series => $seriesName) {
                 $this->updateOrderView($series);
             }
-            $ret = 'OK';
             // $transaction->commit();
             $this->renderJsonBms(true, 'OK', $ret);
         } catch(Exception $e) {
             $this->transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
+    }
+
+    public function actionTestCRM () {
+        $orderNumber = $this->validateStringVal('orderNumber', '');
+        try {
+            $test = new Test();
+            $ret['xf'] = $test->getOriginalOrders($orderNumber, "XF");
+            $ret['crm'] = $test->getOriginalOrders($orderNumber, "CRM");
+            $this->renderJsonBms(true, 'Ok', $ret);
+        } catch(Exception $e) {
+            $this->renderJsonBms(true, $e->getMessage(), null);
+        }
+    }
+
+    public function parseDate ($sDate, $eDate) {
+        $stime = $sDate . ' 08:00:00';
+        $etime = date("Y-m-d H:i:s", strtotime('+1 day', strtotime($eDate . ' 08:00:00')));
+
+        $s = strtotime($stime);
+        $e = strtotime($etime);
+
+        $months = (date("Y", $e)-date("Y", $s))*12+(date("m", $e)-date("m",$s));
+        $timespan = $months>=2 ? "yearly" : "monthly";
+        $ret = array();
+        switch($timespan) {
+            case "monthly":
+                $pointFormat = 'm-d';
+                $format = 'Y-m-d H:i:s';
+                $slice = 86400;
+                break;
+            case "yearly":
+                $pointFormat = 'y-m';
+                $format = 'Y-m-d H:i:s';
+                break;
+        }
+
+        $t = $s;
+        while($t<$e) {
+            $point = date($pointFormat, $t);
+            if($pointFormat === 'y-m') {
+                $eNextM = strtotime('first day of next month', $t); //next month
+                $ee = date('Y-m-d', $eNextM) . " 08:00:00"; //next month firstday
+                $etmp = strtotime($ee); //next month firstday
+            } else {
+                $etmp = $t+$slice;
+            }
+            if($etmp>=$e){
+                $etmp=$e;
+            }
+
+            $ret[] = array(
+                'stime' => date($format, $t),
+                'etime' => date($format, $etmp),
+                'point' => $point,
+            );
+            $t = $etmp;
+        }
+
+        return $ret;
+    }
+
+    public function parseQueryTime ($stime, $etime, $timespan) {
+        $s = strtotime($stime);
+        $e = strtotime($etime);
+
+        $ret = array();
+
+        switch($timespan) {
+            case "monthly":
+                $pointFormat = 'd';
+                $format = 'Y-m-d H:i:s';
+                $slice = 86400;
+                break;
+            case "yearly":
+                $pointFormat = 'm';
+                $format = 'Y-m-d H:i:s';
+                break;
+            default:
+                $pointFormat = 'd';
+                $format = 'Y-m-d H:i:s';
+                $slice = 86400;
+        }
+
+        $t = $s;
+        while($t<$e) {
+            $point = date($pointFormat, $t);
+            if($pointFormat === 'm') {
+                $eNextM = strtotime('first day of next month', $t); //next month
+                $ee = date('Y-m-d', $eNextM) . " 08:00:00"; //next month firstday
+                $etmp = strtotime($ee); //next month firstday
+            } else {
+                $etmp = $t+$slice;
+            }
+            if($etmp>=$e){
+                $etmp=$e;
+            }
+
+            $ret[] = array(
+                'stime' => date($format, $t),
+                'etime' => date($format, $etmp),
+                'point' => $point,
+            );
+            $t = $etmp;
+        }
+
+        return $ret;
     }
 
     public function updateOrderView ($series) {

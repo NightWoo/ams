@@ -16,6 +16,12 @@
             .tabs-left > .nav-tabs > li > a {
                 min-width: 30px
             }
+            #tableSub thead th {
+                min-width: 50px;
+            }
+            #tableSub, #tableAll {
+                font-size: 12px
+            }
         </style>
 	</head>
 	<body>
@@ -58,75 +64,20 @@
                     <div class="tab-pane active" id="retTable">
                         <div class="row">
                             <div class="span5">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" id="tableAll" style="display:none">
                                     <thead>
                                         <tr>
-                                            <th style="min-width:180px">配置</th>
-                                            <th style="width:70px">渠道库存</th>
-                                            <th style="width:70px">销量</th>
+                                            <th style="width:170px">配置</th>
+                                            <th style="min-width:85px"><span id="day"></span>渠道库存</th>
+                                            <th style="min-width:85px">销量</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th>1.0L实用/非耐寒</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L实用/北京欧五</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L实用/耐寒</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L实用/助力/耐寒</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L舒适/非耐寒</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L舒适/北京欧五</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L舒适/耐寒</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L尊贵</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L实用/助力/AMT</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>1.0L舒适/AMT</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>合计</th>
-                                            <td>0 / 0%</td>
-                                            <td>0 / 0%</td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="span7" style="overflow-x: scroll; margin-left:-1px">
-                                <table class="table table-bordered">
+                            <div class="span7" style="overflow-x: auto; margin-left:-1px">
+                                <table class="table table-bordered" id="tableSub" style="display:none">
                                     <thead>
                                         <tr>
                                             <th style="min-width:60px">01-01</th>
@@ -144,161 +95,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                            </tbody>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ require.config({
         "bootbox": "../../vendor/bootbox/bootbox.min",
         "jquery-ui": "../../vendor/jquery-ui/js/jquery-ui.custom.min",
         "primitives": "../../vendor/primitives/primitives.min",
+        "printArea": "../../vendor/printArea/jquery.PrintArea",
 
         "": ""
     },
@@ -17,6 +18,7 @@ require.config({
         "confirmation": ["bootstrap"],
         "jquery-ui": ["jquery"],
         "primitives": ["bootstrap"],
+        "printArea": ["jquery"],
 
         "": ""
     }

@@ -229,9 +229,9 @@ require(['commonConfig'], function () {
                         case 'remove' :
                             var msg = '是否移除[' + data.context.display_name +']？<br>注：移除的部门可从后台恢复';
                             bootbox.confirm(msg, function(confirm) {
-                              if(confirm) {
-                                  remove(data.context.id);
-                              }
+                                if(confirm) {
+                                    remove(data.context.id);
+                                }
                             });
                             break;
                     }

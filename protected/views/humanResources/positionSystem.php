@@ -66,7 +66,7 @@
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <div class="btn-group btn-group-xs">
-                      <button id="btnAdd" class="btn btn-link btn-xs" rel="tooltip" title="添加岗位" btn-name="add"><i class="fa fa-plus fa-lg"></i></button>
+                      <button id="btnAdd" class="btn btn-link btn-xs" rel="tooltip" title="添加岗位" btn-name="add" style="display: none"><i class="fa fa-plus fa-lg"></i></button>
                     </div>
                     <span class="current-position-name">岗位</span>
                   </div>

@@ -2,12 +2,17 @@ require.config({
     baseUrl: '../src/js'
 });
 require(['commonConfig'], function () {
-    require(["service", "common", "jsrender"], function(service,common) {
+    require(['service', 'common', 'jsrender', 'printArea'], function(service,common) {
         var
             maintainPrivilage = common.checkPrivilage('POSITION_SYSTEM_MAINTAIN'),
-            positionId = $('#positionId').attr('data-position-id');
+            positionId = $('#positionId').attr('data-position-id'),
+            $btnPrint = $('.btn[btn-name=print]');
 
         initPage();
+
+        $btnPrint.on('click', function (e) {
+             $("#descriptionPrintContent").printArea();
+        });
 
         function initPage () {
             common.initGolbal();

@@ -1,7 +1,9 @@
 # vendor src
 vendor/bootstrap-*
+vendor/bootstrap/bootstrap-*
 vendor/jquery-ui/development-bundle
-vendor/jquery-ui-*
+vendor/jquery-ui/jquery-ui-*
+vendor/printArea/RitsC-*
 
 # byd doc
 configImage
