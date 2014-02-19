@@ -21,7 +21,7 @@
 			<?php
               require_once(dirname(__FILE__)."/../common/left/management_system_left.php");
       ?>
-			<div id="bodyright" class="offset2"><!-- Main -->				
+			<div id="bodyright" class="offset2"><!-- Main -->
 				<!-- <div>
 					<ul class="breadcrumb">
 						<li>
@@ -31,7 +31,7 @@
 							体系概况
 						</li>
 					</ul>
-				</div>-->		
+				</div>-->
 				<div class="main"><!-- 内容主体 -->
 					 <div class="row-fluid">
             <ul class="thumbnails">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="description">
                       <p>质量控制环1（CL1）定义了生产线建立并保证达到产品质量标准的流程和方法。CL1通过引导/监控每一个员工和生产管理人员的职责和行为，以确保他们按照工艺文件（SOP）和质量标准文件执行。
-</p>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -99,7 +99,26 @@
                     </div>
                     <div class="description">
                       <p>质量控制环2（CL2）定义了检查/评估零部件和装配质量特性的方法，通过在生产线末端设置质量关卡进行区域检验，以及在生产线中设置工段检验以检查那些在后工段被覆盖而无法检查的零部件和操作内容。
-</p>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <ul class="thumbnails">
+              <li class="span3">
+                <div class="">
+                  <a href="/bms/ManagementSystem/quality?view=QCC" class="thumbnail">
+                    <img src="/bms/doc/browse/managementSystem/quality/QCC/thumb.jpg" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/QCC.pptx">下载</a>
+                    <h4>QCC</h4>
+                    </div>
+                    <div class="description">
+                      <p>QCC系由工作在同一现场的人员自动自发的进行质量管理所组成的小组,在自我启发和相互启发的原则下,活用各种统计方法,以全参加的方式不断的进行维护及改善自己工作现场的活动,以达成改善品质,环境,效率及降低成本的目的。
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -108,6 +127,6 @@
           </div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->
-		</div><!-- end offhead -->   
+		</div><!-- end offhead -->
     </body>
 </html>

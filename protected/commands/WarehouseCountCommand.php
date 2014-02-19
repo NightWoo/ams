@@ -7,7 +7,6 @@ class WarehouseCountCommand extends CConsoleCommand
 	public function actionCountMorning() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
-		// $seriesArray = self::$SERIES;
 		$seriesArray = Series::getNameList();
 		$monthStart = date("Y-m", strtotime($lastDate)) . "-01 08:00:00";
 
@@ -32,8 +31,6 @@ class WarehouseCountCommand extends CConsoleCommand
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
 
-			// $reviseMonthCheckin = $this->getReviseCount($series, '已入');
-			// $monthCheckin += $reviseMonthCheckin;
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
@@ -43,8 +40,6 @@ class WarehouseCountCommand extends CConsoleCommand
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
 
-			// $reviseCheckout = $this->getReviseCount($series, '已发');
-			// $monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
 
 			$balance = $this->countBalance($series);
@@ -54,17 +49,15 @@ class WarehouseCountCommand extends CConsoleCommand
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
 
-			// $sell->updateOrderView($series);
 		}
 
-		$sell = new SellTable();
-		$sell->getStockDaily();
+		// $sell = new SellTable();
+		// $sell->getStockDaily();
 	}
 
 	public function actionCountAfternoon() {
 		$lastDate = DateUtil::getLastDate();
 		$curDate = DateUtil::getCurDate();
-		// $seriesArray = self::$SERIES;
 		$seriesArray = Series::getNameList();
 		$monthStart = date("Y-m", strtotime($curDate)) . "-01 08:00:00";
 
@@ -88,8 +81,6 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckin = $this->countCheckin($monthStart, $etime, $series);
 			$this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
-			// $reviseMonthCheckin = $this->getReviseCount($series, '已入');
-			// $monthCheckin += $reviseMonthCheckin;
 			$this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
 
 			$checkout = $this->countCheckout($stime, $etime, $series);
@@ -98,8 +89,6 @@ class WarehouseCountCommand extends CConsoleCommand
 
 			$monthCheckout = $this->countCheckout($monthStart, $etime, $series);
 			$this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
-			// $reviseCheckout = $this->getReviseCount($series, '已发');
-			// $monthCheckout += $reviseCheckout;
 			$this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
 
 			$balance = $this->countBalance($series);
@@ -109,14 +98,13 @@ class WarehouseCountCommand extends CConsoleCommand
 			$this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
 			$this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
 
-			// $sell->updateOrderView($series);
 		}
 	}
 
 	private function getSellTableDatas ($series) {
 		$sellTable = new SellTable();
 		// $sellTable->updateOrderView($series);
-		$sellTable->getOrderView($series);
+		// $sellTable->getOrderView($series);
 		$sellTable->getSaleView($series);
 		$sellTable->getShipView($series);
 		// $sellTable->getStockView($series);

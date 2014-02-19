@@ -277,6 +277,9 @@ class SellTable
     public function getStockDaily () {
         $seriesNameList = Series::getNameList();
         $seriesCodeList = Series::getCodeList();
+        foreach($seriesNameList as &$seriesName) {
+            $seriesName = iconv('UTF-8', 'GB2312', $seriesName);
+        }
         $seriesCondition = "('" . join("','", $seriesNameList) . "')";
         $sql = "SELECT
             COUNT(*) AS count,

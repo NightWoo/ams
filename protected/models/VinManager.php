@@ -1,5 +1,5 @@
 <?php
-Yii::import('application.models.AR.*');
+Yii::import('application.models.AR.CarAR');
 class VinManager
 {
 	public static function importCar($vin) {
@@ -15,13 +15,13 @@ class VinManager
                        AUTO_REMARK as remark
                   FROM view_VINM_AUTO
                  WHERE AUTO_VINCODE = '$vin'";
-	
+
 		$tdsSever = Yii::app()->params['tds_server'];
 		$tdsDB = Yii::app()->params['tds_dbname'];
 		$tdsUser = Yii::app()->params['tds_username'];
 		$tdsPwd = Yii::app()->params['tds_password'];
-		
-		//php 5.4 linux use pdo cannot connet to ms sqlsrv db 
+
+		//php 5.4 linux use pdo cannot connet to ms sqlsrv db
 		//use mssql_XXX instead
 
 		//connect
@@ -30,14 +30,14 @@ class VinManager
 			throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
 		}
 		mssql_select_db($tdsDB ,$mssql);
-		
+
 		//query
 		$result = mssql_query($sql);
 		$auto =  mssql_fetch_row($result);
-		
+
 		//disconnect
 		mssql_close($mssql);
-	
+
 		if(empty($auto)) {
 			throw new Exception("vin $vin not exit in vinm_auto");
 		}
@@ -54,7 +54,7 @@ class VinManager
 
 		return $car;
 	}
-	
+
 	//get car data from webservice http://10.23.86.111/[path]/getCar.asmx
 	//written by wujun
 	public static function getCar($vin){
@@ -62,7 +62,7 @@ class VinManager
 		//$car = CarAR::model()->find('vin=?',array($vin));
 		//if(!empty($car)) {
 		//	return $car;
-		//} else 
+		//} else
 		if (strlen($vin) >= 9) {
 			$vin = strtoupper($vin);												//added by wujun
 			$car = CarAR::model()->find("upper(vin) LIKE ?", array("%$vin"));		//added by wujun
@@ -73,14 +73,14 @@ class VinManager
 		//call webservice to get car data
 		$client = new SoapClient(Yii::app()->params['vinm_wsdl']);
 		$result = $client -> getCar(array('VinCode'=>$vin));
-		
+
 		//convert the result(stdClsss object) to array
 		$resArray =(array)$result->getCarResult;
-		
-		
+
+
 		$label = array("id","series","type","color","special_order");
 		$data = array_combine($label,$resArray['string']);
-		
+
 		if(empty($data['id']) || empty($data['series'])) {
 			throw new Exception("vin号 $vin 不存在");
 		}
@@ -95,10 +95,10 @@ class VinManager
 		$car->create_time = date("YmdHis");
 		$car->user_id =yii::app()->user->id;
 		$car->save();
-		
+
 		return $car;
 	}
-	
+
 	public static function validateDigit9($vin) {
 		$replacement = array(
 			"0" => "0",

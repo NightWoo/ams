@@ -26,7 +26,7 @@ class Warehouse
 			$conditions = array();
 			switch($car->series){
 				case "F0" :
-					$conditions['area'] = "(id>1 AND id<200)";
+					$conditions['area'] = "((id>1 AND id<200) OR (id>700 AND id<800))";
 					break;
 				case "M6" :
 					$conditions['area'] = "(id>400 AND id<500) ";
@@ -36,7 +36,7 @@ class Warehouse
 					break;
 				default:
 			}
-			
+
 			$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
 			$conditions['free'] = "status=0 AND free_seat>0";
 			$condition = join(' AND ', $conditions);
@@ -45,7 +45,7 @@ class Warehouse
 			// 寻找同型车列
 			$row = WarehouseAR::model()->find($condition, $values);
 
-			//如无同型车列		
+			//如无同型车列
 			if(empty($row)) {
 				//查找空车列，并生成同型车列
 				$voidCondtion = $conditions['area'] . " AND status=0 AND quantity=0 AND (series=? OR series='') AND special_property=? AND free_seat>0 ORDER BY id ASC";
@@ -70,7 +70,7 @@ class Warehouse
 						$row = WarehouseAR::model()->findByPk(1000);
 					}
 				}
-			} 
+			}
 		}
 
 		if(empty($row)){
@@ -86,7 +86,7 @@ class Warehouse
 				$row->status = 1;
 			}
 			$row->save();
-			
+
 			//原库位数量减1
 			if($car->warehouse_id>900){
 				$oldRow = WarehouseAR::model()->findByPk($car->warehouse_id);
@@ -110,7 +110,7 @@ class Warehouse
 		$order = OrderAR::model()->findByPk($car->order_id);
 		$row = WarehouseAR::model()->findByPk($car->warehouse_id);
 		$data = array();
-		
+
 		if(empty($order)){
 			throw new Exception('该车未匹配订单，或订单不存在，无法出库');
 		} else {
@@ -150,14 +150,14 @@ class Warehouse
 				$laneName = '_' . $lane;
 			}
 
-			$data['vin'] = $car->vin;				
+			$data['vin'] = $car->vin;
 			$data['lane'] = $lane;
 			$data['lane_id'] = $order->lane_id;
-			$data['order_id'] = $car->order_id;				
+			$data['order_id'] = $car->order_id;
 			$data['order_number'] = $order->order_number;
 			$data['distributor_name'] = $order->distributor_name;
 			$data['distributor_code'] = $order->distributor_code;
-			$data['carrier'] = $order->carrier;				
+			$data['carrier'] = $order->carrier;
 
 			// $order->save();
 		}
@@ -176,5 +176,5 @@ class Warehouse
 
 		return $warehouseId;
 	}
-	
+
 }
