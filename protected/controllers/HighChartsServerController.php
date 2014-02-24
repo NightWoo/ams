@@ -4,12 +4,12 @@ class HighChartsServerController extends BmsBaseController
 /**
  * This file is part of the exporting module for Highcharts JS.
  * www.highcharts.com/license
- * 
- *  
+ *
+ *
  * Available POST variables:
  *
  * $filename  string   The desired filename without extension
- * $type      string   The MIME type for export. 
+ * $type      string   The MIME type for export.
  * $width     int      The pixel width of the exported raster image. The height is calculated.
  * $svg       string   The SVG source code to convert.
  */
@@ -17,7 +17,7 @@ class HighChartsServerController extends BmsBaseController
 	public function actionExport() {
 
 		// Options
-		define ('BATIK_PATH', '/home/work/bms/web/bms/temp/batik-rasterizer.jar');
+		define ('BATIK_PATH', '/home/work/bms/web/bms/vendor/batik/batik-rasterizer.jar');
 
 		///////////////////////////////////////////////////////////////////////////////
 		ini_set('magic_quotes_gpc', 'off');
@@ -30,7 +30,7 @@ class HighChartsServerController extends BmsBaseController
 		// prepare variables
 		if (!$filename) $filename = 'chart';
 		if (get_magic_quotes_gpc()) {
-			$svg = stripslashes($svg);	
+			$svg = stripslashes($svg);
 		}
 
 		// check for malicious attack in SVG
@@ -44,7 +44,7 @@ class HighChartsServerController extends BmsBaseController
 		if ($type == 'image/png') {
 			$typeString = '-m image/png';
 			$ext = 'png';
-			
+
 		} elseif ($type == 'image/jpeg') {
 			$typeString = '-m image/jpeg';
 			$ext = 'jpg';
@@ -54,12 +54,12 @@ class HighChartsServerController extends BmsBaseController
 			$ext = 'pdf';
 
 		} elseif ($type == 'image/svg+xml') {
-			$ext = 'svg';	
+			$ext = 'svg';
 		}
 		$outfile = "/home/work/bms/web/bms/temp/$tempName.$ext";
 
 		if (isset($typeString)) {
-			
+
 			// size
 			if ($_POST['width']) {
 				$width = (int)$_POST['width'];
@@ -67,11 +67,11 @@ class HighChartsServerController extends BmsBaseController
 			}
 
 			// generate the temporary file
-			if (!file_put_contents("/home/work/bms/web/bms/temp/$tempName.svg", $svg)) { 
+			if (!file_put_contents("/home/work/bms/web/bms/temp/$tempName.svg", $svg)) {
 				die("Couldn't create temporary file. Check that the directory permissions for
 					the /temp directory are set to 777.");
 			}
-			
+
 			// do the conversion
 			$output = shell_exec("java -jar ". BATIK_PATH ." $typeString -d $outfile $width /home/work/bms/web/bms/temp/$tempName.svg");
 			// var_dump("java -jar ". BATIK_PATH ." $typeString -d $outfile $width /home/work/bms/web/bms/temp/$tempName.svg");
@@ -79,7 +79,7 @@ class HighChartsServerController extends BmsBaseController
 			if (!is_file($outfile) || filesize($outfile) < 10) {
 				echo "<pre>$output</pre>";
 				echo "Error while converting SVG. ";
-				
+
 				if (strpos($output, 'SVGConverter.error.while.rasterizing.file') !== false) {
 					echo "
 					<h4>Debug steps</h4>
@@ -91,15 +91,15 @@ class HighChartsServerController extends BmsBaseController
 					<li>Click the Check button</li>
 					</ol>";
 				}
-			} 
-			
+			}
+
 			// stream it
 			else {
 				header("Content-Disposition: attachment; filename=\"$filename.$ext\"");
 				header("Content-Type: $type");
 				echo file_get_contents($outfile);
 			}
-			
+
 			// delete it
 			unlink("/home/work/bms/web/bms/temp/$tempName.svg");
 			// unlink($outfile);
@@ -109,7 +109,7 @@ class HighChartsServerController extends BmsBaseController
 			header("Content-Disposition: attachment; filename=\"$filename.$ext\"");
 			header("Content-Type: $type");
 			echo $svg;
-			
+
 		} else {
 			echo "Invalid type";
 		}

@@ -11,6 +11,17 @@ class UserController extends BmsBaseController
 		);
 	}
 
+    public function actionGetCurrent () {
+        try {
+            $curUser['id'] = Yii::app()->user->id;
+            $curUser['name'] = Yii::app()->user->name;
+            $curUser['display_name'] = Yii::app()->user->display_name;
+            $this->renderJsonBms(true, 'get current user success', $curUser);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->message());
+        }
+    }
+
 	public function actionShow() {
 		$curUser = User::create(Yii::app()->user->id);
 		$userList = array();
@@ -56,7 +67,7 @@ class UserController extends BmsBaseController
 			$user->email = $email;
 			$user->cellphone = $cellphone;
 			$user->telephone = $telephone;
-			$user->save();	
+			$user->save();
             $this->renderJsonBms(true, 'OK', '');
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -64,7 +75,7 @@ class UserController extends BmsBaseController
 	}
 
 
-    //only admin can init user's password	
+    //only admin can init user's password
 	public function actionInitPassword() {
 		try {
 			$opUserId = Yii::app()->user->id;
@@ -162,7 +173,7 @@ class UserController extends BmsBaseController
             	BmsLogger::info('init ' .$user->username .' password to ' . $password);
  			}
 			$user->save();
-			
+
             $this->renderJsonBms(true, 'OK');
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
@@ -183,7 +194,7 @@ class UserController extends BmsBaseController
 			if($user->id == $userId) {
 				throw new Exception ('管理员不能删除自己');
 			}
-			
+
             $user = User::model()->findByPk($userId);
             if(!empty($user)) {
 				$user->disable();

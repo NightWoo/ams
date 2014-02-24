@@ -36,7 +36,7 @@ class PlanningDivisionReportSeeker
                 $countData[$series][$typeGroup]['warehouseBalance'] = array("daily" => array("domestic"=>0,"export"=>0));
                 $countData[$series][$typeGroup]['stockBalance'] = array("daily" => array("all"=>0));
                 $countData[$series][$typeGroup]['saleVolume'] = array(
-                    "mothly" => array("all"=>0),
+                    "monthly" => array("all"=>0),
                     "yearly" => array("all"=>0)
                 );
             }
@@ -94,8 +94,8 @@ class PlanningDivisionReportSeeker
 
         $stockBalance = $this->stockGroupByPdType($date);
         foreach($stockBalance as $data) {
-            $countData[$data['series']][$data['pdType']]['stockBalance']['daily']['all'] += $data['count'];
-            $countData[$data['series']]['合计']['stockBalance']['daily']['all'] += $data['count'];
+            $countData[$data['series']][$data['pdType']]['stockBalance']['daily']['all'] += intval($data['count']);
+            $countData[$data['series']]['合计']['stockBalance']['daily']['all'] += intval($data['count']);
             $countTotal['stockBalance']['daily']['all'] += intval($data['count']);
         }
 
@@ -350,21 +350,26 @@ class PlanningDivisionReportSeeker
         return $count;
     }
 
-    public function queryOrderCount ($stime, $etime, $series="", $distributionNetwork="" ) {
-        $sql = "SELECT SUM(amount) FROM sell_order_view WHERE audit_time>='$stime' AND audit_time<'$etime' AND audit_status=1";
+    public function queryOrderCount ($stime, $etime, $series="", $netName="" ) {
+        $sql = "SELECT SUM(dgsl) AS count
+                FROM AMS_ORDERVIEW
+                WHERE convert(varchar(30),[cwshrq],120)>='$stime'
+                    AND convert(varchar(30),[cwshrq],120)<'$etime'
+                    AND cwshjg='1'";
         if(!empty($series)) {
-            $sql .= " AND series='$series'";
+            $seriesName = iconv('UTF-8', 'GBK', Series::getName($series));
+            $sql .= " AND cxmc='$seriesName'";
         }
-        if(!empty($distributionNetwork)) {
-            $sql .= " AND distribution_network='$distributionNetwork'";
+        if(!empty($netName)) {
+            $netName = iconv('UTF-8', 'GBK', $netName);
+            $sql .= " AND xswl='$netName'";
         }
+        $count = $this->sellMSSQL($sql);
 
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-
-        return $count;
+        return intval($count[0]['count']);
     }
 
-    public function querySaleDistributorCount ($stime="", $etime="", $series="", $distributionNetwork="") {
+    public function querySaleDistributorCount ($stime="", $etime="", $series="", $netName="") {
         $conditions = array();
         if(!empty($stime)) {
             $conditions[] = "register_time>='$stime'";
@@ -375,8 +380,8 @@ class PlanningDivisionReportSeeker
         if(!empty($series)) {
             $conditions[] = "series='$series'";
         }
-        if(!empty($distributionNetwork)) {
-            $conditions[] = "distribution_network='$distributionNetwork'";
+        if(!empty($netName)) {
+            $conditions[] = "distribution_network='$netName'";
         }
         $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
 
@@ -386,27 +391,30 @@ class PlanningDivisionReportSeeker
         return $count;
     }
 
-    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $distributionNetwork="") {
+    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $netName="") {
         $conditions = array();
         if(!empty($stime)) {
-            $conditions[] = "audit_time>='$stime'";
+            $conditions[] = "convert(varchar(30),[cwshrq],120)>='$stime'";
         }
         if(!empty($etime)) {
-            $conditions[] = "audit_time<'$etime'";
+            $conditions[] = "convert(varchar(30),[cwshrq],120)<'$etime'";
         }
         if(!empty($series)) {
-            $conditions[] = "series='$series'";
+            $seriesName = iconv('UTF-8', 'GBK', Series::getName($series));
+            $conditions[] = "cxmc='$seriesName'";
         }
-        if(!empty($distributionNetwork)) {
-            $conditions[] = "distribution_network='$distributionNetwork'";
+        if(!empty($netName)) {
+            $netName = iconv('UTF-8', 'GBK', $netName);
+            $conditions[] = "xswl='$netName'";
         }
-        $conditions[] = "audit_status=1";
+        $conditions[] = "cwshjg='1'";
         $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
 
-        $sql = "SELECT COUNT(DISTINCT distributor_code) FROM sell_order_view $condition";
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
+        $sql = "SELECT COUNT(DISTINCT dgdw) AS count
+                FROM AMS_ORDERVIEW $condition";
+        $count = $this->sellMSSQL($sql);
 
-        return $count;
+        return intval($count[0]['count']);
     }
 
     public function countCarByPoint ($stime,$etime,$point="assembly",$line="") {
@@ -644,5 +652,39 @@ class PlanningDivisionReportSeeker
         }
 
         return $ret;
+    }
+
+    public function sellMSSQL($sql){
+        //php 5.4 linux use pdo cannot connet to ms sqlsrv db
+        //use mssql_XXX instead
+
+        $tdsSever = Yii::app()->params['tds_SELL'];
+        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsUser = Yii::app()->params['tds_SELL_username'];
+        $tdsPwd = Yii::app()->params['tds_SELL_password'];
+
+        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        if(empty($mssql)) {
+            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        }
+        mssql_select_db($tdsDB ,$mssql);
+
+        //query
+        $result = mssql_query($sql);
+        $datas = array();
+        while($ret = mssql_fetch_assoc($result)){
+            $datas[] = $ret;
+        }
+        //disconnect
+        mssql_close($mssql);
+
+        //convert to UTF-8
+        foreach($datas as &$data){
+            foreach($data as $key => $value){
+                $data[$key] = iconv('GBK','UTF-8', $value);
+            }
+        }
+
+        return $datas;
     }
 }

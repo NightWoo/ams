@@ -21,13 +21,16 @@ class CarInfoController extends CController
      */
     public function getCarInfo($vin)
     {
+        $transaction = Yii::app()->db->beginTransaction();
         try {
             $car = Car::create($vin);
             $result = "0";
-            if(!empty($car)){
+            if(!empty($car->car)){
                 $carInfo = array();
                 $carInfo['matched'] = 1;
                 $carInfo['id'] = $car->car->id;
+                $car->enterNode('PBS', 2);
+                $car->detectStatus('PBS');
                 if(!empty($car->car->plan_id)) {
                     $carInfo['matched'] = 2;
                 } else {
@@ -54,9 +57,11 @@ class CarInfoController extends CController
             } else {
                 $result = "0";
             }
+            $transaction->commit();
             return $result;
         } catch(Excption $e) {
             $result = "vin not exist";
+            $transaction->rollback();
             return $result;
         }
     }

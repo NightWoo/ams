@@ -21,19 +21,8 @@
             require_once(dirname(__FILE__)."/../../../common/head.php");
         ?>
         <div class="offhead">
-           <?php
-            // require_once(dirname(__FILE__)."/../../../common/left/assembly_plan_left.php");
-            ?>
-
-            <!-- Main体 -->  
-            
+            <!-- Main体 -->
             <div id="bodyright" class="offset2">
-                <!-- <div ><ul class="breadcrumb">
-                        <li><a href="#">生产执行</a><span class="divider">&gt;</span></li>
-                        <li><a href="/bms/execution/home">总装</a><span class="divider">&gt;</span></li>
-                        <li><a href="#">维护与帮助</a><span class="divider">&gt;</span></li>
-                        <li class="active">订单维护</li>                
-                </ul></div> -->
                 <div>
                     <legend>库位整理
                         <!-- <span class="pull-right">
@@ -56,16 +45,6 @@
                         <tr>
                             <td>
                                 <select id="area" class="input-small">
-                                    <option value=''>全部</option>
-                                    <option value='A'>A</option>
-                                    <option value='B'>B</option>
-                                    <option value='C'>C</option>
-                                    <option value='D'>D</option>
-                                    <option value='E'>E</option>
-                                    <option value='F'>F</option>
-                                    <option value='G'>G</option>
-                                    <option value='H'>27#厂房</option>
-                                    <option value='X'>X</option>
                                 </select>
                             </td>
                             <td>
@@ -73,10 +52,6 @@
                             </td>
                             <td>
                                 <select id="series" class="input-small">
-                                    <option value=''>未选择</option>
-                                    <option value='F0'>F0</option>
-                                    <option value='M6'>M6</option>
-                                    <option value='6B'>思锐</option>
                                 </select>
                             </td>
                             <td>
@@ -90,12 +65,12 @@
                                 </select>
                             </td>
                             <td>
-                                <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>   
+                                <input type="button" class="btn btn-primary" id="btnQuery" value="查询" style="margin-left:2px;"></input>
                             </td>
                         </tr>
                     </table>
                 </form>
-                
+
                 <table id="tableResult" class="table table-condensed table-hover" style="font-size:12px;">
                     <thead>
                         <tr>
@@ -112,7 +87,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div><!-- end of 主体 -->
@@ -143,7 +118,7 @@
                 <div class="controls">
                     <select id="newLane"  name=""class="input-small">
                         <option value="" selected>未选择</option>
-                        <?php 
+                        <?php
                             for($i=1;$i<51;$i++){
                                 $num = sprintf("%02d", $i);
                                 $ret = "<option value=". $num .">$num</option>";
@@ -152,7 +127,7 @@
                         ?>
                     </select>
                 </div>
-            </div> 
+            </div>
         </form>
     </div>
     <div class="modal-footer">

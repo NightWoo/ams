@@ -11,6 +11,9 @@ var CHECK_PRIVILAGE ="/bms/user/checkPrivilage";
 var WAREHOUSE_COUNT_REVISE_QUERY = "/bms/dataBase/queryWarehouseCountRevise";
 var WAREHOUSE_COUNT_REVISE_SAVE = "/bms/dataBase/saveWarehouseCountRevise";
 
+//select
+var GET_WAREHOUSE_AREA = "/bms/warehouse/getWarehouseAreaList";
+
 //获得车辆原始信息
 var GET_CAR = "/bms/car/getCar";
 
@@ -43,7 +46,7 @@ var F20_GET_INFO = "/bms/car/validateF20";
 var F20_PRINT_CHECK_LIST = "/bms/execution/enterF20";
 
 //
-var QUERY_DUTY_DEPARTMENT = "/bms/query/queryDutyDepartment";
+var QUERY_DUTY_DEPARTMENT = "/bms/query/getDutyDepartment";
 var GET_DUTY_GROUP_LIST = "/bms/query/getDutyGroupList";
 
 //VQ1校验      需返回车系、颜色、车身、VIN号
@@ -128,7 +131,7 @@ var CHECKOUT_VALIDATE = "/bms/car/validateNode";
 var CHECKOUT_SUBMIT = "/bms/execution/warehouseCheckout";
 
 var WAREHOUSE_LABEL_VALIDATE = "/bms/car/validateWarehouseLabel";
-var WAREHOUSE_LEBEL_PRINT = "/bms/execution/getWarehouseLabel"; 
+var WAREHOUSE_LEBEL_PRINT = "/bms/execution/getWarehouseLabel";
 
 var WAREHOUSE_CHECKIN_QUERY = "/bms/warehouse/checkinDetail";
 var WAREHOUSE_CHECKIN_EXPORT = "/bms/warehouse/exportCheckinDetail";

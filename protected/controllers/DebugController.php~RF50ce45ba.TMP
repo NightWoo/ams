@@ -1,0 +1,176 @@
+<?php
+Yii::import('application.models.AR.*');
+Yii::import('application.models.*');
+
+class DebugController extends BmsBaseController
+{
+	public function actionIndex () {
+		$this->render('test');
+	}
+
+	public function actionTest () {
+		$vin = $this->validateStringVal('vin', '');
+		$material = $this->validateStringVal('material', '');
+        $transaction = Yii::app()->db->beginTransaction();
+		try {
+            $transaction->commit();
+			$this->renderJsonBms(true, 'OK', $ret);
+		} catch(Exception $e) {
+            $transaction->rollback();
+			$this->renderJsonBms(false, $e->getMessage(), null);
+		}
+	}
+
+    public function actionTestUpdateOrderView(){
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $ret = $this->updateOrderView();
+            $transaction->commit();
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+    public function actionStockDaily(){
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $ret = $this->getStockDaily();
+            $transaction->commit();
+            $this->renderJsonBms(true, 'OK', $ret);
+        } catch(Exception $e) {
+            $transaction->rollback();
+            $this->renderJsonBms(false, $e->getMessage(), null);
+        }
+    }
+
+
+    public function updateOrderView () {
+        $seriesCodeList = Series::getCodeList();
+        $sql = "SELECT order_id FROM sell_order_view WHERE audit_conclusion=0 OR not_arrived_count>0";
+        $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+        if(!empty($ids)) {
+            $idCondition = "(" . join(",", $ids) .")";
+            $mssql = "SELECT TOP 10
+            xswl AS distribution_network,
+            yxbmc AS sales_department,
+            ssdq AS sales_region,
+            ssqy AS sales_area,
+            sssf AS sales_province,
+            sscs AS sales_city,
+            sccs AS deliver_city,
+            dgdh AS order_number,
+            dgxz AS order_nature,
+            ddxz AS cold_resistant,
+            fhdwmc AS delivery_unit,
+            dgdwbh AS distributor_code,
+            dgdw AS distributor_name,
+            cldm AS car_type_code,
+            cxmc AS series_name,
+            clxh AS sell_car_type,
+            cx AS sell_config_name,
+            VINxtcx AS car_type,
+            clys AS sell_color,
+            xzpz AS options,
+            dgsl AS amount,
+            yfsl AS delivered_count,
+            ydsl AS arrived_count,
+            wdsl AS not_arrived_count,
+            qxsl AS canceled_count,
+            qxyy AS cancel_reason,
+            convert(varchar(30),[dgrq],120) AS book_time,
+            jhzt AS order_plan_status,
+            convert(varchar(30),[jhrq],120) AS order_plan_date,
+            cwshjg AS audit_status,
+            cwshyj AS audit_comment,
+            convert(varchar(30),[cwshrq],120) AS audit_time,
+            shbz AS audit_flag,
+            shjg AS audit_conclusion,
+            ID AS order_id,
+            jzpz AS additions,
+            mxbz AS remark
+            FROM AMS_ORDERVIEW
+            WHERE ID IN $idCondition";
+            $datas = $this->sellMSSQL($mssql);
+            // foreach($datas as $data) {
+            //     $ar = SellStockViewAR::model()->find("order_id", array($data['order_id']));
+            //     foreach($data as $key => $value) {
+            //         if($key == "order_id") {
+            //             continue;
+            //         }
+            //         if($key == "series_name") {
+            //             $ar->series = $seriesCodeList[$value];
+            //         } else {
+            //             $ar->$key = $value;
+            //         }
+            //     }
+            //     $ar->save();
+            // }
+            return $datas;
+        }
+    }
+
+    public function getStockDaily () {
+        $seriesNameList = Series::getNameList();
+        $seriesCodeList = Series::getCodeList();
+        $seriesCondition = "('" . join("','", $seriesNameList) . "')";
+        $sql = "SELECT
+            COUNT(*) AS count,
+            xswl AS distribution_network,
+            jxsmc AS distributor_name,
+            cxmc AS series_name,
+            VINxtcx AS car_type,
+            clys AS sell_color
+            FROM AMS_STOCKVIEW
+            WHERE cxmc IN $seriesCondition
+            GROUP BY xswl,jxsmc,cxmc,VINxtcx,clys";
+        $datas = $this->sellMSSQL($sql);
+        foreach($datas as $data){
+            $ar = new SellStockDailyAR();
+            $ar->create_time = date("YmdHis");
+            foreach($data as $key => $value) {
+                if($key == "series_name") {
+                    $ar->series = $seriesCodeList[$value];
+                } else {
+                    $ar->$key = $value;
+                }
+            }
+            $ar->save();
+        }
+    }
+
+    public function sellMSSQL($sql){
+        //php 5.4 linux use pdo cannot connet to ms sqlsrv db
+        //use mssql_XXX instead
+
+        $tdsSever = Yii::app()->params['tds_SELL'];
+        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsUser = Yii::app()->params['tds_SELL_username'];
+        $tdsPwd = Yii::app()->params['tds_SELL_password'];
+
+        $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
+        if(empty($mssql)) {
+            throw new Exception("cannot connet to sqlserver $tdsSever, $tdsUser ");
+        }
+        mssql_select_db($tdsDB ,$mssql);
+
+        //query
+        $result = mssql_query($sql);
+        $datas = array();
+        while($ret = mssql_fetch_assoc($result)){
+            $datas[] = $ret;
+        }
+        //disconnect
+        mssql_close($mssql);
+
+        //convert to UTF-8
+        foreach($datas as &$data){
+            foreach($data as $key => $value){
+                $data[$key] = iconv('GBK','UTF-8', $value);
+            }
+        }
+
+        return $datas;
+    }
+}

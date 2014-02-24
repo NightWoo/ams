@@ -87,7 +87,7 @@ class BmsBaseController extends Controller
 
     /**
      * 权限认证
-     * 
+     *
      * 具体的controller不需要调用或重写本函数，只需要重写bmsAccessRule即可。
      */
     public function filterBmsAccessControl($filterChain) {
@@ -100,9 +100,9 @@ class BmsBaseController extends Controller
             throw new CHttpException(403, $msg);
         }
         $filterChain->run();
- }
+    }
 
-    /** 
+    /**
      * @return array action filters
      */
     public function filters() {
@@ -116,7 +116,7 @@ class BmsBaseController extends Controller
      * 将action映射到系统功能（function）。框架将根据此进行权限验证。
      *
      * 本函数返回一个array，key是action的名字，value是对应的系统功能。
-     * 
+     *
      * 未出现在本映射中的将不做权限检查。
      * <pre>
      * array(
@@ -125,13 +125,13 @@ class BmsBaseController extends Controller
      * );
      * </pre>
      *
-     * @return array 
+     * @return array
      */
     public function bmsAccessRules() {
         return array();
     }
 
-    /** 
+    /**
      * Specifies the access control rules.
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
@@ -162,7 +162,7 @@ class BmsBaseController extends Controller
         if (is_array($data) && !isset($data['errors'])) {
             $data['errors'] = $this->errors;
         }
-        
+
         $smarty->assign($data);
         if ($return) {
             return $smarty->fetch($view);
@@ -191,7 +191,7 @@ class BmsBaseController extends Controller
      */
     public function renderJsonBms($success, $message, $data='') {
         $this->renderJson(array(
-            'success' => $success, 
+            'success' => $success,
             'message' => $message,
             'data' => $data,
             ));

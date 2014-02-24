@@ -1,6 +1,6 @@
 define({
 	'SPARES_STORE_VALIDATE': '/bms/car/validateSparesStore',
-	'QUERY_DUTY_DEPARTMENT': '/bms/query/queryDutyDepartment',
+	'QUERY_DUTY_DEPARTMENT': '/bms/query/getDutyDepartment',
 
 	'GET_SERIES_LIST': '/bms/common/getSeriesList',
 	'GET_SERIES_ARRAY': '/bms/common/getSeriesArray',

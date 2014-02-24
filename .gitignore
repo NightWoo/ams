@@ -4,6 +4,10 @@ vendor/bootstrap/bootstrap-*
 vendor/jquery-ui/development-bundle
 vendor/jquery-ui/jquery-ui-*
 vendor/printArea/RitsC-*
+vendor/angular/angular-*
+vendor/angular-loading-bar/angular-loading-bar-*
+vendor/angular-ui-bootstrap/bootstrap-gh-pages
+
 
 # byd doc
 configImage
@@ -11,3 +15,11 @@ doc
 
 # my config
 sftp-config.json
+
+#others
+bin/*
+build/*
+temp/*
+karma/*
+node_modules/*
+jsondata/*

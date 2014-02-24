@@ -30,6 +30,8 @@ class SiteController extends Controller
 	    {
 	    	if(Yii::app()->request->isAjaxRequest)
 	    		echo $error['message'];
+	    	// else if ($error['code'] == 401)
+	    	// 	$this->redirect('/bms/login.php');
 	    	else
 	        	$this->render('error', $error);
 	    }
@@ -40,12 +42,13 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
 		if(empty(Yii::app()->user) || Yii::app()->user->name === 'Guest') {
-			$this->render('login');
+			// $this->render('login');
+			$this->redirect('/bms/login.php');
+			// throw new CHttpException(401,'The specified post cannot be found.');
 		} else {
 			 $this->render('home');
-			//$this->redirect('/bms/execution/home');
-		} 
-		
+		}
+
 	}
 
 	/**
@@ -58,8 +61,8 @@ class SiteController extends Controller
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
-				echo CActiveForm::validate($model);
-				Yii::app()->end();
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
 		}
 
 		// collect user input data
@@ -69,13 +72,12 @@ class SiteController extends Controller
 		}
 		// validate user input and redirect to the previous page if valid
 		if($model->validate() && $model->login()) {
-				//$this->redirect('/bms/execution/home');
-				$this->render('home');
+				$this->redirect('/bms/site/index');
+				// $this->render('home');
 				Yii::app()->end();
 		}
 		// display the login form
-		$this->redirect('/bms');
-
+		$this->redirect('/bms/login.php');
 	}
 
 	/**

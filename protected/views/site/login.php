@@ -4,12 +4,12 @@
 		<meta charset="utf-8">
 		<title>总装长沙AMS</title>
 		<!-- Le styles -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/login.css" rel="stylesheet">
-		<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
-		<script type="text/javascript" src="js/service.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/login.js"></script>
+		<link href="/bms/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/bms/css/login.css" rel="stylesheet">
+		<script type="text/javascript" src="/bms/js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="/bms/js/service.js"></script>
+        <script type="text/javascript" src="/bms/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/bms/js/login.js"></script>
 	</head>
 
 
@@ -27,7 +27,7 @@
 	               <a id="addFavor" href="#">加入收藏</a>
 	               &nbsp;
 	               <a id="setHome" href="#">设为首页</a>
-	          </div> -->  
+	          </div> -->
 	        </legend>
             <form class="form-horizontal" action='/bms/site/login' method='post' name='LoginForm'>
                 <div class="control-group">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <div class="controls form-inline">              
+                    <div class="controls form-inline">
                         <button type="submit" class="btn btn-primary">登陆</button>
                         &nbsp;&nbsp;&nbsp;
                         <label class="checkbox">
@@ -68,7 +68,7 @@
             </form>
         </div>
 	    <div class="span5">
-	        <table>	            
+	        <table>
 	            <tr>
                     <td>
                         <ul class="unstyled">
@@ -81,8 +81,8 @@
                                     <li class="text-error">用户不得将账号交予他人使用，否则将被追究相关责任</li>
                                     <li class="text-error">任何越权操作将被记录</li>
                                     <li class="text-error">用户须定期修改密码，并保护密码安全</li>
-                                </ul> 
-                            </li>  
+                                </ul>
+                            </li>
                             <li class="title"><i class="icon-envelope"></i>&nbsp;联系我们</li>
                             <li>
                                 <ul id="contect">
@@ -90,8 +90,8 @@
                                     <li class="text-info">系统维护：<a href="Mailto:yang.huifen@byd.com">yang.huifen@byd.com</a></li>
                                     <li class="text-info">系统管理：<a href="Mailto:xu.yuanyuan1@byd.com">xu.yuanyuan1@byd.com</a></li>
                                     <li class="text-info">联系电话：0755-89888888-69550</li>
-                                </ul> 
-                            </li>           
+                                </ul>
+                            </li>
 							<li class="title"><i class="icon-download"></i>&nbsp;浏览器下载</li>
 							<li>
 								<ul>
@@ -99,15 +99,15 @@
 									<li class="text-info"><a href="/bms/download/browser/Chrome.zip"></a>Chrome</li>
 								</ul>
 							</li>
-                        </ul>   
+                        </ul>
                     </td>
                 </tr>
-	        </table>             
+	        </table>
 	    </div>
 	    </div>
 	</div>
 	<div class="span12 row">
-	    <div class="row">	    	    
+	    <div class="row">
 		<div class="span6"><p class="muted">Copyright&nbsp;&copy;&nbsp;2013&nbsp;&nbsp;第十一事业部</p></div>
 		<div class="span6"><p class="muted pull-right">更新于2013-11-01</p></div>
 		</div>

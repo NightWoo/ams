@@ -3,18 +3,13 @@ $(document).ready(function () {
 	initPage();
 	ajaxQuery();
 
-	// var list = [];
-	// 	$("#rightControls input:checked").each(function () {
-	// 		list.push($(this).val());
-	// 	});
-	// 	console.log(list);
 	$("#modifySelf").live("click", function () {
 		$("#emailModal").modal("show");
 		$("#inputEmailChange").val($("#userInfoTr").data("email"));
 		$("#selfCell").val($("#userInfoTr").data("cell"));
 		$("#selfTel").val($("#userInfoTr").data("tel"));
 	});
-	//------------------- common functions -----------------------	
+	//------------------- common functions -----------------------
 	//initialize this page
 	/*
 		1.add head class and resetPage
@@ -25,7 +20,7 @@ $(document).ready(function () {
 		//add head class
 		$("#headGeneralInformationLi").addClass("active");
 		$(".pager").hide();
-		
+
 		$('#initPasswordModal').modal({
 			"show" : false
 		});
@@ -40,12 +35,12 @@ $(document).ready(function () {
 		ajaxGetSmsDuty();
 	}
 
-	$("#btnEmailChange").click( 
+	$("#btnEmailChange").click(
 		function () {
 			ajaxUserChangeEmail();
 	});
 
-	$("#btnPasswordChange").click( 
+	$("#btnPasswordChange").click(
 		function () {
 			if ($("#inputPasswordNew").val() == $("#inputPasswordConfirm").val()) {
 				ajaxUserChangePassword();
@@ -54,7 +49,7 @@ $(document).ready(function () {
 				return false;
 			}
 	});
-	
+
 
 	$("#btnQuery").click(function () {
 		//clear last
@@ -69,7 +64,7 @@ $(document).ready(function () {
 		} else {
 			alert("您无订阅停线短信的权限，如工作需要，可向总装生产部申请获得，具体请联系AMS系统管理员。");
 		}
-	})
+	});
 
 	$(".prePage").click(
 		function (){
@@ -102,7 +97,7 @@ $(document).ready(function () {
 				ajaxQuery();
 			}
 			return false;
-		}	
+		}
 	});
 
 	function optDelete () {
@@ -169,7 +164,7 @@ $(document).ready(function () {
 		    		// 	var userNameTd = "<td>" + value.username + '<input type="hidden" value="' + value.id + '" />' + "</td>";
 		    		// 	var displayNameTd = "<td>" + value.display_name + "</td>";
 		    		// 	var emailTd = "<td>" + value.email + "</td>";
-		    		// 	var optionTd = "<td>" + '<input type="button" class="btn btn-danger optDelete" value ="删除"></input>' + 
+		    		// 	var optionTd = "<td>" + '<input type="button" class="btn btn-danger optDelete" value ="删除"></input>' +
 		    		// 		'<input type="button" class="btn btn-danger optReset" value ="改密码"></input>' + "</td>";
 		    		// 	var tr = "<tr>" + userNameTd + displayNameTd + emailTd + optionTd + "</tr>";
 		    		// 	$("#resultTable tbody").append(tr);
@@ -212,7 +207,7 @@ $(document).ready(function () {
 		    error:function(){alertError();}
 		});
 	}
-	
+
 	function ajaxQuery (argument) {
 		//clear before render
 		$("#resultTable tbody").html("");
@@ -324,8 +319,8 @@ $(document).ready(function () {
 
 		    	}
 		    },
-		    error : function() { 
-		    	alertError(); 
+		    error : function() {
+		    	alertError();
 		    }
 		});
 	}
@@ -362,7 +357,7 @@ $(document).ready(function () {
 
 	$("#btnEdit").click(function () {
 		ajaxEdit();
-		
+
 	})
 	function ajaxEdit (argument) {
 		$.ajax({
@@ -394,7 +389,7 @@ $(document).ready(function () {
 		    error:function(){alertError();}
 		});
 	}
-	
+
 	function ajaxDelete (userId) {
 		$.ajax({
 			type: "get",//使用get方法访问后台
@@ -527,7 +522,7 @@ $(document).ready(function () {
 			}
 		})
 		return permit;
-	} 
+	}
 
 	function emptyNewModal(){
 		$("#newModal input[type=text]").val("");

@@ -152,4 +152,14 @@ class WarehouseController extends BmsBaseController
 			$this->renderJsonBms(false, $e->getMessage(), null);
 		}
 	}
+
+    public function actionGetWarehouseAreaList () {
+        try {
+            $seeker = new WarehouseSeeker();
+            $nameList = $seeker->getArea();
+            $this->renderJsonBms(true, 'OK', $nameList);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
 }

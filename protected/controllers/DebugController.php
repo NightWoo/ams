@@ -13,13 +13,59 @@ class DebugController extends BmsBaseController
         $material = $this->validateStringVal('material', '');
         // $transaction = Yii::app()->db->beginTransaction();
         try {
-            $client =new SoapClient('http://192.168.1.38/bms/webService/carInfo/quote');
-            $ret = $client->getCarInfo('LGXCG6CF5D0036612');
+            $ret['count'] = $this->queryOrderCount('2014-01-01 08:00:00', '2014-02-01 08:00:00', 'F0', '红网');
+            $ret['count'] = $this->queryOrderDistributorCount('2014-01-01 08:00:00', '2014-02-01 08:00:00', 'F0', '红网');
+
             $this->renderJsonBms(true, 'OK', $ret);
         } catch(Exception $e) {
             // $this->transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
+    }
+
+    public function queryOrderCount ($stime, $etime, $series="", $netName="" ) {
+        $sql = "SELECT SUM(dgsl) AS count
+                FROM AMS_ORDERVIEW
+                WHERE convert(varchar(30),[cwshrq],120)>='$stime'
+                    AND convert(varchar(30),[cwshrq],120)<'$etime'
+                    AND cwshjg='1'";
+        if(!empty($series)) {
+            $seriesName = iconv('UTF-8', 'GBK', Series::getName($series));
+            $sql .= " AND cxmc='$seriesName'";
+        }
+        if(!empty($netName)) {
+            $netName = iconv('UTF-8', 'GBK', $netName);
+            $sql .= " AND xswl='$netName'";
+        }
+        $count = $this->sellMSSQL($sql);
+
+        return intval($count);
+    }
+
+    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $netName="") {
+        $conditions = array();
+        if(!empty($stime)) {
+            $conditions[] = "convert(varchar(30),[cwshrq],120)>='$stime'";
+        }
+        if(!empty($etime)) {
+            $conditions[] = "convert(varchar(30),[cwshrq],120)<'$etime'";
+        }
+        if(!empty($series)) {
+            $seriesName = iconv('UTF-8', 'GBK', Series::getName($series));
+            $conditions[] = "cxmc='$seriesName'";
+        }
+        if(!empty($netName)) {
+            $netName = iconv('UTF-8', 'GBK', $netName);
+            $conditions[] = "xswl='$netName'";
+        }
+        $conditions[] = "cwshjg='1'";
+        $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
+
+        $sql = "SELECT COUNT(DISTINCT dgdw) AS count
+                FROM AMS_ORDERVIEW $condition";
+        $count = $this->sellMSSQL($sql);
+
+        return intval($count);
     }
 
     public function actionTestCRMempty () {
@@ -222,249 +268,39 @@ class DebugController extends BmsBaseController
         }
     }
 
-    public function actionCountMorning() {
-        $lastDate = DateUtil::getLastDate();
-        $curDate = DateUtil::getCurDate();
-        // $seriesArray = self::$SERIES;
-        $seriesArray = Series::getNameList();
-        $monthStart = date("Y-m", strtotime($lastDate)) . "-01 08:00:00";
-
-        $countDate = $curDate;
-        $workDate = $lastDate;
-        $log = 0;
-
-        $stime = $lastDate . " 08:00:00";
-        $etime = $curDate . " 08:00:00";
-
-        $undistributed = $this->countUndistributed($etime);
-        foreach($seriesArray as $series => $seriesName){
-            $this->getSellTableDatas($series);
-
-            $assembly = $this->countAssembly($stime, $etime, $series);
-            $this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
-
-            $checkin = $this->countCheckin($stime, $etime, $series);
-            $this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
-            $this->throwTextData('入库',$checkin,$seriesName,$countDate,$log);
-
-            $monthCheckin = $this->countCheckin($monthStart, $etime, $series);
-            $this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
-
-            // $reviseMonthCheckin = $this->getReviseCount($series, '已入');
-            // $monthCheckin += $reviseMonthCheckin;
-            $this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
-
-            $checkout = $this->countCheckout($stime, $etime, $series);
-            $this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log);
-            $this->throwTextData('出库',$checkout,$seriesName,$countDate,$log);
-
-            $monthCheckout = $this->countCheckout($monthStart, $etime, $series);
-            $this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
-
-            // $reviseCheckout = $this->getReviseCount($series, '已发');
-            // $monthCheckout += $reviseCheckout;
-            $this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
-
-            $balance = $this->countBalance($series);
-            $this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
-            $this->throwTextData('库存',$balance,$seriesName,$countDate,$log);
-
-            $this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
-            $this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
-
-            // $sell->updateOrderView($series);
+    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $netName="") {
+        $conditions = array();
+        if(!empty($stime)) {
+            $conditions[] = "convert(varchar(30),[cwshrq],120)>='$stime'";
         }
-
-        $sell = new SellTable();
-        $sell->getStockDaily();
-    }
-
-    public function actionCountAfternoon() {
-        $lastDate = DateUtil::getLastDate();
-        $curDate = DateUtil::getCurDate();
-        // $seriesArray = self::$SERIES;
-        $seriesArray = Series::getNameList();
-        $monthStart = date("Y-m", strtotime($curDate)) . "-01 08:00:00";
-
-        $countDate = $curDate;
-        $workDate = $curDate;
-        $log = 1;
-
-        $stime = $curDate . " 08:00:00";
-        $etime = $curDate . " 17:30:00";
-
-        $undistributed = $this->countUndistributed($etime);
-        foreach($seriesArray as $series => $seriesName){
-            $this->getSellTableDatas($series);
-
-            $assembly = $this->countAssembly($stime, $etime, $series);
-            $this->countRecord('上线',$assembly,$series,$countDate,$workDate,$log);
-
-            $checkin = $this->countCheckin($stime, $etime, $series);
-            $this->countRecord('入库',$checkin,$series,$countDate,$workDate,$log);
-            $this->throwTextData('入库',$checkin,$seriesName,$countDate,$log);
-
-            $monthCheckin = $this->countCheckin($monthStart, $etime, $series);
-            $this->countRecord('已入',$monthCheckin,$series,$countDate,$workDate,$log);
-            // $reviseMonthCheckin = $this->getReviseCount($series, '已入');
-            // $monthCheckin += $reviseMonthCheckin;
-            $this->throwTextData('已入',$monthCheckin,$seriesName,$countDate,$log);
-
-            $checkout = $this->countCheckout($stime, $etime, $series);
-            $this->countRecord('出库',$checkout,$series,$countDate,$workDate,$log);
-            $this->throwTextData('出库',$checkout,$seriesName,$countDate,$log);
-
-            $monthCheckout = $this->countCheckout($monthStart, $etime, $series);
-            $this->countRecord('已发',$monthCheckout,$series,$countDate,$workDate,$log);
-            // $reviseCheckout = $this->getReviseCount($series, '已发');
-            // $monthCheckout += $reviseCheckout;
-            $this->throwTextData('已发',$monthCheckout,$seriesName,$countDate,$log);
-
-            $balance = $this->countBalance($series);
-            $this->countRecord('库存',$balance,$series,$countDate,$workDate,$log);
-            $this->throwTextData('库存',$balance,$seriesName,$countDate,$log);
-
-            $this->countRecord('未发',$undistributed[$series],$series,$countDate,$workDate,$log);
-            $this->throwTextData('未发',$undistributed[$series],$seriesName,$countDate,$log);
-
-            // $sell->updateOrderView($series);
+        if(!empty($etime)) {
+            $conditions[] = "convert(varchar(30),[cwshrq],120)<'$etime'";
         }
-    }
-
-    private function getSellTableDatas ($series) {
-        $sellTable = new SellTable();
-        // $sellTable->updateOrderView($series);
-        $sellTable->getOrderView($series);
-        $sellTable->getSaleView($series);
-        $sellTable->getShipView($series);
-        // $sellTable->getStockView($series);
-    }
-
-    private function getReviseCount($series, $countType) {
-        $sql = "SELECT count FROM warehouse_count_revise WHERE series='$series' AND count_type='$countType'";
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
-    }
-
-    private function countAssembly($stime,$etime,$series) {
-        $sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND assembly_time>='$stime' AND assembly_time<'$etime'";
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
-    }
-
-    private function countFinish($stime,$etime,$series) {
-        $sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND finish_time>='$stime' AND finish_time<'$etime'";
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
-    }
-
-    private function countCheckin($stime,$etime,$series) {
-        $sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND warehouse_time>='$stime' AND warehouse_time<'$etime'";
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
-    }
-
-    private function countCheckout($stime,$etime,$series,$noExport=false) {
-        $sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND distribute_time>='$stime' AND distribute_time<'$etime'";
-        if($noExport){
-            $sql .= " AND special_property!=1";
+        if(!empty($series)) {
+            $seriesName = Series::getName($series);
+            $conditions[] = "cxmc='$seriesName'";
         }
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
+        if(!empty($netName)) {
+            $conditions[] = "xswl='$netName'";
+        }
+        $conditions[] = "cwshjg='1'";
+        $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
+
+        $sql = "SELECT COUNT(DISTINCT dgdw) AS count
+                FROM AMS_ORDERVIEW $condition";
+        $data = $this->sellMSSQL($sql);
+
+        return $data['count'];
     }
 
-    private function countBalance($series, $all=false) {
-        $sql = "SELECT COUNT(id) FROM car WHERE series='$series' AND (`status`='成品库' OR `status`='WDI')";
-        if(!$all){
-            $sql .= " AND warehouse_id < 3000 AND warehouse_id <> 1000 AND special_property < 9";
-        }
-        $count = Yii::app()->db->createCommand($sql)->queryScalar();
-        return $count;
-    }
+    public function sellMSSQL($sql){
+        //php 5.4 linux use pdo cannot connet to ms sqlsrv db
+        //use mssql_XXX instead
 
-    private function countUndistributed($etime) {
-        // $seriesArray = array('F0', 'M6', '6B', 'G6');
-        $seriesArray = Series::getArray();
-
-        //初始时间2013-06-04 08:00前的未发值
-        // $count = array(
-     //     'F0' => 2829,
-     //     'M6' => 603,
-     //     '6B' => 382,
-     //     'G6' => 0,
-     //    );
-        foreach($seriesArray as $series) {
-            $count[$series] = $this->getReviseCount($series, '未发');
-        }
-
-        ////初始时间2013-06-04 08:00时的最大DATAK40_DGMXID为1746208
-        $sql = "SELECT SUM(DATAK40_DGSL) as sum,
-                        DATAK40_CXMC as series
-                FROM DATAK40_CLDCKMX
-                WHERE DATAK40_DGMXID>1746208 AND DATAK40_SSDW=3
-                GROUP BY DATAK40_CXMC";
         $tdsSever = Yii::app()->params['tds_SELL'];
         $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
         $tdsUser = Yii::app()->params['tds_SELL_username'];
         $tdsPwd = Yii::app()->params['tds_SELL_password'];
-
-        $datas = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
-        foreach($datas as &$data){
-            if($data['series'] == '思锐'){
-                $data['series'] = '6B';
-            }
-            $count[$data['series']] += $data['sum'];
-        }
-
-        // $sql = "SELECT SUM(count) as sum, series FROM `order` WHERE order_detail_id>1746208 GROUP BY series";
-        // $rets = Yii::app()->db->createCommand($sql)->queryAll();
-
-        // foreach($rets as $ret){
-           //  $count[$ret['series']] -= $ret['sum'];
-        // }
-
-        //计算从初始时间2013-06-04 08:00开始到目前的出库量，并从未发值中减去
-        $stime = "2013-06-04 08:00:00";
-        $noExport=true;
-        foreach($seriesArray as $series){
-            $checkout = $this->countCheckout($stime, $etime, $series, $noExport);
-            $count[$series] -= $checkout;
-        }
-
-        return $count;
-    }
-
-    private function throwTextData($countType,$count,$series,$date,$log) {
-        $client = new SoapClient(Yii::app()->params['ams2vin_note']);
-        $params = array(
-            'Date'=>$date,
-            'AutoType'=>$series,
-            'Sum'=>$count,
-            'StatType'=>$countType,
-            'NoteLog'=>$log,
-        );
-        if(!empty($time)){
-            $params['Date'] = $time;
-        }
-        $result = (array)$client -> NoteStat($params);
-
-        return $result;
-    }
-
-    private function countRecord($countType,$count,$series,$countDate,$workDate,$log){
-        $ar = new WarehouseCountDailyAR();
-        $ar->series = $series;
-        $ar->count = $count;
-        $ar->count_type = $countType;
-        $ar->count_date = $countDate;
-        $ar->work_date = $workDate;
-        $ar->log = $log;
-        $ar->save();
-    }
-
-    private function mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql){
-        //php 5.4 linux use pdo cannot connet to ms sqlsrv db
-        //use mssql_XXX instead
 
         $mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
         if(empty($mssql)) {
@@ -484,7 +320,7 @@ class DebugController extends BmsBaseController
         //convert to UTF-8
         foreach($datas as &$data){
             foreach($data as $key => $value){
-                $data[$key] = iconv('GB2312','UTF-8', $value);
+                $data[$key] = iconv('GBK','UTF-8', $value);
             }
         }
 

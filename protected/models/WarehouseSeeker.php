@@ -7,9 +7,9 @@ class WarehouseSeeker
 {
 	public function __construct(){
 	}
-	
+
 	public function query($area, $row, $series, $orderConfig, $color) {
-		
+
 		$conditions = array();
 
 		if(!empty($area)){
@@ -40,7 +40,7 @@ class WarehouseSeeker
 
 		$condition = 'WHERE id>1';
 		if(!empty($con)){
-			$condition .= " AND ". $con; 
+			$condition .= " AND ". $con;
 		}
 
 		$rowSql = "SELECT id AS warehouse_id, area, row, capacity, quantity, free_seat, series, order_config_id, cold_resistant, color FROM warehouse $condition";
@@ -60,11 +60,17 @@ class WarehouseSeeker
 
 	public function getAllOrderConfig() {
 		$configs = OrderConfigAR::model()->findAll();
-		
+
 		$datas = array();
 		foreach($configs as $config) {
 			$datas[$config['id']] = $config['name'];
 		}
+		return $datas;
+	}
+
+	public function getArea () {
+		$sql = "SELECT DISTINCT area FROM warehouse";
+		$datas = Yii::app()->db->createCommand($sql)->queryColumn();
 		return $datas;
 	}
 }

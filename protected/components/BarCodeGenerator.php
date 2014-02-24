@@ -2,16 +2,16 @@
 class BarCodeGenerator
 {
 	private $requiredKeys = array('code', 'filetype', 'dpi', 'scale', 'rotation', 'font_family', 'font_size', 'text');
-	
+
 	private $filetype;
 
 	private $classFile;
 	private $className;
 	private $baseClassFile;
 	private $codeVersion;
-	
+
 	protected function __construct($code) {
-		$barcodeBaseDir = "/home/work/bms/web/bms/barcode/";
+		$barcodeBaseDir = "/home/work/bms/web/bms/vendor/barcode/";
 		include_once($barcodeBaseDir . 'html' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $code . '.php');
 
 		$class_dir = $barcodeBaseDir . 'class';
@@ -19,7 +19,7 @@ class BarCodeGenerator
 		require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGBarcode.php');
 		require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGDrawing.php');
 		require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGFontFile.php');
-		
+
 		include_once($class_dir . DIRECTORY_SEPARATOR . $classFile);
 		include_once($barcodeBaseDir . 'html' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $baseClassFile);
 
@@ -46,7 +46,7 @@ class BarCodeGenerator
 		try {
 			$color_black = new BCGColor(0, 0, 0);
 			$color_white = new BCGColor(255, 255, 255);
-			$font = new BCGFontFile('/home/work/bms/web/bms/barcode/font/Arial.ttf', 10);
+			$font = new BCGFontFile('/home/work/bms/web/bms/vendor/barcode/font/Arial.ttf', 10);
 
 			$code_generated = new $this->className();
 

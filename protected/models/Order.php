@@ -263,7 +263,7 @@ class Order
 
         		switch($standbyArea){
         			case 0 :
-        				$matchCondition = "warehouse_id>1 AND warehouse_id<=300 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        				$matchCondition = "((warehouse_id>1 AND warehouse_id<=300) OR (warehouse_id>700 AND warehouse_id<800)) AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
         				break;
         			case 14 :
 						$matchCondition = "warehouse_id>=400 AND warehouse_id<500 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
@@ -284,13 +284,16 @@ class Order
 
 				$values = array($order->series, $order->color, $order->cold_resistant);
 
-				// $LC0Type = self::$LC0_TYPE;
-				// $LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR (type='QCJ7100L(1.0排量舒适型)' AND color='法兰红') OR config_id IN (7,9) OR (type IN ('QCJ7152ET1(1.5TI尊贵型)','QCJ7152ET1(1.5TI尊享型)','QCJ7152ET2(1.5TID尊贵型)') AND color<>'巧克力棕' AND color<>'德兰黑') )";
 				list($LC0TypeArray,$LC0Type) = $this->getLC0Type();
-				list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
-				$LC0TypeColorText = $this->getLC0TypeColorText();
-				$LC0Condition = " AND (vin LIKE 'LGX%' OR type IN $LC0Type OR special_property=1 OR config_id IN $LCOConfig OR $LC0TypeColorText)";
-				$matchCondition .= $LC0Condition;
+                list($LC0ConfigArray,$LCOConfig) = $this->getLC0Config();
+                $LC0TypeCondition = empty($LC0Type) ? "" : " OR type IN $LC0Type";
+                $LC0ConfigCondition = empty($LCOConfig) ? "" : " OR config_id IN $LCOConfig";
+
+                $LC0TypeColorText = $this->getLC0TypeColorText();
+                $LC0TypeColorCondition = empty($LC0TypeColorText) ? "" : " OR $LC0TypeColorText";
+
+				$LC0Condition = " AND (vin LIKE 'LGX%' OR special_property=1 $LC0TypeCondition $LC0ConfigCondition $LC0TypeColorCondition)";
+                $matchCondition .= $LC0Condition;
 
 				$matchCondition .= "  ORDER BY fifo_time ASC";
 				$matchedCar = CarAR::model()->find($matchCondition, $values);

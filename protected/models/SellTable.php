@@ -171,7 +171,7 @@ class SellTable
     public function getStockView ($series) {
         $seriesNameList = Series::getNameList();
         $seriesCodeList = Series::getCodeList();
-        $seriesName = iconv('UTF-8', 'GB2312', $seriesNameList[$series]);
+        $seriesName = iconv('UTF-8', 'GBK', $seriesNameList[$series]);
         $maxSql = "SELECT MAX(store_time) FROM sell_stock_view";
         $max = Yii::app()->db->createCommand($maxSql)->queryScalar();
         $max = (empty($max) || $max == '0000-00-00 00:00:00') ? '1800-01-01 00:00:00' : $max;

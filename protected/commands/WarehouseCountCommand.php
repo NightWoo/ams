@@ -51,8 +51,8 @@ class WarehouseCountCommand extends CConsoleCommand
 
 		}
 
-		// $sell = new SellTable();
-		// $sell->getStockDaily();
+		$sell = new SellTable();
+		$sell->getStockDaily();
 	}
 
 	public function actionCountAfternoon() {
@@ -153,16 +153,9 @@ class WarehouseCountCommand extends CConsoleCommand
 	}
 
 	private function countUndistributed($etime) {
-		// $seriesArray = array('F0', 'M6', '6B', 'G6');
 		$seriesArray = Series::getArray();
 
 		//初始时间2013-06-04 08:00前的未发值
-		// $count = array(
-	 //    	'F0' => 2829,
-	 //    	'M6' => 603,
-	 //    	'6B' => 382,
-	 //    	'G6' => 0,
-	 //    );
 	    foreach($seriesArray as $series) {
 	    	$count[$series] = $this->getReviseCount($series, '未发');
 	    }
@@ -173,25 +166,14 @@ class WarehouseCountCommand extends CConsoleCommand
 				FROM DATAK40_CLDCKMX
 				WHERE DATAK40_DGMXID>1746208 AND DATAK40_SSDW=3
 				GROUP BY DATAK40_CXMC";
-		$tdsSever = Yii::app()->params['tds_SELL'];
-        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
-        $tdsUser = Yii::app()->params['tds_SELL_username'];
-        $tdsPwd = Yii::app()->params['tds_SELL_password'];
 
-        $datas = $this->mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql);
+        $datas = $this->mssqlQuery($sql);
         foreach($datas as &$data){
         	if($data['series'] == '思锐'){
         		$data['series'] = '6B';
 	        }
 	        $count[$data['series']] += $data['sum'];
 	    }
-
-	    // $sql = "SELECT SUM(count) as sum, series FROM `order` WHERE order_detail_id>1746208 GROUP BY series";
-	    // $rets = Yii::app()->db->createCommand($sql)->queryAll();
-
-	    // foreach($rets as $ret){
-		   //  $count[$ret['series']] -= $ret['sum'];
-	    // }
 
 	    //计算从初始时间2013-06-04 08:00开始到目前的出库量，并从未发值中减去
 	    $stime = "2013-06-04 08:00:00";
@@ -232,9 +214,14 @@ class WarehouseCountCommand extends CConsoleCommand
 		$ar->save();
 	}
 
-	private function mssqlQuery($tdsSever, $tdsUser, $tdsPwd, $tdsDB, $sql){
+	private function mssqlQuery($sql){
 		//php 5.4 linux use pdo cannot connet to ms sqlsrv db
         //use mssql_XXX instead
+
+		$tdsSever = Yii::app()->params['tds_SELL'];
+        $tdsDB = Yii::app()->params['tds_dbname_BYDDATABASE'];
+        $tdsUser = Yii::app()->params['tds_SELL_username'];
+        $tdsPwd = Yii::app()->params['tds_SELL_password'];
 
 		$mssql=mssql_connect($tdsSever, $tdsUser, $tdsPwd);
         if(empty($mssql)) {
