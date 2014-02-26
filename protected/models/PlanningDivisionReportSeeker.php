@@ -296,7 +296,7 @@ class PlanningDivisionReportSeeker
     }
 
     public function queryStockCount ($date, $series="", $distributionNetwork="", $pdType="") {
-        $sql = "SELECT SUM(count) FROM view_sell_stock_daily WHERE DATE(create_time)>='$date'";
+        $sql = "SELECT SUM(count) FROM view_sell_stock_daily WHERE DATE(create_time)='$date'";
         if(!empty($series)) {
             $sql .= " AND series='$series'";
         }
@@ -442,7 +442,10 @@ class PlanningDivisionReportSeeker
         list($stime, $etime) = $this->reviseDate2Date($sDate, $eDate);
         $timeArray = $this->parseDate($stime, $etime);
         $pdTypeList = $this->pdTypeList($series);
+
         $saleSeries = $this->querySaleCount($stime, $etime, $series, "");
+
+        // $monthlyDate = $this->getStockMonthlyDate($eDate);
         $stockSeries = $this-> queryStockCount ($eDate, $series, "");
 
         $all = array();
@@ -454,6 +457,8 @@ class PlanningDivisionReportSeeker
         foreach ($pdTypeList as $pdType) {
 
             $saleTotal = $this->querySaleCount($stime, $etime, $series, "", $pdType);
+
+            // $monthlyDate = $this->getStockMonthlyDate($eDate);
             $stockTotal = $this->queryStockCount($eDate, $series, "", $pdType);
 
             $saleRate = empty($saleSeries) ? "-" : round($saleTotal/$saleSeries, 2) * 100 . "%";
@@ -492,6 +497,14 @@ class PlanningDivisionReportSeeker
         }
 
         return $list;
+    }
+
+    public function getStockMonthlyDate ($date) {
+        list($stime, $etime) = $this->reviseMonthlyTime($date);
+        $sql = "SELECT MAX(create_time) FROM sell_stock_daily WHERE create_time>='$stime' AND create_time<'$etime'";
+        $maxDate = Yii::app()->db->createCommand($sql)->queryScalar();
+        $maxDate = substr($maxDate, 0, 10);
+        return $maxDate;
     }
 
     public function reviseDailyMonth ($date) {

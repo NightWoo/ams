@@ -11,6 +11,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-http-server');
   grunt.task.loadTasks('grunt-tasks/bird');
+  grunt.task.loadTasks('grunt-tasks/copy-index');
 
   /**
    * Load in our build configuration file.
@@ -29,8 +30,8 @@ module.exports = function ( grunt ) {
     pkg: grunt.file.readJSON("package.json"),
 
     clean: [
-      '<%= build_dir %>',
-      '<%= bin_dir %>'
+      '<%= build_dir %>/*',
+      '<%= compile_dir %>/*'
     ],
     copy: {
       buildCopyApp: {
@@ -73,23 +74,12 @@ module.exports = function ( grunt ) {
           }
         ]
       },
-      // buildIndex: {
-      //   files: [
-      //     {
-      //       src: ['src/index.php'],
-      //       dest: '<%= build_dir %>',
-      //       cwd: '.',
-      //       expand: true,
-      //       flatten: true
-      //     }
-      //   ]
-      // },
       buildCopyAssets: {
         files: [
           {
             src: [ 'assets/**'],
             dest: '<%= build_dir %>',
-            cwd: './src',
+            cwd: './<%= src_dir %>',
             expand: true
           }
         ]
@@ -98,8 +88,8 @@ module.exports = function ( grunt ) {
         files: [
           {
             src: [ '!*.spec.js', '**/*.js', '!**.js' ],
-            dest: 'bin/',
-            cwd: './src/app',
+            dest: '<%= compile_dir %>',
+            cwd: './<%= src_dir %>/app',
             expand: true
           }
        ]
@@ -108,8 +98,8 @@ module.exports = function ( grunt ) {
         files: [
           {
             src: [ 'assets/**'],
-            dest: 'bin',
-            cwd: 'build',
+            dest: '<%= compile_dir %>',
+            cwd: '<%= build_dir %>',
             expand: true
           }
         ]
@@ -121,35 +111,28 @@ module.exports = function ( grunt ) {
           livereload: true
         },
         files: [
-          'src/app/**/*.js', 'src/**/*.tpl.html', 'src/index.*', 'Gruntfile.js', '!src/**/*.spec.js'
+          '<%= src_dir %>/app/**/*.js', '<%= src_dir %>/**/*.tpl.html', '<%= src_dir %>/index.*', 'Gruntfile.js', '!<%= src_dir %>/**/*.spec.js'
         ],
-        // tasks: [ 'clean', 'html2js', 'copy', 'jshint']
-        tasks: ['jshint', 'build']
+        tasks: [ 'jshint', 'build' ]
       },
       spec: {
         options: {
 
         },
         files: [
-          'src/**/*.spec.js'
+          '<%= src_dir %>/**/*.spec.js'
         ],
         tasks: [ 'jshint' ]
       }
     },
     html2js: {
       options: {
-        base: 'src/app',
+        base: '<%= src_dir %>/app',
         module: 'app-templates'
       },
       main: {
-        build: {
-          src: ['src/**/*.tpl.html'],
-          dest: '<%= build_dir %>/src/app/app-templates.js'
-        },
-        bin: {
-          src: ['src/**/*.tpl.html'],
-          dest: '<%= bin_dir %>/src/app/app-templates.js'
-        }
+        src: ['<%= src_dir %>/**/*.tpl.html'],
+        dest: '<%= build_dir %>/src/app/app-templates.js'
       }
     },
     karma: {
@@ -167,7 +150,7 @@ module.exports = function ( grunt ) {
      */
     jshint: {
       src: [
-        'src/app/**/*.js'
+        '<%= src_dir %>/app/**/*.js'
       ],
       // test: [
       //   '<%= app_files.jsunit %>'
@@ -190,41 +173,39 @@ module.exports = function ( grunt ) {
       compile: {
         options: {
           name: 'main',
-          baseUrl: "./src/app",
-          mainConfigFile: "src/app/main.js",
-          out: "bin/ams-min.js"
+          baseUrl: "./<%= src_dir %>/app",
+          mainConfigFile: "<%= src_dir %>/app/main.js",
+          out: "<%= compile_dir %>/ams-min.js"
 
         }
       }
     },
+    //copy index.php to build/bin and replace the js reference variable in it
     copyIndex: {
       compile: {
-        dir: '<%= bin_dir %>'
+        dir: '<%= compile_dir %>'
       },
       build: {
         dir: '<%= build_dir %>'
       }
 
     },
-    bootstrap: {
-        build: {
-          src: []
-        }
-    },
     concat: {
-      compile: {
-        src: [ 'vendor/requirejs/require.js', 'bin/ams-min.js'],
-        dest: 'bin/ams-min.js'
-      },
       buildCss: {
-        src: [ '<%= vendor_files.css %>', 'src/**/*.css'],
-        dest: 'build/assets/all.css'
+        src: [ '<%= vendor_files.css %>', 'src/css/app.css'],
+        dest: '<%= build_dir %>/assets/all.css'
+      },
+      compileJs: {
+        src: [ 'vendor/requirejs/require.js', '<%= compile_dir %>/ams-min.js'],
+        dest: '<%= compile_dir %>/ams-min.js'
       }
     },
+    //Lint, compile and concat less/css
     recess: {
       build: {
-        src: ['<%= vendor_files.css %>', 'src/css/app.css' ],
-        dest: 'build/assets/all.css',
+        files: {
+          '<%= build_dir %>/assets/all.css' : [ '<%= vendor_files.css %>', '<%= src_dir %>/css/app.css' ]
+        },
         options: {
           compile: true,
           compress: false,
@@ -234,8 +215,9 @@ module.exports = function ( grunt ) {
         }
       },
       compile: {
-        src: [ '<%= recess.build.dest %>' ],
-        dest: '<%= recess.build.dest %>',
+        files: {
+          '<%= compile_dir %>/assets/all.css' : [ '<%= build_dir %>/assets/all.css' ]
+        },
         options: {
           compile: true,
           compress: true,
@@ -248,7 +230,7 @@ module.exports = function ( grunt ) {
     "http-server": {
         dev: {
           // the server root directory
-          root: 'src',
+          root: '<%= build_dir %>',
           port: 8282,
           host: "127.0.0.1",
 
@@ -262,46 +244,15 @@ module.exports = function ( grunt ) {
         }
     }
   };
+
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
   grunt.registerTask('test', [ 'karma' ]);
-  grunt.registerTask('default', ['clean', 'build', 'compile']);
-  grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('watchHint', ['watch:hint']);
-  grunt.registerTask('copyBuild', ['copy:buildCopyApp', 'copy:buildVendor_js', 'copy:buildVendor_css', 'copy:buildVendor_assets', 'copy:buildCopyAssets', 'copyIndex:build']);
-  grunt.registerTask('copyCompile', ['copy:compileCopyApp', 'copy:compileCopyAssets', 'copyIndex:compile'])
-  grunt.registerTask('build', ['copyBuild', , 'html2js', 'concat:buildCss' ]);
-  grunt.registerTask('compile', ['requirejs', 'concat:compile', 'copyCompile']);
+  grunt.registerTask('lint', [ 'jshint' ]);
+  grunt.registerTask('watchHint', [ 'watch:hint' ]);
+  grunt.registerTask('copyBuild', [ 'copy:buildCopyApp', 'copy:buildVendor_js', 'copy:buildVendor_css', 'copy:buildVendor_assets', 'copy:buildCopyAssets', 'copyIndex:build' ]);
+  grunt.registerTask('copyCompile', ['copy:compileCopyApp', 'copy:compileCopyAssets', 'copyIndex:compile' ]);
+  grunt.registerTask('build', [ 'clean', 'copyBuild', 'html2js', 'concat:buildCss' ]);
+  grunt.registerTask('compile', [ 'requirejs', 'concat:compileJs', 'copyCompile' ]);
+  grunt.registerTask('default', [ 'clean', 'build', 'compile' ]);
 
-  //replace the js reference variable in index.php
-  grunt.registerMultiTask('copyIndex', 'replace js', function () {
-    var dir = this.data.dir;
-    grunt.file.copy('src/index.php', dir + '/index.php', {
-      process: function ( contents, path ) {
-        if ( dir === 'build') {
-          return grunt.template.process( contents, {
-            data: {
-              compiledJs: '<script src="vendor/requirejs/require.js" data-main="src/app/main.js" ></script>'
-            }
-          });
-        }
-        return grunt.template.process( contents, {
-          data: {
-            compiledJs: '<script src="ams-min.js"></script>'
-          }
-        });
-      }
-    });
-  });
-  /*below for test*/
-  // grunt.initConfig({
-  //   log: {
-  //     foo: [1, 2, 3],
-  //     bar: 'hello world',
-  //     baz: false
-  //   }
-  // });
-
-  // grunt.registerMultiTask('log', 'Log stuff.', function() {
-  //   grunt.log.writeln(this.target + ': ' + this.data);
-  // });
 };

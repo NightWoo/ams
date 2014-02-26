@@ -202,12 +202,150 @@ class NodeSeeker
 			$ret[$key] = $data;
         }
 
-        $countSql = "SELECT count(id) FROM $traceTable WHERE $condition";
+        $countSql = "SELECT COUNT(*) FROM $traceTable WHERE $condition";
         $total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
         $ret = array_values($ret);
 		return array($total, $ret);
 	}
+
+    public function queryPbsQueue($stime, $etime, $series, $curPage, $perPage) {
+        $sql = "SELECT id,display_name FROM user";
+        $users = Yii::app()->db->createCommand($sql)->queryAll();
+        $userInfos = array();
+        foreach($users as $user) {
+            $userInfos[$user['id']] = $user['display_name'];
+        }
+
+        $sql = "SELECT id, name, order_config_id FROM car_config";
+        $configs = Yii::app()->db->createCommand($sql)->queryAll();
+        $configInfos = array();
+        foreach($configs as $config){
+            $configInfos[$config['id']]['configName'] = $config['name'];
+            $order = OrderConfigAR::model()->findByPk($config['order_config_id']);
+            if(!empty($order)){
+                $configInfos[$config['id']]['orderConfigName'] = $order->name;
+            } else {
+                $configInfos[$config['id']]['orderConfigName'] = $config['name'];
+            }
+        }
+
+        $sql = "SELECT car_type, car_model FROM car_type_map";
+        $carModels = Yii::app()->db->createCommand($sql)->queryAll();
+        $modelInfo = array();
+        foreach($carModels as $carModel){
+            $modelInfo[$carModel['car_type']]= $carModel['car_model'];
+        }
+
+        $sql = "SELECT series, config_id, color, material_code, description FROM config_sap_map";
+        $materials = Yii::app()->db->createCommand($sql)->queryAll();
+        $materialCodes = array();
+        $materialDescriptions = array();
+        foreach($materials as $material) {
+            $key = $material['series'] . $material['config_id'] . $material['color'];
+            $materialCodes[$key] = $material['material_code'];
+            $materialDescriptions[$key] = $material['description'];
+        }
+
+        $conditions = array();
+
+        if(!empty($stime)) {
+            $conditions[] = "queue_time >= '$stime'";
+        }
+        if(!empty($etime)) {
+            $conditions[] = "queue_time <= '$etime'";
+        }
+
+        if(!empty($series)){
+            $arraySeries = Series::parseSeries($series);
+            $cTmp = array();
+            foreach($arraySeries as $series){
+                $cTmp[] = "car_series='$series'";
+            }
+            $conditions[] = "(" . join(' OR ', $cTmp) . ")";
+        };
+        $condition = join(' AND ', $conditions);
+
+        $limit = "";
+        if(!empty($perPage)) {
+            $offset = ($curPage - 1) * $perPage;
+            $limit = "LIMIT $offset, $perPage";
+        }
+
+        $dataSql = "SELECT car_id, 2 as user_id, queue_time as pass_time, remark as node_remark, vin, series, serial_number, type, color, plan_id, config_id, remark, status, cold_resistant, special_order, distributor_name, order_id, engine_code, yielded
+            FROM view_pbs_queue
+            WHERE $condition
+            ORDER BY queue_time DESC
+            $limit";
+        $datas = Yii::app()->db->createCommand($dataSql)->queryAll();
+
+        $ret = array();
+        foreach($datas as &$data){
+            $materialKey = $data['series'] . $data['config_id'] . $data['color'];
+            $data['material_code'] = empty($materialCodes[$materialKey]) ? '' : $materialCodes[$materialKey];
+            $data['material_description'] = empty($materialDescriptions[$materialKey]) ? '' : $materialDescriptions[$materialKey];
+            if($data['series'] == '6B') $data['series'] = '思锐';
+
+            if($data['cold_resistant'] == 1){
+                $data['cold_resistant'] = '耐寒';
+            } else {
+                $data['cold_resistant'] = '非耐寒';
+            }
+
+            if(!empty($data['user_id'])){
+                $data['user_name'] = $userInfos[$data['user_id']];
+            } else {
+                $data['user_name'] = '-';
+            }
+            if(!empty($data['driver_id'])) {
+                $data['driver_name'] = $userInfos[$data['driver_id']];
+            } else {
+                $data['driver_name'] = $data['user_name'];
+            }
+
+            if(!empty($data['type'])){
+                $data['car_model'] = $modelInfo[$data['type']];
+            } else {
+                $data['car_model'] ='';
+            }
+            if(!empty($data['config_id'])){
+                $data['config_name'] = $configInfos[$data['config_id']]['configName'];
+                $data['order_config_name'] = $configInfos[$data['config_id']]['orderConfigName'];
+                $data['type_config'] = $data['car_model'] . '/' . $data['order_config_name'];
+            }else {
+                $data['config_name'] = '';
+                $data['order_config_name'] = '';
+                $data['type_config'] = $data['type'];
+
+            }
+
+            $data['order_number'] = '-';
+            if(!empty($data['order_id'])){
+                $sql = "SELECT order_number FROM `order` WHERE id = '{$data['order_id']}'";
+                $order_number = Yii::app()->db->createCommand($sql)->queryScalar();
+                $data['order_number']= $order_number;
+            }
+            $data['plan_number'] = '-';
+            if(!empty($data['plan_id'])) {
+                $sql = "SELECT plan_number FROM plan_assembly WHERE id='{$data['plan_id']}'";
+                $plan_number = Yii::app()->db->createCommand($sql)->queryScalar();
+                $data['plan_number'] = $plan_number;
+            }
+
+            $data['node_name'] = 'PBS排序（虚拟）';
+
+            $data['pass_time'] = substr($data['pass_time'],0,16);
+            $data['return_to'] = "";
+            $key = join('_', $data);
+            $ret[$key] = $data;
+        }
+
+        $countSql = "SELECT COUNT(*) FROM view_pbs_queue WHERE $condition";
+        $total = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+        $ret = array_values($ret);
+        return array($total, $ret);
+    }
 
 	private function reviseSETime($stime,$etime) {
 		//cancel the revise function

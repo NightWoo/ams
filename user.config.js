@@ -9,7 +9,8 @@ module.exports = {
    */
   src_dir: 'src',
   build_dir: 'build',
-  bin_dir: 'bin',
+  compile_dir: 'bin',
+  vendor_dir: 'vendor',
   vendor_files: {
     js: [
       'vendor/angular/angular.min.js',
@@ -18,7 +19,8 @@ module.exports = {
       'vendor/angular-couch-potato/angular-couch-potato.js',
       'vendor/angular-loading-bar/loading-bar.min.js',
       'vendor/requirejs/require.js',
-      'vendor/requirejs/domReady.js'
+      'vendor/requirejs/domReady.js',
+      'vendor/requirejs/r.js'
     ],
     css: [
       'vendor/angular-loading-bar/loading-bar.min.css',

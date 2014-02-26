@@ -25,7 +25,7 @@
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
         <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
         <script type="text/javascript" src="/bms/js/execution/assembly/query/manufactureQuery.js"></script>
-	<!--[if IE 6]>    
+	<!--[if IE 6]>
             <link href="/bms/css/ie6.min.css" rel="stylesheet">
     <![endif]-->
     </head>
@@ -63,6 +63,7 @@
 								<select name="" id="selectNode" class="input-small">
                                     <option value="" selected>全部工段</option>
                                     <option value="PBS">PBS/入库</option>
+                                    <option value="PBS_QUEUE">PBS/排序</option>
                                     <option value="T0">PBS/上I线</option>
                                     <option value="T0_2">PBS/上II线</option>
                                     <option value="T1">T1/T11</option>
@@ -85,7 +86,7 @@
                                     <!-- <option value="DETECT_SHOP_LEAVE">检测间离开</option>
                                     <option value="DETECT_SHOP_RETURN">检测间归还</option> -->
 								</select>
-                                
+
 							</td>
                             <td>
                                 <!-- <input type="text" class="span2" placeholder="开始时间..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'});"/> -->
@@ -122,9 +123,9 @@
                                     <label class='checkbox'><input type='checkbox' id='checkbox{{:series}}' value='{{:series}}'>{{:name}}</input></label>
                                 </script>
                             </td>
-                        </tr>    
-					</table> 
-                </form>      
+                        </tr>
+					</table>
+                </form>
                 <div id="divDetail">
                     <div>
                         <ul id="tabs" class="nav nav-pills">
@@ -196,7 +197,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -226,7 +227,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                        
+
                                 </tbody>
                             </table>
                             <!-- <div id="paginationPause" class="pagination" style="display: none;">
@@ -244,7 +245,7 @@
                         </div>
 
                         <div class="tab-pane" id="pauseDistribute">
-                            <!-- <div id="radioPauseDistribute">   
+                            <!-- <div id="radioPauseDistribute">
                                 <label class="radio inline">
                                   <input type="radio" name="optionsRadios" id="optionsRadios1" value="cause_type_chart_data" checked="checked">
                                   停线类型
@@ -289,7 +290,7 @@
                                     <th>备注</th>
                                 </thead>
                                 <tbody>
-                        
+
                                 </tbody>
                             </table>
                         </div>

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 	initPage();
-//------------------- common functions -----------------------	
+//------------------- common functions -----------------------
 	//initialize this page
 	/*
 		1.add head class and resetPage
@@ -44,7 +44,7 @@ $(document).ready(function () {
 			ajaxCompletionRate();
 		else if (index === 10)
 			queryManufacturePeriod();
-		
+
 		return false;
 	}
 
@@ -95,7 +95,7 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  * Event bindings
  * ----------------------------------------------------------------
- */	
+ */
  // 	$(window).on('keydown', enterHandler);
 	// function enterHandler (event) {
 	// 	if (event.keyCode == "13"){
@@ -286,7 +286,7 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: QUERY_NODE_TRACE,//ref:  /bms/js/service.js
-		    data: { "vin": $('#vinText').val(), 
+		    data: {
 		    		"node":$("#selectNode").val(),
 					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
@@ -314,20 +314,20 @@ $(document).ready(function () {
 		    			var pTimeTd = "<td>" + value.pass_time + "</td>";
 		    			var returnToTd = "";
 		    			if($("#selectNode").val() == "WAREHOUSE_RETURN") {
-		    				returnToVal = value.return_to == null ? "-" : value.return_to; 
+		    				returnToVal = value.return_to == null ? "-" : value.return_to;
 		    				returnToTd = "<td>" + returnToVal + "</td>";
 		    			}
 		    			var tr = "<tr>"
-		    				+ serialTd 
-		    				+ vinTd 
-		    				+ seriesTd 
+		    				+ serialTd
+		    				+ vinTd
+		    				+ seriesTd
 		    				// + carTypeTd
 		    				+ configTd
-		    				+ coldTd 
+		    				+ coldTd
 		    				+ colorTd
-		    				+ statusTd 
-		    				+ pTimeTd 
-		    				+ remarkTd 
+		    				+ statusTd
+		    				+ pTimeTd
+		    				+ remarkTd
 		    				+ returnToTd
 		    				+ "</tr>";
 
@@ -335,7 +335,7 @@ $(document).ready(function () {
 						$("#tableCars").show();
 		    		});
 
-		    		//deal with pager	
+		    		//deal with pager
 		    		if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
 						$("#preCars, #firstCars").addClass("disabled");
@@ -358,7 +358,7 @@ $(document).ready(function () {
 					$("#curCars a").html(response.data.pager.curPage);
 					$("#totalCars").attr("total", response.data.pager.total);
 					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
-				
+
 					$("#paginationCars").show();
 		    	}else
 		    		alert(response.message);
@@ -372,7 +372,7 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_CAR,//ref:  /bms/js/service.js
-		    data: { "vin": $('#vinText').val(), 
+		    data: { "vin": $('#vinText').val(),
 		    		"node":$("#selectNode").val(),
 					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
@@ -396,7 +396,7 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: NODE_QUERY_CAR,//ref:  /bms/js/service.js
-		    data: { "vin": $('#vinText').val(), 
+		    data: { "vin": $('#vinText').val(),
 		    		"node":$("#selectNode").val(),
 					"series": getSeriesChecked(),
 					"stime":$("#startTime").val(),
@@ -404,13 +404,13 @@ $(document).ready(function () {
 				},
 		    success:function (response) {
 		    	if(response.success){
-		    		
+
 		    		drawStatistic(response.data);
 		    		changeStatisticsTable(response.data);
 		    		// drawLineChart(response.data.series);
 		    		// tempLineData = response.data.series;
 		    		// changeLineTable(response.data.detail);
-		    		
+
 		    	}else
 		    		alert(response.message);
 		    },
@@ -488,13 +488,13 @@ $(document).ready(function () {
 		detail = data.detail;
 		total =data.total;		//added by wujun
 		$("#tableStatistic thead").html("<tr />");
-		$("#tableStatistic tbody").html("<tr />");		
+		$("#tableStatistic tbody").html("<tr />");
         $.each(carSeries, function (index,value) {
             $("<tr />").appendTo($("#tableStatistic tbody"));
         });
-		
+
 		var thTr = $("#tableStatistic tr:eq(0)");
-        $("<th />").html("车系").appendTo(thTr);    
+        $("<th />").html("车系").appendTo(thTr);
         $("<th />").html("合计").appendTo(thTr);
 		$.each(carSeries, function (index, series) {
             $("<td />").html(series).appendTo($("#tableStatistic tr:eq("+(index*1+1)+")"));
@@ -517,12 +517,12 @@ $(document).ready(function () {
             if ($.inArray(index, distinctLabel) !== -1)
                 return { y: item, show: false};
             return { y: item, show: true};
-        });   
+        });
     }
 
 	function ajaxExportNodeTrace () {
-		window.open(EXPORT_NODE_TRACE + 
-			"?&node=" + $("#selectNode").val() + 
+		window.open(EXPORT_NODE_TRACE +
+			"?&node=" + $("#selectNode").val() +
 			"&series=" + getSeriesChecked() +
 			"&stime=" + $("#startTime").val() +
 			"&etime=" + $("#endTime").val()
@@ -550,7 +550,7 @@ $(document).ready(function () {
 				"endTime": $("#endTime").val(),
 				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
-				"section": $("#selectNode").val(),	
+				"section": $("#selectNode").val(),
 				"pauseReason": $("#pauseReason").val(),
 				"perPage": 10,
 				"curPage": targetPage || 1,
@@ -574,11 +574,11 @@ $(document).ready(function () {
 							$("<td />").html(value.recover_time.substring(0,16)).appendTo(tr);
 						}
 						$("<td />").html(value.editor_name).appendTo(tr);
-						
+
 						tr.data("id",value.id);
-						
+
 						$("#tablePause tbody").append(tr);
-						
+
 						if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
 							$("#prePause, #firstPause").addClass("disabled");
@@ -601,17 +601,17 @@ $(document).ready(function () {
 						$("#curPause a span").html(response.data.pager.curPage);
 						$("#totalPause").attr("total", response.data.pager.total);
 						$("#totalPause").html("导出全部" + response.data.pager.total + "条记录");
-					
+
 						$("#tablePause").show();
 						$("#paginationPause").show();
 					});
 				}else {
-					alert(response.message);	
+					alert(response.message);
 				}
 			},
 			error: function() {
 				alertError();
-			}	
+			}
 		})
 	}
 
@@ -621,7 +621,7 @@ $(document).ready(function () {
 				"endTime": $("#endTime").val(),
 				"causeType": $("#causeType").val(),
 				"dutyDepartment": $("#dutyDepartment").val(),
-				"section": $("#section").val(),	
+				"section": $("#section").val(),
 				"pauseReason": $("#pauseReason").val(),
 			}
 		$.ajax({
@@ -727,7 +727,7 @@ $(document).ready(function () {
 		    			$("<td />").html(value.total).appendTo(tr);
 		    			$("<td />").html(value.ready).appendTo(tr);
 		    			$("<td />").html(value.car_series).appendTo(tr);
-		    			$("<td />").html(value.car_type_name).appendTo(tr);	
+		    			$("<td />").html(value.car_type_name).appendTo(tr);
 		    			$("<td />").html(value.config_name).appendTo(tr);
 	    				$("<td />").html(value.cold).appendTo(tr);
 		    			$("<td />").html(value.color).appendTo(tr);
@@ -740,7 +740,7 @@ $(document).ready(function () {
 					});
 					$("#tablePlan").show();
 
-					//deal with pager	
+					//deal with pager
 		    		if(response.data.pager.curPage == 1) {
 		    			//$(".prePage").hide();
 						$("#prePlan a span").html("&times;");
@@ -763,7 +763,7 @@ $(document).ready(function () {
 					$("#curPlan a span").html(response.data.pager.curPage);
 					$("#totalPlan").attr("total", response.data.pager.total);
 					$("#totalPlan").html("导出全部" + response.data.pager.total + "条记录");
-					
+
 					$("#paginationPlan").show();
 				} else {
 					alert(response.message);
@@ -1070,15 +1070,15 @@ $(document).ready(function () {
 				useHTML: true,
                 formatter: function() {
                 	var s = this.points[0].key +'<table>';
-                
+
                 	$.each(this.points, function(i, point) {
                     	s += '<tr><td style="color: '+ point.series.color +'">'+ point.series.name +': </td>' +
             					'<td style="text-align: right"><b>'+ Math.round(point.y * 100)+'%</b></td></tr>';
                 	});
-                	
+
                 	s += '</table>';
                 	return s;
-                        
+
                 }
             },
             legend: {
@@ -1089,7 +1089,7 @@ $(document).ready(function () {
             },
             plotOptions:{
                 line:{
-                    dataLabels: { 
+                    dataLabels: {
                         enabled: true,
                         formatter: function() {
                             if(!this.point.show)
@@ -1114,7 +1114,7 @@ $(document).ready(function () {
             series: []
 
 		},
-	
+
 		drawUseRate: function() {
 			var lineSeries = [];
 			shift = this.useRateAjaxData.shift;
@@ -1128,7 +1128,7 @@ $(document).ready(function () {
 			var chart;
 			chart = new Highcharts.Chart(this.useRateChartData);
 		},
-	
+
 		updateUseRateTable: function() {
 			var shift = this.useRateAjaxData.shift;
 			var detail = this.useRateAjaxData.detail;
@@ -1182,9 +1182,9 @@ $(document).ready(function () {
 		},
 
 		prepare : function  (dataArray) {
-            return $(dataArray).map(function (index, item) {                
+            return $(dataArray).map(function (index, item) {
                 return { x: index, y: item, show: false};
-            });  
+            });
         }
 	};
 
@@ -1230,9 +1230,9 @@ $(document).ready(function () {
 					rotation: -45,
 					align: 'right',
 					style: {
-						fontSize: '12px',	
+						fontSize: '12px',
 						fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
-					} 
+					}
 				}
 			},
 			yAxis: [
@@ -1292,7 +1292,7 @@ $(document).ready(function () {
 					dataLabels: {
 						enabled:true,
 						style: {
-							
+
 							fontSize: '14px',
 							fontFamily: 'Helvetica Neue, Microsoft YaHei, Helvetica, Arial, sans-serif',
 						},
@@ -1448,7 +1448,7 @@ $(document).ready(function () {
                 	s += ss;
                 	s += '</table>';
                 	return s;
-                        
+
                 }
             },
             plotOptions: {
@@ -1484,13 +1484,13 @@ $(document).ready(function () {
 	    	var total = this.statisticsAllAjaxData.total;
 
 			$("#tableStatistic thead").html("<tr />");
-			$("#tableStatistic tbody").html("");		
+			$("#tableStatistic tbody").html("");
 	        $.each(carSeries, function (index,value) {
 	            $("<tr />").appendTo($("#tableStatistic tbody"));
 	        });
-	        
+
 			var thTr = $("#tableStatistic tr:eq(0)");
-	        $("<th />").html("车系").appendTo(thTr);    
+	        $("<th />").html("车系").appendTo(thTr);
 	        $("<th />").html("合计").appendTo(thTr);
 
 	        totalTotal = 0;

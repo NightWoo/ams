@@ -13,10 +13,17 @@ class DebugController extends BmsBaseController
         $material = $this->validateStringVal('material', '');
         // $transaction = Yii::app()->db->beginTransaction();
         try {
-            $ret['count'] = $this->queryOrderCount('2014-01-01 08:00:00', '2014-02-01 08:00:00', 'F0', '红网');
-            $ret['count'] = $this->queryOrderDistributorCount('2014-01-01 08:00:00', '2014-02-01 08:00:00', 'F0', '红网');
-
+            // $client =new SoapClient('http://192.168.1.38/bms/webService/carInfo/quote');
+            // $ret = $client->getCarInfo('LC0C14AA8D0061858');
+            $vin = 797;
+            if(strlen($vin) != 17 && substr(strtoupper($vin), 0, 1) != 'L') {
+                $sql = "SELECT vin FROM car WHERE id = $vin";
+                $vin = Yii::app()->db->createCommand($sql)->queryScalar();
+            }
+            $car = Car::create($vin);
+            $ret = $car->car->vin;
             $this->renderJsonBms(true, 'OK', $ret);
+
         } catch(Exception $e) {
             // $this->transaction->rollback();
             $this->renderJsonBms(false, $e->getMessage(), null);
@@ -266,31 +273,6 @@ class DebugController extends BmsBaseController
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage(), null);
         }
-    }
-
-    public function queryOrderDistributorCount ($stime="", $etime="", $series="", $netName="") {
-        $conditions = array();
-        if(!empty($stime)) {
-            $conditions[] = "convert(varchar(30),[cwshrq],120)>='$stime'";
-        }
-        if(!empty($etime)) {
-            $conditions[] = "convert(varchar(30),[cwshrq],120)<'$etime'";
-        }
-        if(!empty($series)) {
-            $seriesName = Series::getName($series);
-            $conditions[] = "cxmc='$seriesName'";
-        }
-        if(!empty($netName)) {
-            $conditions[] = "xswl='$netName'";
-        }
-        $conditions[] = "cwshjg='1'";
-        $condition = empty($conditions) ? "" : "WHERE " . join(" AND ", $conditions);
-
-        $sql = "SELECT COUNT(DISTINCT dgdw) AS count
-                FROM AMS_ORDERVIEW $condition";
-        $data = $this->sellMSSQL($sql);
-
-        return $data['count'];
     }
 
     public function sellMSSQL($sql){

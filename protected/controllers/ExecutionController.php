@@ -121,7 +121,7 @@ class ExecutionController extends BmsBaseController
                 Yii::app()->permitManager->check(self::$CHILD_VIEW_PRIVILAGE[$view]);
             }
 
-            $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point,));
+            $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point));
         } catch(Exception $e) {
             if($e->getMessage() == 'permission denied')
                 $this->render('../site/permissionDenied');
@@ -143,12 +143,16 @@ class ExecutionController extends BmsBaseController
             $car->checkAlreadyOnline();
             $car->enterNode('PBS');
             $car->detectStatus('PBS');
-            if( empty($car->car->plan_id) && ($car->car->series == '6B' || $car->car->series == 'M6' || $car->car->series == 'G6') ){
+            if( empty($car->car->plan_id) ){
                 $car->addToPlan($date, $planId);
-                $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
-                $car->addSpsQueue($spsPoints);
-                $car->generateSpsSerial($line);
+                $car->addPbsPlanedCar();
+                if($car->car->series == '6B' || $car->car->series == 'M6' || $car->car->series == 'G6') {
+                    $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
+                    $car->addSpsQueue($spsPoints);
+                    $car->generateSpsSerial($line);
+                }
             }
+
             $transaction->commit();
 			$this->renderJsonBms(true, $vin . '成功录入彩车身库', $vin);
 		} catch(Exception $e) {
@@ -868,7 +872,11 @@ class ExecutionController extends BmsBaseController
         $curPage = $this->validateIntVal('curPage', 1);
         try{
             $seeker = new NodeSeeker();
-            list($total, $data) = $seeker->queryTrace($stime, $etime, $series, $node, $curPage, $perPage);
+            if($node == "PBS_QUEUE") {
+                list($total, $data) = $seeker->queryPbsQueue($stime, $etime, $series, $curPage, $perPage);
+            } else {
+                list($total, $data) = $seeker->queryTrace($stime, $etime, $series, $node, $curPage, $perPage);
+            }
             $ret = array(
                         'pager' => array('curPage' => $curPage, 'perPage' => $perPage, 'total' => $total),
                         'data' => $data,
@@ -886,7 +894,11 @@ class ExecutionController extends BmsBaseController
         $node = $this->validateStringVal('node', '');
         try{
             $seeker = new NodeSeeker();
-            list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
+            if($node == "PBS_QUEUE") {
+                list($total, $datas) = $seeker->queryPbsQueue($stime, $etime, $series, $node, 0, 0);
+            } else {
+                list($total, $datas) = $seeker->queryTrace($stime, $etime, $series, $node, 0, 0);
+            }
             $content = "carID,流水号,VIN,车系,颜色,车型,配置,生产配置,耐寒性,状态,录入时间,经销商,特殊订单号,车辆备注,节点,退回,节点备注,录入人员,录入用户,订单号,发动机号,生产订单号,SAP料号,SAP物料描述,SAP报功\n";
             foreach($datas as $data) {
                 $content .= "{$data['car_id']},";
