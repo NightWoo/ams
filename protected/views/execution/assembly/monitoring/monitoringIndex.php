@@ -15,11 +15,11 @@
 		<script type="text/javascript" src="/bms/js/service.js"></script>
 		<script type="text/javascript" src="/bms/js/jquery.qtip.js"></script>
 		<script type="text/javascript" src="/bms/js/execution/assembly/monitoring/monitoringIndex.js"></script>
-		
-		
+
+
 		<style type="text/css">
 			#tableInfo td{text-align: center;}
-			
+
 		</style>
     </head>
     <body>
@@ -54,7 +54,7 @@
 			        </ul>
 			    </div>
 			    <div class="tab-content">
-				    
+
 		            <div id="index" class="tab-pane active main">
 		            	<div class="stop_mark" id="stopMark">C00</div>
 		            	<div class="t1 range" id="rangeT1"></div>
@@ -98,7 +98,7 @@
 		            		<span id="line_speed"></span><span style="font-size:14px">&nbsp;秒</span>
 		            	</div>
 		            </div>
-		            <!-- <div id="detecthouse" class="tab-pane ">		            	
+		            <!-- <div id="detecthouse" class="tab-pane ">
 		            	<div id="background" class="pull-left">
 				    		<div class="A01 stockyard">A01</div>
 				  		  	<div class="A02 stockyard">A02</div>
@@ -134,7 +134,7 @@
 
               			</div>
               		</div> -->
-              		<div id="detect" class="tab-pane ">	
+              		<div id="detect" class="tab-pane ">
 	      				<div class="outware-data data-node sub-flag"></div>
 			    		<div class="inware-data data-node sub-flag"></div>
 			    		<div class="vq3-data data-node sub-flag"></div>
@@ -192,13 +192,15 @@
 
 				    		<div id="extraArea" class="">
 	      					    <dl class="dl-horizontal">
-								    <dt><a class="area-btn-k">14#附加区<span class="area-text">K</span></a></dt><dd class="area-k">-</dd>
-								    <dt><a class="area-btn-y">35#附加区<span class="area-text">Y</span></a></dt><dd class="area-y">-</dd>
-								    <dt><a class="area-btn-h">27#临时区<span class="area-text">H</span></a></dt><dd class="area-h">-</dd>
-								    <dt>27#出口车Z</dt><dd class="area-z">-</dd>
-								    <dt>临时区T</dt><dd class="area-t">-</dd>
-								    <dt>特殊区X</dt><dd class="area-x">-</dd>
-								    <dt>WDI</dt><dd class="area-wdi">-</dd>
+								    <dt><a class="area-btn-h">2号库<span class="area-text">H</span></a></dt><dd class="block-h">-</dd>
+								    <dt><a class="area-btn-i">3号库(油库区)<span class="area-text">L</span></a></dt><dd class="block-i">-</dd>
+								    <dt><a class="area-btn-y">4号库(35#)<span class="area-text">Y</span></a></dt><dd class="block-y">-</dd>
+								    <dt><a class="area-btn-k">5号库(14#)<span class="area-text">K</span></a></dt><dd class="block-k">-</dd>
+								    <!--<dt><a class="area-btn-i">3号库(油库区)<span class="area-text">L</span></a></dt><dd class="block-i">-</dd>-->
+								    <dt>出口车(27#)</dt><dd class="block-z">-</dd>
+								    <dt>非商品车区X</dt><dd class="block-x">-</dd>
+								    <!--<dt>非库位区T</dt><dd class="block-t">-</dd>-->
+								    <dt>WDI</dt><dd class="block-wdi">-</dd>
 							    </dl>
 		      				</div>
 
@@ -212,15 +214,15 @@
 	      				</div>
 
 
-			    		
+
 	      			</div>
 		         </div>
 
-		         
+
 
 	            <div style="width:756px;margin-left:44px;display:none;">
 	            	<table class="table table-bordered" id="tableInfo">
-	            		
+
 	            		<tbody>
 	            			<thead>
 	            				<tr>
@@ -253,7 +255,7 @@
 	            				<td id="vq1DPU"></td>
 	            				<td id="vq2DPU"></td>
 	            				<td id="vq3DPU"></td>
-	            
+
 	            			</tr>
 	            			<tr>
 	            				<td id="totalDRR"></td>
@@ -261,9 +263,9 @@
 	            				<td id="vq1DRR"></td>
 	            				<td id="vq2DRR"></td>
 	            				<td id="vq3DRR"></td>
-	            
+
 	            			</tr> -->
-	            			
+
 	            		</tbody>
 	            	</table>
 	            </div>
@@ -342,7 +344,7 @@
 		  	</div>
 		</div>
 
-		
+
 
 		<!-- stockyard record -->
 		<div class="modal" id="stockyardModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;width:800px;margin-left:-400px;">

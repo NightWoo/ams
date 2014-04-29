@@ -83,13 +83,6 @@
                               </div>
                             </li>
                             <li class="span2">
-                              <div id="planningDivisionFourTech" class="thumbnail" style="height:120px">
-                                <div>
-                                    <h5>四大工艺完成</h5>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="span2">
                               <div id="planningDivisionNewOrder" class="thumbnail" style="height:120px">
                                 <div>
                                     <h5>新增订单</h5>

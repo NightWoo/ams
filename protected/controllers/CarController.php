@@ -38,9 +38,9 @@ class CarController extends BmsBaseController
         $line = $this->validateStringVal('line', 'I');
         try{
             $car = Car::create($vin);
-            if(!empty($car->car->plan_id)) {
-                throw new Exception("此车已匹配计划");
-            }
+            // if(!empty($car->car->plan_id)) {
+            //     throw new Exception("此车已匹配计划");
+            // }
             //“当天计划”的有效时间是指“当天上午08:00至次日上午07：59分”
             //
             $curDate = DateUtil::getCurDate();
@@ -714,13 +714,14 @@ class CarController extends BmsBaseController
 		$type = $this->validateStringVal('type', 'subInstrument');
 		$stime = $this->validateStringVal('stime', '');
 		$etime = $this->validateStringVal('etime', '');
-		$status = $this->validateIntVal('status', 0);
+        $status = $this->validateIntVal('status', 0);
+		$closed = $this->validateIntVal('closed', 0);
         $vin = $this->validateStringVal('vin' ,'');
         $top  =$this->validateIntVal("top", 0);
 		$sortType = $this->validateStringVal('sortType', 'ASC');
 
 		$seeker = new SubConfigSeeker($type);
-		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
+		$datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType, $closed);
         $count = $seeker->countQueue($status, $stime, $etime);
         $ret = array("datas"=>$datas, "countAll"=>$count);
 		$this->renderJsonBms(true, 'OK', $ret);
@@ -778,7 +779,11 @@ class CarController extends BmsBaseController
             $point = $this->validateStringVal('point', 'S1');
 
             $seeker = new SpsSeeker($point);
-            $seeker->validate($vin);
+            if($point === 'S3') {
+                $seeker->validatePbs($vin);
+            } else {
+                $seeker->validate($vin);
+            }
 
             $car = Car::create($vin);
             // $data = VinManager::getCar($vin);
@@ -799,8 +804,13 @@ class CarController extends BmsBaseController
         $sortType  = $this->validateStringVal("sortType", "ASC");
 
         $seeker = new SpsSeeker($point);
-        $datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
-        $count = $seeker->countQueue($status, $stime, $etime);
+        if($point == 'S3') {
+            $datas = $seeker->queryAllPbs($vin, $status, $stime, $etime, $top, $sortType);
+            $count = $seeker->countQueuePbs($status, $stime, $etime);
+        } else {
+            $datas = $seeker->queryAll($vin, $status, $stime, $etime, $top, $sortType);
+            $count = $seeker->countQueue($status, $stime, $etime);
+        }
         $ret = array("datas"=>$datas, "countAll"=>$count);
 
         $this->renderJsonBms(true, 'OK', $ret);
@@ -811,7 +821,12 @@ class CarController extends BmsBaseController
             $vin = $this->validateStringVal('vin', '');
             $point = $this->validateStringVal('point', 'S1');
             $car = Car::create($vin);
-            $datas = $car->generateSpsData($point);
+            if($point == 'S3') {
+                $datas = $car->generatePbsData($point);
+            } else {
+                $datas = $car->generateSpsData($point);
+
+            }
 
             $this->renderJsonBms(true, 'OK', $datas);
         } catch(Exception $e) {

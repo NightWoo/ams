@@ -5,8 +5,8 @@ $(document).ready(function () {
 	$(".road-data").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".leak-data").qtip({content: "s",position: {my: 'top center', at: 'bottom center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
 	$(".vq1-data").qtip({content: "s",position: {my: 'bottom center', at: 'top center'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
-	
-	//warehouse tips
+
+//warehouse tips
 	$(".inware-warehouse").qtip({content: "s",position: {my: 'center left', at: 'bottom right'},show: {event: false,ready: false}, 	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".outware-warehouse").qtip({content: "s",position: {my: 'center right', at: 'bottom left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'blue'}});
 	$(".vq3-warehouse").qtip({content: "s",position: {my: 'bottom center', at: 'top left'},show: {event: false,ready: false},	hide: false,style: {tip: true,classes: 'ui-tooltip-' + 'red'}});
@@ -90,7 +90,7 @@ $(document).ready(function () {
 	$("#pbsBalanceModal").modal("hide");
 	$("#pbsBalance, #ui-tooltip-11").live("click", function () {
 		ajaxPbsBalance();
-		
+
 	});
 
 	$("#vq1BalanceModal").modal("hide");
@@ -107,10 +107,10 @@ $(document).ready(function () {
 	});
 	// });
 	$(".range").click(function (e) {
-		console.log($(e.target).data("sectionName"));
+		// console.log($(e.target).data("sectionName"));
 		window.open("/bms/execution/MonitoringSection?section=" + $(e.target).data("sectionName"),"_blank","width=320, height=128, location=no");
 	});
-	
+
 	$("#andon_board").click(function () {
 		window.open("/bms/execution/MonitoringWorkshop","_blank","width=384, height=240, location=no");
 	});
@@ -122,7 +122,7 @@ $(document).ready(function () {
 
 	//added by wujun
 	$("#welcomeSection").click(function (e) {
-		console.log($(e.target).data("sectionName"));
+		// console.log($(e.target).data("sectionName"));
 		window.open("/bms/execution/WelcomeSection","_blank","width=320, height=128, location=no");
 	});
 
@@ -133,17 +133,17 @@ $(document).ready(function () {
 	//added by wujun
 
 
-	
+
 	ajaxThreeInfo();
 	var assemblyHouseIntervalId = setInterval(function () {
 		ajaxThreeInfo();
 	},10000);
-	console.log(assemblyHouseIntervalId);
+	// console.log(assemblyHouseIntervalId);
 	ajaxRefresh();
 	var assemblyHouseRefreshId = setInterval(function () {
 		ajaxRefresh();
 	},5000);
-	
+
 	var detectHouseRefreshId ;
 	$("#liAssembly").live("click", showAssemblyTips);
 	$("#liDetect").live("click", showDetectTips);
@@ -234,11 +234,11 @@ function qtipMe (target, text, color) {
 		$(target).qtip({
 			content: text,
 			position: {
-				my: 'center', 
+				my: 'center',
 				at: 'center',
-				// adjust: {  
+				// adjust: {
 		  //           y:5
-		  //       } 
+		  //       }
 			},
 			// effect: false,
 			show: {
@@ -255,9 +255,9 @@ function qtipMe (target, text, color) {
 		$(target).qtip({
 			content: text,
 			position: {
-				my: 'top center', 
+				my: 'top center',
 				at: 'bottom left',
-				adjust: {  
+				adjust: {
 		            y:5
 		        }
 			},
@@ -275,9 +275,9 @@ function qtipMe (target, text, color) {
 		$(target).qtip({
 			content: text,
 			position: {
-				my: 'top center', 
+				my: 'top center',
 				at: 'bottom center',
-				adjust: {  
+				adjust: {
 		            y:5
 		        }
 			},
@@ -298,7 +298,7 @@ function qtipMe (target, text, color) {
 	window.tipRadio = {};
 	tipRadio.type = "none";
 	tipRadio.clearLast = function () {
-		console.log(this.type);
+		// console.log(this.type);
 		if (this.type === "productInfo") {
 			$('.node_pbs').qtip('toggle', false);
 			$('.node_t0').qtip('toggle', false);
@@ -308,7 +308,7 @@ function qtipMe (target, text, color) {
 		} else if (this.type === "storeInfo") {
 			$('.pbs').qtip('toggle', false);
 			$('.vq1').qtip('toggle', false);
-		} 
+		}
 	};
 }(window);
 
@@ -325,7 +325,7 @@ function ajaxRefresh () {
 	    		$("#line_urate").text(response.data.line_urate);
 	    		$("#totalPauseTime").text(response.data.pause_time.total);
 
-	    	
+
 	    		$("#DPVeDRR").text(response.data.DPU.total + " / " + response.data.DRR.total);
 	    		$("#VQ1DPVeDRR").text(response.data.DPU.VQ1 + " / " + response.data.DRR.VQ1);
 	    		$("#VQ2DPVeDRR").text(response.data.DPU.VQ2 + " / " + response.data.DRR.VQ2);
@@ -343,11 +343,11 @@ function ajaxRefresh () {
 
 	    		$("#recycleCar").text(parseInt(response.data.balance.VQ1) + parseInt(response.data.balance.VQ2) +
 	    			parseInt(response.data.balance.VQ3));
-	    		
+
 	    		if(response.data.pause_seat !== "") {
 	    			$("#stopMark").show().text(response.data.pause_seat);
 	    			$("#stopMark").css("left", window.markMap[response.data.pause_seat] + "px");
-	    	
+
 	    		} else {
 	    			$("#stopMark").hide();
 	    				// $('.main').qtip('toggle', false);
@@ -376,7 +376,7 @@ function ajaxThreeInfo () {
 
 	    		$(".node_t0").qtip('option', 'content.text', response.data.list.production.T0.all);
 	    		$(".node_t0").data("subData", response.data.list.production.T0);
-	    		
+
 	    		$(".node_vq1").qtip('option', 'content.text', response.data.list.quality.VQ1.all);
 	    		$(".node_vq1").data("subData", response.data.list.quality.VQ1);
 
@@ -399,10 +399,10 @@ $(".sub-flag").live("hover", function () {
 			tipContent += k + ": " + v + "  ";
 		}
 	});
-	console.log(tipContent);
+	// console.log(tipContent);
 	$(this).qtip('option', 'content.text', tipContent.substr(0, tipContent.length - 1));
 }).live("mouseout", function () {
-	
+
 	$(this).qtip('option', 'content.text', $(this).data("subData").all);
 });
 
@@ -423,7 +423,7 @@ function ajaxGetStock (argument) {
 	    		//refresh tips
 	    		$(".outware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_out.all);
 	    		$(".outware-data").data("subData", response.data.pass_car.warehourse_out);
-	    		
+
 	    		$(".inware-data").qtip('option', 'content.text', response.data.pass_car.warehourse_in.all);
 	    		$(".inware-data").data("subData", response.data.pass_car.warehourse_in);
 
@@ -440,18 +440,18 @@ function ajaxGetStock (argument) {
 	    		//warehouse things
 	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.pass_car.warehourse_out.all);
 	    		$(".outware-warehouse").data("subData", response.data.pass_car.warehourse_out);
-	    		
+
 	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.pass_car.warehourse_in.all);
 	    		$(".inware-warehouse").data("subData", response.data.pass_car.warehourse_in);
 
 	    		//warehouse proccess
-	    		$(".progressA").css("width", (response.data.area_rate.A * 100) + '%');
-	    		$(".progressB").css("width", (response.data.area_rate.B * 100) + '%');
-	    		$(".progressC").css("width", (response.data.area_rate.C * 100) + '%');
-	    		$(".progressD").css("width", (response.data.area_rate.D * 100) + '%');
-	    		$(".progressE").css("width", (response.data.area_rate.E * 100) + '%');
-	    		$(".progressF").css("width", (response.data.area_rate.F * 100) + '%');
-	    		$(".progressG").css("width", (response.data.area_rate.G * 100) + '%');
+	    		$(".progressA").css("width", (response.data.block_rate.A * 100) + '%');
+	    		$(".progressB").css("width", (response.data.block_rate.B * 100) + '%');
+	    		$(".progressC").css("width", (response.data.block_rate.C * 100) + '%');
+	    		$(".progressD").css("width", (response.data.block_rate.D * 100) + '%');
+	    		$(".progressE").css("width", (response.data.block_rate.E * 100) + '%');
+	    		$(".progressF").css("width", (response.data.block_rate.F * 100) + '%');
+	    		$(".progressG").css("width", (response.data.block_rate.G * 100) + '%');
 	    		// $(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
 	    		// $(".vq3-warehouse").data("subData", response.data.drr.VQ3);
 
@@ -477,20 +477,21 @@ function ajaxGetStock (argument) {
 				$("#capacityRate").html(progress.append(barOccupid).append(barUse).append(barFree));
 
 				//area quantity
-				$(".quantity-a").html(response.data.area_quantity.A);
-				$(".quantity-b").html(response.data.area_quantity.B);
-				$(".quantity-c").html(response.data.area_quantity.C);
-				$(".quantity-d").html(response.data.area_quantity.D);
-				$(".quantity-e").html(response.data.area_quantity.E);
-				$(".quantity-f").html(response.data.area_quantity.F);
-				$(".quantity-g").html(response.data.area_quantity.G);
-	    		$(".area-h").html(response.data.area_quantity.H);
-	    		$(".area-k").html(response.data.area_quantity.K);
-	    		$(".area-x").html(response.data.area_quantity.X);
-	    		$(".area-y").html(response.data.area_quantity.Y);
-	    		$(".area-t").html(response.data.area_quantity.T);
-	    		$(".area-z").html(response.data.area_quantity.Z);
-	    		$(".area-wdi").html(response.data.area_quantity.WDI);
+				$(".quantity-a").html(response.data.block_quantity.A);
+				$(".quantity-b").html(response.data.block_quantity.B);
+				$(".quantity-c").html(response.data.block_quantity.C);
+				$(".quantity-d").html(response.data.block_quantity.D);
+				$(".quantity-e").html(response.data.block_quantity.E);
+				$(".quantity-f").html(response.data.block_quantity.F);
+				$(".quantity-g").html(response.data.block_quantity.G);
+	    		$(".block-h").html(response.data.block_quantity.H);
+	    		$(".block-k").html(response.data.block_quantity.K);
+	    		$(".block-i").html(response.data.block_quantity.L);
+	    		$(".block-x").html(response.data.block_quantity.X);
+	    		$(".block-y").html(response.data.block_quantity.Y);
+	    		$(".block-t").html(response.data.block_quantity.T);
+	    		$(".block-z").html(response.data.block_quantity.Z);
+	    		$(".block-wdi").html(response.data.block_quantity.WDI);
 				$(".area-total-amount").html(response.data.warehourse_cars.all);
 
 				$("#warehousePeriod").html("<i class='fa fa-clock-o'></i>" + response.data.period.warehousePeriod + "H");
@@ -503,32 +504,6 @@ function ajaxGetStock (argument) {
 	    error:function(){alertError();}
 	});
 }
-
-// function ajaxGetWarehouseStock (argument) {
-// 	$.ajax({
-// 		type: "get",//使用get方法访问后台
-// 	    dataType: "json",//返回json格式的数据
-// 	    url: MONITOR_PRODUCT_INFO,//ref:  /bms/js/service.js
-// 	    data: {},
-// 	    success:function (response) {
-// 	    	if (response.success){
-// 	    		//refresh tips
-// 	    		$(".outware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_out.all);
-// 	    		$(".outware-warehouse").data("subData", response.data.balance.warehourse_out);
-	    		
-// 	    		$(".inware-warehouse").qtip('option', 'content.text', response.data.balance.warehourse_in.all);
-// 	    		$(".inware-warehouse").data("subData", response.data.balance.warehourse_in);
-
-// 	    		$(".vq3-warehouse").qtip('option', 'content.text', response.data.drr.VQ3.all);
-// 	    		$(".vq3-warehouse").data("subData", response.data.drr.VQ3);
-// 	    	} else {
-// 	    		alert(response.message);
-// 	    	}
-// 	    },
-// 	    error:function(){alertError();}
-// 	});
-// }
-
 
 // balance
 function ajaxPbsBalance () {
@@ -548,7 +523,7 @@ function ajaxPbsBalance () {
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.time.substr(0,16)).appendTo(tr);
-	    			
+
 	    			$("#pbsBalanceTable tbody").append(tr);
 	    		});
 
@@ -579,7 +554,7 @@ function ajaxVq1Balance () {
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.time).appendTo(tr);
-	    			
+
 	    			$("#vq1BalanceTable tbody").append(tr);
 	    		});
 
@@ -612,7 +587,7 @@ function ajaxBalance (node) {
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.time).appendTo(tr);
-	    			
+
 	    			$("#modalTable tbody").append(tr);
 	    		});
 
@@ -626,7 +601,7 @@ function ajaxBalance (node) {
 }
 
 //block click handler
-	$(".area-a,.area-b,.area-c,.area-d,.area-e,.area-f,.area-g").live("click", function () {
+	$(".area-a, .area-b, .area-c, .area-d, .area-e, .area-f, .area-g").live("click", function () {
 		var blockNumber = $.trim($(this).find("span").filter(".area-text").html());
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();
@@ -637,7 +612,7 @@ function ajaxBalance (node) {
 		}
 	});
 
-	$(".area-btn-k,.area-btn-h,.area-btn-y").live("click", function () {
+	$(".area-btn-k,.area-btn-h,.area-btn-y,.area-btn-i").live("click", function () {
 		var blockNumber = $.trim($(this).find("span").filter(".area-text").html());
 		if (blockNumber == $("#blockDetail").data("currentBlock")) {
 			$("#blockDetail").hide();
@@ -653,12 +628,12 @@ function ajaxBalance (node) {
 	})
 
 $("#areaModal").modal("hide");
-function ajaxStockyard (areaName) {
+function ajaxStockyard (block) {
 	$.ajax({
 		type: "get",//使用get方法访问后台
 	    dataType: "json",//返回json格式的数据
 	    url: MONITOR_AREA_INFO,//ref:  /bms/js/service.js
-	    data: {"area" : areaName},
+	    data: {"block" : block},
 	    success:function (response) {
 	    	if (response.success){
 	    		//clear Text
@@ -673,7 +648,7 @@ function ajaxStockyard (areaName) {
 	    			} else if (value.counts == "0"){
 	    				bar.css("color", "black");
 	    			}
-	    				
+
 	    			a.append(p);
 	    			a.append(progress);
 	    			progress.append(bar);
@@ -732,7 +707,7 @@ function ajaxLaneInfo (){
 	    			} else if (value.count == "0"){
 	    				bar.css("color", "black");
 	    			}
-	    				
+
 	    			a.append(p);
 	    			a.append(pLast);
 	    			a.append(progress);
@@ -772,7 +747,7 @@ function ajaxRow (rowName) {
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.time).appendTo(tr);
-	    			
+
 	    			$("#modalTable tbody").append(tr);
 	    		});
 
@@ -801,7 +776,7 @@ function ajaxVq1ExceptionBalance () {
 	    			$("<td />").html(value.type).appendTo(tr);
 	    			$("<td />").html(value.color).appendTo(tr);
 	    			$("<td />").html(value.time).appendTo(tr);
-	    			
+
 	    			$("#vq1ExceptionBalanceTable tbody").append(tr);
 	    		});
 
@@ -814,11 +789,3 @@ function ajaxVq1ExceptionBalance () {
 	    error:function(){alertError();}
 	});
 }
-
-// $(".area-e,.area-e-up").live("hover", function () {
-// 	$(".area-e").css("background", "url(../img/hover_E.png) no-repeat 0 0");
-// 	$(".area-e-up").css("background", "url(../img/hover_E_up.png) no-repeat 0 0");
-// }).live("mouseout", function () {
-// 	$(".area-e").css("background", "");
-// 	$(".area-e-up").css("background", "");
-// });

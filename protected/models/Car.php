@@ -56,15 +56,27 @@ class Car
                     $priority = intval($plan['priority']);
                     if($curPrority > $priority) {
                         if($plan['car_body'] === $data['type'] && $plan['color'] === $data['color'] && intval($plan['total']) > intval($plan['ready']) && $data['special_order'] === $plan['special_order']) {
-                            $data['plan_id'] = $plan['id'];
-                            $data['car_year'] = $plan['car_year'];
-                            $data['config_name'] = $plan['config_name'];
-                            $data['order_type'] = $plan['order_type'];
-                            $data['special_order'] = $plan['special_order'];
-                            $data['cold_resistant'] = $plan['cold_resistant'];
-                            $data['remark'] = $plan['remark'];
-                            $data['adapt_plan'] = true;
-                            $curPrority = $priority;
+                            $seeker = new CarSeeker();
+                            $count = $seeker->countByPlanId($plan['id']);
+                            //make sure the plan is not full
+                            if($count < intval($plan['total'])) {
+                                $data['plan_id'] = $plan['id'];
+                                $data['car_year'] = $plan['car_year'];
+                                $data['config_name'] = $plan['config_name'];
+                                $data['order_type'] = $plan['order_type'];
+                                $data['special_order'] = $plan['special_order'];
+                                $data['cold_resistant'] = $plan['cold_resistant'];
+                                $data['remark'] = $plan['remark'];
+                                $data['adapt_plan'] = true;
+                                $curPrority = $priority;
+                            }
+
+                            //correct the plan ready count if it is wrong
+                            if($count > intval($plan['ready'])) {
+                                $planAr = PlanAR::model()->findByPk($plan['id']);
+                                $planAr->ready = $count;
+                                $planAr->save();
+                            }
                         }
                     }
                 }
@@ -675,7 +687,8 @@ class Car
             return;
         }
 
-        return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
+        // return $this->checkTraceComponentByIds(array($component['id']), $component['name']);
+        return $this->checkTraceComponentByIds($componentIds, $component['name']);
     }
 
     public function checkTraceComponentByName ($componentName) {
@@ -1051,18 +1064,18 @@ class Car
     public function addSpsQueue ($spsPoints = array('S1','S2','S3','frontBumper','rearBumper'), $line="I") {
         foreach($spsPoints as $point) {
             $spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
-
             if(empty($spsQueueOne)) {
                 $spsQueueOne = new SpsQueueAR();
-                $spsQueueOne->line = $line;
-                $spsQueueOne->car_id = $this->car->id;
-                $spsQueueOne->series = $this->car->series;
-                $spsQueueOne->vin = $this->car->vin;
-                $spsQueueOne->point = $point;
-                $spsQueueOne->status = 0;
-                $spsQueueOne->queue_time = date('Y-m-d H:i:s');
-                $spsQueueOne->save();
             }
+            $spsQueueOne->line = $line;
+            $spsQueueOne->car_id = $this->car->id;
+            $spsQueueOne->series = $this->car->series;
+            $spsQueueOne->vin = $this->car->vin;
+            $spsQueueOne->point = $point;
+            $spsQueueOne->status = 0;
+            $spsQueueOne->queue_time = date('Y-m-d H:i:s');
+            $spsQueueOne->check_time = '0000-00-00 00:00:00';
+            $spsQueueOne->save();
         }
     }
 
@@ -1147,6 +1160,57 @@ class Car
         return $ret;
     }
 
+    public function generatePbsData ($point='S1', $force = false) {
+        $fieldmap = array(
+            'S1' => 'point_s1',
+            "S2" => 'point_s2',
+            "S3" => 'point_s3',
+            "frontBumper" => 'point_fb',
+            "rearBumper" => 'point_rb'
+        );
+        $field = $fieldmap[$point];
+        $queryText =
+        $pbsQueueOne = PbsQueueAR::model()->find('car_id=? AND '. $field .'=?', array($this->car->id,$point));
+        if(empty($pbsQueueOne)) {//suit for those cars has passed t0
+            throw new Exception("该车不在列队中");
+        }
+
+        if(!$force) {
+            if($pbsQueueOne->$field == 2) {//forbid print
+                $info = array(1=>"已经",2=>"禁止");
+                throw new Exception("该车{$info[$pbsQueueOne->$field]}已打印 {$point} 分拣单");
+            }
+        }
+
+        $barcodeGenerator = BarCodeGenerator::create("BCGcode39");
+        $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
+        $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
+        $config = CarConfigAR::model()->findByPk($this->car->config_id);
+
+        $ret = array(
+            'vinBarCode' => "/bms/" .$vinBarCodePath,
+            'type' => $this->car->type,
+            'serialNumber' => $this->car->serial_number,
+            'series' => $this->car->series,
+            'date' => date('Y-m-d'),
+            'color' => $this->car->color,
+            'config' => $config->name,
+            'remark'  => $this->car->remark,
+            'vinCode' => $this->car->vin,
+            'coldResistant' => $this->car->cold_resistant,
+            // 'image' => $image,
+        );
+
+
+        if(!empty($pbsQueueOne)) {
+            $pbsQueueOne->$field = 1;
+            $pbsQueueOne->check_time = date("YmdHis");
+            $pbsQueueOne->save();
+        }
+
+        return $ret;
+    }
+
     public function generateSpsData ($point='S1', $force = false) {
         $spsQueueOne = SpsQueueAR::model()->find('car_id=? AND point=?', array($this->car->id,$point));
         if(empty($spsQueueOne)) {//suit for those cars has passed t0
@@ -1164,17 +1228,6 @@ class Car
         $vinBarCodePath = "tmp/" .$this->car->vin .".jpeg";
         $barcodeGenerator->generate($this->car->vin,'./' .$vinBarCodePath);
         $config = CarConfigAR::model()->findByPk($this->car->config_id);
-
-        // $images = array();
-        // if(!empty($config)) {
-        //  $path = "/home/work/bms/web/bms/configImage/" . $config->id;
-        //  $name = $type . '.jpg';
-        //  $fileName = $path . '/' . $name;
-        //  $image = '';
-        //  if(file_exists($fileName)) {
-        //      $image = '/bms/configImage/' .$config->id . '/' . $name;
-        //  }
-        // }
 
         $ret = array(
             'vinBarCode' => "/bms/" .$vinBarCodePath,

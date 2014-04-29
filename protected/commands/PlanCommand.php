@@ -1,44 +1,19 @@
 <?php
 Yii::import('application.models.AR.PlanAR');
+Yii::import('application.models.AR.CarAR');
 class PlanCommand extends CConsoleCommand
 {
 	public function run($args) {
-		//deleted by wujun
-		// $plans = $this->getLastDatePlans();
-
-		// $sysUid = $this->getSystemUserId();
-		// $curDate = DateUtil::getCurDate();
-		// $lastPriorityPlan = PlanAR::model()->find("plan_date=? ORDER BY priority DESC", array($curDate));
-		// $pri = 1;	//should be 0? plan's priority begin at 0
-		// if(!empty($lastPriorityPlan)) {
-		// 	$pri = $lastPriorityPlan->priority + 1;
-		// }
-		// foreach($plans as $plan) {
-		// 	if($plan->total - $plan->ready != 0) {
-		// 		$ar = new PlanAR();
-		// 		$ar->setAttributes($plan->getAttributes(),false);
-		// 		$ar->id = null;
-		// 		$ar->total = $plan->total - $plan->ready;
-		// 		$ar->priority = $pri ++;
-		// 		$ar->ready = 0;
-		// 		$ar->plan_date = $curDate;
-		// 		$ar->user_id = $sysUid;
-		// 		$ar->create_time = date("Y-m-d H:i:s");
-		// 		$ar->save();
-		// 	}
-		// }
-
-		//added by wujun
 		$sysUid = $this->getSystemUserId();
 		list($unfinishedPlans, $count) = $this->getUnfinishedPlans();
 		$plansCurDate = $this->getCurdatePlans();
 		$curDate = DateUtil::getCurDate();
 		$lastDate = DateUtil::getLastDate();
-		
+
 		//将“未完成昨日计划”生成“当日计划”，并置顶
 		if($count > 0 && !empty($plansCurDate)) {
 			foreach($plansCurDate as $plan) {
-				$plan->priority += $count; 
+				$plan->priority += $count;
 				$plan->save();
 			}
 		}
@@ -54,6 +29,7 @@ class PlanCommand extends CConsoleCommand
 				$ar->plan_date = $curDate;
 				$ar->user_id = $sysUid;
 				$ar->create_time = date("Y-m-d H:i:s");
+				$ar->original_id = $plan->id;
 				$ar->save();
 			}
 		}
@@ -80,17 +56,30 @@ class PlanCommand extends CConsoleCommand
 				$ar->plan_date = $lastDate;
 				$ar->user_id = $sysUid;
 				$ar->create_time = date("Y-m-d H:i:s");
+				$ar->original_id = $plan->id;
 				$ar->save();
 
 				$plan->total -= $plan->ready;
+				$plan->ready = 0;
+				$plan->save();
+
+				$this->resetCarPlanId ($plan->id, $ar->id);
 				if($plan->total == 0){
-					$plan->delete();
-				} else{
-					$plan->ready = 0;
+					// $plan->delete();
+					$plan->removed = 1;
 					$plan->save();
 				}
 			}
 		}
+	}
+
+	private function resetCarPlanId ($oldId, $newId) {
+		$cars = CarAR::model()->findAll("plan_id=?", array($oldId));
+		foreach($cars as $car) {
+			$car->plan_id = $newId;
+			$car->save();
+		}
+
 	}
 
 	private function getLastDatePlans() {
@@ -104,8 +93,6 @@ class PlanCommand extends CConsoleCommand
 		return Yii::app()->db->createCommand($sql)->queryScalar();
 	}
 
-
-	//added by wujun
 	private function getCurDatePlans() {
 		$curDate = DateUtil::getCurDate();
 		$plans = PlanAR::model()->findAll("plan_date=? ORDER BY priority ASC", array($curDate));

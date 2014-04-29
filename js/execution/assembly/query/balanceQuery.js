@@ -61,7 +61,7 @@ $(document).ready(function () {
 		]
 
 	}
-//------------------- common functions -----------------------	
+//------------------- common functions -----------------------
 	//initialize this page
 	/*
 		1.add head class and resetPage
@@ -77,10 +77,10 @@ $(document).ready(function () {
 		// $("#endTime").val(currentDate16());
 
 		getSeries();
-		
+
 		resetAll();
 	}
-	
+
 
 	function resetAll (argument) {
 		$(".pager").hide();
@@ -94,7 +94,7 @@ $(document).ready(function () {
  * ----------------------------------------------------------------
  * Event bindings
  * ----------------------------------------------------------------
- */	
+ */
  	$(window).bind('keydown', enterHandler);
 	function enterHandler (event) {
 		if (event.keyCode == "13"){
@@ -114,7 +114,7 @@ $(document).ready(function () {
 			$("#recyclePeriodLi").show();
 		}
 	})
-	
+
 	$("#btnQuery").bind("click",toQuery);
 	function toQuery() {
 		//clear last
@@ -260,7 +260,7 @@ $(document).ready(function () {
 			type: "get",//使用get方法访问后台
     	    dataType: "json",//返回json格式的数据
 		    url: BALANCE_DETAIL_QUERY,//ref:  /bms/js/service.js
-		    data: { 
+		    data: {
 		    	"state" : $("#selectState").val(),
 		    	"series" : $("#selectSeries").val(),
 		    	"area" : areaVal,
@@ -281,7 +281,7 @@ $(document).ready(function () {
 		    			var rowTd = "<td>" + value.row + "</td>";
 		    			var finishTimeTd = "<td>" + value.finish_time + "</td>";
 		    			var warehouseTimeTd = "<td>" + value.warehouse_time + "</td>";
-		    			var tr = "<tr>" + serialTd + vinTd + seriesTd + typeInfoTd + 
+		    			var tr = "<tr>" + serialTd + vinTd + seriesTd + typeInfoTd +
 		    				coldTd + colorTd + statusTd + rowTd + finishTimeTd + warehouseTimeTd + "</tr>";
 		    			$("#resultTable tbody").append(tr);
 						$("#resultTable").show();
@@ -309,7 +309,7 @@ $(document).ready(function () {
 					$("#curCars a").html(response.data.pager.curPage);
 					$("#totalCars").attr("total", response.data.pager.total);
 					$("#totalCars").html("导出全部" + response.data.pager.total + "条记录");
-					
+
 					//area condition
 					if(areaVal == ""){
 						$("#area").html("");
@@ -334,8 +334,8 @@ $(document).ready(function () {
 
 	function ajaxExportBalanceDetail(){
 		areaVal = $("#area").val();
-		window.open(BALANCE_DETAIL_EXPORT 
-			+ "?state=" + $("#selectState").val() 
+		window.open(BALANCE_DETAIL_EXPORT
+			+ "?state=" + $("#selectState").val()
 			+ "&series="+ $("#selectSeries").val()
 			+ "&area=" + areaVal
 			);
@@ -392,7 +392,7 @@ $(document).ready(function () {
 			type: "get",
 			data: {
 				"state" : $("#selectState").val(),
-				"series" : $("#selectSeries").val(), 
+				"series" : $("#selectSeries").val(),
 			},
 			dataType: "json",
 			success: function (response) {
@@ -467,7 +467,7 @@ $(document).ready(function () {
 			type: "get",
 			data: {
 				"state" : $("#selectState").val(),
-				"series" : $("#selectSeries").val(), 
+				"series" : $("#selectSeries").val(),
 			},
 			dataType: "json",
 			success: function (response) {
@@ -563,7 +563,7 @@ $(document).ready(function () {
 			}
 		})
 	}
-	
+
 
 //-------------------END ajax query -----------------------
 
@@ -586,7 +586,11 @@ $(document).ready(function () {
                 text: ''
             },
             xAxis: {
-                categories: []
+                categories: [],
+                labels: {
+                	rotation: -45,
+                	align: 'right'
+                }
             },
             credits: {
                 enabled: false
@@ -687,10 +691,8 @@ $(document).ready(function () {
 				}
 			})
 
-            // console.log(this);
 			this.columnData.xAxis.categories = columnSeriesData.x;
 			this.columnData.series = columnSeries;
-			console.log(this.columnData.series);
 			var chart;
 			chart = new Highcharts.Chart(this.columnData);
 		}
@@ -758,7 +760,7 @@ $(document).ready(function () {
 	}
 
 	window.balanceQuery.balancePeriod = {
-		
+
 
 		ajaxData: {},
 
@@ -808,7 +810,6 @@ $(document).ready(function () {
                 shared: true,
                 useHTML: true,
                 formatter: function()  {
-                	console.log(this.points)
                 	var s = this.x + 'H<table>';
                 	var total = 0;
                 	$.each(this.points, function (i, point) {
@@ -861,13 +862,13 @@ $(document).ready(function () {
 			var total = this.ajaxData.seriesTotal;
 
 			$("#tableBalancePeriod thead").html("<tr />");
-			$("#tableBalancePeriod tbody").html("");		
+			$("#tableBalancePeriod tbody").html("");
 	        $.each(carSeries, function (index,value) {
 	            $("<tr />").appendTo($("#tableBalancePeriod tbody"));
 	        });
-	        
+
 			var thTr = $("#tableBalancePeriod tr:eq(0)");
-	        $("<th />").html("车系").appendTo(thTr);    
+	        $("<th />").html("车系").appendTo(thTr);
 	        $("<th />").html("合计").appendTo(thTr);
 
 	        totalTotal = 0;
@@ -893,142 +894,4 @@ $(document).ready(function () {
 
 		}
 	}
-
-	// window.balanceQuery.recyclePeriod ={
-	// 	ajaxData: {},
-		
-	// 	chartData: {
- //            chart: {
- //                type: 'pie'
- //            },
- //            title: {
- //                text: ''
- //            },
- //            credits: {
- //                enabled: false
- //            },
- //            yAxis: {
- //                title: {
- //                    text: ''
- //                }
- //            },
- //            plotOptions: {
- //                pie: {
- //                    shadow: false,
- //                    center: ['50%', '50%']
- //                }
- //            },
- //            tooltip: {
- //        	    valueSuffix: '辆'
- //            },
- //            series: [{
- //                name: '区域',
- //                data: [],
- //                size: '60%',
- //                dataLabels: {
- //                    formatter: function() {
- //                        return this.y > 0 ? '<b>'+ this.point.name +'</b> ' + "[" + this.y +"]": null;
- //                    },
- //                    color: 'white',
- //                    distance: -30
- //                }
- //            }, {
- //                name: '周期',
- //                data: [],
- //                size: '80%',
- //                innerSize: '60%',
- //                dataLabels: {
- //                    formatter: function() {
- //                        // display only if larger than 0
- //                        return this.y > 0 ? '<b>'+ this.point.name +'</b> '+  "[" + this.y + "]" : null;
- //                    }
- //                }
- //            }]
- //        },
-
- //        drawDonut: function() {
- //        	var data = this.ajaxData.dataDonut;
- //        	colors = Highcharts.getOptions().colors;
- //        	var stateData = [];
-	//         var periodData = [];
-	//         $.each(data, function (key, value) {
-	//         	stateData.push({
-	//                 name: key,
-	//                 y: value.y,
-	//                 color: colors[value.colorIndex],
-	//             });
-	    
-	//             // add version data
-	//             for (var j = 0; j < value.drilldown.data.length; j++) {
-	//                 var brightness = 0.2 - (j / value.drilldown.data.length) / 5 ;
-	//                 periodData.push({
-	//                     name: value.drilldown.categories[j],
-	//                     y: value.drilldown.data[j],
-	//                     color: Highcharts.Color(colors[value.colorIndex]).brighten(brightness).get()
-	//                 });
-	//             }
-	//         })
-
-	//         this.chartData.series[0].data = stateData;
-	//         this.chartData.series[1].data = periodData;
-	//         $("#recycleDonutContainer").highcharts(this.chartData);
- //        },
-
- //        updateRecycleTable: function() {
- //        	var recyclePeriod = this.ajaxData.recyclePeriod;
- //        	var detail  = this.ajaxData.detail;
- //        	var stateTotal = this.ajaxData.stateTotal;
- //        	var periodTotal = this.ajaxData.periodTotal;
-
- //        	//clear table and initialize it
- //        	$("#tableRecyclePeriod thead").html("<tr />");
-	// 		$("#tableRecyclePeriod tbody").html("");
-	// 		$.each(recyclePeriod, function (index, which) {
-	// 			$("<tr />").appendTo($("#tableRecyclePeriod tbody"));
-	// 		});
-	// 		stateTotalTr = $("<tr />").appendTo($("#tableRecyclePeriod tbody"));
-
-	// 		//first column description
-	// 		var stateTr = $("#tableRecyclePeriod tr:eq(0)");
-	// 		$("<td />").html('周期').addClass('alignCenter').appendTo(stateTr);
-	// 		$.each(recyclePeriod, function (index, which){
-	// 			$("<td />").html(which).addClass('alignCenter').appendTo($("#tableRecyclePeriod tr:eq("+ (index+1) +")"));
-	// 		});
-	// 		$("<td />").html('合计').addClass('alignCenter').appendTo(stateTotalTr);
-
-	// 		//detail data
-	// 		$.each(detail, function (index ,value) {
-	// 			$("<td />").html(value.state).appendTo(stateTr);
-	// 			$.each(recyclePeriod, function (index, which){
-	// 				aCount = $("<a />").addClass("recycleCars");
-	// 				aCount.html(value[which].countSum);
-	// 				aCount.attr("state", value.state);
-	// 				aCount.attr("recyclePeriod", which);
-	// 				$("<td />").html(aCount).appendTo($("#tableRecyclePeriod tr:eq("+ (index+1) +")"));
-	// 			});
-	// 		})
-
-	// 		//period total
-	// 		$("<td />").html('总计').appendTo(stateTr);
-	// 		$.each(recyclePeriod, function (index, which) {
-	// 			aCount = $("<a />").addClass("recycleCars");
-	// 			aCount.html(periodTotal[which].countSum);
-	// 			aCount.attr("state", 'recycle');
-	// 			aCount.attr("recyclePeriod", which);
-	// 			$("<td />").html(aCount).appendTo($("#tableRecyclePeriod tr:eq("+ (index+1) +")"));
-	// 		})
-
-	// 		//state total
-	// 		var totalTotal = 0;
-	// 		$.each(stateTotal, function (key, value) {
-	// 			aCount = $("<a />").addClass("recycleCars");
-	// 			aCount.html(value.countSum);
-	// 			aCount.attr("state", key);
-	// 			aCount.attr("recyclePeriod", "");
-	// 			$("<td />").html(aCount).appendTo(stateTotalTr);
-	// 			totalTotal += value.countSum;
-	// 		})
-	// 		$("<td />").html(totalTotal).appendTo(stateTotalTr);
- //        }
-	// }
-})
+});

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -52,7 +52,7 @@
                 </div>
               </li>
 
-              <li class="span3">
+              <!--li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=controllLoop" class="thumbnail">
                     <img src="/bms/doc/browse/managementSystem/quality/controllLoop/thumb.jpg" alt="">
@@ -67,7 +67,7 @@
                     </div>
                   </div>
                 </div>
-              </li>
+              </li-->
 
               <li class="span3">
                 <div class="">
@@ -104,8 +104,6 @@
                   </div>
                 </div>
               </li>
-            </ul>
-            <ul class="thumbnails">
               <li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=QCC" class="thumbnail">
@@ -118,6 +116,26 @@
                     </div>
                     <div class="description">
                       <p>QCC系由工作在同一现场的人员自动自发的进行质量管理所组成的小组,在自我启发和相互启发的原则下,活用各种统计方法,以全参加的方式不断的进行维护及改善自己工作现场的活动,以达成改善品质,环境,效率及降低成本的目的。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <ul class="thumbnails">
+
+              <li class="span3">
+                <div class="">
+                  <a href="/bms/ManagementSystem/quality?view=QCBasic7Tools" class="thumbnail">
+                    <img src="/bms/doc/browse/managementSystem/quality/QCBasic7Tools/thumb.JPG" alt="">
+                  </a>
+                  <div class="caption">
+                    <div>
+                    <a class="pull-right btn-link" href="/bms/doc/ppt/QCBasic7Tools.pptx">下载</a>
+                    <h4>QC七大手法（传统版）</h4>
+                    </div>
+                    <div class="description">
+                      <p>QC七大手法是常用的统计管理方法，又称为初级统计管理方法。传统上主要包括控制图、因果图、直方图、排列图、检查表、层别法、散布图。
                       </p>
                     </div>
                   </div>

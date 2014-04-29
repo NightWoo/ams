@@ -29,10 +29,11 @@ class PlanSeeker
             $condition .= " AND assembly_line=?";
 			$values[] = $line;
         }
-        if($matchSerach){
+        if($matchSerach) {
 	        $condition .= " AND is_frozen=0";
         }
-        //modifed by wujun
+
+        $condition .= " AND removed=0";
         $plans = PlanAR::model()->findAll($condition . ' ORDER BY plan_date, priority ASC', $values);
 
         $datas = array();
@@ -80,7 +81,7 @@ class PlanSeeker
 		if($sdate > $edate) {
 			throw new Exception("起始时间不能大于结束时间！", 1);
 		} else {
-			$condition = "plan_date>='$sdate' AND plan_date<='$edate'";
+			$condition = "plan_date>='$sdate' AND plan_date<='$edate' AND removed=0";
 		}
 
 		$values = array($sdate, $edate);
@@ -143,7 +144,7 @@ class PlanSeeker
 		foreach($queryTimes as $queryTime) {
 			$ss = $queryTime['stime'];
 			$ee = $queryTime['etime'];
-			$cc = array("assembly_line='$line'");
+			$cc = array("assembly_line='$line'", "removed=0");
 			if(!empty($ss)) {
 				$cc[] = "plan_date>='$ss'";
 			}

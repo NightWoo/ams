@@ -351,7 +351,7 @@ var SPS_QUEUE_SUBMIT = "/bms/car/printSpsPaper";
 var SPS_QUEUE_SAVE ="/bms/car/saveSpsQueue";
 
 var VALIDATE_DATA_THROW = "/bms/car/validateDataThrow";
-var ASSEMBLY_FINISH_DATA_THROW = "/bms/car/throwAssemblyFinish"
+var ASSEMBLY_FINISH_DATA_THROW = "/bms/car/throwAssemblyFinish";
 var WAREHOUSE_IN_DATA_THROW = "/bms/car/throwStoreIn";
 var WAREHOUSE_OUT_DATA_THROW = "/bms/car/throwStoreOut";
 var MARK_PRINT_THROW = "/bms/car/throwMarkPrint";

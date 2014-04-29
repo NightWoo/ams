@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -16,7 +16,7 @@
         <script type="text/javascript" src="/bms/js/datePicker/WdatePicker.js"></script>
         <script type="text/javascript" src="/bms/js/highcharts.src.js"></script>
         <script type="text/javascript" src="/bms/js/exporting.src.js"></script>
-	<!--[if IE 6]>    
+	<!--[if IE 6]>
             <link href="/bms/css/ie6.min.css" rel="stylesheet">
     <![endif]-->
     </head>
@@ -27,15 +27,10 @@
 			require_once(dirname(__FILE__)."/../../../common/head.php");
 		?>
         <div class="offhead">
-            <?php
-            // require_once(dirname(__FILE__)."/../../../common/left/assembly_dataInput_left.php");
-            ?>
-
         	<div id="bodyright" class="offset2">
                 <div>
                     <legend>结存查询
                         <span class="pull-right">
-                            <!-- <a href="/bms/execution/orderMaintain"><i class="icon-link"></i>&nbsp;订单维护</a> -->
                         </span>
                     </legend>
                 </div>
@@ -43,16 +38,6 @@
                     <form id="form" class="well form-inline">
     					<table>
     						<tr>
-    							<!-- <td class="alignRight"><label>时间&nbsp;&nbsp;</label></td>
-                                <td>
-                                    <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="startTime" onClick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
-                                </td>
-                                <td>
-                                    -
-                                </td>
-                                <td>
-                                    <input type="text" class="input-medium" disabled placeholder="未开放此功能..." id="endTime" onClick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:00'});"/>
-                                </td> -->
     							<td>
                                     <select id="selectArea" class="input-small">
                                         <option value="assembly">全部(总装)</option>
@@ -63,16 +48,6 @@
                                     </select>
     								<select name="" id="selectState" class="input-small">
                                         <option value="assembly">全部</option>
-                                        <!-- <option value="WH">成品库</option>
-                                        <option value="WHin">成品库可备</option>
-                                        <option value="recycle">周转车</option>
-                                        <option value="VQ3">VQ3</option>
-                                        <option value="VQ3-OK">VQ3合格</option>
-                                        <option value="VQ2">VQ2</option>
-                                        <option value="VQ1">VQ1</option>
-                                        <option value="onLine">I线</option>
-                                        <option value="onLine-2">II线</option>
-                                        <option value="PBS">PBS</option> -->
     								</select>
                                     <script id="tmplSelectStateOption" type="text/x-jsrander">
                                         <option value='{{:value}}'>{{:text}}</option>
@@ -81,21 +56,14 @@
                                 <td>
                                     <select name="" id="selectSeries" class="input-small">
                                         <option value="">全车系</option>
-                                        <!-- <option value="F0">F0</option>
-                                        <option value="M6">M6</option>
-                                        <option value="6B">思锐</option> -->
                                     </select>
                                     <script id="tmplSeriesSelect" type="text/x-jsrander">
                                         <option value='{{:series}}'>{{:name}}</option>
                                     </script>
                                 </td>
-                                <!-- <td colspan="2">
-                                    <input type="button" class="btn btn-primary" id='btnQuery' value='查询'></input>   
-                                    <input id="btnExport" class='btn btn-success' type="button" value="全部导出"></input>
-                                </td> -->
                             </tr>
-    					</table> 
-                    </form>      
+    					</table>
+                    </form>
                 </div>
 
                 <div id="divDetail">
@@ -141,13 +109,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="tab-pane" id="carsDistribute">
-                            <div class="tableContainer carsDistributeContainer span10 pull-left">
+                            <div class="chartContainer carsDistributeContainer row-fluid">
+                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="tableContainer carsDistributeContainer row-fluid pull-left">
                                 <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
                                     <thead>
 
@@ -156,15 +127,12 @@
 
                                     </tbody>
                                 </table>
-                                <div id="divCheckbox">   
+                                <div id="divCheckbox">
                                     <label class="checkbox">
                                       <input type="checkbox" name="optionsRadios" id="checkboxMerge" value="reycle_bar_data">
                                       将VQ1、VQ2、VQ3结存合并为周转车
                                     </label>
-                                </div>                          
-                            </div>
-                            <div class="chartContainer carsDistributeContainer offset10">
-                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
+                                </div>
                             </div>
                         </div>
 
@@ -178,21 +146,6 @@
                                 <tbody />
                             </table>
                         </div>
-
-                        <!-- <div class="tab-pane" id="balanceTrend">
-
-                            <div id="balanceTrendContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-                            
-                            <table id="tableBalanceTrendContainer" class="table table-condensed">
-                                <thead>
-                                    <tr></tr>
-                                </thead>
-                                <tbody>
-                                    <tr></tr>
-                                    <tr></tr>
-                                </tbody>
-                            </table>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -221,7 +174,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
+
                     </tbody>
                 </table>
             </div>

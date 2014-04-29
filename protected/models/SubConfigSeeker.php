@@ -90,7 +90,7 @@ class SubConfigSeeker
         while($i < $length){
             if($type[$i] === '(' || $i === stripos($type, '（')){
             	break;
-            } else {	
+            } else {
             	$typeName .= $type[$i];
             	$i++;
             }

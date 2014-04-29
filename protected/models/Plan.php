@@ -45,7 +45,7 @@ class Plan {
 		$sapCreate = $this->createInSap($materialCode, $data['total'], $startDate, $endDate, $prodVersion);
 		if(!empty($sapCreate) && "success" == $sapCreate[0] && !empty($sapCreate[3])){
 			$data['plan_number'] = $sapCreate[3];
-		} 
+		}
 		// else {
 		// 	throw new Exception("SAP计划编号生成失败，无法完成新增。消息类型[". $sapCreate[1] . "]，描述[". $sapCreate[2] ."]");
 		// }
@@ -106,7 +106,7 @@ class Plan {
 
 		if(0 < $this->ar->ready) {
 			throw new Exception("此计划已经进行，不可删除");
-		} 
+		}
 		// if(!empty($this->ar->plan_number)) {
 		// 	$checkRet = $this->checkPlanInSap($this->ar->plan_number);
 		// 	if("success" != $checkRet[0] && (false !== strpos($checkRet[3],"CRTD") || "X" == $checkRet[5])) {
@@ -122,7 +122,9 @@ class Plan {
 		// 		throw new Exception("SAP系统计划已下达，无法删除");
 		// 	}
 		// }
-		$this->ar->delete();
+		// $this->ar->delete();
+		$this->ar->removed = 1;
+		$this->ar->save();
 	}
 
 	public function generateBatchNumber($planDate) {

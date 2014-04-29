@@ -55,6 +55,8 @@ class ExecutionController extends BmsBaseController
         "CONFIG_PAPAER_MAINTAIN",
         "CONFIG_PAPAER_PREVIEW"
     );
+
+    public static $PLANNING_DIVISION_REPORT = array("PlanningDivisionReport", "PlanningDivisionNewOrder" ,"PlanningDivisionSalesVolume");
 	/**
 	 * Declares class-based actions.
 	 */
@@ -87,18 +89,23 @@ class ExecutionController extends BmsBaseController
 			Yii::app()->permitManager->check(self::$QUERY_PRIVILAGE[$queryPanel]);
 			$this->render('assembly/query/' . $queryPanel,array(''));
 		} catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
 		}
     }
 
     public function actionReport(){
-        $reportPanel = $this->validateStringVal('type','WarehouseReport');
+        $reportName = $this->validateStringVal('type','WarehouseReport');
         try{
-            $this->render('assembly/report/' . $reportPanel);
+            if(in_array($reportName, self::$PLANNING_DIVISION_REPORT)) {
+                Yii::app()->permitManager->check('PLANNING_DIVISION_REPORT');
+            }
+            $this->render('assembly/report/' . $reportName);
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -123,8 +130,9 @@ class ExecutionController extends BmsBaseController
 
             $this->render('assembly/dataInput/' . $view ,array('type' => $type, 'node'=>$nodeName, 'nodeDisplayName' => $node->exist() ? $node->display_name : $nodeName, 'line'=>$line, 'point' => $point));
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -137,20 +145,20 @@ class ExecutionController extends BmsBaseController
         $transaction = Yii::app()->db->beginTransaction();
         try{
 			$car = Car::create($vin);
-            if(!empty($car->car->plan_id)) {
-                throw new Exception("此车已匹配计划");
-            }
+            // if(!empty($car->car->plan_id)) {
+            //     throw new Exception("此车已匹配计划");
+            // }
             $car->checkAlreadyOnline();
             $car->enterNode('PBS');
             $car->detectStatus('PBS');
-            if( empty($car->car->plan_id) ){
+            if(empty($car->car->plan_id)){
                 $car->addToPlan($date, $planId);
                 $car->addPbsPlanedCar();
-                if($car->car->series == '6B' || $car->car->series == 'M6' || $car->car->series == 'G6') {
-                    $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
-                    $car->addSpsQueue($spsPoints);
-                    $car->generateSpsSerial($line);
-                }
+            }
+            if (!empty($car->car->plan_id) && $car->car->series != 'F0'){
+                $spsPoints = array('S1','S2','S3','frontBumper','rearBumper');
+                $car->addSpsQueue($spsPoints);
+                $car->generateSpsSerial($line);
             }
 
             $transaction->commit();
@@ -220,7 +228,7 @@ class ExecutionController extends BmsBaseController
             $car = Car::create($vin);
             $car->checkAlreadyOut();
             $car->checkAlreadyWarehouse();
-            //$car->leftNode($leftNode->name);
+            $car->leftNode($leftNode->name);
 			$car->enterNode($enterNode->name);
 
             //save component trace
@@ -1133,8 +1141,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/PlanAssembly');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1144,8 +1153,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
     		$this->render('assembly/other/ConfigMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -1154,8 +1164,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/OrderConfigMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1164,8 +1175,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/AccessoryListMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1175,8 +1187,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/ConfigList');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -1186,8 +1199,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check(self::$CONFIG_PAPER_PRIVILAGE);
             $this->render('assembly/other/ConfigPaper');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -1197,8 +1211,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
     		$this->render('assembly/dataInput/PauseEdit');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -1208,8 +1223,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/other/OrderMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
 	}
 
@@ -1218,8 +1234,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/other/WarehouseAdjust');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1228,8 +1245,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
             $this->render('assembly/dataInput/WarehousePrint');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1238,8 +1256,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
             $this->render('assembly/dataInput/WarehousePrintOrderInBoard');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1248,8 +1267,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_PRINT');
             $this->render('assembly/dataInput/WarehousePrintExport');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1258,8 +1278,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/dataInput/LaneManage');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1269,8 +1290,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/PlanPause');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1280,8 +1302,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_ASSEMBLY');
             $this->render('assembly/other/SubQueueMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1290,8 +1313,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('DATA_MAINTAIN_SPS');
             $this->render('assembly/other/SPSQueueMaintain');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1301,8 +1325,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('ORDER_MAINTAIN');
             $this->render('assembly/other/DataThrow');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1339,8 +1364,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/other/WarehouseReturn');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1349,8 +1375,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('CHECKPAPER_PRINT');
             $this->render('assembly/other/CheckPaper');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1367,8 +1394,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('FAULT_DUTY_EDIT');
             $this->render('assembly/other/FaultDutyEdit');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1377,8 +1405,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('COMPLETE_BAR_CODE_RECORD');
             $this->render('assembly/other/CompleteBarcodeRecord');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1387,8 +1416,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('CAR_ACCESS_CONTROL');
             $this->render('assembly/dataInput/DetectShopAccess');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1398,8 +1428,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_MAINTAIN');
             $this->render('assembly/dataInput/HoldRelease');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 
@@ -1408,8 +1439,9 @@ class ExecutionController extends BmsBaseController
             Yii::app()->permitManager->check('WAREHOUSE_COUNT_REVISE');
             $this->render('assembly/other/WarehouseCountRevise');
         } catch(Exception $e) {
-            if($e->getMessage() == 'permission denied')
+            if($e->getMessage() == 'permission denied') {
                 $this->render('../site/permissionDenied');
+            }
         }
     }
 

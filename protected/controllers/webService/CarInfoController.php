@@ -32,17 +32,17 @@ class CarInfoController extends CController
             $result = "0";
             if(!empty($car)){
                 $carInfo = array();
-                $carInfo['matched'] = 1;
+                $carInfo['matched'] = 2;
                 $carInfo['id'] = $car->car->id;
                 if(!empty($car->car->plan_id)) {
-                    $carInfo['matched'] = 2;
+                    $carInfo['matched'] = 1;
                 } else {
                     $curDate = DateUtil::workDate(date("Y-m-d H:i:s"));
                     $data = $car->matchPlan($curDate, "I");
                     if($data['adapt_plan']) {
                         $car->addToPlan ($curDate, $data['plan_id']);
                         $car->addPbsPlanedCar();
-                        $carInfo['matched'] = 2;
+                        $carInfo['matched'] = 1;
                         $car->car->status = '预上线';
                     } else {
                         $car->car->status = '彩车身库';

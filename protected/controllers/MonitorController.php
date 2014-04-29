@@ -22,7 +22,7 @@ class MonitorController extends BmsBaseController
 		$seeker = new MonitorSeeker();
 
 		list($stime, $etime) = $this->getSETime();
-	
+
 		$dpus = array(
 			'VQ1' => $seeker->queryDPU($stime, $etime, 'VQ1'),
 			'VQ2' => $seeker->queryDPU($stime, $etime, 'VQ2_ALL'),
@@ -59,7 +59,7 @@ class MonitorController extends BmsBaseController
 			'VQ2' => $seeker->queryBalanceCount('VQ2'),
 			'VQ3' => $seeker->queryBalanceCount('VQ3'),
 		);
-		
+
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
         $data = array(
@@ -94,11 +94,11 @@ class MonitorController extends BmsBaseController
 		$seeker = new MonitorSeeker();
 
 		list($stime, $etime) = $this->getSETime();
-	
+
 		$lineRunTime = $seeker->queryLineRunTime($stime, $etime);
         $lineSpeed = $seeker->queryLineSpeed();
 
-		$nodes = array('VQ1' => 'VQ1', 'VQ2_LEAK'=> 'VQ2', 'VQ2_ROAD' => 'ROAD_TEST_FINISH', 'VQ3' => 'VQ3');	
+		$nodes = array('VQ1' => 'VQ1', 'VQ2_LEAK'=> 'VQ2', 'VQ2_ROAD' => 'ROAD_TEST_FINISH', 'VQ3' => 'VQ3');
 		$seriesArray = SeriesSeeker::findAllCode();
 		$seriesArray[] = 'all';
 		$drrs = array();
@@ -119,21 +119,14 @@ class MonitorController extends BmsBaseController
 
 		$startTime = DateUtil::getCurDate() . " 08:00:00";
 		$endTime = date('Y-m-d H:i:s');
-		
-		// $states = array('warehourse_in' => '成品库', 'warehourse_out' => '公司外');
-		// foreach($seriesArray as $series) {
-  //           foreach($states as $key => $state) {
-		// 		$balance[$key][$series] = $seeker->queryWareHourseCars($state, $series, $startTime, $endTime);
-  //           }
-  //       }
 
 		$wareHourseCar = array();
 		foreach($seriesArray as $series) {
 			$wareHourseCar[$series] = $seeker->queryWareHourseCars('成品库', $series, null, null);
 		}
 
-		$areaRates = $seeker->queryAreaRate();
-		$areaQuantity = $seeker->queryAreaQuantity();
+		$blockRates = $seeker->queryBlockRate();
+		$blockQuantity = $seeker->queryBlockQuantity();
 		$capacityRate =$seeker->queryCapacityRate();
 		$period = $seeker->queryPeriod();
 
@@ -146,8 +139,8 @@ class MonitorController extends BmsBaseController
 			'pass_car' => $seeker->queryWareHousePassCars($stime, $etime),
 			'warehourse_cars' => $wareHourseCar,
 			'drr' => $drrs,
-			'area_rate' => $areaRates,
-			'area_quantity' => $areaQuantity,
+			'block_rate' => $blockRates,
+			'block_quantity' => $blockQuantity,
 			'capacity_rate' => $capacityRate,
 			'period' => $period,
 		);
@@ -165,11 +158,11 @@ class MonitorController extends BmsBaseController
 	}
 
 	public function actionShowWarehouseAreaBalance() {
-        $area = $this->validateStringVal('area', 'A');
-		$area = strtoupper($area);
+        $block = $this->validateStringVal('block', 'A');
+		$block = strtoupper($block);
         $seeker = new MonitorSeeker();
 
-        $data = $seeker->queryWarehouseAreaBalance($area);
+        $data = $seeker->queryWarehouseBlockBalance($block);
 
         $this->renderJsonBms(true, 'OK', $data);
     }
@@ -189,7 +182,7 @@ class MonitorController extends BmsBaseController
 
         $this->renderJsonBms(true, 'OK', $data);
     }
-	
+
 	public function actionShowWarehouseBalanceDetail() {
         $suffix = $this->validateStringVal('row', 'A011');
         $type = $this->validateStringVal('type', 'row');
@@ -240,7 +233,7 @@ class MonitorController extends BmsBaseController
 		);
 
 		$this->renderJsonBms(true, 'OK', $data);
-	
+
 	}
 
 
@@ -318,7 +311,7 @@ class MonitorController extends BmsBaseController
 
 	private function getSETime() {
 		$etime = date('Y-m-d H:i:s');
-		
+
 		$date = DateUtil::getCurDate();				//modified by wujun
 		//$stime = date('Y-m-d') . " 08:00:00";		//modified by wujun
 		$stime = $date . " 08:00:00";				//modified by wujun

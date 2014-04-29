@@ -38,6 +38,16 @@ class ManagementSystemController extends BmsBaseController
 		$this->render($view);
 	}
 
+	public function actionCost() {
+		$view = $this->validateStringVal('view', '');
+		$this->render($view);
+	}
+
+	public function actionProductivity() {
+		$view = $this->validateStringVal('view', '');
+		$this->render($view);
+	}
+
 	public function actionStandardForm() {
 		$this->render('MSStandardForm');
 	}
@@ -45,13 +55,13 @@ class ManagementSystemController extends BmsBaseController
 	public function actionWorkSummaryAPD() {
 		$this->render('WorkSummaryAPD');
 	}
-	
+
 	public function actionWorkSummaryCost() {
 		$this->render('WorkSummaryCost');
 	}
-	
+
 	public function actionWorkSummaryManpower() {
 		$this->render('WorkSummaryManpower');
 	}
-    
+
 }

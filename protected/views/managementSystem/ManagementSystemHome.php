@@ -37,13 +37,13 @@
       <li id="leftFieldManagement"><a href="/bms/ManagementSystem/field?view=MSField">安全与现场</a></li>
       <li id="leftManpowerLi"><a href="/bms/ManagementSystem/manpower?view=MSManpower">人力资源</a></li>
       <li id="leftQualityLi"><a href="/bms/ManagementSystem/quality?view=MSQuality">质量</a></li>
-      <li id=""><a>生产力</a></li>
-      <li id=""><a>设备/资产与成本</a></li>
+      <li id="leftProductivityLi"><a href="/bms/ManagementSystem/quality?view=MSProductivity">生产力</a></li>
+      <li id="leftCostLi"><a  href="/bms/ManagementSystem/quality?view=MSCost">设备/资产与成本</a></li>
     <li class="nav-header">标准表单</li>
       <li id="leftStandarFormLi"><a href="/bms/ManagementSystem/standardForm">表单下载</a></li>
-     <!-- <li class="divider"></li>      
+     <!-- <li class="divider"></li>
       <li><a href="#">帮助</a></li>     -->
-  </ul>        
+  </ul>
 </div><!-- end 侧边栏 -->
 <div id="toggle-left" href="">
   <div id="leftHandle">
@@ -51,7 +51,7 @@
   <i id="icon-left" class="icon-caret-right icon-large"></i>
 </div>
 </div>
-			<div id="bodyright" class="offset2"><!-- Main -->				
+			<div id="bodyright" class="offset2"><!-- Main -->
 				<!-- <div>
 					<ul class="breadcrumb">
 						<li>
@@ -61,24 +61,24 @@
 							体系概况
 						</li>
 					</ul>
-				</div>-->		
+				</div>-->
 				<div class="main"><!-- 内容主体 -->
 					    <div id="Carousel" class="carousel slide">
     						<!-- Carousel items -->
     						<div class="carousel-inner">
     							<?php
                     //1_overview
-                    $dir1='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_1_Overview';  
-                    $handle=opendir($dir1);  
-                    $i=0;  
-                    while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-                        //var_dump($file);  
-                        $i++;  
-                      }  
-                    }  
+                    $dir1='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_1_Overview';
+                    $handle=opendir($dir1);
+                    $i=0;
+                    while(false!==($file=readdir($handle))){
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){
+                        //var_dump($file);
+                        $i++;
+                      }
+                    }
                     closedir($handle);
-                    
+
                     for($n=1;$n<=$i;$n++){
                       if($n===1){
                         echo '<div class="item active">';
@@ -96,17 +96,17 @@
                     }
 
                     //2_policy_and_vision
-                    $dir2='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_2_PolicyAndVision';  
-                    $handle=opendir($dir2);  
-                    $i=0;  
-                    while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-                        //var_dump($file);  
-                        $i++;  
-                      }  
-                    }  
+                    $dir2='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_2_PolicyAndVision';
+                    $handle=opendir($dir2);
+                    $i=0;
+                    while(false!==($file=readdir($handle))){
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){
+                        //var_dump($file);
+                        $i++;
+                      }
+                    }
                     closedir($handle);
-                    
+
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_2_PolicyAndVision/'. $n .'.JPG" alt="">';
@@ -120,17 +120,17 @@
                     }
 
                     //3_management_goal
-                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_3_ManagementGoal';  
-                    $handle=opendir($dir3);  
-                    $i=0;  
-                    while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-                        //var_dump($file);  
-                        $i++;  
-                      }  
-                    }  
+                    $dir3='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_3_ManagementGoal';
+                    $handle=opendir($dir3);
+                    $i=0;
+                    while(false!==($file=readdir($handle))){
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){
+                        //var_dump($file);
+                        $i++;
+                      }
+                    }
                     closedir($handle);
-                    
+
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_3_ManagementGoal/'. $n .'.JPG" alt="">';
@@ -144,17 +144,17 @@
                     }
 
                     //5_structure_and_duty
-                    $dir5='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_5_StructureAndDuty';  
-                    $handle=opendir($dir5);  
-                    $i=0;  
-                    while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-                        //var_dump($file);  
-                        $i++;  
-                      }  
-                    }  
+                    $dir5='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_5_StructureAndDuty';
+                    $handle=opendir($dir5);
+                    $i=0;
+                    while(false!==($file=readdir($handle))){
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){
+                        //var_dump($file);
+                        $i++;
+                      }
+                    }
                     closedir($handle);
-                    
+
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_5_StructureAndDuty/'. $n .'.JPG" alt="">';
@@ -166,19 +166,19 @@
                       echo '</div>';
                       echo '</div>';
                     }
-					
+
 					//6_process
-                    $dir6='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_6_Process';  
-                    $handle=opendir($dir6);  
-                    $i=0;  
-                    while(false!==($file=readdir($handle))){  
-                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){  
-                        //var_dump($file);  
-                        $i++;  
-                      }  
-                    }  
+                    $dir6='/home/work/bms/web/bms/doc/browse/managementSystem/managementManual/AMS_6_Process';
+                    $handle=opendir($dir6);
+                    $i=0;
+                    while(false!==($file=readdir($handle))){
+                      if($file!='.' && $file!='..' && $file!='thumb.jpg'){
+                        //var_dump($file);
+                        $i++;
+                      }
+                    }
                     closedir($handle);
-                    
+
                     for($n=1;$n<=$i;$n++){
                       echo '<div class="item">';
                       echo '<img src="/bms/doc/browse/managementSystem/managementManual/AMS_6_Process/'. $n .'.JPG" alt="">';
@@ -199,6 +199,6 @@
     					</div>
 				</div><!-- end 内容主体 -->
 			</div><!-- end Main -->
-		</div><!-- end offhead -->   
+		</div><!-- end offhead -->
     </body>
 </html>

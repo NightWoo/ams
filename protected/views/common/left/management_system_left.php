@@ -13,13 +13,13 @@
 			<li id="leftFieldManagement"><a href="/bms/ManagementSystem/field?view=MSField">安全与现场</a></li>
 			<li id="leftManpowerLi"><a href="/bms/ManagementSystem/manpower?view=MSManpower">人力资源</a></li>
 			<li id="leftQualityLi"><a href="/bms/ManagementSystem/quality?view=MSQuality">质量</a></li>
-			<li id=""><a>生产力</a></li>
-			<li id=""><a>设备/资产与成本</a></li>
+			<li id="leftProductivityLi"><a href="/bms/ManagementSystem/quality?view=MSProductivity">生产力</a></li>
+			<li id="leftCostLi"><a  href="/bms/ManagementSystem/quality?view=MSCost">设备/资产与成本</a></li>
 		<li class="nav-header">标准表单</li>
 			<li id="leftStandarFormLi"><a href="/bms/ManagementSystem/standardForm">表单下载</a></li>
-	   <!-- <li class="divider"></li>      
+	   <!-- <li class="divider"></li>
 			<li><a href="#">帮助</a></li>     -->
-	</ul>        
+	</ul>
 </div><!-- end 侧边栏 -->
 <div id="toggle-left" href="">
 	<div id="leftHandle">

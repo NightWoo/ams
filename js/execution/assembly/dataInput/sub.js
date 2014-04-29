@@ -102,7 +102,7 @@ $("document").ready(function() {
 					if (response.data.image == "") {
 						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
-						setTimeout(function (){window.print();},2000);
+						setTimeout(function (){window.print();},3000);
 						fadeMessageAlert(response.message,"alert-success");
 					}
 				} else {

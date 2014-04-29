@@ -28,15 +28,15 @@ class BalanceSeeker
 		'VQ3-RETURN'=> array('VQ3退库'),
 		'WH' => array('成品库','WDI'),
 		'WHin' => array('成品库'),
-		'WH-0' => array('成品库'),
+		'WH-1' => array('成品库'),
+		'WH-2' => array('成品库'),
+		'WH-5' => array('成品库'),
+		'WH-3' => array('成品库'),
+		'WH-4' => array('成品库'),
+		//'WH-5' => array('成品库'),
 		'WH-27-export' => array('成品库'),
-		'WH-27-normal' => array('成品库'),
-		'WH-35' => array('成品库'),
 		'WH-X' => array('成品库'),
-		'WH-14' => array('成品库'),
-		'WH-13' => array('成品库'),
-		'WH-15' => array('成品库'),
-		'WH-T' => array('成品库'),
+		//'WH-T' => array('成品库'),
 		'WH-WDI' => array('WDI'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验', 'II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验', 'VQ1异常','VQ1合格', '出生产车间' , 'VQ1退库', '检测线缓冲','VQ2检测线','VQ2路试', 'VQ2淋雨', 'VQ2异常.路试', 'VQ2异常.漏雨' , 'VQ2退库', 'VQ3检验' ,'VQ3合格', 'VQ3异常' , 'VQ3退库','成品库','WDI'),
 	);
@@ -60,7 +60,7 @@ class BalanceSeeker
 
 		$seriesArray = Series::parseSeries($series);
 		$seriesName = Series::getNameList();
-		
+
 		$dataSeriesX = array();
 		$dataSeriesY = array();
 		$detail = array();
@@ -150,7 +150,7 @@ class BalanceSeeker
 		}
 
 		$sql = "SELECT id AS car_id, vin, assembly_line, `status`, special_property, series, assembly_time, finish_time, vq1_finish_time, vq2_finish_time, warehouse_time, standby_time, distribute_time, vq1_return_time, vq2_return_time, vq3_return_time
-				FROM car 
+				FROM car
 				WHERE $condition";
 		$cars = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -247,11 +247,12 @@ class BalanceSeeker
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
 			'VQ3-OK' => array('VQ3-OK'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
-			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-14','WH-X','WH-T','WH-13','WH-15','WH-WDI'),
+			//'WH' => array('WH-1', 'WH-2', 'WH-3', 'WH-4', 'WH-5', 'WH-X', 'WH-T', 'WH-27-export', 'WH-WDI'),
+			'WH' => array('WH-1', 'WH-2', 'WH-5','WH-3', 'WH-4', 'WH-X','WH-27-export', 'WH-WDI'),
 			'WH-WDI' => array('WH-WDI'),
 			'WHin' => array('WHin'),
 			'assembly' => array('PBS', 'onLine', 'onLine-2', 'VQ1', 'VQ2', 'VQ3', 'WH'),
-			'mergeRecyle' => array('PBS','onLine', 'onLine-2','recycle', 'WH'),
+			'mergeRecyle' => array('PBS','onLine', 'onLine-2', 'recycle', 'WH'),
 		);
 		return $stateMap[$state];
 	}
@@ -275,16 +276,16 @@ class BalanceSeeker
 			'WH' => '成品库',
 			'WHin' => '成品库可备',
 			'assembly' => '总装',
-			'WH-0' => '成品库区',
-			'WH-27-export' => '27#出口',
-			'WH-27-normal' => '27#普通',
-			'WH-35' => '35#厂房',
-			'WH-X' => '异常X',
+			'WH-1' => '1号库',
+			'WH-2' => '2号库',
+			'WH-5' => '3号库(油库区)',
+			'WH-3' => '4号库(35#)',
+			'WH-4' => '5号库(14#)',
+			//'WH-5' => '3号库(油库区)',
+			'WH-27-export' => '出口车(27#)',
+			'WH-X' => 'X(非商品车区)',
+			//'WH-T' => 'T(非库位区)',
 			'WH-WDI' => 'WDI',
-			'WH-14' => '14#厂房',
-			'WH-13' => '13#厂房',
-			'WH-15' => '15#厂房',
-			'WH-T' => '临时T',
 		);
 
 		return $stateName;

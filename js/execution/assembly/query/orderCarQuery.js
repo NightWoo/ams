@@ -1,4 +1,4 @@
-$(document).ready(function () {
+	$(document).ready(function () {
 	initPage();
 	//------------------- common functions -----------------------	
 	//initialize this page
@@ -304,7 +304,7 @@ $(document).ready(function () {
 	    					}
 	    				}
 	    				if(order.status ==1 && order.out_finish_time === '0000-00-00 00:00:00'){
-	    					if(order.standby_last >= 12 || order.out_last >= 20 || order.lane_last >= 12){
+	    					if(order.standby_last >= 12 || order.out_last >= 9 || order.lane_last >= 12){
 	    						$(tr).removeClass('warning').addClass('error');
 	    					}
 	    				}else if(order.status == 2){

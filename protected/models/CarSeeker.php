@@ -31,15 +31,15 @@ class CarSeeker
 		'VQ3-RETURN'=> array('VQ3退库'),
 		'WH' => array('成品库','WDI'),
 		'WHin' => array('成品库'),
-		'WH-0' => array('成品库'),
+		'WH-1' => array('成品库'),
+		'WH-2' => array('成品库'),
+		'WH-5' => array('成品库'),
+		'WH-3' => array('成品库'),
+		'WH-4' => array('成品库'),
+		//'WH-5' => array('成品库'),
 		'WH-27-export' => array('成品库'),
-		'WH-27-normal' => array('成品库'),
-		'WH-35' => array('成品库'),
 		'WH-X' => array('成品库'),
-		'WH-14' => array('成品库'),
-		'WH-13' => array('成品库'),
-		'WH-15' => array('成品库'),
-		'WH-T' => array('成品库'),
+		//'WH-T' => array('成品库'),
 		'WH-WDI' => array('WDI'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验', 'II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验', 'VQ1异常','VQ1合格', '出生产车间' , 'VQ1退库', '检测线缓冲','VQ2检测线','VQ2路试', 'VQ2淋雨', 'VQ2异常.路试', 'VQ2异常.漏雨' , 'VQ2退库', 'VQ3检验' ,'VQ3合格', 'VQ3异常' , 'VQ3退库','成品库', 'WDI'),
 	);
@@ -63,8 +63,8 @@ class CarSeeker
 		}
 
 		$dataSql = "SELECT id as car_id,serial_number,warehouse_id,vin,series,type,config_id,cold_resistant,color,engine_code,finish_time,warehouse_time,remark,special_order,assembly_line
-				      FROM car 
-				     WHERE $condition 
+				      FROM car
+				     WHERE $condition
 			      ORDER BY order_id, lane_id, distribute_time ASC $limit";
 
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
@@ -80,7 +80,7 @@ class CarSeeker
 			}
 		}
 
-		$countSql = "SELECT count(*) FROM car where $condition";	
+		$countSql = "SELECT count(*) FROM car where $condition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
 		return array($total, $datas);
@@ -102,9 +102,9 @@ class CarSeeker
 			$limit = "LIMIT $offset, $perPage";
 		}
 
-		$dataSql = "SELECT id as car_id,vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,remark,special_order 
-				  FROM car 
-				  WHERE $condition 
+		$dataSql = "SELECT id as car_id,vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,remark,special_order
+				  FROM car
+				  WHERE $condition
 			  ORDER BY distribute_time ASC $limit";
 
 		$datas = Yii::app()->db->createCommand($dataSql)->queryAll();
@@ -113,7 +113,7 @@ class CarSeeker
 			if($data['series'] == '6B') $data['series'] = '思锐';
 			$data['config_name'] = $configName[$data['config_id']];
 			$data['cold'] = self::$COLD_RESISTANT[$data['cold_resistant']];
-			
+
 			$data['order_number'] = '-';
 			if(!empty($data['order_id'])){
 				$data['order_number'] = OrderAR::model()->findByPk($data['order_id'])->order_number;
@@ -125,7 +125,7 @@ class CarSeeker
 			}
 		}
 
-		$countSql = "SELECT count(*) FROM car where $condition";	
+		$countSql = "SELECT count(*) FROM car where $condition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
 		return array($total, $datas);
@@ -215,7 +215,7 @@ class CarSeeker
         	if($car['warehouse_time'] == '0000-00-00 00:00:00')  $car['warehouse_time'] = '-';
         }
 
-        $sql = "SELECT count(*) FROM car $condition";	
+        $sql = "SELECT count(*) FROM car $condition";
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 
 		$sql = "SELECT DISTINCT(area) FROM car $condition ORDER BY area ASC";
@@ -224,7 +224,7 @@ class CarSeeker
         return  array($total, $cars, $areaArray);
 	}
 
-	public function queryAssemblyBalance ($state) { 
+	public function queryAssemblyBalance ($state) {
 		$seriesArray = Series::parseSeries('all');
 		$seriesName = Series::getNameList();
 		$stateArray = $this->stateArray($state);
@@ -261,7 +261,7 @@ class CarSeeker
 		}
 
 		return array(
-			'carSeries' => $carSeries, 
+			'carSeries' => $carSeries,
 			'detail' => $detail,
 			'seriesTotal'=> $seriesTotal,
 			'stateTotal'=> $stateTotal,
@@ -269,11 +269,11 @@ class CarSeeker
 				'x'=> $dataSeriesX,
 				'y'=> $dataSeriesY,
 			)
-		);	
+		);
 	}
 
 	public function balanceDistribute ($state, $series) {
-		
+
 		$stateName = $this->stateName();
 
 		$colorArray = $this->colorCategories($series);
@@ -288,7 +288,7 @@ class CarSeeker
 		$configNameArray = array();
 		$configTotal = array();
 		foreach($configColdArray as $configCold){
-			$configNameArray[] = $configCold['name']; 
+			$configNameArray[] = $configCold['name'];
 			$configTotal[$configCold['name']]['count'] = 0;
 			$configTotal[$configCold['name']]['orderConfigId'] = $configCold['order_config_id'];
 			$configTotal[$configCold['name']]['coldResistant'] = $configCold['cold_resistant'];
@@ -298,7 +298,7 @@ class CarSeeker
 		foreach($colorArray as $index => $color){
 			$data = array();
 			$temp = array();
-			
+
 			$colorCount = $this->countStateCars($state, $series, $color);
 			$data['y'] = $colorCount;
 			$colorTotal[$color] += $colorCount;
@@ -308,9 +308,9 @@ class CarSeeker
 			$drilldownData = array();
 			foreach($configColdArray as $configCold){
 				$configCount = $this->countStateCars($state,$series, $color, $configCold['order_config_id'], $configCold['cold_resistant']);
-				if(!empty($configCount)){					
+				if(!empty($configCount)){
 					$drilldownCategories[] = $configCold['name'];
-					$drilldownData[] = $configCount;					
+					$drilldownData[] = $configCount;
 					$configTotal[$configCold['name']]['count'] += $configCount;
 				}
 				// $temp[$configCold['name']] = $configCount;
@@ -441,7 +441,7 @@ class CarSeeker
 				$car['recycle_last'] = round($car['recycle_last'], 1);
 			}
 		}
-		
+
 		return $cars;
 	}
 
@@ -475,7 +475,7 @@ class CarSeeker
 			$data = array();
 			$drilldownCategories = array();
 			$drilldownData = array();
-			
+
 			foreach($periodArray as $periodName => $period){
 				$countSum = 0;
 				foreach($seriesArray as $series){
@@ -570,7 +570,7 @@ class CarSeeker
 				$car['recycle_last'] = round($car['recycle_last'], 1);
 			}
 		}
-		
+
 		return $cars;
 	}
 
@@ -608,33 +608,30 @@ class CarSeeker
         if($state === 'WHin'){
 			$condition .= " AND warehouse_id>1 AND warehouse_id< 1000 AND special_property=0";
 		}
-		if($state === 'WH-0'){
+		if($state === 'WH-1'){
 			$condition .= " AND warehouse_id>1 AND warehouse_id< 200";
+		}
+		if($state === 'WH-2'){
+			$condition .= " AND warehouse_id > 800 AND warehouse_id < 900";
+		}
+		if($state === 'WH-3'){
+			$condition .= " AND warehouse_id>=600 AND warehouse_id< 700";
+		}
+		if($state === 'WH-4'){
+			$condition .= " AND warehouse_id>=400 AND warehouse_id< 500";
+		}
+		if($state === 'WH-5'){
+			$condition .= " AND warehouse_id >700 AND warehouse_id < 800";
 		}
 		if($state === 'WH-27-export'){
 			$condition .= " AND warehouse_id>=200 AND warehouse_id< 300 AND special_property=1";
 		}
-		if($state === 'WH-27-normal'){
-			$condition .= " AND warehouse_id>=500 AND warehouse_id< 600";
-		}
-		if($state === 'WH-35'){
-			$condition .= " AND warehouse_id>=600 AND warehouse_id< 700";
-		}
-		if($state === 'WH-14'){
-			$condition .= " AND warehouse_id>=400 AND warehouse_id< 500";
-		}
-		if($state === 'WH-13'){
-			$condition .= " AND warehouse_id=2001";
-		}
-		if($state === 'WH-15'){
-			$condition .= " AND warehouse_id=2002";
-		}
 		if($state === 'WH-X'){
 			$condition .= " AND warehouse_id=1000";
 		}
-		if($state === 'WH-T'){
-			$condition .= " AND warehouse_id=2000";
-		}
+		//if($state === 'WH-T'){
+			//$condition .= " AND warehouse_id=2000";
+		//}
 
 		//recyclePeriod = now - assembly_time, or recyclePeriod = assembly_time - warehouse_time
 		if(!empty($lowRP)){
@@ -644,7 +641,7 @@ class CarSeeker
 			$condition .= " AND TIMESTAMPDIFF(hour,finish_time,CURRENT_TIMESTAMP) <= $highRP";
 		}
 
-		$sql = "SELECT count(*) FROM car $condition";	
+		$sql = "SELECT count(*) FROM car $condition";
 		$total = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $total;
 	}
@@ -652,15 +649,15 @@ class CarSeeker
 	public function queryOrderCar ($standbyDate, $orderNumber, $distributor, $status='all', $series='', $curPage=0, $perPage=0,$orderBy='lane_id,priority,`status`', $standbyDateEnd='', $boardNumber='', $carrier='') {
 		$configNames = $this->configNameList();
 		$orderNumberArray = array();
-		$orderSeeker = new OrderSeeker(); 
+		$orderSeeker = new OrderSeeker();
 		$orders = $orderSeeker-> query($standbyDate, $orderNumber, $distributor, $status, $series,$orderBy, $standbyDateEnd, $boardNumber, $carrier);
-		
+
 		$contConditions = array();
 		foreach($orders as $order){
 			$orderId= $order['id'];
 			$orderNumberArray[$orderId] = $order['order_number'];
 			$sqls[] = "(SELECT serial_number, vin,series,type,config_id,cold_resistant,color,engine_code,distributor_name,lane_id,distribute_time,order_id,old_wh_id,remark
-							FROM car 
+							FROM car
 							WHERE order_id = $orderId)";
 			$countConditions[] = "order_id = $orderId";
 		}
@@ -669,7 +666,7 @@ class CarSeeker
 		$dataSql .= "ORDER BY order_id, distribute_time ASC";
 
 		$countCondition = join(' OR ', $countConditions);
-		$countSql = "SELECT count(*) FROM car where $countCondition";	
+		$countSql = "SELECT count(*) FROM car where $countCondition";
 		$total = Yii::app()->db->createCommand($countSql)->queryScalar();
 
 		$limit = "";
@@ -893,7 +890,7 @@ class CarSeeker
 
         $conVin = join(' OR ', $conditions);
 
-        $condition = "warehouse_time>'0000-00-00 00:00:00' AND ($conVin)"; 
+        $condition = "warehouse_time>'0000-00-00 00:00:00' AND ($conVin)";
         $sql = "SELECT id, vin, serial_number, series, type, order_config_name, cold_resistant, config_id, order_config_id, color, engine_code, remark, warehouse_time, order_id
         		FROM view_car_info_order_config
         		WHERE $condition";
@@ -905,6 +902,11 @@ class CarSeeker
         return $datas;
 	}
 
+	public function countByPlanId ($planId) {
+		$sql = "SELECT COUNT(*) FROM car WHERE plan_id=$planId";
+		$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		return intval($count);
+	}
 	// private function parseSeries ($series) {
 	// 	if(empty($series) || $series === 'all') {
  //            $series = array('F0', 'M6', '6B');
@@ -937,7 +939,8 @@ class CarSeeker
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
 			'VQ3-OK' => array('VQ3-OK'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
-			'WH' => array('WH-0','WH-27-export','WH-27-normal','WH-35','WH-14','WH-X','WH-T','WH-13','WH-15','WH-WDI'),
+			//'WH' => array('WH-1', 'WH-2', 'WH-3', 'WH-4', 'WH-5', 'WH-27-export', 'WH-X', 'WH-T', 'WH-WDI'),
+			'WH' => array('WH-1', 'WH-2', 'WH-5','WH-3', 'WH-4',  'WH-27-export', 'WH-X', 'WH-WDI'),
 			'WH-WDI' => array('WH-WDI'),
 			'WHin' => array('WHin'),
 			'assembly' => array('PBS', 'onLine', 'onLine-2', 'VQ1', 'VQ2', 'VQ3', 'WH'),
@@ -969,16 +972,16 @@ class CarSeeker
 			'WHin' => '成品库可备',
 			'WH-WDI' => 'WDI',
 			'assembly' => '总装',
-			'WH-0' => '成品库区',
-			'WH-27-export' => '27#出口',
-			'WH-27-normal' => '27#普通',
-			'WH-35' => '35#厂房',
-			'WH-X' => '异常X',
-			'WH-WDI' => 'WDI',
-			'WH-14' => '14#厂房',
-			'WH-13' => '13#厂房',
-			'WH-15' => '15#厂房',
-			'WH-T' => '临时T',
+			'WH-1' => '1号库',
+			'WH-2' => '2号库',
+			'WH-5' => '3号库(油库区)',
+			'WH-3' => '4号库(35#)',
+			'WH-4' => '5号库(14#)',
+			//'WH-5' => '3号库(油库区)',
+			'WH-27-export' => '出口车(27#)',
+			'WH-X' => 'X(非商品车区)',
+			//'WH-T' => 'T(非库位区)',
+			'WH-WDI' => 'WDI'
 		);
 
 		return $stateName;

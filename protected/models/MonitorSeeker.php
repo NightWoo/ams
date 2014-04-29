@@ -37,7 +37,7 @@ class MonitorSeeker
 				$method = "query" . ucFirst($type) . "Label";
 				if(method_exists($this, $method)) {
 					$ret[$type] = $this->$method($stime,$etime);
-				} 
+				}
 			}
 		} else {
 			$method = "query" . ucFirst($type) . "Label";
@@ -83,13 +83,6 @@ class MonitorSeeker
 			    );
 	}
 
-	public function queryWarehouseBlockBalance($block) {
-		$sql = "SELECT row,capacity, quantity FROM warehouse WHERE block='$block'";
-		$rows = Yii::app()->db->createCommand($sql)->queryAll();
-
-		return $rows;
-	}
-
 	public function queryLaneInfo() {
 		$datas=array();
 		for($i=1;$i<51;$i++){
@@ -103,13 +96,13 @@ class MonitorSeeker
 			}
 
 			$orderSql = "SELECT lane_id,
-							MIN(activate_time) AS min_activate, 
-							MAX(activate_time) AS max_activate, 
-							MIN(out_finish_time) AS min_out, 
+							MIN(activate_time) AS min_activate,
+							MAX(activate_time) AS max_activate,
+							MIN(out_finish_time) AS min_out,
 							MAX(out_finish_time) AS max_out,
 							MIN(lane_release_time) AS min_release,
 							MAX(lane_release_time) AS max_relaese
-						FROM `order` 
+						FROM `order`
 						WHERE lane_status=1 AND lane_id=$i
 						GROUP BY lane_id";
 			$time = Yii::app()->db->createCommand($orderSql)->queryRow();
@@ -117,7 +110,7 @@ class MonitorSeeker
 			$now = date("Y-m-d H:i:s");
 			$last = 0;
 			if($time['min_out'] === '0000-00-00 00:00:00'){
-				$last = strtotime($now) - strtotime($laneActivate); 
+				$last = strtotime($now) - strtotime($laneActivate);
 			} else {
 				$laneOutFinish = $time['max_out'];
 				$last = strtotime($now) - strtotime($laneOutFinish);
@@ -133,8 +126,8 @@ class MonitorSeeker
 		return $datas;
 	}
 
-	public function queryWarehouseAreaBalance($area) {
-        $sql = "SELECT row,capacity, quantity FROM warehouse WHERE area='$area'";
+	public function queryWarehouseBlockBalance($block) {
+        $sql = "SELECT row,capacity, quantity FROM warehouse WHERE block='$block'";
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
         return $rows;
@@ -152,7 +145,7 @@ class MonitorSeeker
 
 		return $this->queryBalanceDetailByWareHouseId($states);
 	}
-	
+
 	public function queryBalanceDetailByWareHouseId($ids) {
         $str = "'" . join("','", $ids) . "'";
         $sql = "SELECT series,vin,type,color,modify_time as time FROM car WHERE warehouse_id IN ($str)";
@@ -189,20 +182,20 @@ class MonitorSeeker
 
 	}
 
-	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {  
-        if(is_array($multi_array)){  
-            foreach ($multi_array as $row_array){  
-                if(is_array($row_array)){  
-                    $key_array[] = $row_array[$sort_key];  
-                }else{  
-                    return -1;  
-                }  
-            }  
-        }else{  
-            return -1;  
-        }  
-        array_multisort($key_array,$sort,$multi_array);  
-        return $multi_array;  
+	public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {
+        if(is_array($multi_array)){
+            foreach ($multi_array as $row_array){
+                if(is_array($row_array)){
+                    $key_array[] = $row_array[$sort_key];
+                }else{
+                    return -1;
+                }
+            }
+        }else{
+            return -1;
+        }
+        array_multisort($key_array,$sort,$multi_array);
+        return $multi_array;
     }
 
 	public function queryBalanceCount($node, $series = 'all') {
@@ -227,7 +220,7 @@ class MonitorSeeker
 		}
 		if(!empty($etime)) {
 			$conditions[] = "modify_time <= '$etime'";
-		}   
+		}
 		if($series !== 'all') {
 			$conditions[] = "series = '$series'";
 		}
@@ -248,14 +241,14 @@ class MonitorSeeker
         }
         if(!empty($etime)) {
             $conditions[] = "modify_time <= '$etime'";
-        }   
+        }
         if($series !== 'all') {
             $conditions[] = "series = '$series'";
         }
         if(!empty($conditions)) {
             $condition = ' AND ' . join(' AND ', $conditions);
         }
-		
+
 
 		$sql = "SELECT count(*) FROM car WHERE status LIKE '$state%' $condition";
 		$sql = "SELECT count(*) FROM car WHERE status = '$state' OR status='WDI' $condition";
@@ -294,7 +287,7 @@ class MonitorSeeker
 				// $sqlOut .= " AND series = '$series'";
 			}
 
-			
+
 			$in = Yii::app()->db->createCommand($sqlIn)->queryScalar();
 
 			$out = Yii::app()->db->createCommand($sqlOut)->queryScalar();
@@ -374,22 +367,22 @@ class MonitorSeeker
 		return $total;
 	}
 
-	public function queryAreaRate() {
-		$sql = "select sum(quantity)/sum(capacity) as rate,area from warehouse group by area";
+	public function queryBlockRate() {
+		$sql = "select sum(quantity)/sum(capacity) as rate,block from warehouse group by block";
 		$datas = Yii::app()->db->createcommand($sql)->queryAll();
 		$ret = array();
 		foreach($datas as $data) {
-			$ret[$data['area']] = $data['rate'];
+			$ret[$data['block']] = $data['rate'];
 		}
 		return $ret;
 	}
 
-	public function queryAreaQuantity(){
-		$sql = "SELECT SUM(quantity) AS quantity, area FROM warehouse GROUP BY area";
+	public function queryBlockQuantity(){
+		$sql = "SELECT SUM(quantity) AS quantity, block FROM warehouse GROUP BY block";
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
 		$ret = array();
 		foreach($datas as $data) {
-			$ret[$data['area']] = $data['quantity'];
+			$ret[$data['block']] = $data['quantity'];
 		}
 
 		//WDI & Y quantity
@@ -405,27 +398,27 @@ class MonitorSeeker
 		$sql = "SELECT SUM(capacity) AS capacity_sum, SUM(quantity) AS quantity_sum, SUM(free_seat) AS free_seat_sum FROM warehouse WHERE id>1 AND id<200";
 		$data = Yii::app()->db->createCommand($sql)->queryRow();
 
-		return $data;		
-	} 
+		return $data;
+	}
 
 	public function queryPeriod() {
 		$curDate = DateUtil::getCurDate();
 		$stime = $curDate . ' 08:00:00';
 		$etime = date("Y-m-d H:i:s");
 
-		$sql = "SELECT 	board_number, 
-						MIN(activate_time) AS min_activate, 
-						MAX(activate_time) AS max_activate, 
-						MIN(out_finish_time) AS min_out, 
+		$sql = "SELECT 	board_number,
+						MIN(activate_time) AS min_activate,
+						MAX(activate_time) AS max_activate,
+						MIN(out_finish_time) AS min_out,
 						MAX(out_finish_time) AS max_out,
 						MIN(lane_release_time) AS min_release,
-						MAX(lane_release_time) AS max_relaese 
+						MAX(lane_release_time) AS max_relaese
 				FROM `order`
 				WHERE activate_time>='$stime' AND activate_time<'$etime'
 				GROUP BY board_number";
-		 
+
 		$datas = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		$warehousePeriod = 0;
 		$transportPeriod = 0;
 		foreach($datas as &$data){
@@ -450,7 +443,7 @@ class MonitorSeeker
 			$transportPeriod += $data['transportPeriod'];
 		}
 		$totalPeriod = $warehousePeriod + $transportPeriod;
-		
+
 		//计算板板数
 		$countSql = "SELECT COUNT(DISTINCT board_number) FROM `order` WHERE activate_time>='$stime' AND activate_time<'$etime'";
 		$boardCount = Yii::app()->db->createCommand($countSql)->queryScalar();
@@ -499,31 +492,7 @@ class MonitorSeeker
 
 	//run time
 	public function queryLineRunTime($stime, $etime) {
-		//deleted by wujun
-		//$lineRuns = LineRunAR::model()->findAll('event=? AND create_time >= ? AND create_time <=?', array('启动', $stime , $etime));
-		//$lineStops = LineRunAR::model()->findAll('event=? AND create_time >= ? AND create_time <=?', array('停止', $stime, $etime));
-
-		//$linePauses = LinePauseAR::model()->findAll("pause_time > ? AND pause_type=?" , array($stime, '计划停线'));
-
-		//$diff = count($lineRuns) - count($lineStops);
-		//if($diff > 1 || $diff < 0) {
-		//	throw new Exception('line run/stop record error');
-		//}
-		//$lineRunTime = 0;
-		//$trips = count($lineRuns);
-		//for($i = 0; $i < $trips; $i ++) {
-		//	$lineRun = $lineRuns[$i];	
-		//   $lrST = strtotime($lineRun->create_time);
-		//    if(!empty($lineStops[$i])) {
-		//		$lineStop = $lineStops[$i];
-		//        $lrET = strtotime($lineStop->create_time);
-		//	} else {
-		//        $lrET = time();
-		//    }
-
-		//    $lineRunTime += $lrET - $lrST;
-		//}
-		$lineRunTime = strtotime($etime) - strtotime($stime);	
+		$lineRunTime = strtotime($etime) - strtotime($stime);
 		$linePauses = LinePauseAR::model()->findAll("pause_time>=? AND pause_time<=? AND pause_type=?" , array($stime, $etime, '计划停线'));
 		$now = time();
 		$planPauseTime = 0;
@@ -594,27 +563,19 @@ class MonitorSeeker
 
 
 	public function queryLineURate($stime , $etime) {
-		//$linePauseTime = $this->queryLinePauseTime('', $stime, $etime, 'without_plan_to_pause');
-		//$lineRunTime = $this->queryLineRunTime($stime, $etime);		
-		//$rate = '-';
-		// if(!empty($lineRunTime)) {
-		//	 $rate = intval(100 - 100 * $linePauseTime / $lineRunTime);
-		//	 $rate = "$rate%";
-		// }
-		//added by wujun
 		$lineRunTime = $this->queryLineRunTime($stime, $etime);
 		$node = 'T0';
 		$online = $this->queryFinishCars($stime, $etime, $node);
 		$lineSpeed = $this->queryLineSpeed();
 
 		$rate = '-';
-		if(!empty($lineRunTime) && !empty($lineSpeed)){			
+		if(!empty($lineRunTime) && !empty($lineSpeed)){
 			$capacity = $lineRunTime / $lineSpeed;
 			$rate = intval(100 * $online / $capacity);
 			if($rate > 100){
 				$rate = "100%";
 			} else {
-				$rate = "$rate%";	
+				$rate = "$rate%";
 			}
 		}
 
@@ -684,10 +645,10 @@ class MonitorSeeker
 		$conditions = array();
 		if(!empty($stime)) {
 			$conditions[] = "create_time >= '$stime'";
-		}   
+		}
 		if(!empty($etime)) {
 			$conditions[] = "create_time <= '$etime'";
-		}   
+		}
 		$condition = join(' AND ', $conditions);
 		if(!empty($condition)) {
 			$condition = 'WHERE ' . $condition;
@@ -749,7 +710,7 @@ class MonitorSeeker
 
 			$sql = "SELECT count(DISTINCT car_id) FROM node_trace WHERE pass_time >= '$stime' AND pass_time <= '$etime' AND node_id IN ($nodeIdStr) AND car_series = '$series'";
 			$cars += Yii::app()->db->createCommand($sql)->queryScalar();
-		}  
+		}
 		$rate = empty($cars) ? 0 : round(($cars - $faults) / $cars, $roundBit);
 		$rate = empty($cars) ? '-' : $rate * 100 . "%";
 
@@ -783,7 +744,7 @@ class MonitorSeeker
 	}
 
 	public function queryCallStatus($section, $curDay) {
-		$condition = "";	
+		$condition = "";
 		if(!empty($section)) {
 			$sql = "SELECT id FROM node WHERE section='$section'";
 			$nodeIds = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -846,7 +807,7 @@ class MonitorSeeker
 				$seatStatus[$call->node_id] = array(
 						'node_id' => $call->node_id,
 						'seat' => $seat,
-						'full_seat' => $fullSeat, 
+						'full_seat' => $fullSeat,
 						'section' => $otherSection,
 						'background_text' => $callType === '设备故障' ? '&nbsp;' : $callType,
 						'background_font_color' => $callType === 'A' ? 'yellow' : 'red',
@@ -914,7 +875,7 @@ class MonitorSeeker
 						'foreground_color' => 'grey',
 						);
 			}
-		} 
+		}
 
 		$runStatus = $this->queryLineStatus($curDay, '');
 
@@ -941,7 +902,7 @@ class MonitorSeeker
 		$sql = "SELECT name,type FROM node WHERE id=$nodeId";
 		$seat = Yii::app()->db->createCommand($sql)->queryRow();
 
-		$name = $seat['name'];	
+		$name = $seat['name'];
 		if($seat['type'] !== 'device') {
 			$name = sprintf('%02d', substr($name, 1));
 		} else {
@@ -1038,6 +999,6 @@ class MonitorSeeker
 	// 		$series = explode(',', $series);
 	// 	}
 	// 	return $series;
-	// }	
+	// }
 
 }

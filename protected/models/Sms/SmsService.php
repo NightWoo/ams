@@ -14,10 +14,12 @@ class SmsService
 	* @param string $phoneNumbers, the receivers nubmers split by ","
 	*/
 	public function send ($content, $phoneNumbers){
+		ini_set('soap.wsdl_cache_enabled',0);
+		ini_set('soap.wsdl_cache_ttl',0);
 		$client = new SoapClient($this->service);
 		$params = array(
-			'content'=>$content, 
-			'phoneNumbers'=>$phoneNumbers, 
+			'content'=>$content,
+			'phoneNumbers'=>$phoneNumbers,
 		);
 		$result = (array)$client->send($params);
 

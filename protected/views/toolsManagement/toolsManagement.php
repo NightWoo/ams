@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -90,10 +90,10 @@
                         </table>
                     </form>
                 </div><!-- end of 主体 -->
-                <div class="table table-condensed">     
-                    <div style="width:500px;float: left;">
+                <div class="table table-condensed row-fluid">     
+                    <div style="float: left;" class="span6">
                         <div style="clear:both; height:30px;"><span style="float:left;width:50px; font-size:14px">汇总</span><a href="#" id="exportToolsManagement" style="float:right">导出全部明细</a></div>
-                        <table border="0" cellpadding="0" cellspacing="0" id="tableToolsManage" style="font-size:12px;width:500px;border:1px solid #4BACC6;">
+                        <table border="0" cellpadding="0" cellspacing="0" id="tableToolsManage" style="font-size:12px;border:1px solid #4BACC6;min-width:500px;">
                             <thead>
                                 <tr bgcolor="#4BACC6" style="color:#FFFFFF">
                                     <th>#</th>
@@ -123,9 +123,9 @@
                             </ul>
                         </div>
                     </div>  
-                    <div style="width:520px;margin-left: 20px; min-height:400px; border-left:1px solid #4A7EBB;float: left;">   
+                    <div style="margin-left: 20px; min-height:400px; border-left:1px solid #4A7EBB;float: left;" class="span6">   
                         <div style="clear:both; height:30px;"><span style="float:left;width:50px; margin-left:20px; font-size:14px">明细</span></div>
-                        <table border="0" cellpadding="0" cellspacing="0" id="tableToolsList" style="font-size:12px;margin-left: 20px;width:500px; border:1px solid #F79646;">
+                        <table border="0" cellpadding="0" cellspacing="0" id="tableToolsList" style="font-size:12px;margin-left: 20px;border:1px solid #F79646;min-width:500px;">
                             <thead>
                                 <tr bgcolor="#F79646" style="color:#FFFFFF">
                                     <th>#</th>
@@ -268,7 +268,7 @@
                     <div class="control-group">
                         <label class="control-label" for="">*工艺代码：</label>
                         <div class="controls">
-                            <input type="text" class="input-medium" id="editModalTextEditToolsCode" disabled="disabled" style="height: 20px">
+                            <input type="text" class="input-medium" id="editModalTextEditToolsCode" style="height: 20px">
                             <input type="hidden" class="input-medium" id="editModalTextEditToolsCode2" disabled="disabled" style="height: 20px">
                         </div>
                     </div>
