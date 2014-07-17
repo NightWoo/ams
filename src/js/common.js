@@ -204,6 +204,31 @@ define(["service", "jquery", "bootstrap", "bootbox"], function(service, $) {
 
         fillLineSelect: function () {
             return fillLineSelect();
+        },
+
+        getDateString: function (date) {
+            var theDate = date || new Date();
+            var year = theDate.getFullYear(),
+                month = theDate.getMonth() + 1,
+                day = theDate.getDate();
+
+            month = month < 10 ? '0' + month : month;
+            day = day < 10 ? '0' + day : day;
+
+            var dateString = year + '-' + month + '-' + day;
+            return dateString;
+        },
+        getDateTimeString: function (date) {
+            var theDate = date || new Date();
+            var dateString = this.getDateString(theDate),
+                hh = theDate.getHours(),
+                mm = theDate.getMinutes(),
+                ss = theDate.getSeconds();
+            hh = hh < 10 ? '0' + hh : hh;
+            mm = mm < 10 ? '0' + mm : mm;
+            ss = ss < 10 ? '0' + ss : ss;
+            var dateTimeString = dateString + ' ' + hh + ':' + mm + ':' + ss;
+            return dateTimeString;
         }
     };
 });

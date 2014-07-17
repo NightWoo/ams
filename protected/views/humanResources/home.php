@@ -38,7 +38,7 @@
                     <legend>员工关系</legend>
                     <div class="row pannel-thumbnails">
                         <div class="col-sm-4">
-                            <a href="#" class="thumbnail">
+                            <a href="/bms/humanResources/staffAdd" class="thumbnail">
                                 <h5>入职</h5>
                             </a>
                         </div>

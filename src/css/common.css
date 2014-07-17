@@ -1,4 +1,4 @@
-/*modify bootstrap*/
+modify bootstrap*/
 html {
   font-family: "Microsoft YaHei", sans-serif;
 }
@@ -39,9 +39,13 @@ li.list-group-item>a {
 }.panel-primary .btn-link:hover {
     color: #fff;
 }
+/*modify bootstrap END*/
+/*margin padding*/
+.ml8 { margin-left: 8px; }
+.mb10 { margin-bottom: 10px }
+/*margin padding END*/
 
-/*end modify bootstrap*/
-
+/*common*/
 .body-main {
     overflow-y: auto;
     padding-top: 20px;
@@ -82,3 +86,16 @@ li.list-group-item>a {
 .thumbnail h5 {
     margin-left: 10px;
 }
+
+.require-mark {
+    margin-right: 5px;
+}
+
+.form-hint {
+    color: #ccc;
+}
+
+legend {
+    padding-bottom: 5px;
+}
+/*common END

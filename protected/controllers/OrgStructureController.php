@@ -2,6 +2,7 @@
 Yii::import('application.models.AR.HR.OrgDepartmentAR');
 Yii::import('application.models.HR.OrgDepartment');
 Yii::import('application.models.HR.OrgStructureSeeker');
+Yii::import('application.models.HR.HrPositionSeeker');
 
 class OrgStructureController extends BmsBaseController
 {
@@ -108,6 +109,16 @@ class OrgStructureController extends BmsBaseController
             $data = $dept->getChildren();
             $this->renderJsonBms(true, 'get childrenDepts success', $data);
         } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGet3LevelList () {
+        try {
+            $seeker = new OrgStructureSeeker();
+            $data = $seeker->get3LevelList();
+            $this->renderJsonBms(true, 'get 3 level list success', $data);
+        } catch (Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }
     }
