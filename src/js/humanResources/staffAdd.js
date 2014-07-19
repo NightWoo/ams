@@ -119,7 +119,7 @@ require(['commonConfig'], function () {
       packData.start_date = $('#startDate').val();
       packData.email = $('#email').val();
 
-      retData = JSON.stringify(packData);
+      var retData = JSON.stringify(packData);
       return retData;
     }
 
@@ -141,7 +141,8 @@ require(['commonConfig'], function () {
           expData.push(expObj);
         });
       });
-      return expData;
+      var retData = JSON.stringify(expData);
+      return retData;
     }
 
     function initProvinceCity () {

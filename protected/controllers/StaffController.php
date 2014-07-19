@@ -20,11 +20,13 @@ class StaffController extends BmsBaseController
   public function actionSaveStaff () {
     $id = $this->validateIntVal('staffId',  0);
     $staffData = $this->validateStringVal('staffData', '{}');
+    $expData = $this->validateStringVal('expData', '[]');
 
     $transaction = Yii::app()->db->beginTransaction();
     try {
       $staff = HrStaff::createById($id);
       $staff->save($staffData);
+      $staff->saveExp($expData);
       $transaction->commit();
       $this->renderJsonBms(true, 'save success', '');
     } catch (Exception $e) {

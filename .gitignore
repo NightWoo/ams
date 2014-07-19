@@ -1,5 +1,5 @@
 # vendor src
-vendor/bootstrap-*
+vendor/**/*
 vendor/bootstrap/bootstrap-*
 vendor/jquery-ui/development-bundle
 vendor/jquery-ui/jquery-ui-*
