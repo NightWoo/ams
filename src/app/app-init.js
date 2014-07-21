@@ -1,7 +1,9 @@
 define([
   'app',
   'routeDefs',
-  '_services/User'
+  '_services/User',
+  '_directives/maxHeightBody',
+  '_services/transformRequestAsFormPost'
 ], function (app) {
 
   app.factory('myHttpInterceptor', [

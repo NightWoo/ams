@@ -1,7 +1,6 @@
 define(['app'], function (app) {
-  app.registerController( 'CtrlHome', [
+  app.registerController('CtrlHeader', [
     '$scope',
   function ($scope) {
-
   }]);
 });

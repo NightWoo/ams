@@ -28,32 +28,28 @@ class OrgStructureSeeker
   }
 
   public function get3LevelList () {
-    $sql = "SELECT * FROM org_department WHERE level>0 AND removed=0";
+    $sql = "SELECT * FROM org_department WHERE level>0 AND removed=0 ORDER BY level DESC";
     $depts = Yii::app()->db->createCommand($sql)->queryAll();
 
-    $level1 = array();
-    $level2 = array();
-    $level3 = array();
+    $org = array();
     foreach ($depts as $dept) {
-      if ($dept['level'] == 1) {
-        array_push($level1, $dept);
-      } else if ($dept['level'] == 2) {
-        if (empty($level2[$dept['parent_id']])) {
-          $level2[$dept['parent_id']] = array();
+      $id = $dept['id'];
+      $parentId = $dept['parent_id'];
+      $level = $dept['level'];
+      if (empty($org[$level])) {
+        $org[$level] = array();
+      }
+      if (!empty($level)) {
+        if (!empty($org[$level + 1]) && !empty($org[$level + 1][$id])) {
+          $dept['children'] = $org[$level + 1][$id];
         }
-        array_push($level2[$dept['parent_id']], $dept);
-      } else if ($dept['level'] == 3) {
-        if (empty($level3[$dept['parent_id']])) {
-          $level3[$dept['parent_id']] = array();
+        if (empty($org[$level][$parentId])) {
+          $org[$level][$parentId] = array();
         }
-        array_push($level3[$dept['parent_id']], $dept);
+        array_push($org[$level][$parentId], $dept);
       }
     }
 
-    return array(
-      'level1' => $level1,
-      'level2' => $level2,
-      'level3' => $level3
-    );
+    return array_values($org['1'])[0];
   }
 }

@@ -1,4 +1,5 @@
 @import 'hr/staffAdd.css';
+
 /*modify bootstrap*/
 html {
   font-family: "Microsoft YaHei", sans-serif;
@@ -34,6 +35,10 @@ li.list-group-item>a {
 .mb10 { margin-bottom: 10px }
 /*margin padding END*/
 
+/*height*/
+.l-h_34 { line-height: 34px; }
+/*height END*/
+
 /*common*/
 body { overflow-y: hidden; }
 .body-main, .max-height-body {
@@ -67,6 +72,12 @@ legend { padding-bottom: 5px; }
 .thumbnail h5 { margin-left: 10px; }
 .require-mark { margin-right: 5px; }
 .form-hint { color: #ccc; }
-
+.require-mark { color: #d9534f;}
 /*common END*/
 
+/*input校验*/
+input.ng-invalid.ng-dirty.form-control,
+textarea.ng-invalid.ng-dirty.form-control { border-color: #a94442; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+input.ng-invalid.ng-dirty.form-control:focus,
+textarea.ng-invalid.ng-dirty.form-control:focus { border-color: #a94442; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483; }

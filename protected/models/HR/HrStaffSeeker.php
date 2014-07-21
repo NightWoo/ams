@@ -21,6 +21,6 @@ class HrStaffSeeker
       array_push($data[$city['province_id']]['cities'], $city);
     }
 
-    return $data;
+    return array_values($data);
   }
 }

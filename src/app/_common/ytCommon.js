@@ -1,3 +1,0 @@
-define(['../_services/CommonService'], function () {
-  // body...
-});
