@@ -1,6 +1,6 @@
 <div class="staff-add container">
   <legend>入职</legend>
-  <form name="formStaff">
+  <form name="formStaff" novalidate>
     <h4>基本信息</h4>
     <div class="form-horizontal" role="form" name="shit">
       <div class="form-group">
@@ -180,7 +180,7 @@
       </div>
     </div>
   </form>
-  <form name="formExp">
+  <form name="formExp" novalidate>
     <div ng-repeat="one in expTypes">
       <h4>{{one.title}}</h4>
       <table class="exp-table table mb10">

@@ -38,17 +38,17 @@
                     <legend>员工关系</legend>
                     <div class="row pannel-thumbnails">
                         <div class="col-sm-4">
-                            <a href="/bms/humanResources/staffAdd" class="thumbnail">
+                            <a href="/bms/app#/hr/staff-add" class="thumbnail">
                                 <h5>入职</h5>
                             </a>
                         </div>
                         <div class="col-sm-4">
-                            <a href="#" class="thumbnail">
+                            <a href="/bms/app#/hr/staff-transfer" class="thumbnail">
                                 <h5>调岗</h5>
                             </a>
                         </div>
                         <div class="col-sm-4">
-                            <a href="#" class="thumbnail">
+                            <a href="/bms/app#/hr/staff-resign" class="thumbnail">
                                 <h5>离职</h5>
                             </a>
                         </div>

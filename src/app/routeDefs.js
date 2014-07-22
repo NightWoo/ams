@@ -46,9 +46,39 @@ define(['app'], function(app) {
         // footer: footerConfig,
         'body': {
           templateUrl: baseUrl + 'hr/staffAdd.tpl.html',
-          controller: 'staffAddCtrl',
+          controller: 'CtrlStaffAdd',
           resolve: {
-            ctrl: $couchPotatoProvider.resolveDependencies(['hr/staffAddCtrl'])
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffAdd'])
+          }
+        },
+      }
+    });
+
+    $stateProvider.state('staff-transfer', {
+      url: '/hr/staff-transfer',
+      views: {
+        header: headerConfig,
+        // footer: footerConfig,
+        'body': {
+          templateUrl: baseUrl + 'hr/staffTransfer.tpl.html',
+          controller: 'CtrlStaffTransfer',
+          resolve: {
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffTransfer'])
+          }
+        },
+      }
+    });
+
+    $stateProvider.state('staff-resign', {
+      url: '/hr/staff-resign',
+      views: {
+        header: headerConfig,
+        // footer: footerConfig,
+        'body': {
+          templateUrl: baseUrl + 'hr/staffResign.tpl.html',
+          controller: 'CtrlStaffResign',
+          resolve: {
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffResign'])
           }
         },
       }

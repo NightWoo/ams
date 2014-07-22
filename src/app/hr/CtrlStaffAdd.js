@@ -1,8 +1,8 @@
 define([
   'app',
-  'hr/staffService'
+  'hr/ServiceStaff'
 ], function (app) {
-  app.registerController('staffAddCtrl', [
+  app.registerController('CtrlStaffAdd', [
     '$scope',
     '$filter',
     'Staff',
