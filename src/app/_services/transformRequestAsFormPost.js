@@ -40,10 +40,13 @@ define(['app'], function (app) {
         }
 
         var value = data[name];
+        if (angular.isObject(value)) {
+          value = angular.toJson(value);
+        }
         buffer.push(
           encodeURIComponent(name) +
           "=" +
-          encodeURIComponent((value == null) ? "" : angular.toJson(value))
+          encodeURIComponent((value == null) ? "" : value)
         );
       }
 

@@ -3,20 +3,22 @@
  */
  define([
     'angular',
+    'angular-deferred-bootstrap',
     'app',
     'app-init'
-], function (ng) {
-    // 'use strict';
-
-    require(['domReady!'], function (document) {
-        ng.bootstrap(document, ['app', function () {
-            // for good measure, put ng-app on the html element
-            // studiously avoiding jQuery because angularjs.org says we shouldn't
-            // use it.  In real life, there are a ton of reasons to use it.
-            // karma likes to have ng-app on the html element when using requirejs.
-            ng.element(document).find('html').addClass('ng-app');
-            ng.element(document).find('body').attr('ng-controller', 'CtrlApp');
-        }]);
+], function (angular, deferredBootstrap, app) {
+    var staticDir = '/bms/src/';
+    deferredBootstrapper.bootstrap({
+      element: document.body,
+      module: app['name'],
+      resolve: {
+        'STATIC_DIR': ['$q', '$timeout', function ($q, $timeout) {
+          var deferred = $q.defer();
+          $timeout(function () {
+            deferred.resolve(staticDir);
+          });
+          return deferred.promise;
+        }]
+      }
     });
-
 });

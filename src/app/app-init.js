@@ -3,7 +3,8 @@ define([
   'routeDefs',
   '_services/User',
   '_directives/maxHeightBody',
-  '_services/transformRequestAsFormPost'
+  '_services/transformRequestAsFormPost',
+  '_common/modal/CModal',
 ], function (app) {
 
   app.factory('myHttpInterceptor', [

@@ -27,17 +27,35 @@ li.list-group-item>a {
 
 .panel-primary .btn-link { color: #000; }
 .panel-primary .btn-link:hover { color: #fff; }
+.panel-footer { background-color: #fff; }
+
+.form-control-static { padding-top: 6px; }
 /*modify bootstrap END*/
 
 
 /*margin padding*/
-.ml8 { margin-left: 8px; }
-.mb10 { margin-bottom: 10px }
-/*margin padding END*/
-
-/*height*/
+.mt_10 { margin-top: 10px; }
+.mb_10 { margin-bottom: 10px; }
+.mb_20 { margin-bottom: 20px; }
+.mb_40 { margin-bottom: 40px; }
+.pt_0 { padding-top: 0; }
+.pt_5 { padding-top: 5px; }
+.pr_5 { padding-right: 5px; }
+.pr_10 { padding-right: 10px; }
+.pl_10 { padding-left: 10px; }
+/*width height*/
+.wp_30 { width:30%; }
+.wp_45 { width:45%; }
+.wp_50 { width:50%; }
 .l-h_34 { line-height: 34px; }
-/*height END*/
+/*display*/
+.dspl_ib { display: inline-block; }
+/*table*/
+.v-a_m {vertical-align: middle;}
+.t-a_c {text-align: center;}
+/*font*/
+.f-w_n { font-weight: normal;}
+
 
 /*common*/
 body { overflow-y: hidden; }
@@ -69,11 +87,35 @@ legend { padding-bottom: 5px; }
   text-decoration: none;
 }
 
+div[accordion] h4 { cursor: pointer; }
+div[accordion] h4 a { display: block; }
+
 .thumbnail h5 { margin-left: 10px; }
-.require-mark { margin-right: 5px; }
+.require-mark { margin-right: 5px; color: #d9534f;}
 .form-hint { color: #ccc; }
-.require-mark { color: #d9534f;}
+a { cursor: pointer; }
+li.active a { cursor: default; }
+ul { list-style-type: none; -webkit-padding-start: 0;  padding-left: 0; }
 /*common END*/
+
+/*common modal*/
+.modal-alert,
+.modal-confirm,
+.modal-success { text-align: center; }
+.modal-alert .modal-content,
+.modal-confirm .modal-content { min-width: 300px; display: inline-block; width: auto; max-width: 80%; }
+.modal-alert .modal-header,
+.modal-confirm .modal-header { text-align:left; }
+.modal-alert .modal-body,
+.modal-confirm .modal-body { text-align:left; padding:25px 20px 25px; }
+.modal-alert .modal-body button,
+.modal-confirm .modal-body button { margin-left: 5px; }
+.modal-confirm .plus-info,
+.modal-alert .plus-info { margin-bottom: 0; margin-top: 6px; }
+.modal-success { text-align: center; }
+.modal-success .modal-content { display: inline-block; }
+.modal-success .alert-success{ min-width:200px; display:inline-block; width:auto; margin:0; max-width: 400px; }
+/*common modal END*/
 
 /*input校验*/
 input.ng-invalid.ng-dirty.form-control,

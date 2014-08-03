@@ -1,8 +1,8 @@
 <div class="staff-add container">
   <legend>入职</legend>
   <form name="formStaff" novalidate>
-    <h4>基本信息</h4>
-    <div class="form-horizontal" role="form" name="shit">
+    <h4 class="section-head">基本信息</h4>
+    <div class="form-horizontal" role="form">
       <div class="form-group">
         <label class="col-sm-2 control-label"><span class="require-mark">*</span>姓名</label>
         <div class="col-sm-4">
@@ -50,7 +50,7 @@
         <div class="col-sm-4">
           <select class="form-control" ng-model="staff.education" required>
             <option value="初中">初中</option>
-            <option value="中专" ng-selected="true">中专</option>
+            <option value="中专">中专</option>
             <option value="高中">高中</option>
             <option value="大专">大专</option>
             <option value="本科">本科</option>
@@ -87,7 +87,7 @@
         </div>
       </div>
     </div>
-    <h4>入职信息</h4>
+    <h4 class="section-head">入职信息</h4>
     <div class="form-horizontal" role="form">
       <div class="form-group">
         <label class="col-sm-2 control-label"><span class="require-mark">*</span>工号</label>
@@ -127,7 +127,7 @@
             <option value="I1">I1</option>
             <option value="I2">I2</option>
             <option value="I3">I3</option>
-            <option value="H1" ng-selected="true">H1</option>
+            <option value="H1">H1</option>
             <option value="H2">H2</option>
             <option value="H3">H3</option>
             <option value="G1">G1</option>
@@ -182,7 +182,7 @@
   </form>
   <form name="formExp" novalidate>
     <div ng-repeat="one in expTypes">
-      <h4>{{one.title}}</h4>
+      <h4 class="section-head">{{one.title}}</h4>
       <table class="exp-table table mb10">
         <thead>
           <tr>

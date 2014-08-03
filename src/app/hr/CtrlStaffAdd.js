@@ -6,7 +6,8 @@ define([
     '$scope',
     '$filter',
     'Staff',
-  function ($scope, $filter, Staff) {
+    'CModal',
+  function ($scope, $filter, Staff, CModal) {
 
     Staff.initAdd($scope);
 
@@ -34,13 +35,17 @@ define([
     $scope.saveStaff = function () {
       $scope.staff.enter_date = $filter('date')($scope.staffForm.enterDate.val, 'yyyy-MM-dd');
       $scope.staff.start_date = $filter('date')($scope.staffForm.startDate.val, 'yyyy-MM-dd');
-      $scope.staff.dept_id = $scope.org[3] || $scope.org[2] || $scope.org[1];
+      $scope.staff.dept_id = $scope.org[3].id || $scope.org[2].id || $scope.org[1].id;
       Staff.save({
         staffData: $scope.staff,
         expData: packExpData()
       }).success(function (response) {
         if (response.success) {
-          // Staff.resetAdd($scope);
+          CModal.success({
+            content: '入职信息提交成功'
+          }).then(function() {
+            Staff.resetAdd($scope);
+          });
         }
       });
     };

@@ -3,7 +3,8 @@ define(['app'], function(app) {
     '$stateProvider',
     '$urlRouterProvider',
     '$couchPotatoProvider',
-  function ($stateProvider, $urlRouterProvider, $couchPotatoProvider) {
+    'STATIC_DIR',
+  function ($stateProvider, $urlRouterProvider, $couchPotatoProvider, STATIC_DIR) {
     this.$get = function() {
       // this is a config-time-only provider
       // in a future sample it will expose runtime information to the app
@@ -12,7 +13,7 @@ define(['app'], function(app) {
     // $locationProvider.html5Mode(true);
 
     $urlRouterProvider.otherwise('/home');
-    var baseUrl = '/bms/src/app/'
+    var baseUrl = STATIC_DIR + 'app/'
     var headerConfig = {
       templateUrl: baseUrl + '_common/header/header.tpl.html',
       controller: 'CtrlHeader',

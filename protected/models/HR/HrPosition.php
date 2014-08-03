@@ -35,12 +35,12 @@ class HrPosition {
         $this->_ar->save();
     }
 
-    // public static function getPositionList ($channel='', $level=0) {
-    //     $seeker = new HrPositionSeeker();
-    //     $datas = $seeker->getPositionList($channel, $level);
+    public static function getPositionList ($channel='', $level=0) {
+        $seeker = new HrPositionSeeker();
+        $datas = $seeker->getPositionList($channel, $level);
 
-    //     return $datas;
-    // }
+        return $datas;
+    }
 
     public static function getGradeList () {
         $seeker = new HrPositionSeeker;

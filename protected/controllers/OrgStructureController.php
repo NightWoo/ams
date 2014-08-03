@@ -32,7 +32,7 @@ class OrgStructureController extends BmsBaseController
     public function actionDepartmentSave () {
         $id = $this->validateIntVal('deptId', 0);
         $deptData = $this->validateStringVal('deptData', '{}');
-
+        $managerNumber = $this->validateStringVal('managerNumber', '');
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $dept = OrgDepartment::createById($id);
@@ -40,6 +40,11 @@ class OrgStructureController extends BmsBaseController
                 $dept->generate($deptData);
             } else {
                 $dept->modify($deptData);
+            }
+            $user = User::model()->find('card_number=? AND isdelete=0', array($managerNumber));
+            if (!empty($user)) {
+                $dept->_ar->manager_id = $user->id;
+                $dept->_ar->save();
             }
             $transaction->commit();
             $this->renderJsonBms(true, 'save success', '');

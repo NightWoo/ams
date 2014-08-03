@@ -70,6 +70,12 @@
                       <input type="text" class="form-control" id="inputShortName" placeholder="简称...">
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="inputShortName" class="col-sm-2 control-label">主管</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="managerNumber" placeholder="请输入工号...">
+                    </div>
+                  </div>
                 </form>
               </div>
               <div class="tab-pane fade" id="paneChildrenSort">

@@ -2,11 +2,11 @@
 Yii::import('application.models.AR.HR.OrgDepartmentAR');
 class OrgStructureSeeker
 {
-  public function __construct () {
+  public function __construct() {
 
   }
 
-  public function getOrgStructure ($parentId=0) {
+  public function getOrgStructure($parentId=0) {
     $parentCondition = empty($parentId) ? '' : " AND parent_id={$parentId}";
     $sql = "SELECT
               id,
@@ -15,9 +15,10 @@ class OrgStructureSeeker
               display_name,
               short_name,
               level,
-              sort_number
+              sort_number,
+              manager_name
             FROM
-              org_department
+              view_org_department
             WHERE
               removed = 0 $parentCondition
             ORDER BY
@@ -27,7 +28,7 @@ class OrgStructureSeeker
     return $datas;
   }
 
-  public function get3LevelList () {
+  public function get3LevelList() {
     $sql = "SELECT * FROM org_department WHERE level>0 AND removed=0 ORDER BY level DESC";
     $depts = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -51,5 +52,41 @@ class OrgStructureSeeker
     }
 
     return array_values($org['1'])[0];
+  }
+
+  public function deptParents($parentId, $level) {
+    $highArr = array();
+    if ($level>1) {
+      $sql = "SELECT * FROM org_department WHERE level<$level AND level>0";
+      $highs = Yii::app()->db->createCommand($sql)->queryAll();
+      foreach ($highs as $high) {
+        $highArr[$high['id']] = $high;
+      }
+    }
+
+    $org = array();
+    $org[$level--] = array();
+    for (; $level > 0; $level--) {
+      $org[$level] = $highArr[$parentId];
+      $parentId = $highArr[$parentId]['parent_id'];
+    }
+
+    return $org;
+  }
+
+  public static function getDeptManager($deptId) {
+    $sql = "SELECT manager_id FROM org_department WHERE id=$deptId";
+    $managerId  = Yii::app()->db->createCommand($sql)->queryScalar();
+    return $managerId;
+  }
+
+  public static function getTrManager() {
+    return 101;
+  }
+
+  public static function getFactoryManager() {
+    $sql = "SELECT manager_id FROM org_department WHERE level=0";
+    $managerId = Yii::app()->db->createCommand($sql)->queryScalar();
+    return $managerId;
   }
 }
