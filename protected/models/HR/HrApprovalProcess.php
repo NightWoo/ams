@@ -29,10 +29,12 @@ class HrApprovalProcess {
       '4' => 0,
       '5' => 2, //system
     );
-    if ($curParents[1]['id'] === $applyParents[1]['id']) {
-      if ($curParents[2]['id'] !== $applyParents[2]['id']) {
+
+    if ($curParents[1] && $applyParents[1] && $curParents[1]['id'] === $applyParents[1]['id']) {
+      if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
         $type = 'differentLevel2';
-        $processManagers['2'] = OrgStructureSeeker::getDeptManager($applyParents[2]['id']);
+        $level2Id = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
+        $processManagers['2'] = OrgStructureSeeker::getDeptManager($level2Id);
       } else {
         $type = 'sameLevel2';
         $processManagers['2'] = OrgStructureSeeker::getDeptManager($curDept['id']);

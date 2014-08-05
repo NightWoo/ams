@@ -81,5 +81,9 @@ class HrStaff {
     return $transferAr;
   }
 
+  public function closeTransfer($transferId) {
+
+  }
+
 
 }

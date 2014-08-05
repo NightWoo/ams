@@ -48,15 +48,17 @@ class HrStaffSeeker
             WHERE
               employee_number = '$employeeNum'";
     $data =  Yii::app()->db->createCommand($sql)->queryRow();
-    $data['dept_id'] = intval($data['dept_id']);
+    if (!empty($data)) {
+      $data['dept_id'] = intval($data['dept_id']);
 
-    $orgSeeker = new OrgStructureSeeker();
-    $org = $orgSeeker->deptParents($data['dept_parent_id'], $data['dept_level']);
-    $org[$data['dept_level']] = array(
-      'display_name'=> $data['dept_display_name'],
-      'short_name'=> $data['dept_short_name']
-    );
-    $data['org'] = $org;
+      $orgSeeker = new OrgStructureSeeker();
+      $org = $orgSeeker->deptParents($data['dept_parent_id'], $data['dept_level']);
+      $org[$data['dept_level']] = array(
+        'display_name'=> $data['dept_display_name'],
+        'short_name'=> $data['dept_short_name']
+      );
+      $data['org'] = $org;
+    }
     return $data;
   }
 
@@ -104,7 +106,7 @@ class HrStaffSeeker
               transfer_id,
               conclusion,
               comment,
-              approver_user_id,
+              approver_id,
               approval_status,
               process_type,
               procedure_type,
@@ -136,6 +138,34 @@ class HrStaffSeeker
                     procedure_point_id ASC";
         $approval['sub'] = Yii::app()->db->createCommand($subSql)->queryAll();
       }
+    }
+
+    return $data;
+  }
+
+  public function queryMyApproval() {
+    $userId = Yii::app()->user->id;
+
+    $sql = "SELECT
+              transfer_id,
+              staff_id,
+              employee_number
+            FROM
+              view_hr_approval
+            WHERE
+              approver_id = $userId AND
+              approval_status = 1";
+    $approval = Yii::app()->db->createCommand($sql)->queryRow();
+
+    $data = array(
+        'basicInfo' => array(),
+        'applyInfo' => array(),
+        'approvalRecords' => array()
+    );
+    if (!empty($approval)) {
+      $data['approvalRecords'] = $this->queryApprovalInfo($approval['transfer_id']);
+      $data['basicInfo'] = $this->queryTransferBasicInfo($approval['employee_number']);
+      $data['applyInfo'] = $this->queryTransferApplyInfo($approval['staff_id']);
     }
 
     return $data;

@@ -82,7 +82,21 @@ class StaffController extends BmsBaseController
       $staff = HrStaff::createById($id);
       $data = $staff->applyTransfer($applyForm);
       $transaction->commit();
-      $this->renderJsonApp(true, 'apply success', $data);
+
+      $seeker = new HrStaffSeeker();
+      $applyInfo = array();
+      $approvalRecords = array();
+      if (!empty($staff)) {
+        $applyInfo = $seeker->queryTransferApplyInfo($id);
+        if (!empty($applyInfo)) {
+          $approvalRecords = $seeker->queryApprovalInfo($applyInfo['id']);
+        }
+      }
+      $ret = array(
+        'applyInfo' => $applyInfo,
+        'approvalRecords' => $approvalRecords
+      );
+      $this->renderJsonApp(true, 'apply success', $ret);
     } catch (Exception $e) {
       $transaction->rollback();
       $this->renderJsonApp(false, $e->getMessage());
@@ -102,6 +116,16 @@ class StaffController extends BmsBaseController
     }
   }
 
+  public function actionGetMyApproval() {
+    try {
+      $seeker = new HrStaffSeeker();
+      $data = $seeker->queryMyApproval();
+      $this->renderJsonApp(true, 'ok', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
   public function actionSubmitApproval() {
     $approvalForm = $this->validateStringVal('approvalForm', '{}');
     $transferDate = $this->validateStringVal('transferDate', '');
@@ -109,7 +133,7 @@ class StaffController extends BmsBaseController
     try {
       $approvalForm = is_array($approvalForm) ? $approvalForm : CJSON::decode($approvalForm);
       $approval = HrApproval::createById($approvalForm['id']);
-      $data = $approval->approve($approvalForm);
+      $approval->approve($approvalForm);
 
       if (!empty($transferDate)) {
 
@@ -119,7 +143,14 @@ class StaffController extends BmsBaseController
       }
 
       $transaction->commit();
-      $this->renderJsonApp(true, 'ok', $data);
+
+      $approvalRecords = array();
+      if (!empty($approvalForm)) {
+        $seeker = new HrStaffSeeker();
+        $approvalRecords = $seeker->queryApprovalInfo($approvalForm['transfer_id']);
+      }
+
+      $this->renderJsonApp(true, 'ok', $approvalRecords);
     } catch (Exception $e) {
       $transaction->rollback();
       $this->renderJsonApp(false, $e->getMessage());

@@ -26,6 +26,7 @@
       </div>
     </div>
   </div>
+  <div class="alert alert-info" ng-if="state.hasQueried && !basicInfo.id">查无此员工</div>
   <div ng-if="basicInfo.id">
     <h4 class="section-head">岗位信息</h4>
     <form name="formApply" novalidate>
@@ -113,7 +114,7 @@
     </form>
   </div>
   <h4 class="section-head" ng-if="approvalRecords">审批</h4>
-  <div class="panel panel-default" ng-if="curApproval">
+  <div class="panel panel-default" ng-if="curApproval && curApproval.approver_id===user.id">
     <div class="panel-heading">
       <span class="glyphicon glyphicon-edit pr_5"></span>
       <span>{{curApproval.procedure_name}}</span>

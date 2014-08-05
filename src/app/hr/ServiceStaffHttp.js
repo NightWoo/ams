@@ -39,6 +39,12 @@ define([
           params: paramObj
         });
       },
+      getMyApproval: function () {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/getMyApproval'
+        });
+      },
       transferApply: function (paramObj) {
         return $http({
           method: 'post',
