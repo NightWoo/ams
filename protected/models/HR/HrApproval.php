@@ -1,7 +1,9 @@
 <?php
 Yii::import('application.models.AR.HR.HrApprovalAR');
 Yii::import('application.models.AR.HR.HrApprovalSubAR');
+Yii::import('application.models.AR.HR.HrTransferAR');
 Yii::import('application.models.AR.HR.HrProcedurePointAR');
+Yii::import('application.models.HR.HrStaff');
 
 class HrApproval {
   private $_ar;
@@ -28,13 +30,13 @@ class HrApproval {
     $this->createSub();
   }
 
-  public static function createProcess($transferId, $processManagers) {
-    foreach ($processManagers as $procedureId => $userId) {
-      if (!empty($userId)) {
+  public static function createProcess($transferId, $processDepts) {
+    foreach ($processDepts as $procedureId => $deptId) {
+      if (!empty($deptId)) {
         $data = array(
           'transfer_id' => $transferId,
           'procedure_id' => $procedureId,
-          'user_id' => $userId
+          'dept_id' => $deptId
         );
         if ($procedureId == 1) {
           $data['status'] = 1;
@@ -62,13 +64,18 @@ class HrApproval {
     $this->_ar->conclusion = $approvalForm['conclusion'];
     $this->_ar->comment = $approvalForm['comment'];
     $this->_ar->status = 2;
+    $this->_ar->user_id = Yii::app()->user->id;
     $this->_ar->save();
     if (!empty($approvalForm['sub'])) {
       foreach ($approvalForm['sub'] as $sub) {
         $this->approveSub($sub);
       }
     }
-    $this->activeNext();
+    if ($approvalForm['conclusion'] == 1) {
+      $this->activeNext();
+    } else {
+      $this->closeReject();
+    }
   }
 
   public function approveSub($sub) {
@@ -80,7 +87,44 @@ class HrApproval {
 
   public function activeNext() {
     $approvalAr = HrApprovalAR::model()->find('transfer_id=? AND status=0 ORDER BY procedure_id ASC', array($this->_ar->transfer_id));
-    $approvalAr->status = 1;
-    $approvalAr->save();
+    if (!empty($approvalAr)) {
+      if ($approveAr->dept_id>0) {
+        $approvalAr->status = 1;
+        $approvalAr->save();
+      } else { // 自动结案
+        $approvalAr->status = 2;
+        $approvalAr->conclusion = 1;
+        $approvalAr->user_id = 2;
+        $approvalAr->save();
+
+        $transfer = HrTransfer::createById($approvalAr->transfer_id);
+        $transfer->closeApproved();
+      }
+    }
+  }
+
+  public function closeReject() {
+    $approvalArs = HrApprovalAR::model()->findAll('transfer_id=? AND status=0 ORDER BY procedure_id ASC', array($this->_ar->transfer_id));
+    foreach ($approvalArs as $ar) {
+      if ($ar->procedure_id == 5) {
+        $ar->status = 2;
+        $ar->conclusion = 0;
+        $transfer = HrTransfer::createById($this->_ar->transfer_id);
+        $transfer->closeReject();
+      } else {
+        $ar->status = -1;
+      }
+      $ar->save();
+    }
+  }
+
+  public function closeApproved() {
+    $this->_ar->status = 2;
+    $this->_ar->conclusion = 1;
+    $this->_ar->user_id = 2;
+    $this->_ar->save();
+
+    $transfer = HrTransfer::createById($this->_ar->transfer_id);
+    $transfer->closeApproved();
   }
 }

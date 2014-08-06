@@ -80,13 +80,21 @@ class OrgStructureSeeker
     return $managerId;
   }
 
-  public static function getTrManager() {
-    return 101;
+  public static function getTrId() {
+    $sql = "SELECT id From org_department WHERE UPPER(short_name)='TR'";
+    $trId = Yii::app()->db->createCommand($sql)->queryScalar();
+    return $trId;
   }
 
   public static function getFactoryManager() {
     $sql = "SELECT manager_id FROM org_department WHERE level=0";
     $managerId = Yii::app()->db->createCommand($sql)->queryScalar();
     return $managerId;
+  }
+
+  public static function getFactoryId() {
+    $sql = "SELECT id FROM org_department WHERE level=0";
+    $factoryId = Yii::app()->db->createCommand($sql)->queryScalar();
+    return $factoryId;
   }
 }

@@ -22,27 +22,27 @@ class HrApprovalProcess {
     $applyParents = $orgSeeker->deptParents($applyDept->parent_id, $applyDept->level);
 
     $type = 'differentLevel1';
-    $processManagers = array(
-      '1' => OrgStructureSeeker::getDeptManager($curDept['id']),
-      '2' => OrgStructureSeeker::getDeptManager($applyParents[1]['id']),
-      '3' => OrgStructureSeeker::getTrManager(),
+    $processDepts = array(
+      '1' => $curDept['id'],
+      '2' => $applyParents[1]['id'],
+      '3' => OrgStructureSeeker::getTrId(),
       '4' => 0,
-      '5' => 2, //system
+      '5' => -1,
     );
 
     if ($curParents[1] && $applyParents[1] && $curParents[1]['id'] === $applyParents[1]['id']) {
       if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
         $type = 'differentLevel2';
         $level2Id = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
-        $processManagers['2'] = OrgStructureSeeker::getDeptManager($level2Id);
+        $processManagers['2'] = $level2Id;
       } else {
         $type = 'sameLevel2';
-        $processManagers['2'] = OrgStructureSeeker::getDeptManager($curDept['id']);
+        $processManagers['2'] = $curDept['id'];
       }
     } else {
-      $processManagers['4'] = OrgStructureSeeker::getFactoryManager();
+      $processManagers['4'] = OrgStructureSeeker::getFactoryId();
     }
 
-    return array($type, $processManagers);
+    return array($type, $processDepts);
   }
 }

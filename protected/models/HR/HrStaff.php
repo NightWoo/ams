@@ -2,6 +2,7 @@
 Yii::import('application.models.AR.HR.HrStaffAR');
 Yii::import('application.models.AR.HR.HrStaffExpAR');
 Yii::import('application.models.AR.HR.HrTransferAR');
+Yii::import('application.models.HR.HrStaffPositionAR');
 Yii::import('application.models.HR.HrApproval');
 Yii::import('application.models.HR.HrStaffSeeker');
 Yii::import('application.models.HR.OrgStructureSeeker');
@@ -35,6 +36,8 @@ class HrStaff {
       $this->_ar->$key = $value;
     }
     $this->_ar->save();
+
+    $staff->positionStart($staffData['dept_id'], $staffData['position_id'], $staffData['start_date']);
   }
 
   public function saveExp($expData) {
@@ -63,27 +66,25 @@ class HrStaff {
     $apply['position_id'] = $this->_ar->position_id;
     $apply['create_time'] = date('YmdHis');
 
-    list($type, $processManagers) = HrApprovalProcess::typeProcess($apply['dept_id'], $apply['apply_dept_id']);
+    list($type, $processDepts) = HrApprovalProcess::typeProcess($apply['dept_id'], $apply['apply_dept_id']);
 
     $apply['process_type'] = $type;
 
-    $transferAr = new HrTransferAR();
-    foreach ($apply as $key => $value) {
-      $transferAr->$key = $value;
-    }
-    $transferAr->save();
+    $transfer = HrTransfer::createById();
+    $transfer->save($apply);
 
-    // $approval = HrApproval::createById();
-    // $userId = OrgStructureSeeker::getDeptManager($apply['dept_id']);
-    // $approval->create($transferAr->id, 1, $userId);
+    HrApproval::createProcess($transfer->_ar->id, $processDepts);
 
-    HrApproval::createProcess($transferAr->id, $processManagers);
-    return $transferAr;
+    return $transfer->_ar;
   }
 
-  public function closeTransfer($transferId) {
-
+  public function positionStart($deptId, $positionId, $startDate='') {
+    $staffPosition= new HrStaffPositionAR();
+    $staffPosition->staff_id = $this->_ar->id;
+    $staffPosition->dept_id = $deptId;
+    $staffPosition->position_id = $positionId;
+    $staffPosition->start_date = empty($startDate) ? date('Y-m-d') : $startDate;
+    $staffPosition->save();
   }
-
 
 }
