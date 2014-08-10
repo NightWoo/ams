@@ -73,6 +73,7 @@ define([
           }).success(function (response) {
             if (response.success) {
               scope.basicInfo = response.data;
+              scope.state.hasQueried = true;
             }
           });
         },
@@ -108,7 +109,8 @@ define([
           }
         },
         initResign: function (scope) {
-          scope.basicInfo = {};
+          scope.basicInfo = {}; //员工基础信息
+          scope.state = {}; //各种状态
           scope.resignReasons = [
             '薪酬待遇',
             '工作环境',

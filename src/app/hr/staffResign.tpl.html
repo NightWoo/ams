@@ -13,6 +13,7 @@
       </div>
     </div>
   </div>
+  <div class="alert alert-info" ng-if="state.hasQueried && !basicInfo.id">查无此在职员工</div>
   <div ng-show="basicInfo.id">
     <form name="formResign" novalidate>
       <h4 class="section-head">基本信息</h4>

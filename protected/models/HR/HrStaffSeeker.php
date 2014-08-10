@@ -47,7 +47,7 @@ class HrStaffSeeker
               view_hr_staff_basic_info
             WHERE
               employee_number = '$employeeNum' AND
-              status = 0";
+              staff_status = 0";
     $data =  Yii::app()->db->createCommand($sql)->queryRow();
     if (!empty($data)) {
       $data['dept_id'] = intval($data['dept_id']);

@@ -117,5 +117,6 @@ class HrStaff {
       $surveyAr->save();
     }
     $this->_ar->status = 1;
+    $this->_ar->save();
   }
 }
