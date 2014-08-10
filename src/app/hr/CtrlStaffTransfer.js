@@ -6,7 +6,8 @@ define([
     '$scope',
     '$filter',
     'Staff',
-  function ($scope, $filter, Staff) {
+    'CModal',
+  function ($scope, $filter, Staff, CModal) {
     Staff.initTransfer($scope);
 
     $scope.query = function () {
@@ -30,8 +31,11 @@ define([
         if (response.success) {
           var data = response.data;
           data.basicInfo = $scope.basicInfo;
-          Staff.setTransferData($scope, data);
-          console.log(response.data);
+          CModal.success({
+            content: '调岗提交成功'
+          }).then(function () {
+            Staff.setTransferData($scope, data);
+          });
         }
       });
     };
@@ -41,15 +45,19 @@ define([
         approvalForm: $scope.curApproval
       };
       if ($scope.curApproval.transferDate && $scope.curApproval.transferDate.val) {
-        data.transferDate = $filter('date')($scope.curApproval.transferDate.val, 'yyyy-MM-dd');
+        submitData.transferDate = $filter('date')($scope.curApproval.transferDate.val, 'yyyy-MM-dd');
       }
       Staff.transferApprove(submitData).success(function (response) {
         var data = {};
         data.basicInfo = $scope.basicInfo;
         data.applyInfo = $scope.applyInfo;
+        data.applyInfo.transfer_date = submitData.transferDate;
         data.approvalRecords = response.data;
-        Staff.setTransferData($scope, data);
-        console.log(response.data);
+        CModal.success({
+          content: '审批提交成功'
+        }).then(function () {
+          Staff.setTransferData($scope, data);
+        });
       });
     };
   }]);

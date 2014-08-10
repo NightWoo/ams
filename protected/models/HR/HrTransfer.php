@@ -18,6 +18,10 @@ class HrTransfer {
     return new $c($id);
   }
 
+  public function __get($attr) {
+    return $this->{$attr};
+  }
+
   public function save($data) {
     foreach ($data as $key => $value) {
       $this->_ar->$key = $value;
@@ -35,6 +39,6 @@ class HrTransfer {
     $this->_ar->status = 1;
     $this->_ar->save();
     $staff = HrStaff::createById($this->_ar->staff_id);
-    $staff->positionStart($this->_ar->apply_dept_id, $this->_ar->apply_position_id, $$this->_ar->transfer_date);
+    $staff->positionStart($this->_ar->apply_dept_id, $this->_ar->apply_position_id, $this->_ar->transfer_date, $this->_ar->id);
   }
 }

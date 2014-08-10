@@ -1,6 +1,6 @@
 <?php
 
-class HrStaffPositionAR extends CActiveRecord
+class HrResignAR extends CActiveRecord
 {
 	/**
 	 * @var integer $id
@@ -20,7 +20,7 @@ class HrStaffPositionAR extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'hr_staff_position';
+		return 'hr_resign';
 	}
 
 	/**

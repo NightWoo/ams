@@ -114,39 +114,44 @@
     </form>
   </div>
   <h4 class="section-head" ng-if="approvalRecords">审批</h4>
-  <div class="panel panel-default" ng-if="curApproval && curApproval.approver_id===user.id">
+  <div class="panel panel-default" ng-if="curApproval">
     <div class="panel-heading">
       <span class="glyphicon glyphicon-edit pr_5"></span>
       <span>{{curApproval.procedure_name}}</span>
+      <span ng-if="curApproval.approver_id!==user.id">({{curApproval.approver_display_name}}  审批中)</span>
     </div>
-    <div class="panel-body pt_5">
-      <form name="formApproval" novalidate>
-        <div class="checkbox" ng-repeat="point in curApproval.sub">
-          <label>
-            <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="point.conclusion">{{point.point_description}}
-          </label>
-        </div>
-        <div class="radio" style="margin-top: 15px;">
-          <label>
-            <input type="radio" name="curConclusion" value="1" ng-model="curApproval.conclusion">
-            <strong class="text-success">同意调动</strong>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="curConclusion" value="0" ng-model="curApproval.conclusion">
-            <strong class="text-danger">不同意调动</strong>
-          </label>
-        </div>
-        <div class="input-group wp_30 mb_10" ng-if="applyInfo.transfer_date === '0000-00-00' && curApproval.conclusion==1">
-          <span class="input-group-addon">*&nbsp;允许报道日期</span>
-          <input class="form-control ng-isolate-scope ng-pristine ng-invalid ng-invalid-required ng-valid-date" type="text" placeholder="调动日期" datepicker-popup="" min-date="" datepicker-append-to-body="true" ng-model="curApproval.transferDate.val" is-open="curApproval.transferDate.opened" ng-click="curApproval.transferDate.opened=true" required>
-        </div>
-        <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" ng-if="curApproval.conclusion"></textarea>
-        <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" required ng-if="curApproval.conclusion==='0'"></textarea>
-      </form>
+    <div ng-if="curApproval.approver_id===user.id">
+      <div class="panel-body pt_5">
+        <form name="formApproval" novalidate>
+          <div class="checkbox" ng-repeat="point in curApproval.sub">
+            <label>
+              <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="point.conclusion">{{point.point_description}}
+            </label>
+          </div>
+          <div class="radio" style="margin-top: 15px;">
+            <label>
+              <input type="radio" name="curConclusion" value="1" ng-model="curApproval.conclusion">
+              <strong class="text-success">同意调动</strong>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="curConclusion" value="0" ng-model="curApproval.conclusion">
+              <strong class="text-danger">不同意调动</strong>
+            </label>
+          </div>
+          <div class="input-group wp_30 mb_10" ng-if="applyInfo.transfer_date === '0000-00-00' && curApproval.conclusion==1">
+            <span class="input-group-addon">*&nbsp;允许报道日期</span>
+            <input class="form-control ng-isolate-scope ng-pristine ng-invalid ng-invalid-required ng-valid-date" type="text" placeholder="调动日期" datepicker-popup="" min-date="" datepicker-append-to-body="true" ng-model="curApproval.transferDate.val" is-open="curApproval.transferDate.opened" ng-click="curApproval.transferDate.opened=true" required>
+          </div>
+          <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" ng-if="curApproval.conclusion"></textarea>
+          <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" required ng-if="curApproval.conclusion==='0'"></textarea>
+        </form>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-primary" ng-click="submitApproval()" ng-disabled="formApproval.$invalid || curApproval.conclusion<'0'">提交审批</button>
+      </div>
     </div>
-    <div class="panel-footer"><button class="btn btn-primary" ng-click="submitApproval()" ng-disabled="formApproval.$invalid || curApproval.conclusion<'0'">提交审批</button></div>
   </div>
   <div accordion close-others="false">
     <div accordion-group is-open="approval.open" ng-repeat="approval in approvalRecords">

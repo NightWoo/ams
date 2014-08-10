@@ -23,24 +23,26 @@ class HrApprovalProcess {
 
     $type = 'differentLevel1';
     $processDepts = array(
-      '1' => $curDept['id'],
+      '1' => $curParents[1]['id'],
       '2' => $applyParents[1]['id'],
       '3' => OrgStructureSeeker::getTrId(),
       '4' => 0,
       '5' => -1,
     );
 
+
     if ($curParents[1] && $applyParents[1] && $curParents[1]['id'] === $applyParents[1]['id']) {
-      if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
+      // if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
         $type = 'differentLevel2';
-        $level2Id = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
-        $processManagers['2'] = $level2Id;
-      } else {
-        $type = 'sameLevel2';
-        $processManagers['2'] = $curDept['id'];
-      }
+        $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
+        $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
+      // } else {
+      //   $type = 'sameLevel2';
+      //   $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
+      //   $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
+      // }
     } else {
-      $processManagers['4'] = OrgStructureSeeker::getFactoryId();
+      $processDepts['4'] = OrgStructureSeeker::getFactoryId();
     }
 
     return array($type, $processDepts);

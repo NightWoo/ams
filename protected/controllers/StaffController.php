@@ -4,6 +4,7 @@ Yii::import('application.models.AR.HR.HrPositionAR');
 Yii::import('application.models.AR.HR.HrTransferAR');
 Yii::import('application.models.HR.HrStaff');
 Yii::import('application.models.HR.HrApproval');
+Yii::import('application.models.HR.HrTransfer');
 Yii::import('application.models.HR.HrStaffSeeker');
 
 class StaffController extends BmsBaseController
@@ -37,12 +38,24 @@ class StaffController extends BmsBaseController
     }
   }
 
+  public function actionQueryBasicInfo() {
+    $employeeNumber = $this->validateStringVal('employeeNumber', '');
+
+    try {
+      $seeker = new HrStaffSeeker();
+      $basicInfo = $seeker->queryBasicInfo($employeeNumber);
+      $this->renderJsonApp(true, 'OK', $basicInfo);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
   public function actionQueryTansferInfo() {
     $employeeNumber = $this->validateStringVal('employeeNumber', '');
 
     try {
       $seeker = new HrStaffSeeker();
-      $basicInfo = $seeker->queryTransferBasicInfo($employeeNumber);
+      $basicInfo = $seeker->queryBasicInfo($employeeNumber);
       $applyInfo = array();
       $approvalRecords = array();
       if (!empty($basicInfo)) {
@@ -151,6 +164,26 @@ class StaffController extends BmsBaseController
       }
 
       $this->renderJsonApp(true, 'ok', $approvalRecords);
+    } catch (Exception $e) {
+      $transaction->rollback();
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
+  public function actionSubmitResign() {
+    $staffId = $this->validateIntVal('staffId', 0);
+    $resignForm = $this->validateStringVal('resignForm', '{}');
+
+    $transaction = Yii::app()->db->beginTransaction();
+    try {
+      if (!empty($staffId)) {
+        $staff = HrStaff::createById($staffId);
+        $staff->resign($resignForm);
+      } else {
+        throw new Exception("staff id can not be empty");
+      }
+      $transaction->commit();
+      $this->renderJsonApp(true, 'submit resign success', '');
     } catch (Exception $e) {
       $transaction->rollback();
       $this->renderJsonApp(false, $e->getMessage());

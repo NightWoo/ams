@@ -32,6 +32,13 @@ define([
           url: '/bms/positionSystem/getGradePositionList'
         });
       },
+      getBasicInfo: function (paramObj) {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/queryBasicInfo',
+          params: paramObj
+        });
+      },
       getTransferInfo: function (paramObj) {
         return $http({
           method: 'get',
@@ -57,6 +64,14 @@ define([
         return $http({
           method: 'post',
           url: '/bms/staff/submitApproval',
+          transformRequest: transformRequestAsFormPost,
+          data: paramObj
+        });
+      },
+      resignSubmit: function (paramObj) {
+        return $http({
+          method: 'post',
+          url: '/bms/staff/submitResign',
           transformRequest: transformRequestAsFormPost,
           data: paramObj
         });

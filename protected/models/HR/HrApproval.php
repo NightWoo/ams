@@ -87,8 +87,9 @@ class HrApproval {
 
   public function activeNext() {
     $approvalAr = HrApprovalAR::model()->find('transfer_id=? AND status=0 ORDER BY procedure_id ASC', array($this->_ar->transfer_id));
+
     if (!empty($approvalAr)) {
-      if ($approveAr->dept_id>0) {
+      if ($approvalAr->dept_id>0) {
         $approvalAr->status = 1;
         $approvalAr->save();
       } else { // 自动结案

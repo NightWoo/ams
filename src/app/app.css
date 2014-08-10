@@ -30,11 +30,15 @@ li.list-group-item>a {
 .panel-footer { background-color: #fff; }
 
 .form-control-static { padding-top: 6px; }
+
+.radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline { margin-left: 0;}
+.radio-inline, .checkbox-inline { margin-right: 20px; }
 /*modify bootstrap END*/
 
 
 /*margin padding*/
 .mt_10 { margin-top: 10px; }
+.mb_5 { margin-bottom: 5px; }
 .mb_10 { margin-bottom: 10px; }
 .mb_20 { margin-bottom: 20px; }
 .mb_40 { margin-bottom: 40px; }

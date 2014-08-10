@@ -26,7 +26,7 @@ class HrStaffSeeker
     return array_values($data);
   }
 
-  public function queryTransferBasicInfo($employeeNum) {
+  public function queryBasicInfo($employeeNum) {
     $sql = "SELECT
               id,
               employee_number,
@@ -46,7 +46,8 @@ class HrStaffSeeker
             FROM
               view_hr_staff_basic_info
             WHERE
-              employee_number = '$employeeNum'";
+              employee_number = '$employeeNum' AND
+              status = 0";
     $data =  Yii::app()->db->createCommand($sql)->queryRow();
     if (!empty($data)) {
       $data['dept_id'] = intval($data['dept_id']);

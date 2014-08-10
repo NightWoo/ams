@@ -1,8 +1,10 @@
 <?php
 Yii::import('application.models.AR.HR.HrStaffAR');
 Yii::import('application.models.AR.HR.HrStaffExpAR');
-Yii::import('application.models.AR.HR.HrTransferAR');
-Yii::import('application.models.HR.HrStaffPositionAR');
+Yii::import('application.models.HR.HrTransfer');
+Yii::import('application.models.AR.HR.HrStaffPositionAR');
+Yii::import('application.models.AR.HR.HrResignAR');
+Yii::import('application.models.AR.HR.HrResignSurveyAR');
 Yii::import('application.models.HR.HrApproval');
 Yii::import('application.models.HR.HrStaffSeeker');
 Yii::import('application.models.HR.OrgStructureSeeker');
@@ -37,7 +39,7 @@ class HrStaff {
     }
     $this->_ar->save();
 
-    $staff->positionStart($staffData['dept_id'], $staffData['position_id'], $staffData['start_date']);
+    $this->positionStart($staffData['dept_id'], $staffData['position_id'], $staffData['start_date']);
   }
 
   public function saveExp($expData) {
@@ -78,13 +80,42 @@ class HrStaff {
     return $transfer->_ar;
   }
 
-  public function positionStart($deptId, $positionId, $startDate='') {
+  public function positionStart($deptId, $positionId, $startDate='', $transferId=0) {
     $staffPosition= new HrStaffPositionAR();
     $staffPosition->staff_id = $this->_ar->id;
     $staffPosition->dept_id = $deptId;
     $staffPosition->position_id = $positionId;
+    $staffPosition->transfer_id = $transferId;
     $staffPosition->start_date = empty($startDate) ? date('Y-m-d') : $startDate;
+    if ($staffPosition->start_date <= date('Y-m-d')) {
+      $this->_ar->dept_id = $deptId;
+      $this->_ar->position_id = $positionId;
+      $this->_ar->save();
+      $staffPosition->status = 1;
+    }
     $staffPosition->save();
   }
 
+  public function resign($resignForm) {
+    $resignForm = is_array($resignForm) ? $resignForm : CJSON::decode($resignForm);
+    $resignAr = new HrResignAR();
+    $resignAr->staff_id = $this->_ar->id;
+    foreach($resignForm['resign'] as $key => $value) {
+      $resignAr->$key = $value;
+    }
+    $resignAr->create_time = date('YmdHis');
+    $resignAr->save();
+
+    $resignId = $resignAr->id;
+    foreach($resignForm['resignSurvey'] as $survey) {
+      $surveyAr = new HrResignSurveyAR();
+      $surveyAr->resign_id = $resignId;
+      $surveyAr->create_time = date('YmdHis');
+      foreach ($survey as $key => $value) {
+        $surveyAr->$key = $value;
+      }
+      $surveyAr->save();
+    }
+    $this->_ar->status = 1;
+  }
 }

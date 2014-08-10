@@ -24,7 +24,8 @@
 
 .staff-transfer .table-position .v-a_m,
 .staff-transfer .table-position td { vertical-align: middle; }
-.staff-transfer .save-wrap {
+.staff-transfer .save-wrap,
+.staff-resign .save-wrap {
   margin-top: 20px;
   padding-top: 10px;
   border-top: 1px solid #ccc;

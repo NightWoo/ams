@@ -41,10 +41,10 @@ define([
         expData: packExpData()
       }).success(function (response) {
         if (response.success) {
+          Staff.resetAdd($scope);
+          $scope.formStaff.$setPristine();
           CModal.success({
             content: '入职信息提交成功'
-          }).then(function() {
-            Staff.resetAdd($scope);
           });
         }
       });
