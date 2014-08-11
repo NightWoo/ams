@@ -15,7 +15,7 @@ define([
     };
 
     $scope.submitResign = function () {
-      $scope.resign.reason = $scope.temp.reasons.join(',');
+      $scope.resign.reason = $scope.temp.reasons.join(',') || '其他';
       $scope.resign.date = $filter('date')($scope.temp.regignDate.val, 'yyyy-MM-dd');
       Staff.resignSubmit({
         staffId: $scope.basicInfo.id,

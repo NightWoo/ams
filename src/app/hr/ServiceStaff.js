@@ -143,7 +143,25 @@ define([
         },
         resignSubmit: function (paramObj) {
           return StaffHttp.resignSubmit(paramObj);
-        }
+        },
+        /**
+         * 员工库查询 初始化
+         * @param  {[type]} scope [description]
+         * @return {[type]}       [description]
+         */
+        initQuery: function (scope) {
+          scope.query = {};
+          StaffHttp.getGradeList().success(function (response) {
+            if (response.success) {
+              scope.gradeList = response.data;
+            }
+          });
+          scope.staffGrades = staffGrades();
+          //科室/班/组 下拉
+          getOrg(scope);
+          //岗位 下拉
+          getGradePosition(scope);
+        },
       };
 
 
@@ -217,6 +235,29 @@ define([
             scope.grades = response.data;
           }
         });
+      }
+
+      function staffGrades() {
+        return grades = [
+          "I1",
+          "I2",
+          "I3",
+          "H1",
+          "H2",
+          "H3",
+          "G1",
+          "G2",
+          "G3",
+          "F1",
+          "F2",
+          "F3",
+          "E1",
+          "E2",
+          "E3",
+          "D1",
+          "D2",
+          "D3",
+        ];
       }
     }
   ]);

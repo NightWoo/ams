@@ -21,8 +21,8 @@ define(['app'], function(app) {
         ctrl: $couchPotatoProvider.resolveDependencies(['_common/header/CtrlHeader'])
       }
     };
-    var footerConfig = {
-      templateUrl: baseUrl + '_common/footer/footer.tpl.html'
+    var footerHr = {
+      templateUrl: baseUrl + '_common/footer/footerHr.tpl.html'
     };
 
     $stateProvider.state('home', {
@@ -36,7 +36,7 @@ define(['app'], function(app) {
           }
         },
         header: headerConfig,
-        footer: footerConfig
+        // footer: footerHr
       }
     });
 
@@ -44,7 +44,7 @@ define(['app'], function(app) {
       url: '/hr/staff-add',
       views: {
         header: headerConfig,
-        // footer: footerConfig,
+        footer: footerHr,
         'body': {
           templateUrl: baseUrl + 'hr/staffAdd.tpl.html',
           controller: 'CtrlStaffAdd',
@@ -59,7 +59,7 @@ define(['app'], function(app) {
       url: '/hr/staff-transfer',
       views: {
         header: headerConfig,
-        // footer: footerConfig,
+        footer: footerHr,
         'body': {
           templateUrl: baseUrl + 'hr/staffTransfer.tpl.html',
           controller: 'CtrlStaffTransfer',
@@ -74,12 +74,27 @@ define(['app'], function(app) {
       url: '/hr/staff-resign',
       views: {
         header: headerConfig,
-        // footer: footerConfig,
+        footer: footerHr,
         'body': {
           templateUrl: baseUrl + 'hr/staffResign.tpl.html',
           controller: 'CtrlStaffResign',
           resolve: {
             ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffResign'])
+          }
+        },
+      }
+    });
+
+    $stateProvider.state('staff-query', {
+      url: '/hr/staff-query',
+      views: {
+        header: headerConfig,
+        footer: footerHr,
+        'body': {
+          templateUrl: baseUrl + 'hr/staffQuery.tpl.html',
+          controller: 'CtrlStaffQuery',
+          resolve: {
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQuery'])
           }
         },
       }

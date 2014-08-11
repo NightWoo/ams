@@ -26,6 +26,12 @@ define([
           url: '/bms/orgStructure/get3LevelList'
         });
       },
+      getGradeList: function () {
+        return $http({
+          method: 'get',
+          url: '/bms/positionSystem/getGrades'
+        });
+      },
       getGradePosition: function () {
         return $http({
           method: 'get',

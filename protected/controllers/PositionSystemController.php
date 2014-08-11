@@ -92,6 +92,16 @@ class PositionSystemController extends BmsBaseController
         }
     }
 
+    public function actionGetGrades () {
+        try {
+            $seeker = new HrPositionSeeker;
+            $data = $seeker->getGradeList();
+            $this->renderJsonBms(true, 'get GradeList success', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
     public function actionGetGradePositionList () {
          try {
             $seeker = new HrPositionSeeker();
