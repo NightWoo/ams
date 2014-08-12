@@ -44,7 +44,7 @@ class HrStaffSeeker
               basic_salary,
               start_date
             FROM
-              view_hr_staff_basic_info
+              view_hr_staff
             WHERE
               employee_number = '$employeeNum' AND
               staff_status = 0";
@@ -171,4 +171,92 @@ class HrStaffSeeker
 
     return $data;
   }
+
+  public function queryStaffList($conditions, $pager) {
+    $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
+    $pager = is_array($pager) ? $pager : CJSON::decode($pager);
+    $conArr = array();
+    if (!empty($conditions['gradeId'])) {
+      $conArr[] = "grade_id = {$conditions['gradeId']}";
+    }
+    if (!empty($conditions['staffGrade'])) {
+      $conArr[] = "staff_grade = '{$conditions['staffGrade']}'";
+    }
+    if (!empty($conditions['deptId'])) {
+      $conArr[] = "(dept_id = {$conditions['deptId']} OR dept_parent_id = {$conditions['deptId']} OR parent_parent_id = {$conditions['deptId']})";
+    }
+    if (!$conditions['includeResigned']) {
+      $conArr[] = "staff_status = 0";
+    }
+    $conditionText = join(" AND ", $conArr);
+    if (!empty($conditionText)) {
+      $conditionText = 'WHERE ' . $conditionText;
+    } else {
+      $conditionText = "";
+    }
+    $limit = "";
+    if (!empty($pager['pageSize'])) {
+      $offset = ($pager['pageNumber'] - 1) * $pager['pageSize'];
+      $limit = "LIMIT $offset, {$pager['pageSize']}";
+    }
+    $sql = "SELECT *
+            FROM view_hr_staff
+              $conditionText
+            ORDER BY enter_date ASC
+              $limit";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
+    $data = $this->resovleStaffListOrg($data);
+
+    $countSql = "SELECT COUNT(*) FROM view_hr_staff $conditionText";
+    $count = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+    return array(
+      "result"=>$data,
+      "total"=>$count
+    );
+  }
+
+  public function queryStaffInfo($employee, $pager) {
+    $pager = is_array($pager) ? $pager : CJSON::decode($pager);
+    $limit = "";
+    if (!empty($pager['pageSize'])) {
+      $offset = ($pager['pageNumber'] - 1) * $pager['pageSize'];
+      $limit = "LIMIT $offset, {$pager['pageSize']}";
+    }
+    $sql = "SELECT * FROM view_hr_staff WHERE employee_number LIKE '%$employee' OR name LIKE '%$employee%' ORDER BY enter_date ASC
+              $limit";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
+    $data = $this->resovleStaffListOrg($data);
+
+    $countSql = "SELECT COUNT(*) FROM view_hr_staff WHERE employee_number LIKE '%$employee' OR name LIKE '%$employee%'";
+    $count = Yii::app()->db->createCommand($countSql)->queryScalar();
+
+    return array(
+      "result"=>$data,
+      "total"=>$count
+    );
+  }
+
+  public function resovleStaffListOrg($data) {
+    if (!empty($data)) {
+      $orgSeeker = new OrgStructureSeeker();
+      $parents = array();
+      foreach ($data as &$staff) {
+        if (intval($staff['dept_level']) > 1) {
+          $parents = $orgSeeker->deptParents($staff['dept_parent_id'], $staff['dept_level']);
+        }
+        $parents[$staff['dept_level']] = array(
+          "id" => $staff['dept_id'],
+          "display_name" => $staff['dept_display_name'],
+          "name" => $staff['dept_name'],
+          "parent_id" => $staff['dept_parent_id'],
+          "short_name" => $staff['dept_short_name'],
+          "level" => $staff['dept_level']
+        );
+        $staff['dept_parents'] = $parents;
+      }
+    }
+    return $data;
+  }
+
 }

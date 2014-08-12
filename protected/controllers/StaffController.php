@@ -189,4 +189,21 @@ class StaffController extends BmsBaseController
       $this->renderJsonApp(false, $e->getMessage());
     }
   }
+
+  public function actionQueryStaffList() {
+    $conditions = $this->validateStringVal('conditions', '{}');
+    $employee = $this->validateStringVal('employee', '');
+    $pager = $this->validateStringVal('pager', '{}');
+    try {
+      $seeker = new HrStaffSeeker();
+      if (!empty($employee)) {
+        $data = $seeker->queryStaffInfo($employee, $pager);
+      } else {
+        $data = $seeker->queryStaffList($conditions, $pager);
+      }
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
 }

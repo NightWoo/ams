@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="col col_50p">
+      <div class="col col_48p">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-addon">科室/班/组</span>
@@ -35,8 +35,11 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group">
-          <button class="btn btn-primary" ng-click="goQuery()">查询</button>
+        <div class="checkbox mb_0">
+          <label>
+            <input type="checkbox" ng-model="query.includeResigned">含已离职
+          </label>
+          <!-- <button class="btn btn-primary" ng-click="goQuery()">查询</button> -->
         </div>
       </div>
     </div>
@@ -45,6 +48,11 @@
     </div>
   </form>
   <div class="clearfix mb_10">
+    <ul class="nav nav-pills nav-sm pull-left">
+      <li ng-class="{'active': tab.selected}" ng-repeat="tab in queryTabs">
+        <a class="ptb_5" ng-click="tabQuery(tab)">{{tab.name}}</a>
+      </li>
+    </ul>
     <div class="pull-right">
       <button class="btn btn-link btn-sm pull-left">导出全部{{pager.totalCount}}条记录</button>
       <pagination total-items="pager.totalCount" ng-model="pager.pageNumber" max-size="maxSize" class="pagination-sm m_0" boundary-links="true" rotate="false" num-pages="pager.totalPages" previous-text="&lt;" next-text="&gt;" first-text="&laquo;" last-text="&raquo;" rotate="false" max-size="10"></pagination>
@@ -68,5 +76,31 @@
         <th>联系电话</th>
       </tr>
     </thead>
+    <tbody>
+      <tr ng-repeat="staff in stafflList">
+        <td>{{staff.employee_number}}</td>
+        <td>{{staff.name}}</td>
+        <td>
+          <span ng-if="!staff.gender">男</span>
+          <span ng-if="staff.gender">女</span>
+        </td>
+        <td>{{staff.staff_grade}}</td>
+        <td>{{staff.grade_name}}</td>
+        <td>
+          <span>{{staff.dept_parents[1].display_name}}</span>
+          <span ng-if="!staff.dept_parents[1].display_name">--</span>
+        </td>
+        <td>
+          <span>{{staff.dept_parents[2].display_name}}</span>
+          <span ng-if="!staff.dept_parents[2].display_name">--</span>
+        </td>
+        <td>{{staff.position_display_name}}</td>
+        <td>{{staff.enter_date}}</td>
+        <td>{{staff.start_date}}</td>
+        <td>{{staff.education}}</td>
+        <td>{{staff.supervisor_name}}</td>
+        <td>{{staff.contact_phone}}</td>
+      </tr>
+    </tbody>
   </table>
 </div>

@@ -33,21 +33,25 @@ li.list-group-item>a {
 
 .radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline { margin-left: 0;}
 .radio-inline, .checkbox-inline { margin-right: 20px; }
+.nav-sm>li>a { padding-top: 5px; padding-bottom: 5px;}
 /*modify bootstrap END*/
 
 
 /*margin padding*/
 .m_0 { margin: 0;}
 .mt_10 { margin-top: 10px; }
+.mb_0 { margin-bottom: 0; }
 .mb_5 { margin-bottom: 5px; }
 .mb_10 { margin-bottom: 10px; }
 .mb_20 { margin-bottom: 20px; }
 .mb_40 { margin-bottom: 40px; }
+.ptb_5 { padding-top:5px; padding-bottom: 5px;}
 .pt_0 { padding-top: 0; }
 .pt_5 { padding-top: 5px; }
 .pr_5 { padding-right: 5px; }
 .pr_10 { padding-right: 10px; }
 .pl_10 { padding-left: 10px; }
+.pl_20 { padding-left: 20px; }
 /*width height*/
 .wp_30 { width:30%; }
 .wp_45 { width:45%; }

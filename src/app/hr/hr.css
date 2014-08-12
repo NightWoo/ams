@@ -36,8 +36,9 @@
 .staff-query .well .form-group { margin-bottom: 0; }
 .staff-query .well .grade { width: 60%; }
 .staff-query .well .staff-grade { margin-left: -1px; width: 40%; }
-.staff-query .well .col { float: left; width: 5%; }
+.staff-query .well .col { float: left; width: 8%; }
 .staff-query .well .col + .col { margin-left: 10px; }
 .staff-query .well .col_18p { width: 18%; }
 .staff-query .well .col_23p { width: 23%; }
-.staff-query .well .col_50p { width: 50%; }
+.staff-query .well .col_48p { width: 48%; }
+.staff-query li.active a { cursor: pointer; }

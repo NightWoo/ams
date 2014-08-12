@@ -150,6 +150,16 @@ define([
          * @return {[type]}       [description]
          */
         initQuery: function (scope) {
+          scope.queryTabs = [
+            {queryKey: 'queryStaffList', name: '详细信息'},
+          ];
+          scope.pager = {
+            pageSize: 10,
+            // pageSizeSlots: [10,20,30,50],
+            pageNumber: 1,
+            totalCount: 0
+          };
+
           scope.query = {};
           StaffHttp.getGradeList().success(function (response) {
             if (response.success) {
@@ -162,6 +172,14 @@ define([
           //岗位 下拉
           getGradePosition(scope);
         },
+        queryStaffList: function (scope, postData) {
+          StaffHttp.queryStaffList(postData).success(function (response) {
+            if (response.success) {
+              scope.stafflList = response.data.result || [];
+              scope.pager.totalCount = response.data.total || 0;
+            }
+          });
+        }
       };
 
 
