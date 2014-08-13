@@ -5,26 +5,41 @@ define([
   app.registerController('CtrlStaffQuery', [
     '$scope',
     '$filter',
+    '$window',
     'Staff',
     'CModal',
-  function ($scope, $filter, Staff, CModal) {
+  function ($scope, $filter, $window, Staff, CModal) {
     //员工信息
     Staff.initQuery($scope);
 
     $scope.orgChanged = function (level) {
       Staff.orgClear($scope, level);
-    }
+      Staff.resetStaffList($scope);
+      Staff.resetQueryTabs($scope);
+    };
+
+    $scope.resetStaffList = function () {
+      Staff.resetStaffList($scope);
+      Staff.resetQueryTabs($scope);
+    };
 
     $scope.tabQuery = function (tab) {
-      for (var i = $scope.queryTabs.length - 1; i >= 0; i--) {
-        $scope.queryTabs[i].selected = false;
-      }
+      Staff.resetQueryTabs($scope);
       tab.selected = true;
       $scope.curQueryKey = tab.queryKey;
       doQuery($scope.curQueryKey);
     };
 
-    $scope.query = function () {
+    $scope.exportStaffList = function () {
+      var postData = queryData();
+      var conditionsJson = angular.toJson(postData.conditions);
+      var url = '/bms/staff/exportStaffList';
+      if (postData.employee) {
+        url = url + '?employee=' + postData.employee;
+      } else {
+        url = url + '?conditions=' + conditionsJson;
+      }
+      $window.open(url, '_blank');
     };
 
     $scope.$watch( "pager.pageNumber", function ( newValue, oldValue ){

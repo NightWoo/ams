@@ -89,6 +89,14 @@ define([
           transformRequest: transformRequestAsFormPost,
           data: paramObj
         });
+      },
+      exportStaffList: function (paramObj) {
+        return $http({
+          method: 'post',
+          url: '/bms/staff/exportStaffList',
+          transformRequest: transformRequestAsFormPost,
+          data: paramObj
+        });
       }
     };
   }]);

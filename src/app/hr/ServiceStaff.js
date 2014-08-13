@@ -172,6 +172,17 @@ define([
           //岗位 下拉
           getGradePosition(scope);
         },
+        resetStaffList: function (scope) {
+          scope.stafflList = [];
+          scope.pager.pageNumber = 1;
+          scope.pager.totalCount = 0;
+        },
+        resetQueryTabs: function (scope) {
+          scope.curQueryKey = '';
+          for (var i = scope.queryTabs.length - 1; i >= 0; i--) {
+            scope.queryTabs[i].selected = false;
+          }
+        },
         queryStaffList: function (scope, postData) {
           StaffHttp.queryStaffList(postData).success(function (response) {
             if (response.success) {
@@ -179,6 +190,9 @@ define([
               scope.pager.totalCount = response.data.total || 0;
             }
           });
+        },
+        exportStaffList: function (postData) {
+          return StaffHttp.exportStaffList(postData);
         }
       };
 

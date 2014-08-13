@@ -206,4 +206,50 @@ class StaffController extends BmsBaseController
       $this->renderJsonApp(false, $e->getMessage());
     }
   }
+
+  public function actionExportStaffList() {
+    $conditions = $this->validateStringVal('conditions', '{}');
+    $employee = $this->validateStringVal('employee', '');
+    try{
+      $pager = array("pageSize"=>0);
+      $seeker = new HrStaffSeeker();
+
+      if (!empty($employee)) {
+        $datas = $seeker->queryStaffInfo($employee, $pager);
+      } else {
+        $datas = $seeker->queryStaffList($conditions, $pager);
+      }
+
+      $title = "工号,姓名,性别,级别,岗位等级,科室,班,组,岗位,入厂日期,上岗日期,学历,考核关系,联系电话,身份证号,籍贯,学校,底薪\n";
+      $content = "";
+      foreach($datas['result'] as $data) {
+        $content .= "{$data['employee_number']},";
+        $content .= "{$data['name']},";
+        $gender = empty($data['gender']) ? "男" : "女";
+        $content .= "{$gender},";
+        $content .= "{$data['staff_grade']},";
+        $content .= "{$data['grade_name']},";
+        $level1 = empty($data['dept_parents']['1']) ? "--": $data['dept_parents']['1']['display_name'];
+        $level2 = empty($data['dept_parents']['2']) ? "--": $data['dept_parents']['2']['display_name'];
+        $level3 = empty($data['dept_parents']['3']) ? "--": $data['dept_parents']['3']['display_name'];
+        $content .= "{$level1},";
+        $content .= "{$level2},";
+        $content .= "{$level3},";
+        $content .= "{$data['position_display_name']},";
+        $content .= "{$data['enter_date']},";
+        $content .= "{$data['start_date']},";
+        $content .= "{$data['education']},";
+        $content .= "{$data['supervisor_name']},";
+        $content .= "{$data['contact_phone']},";
+        $content .= "{$data['id_number']},";
+        $content .= "{$data['city_name']},";
+        $content .= "{$data['school']},";
+        $content .= "{$data['basic_salary']},";
+        $content .= "\n";
+      }
+      $export = new Export( '员工库查询_' . date('Ymd'), $title . $content);
+      $export->toCSV();
+    } catch(Exception $e) {
+    }
+  }
 }
