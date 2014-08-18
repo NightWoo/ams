@@ -51,6 +51,7 @@ li.list-group-item>a {
 .pt_5 { padding-top: 5px; }
 .pr_5 { padding-right: 5px; }
 .pr_10 { padding-right: 10px; }
+.pl_0 { padding-left: 0; }
 .pl_10 { padding-left: 10px; }
 .pl_20 { padding-left: 20px; }
 /*width height*/
@@ -105,6 +106,7 @@ div[accordion] h4 a { display: block; }
 .form-hint { color: #ccc; }
 a { cursor: pointer; }
 li.active a { cursor: default; }
+.nav-main .navbar-nav li.active a { cursor: pointer; }
 ul { list-style-type: none; -webkit-padding-start: 0;  padding-left: 0; }
 /*common END*/
 

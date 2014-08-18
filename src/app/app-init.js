@@ -70,9 +70,10 @@ define([
     '$scope',
     '$http',
     '$rootScope',
+    '$state',
     '$timeout',
     'User',
-  function ($scope, $http, $rootScope, $timeout, User) {
+  function ($scope, $http, $rootScope, $state, $timeout, User) {
     User.getCurrent( {}, function ( response ) {
       //if have not login yet;
       if (typeof response === 'string') {
@@ -80,6 +81,14 @@ define([
       }
       $scope.user = response.data;
     });
+
+    $rootScope.checkPagePrivilage = function (privilagePoint) {
+      User.checkPrivilage(privilagePoint).success(function (response) {
+        if (!(response.success && response.data)) {
+          $state.go('error.permissionDenied');
+        }
+      });
+    };
   }]);
 
 });

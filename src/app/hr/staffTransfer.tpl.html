@@ -36,7 +36,8 @@
             <th></th>
             <th>
               <span>现岗位</span>
-              <span class="f-w_n">（底薪￥{{basicInfo.basic_salary}}）</span></th>
+              <!-- <span class="f-w_n">（底薪￥{{basicInfo.basic_salary}}）</span> -->
+            </th>
             <th>
               <span style="display: inline-block; padding-top: 14px;">
                 <span>申请岗位</span>
@@ -82,13 +83,13 @@
             </td>
             <td>
               <div class="row" ng-if="!applyInfo.id">
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                   <select class="form-control" ng-model="positions" ng-options="gradeName for (gradeName, positions) in grades" ng-change="gradeChanged()">
                     <option value="">岗位等级</option>
                   </select>
-                </div>
-                <div class="col-sm-6">
-                  <select class="form-control col-sm-6" ng-model="apply.apply_position_id" ng-options="one.id as one.display_name for one in positions">
+                </div> -->
+                <div class="col-sm-12">
+                  <select class="form-control col-sm-6" ng-model="apply.apply_position_id" ng-options="one.id as one.display_name group by one.grade_name for one in positionList">
                     <option value="" disabled required>岗位名称</option>
                   </select>
                 </div>
@@ -158,13 +159,13 @@
       <div accordion-heading>
         <span class="glyphicon pr_5" ng-class="{'glyphicon-folder-open': approval.open, 'glyphicon-folder-close': !approval.open}"></span>
         <span>{{approval.procedure_name}}</span>
-        <span class="text-success" ng-if="approval.conclusion">（同意）</span>
-        <span class="text-danger" ng-if="approval.conclusion==='0'">（驳回）</span>
+        <span class="text-success" ng-if="approval.conclusion=='1'">（同意）</span>
+        <span class="text-danger" ng-if="approval.conclusion=='0'">（驳回）</span>
       </div accordion-heading>
       <div>
         <ul class="mb_20" ng-if="approval.sub">
           <li ng-repeat="point in approval.sub">
-            <span class="glyphicon pr_5" ng-class="{'glyphicon-ok-sign text-success': point.conclusion, 'glyphicon-remove-sign text-danger': !point.conclusion}"></span><span>{{point.point_description}}</span>
+            <span class="glyphicon pr_5" ng-class="{'glyphicon-ok-sign text-success': point.conclusion=='1', 'glyphicon-remove-sign text-danger': point.conclusion=='0'}"></span><span>{{point.point_description}}</span>
           </li>
         </ul>
         <p>{{approval.comment}}</p>

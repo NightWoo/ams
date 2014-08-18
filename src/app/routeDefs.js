@@ -28,7 +28,7 @@ define(['app'], function(app) {
     $stateProvider.state('home', {
       url: '/home',
       views: {
-        'body': {
+        body: {
           templateUrl: baseUrl + 'home/home.tpl.html',
           controller: 'CtrlHome',
           resolve: {
@@ -40,12 +40,31 @@ define(['app'], function(app) {
       }
     });
 
+    $stateProvider.state('error', {
+      url: '/error',
+      abstract: true,
+      views: {
+        header: headerConfig,
+        body: {
+          templateUrl: baseUrl + '_common/error/error.tpl.html'
+        },
+      }
+    })
+    .state('error.permissionDenied', {
+      url: '/permissionDenied',
+      views: {
+        errorType: {
+          templateUrl: baseUrl + '_common/error/permissionDenied.tpl.html'
+        }
+      }
+    });
+
     $stateProvider.state('staff-add', {
       url: '/hr/staff-add',
       views: {
         header: headerConfig,
         footer: footerHr,
-        'body': {
+        body: {
           templateUrl: baseUrl + 'hr/staffAdd.tpl.html',
           controller: 'CtrlStaffAdd',
           resolve: {
@@ -60,7 +79,7 @@ define(['app'], function(app) {
       views: {
         header: headerConfig,
         footer: footerHr,
-        'body': {
+        body: {
           templateUrl: baseUrl + 'hr/staffTransfer.tpl.html',
           controller: 'CtrlStaffTransfer',
           resolve: {
@@ -75,7 +94,7 @@ define(['app'], function(app) {
       views: {
         header: headerConfig,
         footer: footerHr,
-        'body': {
+        body: {
           templateUrl: baseUrl + 'hr/staffResign.tpl.html',
           controller: 'CtrlStaffResign',
           resolve: {
@@ -90,7 +109,7 @@ define(['app'], function(app) {
       views: {
         header: headerConfig,
         footer: footerHr,
-        'body': {
+        body: {
           templateUrl: baseUrl + 'hr/staffQuery.tpl.html',
           controller: 'CtrlStaffQuery',
           resolve: {

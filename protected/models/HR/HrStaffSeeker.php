@@ -28,21 +28,7 @@ class HrStaffSeeker
 
   public function queryBasicInfo($employeeNum) {
     $sql = "SELECT
-              id,
-              employee_number,
-              name,
-              gender,
-              dept_id,
-              dept_parent_id,
-              dept_level,
-              dept_display_name,
-              dept_short_name,
-              grade_name,
-              staff_grade,
-              position_display_name,
-              position_short_name,
-              basic_salary,
-              start_date
+              *
             FROM
               view_hr_staff
             WHERE
@@ -60,6 +46,12 @@ class HrStaffSeeker
       );
       $data['org'] = $org;
     }
+    return $data;
+  }
+
+  public function queryExp($staffId=0) {
+    $sql = "SELECT * FROM hr_staff_experience WHERE staff_id = $staffId";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
     return $data;
   }
 
@@ -144,7 +136,7 @@ class HrStaffSeeker
     return $data;
   }
 
-  public function queryMyApproval() {
+  public function queryUserApproval() {
     $userId = Yii::app()->user->id;
 
     $sql = "SELECT
@@ -165,11 +157,53 @@ class HrStaffSeeker
     );
     if (!empty($approval)) {
       $data['approvalRecords'] = $this->queryApprovalInfo($approval['transfer_id']);
-      $data['basicInfo'] = $this->queryTransferBasicInfo($approval['employee_number']);
+      $data['basicInfo'] = $this->queryBasicInfo($approval['employee_number']);
       $data['applyInfo'] = $this->queryTransferApplyInfo($approval['staff_id']);
     }
 
     return $data;
+  }
+
+  public function countUserApproval() {
+    $userId = Yii::app()->user->id;
+
+    $sql = "SELECT
+              COUNT(*)
+            FROM
+              view_hr_approval
+            WHERE
+              approver_id = $userId AND
+              approval_status = 1";
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
+  }
+
+  public function curMonthResignRate() {
+    $startDate = date("Y-m-01");
+    $endDate = date("Y-m-d");
+    $resignCount = intval($this->countResign($startDate, $endDate));
+    $staffCount = intval($this->countStaff());
+    $rate = round($resignCount / ($staffCount + $resignCount), 2);
+    return array(
+      'resignCount' => $resignCount,
+      'staffCount' => $staffCount,
+      'resignRate' => $rate
+    );
+  }
+
+  public function countStaff() {
+    $sql = "SELECT COUNT(*) FROM hr_staff WHERE status = 0";
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
+  }
+
+  public function countResign($startDate, $endDate='') {
+    if (empty($endDate)) {
+      $endDate = date("Y-m-d");
+    }
+    $sql = "SELECT COUNT(*) FROM hr_resign WHERE `date`>='$startDate' AND `date`<='$endDate'";
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
   }
 
   public function queryStaffList($conditions, $pager) {

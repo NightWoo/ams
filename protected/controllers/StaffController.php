@@ -38,6 +38,28 @@ class StaffController extends BmsBaseController
     }
   }
 
+  public function actionGetEditInfo() {
+    $employeeNumber = $this->validateStringVal('employeeNumber', '');
+
+    try {
+      $seeker = new HrStaffSeeker();
+      $basicInfo = $seeker->queryBasicInfo($employeeNumber);
+      $exp = array();
+      if (!empty($basicInfo)) {
+        $exp = $seeker->queryExp($basicInfo['id']);
+      }
+
+      $data = array(
+        "basicInfo" => $basicInfo,
+        "exp" => $exp
+      );
+
+      $this->renderJsonApp(true, 'OK', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
   public function actionQueryBasicInfo() {
     $employeeNumber = $this->validateStringVal('employeeNumber', '');
 
@@ -132,7 +154,7 @@ class StaffController extends BmsBaseController
   public function actionGetMyApproval() {
     try {
       $seeker = new HrStaffSeeker();
-      $data = $seeker->queryMyApproval();
+      $data = $seeker->queryUserApproval();
       $this->renderJsonApp(true, 'ok', $data);
     } catch (Exception $e) {
       $this->renderJsonApp(false, $e->getMessage());
@@ -220,7 +242,7 @@ class StaffController extends BmsBaseController
         $datas = $seeker->queryStaffList($conditions, $pager);
       }
 
-      $title = "工号,姓名,性别,级别,岗位等级,科室,班,组,岗位,入厂日期,上岗日期,学历,考核关系,联系电话,身份证号,籍贯,学校,底薪\n";
+      $title = "工号,姓名,性别,级别,岗位等级,科室,班,组,岗位,入厂日期,上岗日期,学历,考核关系,联系电话,身份证号,籍贯,学校,专业,底薪\n";
       $content = "";
       foreach($datas['result'] as $data) {
         $content .= "{$data['employee_number']},";
@@ -244,12 +266,33 @@ class StaffController extends BmsBaseController
         $content .= "{$data['id_number']},";
         $content .= "{$data['city_name']},";
         $content .= "{$data['school']},";
-        $content .= "{$data['basic_salary']},";
+        $content .= "{$data['major']},";
+        $basicSalary = "****";
+        $userId = Yii::app()->user->id;
+        if ( $userId==$data['manager_id'] || $userId==$data['parent_manager_id'] || $userId==$data['parent_parent_manager_id']) {
+          $basicSalary = $data['basic_salary'];
+        }
+        $content .= "{$basicSalary},";
         $content .= "\n";
       }
       $export = new Export( '员工库查询_' . date('Ymd'), $title . $content);
       $export->toCSV();
     } catch(Exception $e) {
+    }
+  }
+
+  public function actionHomeInfo() {
+    try {
+      $seeker = new HrStaffSeeker();
+      $resignInfo = $seeker->curMonthResignRate();
+      $taskCount = $seeker->countUserApproval();
+      $data = array(
+        'taskCount' => $taskCount,
+        'resignInfo' => $resignInfo
+      );
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
     }
   }
 }

@@ -4,10 +4,13 @@ define([
 ], function (app) {
   app.registerController('CtrlStaffResign', [
     '$scope',
+    '$rootScope',
     '$filter',
     'Staff',
     'CModal',
-  function ($scope, $filter, Staff, CModal) {
+  function ($scope, $rootScope, $filter, Staff, CModal) {
+    $scope.checkPagePrivilage('HR_RESIGN');
+    $rootScope.appState = 'hr';
     Staff.initResign($scope);
 
     $scope.query = function () {

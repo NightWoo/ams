@@ -14,6 +14,13 @@ define([
           data: paramObj
         });
       },
+      getEditInfo: function (paramObj) {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/getEditInfo',
+          params: paramObj
+        });
+      },
       getProvinceCity: function () {
         return $http({
           method: 'get',
@@ -36,6 +43,12 @@ define([
         return $http({
           method: 'get',
           url: '/bms/positionSystem/getGradePositionList'
+        });
+      },
+      getPositionList: function () {
+        return $http({
+          method: 'get',
+          url: '/bms/positionSystem/getPositionList'
         });
       },
       getBasicInfo: function (paramObj) {

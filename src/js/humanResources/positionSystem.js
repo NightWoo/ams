@@ -225,6 +225,7 @@ require(['commonConfig'], function () {
           success: function (response) {
             if(response.success) {
               $editModal.modal('hide');
+              bootbox.alert('岗位添加成功');
             } else {
               bootbox.alert(response.message);
             }
@@ -262,7 +263,6 @@ require(['commonConfig'], function () {
       packData.display_name = $inputDisplayName.val();
       packData.short_name = $inputShortName.val();
       packData.grade_id = $selectGrade.val();
-      packData.parent_id = $selectParent.val();
       packData.education = $textEducation.val();
       packData.experiences = $textExperiences.val();
       packData.description = $textDescription.val();

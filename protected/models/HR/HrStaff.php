@@ -35,17 +35,24 @@ class HrStaff {
       $staffData['create_time'] = date('YmdHis');
     }
     foreach($staffData as $key => $value) {
-      $this->_ar->$key = $value;
+      if (!empty($value)) {
+        $this->_ar->$key = $value;
+      }
     }
     $this->_ar->save();
-
-    $this->positionStart($staffData['dept_id'], $staffData['position_id'], $staffData['start_date']);
+    if (!empty($staffData['dept_id']) && !empty($staffData['position_id'])) {
+      $this->positionStart($staffData['dept_id'], $staffData['position_id'], $staffData['start_date']);
+    }
   }
 
   public function saveExp($expData) {
     $expData = is_array($expData) ? $expData : CJSON::decode($expData);
     foreach ($expData as $exp) {
-      $expAr = new HrStaffExpAR();
+      if (empty($exp['id'])) {
+        $expAr = new HrStaffExpAR();
+      } else {
+        $expAr = HrStaffExpAR::model()->findByPk($exp['id']);
+      }
       foreach ($exp as $key => $value) {
         $expAr->$key = $value;
       }
@@ -90,6 +97,7 @@ class HrStaff {
     if ($staffPosition->start_date <= date('Y-m-d')) {
       $this->_ar->dept_id = $deptId;
       $this->_ar->position_id = $positionId;
+      $this->_ar->start_date = $staffPosition->start_date;
       $this->_ar->save();
       $staffPosition->status = 1;
     }

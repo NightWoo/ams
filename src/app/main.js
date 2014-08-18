@@ -10,12 +10,16 @@ require.config({
     'angular-loading-bar'        : '../../vendor/angular-loading-bar/loading-bar.min',
     'angular-cookies'            : '../../vendor/angular/angular-cookies',
     'angular-animate'            : '../../vendor/angular/angular-animate',
-    'angular-sanitize'           : '../../vendor/angular/angular-sanitize'
+    'angular-sanitize'           : '../../vendor/angular/angular-sanitize',
+    'jquery'                     : '../../vendor/jquery/jquery-2.1.0.min',
+    'highcharts'                 : '../../vendor/highcharts/highcharts',
+    'highcharts-ng'              : '../../vendor/highcharts-ng/highcharts-ng'
   },
 
   shim: {
     'angular': {
-      exports: 'angular'
+      exports: 'angular',
+      deps : ['jquery']
   },
     'angular-couch-potato': {
       deps: ['angular']
@@ -39,9 +43,14 @@ require.config({
     'angular-animate' : {
       deps :['angular']
     },
-
     'angular-sanitize' : {
       deps :['angular']
+    },
+    'highcharts': {
+      deps: ['angular', 'jquery']
+    },
+    'highcharts-ng': {
+      deps: ['highcharts']
     },
   },
 

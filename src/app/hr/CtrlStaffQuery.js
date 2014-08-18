@@ -1,14 +1,17 @@
 define([
   'app',
-  'hr/ServiceStaff'
+  'hr/ServiceStaff',
 ], function (app) {
   app.registerController('CtrlStaffQuery', [
     '$scope',
+    '$rootScope',
     '$filter',
     '$window',
     'Staff',
     'CModal',
-  function ($scope, $filter, $window, Staff, CModal) {
+  function ($scope, $rootScope, $filter, $window, Staff, CModal) {
+    $scope.checkPagePrivilage('HR_QUERY');
+    $rootScope.appState = 'hr';
     //员工信息
     Staff.initQuery($scope);
 

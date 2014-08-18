@@ -1,4 +1,4 @@
-<header class="navbar navbar-fixed-top navbar-default" role="banner">
+<header class="navbar navbar-fixed-top navbar-default nav-main" role="banner">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navMaster">
@@ -40,7 +40,7 @@
           <a class="visible-sm" href="/bms/site/pannelIndex?pannel=costPannel" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="成本"><i class="fa fa-money"></i>&nbsp;</a>
           <a class="hidden-sm" href="/bms/site/pannelIndex?pannel=costPannel"><i class="fa fa-money"></i>&nbsp;成本</a>
         </li>
-        <li id="headManpowerLi">
+        <li id="headManpowerLi" ng-class="{'active': appState=='hr'}">
           <a class="visible-sm" href="/bms/humanResources" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="人事"><i class="fa fa-group"></i>&nbsp;</a>
           <a class="hidden-sm" href="/bms/humanResources"><i class="fa fa-group"></i>&nbsp;人事</a>
         </li>

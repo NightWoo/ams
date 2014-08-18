@@ -4,10 +4,13 @@ define([
 ], function (app) {
   app.registerController('CtrlStaffTransfer', [
     '$scope',
+    '$rootScope',
     '$filter',
     'Staff',
     'CModal',
-  function ($scope, $filter, Staff, CModal) {
+  function ($scope, $rootScope, $filter, Staff, CModal) {
+    $scope.checkPagePrivilage('HR_TRANSFER');
+    $rootScope.appState = 'hr';
     Staff.initTransfer($scope);
 
     $scope.query = function () {

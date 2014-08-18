@@ -106,4 +106,10 @@
       </tbody>
     </table>
   </div>
+  <div ng-if="curQueryKey==='queryGradeColumn'">
+    <div highchart config="chartConfig.gradeColumn"></div>
+  </div>
+  <div ng-if="curQueryKey==='queryEduPie'">
+    <div highchart config="chartConfig.eduPie"></div>
+  </div>
 </div>
