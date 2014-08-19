@@ -274,9 +274,18 @@
               <td><button type="button" class="close" ng-click="removeExp(one.expArr, $index)" ng-if="one.expArr.length>1"><span class="delete-row">×</span></button></td>
               <td><input class="form-control" type="text" placeholder="请填写开始日期" datepicker-popup max-date="exp.end_date.val" datepicker-append-to-body="true" ng-model="exp.start_date.val" is-open="exp.start_date.opened" ng-click="exp.start_date.opened=true" required></td>
               <td><input class="form-control" type="text" placeholder="请填写开始日期" datepicker-popup min-date="exp.start_date.val" datepicker-append-to-body="true" ng-model="exp.end_date.val" is-open="exp.end_date.opened" ng-click="exp.end_date.opened=true" required></td>
-              <td>
+              <!-- <td>
                 <textarea class="form-control" rows="1" placeholder="如：汽车装配工  总装长沙工厂/TA  比亚迪汽车有限公司第十一事业部" ng-model="exp.description" required ng-if="exp.type=='career'"></textarea>
                 <textarea class="form-control" rows="1" placeholder="如：汽车工程  武汉理工大学" ng-model="exp.description" required ng-if="exp.type=='training'"></textarea>
+              </td> -->
+              <td ng-if="exp.type=='career'">
+                <input class="form-control dspl_ib wp_30" type="text" placeholder="岗位" ng-model="exp.desc[0]" required>
+                <input class="form-control dspl_ib wp_30" type="text" placeholder="部门" ng-model="exp.desc[1]" required>
+                <input class="form-control dspl_ib wp_30" type="text" placeholder="公司" ng-model="exp.desc[2]" required>
+              </td>
+              <td ng-if="exp.type=='training'">
+                <input class="form-control dspl_ib wp_30" type="text" placeholder="课程/专业" ng-model="exp.desc[0]" required>
+                <input class="form-control dspl_ib wp_30" type="text" placeholder="培训方/学校" ng-model="exp.desc[1]" required>
               </td>
             </tr>
           </tbody>

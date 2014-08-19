@@ -14,6 +14,9 @@ define([
     Staff.initAdd($scope);
 
     $scope.query = function () {
+      if (!$scope.employeeNumber) {
+        return;
+      }
       Staff.getEditInfo($scope.employeeNumber).success(function (response) {
         $scope.state.isEdit = true;
         $scope.staff.employee_number = $scope.employeeNumber;
@@ -88,13 +91,13 @@ define([
       for (var i = $scope.expTypes.length - 1; i >= 0; i--) {
         var expArr = $scope.expTypes[i].expArr;
         for (var j = expArr.length - 1; j >= 0; j--) {
-          if (expArr[j].start_date.val && expArr[j].end_date.val && expArr[j].description) {
+          if (expArr[j].start_date.val && expArr[j].end_date.val) {
             data.push({
               id: expArr[j].id,
               type: expArr[j].type,
               start_date: $filter('date')(expArr[j].start_date.val, 'yyyy-MM-dd'),
               end_date: $filter('date')(expArr[j].end_date.val, 'yyyy-MM-dd'),
-              description: expArr[j].description
+              description: expArr[j].desc.join('/')
             });
           }
         }
@@ -137,6 +140,7 @@ define([
         exp[i].end_date = {
           val: new Date(exp[i].end_date),
         };
+        exp[i].desc = exp[i].description.split('/');
         $scope.expTypes[index].expArr.push(exp[i]);
       };
     }

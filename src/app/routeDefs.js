@@ -104,16 +104,16 @@ define(['app'], function(app) {
       }
     });
 
-    $stateProvider.state('staff-query', {
-      url: '/hr/staff-query',
+    $stateProvider.state('inservice-staff-query', {
+      url: '/hr/inservice-staff-query',
       views: {
         header: headerConfig,
         footer: footerHr,
         body: {
-          templateUrl: baseUrl + 'hr/staffQuery.tpl.html',
-          controller: 'CtrlStaffQuery',
+          templateUrl: baseUrl + 'hr/staffQueryIn.tpl.html',
+          controller: 'CtrlStaffQueryIn',
           resolve: {
-            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQuery'])
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQueryIn'])
           }
         },
       }

@@ -74,8 +74,8 @@
         <div class="form-group">
           <label class="col-sm-2 control-label"></label>
           <div class="col-sm-4 form-control-static">
-            <textarea class="form-control" rows="2" placeholder="请离职原因说明，如果不是以上原因则必须填写" ng-model="resign.reason_description" ng-if="resign.reasons.length"></textarea>
-            <textarea class="form-control" rows="2" placeholder="请离职原因说明，如果不是以上原因则必须填写" ng-model="resign.reason_description" required ng-if="!resign.reasons.length"></textarea>
+            <textarea class="form-control" rows="2" placeholder="其他，如果不是以上原因则必须填写" ng-model="resign.reason_description" ng-if="temp.reasons.length"></textarea>
+            <textarea class="form-control" rows="2" placeholder="其他，如果不是以上原因则必须填写" ng-model="resign.reason_description" required ng-if="!temp.reasons.length"></textarea>
           </div>
         </div>
         <div class="form-group">

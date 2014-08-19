@@ -2,7 +2,7 @@ define([
   'app',
   'hr/ServiceStaff',
 ], function (app) {
-  app.registerController('CtrlStaffQuery', [
+  app.registerController('CtrlStaffQueryIn', [
     '$scope',
     '$rootScope',
     '$filter',

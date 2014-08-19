@@ -260,7 +260,7 @@ define([
         type: expType.type,
         start_date: '',
         end_date: '',
-        description: ''
+        desc: []
       });
     }
 
