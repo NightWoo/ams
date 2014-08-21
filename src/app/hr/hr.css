@@ -38,7 +38,12 @@
 .staff-query .well .staff-grade { margin-left: -1px; width: 45%; }
 .staff-query .well .col { float: left; width: 8%; }
 .staff-query .well .col + .col { margin-left: 10px; }
+.staff-query .well .col_5p { width: 5%; }
+.staff-query .well .col_6p { width: 6%; }
 .staff-query .well .col_20p { width: 20%; }
 .staff-query .well .col_25p { width: 25%; }
+.staff-query .well .col_28p { width: 28%; }
+.staff-query .well .col_45p { width: 45%; }
+.staff-query .well .col_47p { width: 47%; }
 .staff-query .well .col_50p { width: 50%; }
 .staff-query li.active a { cursor: pointer; }

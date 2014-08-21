@@ -104,8 +104,8 @@ define(['app'], function(app) {
       }
     });
 
-    $stateProvider.state('inservice-staff-query', {
-      url: '/hr/inservice-staff-query',
+    $stateProvider.state('staff-query-inservice', {
+      url: '/hr/staff-query-inservice',
       views: {
         header: headerConfig,
         footer: footerHr,
@@ -114,6 +114,36 @@ define(['app'], function(app) {
           controller: 'CtrlStaffQueryIn',
           resolve: {
             ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQueryIn'])
+          }
+        },
+      }
+    });
+
+    $stateProvider.state('staff-query-resigned', {
+      url: '/hr/staff-query-resigned',
+      views: {
+        header: headerConfig,
+        footer: footerHr,
+        body: {
+          templateUrl: baseUrl + 'hr/staffQueryOut.tpl.html',
+          controller: 'CtrlStaffQueryOut',
+          resolve: {
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQueryOut'])
+          }
+        },
+      }
+    });
+
+    $stateProvider.state('staff-query-info', {
+      url: '/hr/staff-query-info',
+      views: {
+        header: headerConfig,
+        footer: footerHr,
+        body: {
+          templateUrl: baseUrl + 'hr/staffQueryInfo.tpl.html',
+          controller: 'CtrlStaffQueryInfo',
+          resolve: {
+            ctrl: $couchPotatoProvider.resolveDependencies(['hr/CtrlStaffQueryInfo'])
           }
         },
       }

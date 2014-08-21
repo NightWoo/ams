@@ -95,6 +95,15 @@ define([
           data: paramObj
         });
       },
+      queryStaffInfo: function (paramObj) {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/queryStaffInfo',
+          // transformRequest: transformRequestAsFormPost,
+          // data: paramObj
+          params: paramObj
+        });
+      },
       queryStaffList: function (paramObj) {
         return $http({
           method: 'post',

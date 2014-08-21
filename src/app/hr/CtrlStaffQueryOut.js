@@ -2,7 +2,7 @@ define([
   'app',
   'hr/ServiceStaff',
 ], function (app) {
-  app.registerController('CtrlStaffQueryIn', [
+  app.registerController('CtrlStaffQueryOut', [
     '$scope',
     '$rootScope',
     '$filter',
@@ -13,7 +13,7 @@ define([
     $scope.checkPagePrivilage('HR_QUERY');
     $rootScope.appState = 'hr';
     //员工信息
-    Staff.initQueryIn($scope);
+    Staff.initQueryOut($scope);
 
     $scope.orgChanged = function (level) {
       Staff.orgClear($scope, level);
@@ -36,12 +36,7 @@ define([
     $scope.exportStaffList = function () {
       var postData = queryData();
       var conditionsJson = angular.toJson(postData.conditions);
-      var url = '/bms/staff/exportStaffList';
-      if (postData.employee) {
-        url = url + '?employee=' + postData.employee;
-      } else {
-        url = url + '?conditions=' + conditionsJson;
-      }
+      var url = '/bms/staff/exportStaffList?isResigned=1&conditions=' + conditionsJson;
       $window.open(url, '_blank');
     };
 
@@ -62,6 +57,9 @@ define([
         data = {
           employee: query.employee,
           conditions: {
+            isResigned: true,
+            startDate: query.startDate && $filter('date')(query.startDate.val, 'yyyy-MM-dd'),
+            endDate: query.endDate && $filter('date')(query.endDate.val, 'yyyy-MM-dd'),
             gradeId: query.grade,
             staffGrade: query.staffGrade,
             deptId: ($scope.org[3] && $scope.org[3].id) || ($scope.org[2] && $scope.org[2].id) || ($scope.org[1] && $scope.org[1].id),

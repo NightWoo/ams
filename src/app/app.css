@@ -108,6 +108,7 @@ a { cursor: pointer; }
 li.active a { cursor: default; }
 .nav-main .navbar-nav li.active a { cursor: pointer; }
 ul { list-style-type: none; -webkit-padding-start: 0;  padding-left: 0; }
+.input-group .separate { float: left; background-color: #eee; padding: 6px 3px; font-size: 14px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
 /*common END*/
 
 /*common modal*/

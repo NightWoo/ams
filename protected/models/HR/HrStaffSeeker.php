@@ -219,7 +219,15 @@ class HrStaffSeeker
     if (!empty($conditions['deptId'])) {
       $conArr[] = "(dept_id = {$conditions['deptId']} OR dept_parent_id = {$conditions['deptId']} OR parent_parent_id = {$conditions['deptId']})";
     }
-    if (!$conditions['includeResigned']) {
+    if (!empty($conditions['isResigned']) && $conditions['isResigned']) {
+      $conArr[] = "staff_status = 1";
+      if (!empty($conditions['startDate'])) {
+        $conArr[] = "resign_date >= '{$conditions['startDate']}'";
+      }
+      if (!empty($conditions['endDate'])) {
+        $conArr[] = "resign_date <= '{$conditions['endDate']}'";
+      }
+    } else {
       $conArr[] = "staff_status = 0";
     }
     $conditionText = join(" AND ", $conArr);
@@ -250,7 +258,7 @@ class HrStaffSeeker
     );
   }
 
-  public function queryStaffInfo($employee, $pager) {
+  public function queryStaffListByEmployee($employee, $pager) {
     $pager = is_array($pager) ? $pager : CJSON::decode($pager);
     $limit = "";
     if (!empty($pager['pageSize'])) {
@@ -271,26 +279,42 @@ class HrStaffSeeker
     );
   }
 
+  public function queryStaffInfo($employee) {
+    $sql = "SELECT * FROM view_hr_staff WHERE employee_number = '$employee' OR name = '$employee'";
+    $staff = Yii::app()->db->createCommand($sql)->queryRow();
+    if (!empty($staff)) {
+      $staff = $this->resovleStaffOrg($staff);
+    }
+    return $staff;
+  }
+
   public function resovleStaffListOrg($data) {
     if (!empty($data)) {
       $orgSeeker = new OrgStructureSeeker();
       $parents = array();
       foreach ($data as &$staff) {
-        if (intval($staff['dept_level']) > 1) {
-          $parents = $orgSeeker->deptParents($staff['dept_parent_id'], $staff['dept_level']);
-        }
-        $parents[$staff['dept_level']] = array(
-          "id" => $staff['dept_id'],
-          "display_name" => $staff['dept_display_name'],
-          "name" => $staff['dept_name'],
-          "parent_id" => $staff['dept_parent_id'],
-          "short_name" => $staff['dept_short_name'],
-          "level" => $staff['dept_level']
-        );
-        $staff['dept_parents'] = $parents;
+        $staff = $this->resovleStaffOrg($staff);
       }
     }
     return $data;
+  }
+
+  public function resovleStaffOrg($staff) {
+    $orgSeeker = new OrgStructureSeeker();
+    $parents = array();
+    if (intval($staff['dept_level']) > 1) {
+      $parents = $orgSeeker->deptParents($staff['dept_parent_id'], $staff['dept_level']);
+    }
+    $parents[$staff['dept_level']] = array(
+      "id" => $staff['dept_id'],
+      "display_name" => $staff['dept_display_name'],
+      "name" => $staff['dept_name'],
+      "parent_id" => $staff['dept_parent_id'],
+      "short_name" => $staff['dept_short_name'],
+      "level" => $staff['dept_level']
+    );
+    $staff['dept_parents'] = $parents;
+    return $staff;
   }
 
 }

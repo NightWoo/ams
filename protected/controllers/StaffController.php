@@ -212,6 +212,17 @@ class StaffController extends BmsBaseController
     }
   }
 
+  public function actionQueryStaffInfo() {
+    $employee = $this->validateStringVal('employee', '');
+    try {
+      $seeker = new HrStaffSeeker();
+      $data = $seeker->queryStaffInfo($employee);
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
   public function actionQueryStaffList() {
     $conditions = $this->validateStringVal('conditions', '{}');
     $employee = $this->validateStringVal('employee', '');
@@ -219,7 +230,7 @@ class StaffController extends BmsBaseController
     try {
       $seeker = new HrStaffSeeker();
       if (!empty($employee)) {
-        $data = $seeker->queryStaffInfo($employee, $pager);
+        $data = $seeker->queryStaffListByEmployee($employee, $pager);
       } else {
         $data = $seeker->queryStaffList($conditions, $pager);
       }
@@ -232,17 +243,23 @@ class StaffController extends BmsBaseController
   public function actionExportStaffList() {
     $conditions = $this->validateStringVal('conditions', '{}');
     $employee = $this->validateStringVal('employee', '');
+    $isResigned = $this->validateIntVal('isResigned', 0);
     try{
       $pager = array("pageSize"=>0);
       $seeker = new HrStaffSeeker();
 
       if (!empty($employee)) {
-        $datas = $seeker->queryStaffInfo($employee, $pager);
+        $datas = $seeker->queryStaffListByEmployee($employee, $pager);
       } else {
         $datas = $seeker->queryStaffList($conditions, $pager);
       }
 
-      $title = "工号,姓名,性别,级别,岗位等级,科室,班,组,岗位,入厂日期,上岗日期,学历,考核关系,联系电话,身份证号,籍贯,学校,专业,底薪\n";
+      $title = "工号,姓名,性别,级别,岗位等级,科室,班,组,岗位,入厂日期,上岗日期,学历,考核关系,联系电话,身份证号,籍贯,学校,专业,底薪";
+      if (empty($isResigned)) {
+        $title .= "\n";
+      } else {
+        $title .= ",离职日期,离职类型,离职原因,离职原因说明\n";
+      }
       $content = "";
       foreach($datas['result'] as $data) {
         $content .= "{$data['employee_number']},";
@@ -269,10 +286,17 @@ class StaffController extends BmsBaseController
         $content .= "{$data['major']},";
         $basicSalary = "****";
         $userId = Yii::app()->user->id;
-        if ( $userId==$data['manager_id'] || $userId==$data['parent_manager_id'] || $userId==$data['parent_parent_manager_id']) {
+        if ( $userId==$data['manager_id'] || $userId==$data['parent_manager_id'] || $userId==$data['parent_parent_manager_id'] || $userId==$data['id']) {
           $basicSalary = $data['basic_salary'];
         }
         $content .= "{$basicSalary},";
+        if (!empty($isResigned)) {
+          $content .= "{$data['resign_date']},";
+          $content .= "{$data['resign_type']},";
+          $reasons = str_replace(',', '、', $data['resign_reason']);
+          $content .= "{$reasons},";
+          $content .= "{$data['resign_reason_desc']},";
+        }
         $content .= "\n";
       }
       $export = new Export( '员工库查询_' . date('Ymd'), $title . $content);

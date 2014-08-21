@@ -153,11 +153,11 @@ define([
         return StaffHttp.resignSubmit(paramObj);
       },
       /**
-       * 员工库查询 初始化
+       * 在职查询 初始化
        * @param  {[type]} scope [description]
        * @return {[type]}       [description]
        */
-      initQuery: function (scope) {
+      initQueryIn: function (scope) {
         scope.queryTabs = [
           {queryKey: 'queryStaffList', name: '详细信息'},
           // {queryKey: 'queryGradeColumn', name: '岗位等级分布'},
@@ -207,6 +207,54 @@ define([
       },
       queryEduPie: function (scope, postData) {
         scope.chartConfig.eduPie = StaffQueryCharts.eduPie;
+      },
+      /**
+       * 离职查询 初始化
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      initQueryOut: function (scope) {
+        scope.queryTabs = [
+          {queryKey: 'queryStaffList', name: '详细信息'},
+          // {queryKey: 'queryGradeColumn', name: '岗位等级分布'},
+          // {queryKey: 'queryEduPie', name: '学历分布'},
+        ];
+        scope.chartConfig = {};
+        scope.pager = {
+          pageSize: 10,
+          // pageSizeSlots: [10,20,30,50],
+          pageNumber: 1,
+          totalCount: 0
+        };
+
+        scope.query = {};
+        StaffHttp.getGradeList().success(function (response) {
+          if (response.success) {
+            scope.gradeList = response.data;
+          }
+        });
+        scope.staffGrades = staffGrades();
+        //科室/班/组 下拉
+        getOrg(scope);
+        //岗位 下拉
+        getGradePosition(scope);
+      },
+      initQueryInfo: function (scope) {
+        scope.query = {};
+        scope.basic = {}; //员工基础信息
+        scope.applyInfo = {} //调动岗位数据
+        scope.apply = {}; //申请岗位表单数据
+        scope.state = {}; //各种状态
+        scope.approvalRecords = [];
+      },
+      queryStaffInfo: function (scope) {
+        StaffHttp.queryStaffInfo({
+          employee: scope.query.employee
+        }).success(function (response) {
+          if (response.success) {
+            scope.basic = response.data;
+          }
+        })
       }
     };
 
