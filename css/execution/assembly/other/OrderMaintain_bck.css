@@ -1,0 +1,136 @@
+/* CSS Document */
+.headBadge{
+	line-height: 36px;
+	margin-left: 16px;
+}
+
+#accordionLane{
+	margin-left: 0;
+}
+
+
+.block a {
+    margin: 5px 0;
+}
+
+.block p {
+    margin: 0 5px;
+}
+
+.block .progress {
+    margin-bottom: 0;
+}
+
+.laneContainer {
+	width: 220px;
+}
+
+.distribution {
+	padding-right: 0; 
+	padding-left: 10px;
+}
+
+.resetLane{
+	padding-left: 0;
+	padding-right: 0; 
+}
+
+
+.offset4 {
+    margin-left: 320px;
+}
+
+.input-medium {
+    width: 160px;
+}
+
+#newModal, #specialModal, #manualModal{
+	margin: 0 0 0 -460px;
+	width: 900px;
+	font-size: 12px;
+}
+
+ #laneModal{
+	margin: -360px 0 0 -480px;
+	width: 950px;
+	font-size: 12px;
+}
+
+#newModal .control-label, #specialModal .control-label{
+	width:80px;
+}
+
+#newModal .controls, #specialModal .controls{
+    margin-left: 90px;
+}
+
+#laneModal .control-label{
+	width:100px;
+}
+
+#laneModal .controls {
+    margin-left: 110px;
+}
+
+#laneModal .input-mini{
+	width: 25px;
+	height:12px;
+}
+
+#newOrderNumber, #specialOrderNumber {
+	width: 166px;
+}
+
+.appendBtn {
+	border-radius: 0 3px 3px 0;
+	padding: 4px 8px;
+	width:15px;
+}
+
+#newClearOrder, #specialClearOrder {
+	padding: 0 0 0 2px;
+	color: red;
+}
+
+#newModal legend{
+	margin-bottom: 15px;
+}
+
+
+#tableNewOrder {
+	margin: 0 auto;
+    width: 860px;
+}
+
+#tableNewOrder .input-mini ,#tableSpecialOrder .input-mini{
+	width: 25px;
+}
+
+#tableNewOrder select, #tableNewOrder input,#tableSpecialOrder select, #tableSpecialOrder input {
+	margin-bottom: 0;
+	font-size: 12px;
+	height: 28px;
+}
+
+#tableNewOrder input, #tableDistribution input, #tableAdjust input, #tableSpecialOrder input {
+	height: 18px;
+	margin: 0;
+}
+
+#tableDistribution .icon-large:before {
+    vertical-align: -8%;
+}
+
+#tableDistribution,#tableAdjust {
+	margin-bottom: 20px;
+	font-size: 11px;
+}
+
+#tableDistribution a, #tableAdjust a{
+	font-size: 11px;
+}
+
+ #tableResult .btn-link {
+ 	padding: 0;
+ 	font-size: 12px
+ }
