@@ -1,0 +1,20 @@
+table tr td,th{
+	padding:5px;
+	vertical-align: middle;
+}
+
+label {
+	margin:0;
+}
+
+table th {
+	text-align: right;
+}
+
+#info {
+	padding-left:20px;
+}
+
+#formVIN {
+	margin-bottom:10px;
+}

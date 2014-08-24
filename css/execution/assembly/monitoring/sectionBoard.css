@@ -1,0 +1,62 @@
+body{background: black;width: 320px;height: 128px;color: #fff;margin: 0;padding: 0;font-size: 12px;font-weight: bold;}
+.main{padding: 2px 8px;}
+
+#board_middle {
+	height:60px;
+	padding:13px 20px 10px 20px;
+}
+#multiCallDiv{
+	margin-top: 8px;
+	height: 6px;
+	line-height: 6px;
+	margin-bottom: 2px;
+}
+#seatDiv{height:23px;}
+#divSection{height:23px;}
+.double{
+	display: inline-block;
+	width: 22px;
+	height: 6px;
+	border-radius: 2px;
+	background-color: black;
+	margin-right: 3px;
+}
+
+.double_show{background-color: yellow;}
+.seat{
+	margin-bottom:10px;
+	margin-right: 3px;
+	text-align: center;
+	display: inline-block;
+	width: 22px;
+	height: 23px;
+	line-height: 23px;
+	border-radius: 2px;
+	background-color: #00FF00;
+	color: black;
+}
+.normal_seat{
+	
+}
+.seat_called{
+	background-color: yellow;
+	color: black;
+}
+.seat_call_oppo{
+	background-color: black;
+	color: yellow;
+}
+.seat_paused{
+	background-color: black;
+	color: yellow;
+}
+.section{text-align: center;display: inline-block;background-color: #00ff00;width: 22px;height: 23px;line-height:23px;color: black;border-radius: 2px;}
+.current_section{color: black;}
+
+.div_section{margin-top: 8px;margin-bottom: 12px;}
+
+
+.symbol{background: url('../../../../img/monitoring-bottom-status-symbol.png') no-repeat;}
+.symbol_white_pause{background: url('../../../../img/monitoring-bottom-status-symbol.png') no-repeat 0 -12px;}
+.symbol_red_pause{background: url('../../../../img/monitoring-bottom-status-symbol.png') no-repeat 0 -23px;}
+.symbol_halt{background: url('../../../../img/monitoring-bottom-status-symbol.png') no-repeat 0 -36px;}

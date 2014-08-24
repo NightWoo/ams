@@ -1,0 +1,113 @@
+/* CSS Document */
+.headBadge{
+	line-height: 36px;
+	margin-left: 16px;
+}
+
+#accordionLane{
+	margin-left: 0;
+	position: fixed;
+}
+#laneGroup1 {
+	border: none;
+}
+
+#refreshLane {
+	font-size: 30px;
+    line-height: 40px;
+}
+#refreshLane:hover,.goPrint, .goPrint:hover, .goDetail, .goDetail:hover{
+	text-decoration: none;
+}
+
+#refreshLane i {
+	margin-top: 8px;
+	margin-left: 0;
+}
+
+#totalOK{
+	font-size: 40px;
+    line-height: 40px;
+    margin: 5px 0 5px 188px;
+    text-align: right;
+    width: 80px;
+}
+.boardOK {
+	display: inline-block;
+	padding: 3px 5px;
+}
+
+#tableOrders thead th{
+	padding-top: 26px;
+}
+
+#tableOrders a{
+	font-size: 14px;
+	padding: 0 2px;
+}
+
+.block a {
+    margin: 5px 0;
+}
+
+.block p {
+    margin: 0 5px;
+}
+
+.block .progress {
+    margin-bottom: 0;
+}
+
+.boardContainer {
+	width: 250px;
+}
+
+.distribution {
+	padding-right: 0; 
+	padding-left: 10px;
+}
+
+.resetLane{
+	padding-left: 0;
+	padding-right: 0; 
+}
+
+
+.offset4 {
+    margin-left: 320px;
+}
+
+.input-medium {
+    width: 160px;
+}
+
+#detailModal {
+    width: 950px;
+	margin-left: -480px;
+}
+
+.modal-header h4 {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+
+#tableDetail {
+	font-size: 12px;
+}
+
+#tableDetail a{
+	font-size: 14px;
+	padding: 0 2px;
+}
+
+#tableOrders td{
+	border-top-width: 1px;
+}
+
+#tableOrders .thickBoarder td{
+	border-top-width: 3px;
+}
+
+#tableOrders .rowSpanTd{
+	background-color: white; 
+}

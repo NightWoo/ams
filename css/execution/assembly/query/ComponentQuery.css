@@ -1,0 +1,28 @@
+.well {
+	margin-bottom: 10px;	
+}
+
+
+.form-search .checkbox {
+	margin-left: 10px;
+}
+
+#btnQuery, #selectNode, #series {
+	margin-left: 3px;
+}
+
+#labelF0 {
+	margin-left: 5px;
+}
+
+#tabs {
+	margin-bottom: 10px;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+#resultTable, #tablePlato, #tableDpu {
+	font-size:12px;	
+}

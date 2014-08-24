@@ -1,0 +1,128 @@
+#tableCarInfo {
+	margin-top: 20px;
+	margin-bottom: 0px;
+}
+
+#form {
+	margin-bottom: 10px;
+}
+
+#cardNumber,#vinText {
+	height: 50px;
+	width: 450px;
+	font-size: 40px;
+	line-height: 50px;
+}
+
+#vinLabel, #cardLabel {
+	font-size: 26px;
+    height: 50px;
+    line-height: 50px;
+    width: 50px;
+}
+
+#btnSubmit, #reset {
+	height: 60px;
+	/*width: 80px;*/
+	font-size: 26px;
+}
+
+#carInfo {
+    line-height: 40px;
+    margin-top: 20px;
+    padding-left: 0;
+}
+
+ #vinHint{
+	font-size: 23px;
+	line-height: 40px;
+}
+
+#carInfo .label-info{
+	font-size: 23px;
+	line-height: 30px;
+	padding: 2px 8px;
+}
+
+
+
+/*#tablePlan {
+	margin-top: 15px;
+	margin-bottom: 0px;
+}
+
+strong {
+	color: #317eac;
+}
+
+label {
+	margin: 0px;
+	padding-left: 5px;
+}
+
+#notallowAlert, #infoAlert, #errorAlert {
+	padding-left: 20px;
+	margin-bottom: 10px;
+}
+
+
+#tableOrder {
+	font-size: 12px;
+	margin-bottom: 0px;
+}
+
+#thPriority {
+	min-width: 25px;
+}
+
+#thLane {
+	min-width: 25px;
+}
+
+#thCarrier {
+	min-width: 50px;
+}
+
+#thCity {
+	min-width: 80px;
+}
+
+#thDistributor {
+	min-width: 250px;
+}
+
+#thOrderNumber {
+	min-width: 100px;
+}
+
+#thAmount, #thRemain ,#thCount {
+	min-width: 25px;
+}
+
+#thSeries {
+	min-width: 25px;
+}
+
+#thCarType {
+	min-width: 200px;
+}
+
+#thConfig {
+	min-width: 120px;
+}
+
+#thColor {
+	min-width: 40px;
+}
+
+#thColdResistant {
+	min-width: 40px;
+}
+
+#thCarYear {
+	min-width: 25px;
+}
+
+#thRemark {
+	min-width: 100px;
+}*/

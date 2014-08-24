@@ -1,0 +1,98 @@
+/*
+
+td{border:1px solid black;font-size: 8px;font-family: "宋体"}
+        thead{padding: 0;margin: 0;border:none;}
+        thead td{border:none;}*/
+
+.notPrintable{
+	display: none;
+}
+.printable{
+	/*display: block;*/
+	display: none;
+	margin: 0;
+}
+
+.toPrint{
+	display: block;
+}
+
+body{
+	margin: 5pt 0 0 5pt;
+	/*margin-left: 5pt;*/
+}
+
+table {
+	margin: 0 auto;
+	border-collapse: collapse;
+	margin-bottom: 7pt;
+}
+
+.tableHead {
+	margin-left: 1pt;
+}
+
+.docCode {
+	height: 20px;
+	border:none;
+}
+
+.logo {
+	height: 28px;
+	width: 142px;
+	position: absolute;
+	top: 15pt;
+}
+
+.tableHead td{
+	text-align: center;
+}
+
+td {
+	font-family: "Microsoft YaHei";
+	font-size: 8pt;
+	border:1pt solid gray;
+}
+
+th {
+	border: none;
+	font-family: "Microsoft YaHei";
+	font-size: 14pt;
+}
+
+.trInfo {
+	height: 20pt;
+	/*text-align: center;*/
+}
+
+.trInfo td {
+	width: 42pt;
+}
+
+td.barcode {
+	width: 280pt;
+}
+
+tr.trList {
+	height: 14pt;
+	width: 811pt;
+}
+
+td.tdList {
+	width: 210pt;
+}
+
+td.tdCheck {
+	width: 30pt;
+	text-align: center;
+}
+
+.alignCenter {
+	text-align: center;
+	font-weight: bold;
+}
+
+.alignRight {
+	text-align: right;
+	font-weight: bold;
+}

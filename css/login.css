@@ -1,0 +1,74 @@
+@CHARSET "UTF-8";
+
+.span12 {
+	float: none;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 0
+}
+
+.ieShow {
+    display: none;
+}
+
+form {
+	margin-top: 20px;
+}
+
+ul ul {
+    margin-left: 18px;
+}
+
+ul {
+    margin-bottom: 0px;
+}
+
+li a {
+    color: #3a87ad;
+}
+
+#warning, #contect {
+    margin-bottom: 10px;
+}
+
+.title {
+    margin-bottom: 0;
+}
+
+td {
+    vertical-align: bottom;
+}
+
+table {
+    height: 301px;
+}
+
+.form-horizontal .control-label {
+    width: 120px;
+}
+
+.form-horizontal .controls {
+    margin-left: 140px;
+}
+
+
+#emputyHead {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+legend a {
+    font-size: 12px;
+}
+
+.span5 {
+    margin-left: 30px;
+}
+
+ul.unstyled {
+	padding-bottom: 2px;
+}
+
+.form-inline .checkbox input[type="checkbox"]{
+	margin-top: 5px;
+}

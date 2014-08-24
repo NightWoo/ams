@@ -1,0 +1,340 @@
+#toggle-left {
+	position: fixed;
+	left:160px;
+	height:100%;
+	width:20px;
+}
+
+#leftHandle {
+  position: absolute;
+  width:10px;
+  height: 150px;
+  background-color: gray;
+  top: 100px;
+  opacity: 0.2;
+  border-radius: 0 6px 6px 0;
+}
+
+#icon-left {
+  opacity: 0.6;
+  position: absolute;
+	top: 162px;
+  color: gray;
+	opacity: 1;
+  margin-left: 2px;
+}
+
+.marginleft {
+	margin-left: 20px;
+}
+
+#toggle-top {
+	position: fixed;
+	top:41px;
+	width:100%;
+	height:14px;
+  background-color: white;
+  z-index: 100;
+  cursor: pointer;
+}
+
+#bodyleft{
+  display: none;
+}
+#toggle-left {
+  left: 0;
+}
+
+#icon-top {
+  vertical-align:text-top;
+	opacity: 0.5;
+  display: none;
+}
+
+#icon-top-container {
+  width:14px;
+  margin: 0 auto;
+}
+
+.offhead {
+	margin-top:55px;
+	margin-right:20px;
+}
+
+#divLeft {
+	background-color:#FFF;
+	z-index:999;
+	position:fixed; 
+	height:100%;
+}
+
+#bodyright {
+	margin-left:20px;
+}
+
+#divFoot .brand{
+  padding-top: 7px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  font-size: 16px;
+}
+
+#divFoot .nav li{
+  line-height: 15px;
+}
+
+legend span {
+  font-size: 14px;
+  padding-top: 4px;
+}
+
+.divLoading{
+  display:none;
+  margin:50px auto;
+  width:50px;
+}
+
+.appendBtn {
+  width:13px;
+}
+
+a {
+  cursor: pointer;
+}
+
+@media screen {
+  body{
+    padding-bottom:40px;
+  }
+}
+
+/*below added by wujun modify bootstrap.css*/
+div.thumbnail:hover, div.thumbnail:focus {
+    border-color: #0088CC;
+    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+div.thumbnail {
+  cursor: pointer;
+}
+
+.icon-white{margin-top:4px;}
+[class^="icon-"],[class*=" icon-"]{margin-top:4px;}
+.dropdown-menu{margin:0;}
+label{vertical-align:middle;}
+.leftside{position: fixed;}
+
+/*alert margin*/
+#messageAlert{
+  margin-top: 10px;
+  display: none;
+}
+/*pager style*/
+.pager li{
+    cursor: pointer;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.tooltip {
+  z-index: 1060;
+}
+
+.main {
+  margin: 0 auto;
+}
+.modal {
+    /*margin: -360px 0 0 -280px;*/
+}
+
+.table tbody tr.success > td {
+  background-color: #d0e9c6;
+}
+
+.table tbody tr.error > td {
+  background-color: #ebcccc;
+}
+
+.table tbody tr.warning > td {
+  background-color: #faf2cc;
+}
+
+.table tbody tr.info > td {
+  background-color: #c4e3f3;
+}
+
+.table-hover tbody tr.success:hover > td {
+  
+  background-color: #dff0d8;
+}
+
+.table-hover tbody tr.error:hover > td {
+  
+  background-color: #f2dede;
+}
+
+.table-hover tbody tr.warning:hover > td {
+  background-color: #fcf8e3;
+  
+}
+
+.table-hover tbody tr.info:hover > td {
+  background-color: #d9edf7;
+  
+}
+
+.popover {
+  z-index: 1050;
+  max-width: 476px;
+}
+
+/*added by wujun modify bootstrap.css finished*/
+
+/*bootstrap 2.2.2 add*/
+.pagination {
+  /*margin: 20px 0;*/
+  margin: 4px 0 0 0;
+}
+
+.pagination ul {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  margin-left: 0;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  *zoom: 1;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.pagination ul > li {
+  display: inline;
+}
+
+.pagination ul > li > a,
+.pagination ul > li > span {
+  float: left;
+  padding: 4px 12px;
+  line-height: 20px;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-left-width: 0;
+}
+
+.pagination ul > li > a:hover,
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+  background-color: #f5f5f5;
+}
+
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+  color: #999999;
+  cursor: default;
+}
+
+.pagination ul > .disabled > span,
+.pagination ul > .disabled > a,
+.pagination ul > .disabled > a:hover {
+  color: #999999;
+  cursor: default;
+  background-color: transparent;
+}
+
+.pagination ul > li:first-child > a,
+.pagination ul > li:first-child > span {
+  border-left-width: 1px;
+  -webkit-border-bottom-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+  -webkit-border-top-left-radius: 4px;
+          border-top-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-topleft: 4px;
+}
+
+.pagination ul > li:last-child > a,
+.pagination ul > li:last-child > span {
+  -webkit-border-top-right-radius: 4px;
+          border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-bottomright: 4px;
+}
+
+.pagination-centered {
+  text-align: center;
+}
+
+.pagination-right {
+  text-align: right;
+}
+
+.pagination-large ul > li > a,
+.pagination-large ul > li > span {
+  padding: 11px 19px;
+  font-size: 17.5px;
+}
+
+.pagination-large ul > li:first-child > a,
+.pagination-large ul > li:first-child > span {
+  -webkit-border-bottom-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+          border-top-left-radius: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-topleft: 6px;
+}
+
+.pagination-large ul > li:last-child > a,
+.pagination-large ul > li:last-child > span {
+  -webkit-border-top-right-radius: 6px;
+          border-top-right-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+          border-bottom-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-bottomright: 6px;
+}
+
+.pagination-mini ul > li:first-child > a,
+.pagination-small ul > li:first-child > a,
+.pagination-mini ul > li:first-child > span,
+.pagination-small ul > li:first-child > span {
+  -webkit-border-bottom-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+          border-top-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  -moz-border-radius-topleft: 3px;
+}
+
+.pagination-mini ul > li:last-child > a,
+.pagination-small ul > li:last-child > a,
+.pagination-mini ul > li:last-child > span,
+.pagination-small ul > li:last-child > span {
+  -webkit-border-top-right-radius: 3px;
+          border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+}
+
+.pagination-small ul > li > a,
+.pagination-small ul > li > span {
+  padding: 2px 10px;
+  font-size: 11.9px;
+}
+
+.pagination-mini ul > li > a,
+.pagination-mini ul > li > span {
+  padding: 0 6px;
+  font-size: 10.5px;
+}
+/*bootstrap 2.2.2 add finished*/

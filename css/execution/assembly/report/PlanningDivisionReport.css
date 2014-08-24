@@ -1,0 +1,71 @@
+
+.screenHide {
+	display: none;
+}
+
+#tableDaily {
+	font-size: 12px
+}
+
+#timeQueryInputDiv {
+	margin-bottom: 0;
+	margin-left: 10px;
+	height: 33px;
+}
+
+#startTime, #btnQuery {
+	padding-top:2px;
+	padding-bottom:2px;
+} 
+
+
+legend {
+	margin-bottom: 20px;
+}
+
+
+.divLoading {
+	height: 200px;
+	margin: 100px auto 0;
+}
+
+.table {
+	margin-bottom: 20px;
+}
+
+.alignRight {
+	text-align:right;
+}
+
+.table .alignRight{
+	text-align: right;
+}
+
+.table thead th {
+	vertical-align: middle;
+}
+
+.thickBorder td{
+	border-top-width: 3px;
+}
+#tableDaily .rowSpanTd{
+	background-color: white; 
+}
+
+.alignCenter{
+	text-align: center;
+}
+
+.net-blue {
+	background-color: #c4e3f3;
+	width:56px;
+}
+
+.net-red {
+	background-color: #ebcccc;
+	width:56px;
+}
+
+.tabs-left > .nav-tabs > li > a {
+	min-width: 30px
+}

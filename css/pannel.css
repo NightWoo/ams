@@ -1,0 +1,38 @@
+
+div.thumbnail:hover, div.thumbnail:focus {
+    border-color: #0088CC;
+    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+div.thumbnail {
+  cursor: pointer;
+}
+
+.thumbnail li {
+    /*margin-bottom: 0px;*/
+}
+
+.thumbnail h5 {
+    margin-left: 10px;
+    margin-top: 5px;
+}
+.thumbnail h4{
+	margin-left: 10px;
+    margin-top: 5px;	
+}
+
+.thumbnail .maindata {
+	margin-right: 10px;
+	margin-top:50px;
+	text-align: right;
+}
+
+.mainData {
+    font-size: 18px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.mainData .unit {
+    font-size: 16px;
+}

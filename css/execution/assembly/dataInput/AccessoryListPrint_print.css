@@ -1,0 +1,59 @@
+/*
+
+td{border:1px solid black;font-size: 8px;font-family: "宋体"}
+        thead{padding: 0;margin: 0;border:none;}
+        thead td{border:none;}*/
+
+.notPrintable{
+	display: none;
+}
+.printable{
+	display: block;
+	/*display: none;*/
+	margin: 0;
+}
+
+.toPrint{
+	display: block;
+}
+
+body{
+	margin: 10pt 0 0 5pt;
+	/*margin-left: 5pt;*/
+}
+
+table {
+	margin: 0 auto;
+	border-collapse: collapse;
+	margin-bottom: 7pt;
+}
+
+.tableHead {
+	margin-left: 1pt;
+}
+
+.logo {
+	height: 28px;
+	top: 15pt;
+}
+
+.tableHead td{
+	text-align: center;
+}
+
+td {
+	font-family: "Microsoft YaHei";
+}
+
+th {
+	border: none;
+	font-family: "Microsoft YaHei";
+}
+
+.distributorsTextDiv, .boardNumberTextDiv {
+	margin-bottom: 5px;
+}
+
+.accessoryListTable .alignRight{
+	text-align: right;
+}

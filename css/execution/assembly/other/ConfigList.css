@@ -1,0 +1,22 @@
+/* CSS Document */
+#tableConfigList {
+	font-size: 12px;
+}
+
+.btn-primary {
+	margin-left: 2px;
+}
+
+#messageAlert {
+	margin-left: 5px;
+}
+
+.help-inline p {
+	margin: 0;
+
+}
+
+.modal {
+	left: 45%;
+	width: auto;
+}

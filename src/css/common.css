@@ -1,0 +1,84 @@
+/*modify bootstrap*/
+html {
+  font-family: "Microsoft YaHei", sans-serif;
+}
+
+body {
+  font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 50px;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.modal-body .nav-tabs {
+    margin-bottom: 30px;
+}
+
+.modal-footer {
+    margin-top: 0;
+}
+
+li.list-group-item:hover, li.list-group-item:focus {
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.list-group-item>.btn, .list-group-item>.btn-group, .panel-heading>.btn, .panel-heading>.btn-group {
+    float: right;
+}
+
+li.list-group-item>a {
+    display: block;
+    text-decoration: none;
+}
+
+.panel-primary .btn-link {
+    color: #000;
+}.panel-primary .btn-link:hover {
+    color: #fff;
+}
+
+/*end modify bootstrap*/
+
+.body-main {
+    overflow-y: auto;
+    padding-top: 20px;
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .pannel-thumbnails .thumbnail {
+        height: 95px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .pannel-thumbnails .thumbnail {
+        height: 132px;
+    }
+}
+@media (min-width: 1200px) {
+    .pannel-thumbnails .thumbnail {
+        height: 165px;
+    }
+}
+
+.container > .row {
+    margin-bottom: 10px;
+}
+
+.pannel-thumbnails a.thumbnail:hover,
+.pannel-thumbnails a.thumbnail:focus,
+.pannel-thumbnails a.thumbnail.active {
+    border-color: #428bca;
+    text-decoration: none;
+}
+
+.thumbnail h5 {
+    margin-left: 10px;
+}
