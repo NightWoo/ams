@@ -317,4 +317,26 @@ class HrStaffSeeker
     return $staff;
   }
 
+  public function queryTransferRecord($staffId) {
+    $sql = "SELECT * FROM view_hr_transfer WHERE staff_id = $staffId";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
+    $orgSeeker = new OrgStructureSeeker();
+    foreach ($data as &$record) {
+      $parents = array();
+      if (intval($record['apply_dept_level']) > 1) {
+        $parents = $orgSeeker->deptParents($record['apply_dept_parent_id'], $record['apply_dept_level']);
+      }
+      $parents[$record['apply_dept_level']] = array(
+        "id" => $record['apply_dept_id'],
+        "display_name" => $record['apply_dept_display_name'],
+        "name" => $record['apply_dept_name'],
+        "parent_id" => $record['apply_dept_parent_id'],
+        "short_name" => $record['apply_dept_short_name'],
+        "level" => $record['apply_dept_level']
+      );
+      $record['dept_parents'] = $parents;
+    }
+    return $data;
+  }
+
 }

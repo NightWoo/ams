@@ -18,7 +18,6 @@ define([
     $scope.btnQuery = function () {
       if ($scope.query.employee) {
         Staff.queryStaffInfo($scope);
-        $scope.state.hasQueried = true;
       }
     };
   }]);

@@ -2,6 +2,8 @@
 Yii::import('application.models.AR.HR.HrStaffAR');
 Yii::import('application.models.AR.HR.HrPositionAR');
 Yii::import('application.models.AR.HR.HrTransferAR');
+Yii::import('application.models.AR.HR.HrResignSurveyAR');
+Yii::import('application.models.AR.HR.HrStaffExpAR');
 Yii::import('application.models.HR.HrStaff');
 Yii::import('application.models.HR.HrApproval');
 Yii::import('application.models.HR.HrTransfer');
@@ -138,19 +140,6 @@ class StaffController extends BmsBaseController
     }
   }
 
-  public function actionGetApprovalInfo() {
-    $employeeNumber = $this->validateStringVal('employeeNumber', '');
-
-    try {
-      $seeker = new HrStaffSeeker();
-      $data = $seeker->queryApprovalInfo($employeeNumber);
-
-      $this->randerJsonApp(true, 'ok', $data);
-    } catch (Exception $e) {
-      $this->randerJsonApp(false, $e->getMessage());
-    }
-  }
-
   public function actionGetMyApproval() {
     try {
       $seeker = new HrStaffSeeker();
@@ -216,7 +205,19 @@ class StaffController extends BmsBaseController
     $employee = $this->validateStringVal('employee', '');
     try {
       $seeker = new HrStaffSeeker();
-      $data = $seeker->queryStaffInfo($employee);
+      $staff = $seeker->queryStaffInfo($employee);
+      $data = array();
+      $userId = Yii::app()->user->id;
+      $isSupervisor = ($userId==$staff['manager_id'] || $userId==$staff['parent_manager_id'] || $userId==$staff['parent_parent_manager_id'] || $userId==$staff['id']);
+      if (!empty($staff) && $isSupervisor) {
+        $data['staff'] = $staff;
+        $data['transferRecord'] = $seeker->queryTransferRecord($staff['id']);
+        if (!empty($staff['resign_id'])) {
+          $data['resignSurvey'] = HrResignSurveyAR::model()->findAll('resign_id=?', array($staff['resign_id']));
+        }
+        $data['careerExp'] = HrStaffExpAR::model()->findAll('staff_id=? AND type=?', array($staff['id'], 'career'));
+        $data['trainingExp'] = HrStaffExpAR::model()->findAll('staff_id=? AND type=?', array($staff['id'], 'training'));
+      }
       $this->renderJsonApp(true, 'query success', $data);
     } catch (Exception $e) {
       $this->renderJsonApp(false, $e->getMessage());

@@ -15,5 +15,161 @@
       </div>
     </div>
   </form>
-  <div class="alert alert-info" ng-if="state.hasQueried && !basic.id">账号权限下，查无员工信息</div>
+  <div class="alert alert-info" ng-if="state.hasQueried && !staff.id">账号权限下，查无员工信息</div>
+  <tabset ng-if="staff.id">
+    <tab heading="个人信息">
+      <h4 class="section-head">基本信息</h4>
+      <dl class="dl-horizontal">
+        <dt>工号</dt>
+        <dd>{{staff.employee_number}}</dd>
+        <dt>姓名</dt>
+        <dd>{{staff.name}}</dd>
+        <dt>性别</dt>
+        <dd>
+          <span ng-if="staff.gender==1">女</span>
+          <span ng-if="staff.gender==0">男</span>
+        </dd>
+        <dt>身份证号</dt>
+        <dd>{{staff.id_number}}</dd>
+        <dt>籍贯</dt>
+        <dd>{{staff.province_name}} / {{staff.city_name}}</dd>
+        <dt>个人联系方式</dt>
+        <dd>{{staff.contact_phone}}</dd>
+        <dt>紧急联系人</dt>
+        <dd>{{staff.emergency_contact}} / {{staff.emergency_phone}}</dd>
+        <dt>学历</dt>
+        <dd>{{staff.education}}</dd>
+        <dt>专业</dt>
+        <dd>{{staff.major}}<span ng-if="!staff.major">--</span></dd>
+        <dt>学校</dt>
+        <dd>{{staff.school}}</dd>
+        <dt>入职日期</dt>
+        <dd>{{staff.enter_date}}</dd>
+      </dl>
+      <h4 class="section-head">工作经历</h4>
+      <table class="table">
+        <tbody>
+          <tr ng-repeat="exp in careerExp">
+            <td class="col-sm-2">{{exp.start_date}} ~ {{exp.end_date}}</td>
+            <td>{{exp.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 class="section-head">教育/培训经历</h4>
+      <table class="table">
+        <tbody>
+          <tr ng-repeat="exp in trainingExp">
+            <td class="col-sm-2">{{exp.start_date}} ~ {{exp.end_date}}</td>
+            <td>{{exp.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </tab>
+    <tab heading="岗位信息">
+      <h4 class="section-head">当前岗位</h4>
+      <dl class="dl-horizontal">
+        <dt>工号</dt>
+        <dd>{{staff.employee_number}}</dd>
+        <dt>姓名</dt>
+        <dd>{{staff.name}}</dd>
+        <dt>科室</dt>
+        <dd>
+          <span>{{staff.dept_parents[1].display_name}}</span>
+          <span ng-if="!staff.dept_parents[1].display_name">--</span>
+        </dd>
+        <dt>班/组</dt>
+        <dd>
+          <span>{{staff.dept_parents[2].display_name}}</span>
+          <span ng-if="!staff.dept_parents[2].display_name">--</span>
+          <span ng-if="staff.dept_parents[3].display_name">/ {{staff.dept_parents[3].display_name}}</span>
+        </dd> 
+        <dt>岗位名称</dt>
+        <dd>{{staff.position_display_name}}</dd>
+        <dt>岗位等级</dt>
+        <dd>{{staff.grade_name}}</dd>
+        <dt>工资级别</dt>
+        <dd>{{staff.staff_grade}}</dd>
+        <dt>底薪</dt>
+        <dd>{{staff.basic_salary}}</dd>
+        <dt>上岗日期</dt>
+        <dd>{{staff.start_date}}</dd>
+        <dt>工作邮箱</dt>
+        <dd>{{staff.email}}<span ng-if="!staff.email">--</span></dd>
+      </dl>
+      <div ng-if="transferRecord.length>1">
+        <h4 class="section-head">调岗记录</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>上岗日期</th>
+              <th>科室</th>
+              <th>班/组</th>
+              <th>岗位名称</th>
+              <th>岗位等级</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="record in transferRecord">
+              <td>{{record.transfer_date}}</td>
+              <td>
+                <span>{{record.dept_parents[1].display_name}}</span>
+                <span ng-if="!record.dept_parents[1].display_name">--</span>
+              </td>
+              <td>
+                <span>{{record.dept_parents[2].display_name}}</span>
+                <span ng-if="!record.dept_parents[2].display_name">--</span>
+                <span ng-if="record.dept_parents[3].display_name">/ {{record.dept_parents[3].display_name}}</span>
+              </td>
+              <td>{{record.apply_position_display_name}}</td>
+              <td>{{record.apply_position_grade_name}}</td>
+              <td><a>审批记录</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </tab>
+    <tab heading="" ng-if="staff.staff_status=='1'">
+      <div tab-heading>
+        <span class="text-danger">离职信息</span>
+      </div>
+      <h4 class="section-head">基本信息</h4>
+      <dl class="dl-horizontal">
+        <dt>工号</dt>
+        <dd>{{staff.employee_number}}</dd>
+        <dt>姓名</dt>
+        <dd>{{staff.name}}</dd>
+        <dt>科室</dt>
+        <dd>
+          <span>{{staff.dept_parents[1].display_name}}</span>
+          <span ng-if="!staff.dept_parents[1].display_name">--</span>
+        </dd>
+        <dt>班/组</dt>
+        <dd>
+          <span>{{staff.dept_parents[2].display_name}}</span>
+          <span ng-if="!staff.dept_parents[2].display_name">--</span>
+          <span ng-if="staff.dept_parents[3].display_name">/ {{staff.dept_parents[3].display_name}}</span>
+        </dd> 
+        <dt>离职日期</dt>
+        <dd>{{staff.resign_date}}</dd>
+        <dt>离职类型</dt>
+        <dd>{{staff.resign_type}}</dd>
+        <dt>离职原因</dt>
+        <dd>
+          <span>{{staff.resign_reason}}</span>
+          <span ng-if="staff.resign_reason_desc">：{{staff.resign_reason_desc}}</span>
+        </dd>
+      </dl>
+      <h4 class="section-head" ng-if="resignSurvey">离职调查</h4>
+      <dl>
+        <div ng-repeat="one in resignSurvey">
+          <dt>
+            <span>Q{{$index + 1}}.&nbsp;</span>
+            <span>{{one.topic}}</span>
+          </dt>
+          <dd>{{one.result}}</dd>
+        </div>
+      </dl>
+    </tab>
+  </tabset>
 </div>

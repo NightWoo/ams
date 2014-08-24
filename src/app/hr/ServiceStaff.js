@@ -182,6 +182,12 @@ define([
         getOrg(scope);
         //岗位 下拉
         getGradePosition(scope);
+        //籍贯 下拉
+        StaffHttp.getProvinceCity().success(function (response) {
+          if (response.success) {
+            scope.provinces = response.data;
+          }
+        });
       },
       resetStaffList: function (scope) {
         scope.stafflList = [];
@@ -241,18 +247,22 @@ define([
       },
       initQueryInfo: function (scope) {
         scope.query = {};
-        scope.basic = {}; //员工基础信息
-        scope.applyInfo = {} //调动岗位数据
-        scope.apply = {}; //申请岗位表单数据
+        scope.staff = {}; //员工基础信息
+        scope.careerExp = [];
+        scope.trainingExp = [];
         scope.state = {}; //各种状态
-        scope.approvalRecords = [];
       },
       queryStaffInfo: function (scope) {
         StaffHttp.queryStaffInfo({
           employee: scope.query.employee
         }).success(function (response) {
           if (response.success) {
-            scope.basic = response.data;
+            scope.staff = response.data.staff;
+            scope.resignSurvey = response.data.resignSurvey;
+            scope.careerExp = response.data.careerExp;
+            scope.trainingExp = response.data.trainingExp;
+            scope.transferRecord = response.data.transferRecord;
+            scope.state.hasQueried = true;
           }
         })
       }

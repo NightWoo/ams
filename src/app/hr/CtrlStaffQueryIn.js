@@ -21,6 +21,13 @@ define([
       Staff.resetQueryTabs($scope);
     };
 
+    $scope.proviceChanged = function () {
+      $scope.cities = $scope.provinceSelected.cities;
+      $scope.query.nativeProvinceId = $scope.provinceSelected.id;
+      $scope.query.nativeCityId = '';
+      $scope.resetStaffList();
+    };
+
     $scope.resetStaffList = function () {
       Staff.resetStaffList($scope);
       Staff.resetQueryTabs($scope);
