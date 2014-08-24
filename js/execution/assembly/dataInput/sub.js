@@ -38,7 +38,7 @@ $("document").ready(function() {
 						var nameTd = "<td>" + value.display_name+"</td><td id='comp" + index + "'comp>" + value.bar_code + "</td>";
 						var hiddenProviderCode = "<input name='provider' type='hidden' value='" + value.provider_code + "' />";
 						var hiddenSimpleCode = "<input name='simple' type='hidden' value='" + value.simple_code + "' />";
-						$("#componentTable tbody").append("<tr>" + nameTd + hiddenProviderCode +
+						$("#componentTable tbody").append("<tr>" + nameTd + hiddenProviderCode + 
 							hiddenSimpleCode + "</tr>");
 					});
 					if(compArray.length>0) {
@@ -82,19 +82,19 @@ $("document").ready(function() {
 				"barCode" : barCode
 			},
 			async:false,
-		  cache:false,
+		    cache:false,
 			success: function(response){
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
-				// $(".printFrontImage").attr("src", response.data.image);
+				$(".printFrontImage").attr("src", response.data.image);
 				// $(".printBackImage").attr("src", response.data.image);
 				$(".printEngineCode").html(response.data.engineCode);
 				$(".printType").html(response.data.type);
 				$(".printSeries").html(response.data.series);
 				if(response.data.coldResistant == "1"){
-					$(".printConfig").html(response.data.config +'/'+ '耐寒');
+					$(".printConfig").html(response.data.config +'/'+ '耐寒');							
 				}else{
-					$(".printConfig").html(response.data.config +'/'+ '非耐寒');
+					$(".printConfig").html(response.data.config +'/'+ '非耐寒');							
 				}
 				$(".printSerialNumber").html(response.data.serialNumber);
 				$(".printRemark").html("备注：" + response.data.remark);
@@ -102,14 +102,7 @@ $("document").ready(function() {
 					if (response.data.image == "") {
 						fadeMessageAlert(response.message + "(配置单图片不完整，无法打印出相应跟单)","alert-info");
 					} else {
-						// var _img = document.getElementById('id1');
-						var newImg = new Image();
-						newImg.src = response.data.image;
-						newImg.onload = function() {
-					    $(".printFrontImage").src = this.src;
-						    // window.print();
-							setTimeout(function (){window.print();},2000);
-						}
+						setTimeout(function (){window.print();},3000);
 						fadeMessageAlert(response.message,"alert-success");
 					}
 				} else {
@@ -122,7 +115,7 @@ $("document").ready(function() {
 			error:function(){alertError();}
 		});
 	}
-
+	
 
 	//get the car orig
 	function ajaxGetPrintList(){
@@ -133,8 +126,8 @@ $("document").ready(function() {
 		    data: {
 		    	"type": $("#subType").val(),
 		    	"stime":$("#startTime").val(),
-					"etime":$("#endTime").val(),
-					"top" :50,
+				"etime":$("#endTime").val(),
+				"top" :50,
 		    },//vin
 		    async:false,
 		    success: function(response){
@@ -150,7 +143,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.queueTime).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-		    		$("<td />").html(value.cold).appendTo(tr);
+		    		$("<td />").html(value.cold).appendTo(tr);	
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
@@ -185,7 +178,7 @@ $("document").ready(function() {
 		    		$("<td />").html(value.queueTime).appendTo(tr);
 		    		$("<td />").html(value.vin).appendTo(tr);
 		    		$("<td />").html(value.type_name + '/' + value.config_name).appendTo(tr);
-						$("<td />").html(value.cold).appendTo(tr);
+					$("<td />").html(value.cold).appendTo(tr);						
 		    		$("<td />").html(value.color).appendTo(tr);
 		    		$("<td />").html(value.special_order).appendTo(tr);
 		    		$("<td />").html(value.remark).appendTo(tr);
@@ -196,14 +189,14 @@ $("document").ready(function() {
 
 		    		tr.data("vin", value.vin);
 		    		//after fetch,set the 1st car to the print place
-
+		    		
 		    	});
 		    },
 		    error:function(){}
        });
 	}
 
-	function ajaxPrintOne(vin){
+		function ajaxPrintOne(vin){
 
 		$.ajax({
 			type: "get",//使用get方法访问后台
@@ -214,7 +207,7 @@ $("document").ready(function() {
 				"type": $("#subType").val(),
 			},
 			async:false,
-		   cache:false,
+		    cache:false,
 			success: function(response){
 				//fill data to print
 				$(".printBarCode").attr("src", response.data.vinBarCode);
@@ -224,9 +217,9 @@ $("document").ready(function() {
 				$(".printType").html(response.data.type);
 				$(".printSeries").html(response.data.series);
 				if(response.data.coldResistant == "1"){
-					$(".printConfig").html(response.data.config +'/'+ '耐寒');
+					$(".printConfig").html(response.data.config +'/'+ '耐寒');							
 				}else{
-					$(".printConfig").html(response.data.config +'/'+ '非耐寒');
+					$(".printConfig").html(response.data.config +'/'+ '非耐寒');							
 				}
 				$(".printSerialNumber").html(response.data.serialNumber);
 				$(".printRemark").html("备注：" + response.data.remark);
@@ -307,7 +300,7 @@ $("document").ready(function() {
 					compArray[i].provider_code == providerCode)
 					return i;
 			}
-
+				
 		};
 		message = compCode + "不是本工位扫描零部件条码";
 		addCheckMessage(message);
@@ -341,7 +334,7 @@ $("document").ready(function() {
 				}
 			};
 			if(unRecordCount != 0){
-				alert("还有" + unRecordCount + "个零部件未扫描:\n\n" +
+				alert("还有" + unRecordCount + "个零部件未扫描:\n\n" + 
 					unRecordComp + "\n无法提交");
 				$("#compCodeText").val("").focus();
 				return false;
@@ -362,8 +355,8 @@ $("document").ready(function() {
 		$("#checkAlert").prepend(checkMessage);
 	}
 //-------------------END ajax -----------------------
-
-//------------------- common functions -----------------------
+	
+//------------------- common functions -----------------------	
 	//initialize this page
 	/*
 		1.add head class and resetPage
@@ -374,7 +367,7 @@ $("document").ready(function() {
 		//add head class
 		$("#headEfficiencyLi").addClass("active");
 		$("#leftNodeSelectLi").addClass("active");
-
+		
 		toggleVinHint(true);
 
 		//hide alert
@@ -415,7 +408,7 @@ $("document").ready(function() {
 			$("#vinText").attr("value","");
 			$("#btnSubmit, #btnTopOut").attr("disabled", "disabled");
 		}
-
+		
 	}
 
 	//toggle 车辆信息和提示信息
@@ -438,7 +431,7 @@ $("document").ready(function() {
 		fade infomation(error or success)
 		fadeout after 5s
 		@param message
-		@param alertClass
+		@param alertClass 
 			value: alert-error or alert-success
 	*/
 	function fadeMessageAlert(message,alertClass){
@@ -450,8 +443,8 @@ $("document").ready(function() {
 			},5000);
 		});
 	}
-
-
+	
+	
 //-------------------END common functions -----------------------
 
 //------------------- event bindings -----------------------
@@ -463,7 +456,7 @@ $("document").ready(function() {
 		if (event.keyCode == "13"){
 		    if($.trim($('#vinText').val()) != ""){
 				ajaxValidate();
-	        }
+	        }   
 		    return false;
 		}
 	});
@@ -522,7 +515,7 @@ $("document").ready(function() {
 				if(compArray.length == recordArray.length){
 					$("#btnSubmit").focus();
 				}
-			}
+			}	
 			return false;
 		}
 	});

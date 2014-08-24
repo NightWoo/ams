@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -115,7 +115,10 @@
                         </div>
 
                         <div class="tab-pane" id="carsDistribute">
-                            <div class="tableContainer carsDistributeContainer span10 pull-left">
+                            <div class="chartContainer carsDistributeContainer row-fluid">
+                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="tableContainer carsDistributeContainer row-fluid pull-left">
                                 <table id="tableCarsDistribute" class="table table-condensed table-hover table-bordered">
                                     <thead>
 
@@ -130,9 +133,6 @@
                                       将VQ1、VQ2、VQ3结存合并为周转车
                                     </label>
                                 </div>
-                            </div>
-                            <div class="chartContainer carsDistributeContainer offset10">
-                                <div id="columnContainer" style="min-width: 400px; height: 200px; margin: 0 auto"></div>
                             </div>
                         </div>
 

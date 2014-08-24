@@ -1,0 +1,104 @@
+<div class="staff-query container">
+  <legend>离职查询</legend>
+  <form class="well clearfix" name="formQuery" novalidate>
+      <div class="col col_28p">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">时段</span>
+            <input class="form-control col_47p" type="text" placeholder="开始日期" datepicker-popup max-date="query.endDate.val" datepicker-append-to-body="true" ng-model="query.startDate.val" is-open="query.startDate.opened" ng-click="query.startDate.opened=true">
+            <span class="col_6p separate">-</span>
+            <input class="form-control col_47p" type="text" placeholder="结束日期" datepicker-popup min-date="query.startDate.val" datepicker-append-to-body="true" ng-model="query.endDate.val" is-open="query.endDate.opened" ng-click="query.endDate.opened=true" style="margin-left:-1px">
+          </div>
+        </div>
+      </div>
+      <div class="col col_25p">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">级别</span>
+              <select class="form-control grade" ng-model="query.grade" ng-options="value.id as value.grade_name group by value.channel for value in gradeList" ng-change="resetStaffList()">
+              <option value="">- 岗位 -</option>
+            </select>
+            <select class="form-control staff-grade" ng-model="query.staffGrade" ng-options="value for value in staffGrades" ng-change="resetStaffList()">
+              <option value="">- 员工 -</option>
+
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col col_45p">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">科室/班/组</span>
+            <select class="form-control org-level" ng-repeat="level in levels" ng-if="$index" ng-model="org[$index]" ng-options="one.display_name for one in org[$index-1].children" ng-change="orgChanged($index)">
+              <option value="">- {{level.levelName}} -</option>
+            </select>
+          </div>
+        </div>
+      </div>
+  </form>
+  <div class="clearfix mb_10">
+    <ul class="nav nav-pills nav-sm pull-left">
+      <li ng-class="{'active': tab.selected}" ng-repeat="tab in queryTabs">
+        <a class="ptb_5" ng-click="tabQuery(tab)">{{tab.name}}</a>
+      </li>
+    </ul>
+    <div class="pull-right" ng-if="curQueryKey==='queryStaffList' && stafflList">
+      <button class="btn btn-default btn-sm pull-left mr_5" ng-click="exportStaffList()">导出全部{{pager.totalCount}}条记录</button>
+      <pagination total-items="pager.totalCount" ng-model="pager.pageNumber" max-size="maxSize" class="pagination-sm m_0" boundary-links="true" rotate="false" num-pages="pager.totalPages" previous-text="&lt;" next-text="&gt;" first-text="&laquo;" last-text="&raquo;" rotate="false" max-size="10"></pagination>
+    </div>
+  </div>
+  <div ng-if="curQueryKey==='queryStaffList'">
+    <div class="alert alert-info" ng-if="!stafflList.length">查无员工信息</div>
+    <table class="table" ng-if="stafflList">
+      <thead>
+        <tr>
+          <th>工号</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>级别</th>
+          <th>岗位等级</th>
+          <th>科室</th>
+          <th>班组</th>
+          <th>岗位</th>
+          <th>入厂日期</th>
+          <th>离职日期</th>
+          <th>离职类型</th>
+          <th>考核关系</th>
+          <th>联系电话</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="staff in stafflList">
+          <td>{{staff.employee_number}}</td>
+          <td>{{staff.name}}</td>
+          <td>
+            <span ng-if="staff.gender=='0'">男</span>
+            <span ng-if="staff.gender=='1'">女</span>
+          </td>
+          <td>{{staff.staff_grade}}</td>
+          <td>{{staff.grade_name}}</td>
+          <td>
+            <span>{{staff.dept_parents[1].display_name}}</span>
+            <span ng-if="!staff.dept_parents[1].display_name">--</span>
+          </td>
+          <td>
+            <span>{{staff.dept_parents[2].display_name}}</span>
+            <span ng-if="!staff.dept_parents[2].display_name">--</span>
+          </td>
+          <td>{{staff.position_display_name}}</td>
+          <td>{{staff.enter_date}}</td>
+          <td>{{staff.resign_date}}</td>
+          <td>{{staff.resign_type}}</td>
+          <td>{{staff.supervisor_name}}</td>
+          <td>{{staff.contact_phone}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div ng-if="curQueryKey==='queryGradeColumn'">
+    <div highchart config="chartConfig.gradeColumn"></div>
+  </div>
+  <div ng-if="curQueryKey==='queryEduPie'">
+    <div highchart config="chartConfig.eduPie"></div>
+  </div>
+</div>

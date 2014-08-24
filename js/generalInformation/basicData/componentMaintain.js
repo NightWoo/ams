@@ -246,6 +246,9 @@ $(document).ready( function () {
 			} else if($("#liG6").hasClass("active")){
 				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
 				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(), isFault, parseInt($(".curPage").attr("page")));
+			}else if($("#liM3").hasClass("active")){
+				var isFault = Number($("#isFaultM3").attr("checked") === "checked");
+				ajaxQuery("M3", $("#inputNameM3").val(), $("#inputCodeM3").val(), $("#selectCategoryM3").val(), isFault, parseInt($(".curPage").attr("page")));
 			}
 	}
 
@@ -306,7 +309,12 @@ $(document).ready( function () {
 			isFault);
 		return false;
 	});
-
+	$("#btnQueryM3").click(function () {
+		var isFault = Number($("#isFaultM3").attr("checked") === "checked");
+		ajaxQuery("M3", $("#inputNameM3").val(), $("#inputCodeM3").val(), $("#selectCategoryM3").val(),
+			isFault);
+		return false;
+	});
 	$("#tableComponent").click(function (e) {
 		if($(e.target).is("button")) {
 			var tr = $(e.target).closest("tr");
@@ -371,7 +379,10 @@ $(document).ready( function () {
 		$('#newSeries').attr("value", "G6");
 		$('#newModal').modal("toggle");
 	});
-
+	$("#btnAddM3").click(function () {
+		$('#newSeries').attr("value", "M3");
+		$('#newModal').modal("toggle");
+	});
 	$("#btnEditConfirm").click(function () {
 		ajaxEdit();
 	});
@@ -408,6 +419,10 @@ $(document).ready( function () {
 				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
 				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(),
 					isFault, parseInt($(".curPage").attr("page")) - 1);
+			}else if(($("#liM3").hasClass("active"))) {
+				var isFault = Number($("#isFaultM3").attr("checked") === "checked");
+				ajaxQuery("M3", $("#inputNameM3").val(), $("#inputCodeM3").val(), $("#selectCategoryM3").val(),
+					isFault, parseInt($(".curPage").attr("page")) - 1);
 			}
 		}
 	);
@@ -429,6 +444,10 @@ $(document).ready( function () {
 			} else if(($("#liG6").hasClass("active"))) {
 				var isFault = Number($("#isFaultG6").attr("checked") === "checked");
 				ajaxQuery("G6", $("#inputNameG6").val(), $("#inputCodeG6").val(), $("#selectCategoryG6").val(),
+					isFault, parseInt($(".curPage").attr("page")) + 1);
+			}else if(($("#liM3").hasClass("active"))) {
+				var isFault = Number($("#isFaultM3").attr("checked") === "checked");
+				ajaxQuery("M3", $("#inputNameM3").val(), $("#inputCodeM3").val(), $("#selectCategoryM3").val(),
 					isFault, parseInt($(".curPage").attr("page")) + 1);
 			}
 		}

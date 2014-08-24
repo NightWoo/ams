@@ -109,7 +109,15 @@
                 <li class="span3">
                   <div id="manpowerPannel" class="thumbnail pannel" style="background-color:#00ABA9;">
                     <div>
-                        <h4><i class="fa fa-group"></i>&nbsp;人事</h4>
+                        <div>
+                            <div class="mainData pull-right">
+                              <span id="resignRate">-</span><span class="unit">%</span>&nbsp;/&nbsp;<span id="resignCount">-</span>
+                            </div>
+                            <h4><i class="fa fa-group"></i>&nbsp;人事</h4>
+                        </div>
+                        <ul>
+                          <li id="hrTask"></li>
+                        </ul>
                     </div>
                   </div>
                 </li>

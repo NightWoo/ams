@@ -22,6 +22,7 @@ define({
 	'SHOW_HOME_EFFICIENCY_INFO': '/bms/monitor/showHomeEfficiency',
 	'SHOW_HOME_COST_INFO': '/bms/monitor/showHomeCost',
 	'SHOW_MONITOR_INFO': '/bms/monitor/showInfo',
+	'SHOW_HOME_HR_INFO': '/bms/staff/homeInfo',
 
 	//planning division report
 	'QUERY_PLANNING_DIVISION_DAILY': '/bms/report/queryPlanningDivisionDaily',

@@ -2,6 +2,7 @@
 Yii::import('application.models.AR.HR.OrgDepartmentAR');
 Yii::import('application.models.HR.OrgDepartment');
 Yii::import('application.models.HR.OrgStructureSeeker');
+Yii::import('application.models.HR.HrPositionSeeker');
 
 class OrgStructureController extends BmsBaseController
 {
@@ -31,7 +32,7 @@ class OrgStructureController extends BmsBaseController
     public function actionDepartmentSave () {
         $id = $this->validateIntVal('deptId', 0);
         $deptData = $this->validateStringVal('deptData', '{}');
-
+        $managerNumber = $this->validateStringVal('managerNumber', '');
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $dept = OrgDepartment::createById($id);
@@ -39,6 +40,11 @@ class OrgStructureController extends BmsBaseController
                 $dept->generate($deptData);
             } else {
                 $dept->modify($deptData);
+            }
+            $user = User::model()->find('card_number=? AND isdelete=0', array($managerNumber));
+            if (!empty($user)) {
+                $dept->_ar->manager_id = $user->id;
+                $dept->_ar->save();
             }
             $transaction->commit();
             $this->renderJsonBms(true, 'save success', '');
@@ -108,6 +114,16 @@ class OrgStructureController extends BmsBaseController
             $data = $dept->getChildren();
             $this->renderJsonBms(true, 'get childrenDepts success', $data);
         } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGet3LevelList () {
+        try {
+            $seeker = new OrgStructureSeeker();
+            $data = $seeker->get3LevelList();
+            $this->renderJsonBms(true, 'get 3 level list success', $data);
+        } catch (Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());
         }
     }

@@ -61,6 +61,17 @@ class PositionSystemController extends BmsBaseController
         }
     }
 
+    // public function actionGetHighLevel () {
+    //     $id = $this->validateIntVal('positionId', 0);
+    //     try {
+    //         $seeker = new HrPositionSeeker();
+    //         $data = $seeker->getHighLevel($id);
+    //         $this->renderJsonBms(true, 'OK', $data);
+    //     } catch (Exception $e) {
+    //         $this->renderJsonBms(false, $e->getMessage());
+    //     }
+    // }
+
     public function actionGetPositionList () {
         $channel = $this->validateStringVal('channel', '');
         $level = $this->validateIntVal('level', 0);
@@ -75,6 +86,26 @@ class PositionSystemController extends BmsBaseController
     public function actionGetGradeList () {
         try {
             $data = HrPosition::getGradeList();
+            $this->renderJsonBms(true, 'get GradeList success', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGetGrades () {
+        try {
+            $seeker = new HrPositionSeeker;
+            $data = $seeker->getGradeList();
+            $this->renderJsonBms(true, 'get GradeList success', $data);
+        } catch(Exception $e) {
+            $this->renderJsonBms(false, $e->getMessage());
+        }
+    }
+
+    public function actionGetGradePositionList () {
+         try {
+            $seeker = new HrPositionSeeker();
+            $data = $seeker->gradePositionList();
             $this->renderJsonBms(true, 'get GradeList success', $data);
         } catch(Exception $e) {
             $this->renderJsonBms(false, $e->getMessage());

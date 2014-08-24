@@ -1,0 +1,112 @@
+{
+    "depts": [
+        {
+            "id": 1,
+            "parent": null,
+            "title": "ASF",
+            "name": "Changsha Assembly Factory",
+            "display_name": "总装长沙工厂",
+            "level": 0,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 2,
+            "parent": 1,
+            "title": "ME",
+            "name": "Manufacture Engineering Section",
+            "display_name": "生产技术科",
+            "level": 1,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 3,
+            "parent": 2,
+            "title": "ME1",
+            "name": "Manufacture Engineering Section1",
+            "display_name": "车型工艺组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 4,
+            "parent": 2,
+            "title": "ME2",
+            "name": "Manufacture Engineering Section2",
+            "display_name": "工艺规划组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 5,
+            "parent": 2,
+            "title": "FM",
+            "name": "Facilities Management Section",
+            "display_name": "设备/工装管理组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 6,
+            "parent": 1,
+            "title": "PMO",
+            "name": "Production Management Office",
+            "display_name": "生产办公室",
+            "level": 1,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 7,
+            "parent": 6,
+            "title": "AMS",
+            "name": "Assembly Management System Team",
+            "display_name": "管理体系小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 8,
+            "parent": 6,
+            "title": "5S",
+            "name": "5S/Safety Management Team",
+            "display_name": "现场/安全小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 9,
+            "parent": 6,
+            "title": "QE",
+            "name": "Quality Engineering Team",
+            "display_name": "质量管理小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 10,
+            "parent": 6,
+            "title": "IE",
+            "name": "Industry Engineering Team",
+            "display_name": "效率小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 11,
+            "parent": 6,
+            "title": "CE",
+            "name": "Cost Engineering Team",
+            "display_name": "成本管理小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        },
+        {
+            "id": 12,
+            "parent": 6,
+            "title": "TR",
+            "name": "Employee Relations&Training Team",
+            "display_name": "员工关系/培训小组",
+            "level": 2,
+            "templateName": "orgStructureTpl"
+        }
+    ]
+}

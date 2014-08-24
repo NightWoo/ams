@@ -33,12 +33,13 @@ class CarSeeker
 		'WHin' => array('成品库'),
 		'WH-1' => array('成品库'),
 		'WH-2' => array('成品库'),
+		'WH-5' => array('成品库'),
 		'WH-3' => array('成品库'),
 		'WH-4' => array('成品库'),
-		'WH-5' => array('成品库'),
+		//'WH-5' => array('成品库'),
 		'WH-27-export' => array('成品库'),
 		'WH-X' => array('成品库'),
-		'WH-T' => array('成品库'),
+		//'WH-T' => array('成品库'),
 		'WH-WDI' => array('WDI'),
 		'assembly' => array('T1工段' ,'T2工段', 'T3工段', 'C1工段', 'C2工段', 'F1工段', 'F2工段', 'VQ1检验', 'II_T1工段' ,'II_T2工段', 'II_T3工段', 'II_C1工段', 'II_C2工段', 'II_F1工段', 'II_F2工段', 'II_VQ1检验', 'VQ1异常','VQ1合格', '出生产车间' , 'VQ1退库', '检测线缓冲','VQ2检测线','VQ2路试', 'VQ2淋雨', 'VQ2异常.路试', 'VQ2异常.漏雨' , 'VQ2退库', 'VQ3检验' ,'VQ3合格', 'VQ3异常' , 'VQ3退库','成品库', 'WDI'),
 	);
@@ -628,9 +629,9 @@ class CarSeeker
 		if($state === 'WH-X'){
 			$condition .= " AND warehouse_id=1000";
 		}
-		if($state === 'WH-T'){
-			$condition .= " AND warehouse_id=2000";
-		}
+		//if($state === 'WH-T'){
+			//$condition .= " AND warehouse_id=2000";
+		//}
 
 		//recyclePeriod = now - assembly_time, or recyclePeriod = assembly_time - warehouse_time
 		if(!empty($lowRP)){
@@ -938,7 +939,8 @@ class CarSeeker
 			'VQ3' => array('VQ3-NORMAL','VQ3-RETURN'),
 			'VQ3-OK' => array('VQ3-OK'),
 			'recycle' => array('VQ1', 'VQ2', 'VQ3'),
-			'WH' => array('WH-1', 'WH-2', 'WH-3', 'WH-4', 'WH-5', 'WH-27-export', 'WH-X', 'WH-T', 'WH-WDI'),
+			//'WH' => array('WH-1', 'WH-2', 'WH-3', 'WH-4', 'WH-5', 'WH-27-export', 'WH-X', 'WH-T', 'WH-WDI'),
+			'WH' => array('WH-1', 'WH-2', 'WH-5','WH-3', 'WH-4',  'WH-27-export', 'WH-X', 'WH-WDI'),
 			'WH-WDI' => array('WH-WDI'),
 			'WHin' => array('WHin'),
 			'assembly' => array('PBS', 'onLine', 'onLine-2', 'VQ1', 'VQ2', 'VQ3', 'WH'),
@@ -972,12 +974,13 @@ class CarSeeker
 			'assembly' => '总装',
 			'WH-1' => '1号库',
 			'WH-2' => '2号库',
-			'WH-3' => '3号库(35#)',
-			'WH-4' => '4号库(14#)',
-			'WH-5' => '5号库(油库区)',
+			'WH-5' => '3号库(油库区)',
+			'WH-3' => '4号库(35#)',
+			'WH-4' => '5号库(14#)',
+			//'WH-5' => '3号库(油库区)',
 			'WH-27-export' => '出口车(27#)',
 			'WH-X' => 'X(非商品车区)',
-			'WH-T' => 'T(非库位区)',
+			//'WH-T' => 'T(非库位区)',
 			'WH-WDI' => 'WDI'
 		);
 

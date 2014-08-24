@@ -22,6 +22,21 @@ define([
         }).success( function ( result ) {
           cbfn( result );
         });
+      },
+      /**
+       * 检查是否有功能点权限
+       * @param  {[type]} privilagePoint 功能点权限
+       * @return {boolean} permit 是否有权限
+       */
+      checkPrivilage: function (privilagePoint) {
+        var permit = false;
+        return $http({
+          method: 'get',
+          url: '/bms/user/checkPrivilage',
+          params: {
+            privilagePoint: privilagePoint
+          }
+        });
       }
     };
   }]);

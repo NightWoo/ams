@@ -1,0 +1,185 @@
+<div class="staff-transfer container">
+  <legend>调岗</legend>
+  <!-- <h4 class="section-head">基本信息</h4> -->
+  <div class="form-horizontal mb_40" role="form">
+    <div class="form-group">
+      <div class="col-sm-3">
+        <div class="input-group">
+           <span class="input-group-addon">工号</span>
+            <input type="text" class="form-control" ng-model="employeeNumber">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="query()"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+        </div>
+      </div>
+      <div class="col-sm-9" ng-if="basicInfo.employee_number">
+        <div class="form-control-static">
+          <span>{{basicInfo.employee_number}}</span>
+          <span>&nbsp;|&nbsp;</span>
+          <span>{{basicInfo.name}}</span>
+          <span>&nbsp;|&nbsp;</span>
+          <span>
+            <span ng-if="basicInfo.gender==0">男</span>
+            <span ng-if="basicInfo.gender">女</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-info" ng-if="state.hasQueried && !basicInfo.id">查无此员工</div>
+  <div ng-if="basicInfo.id">
+    <h4 class="section-head">岗位信息</h4>
+    <form name="formApply" novalidate>
+      <table class="table table-position">
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              <span>现岗位</span>
+              <!-- <span class="f-w_n">（底薪￥{{basicInfo.basic_salary}}）</span> -->
+            </th>
+            <th>
+              <span style="display: inline-block; padding-top: 14px;">
+                <span>申请岗位</span>
+                <span class="f-w_n" ng-if="applyInfo.transfer_date !== '0000-00-00'">（调动日期{{applyInfo.transfer_date}}）</span>
+              </span>
+              <div class="pull-right" ng-if="!applyInfo.id">
+                <span class="text-warning pull-left l-h_34 f-w_n pr_10" ng-show="formApply.$invalid">信息不完整</span>
+                <button class="btn btn-primary pull-right" ng-click="submitApply()" ng-disabled="formApply.$invalid">提交调动申请</button>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="v-a_m">科室&gt;班&gt;组</th>
+            <td>
+              <span ng-if="basicInfo.org[0]">{{basicInfo.org[0].display_name}}</span>
+              <span ng-if="basicInfo.org[1]">{{basicInfo.org[1].display_name}}</span>
+              <span ng-if="basicInfo.org[2]">&nbsp;&gt;&nbsp;{{basicInfo.org[2].display_name}}</span>
+              <span ng-if="basicInfo.org[3]">&nbsp;&gt;&nbsp;{{basicInfo.org[3].display_name}}</span>
+            </td>
+            <td>
+              <div class="row" ng-if="!applyInfo.id">
+                <div class="col-sm-4" ng-repeat="level in levels" ng-if="$index">
+                  <select class="form-control" ng-model="org[$index]" ng-options="one.display_name for one in org[$index-1].children" ng-change="orgChanged($index)" required>
+                    <option value="">- {{level.levelName}} -</option>
+                  </select>
+                </div>
+              </div>
+              <div ng-if="applyInfo.id">
+                <span ng-if="applyInfo.apply_org[0]">{{applyInfo.apply_org[0].display_name}}</span>
+                <span ng-if="applyInfo.apply_org[1]">{{applyInfo.apply_org[1].display_name}}</span>
+                <span ng-if="applyInfo.apply_org[2]">&nbsp;&gt;&nbsp;{{applyInfo.apply_org[2].display_name}}</span>
+                <span ng-if="applyInfo.apply_org[3]">&nbsp;&gt;&nbsp;{{applyInfo.apply_org[3].display_name}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="v-a_m">等级/岗位</th>
+            <td>
+              <span>{{basicInfo.grade_name}}[{{basicInfo.staff_grade}}] / {{basicInfo.position_display_name}}</span>
+              <span>[{{basicInfo.start_date}}]</span>
+            </td>
+            <td>
+              <div class="row" ng-if="!applyInfo.id">
+                <!-- <div class="col-sm-6">
+                  <select class="form-control" ng-model="positions" ng-options="gradeName for (gradeName, positions) in grades" ng-change="gradeChanged()">
+                    <option value="">岗位等级</option>
+                  </select>
+                </div> -->
+                <div class="col-sm-12">
+                  <select class="form-control col-sm-6" ng-model="apply.apply_position_id" ng-options="one.id as one.display_name group by one.grade_name for one in positionList">
+                    <option value="" disabled required>岗位名称</option>
+                  </select>
+                </div>
+              </div>
+              <div ng-if="applyInfo.id">
+                <span>{{applyInfo.apply_position_grade_name}} / {{applyInfo.apply_position_display_name}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <textarea class="form-control" rows="2" placeholder="申请理由" ng-model="apply.reason" required ng-if="!applyInfo.id"></textarea>
+              <p ng-if="applyInfo.id">
+                <span>申请理由：</span>
+                <span>{{applyInfo.reason}}</span>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <h4 class="section-head" ng-if="approvalRecords">审批</h4>
+  <div class="panel panel-default" ng-if="curApproval">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-edit pr_5"></span>
+      <span>{{curApproval.procedure_name}}</span>
+      <span ng-if="curApproval.approver_id!==user.id">({{curApproval.approver_display_name}}  审批中)</span>
+    </div>
+    <div ng-if="curApproval.approver_id===user.id">
+      <div class="panel-body pt_5">
+        <form name="formApproval" novalidate>
+          <div class="checkbox" ng-repeat="point in curApproval.sub">
+            <label>
+              <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="point.conclusion">{{point.point_description}}
+            </label>
+          </div>
+          <div class="radio" style="margin-top: 15px;">
+            <label>
+              <input type="radio" name="curConclusion" value="1" ng-model="curApproval.conclusion">
+              <strong class="text-success">同意调动</strong>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="curConclusion" value="0" ng-model="curApproval.conclusion">
+              <strong class="text-danger">不同意调动</strong>
+            </label>
+          </div>
+          <div class="input-group wp_30 mb_10" ng-if="applyInfo.transfer_date === '0000-00-00' && curApproval.conclusion==1">
+            <span class="input-group-addon">*&nbsp;允许报道日期</span>
+            <input class="form-control ng-isolate-scope ng-pristine ng-invalid ng-invalid-required ng-valid-date" type="text" placeholder="调动日期" datepicker-popup="" min-date="" datepicker-append-to-body="true" ng-model="curApproval.transferDate.val" is-open="curApproval.transferDate.opened" ng-click="curApproval.transferDate.opened=true" required>
+          </div>
+          <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" ng-if="curApproval.conclusion"></textarea>
+          <textarea class="form-control" rows="2" placeholder="审批意见，注：不同意调动须请写明理由" ng-model="curApproval.comment" required ng-if="curApproval.conclusion==='0'"></textarea>
+        </form>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-primary" ng-click="submitApproval()" ng-disabled="formApproval.$invalid || curApproval.conclusion<'0'">提交审批</button>
+      </div>
+    </div>
+  </div>
+  <div accordion close-others="false">
+    <div accordion-group is-open="approval.open" ng-repeat="approval in approvalRecords">
+      <div accordion-heading>
+        <span class="glyphicon pr_5" ng-class="{'glyphicon-folder-open': approval.open, 'glyphicon-folder-close': !approval.open}"></span>
+        <span>{{approval.procedure_name}}</span>
+        <span class="text-success" ng-if="approval.conclusion=='1'">（同意）</span>
+        <span class="text-danger" ng-if="approval.conclusion=='0'">（驳回）</span>
+      </div accordion-heading>
+      <div>
+        <ul class="mb_20" ng-if="approval.sub">
+          <li ng-repeat="point in approval.sub">
+            <span class="glyphicon pr_5" ng-class="{'glyphicon-ok-sign text-success': point.conclusion=='1', 'glyphicon-remove-sign text-danger': point.conclusion=='0'}"></span><span>{{point.point_description}}</span>
+          </li>
+        </ul>
+        <p>{{approval.comment}}</p>
+        <p>
+          <strong>
+            <span class="text-success" ng-if="approval.conclusion">同意调动</span>
+            <span class="text-danger" ng-if="!approval.conclusion">不同意调动</span>
+          </strong>
+        </p>
+        <p>
+          <span>{{approval.approver_display_name}}</span>
+          <span>[{{approval.update_time | limitTo:10}}]</span>
+        </p>
+      </div>
+    </div accordion-group>
+  </div accordion>
+</div>

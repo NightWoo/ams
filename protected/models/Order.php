@@ -263,7 +263,8 @@ class Order
 
         		switch($standbyArea){
         			case 0 :
-        				$matchCondition = "((warehouse_id>1 AND warehouse_id<=300) OR (warehouse_id>700 AND warehouse_id<800)) AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        				//$matchCondition = "((warehouse_id>1 AND warehouse_id<=300) OR (warehouse_id>700 AND warehouse_id<800)) AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
+        				$matchCondition = "(warehouse_id>1 AND warehouse_id<=900)  AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";
         				break;
         			case 14 :
 						$matchCondition = "warehouse_id>=400 AND warehouse_id<500 AND series=? AND color=? AND cold_resistant=? AND special_property<9 AND config_id IN $configId AND warehouse_time>'0000-00-00 00:00:00'";

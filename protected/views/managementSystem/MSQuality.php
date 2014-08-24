@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -52,7 +52,7 @@
                 </div>
               </li>
 
-              <li class="span3">
+              <!--li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=controllLoop" class="thumbnail">
                     <img src="/bms/doc/browse/managementSystem/quality/controllLoop/thumb.jpg" alt="">
@@ -67,7 +67,7 @@
                     </div>
                   </div>
                 </div>
-              </li>
+              </li-->
 
               <li class="span3">
                 <div class="">
@@ -104,8 +104,6 @@
                   </div>
                 </div>
               </li>
-            </ul>
-            <ul class="thumbnails">
               <li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=QCC" class="thumbnail">
@@ -125,6 +123,7 @@
               </li>
             </ul>
             <ul class="thumbnails">
+
               <li class="span3">
                 <div class="">
                   <a href="/bms/ManagementSystem/quality?view=QCBasic7Tools" class="thumbnail">

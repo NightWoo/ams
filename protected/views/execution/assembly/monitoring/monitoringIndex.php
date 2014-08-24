@@ -193,12 +193,13 @@
 				    		<div id="extraArea" class="">
 	      					    <dl class="dl-horizontal">
 								    <dt><a class="area-btn-h">2号库<span class="area-text">H</span></a></dt><dd class="block-h">-</dd>
-								    <dt><a class="area-btn-y">3号库(35#)<span class="area-text">Y</span></a></dt><dd class="block-y">-</dd>
-								    <dt><a class="area-btn-k">4号库(14#)<span class="area-text">K</span></a></dt><dd class="block-k">-</dd>
-								    <dt><a class="area-btn-i">5号库(油库区)<span class="area-text">I</span></a></dt><dd class="block-i">-</dd>
+								    <dt><a class="area-btn-i">3号库(油库区)<span class="area-text">L</span></a></dt><dd class="block-i">-</dd>
+								    <dt><a class="area-btn-y">4号库(35#)<span class="area-text">Y</span></a></dt><dd class="block-y">-</dd>
+								    <dt><a class="area-btn-k">5号库(14#)<span class="area-text">K</span></a></dt><dd class="block-k">-</dd>
+								    <!--<dt><a class="area-btn-i">3号库(油库区)<span class="area-text">L</span></a></dt><dd class="block-i">-</dd>-->
 								    <dt>出口车(27#)</dt><dd class="block-z">-</dd>
 								    <dt>非商品车区X</dt><dd class="block-x">-</dd>
-								    <dt>非库位区T</dt><dd class="block-t">-</dd>
+								    <!--<dt>非库位区T</dt><dd class="block-t">-</dd>-->
 								    <dt>WDI</dt><dd class="block-wdi">-</dd>
 							    </dl>
 		      				</div>

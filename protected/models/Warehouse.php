@@ -32,13 +32,16 @@ class Warehouse
 					$conditions['area'] = "(id>400 AND id<500) ";
 					break;
 				case "6B" :
-					$conditions['area'] = "((id>400 AND id<500) OR (id>618 AND id<700) OR (id>800 AND id<900))";
+					$conditions['area'] = "((id>400 AND id<500) OR (id>600 AND id<700) OR (id>800 AND id<900))";
+					break;
+				case "M3" :
+					$conditions['area'] = "(id>600 AND id<700)";
 					break;
 				default:
 			}
 
 			$conditions['match'] = "(series=? OR series='') AND car_type=? AND color=? AND cold_resistant=? AND order_config_id=? AND special_property=?";
-			$conditions['free'] = "status=0 AND free_seat>0";
+			$conditions['free'] = "status=0 AND free_seat>0 AND removed=0";
 			$condition = join(' AND ', $conditions);
 			$condition .= ' ORDER BY id ASC';
 			$values = array($car->series, $car->type, $car->color, $car->cold_resistant, $orderConfigId, $car->special_property);

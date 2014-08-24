@@ -181,6 +181,13 @@
                       </select>
                     </div>
                   </div>
+<!--                   <div class="form-group">
+                    <label for="selectParent" class="col-sm-2 control-label">岗位上级</label>
+                    <div class="col-sm-10">
+                      <select class="form-control" id="selectParent">
+                      </select>
+                    </div>
+                  </div> -->
                   <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">中文名</label>
                     <div class="col-sm-10">

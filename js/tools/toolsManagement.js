@@ -1,4 +1,4 @@
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
     initPage();
 
@@ -639,7 +639,7 @@ $(document).ready(function() {
                 "brandMaker": $("#brandMaker").val(),
                 "toolsModel": $("#toolsModel").val(),
                 "selectSeat": $("#selectSeat").val(),
-                "perPage": 15,
+                "perPage": 10,
                 "curPage": pageNumber || 1
             },
             success: function(response) {
@@ -757,7 +757,7 @@ $(document).ready(function() {
             data: {
                 "type": 'selectList',
                 "toolsCode": toolsCode,
-                "perPage": 15,
+                "perPage": 10,
                 "curPage": pageNumber || 1
             },
             success: function(response) {

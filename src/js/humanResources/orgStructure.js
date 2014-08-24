@@ -15,6 +15,7 @@ require(['commonConfig'], function () {
             $liDetailEdit = $('#liDetailEdit'),
             $paneChildrenSort = $('#paneChildrenSort'),
             $paneDetailEdit = $('#paneDetailEdit'),
+            $managerNumber = $('#managerNumber'),
             $tbodyChildren = $('#tableChildren>tbody');
 
         initPage();
@@ -76,7 +77,8 @@ require(['commonConfig'], function () {
                                     name: dept.name,
                                     display_name: dept.display_name,
                                     itemTitleColor: colors[dept.level],
-                                    templateName: dept.templateName
+                                    templateName: dept.templateName,
+                                    manager_name: dept.manager_name,
                                 })
                             );
                         });
@@ -121,7 +123,7 @@ require(['commonConfig'], function () {
                         });
                     data.element.attr('title', itemConfig.name);
 
-                    var fields = ["title", "display_name"];
+                    var fields = ["title", "display_name", "manager_name"];
                     for (var index = 0; index < fields.length; index++) {
                         var field = fields[index];
 
@@ -150,7 +152,9 @@ require(['commonConfig'], function () {
                     '<div class="bp-item bp-corner-all bt-item-frame" rel="tooltip">'+
                         '<div class="bp-item-wrap">' +
                             '<div name="titleBackground" class="bp-item bp-corner-all bp-title-frame">' +
-                                '<div name="title" class="bp-item bp-title">' +
+                                '<div class="bp-item bp-title">' +
+                                    '<span name="title"></span>'+
+                                    '<span class="pull-right" name="manager_name"></span>'+
                                 '</div>' +
                             '</div>' +
                             '<div name="display_name" class="bp-item bp-item-dispname"></div>'+
@@ -247,7 +251,8 @@ require(['commonConfig'], function () {
                 dataType: 'json',
                 data: {
                     'deptId' : $editModal.data('dept_id'),
-                    'deptData' : packEditData()
+                    'deptData' : packEditData(),
+                    'managerNumber': $managerNumber.val()
                 },
                 error: function () {
                     common.alertError();

@@ -1,0 +1,104 @@
+<div class="staff-resign container">
+  <legend>离职</legend>
+  <div class="form-horizontal mb_40" role="form">
+    <div class="form-group">
+      <div class="col-sm-3">
+        <div class="input-group">
+           <span class="input-group-addon">工号</span>
+            <input type="text" class="form-control" ng-model="employeeNumber">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="query()"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-info" ng-if="state.hasQueried && !basicInfo.id">查无此在职员工</div>
+  <div ng-show="basicInfo.id">
+    <form name="formResign" novalidate>
+      <h4 class="section-head">基本信息</h4>
+      <div class="form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">工号</label>
+          <div class="col-sm-4">
+            <p class="form-control-static">{{basicInfo.employee_number}}</p>
+          </div>
+        </div>
+        <div class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-4">
+              <p class="form-control-static">{{basicInfo.name}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">科室/班/组</label>
+          <div class="col-sm-4">
+            <p class="form-control-static">
+              <span ng-if="basicInfo.org[0]">{{basicInfo.org[0].display_name}}</span>
+              <span ng-if="basicInfo.org[1]">{{basicInfo.org[1].display_name}}</span>
+              <span ng-if="basicInfo.org[2]">&nbsp;&gt;&nbsp;{{basicInfo.org[2].display_name}}</span>
+              <span ng-if="basicInfo.org[3]">&nbsp;&gt;&nbsp;{{basicInfo.org[3].display_name}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"><span class="require-mark">*</span>离职类型</label>
+          <div class="col-sm-4">
+            <select class="form-control" ng-model="resign.type" required>
+              <option value="正常离职">正常离职</option>
+              <option value="四级处罚">四级处罚</option>
+              <option value="自离">自离</option>
+              <option value="调出总装工厂">调出总装工厂</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"><span class="require-mark">*</span>离职日期</label>
+          <div class="col-sm-4">
+            <input class="form-control" type="text" placeholder="请填写离职日期" datepicker-popup datepicker-append-to-body="true" ng-model="temp.regignDate.val" is-open="temp.regignDate.opened" ng-click="temp.regignDate.opened=true" required>
+          </div>
+        </div>
+      </div>
+      <h4 class="section-head">离职调查</h4>
+      <div class="form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-sm-2 control-label"><span class="require-mark">*</span>离职原因</label>
+          <div class="col-sm-4">
+            <label class="checkbox-inline" ng-repeat="reason in resignReasons">
+              <input type="checkbox" checklist-model="temp.reasons" checklist-value="reason">{{reason}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"></label>
+          <div class="col-sm-4 form-control-static">
+            <textarea class="form-control" rows="2" placeholder="其他，如果不是以上原因则必须填写" ng-model="resign.reason_description" ng-if="temp.reasons.length"></textarea>
+            <textarea class="form-control" rows="2" placeholder="其他，如果不是以上原因则必须填写" ng-model="resign.reason_description" required ng-if="!temp.reasons.length"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">调查</label>
+          <div class="col-sm-4">
+            <div class="form-control-static mb_5" ng-repeat="one in resignSurvey">
+              <p>
+                <span>Q{{$index + 1}}.&nbsp;</span>
+                <span>{{one.topic}}</span>
+              </p>
+              <textarea class="form-control" rows="2" placeholder="" ng-model="one.result"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="save-wrap text-center row">
+      <div class="col-sm-6">
+        <button class="btn btn-primary btn-save pull-right" ng-click="submitResign()" ng-disabled="formResign.$invalid">提交离职信息</button>
+      </div>
+      <div class="col-sm-6">
+        <span class="text-warning pull-left l-h_34" ng-show="formResign.$invalid">信息不完整，不可提交</span>
+      </div>
+    </div>
+  </div>
+</div>

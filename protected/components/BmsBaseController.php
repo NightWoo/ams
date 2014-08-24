@@ -197,6 +197,29 @@ class BmsBaseController extends Controller
             ));
     }
 
+    /**
+     * 按照统一的返回格式来返回Json
+     * @param bool 是否成功执行，用来控制是否显示出错信息
+     * @param string 执行信息，系统的出错信息
+     * @param array 返回的数据
+     * @param int 结果代码
+     */
+    public function renderJsonApp($success, $message, $data='', $code=0) {
+        if (empty($code)) {
+            if ($success) {
+                $code = 200;
+            } else {
+                $code = 201;
+            }
+        }
+        $this->renderJson(array(
+            'success' => $success,
+            'message' => $message,
+            'data' => $data,
+            'code' => $code
+        ));
+    }
+
     public function renderDebug($view, $data=null, $return=false) {
         print("template file: <b style=\"color:red\">$view</b><br/>");
         print("<table width=100% border=1>");
