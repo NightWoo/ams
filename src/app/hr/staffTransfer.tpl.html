@@ -171,8 +171,8 @@
         <p>{{approval.comment}}</p>
         <p>
           <strong>
-            <span class="text-success" ng-if="approval.conclusion">同意调动</span>
-            <span class="text-danger" ng-if="!approval.conclusion">不同意调动</span>
+            <span class="text-success" ng-if="approval.conclusion==1">同意调动</span>
+            <span class="text-danger" ng-if="approval.conclusion==0">不同意调动</span>
           </strong>
         </p>
         <p>

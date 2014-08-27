@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
+  <h4>审批记录</h4>
+</div>
+<div class="modal-body">
+  <div accordion class="mt_10" close-others="true">
+    <div accordion-group is-open="approval.isOpen" ng-repeat="approval in approvalRecords">
+      <div accordion-heading>
+        <span class="glyphicon pr_5" ng-class="{'glyphicon-folder-open': approval.isOpen, 'glyphicon-folder-close': !approval.isOpen}"></span>
+        <span>{{approval.procedure_name}}</span>
+        <span class="text-success" ng-if="approval.conclusion=='1'">（同意）</span>
+        <span class="text-danger" ng-if="approval.conclusion=='0'">（驳回）</span>
+        <span class="text-warning" ng-if="approval.conclusion=='-1'">（{{approval.approver_display_name}} 审批中）</span>
+      </div accordion-heading>
+      <div>
+        <ul class="mb_20" ng-if="approval.sub">
+          <li ng-repeat="point in approval.sub">
+            <span class="glyphicon pr_5" ng-class="{'glyphicon-ok-sign text-success': point.conclusion=='1', 'glyphicon-remove-sign text-danger': point.conclusion=='0'}" ng-if="approval.conclusion!='-1'"></span>
+            <span class="glyphicon pr_5 glyphicon-question-sign" ng-if="approval.conclusion=='-1'"></span>
+            <span>{{point.point_description}}</span>
+          </li>
+        </ul>
+        <div ng-if="approval.conclusion!='-1'">
+          <p>{{approval.comment}}</p>
+          <p>
+            <strong>
+              <span class="text-success" ng-if="approval.conclusion==1">同意调动</span>
+              <span class="text-danger" ng-if="approval.conclusion==0">不同意调动</span>
+            </strong>
+          </p>
+          <p>
+            <span>{{approval.approver_display_name}}</span>
+            <span>[{{approval.update_time | limitTo:10}}]</span>
+          </p>
+        </div>
+        <p class="text-warning" ng-if="approval.conclusion=='-1'">未完成审批</p>
+      </div>
+    </div accordion-group>
+  </div accordion>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="cancel()">关闭</button>
+</div>

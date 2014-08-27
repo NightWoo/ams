@@ -6,7 +6,7 @@ define(['app'], function (app) {
     'STATIC_DIR',
     function ($q, $modal, $timeout, STATIC_DIR) {
       return {
-        alert: function (opts, cbfn) {
+        alert: function (opts) {
           var defered = $q.defer(),
             modalInstance,
             optsDefault = {

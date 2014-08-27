@@ -82,7 +82,7 @@
           <span>{{staff.dept_parents[2].display_name}}</span>
           <span ng-if="!staff.dept_parents[2].display_name">--</span>
           <span ng-if="staff.dept_parents[3].display_name">/ {{staff.dept_parents[3].display_name}}</span>
-        </dd> 
+        </dd>
         <dt>岗位名称</dt>
         <dd>{{staff.position_display_name}}</dd>
         <dt>岗位等级</dt>
@@ -123,7 +123,7 @@
               </td>
               <td>{{record.apply_position_display_name}}</td>
               <td>{{record.apply_position_grade_name}}</td>
-              <td><a>审批记录</a></td>
+              <td><a ng-click="approvalRecord(record.id)">审批记录</a></td>
             </tr>
           </tbody>
         </table>
@@ -149,7 +149,7 @@
           <span>{{staff.dept_parents[2].display_name}}</span>
           <span ng-if="!staff.dept_parents[2].display_name">--</span>
           <span ng-if="staff.dept_parents[3].display_name">/ {{staff.dept_parents[3].display_name}}</span>
-        </dd> 
+        </dd>
         <dt>离职日期</dt>
         <dd>{{staff.resign_date}}</dd>
         <dt>离职类型</dt>

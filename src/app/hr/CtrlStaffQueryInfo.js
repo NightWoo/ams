@@ -1,6 +1,7 @@
 define([
   'app',
   'hr/ServiceStaff',
+  'hr/ModalApprovalRecord',
 ], function (app) {
   app.registerController('CtrlStaffQueryInfo', [
     '$scope',
@@ -9,7 +10,8 @@ define([
     '$window',
     'Staff',
     'CModal',
-  function ($scope, $rootScope, $filter, $window, Staff, CModal) {
+    'ModalApprovalRecord',
+  function ($scope, $rootScope, $filter, $window, Staff, CModal, ModalApprovalRecord) {
     $scope.checkPagePrivilage('HR_QUERY');
     $rootScope.appState = 'hr';
     //员工信息
@@ -19,6 +21,12 @@ define([
       if ($scope.query.employee) {
         Staff.queryStaffInfo($scope);
       }
+    };
+
+    $scope.approvalRecord = function (transferId) {
+      ModalApprovalRecord.show({
+        transferId: transferId
+      });
     };
   }]);
 });

@@ -306,6 +306,18 @@ class StaffController extends BmsBaseController
     }
   }
 
+  public function actionGetApprovalRecord() {
+    $transferId = $this->validateIntVal('transferId', 0);
+    try {
+      $seeker = new HrStaffSeeker();
+      $data = $seeker->queryApprovalInfo($transferId);
+
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
   public function actionHomeInfo() {
     try {
       $seeker = new HrStaffSeeker();

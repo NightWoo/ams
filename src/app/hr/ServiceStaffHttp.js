@@ -119,6 +119,13 @@ define([
           transformRequest: transformRequestAsFormPost,
           data: paramObj
         });
+      },
+      getApprovalRecord: function (paramObj) {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/getApprovalRecord',
+          params: paramObj
+        })
       }
     };
   }]);
