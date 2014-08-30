@@ -125,7 +125,15 @@ define([
           method: 'get',
           url: '/bms/staff/getApprovalRecord',
           params: paramObj
-        })
+        });
+      },
+      queryAnalysisIn: function (paramObj) {
+        return $http({
+          method: 'post',
+          url: '/bms/staff/queryAnalysisIn',
+          transformRequest: transformRequestAsFormPost,
+          data: paramObj
+        });
       }
     };
   }]);

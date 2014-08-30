@@ -16,10 +16,10 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-addon">岗位</span>
-              <select class="form-control grade" ng-model="query.grade" ng-options="value.id as value.grade_name group by value.channel for value in gradeList" ng-change="resetStaffList()">
+              <select class="form-control grade" ng-model="query.grade" ng-options="value.id as value.grade_name group by value.channel for value in gradeList" ng-change="changeGrade()">
               <option value="">- 等级 -</option>
             </select>
-            <input type="text" class="form-control position" placeholder="名称/简称" ng-model="query.position" ng-change="resetStaffList()">
+            <input type="text" class="form-control position" placeholder="名称/简称" ng-model="query.position" ng-change="resetStaffList()" ng-disabled="query.grade">
           </div>
         </div>
       </div>
@@ -153,10 +153,37 @@
       </tbody>
     </table>
   </div>
-  <div ng-if="curQueryKey==='queryGradeColumn'">
-    <div highchart config="chartConfig.gradeColumn"></div>
-  </div>
-  <div ng-if="curQueryKey==='queryEduPie'">
-    <div highchart config="chartConfig.eduPie"></div>
+  <div ng-if="curQueryKey==='queryAnalysisIn'">
+    <div class="col-sm-2">
+      <div tabset vertical="true" type="pills">
+        <div tab ng-repeat="tab in analysisTabs" select="selectAnalysis(tab.key)" active="tab.active">
+          <div tab-heading>
+            <span>{{tab.name}}</span>
+            <span class="pull-right" ng-class="{'glyphicon glyphicon-chevron-right' : tab.active}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <div ng-if="curAnalysis==='org'">
+        <div class="alert alert-info" ng-if="!chartConfig.orgBar.series[0].data.length">组织结构上无子节点</div>
+        <div ng-if="chartConfig.orgBar.series[0].data.length" highchart config="chartConfig.orgBar"></div>
+      </div>
+      <div ng-if="curAnalysis==='grade'">
+        <div highchart config="chartConfig.gradeBar"></div>
+      </div>
+      <div ng-if="curAnalysis==='staffGrade'">
+        <div highchart config="chartConfig.staffGradeBar"></div>
+      </div>
+      <div ng-if="curAnalysis==='edu'">
+        <div highchart config="chartConfig.eduPie"></div>
+      </div>
+      <div ng-if="curAnalysis==='gender'">
+        <div highchart config="chartConfig.genderPie"></div>
+      </div>
+      <div ng-if="curAnalysis==='native'">
+        <div highchart config="chartConfig.nativeBar"></div>
+      </div>
+    </div>
   </div>
 </div>

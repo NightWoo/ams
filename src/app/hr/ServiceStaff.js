@@ -160,8 +160,16 @@ define([
       initQueryIn: function (scope) {
         scope.queryTabs = [
           {queryKey: 'queryStaffList', name: '详细信息'},
-          // {queryKey: 'queryGradeColumn', name: '岗位等级分布'},
+          {queryKey: 'queryAnalysisIn', name: '在职分析'},
           // {queryKey: 'queryEduPie', name: '学历分布'},
+        ];
+        scope.analysisTabs = [
+          {key: 'org', name: '科室班组'},
+          {key: 'grade', name: '岗位等级'},
+          {key: 'staffGrade', name: '工资等级'},
+          {key: 'edu', name: '学历'},
+          {key: 'gender', name: '性别'},
+          {key: 'native', name: '籍贯'}
         ];
         scope.chartConfig = {};
         scope.pager = {
@@ -208,8 +216,30 @@ define([
           }
         });
       },
-      queryGradeColumn: function (scope, postData) {
-        scope.chartConfig.gradeColumn = StaffQueryCharts.gradeColumn;
+      queryAnalysisIn: function (scope, postData) {
+        StaffHttp.queryAnalysisIn(postData).success(function (response) {
+          if (response.success) {
+            scope.chartConfig.orgBar = angular.copy(StaffQueryCharts.basicBar);
+            scope.chartConfig.orgBar.series[0].data = response.data.org;
+
+            scope.chartConfig.gradeBar = angular.copy(StaffQueryCharts.basicBar);
+            scope.chartConfig.gradeBar.series[0].data = response.data.grade;
+
+            scope.chartConfig.staffGradeBar = angular.copy(StaffQueryCharts.basicBar);
+            scope.chartConfig.staffGradeBar.series[0].data = response.data.staffGrade;
+
+            scope.chartConfig.nativeBar = angular.copy(StaffQueryCharts.basicBar);
+            scope.chartConfig.nativeBar.series[0].data = scope.query.nativeProvinceId ? response.data.city : response.data.province;
+
+            scope.chartConfig.eduPie = angular.copy(StaffQueryCharts.basicPie);
+            scope.chartConfig.eduPie.series[0].data = response.data.edu;
+
+            scope.chartConfig.genderPie = angular.copy(StaffQueryCharts.basicPie);
+            scope.chartConfig.genderPie.series[0].data = response.data.gender;
+
+          }
+        });
+        scope.chartConfig.eduPie = StaffQueryCharts.eduPie;
       },
       queryEduPie: function (scope, postData) {
         scope.chartConfig.eduPie = StaffQueryCharts.eduPie;

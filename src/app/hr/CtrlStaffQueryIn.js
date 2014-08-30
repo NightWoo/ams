@@ -22,11 +22,18 @@ define([
     };
 
     $scope.proviceChanged = function () {
-      $scope.cities = $scope.provinceSelected.cities;
-      $scope.query.nativeProvinceId = $scope.provinceSelected.id;
+      $scope.cities = ($scope.provinceSelected && $scope.provinceSelected.cities) || [];
+      $scope.query.nativeProvinceId = ($scope.provinceSelected && $scope.provinceSelected.id) || '';
       $scope.query.nativeCityId = '';
       $scope.resetStaffList();
     };
+
+    $scope.changeGrade =  function () {
+      if ($scope.query.grade) {
+        $scope.query.position = '';
+      }
+      $scope.resetStaffList();
+    }
 
     $scope.resetStaffList = function () {
       Staff.resetStaffList($scope);
@@ -58,21 +65,36 @@ define([
       }
     });
 
+    $scope.selectAnalysis = function (analysisKey) {
+      $scope.curAnalysis = analysisKey;
+    };
+
     function doQuery(queryKey) {
       var postData = queryData();
-      Staff[queryKey]($scope, postData);
+      if (Staff[queryKey]) {
+        Staff[queryKey]($scope, postData);
+      }
     }
 
     function queryData() {
       var
         query = $scope.query,
+        org = $scope.org,
+        provinceSelected = $scope.provinceSelected,
         data = {
           employee: query.employee,
           conditions: {
+            includeResigned: (query.includeResigned || false),
             gradeId: query.grade,
+            position: query.position && query.position.toUpperCase(),
             staffGrade: query.staffGrade,
-            deptId: ($scope.org[3] && $scope.org[3].id) || ($scope.org[2] && $scope.org[2].id) || ($scope.org[1] && $scope.org[1].id),
-            includeResigned: query.includeResigned || false
+            deptId: (org[3] && org[3].id) || (org[2] && org[2].id) || (org[1] && org[1].id),
+            countLevel: (org[2] && org[2].id &&  3) || (org[1] && org[1].id && 2) || 1,
+            gender: (query.gender || -1),
+            provinceId: provinceSelected && provinceSelected.id,
+            cityId: query.nativeCityId,
+            education: query.education,
+            major: query.major
           },
           pager: $scope.pager
         };

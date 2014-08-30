@@ -83,73 +83,15 @@
                   </script>
                 </div>
               </div>
-<!--               <div class="col-sm-8">
-                <div class="panel panel-primary">
-                  <div class="panel-heading">
-                    <div id="currentPositionBtnGroup" class="btn-group btn-group-xs">
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="编辑"  btn-name="edit"><i class="fa fa-edit fa-lg"></i></button>
-                      <button class="btn btn-link btn-xs" rel="tooltip" title="打印" btn-name="print"><i class="fa fa-print fa-lg"></i></button>
-                    </div>
-                    <span class="current-position-name">工段长</span>
-                  </div>
-                  <div class="panel-body current-position-description">
-                    <dl>
-                      <dt>岗位编号</dt><dd>AS-TA-SL</dd>
-                      <dt>岗位名称</dt><dd>工段长</dd>
-                      <dt>英文名</dt><dd>Section Leader/SL</dd>
-                      <dt>岗位等级</dt><dd>E3</dd>
-                      <dt>职位描述</dt>
-                      <dd>
-                        <div class="current-potition-detail">
-                          <br>
-                          1.Operatively responsible so that products and services within the assigned area are performed and delivered in time, within specification, using the right amount of resources regarding material, machines, personnel and taking care of the environment.能够在分配的区域内执行和及时交付产品和服务，并能在规范内考虑到材料、机器、人员和环境情况，正确使用资源数量。<br><br>
-                          2. Secure that the team understands the direction (mission, vision, strategy, targets, rules, safety laws and regulations).确保团队成员了解工作方向（包括使命、愿景、战略、目标、规则、安全法律和法规等）。<br><br>
-                          3. Act according to and communicate the company philosophy and Assembly  Manufacturing’s principles.按照公司的沟通原则和总装工厂制造原则（AMS）来执行和沟通。<br><br>
-                          4. Perform all first line manager tasks concerning personnel and finance management.执行第一线经理有关人事和财务管理方面的任务。<br><br>
-                          5. Responsible for the target setting process of the assigned teams.对指定团队的目标设置过程负责。<br><br>
-                          6. Follow up results in the own teams and help prioritizing when necessary.对自己团队工作结果的跟进，并在必要时优先帮助和处理。<br><br>
-                          7. Works actively with cost awareness mind-set within the assigned teams.在指定团队工作积极并具有成本意识。<br><br>
-                          8. Secures that laws, regulations and procedures are followed.确保法律、法规和过程的最终落实。<br><br>
-                          9. Ensure right manning on short and long term.
-                          保证在长期和短期的人员配备是正确的。<br><br>
-                          10. Actively contribute to the department activity plan.积极参与部门的活动计划。<br><br>
-                          11. Responsible for AMS implementation by following up the result and train the team members in methods and tools.
-                          通过跟踪结果和使用恰当方法及工具培训团队成员来实施AMS系统。<br><br>
-                          12. Supervisor is the primary coach for the assigned team leaders and team members.主管指定团队的领导和团队成员。<br><br>
-                          13. Coaches and supports the assigned teams and makes sure they have the right conditions and prerequisites for their job.指导和支持指定团队并确保他们有正确的先决条件完成工作。<br><br>
-                          14. It is the Supervisors responsibility to assure that the operators can do their job with the right quality and speed.主管要负责保证操作员工能够以正确的质量和速度完成工作。<br><br>
-                          15. It is the Supervisors responsibility to secure back-up of the team leader in case of absence.在班长缺席时，主管要替代班长履行职责。<br><br>
-                          16. Secures the right competence for the team leader and the team.确保班组长和班组成员具有正确的能力。<br><br>
-                          17. Secures that everybody contributes to the team’s performance, according to the Autonomous Management team concept.根据团队自治管理的理念要确保团队中的每个人都能为团队绩效有所贡献。<br><br>
-                          18. Ensure a good communication and co-operation with and between the team members, other teams and the relevant support functions.确保团队成员之间、本团队与其他团队及相关支持部门间的良好沟通和合作。<br><br>
-                          19. Support the team leaders in their First Line Analysis work.协助班组长的一线分析工作。<br><br>
-                          20. Provides framework for teams to generate ideas and improvements. Assists team with implementation of ideas where appropriate.为团队提供思想和改进的框架，当合适的时候协助团队成员将想法变成实现。<br><br>
-                          21. Makes sure the problems that occur within his/her teams are taken care of.确保团队内有问题发生时，团队能完全解决。<br><br>
-                          22. Approve the non-operational tasks assigned to the team and make sure that they contribute to help the team carry out their operational tasks more lean and efficient.批准分配给团队的非经营性任务和确保他们能帮助团队更精简和高效执行其操作任务。<br><br>
-                        </div>
-                      </dd>
-                      <dt>任职要求</dt>
-                      <dd>
-                        <div class="current-potition-qualification">
-                          学历：<br>
-                          University degree or equivalent.
-                          <br>
-                          大学本科及同等学力
-                          <br>
-                          专业/经验：
-                          <br>
-                          Over 3 years of production management experience in automotive or manufacture industry.
-                          <br>
-                          三年以上汽车或制造业生产管理经验
-                        </div>
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div> -->
             </div>
         </div>
     </div>
+    <footer class="navbar-inverse  navbar-fixed-bottom" role="banner">
+        <style type="text/css" media="screen">
+            body {padding-bottom: 70px;}
+        </style>
+        <?php require_once(dirname(__FILE__)."/../common/footer/navQueryHR.php"); ?>
+    </footer>
     <!-- edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
       <div class="modal-dialog">

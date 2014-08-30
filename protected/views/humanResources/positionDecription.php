@@ -54,6 +54,12 @@
             </div>
         </div>
     </div>
+    <footer class="navbar-inverse  navbar-fixed-bottom" role="banner">
+        <style type="text/css" media="screen">
+            body {padding-bottom: 70px;}
+        </style>
+        <?php require_once(dirname(__FILE__)."/../common/footer/navQueryHR.php"); ?>
+    </footer>
 </body>
 <script data-main="/bms/src/js/humanResources/positionDescription.js" src="/bms/vendor/requirejs/require.js"></script>
 </html>

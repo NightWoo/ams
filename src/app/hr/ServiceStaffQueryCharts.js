@@ -9,13 +9,13 @@ define([
         '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a', '#0d233a'
       ];
       return {
-        gradeColumn: {
+        basicBar: {
           //This is not a highcharts object. It just looks a little like one!
           options: {
             //This is the Main Highcharts chart config. Any Highchart options are valid here.
             //will be ovverriden by values specified below.
             chart: {
-              type: 'column'
+              type: 'bar'
             },
             credits: {
               enabled: null
@@ -34,29 +34,24 @@ define([
               // verticalAlign: 'top',
               enabled: false
             },
-
+            plotOptions: {
+              bar: {
+                dataLabels: {
+                  enabled: true
+                }
+              }
+            },
           },
 
           //The below properties are watched separately for changes.
 
           //Series object (optional) - a list of series using normal highcharts series options.
           series: [{
-            name: 'Things',
+            name: '人数',
             // colorByPoint: true,
-            data: [{
-              name: 'Animals',
-              y: 5,
-              drilldown: 'animals'
-            }, {
-              name: 'Fruits',
-              y: 2,
-              drilldown: 'fruits'
-            }, {
-              name: 'Cars',
-              y: 4,
-              color: colors[3],
-              drilldown: 'cars'
-            }]
+            data: [
+              // {name: 'XXXX'， y: 23}
+            ]
           }],
           //Title configuration (optional)
           title: {
@@ -70,6 +65,8 @@ define([
             type: 'category'
           },
           yAxis: {
+            opposite: true,
+            allowDecimals: false,
             min: 0,
             title: {
               text: null
@@ -80,18 +77,19 @@ define([
               }
             },
           },
+
           //Whether to use HighStocks instead of HighCharts (optional). Defaults to false.
           useHighStocks: false,
           //size (optional) if left out the chart will default to size of the div or something sensible.
           size: {
-            height: 400
+            height: 300
           },
           //function (optional)
           func: function(chart) {
             //setup some logic for the chart
           }
         },
-        eduPie: {
+        basicPie: {
           //This is not a highcharts object. It just looks a little like one!
           options: {
             //This is the Main Highcharts chart config. Any Highchart options are valid here.
@@ -108,7 +106,7 @@ define([
                 padding: 10,
                 fontWeight: 'normal'
               },
-              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+              pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
             },
             plotBackgroundColor: null,
             plotBorderWidth: 1,//null,
@@ -123,7 +121,7 @@ define([
                   cursor: 'pointer',
                   dataLabels: {
                       enabled: true,
-                      format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                      format: '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)',
                       style: {
                           color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                       }
@@ -137,19 +135,19 @@ define([
           //Series object (optional) - a list of series using normal highcharts series options.
           series: [{
             type: 'pie',
-            name: 'Browser share',
+            name: '人数',
             data: [
-                ['Firefox',   45.0],
-                ['IE',       26.8],
-                {
-                    name: 'Chrome',
-                    y: 12.8,
-                    sliced: true,
-                    selected: true
-                },
-                ['Safari',    8.5],
-                ['Opera',     6.2],
-                ['Others',   0.7]
+                // ['Firefox',   45.0],
+                // ['IE',       26.8],
+                // {
+                //     name: 'Chrome',
+                //     y: 12.8,
+                //     sliced: true,
+                //     selected: true
+                // },
+                // ['Safari',    8.5],
+                // ['Opera',     6.2],
+                // ['Others',   0.7]
             ]
           }],
           //Title configuration (optional)
@@ -175,7 +173,7 @@ define([
           useHighStocks: false,
           //size (optional) if left out the chart will default to size of the div or something sensible.
           size: {
-            height: 400
+            height: 300
           },
           //function (optional)
           func: function(chart) {

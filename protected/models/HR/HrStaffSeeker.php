@@ -6,6 +6,8 @@ class HrStaffSeeker
 {
   public function __construct () {}
 
+  public static $STAFF_GRADE = array("I1", "I2", "I3", "H1", "H2", "H3", "G1", "G2", "G3", "F1", "F2", "F3", "E1", "E2", "E3", "D1", "D2", "D3");
+
   public function provinceCityList() {
     $provinceSql = "SELECT * FROM province";
     $provinces = Yii::app()->db->createCommand($provinceSql)->queryAll();
@@ -206,18 +208,36 @@ class HrStaffSeeker
     return intval($count);
   }
 
-  public function queryStaffList($conditions, $pager) {
+  public function queryStaffList($conditions, $pager=array('pageSize'=>0)) {
     $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
     $pager = is_array($pager) ? $pager : CJSON::decode($pager);
     $conArr = array();
     if (!empty($conditions['gradeId'])) {
       $conArr[] = "grade_id = {$conditions['gradeId']}";
     }
-    if (!empty($conditions['staffGrade'])) {
+    if (!empty($conditions['position'])) {
+      $conArr[] = "(UPPER(position_short_name) LIKE '%{$conditions['position']}%' OR position_display_name LIKE '%{$conditions['position']}%' OR UPPER(position_name) LIKE '%{$conditions['position']}%')";
+    } else if (!empty($conditions['staffGrade'])) {
       $conArr[] = "staff_grade = '{$conditions['staffGrade']}'";
     }
+
     if (!empty($conditions['deptId'])) {
       $conArr[] = "(dept_id = {$conditions['deptId']} OR dept_parent_id = {$conditions['deptId']} OR parent_parent_id = {$conditions['deptId']})";
+    }
+    if ($conditions['gender'] > -1) {
+      $conArr[] = "gender = {$conditions['gender']}";
+    }
+    if (!empty($conditions['provinceId'])) {
+      $conArr[] = "province_id = {$conditions['provinceId']}";
+    }
+    if (!empty($conditions['cityId'])) {
+      $conArr[] = "native_city_id = {$conditions['cityId']}";
+    }
+    if (!empty($conditions['education'])) {
+      $conArr[] = "education = '{$conditions['education']}'";
+    }
+    if (!empty($conditions['major'])) {
+      $conArr[] = "major LIKE '%{$conditions['major']}%'";
     }
     if (!empty($conditions['isResigned']) && $conditions['isResigned']) {
       $conArr[] = "staff_status = 1";
@@ -337,6 +357,122 @@ class HrStaffSeeker
       $record['dept_parents'] = $parents;
     }
     return $data;
+  }
+
+  public function queryAnalysisIn($conditions) {
+    $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
+    $staffData = $this->queryStaffList($conditions);
+    // $analysis = array();
+    $parentId = empty($conditions['deptId']) ? 1 : $conditions['deptId'];
+    $level = $conditions['countLevel'];
+    $analysis = $this->resolveAnalysis($staffData['result'], $parentId, $level);
+    return $analysis;
+  }
+
+  public function resolveAnalysis($staffData, $parentId, $level) {
+    $analysis = array();
+    $orgData = $this->initAnalysisOrg($parentId);
+    $gradeData = $this->initAnalysisGrade();
+    $staffGradeData = $this->initAnalysisStaffGrade();
+    $nativeData = array(
+      'province' => array(),
+      'city' => array()
+    );
+    $eduData = array();
+    $genderData = array(
+      array('name'=>'男', 'y'=>0),
+      array('name'=>'女', 'y'=>0)
+    );
+    foreach ($staffData as $staff) {
+      if (empty($staff['dept_parents']) || empty($staff['dept_parents'][$level])) {
+        continue;
+      } else {
+        $org = $staff['dept_parents'][$level];
+        if (!empty($orgData[$org['id']])) {
+          $orgData[$org['id']]['y']++;
+        }
+      }
+
+      if (empty($eduData[$staff['education']])) {
+        $eduData[$staff['education']] = array(
+          'name' => $staff['education'],
+          'y' => 0
+        );
+      }
+
+      if (empty($nativeData['province'][$staff['province_id']])) {
+        $nativeData['province'][$staff['province_id']] = array(
+          'name' => $staff['province_name'],
+          'y' => 0
+        );
+      }
+      if (empty($nativeData['city'][$staff['native_city_id']])) {
+        $nativeData['city'][$staff['native_city_id']] = array(
+          'name' => $staff['city_name'],
+          'y' => 0
+        );
+      }
+
+      $gradeData[$staff['grade_id']]['y']++;
+      $staffGradeData[$staff['staff_grade']]['y']++;
+      $nativeData['province'][$staff['province_id']]['y']++;
+      $nativeData['city'][$staff['native_city_id']]['y']++;
+      $genderData[$staff['gender']]['y']++;
+      $eduData[$staff['education']]['y']++;
+    }
+
+
+    $analysis['org'] = array_values($orgData);
+    $analysis['grade'] = array_values($gradeData);
+    $analysis['staffGrade'] = array_values($staffGradeData);
+    $analysis['province'] = array_values($nativeData['province']);
+    $analysis['city'] = array_values($nativeData['city']);
+    $analysis['gender'] = array_values($genderData);
+    $analysis['edu'] = array_values($eduData);
+    return $analysis;
+  }
+
+  public function initAnalysisOrg($parentId) {
+    $analysisData = array();
+    $orgList = OrgStructureSeeker::getChildren($parentId);
+    foreach ($orgList as $org) {
+      $analysisData[$org['id']] = array(
+        'name' => $org['display_name'],
+        'shortName' => $org['short_name'],
+        'managerName' => $org['manager_name'],
+        'y' => 0
+      );
+    }
+    return $analysisData;
+  }
+
+  public function initAnalysisGrade() {
+    $sql = "SELECT * FROM hr_grade ORDER BY channel";
+    $gradeList = Yii::app()->db->createCommand($sql)->queryAll();
+
+    $analysisData = array();
+    foreach ($gradeList as $grade) {
+      $analysisData[$grade['id']] = array(
+        'name' => $grade['grade_name'],
+        'grade' => $grade['grade'],
+        'channel' => $grade['channel'],
+        'y' => 0
+      );
+    }
+    return $analysisData;
+  }
+
+  public function initAnalysisStaffGrade() {
+    $gradeList = self::$STAFF_GRADE;
+
+    $analysisData = array();
+    foreach ($gradeList as $grade) {
+      $analysisData[$grade] = array(
+        'name' => $grade,
+        'y' => 0
+      );
+    }
+    return $analysisData;
   }
 
 }

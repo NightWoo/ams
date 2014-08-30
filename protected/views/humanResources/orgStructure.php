@@ -27,6 +27,12 @@
             </div>
         </div>
     </div>
+    <footer class="navbar-inverse  navbar-fixed-bottom" role="banner">
+        <style type="text/css" media="screen">
+            body {padding-bottom: 70px;}
+        </style>
+        <?php require_once(dirname(__FILE__)."/../common/footer/navQueryHR.php"); ?>
+    </footer>
     <!-- edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
       <div class="modal-dialog">
