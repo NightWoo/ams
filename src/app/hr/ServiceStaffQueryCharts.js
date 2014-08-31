@@ -179,6 +179,106 @@ define([
           func: function(chart) {
             //setup some logic for the chart
           }
+        },
+        basicColTrand: {
+          options: {
+            zoomType: 'xy',
+            credits: {
+              enabled: null
+            },
+            title: {
+            text: null
+            },
+            colors: colors,
+            tooltip: {
+              shared: true,
+              crosshairs: true,
+              style: {
+                padding: 10,
+                fontWeight: 'normal'
+              }
+              // pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+            },
+            legend: {
+              // layout: 'vertical',
+              // align: 'left',
+              // x: 120,
+              verticalAlign: 'top',
+              // y: 100,
+              // floating: true,
+              // backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            plotBackgroundColor: null,
+            plotBorderWidth: 1,//null,
+            plotShadow: false,
+            plotOptions: {
+              series: {
+                marker: {
+                  radius: 5,
+                  lineWidth: 2,
+                  symbol: 'circle'
+                }
+              }
+            },
+
+          },
+          useHighStocks: false,
+          //size (optional) if left out the chart will default to size of the div or something sensible.
+          size: {
+            height: 300
+          },
+          xAxis: [
+            {
+              categories: [],
+              labels: {
+                rotation: -45
+              }
+            }
+          ],
+          yAxis: [
+            { // Primary yAxis
+              allowDecimals: false,
+              min: 0,
+              labels: {
+                style: {
+                  color: Highcharts.getOptions().colors[0]
+                }
+              },
+              title: {
+                text: null,
+              }
+            }, { // Secondary yAxis
+              // allowDecimals: false,
+              min: 0,
+              title: {
+                text: null,
+              },
+              labels: {
+                formatter: function () {
+                  return this.value*100 + '%';
+                },
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+              },
+              opposite: true
+            }
+          ],
+          series: [
+            {
+              name: '离职人数',
+              type: 'column',
+              data: [],
+            }, {
+              name: '离职率',
+              type: 'line',
+              yAxis: 1,
+              data: [],
+              tooltip: {
+                valueSuffix: '%'
+              }
+            }
+          ]
         }
       };
     }

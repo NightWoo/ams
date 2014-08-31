@@ -99,6 +99,9 @@ class OrgStructureSeeker
   }
 
   public static function getChildren($parentId=1) {
+    if (empty($parentId)) {
+      $parentId = 1;
+    }
     $sql = "SELECT * FROM view_org_department WHERE parent_id=$parentId ORDER BY sort_number ASC";
     $list = Yii::app()->db->createCommand($sql)->queryAll();
     return $list;

@@ -27,6 +27,16 @@ define([
     };
 
     $scope.tabQuery = function (tab) {
+      var
+        query = $scope.query,
+        startDate = query.startDate && $filter('date')(query.startDate.val, 'yyyy-MM-dd'),
+        endDate = query.endDate && $filter('date')(query.endDate.val, 'yyyy-MM-dd');
+      if (!startDate || !endDate) {
+        CModal.alert({
+          content: '起始时间不可为空，且格式须为XXXX-XX-XX'
+        });
+        return false;
+      }
       Staff.resetQueryTabs($scope);
       tab.selected = true;
       $scope.curQueryKey = tab.queryKey;
@@ -46,6 +56,10 @@ define([
       }
     });
 
+    $scope.selectAnalysis = function (analysisKey) {
+      $scope.curAnalysis = analysisKey;
+    };
+
     function doQuery(queryKey) {
       var postData = queryData();
       Staff[queryKey]($scope, postData);
@@ -54,6 +68,7 @@ define([
     function queryData() {
       var
         query = $scope.query,
+        org = $scope.org,
         data = {
           employee: query.employee,
           conditions: {
@@ -62,8 +77,8 @@ define([
             endDate: query.endDate && $filter('date')(query.endDate.val, 'yyyy-MM-dd'),
             gradeId: query.grade,
             staffGrade: query.staffGrade,
-            deptId: ($scope.org[3] && $scope.org[3].id) || ($scope.org[2] && $scope.org[2].id) || ($scope.org[1] && $scope.org[1].id),
-            includeResigned: query.includeResigned || false
+            deptId: (org[3] && org[3].id) || (org[2] && org[2].id) || (org[1] && org[1].id),
+            countLevel: (org[2] && org[2].id &&  3) || (org[1] && org[1].id && 2) || 1
           },
           pager: $scope.pager
         };

@@ -170,6 +170,11 @@
         <div ng-if="chartConfig.orgBar.series[0].data.length" highchart config="chartConfig.orgBar"></div>
       </div>
       <div ng-if="curAnalysis==='grade'">
+        <div class="pull-right mb_5">
+          <span class="label label-success">技术专家</span>
+          <span class="label label-warning">技能</span>
+          <span class="label label-primary">管理</span>
+        </div>
         <div highchart config="chartConfig.gradeBar"></div>
       </div>
       <div ng-if="curAnalysis==='staffGrade'">

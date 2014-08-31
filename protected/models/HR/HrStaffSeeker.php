@@ -183,8 +183,8 @@ class HrStaffSeeker
   public function curMonthResignRate() {
     $startDate = date("Y-m-01");
     $endDate = date("Y-m-d");
-    $resignCount = intval($this->countResign($startDate, $endDate));
-    $staffCount = intval($this->countStaff());
+    $resignCount = $this->countResign($startDate, $endDate);
+    $staffCount = $this->countCurrent();
     $rate = round($resignCount / ($staffCount + $resignCount), 2);
     return array(
       'resignCount' => $resignCount,
@@ -193,52 +193,10 @@ class HrStaffSeeker
     );
   }
 
-  public function countStaff() {
-    $sql = "SELECT COUNT(*) FROM hr_staff WHERE status = 0";
-    $count = Yii::app()->db->createCommand($sql)->queryScalar();
-    return intval($count);
-  }
-
-  public function countResign($startDate, $endDate='') {
-    if (empty($endDate)) {
-      $endDate = date("Y-m-d");
-    }
-    $sql = "SELECT COUNT(*) FROM hr_resign WHERE `date`>='$startDate' AND `date`<='$endDate'";
-    $count = Yii::app()->db->createCommand($sql)->queryScalar();
-    return intval($count);
-  }
-
   public function queryStaffList($conditions, $pager=array('pageSize'=>0)) {
     $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
     $pager = is_array($pager) ? $pager : CJSON::decode($pager);
-    $conArr = array();
-    if (!empty($conditions['gradeId'])) {
-      $conArr[] = "grade_id = {$conditions['gradeId']}";
-    }
-    if (!empty($conditions['position'])) {
-      $conArr[] = "(UPPER(position_short_name) LIKE '%{$conditions['position']}%' OR position_display_name LIKE '%{$conditions['position']}%' OR UPPER(position_name) LIKE '%{$conditions['position']}%')";
-    } else if (!empty($conditions['staffGrade'])) {
-      $conArr[] = "staff_grade = '{$conditions['staffGrade']}'";
-    }
-
-    if (!empty($conditions['deptId'])) {
-      $conArr[] = "(dept_id = {$conditions['deptId']} OR dept_parent_id = {$conditions['deptId']} OR parent_parent_id = {$conditions['deptId']})";
-    }
-    if ($conditions['gender'] > -1) {
-      $conArr[] = "gender = {$conditions['gender']}";
-    }
-    if (!empty($conditions['provinceId'])) {
-      $conArr[] = "province_id = {$conditions['provinceId']}";
-    }
-    if (!empty($conditions['cityId'])) {
-      $conArr[] = "native_city_id = {$conditions['cityId']}";
-    }
-    if (!empty($conditions['education'])) {
-      $conArr[] = "education = '{$conditions['education']}'";
-    }
-    if (!empty($conditions['major'])) {
-      $conArr[] = "major LIKE '%{$conditions['major']}%'";
-    }
+    $conArr = $this->commonConditionArr($conditions);
     if (!empty($conditions['isResigned']) && $conditions['isResigned']) {
       $conArr[] = "staff_status = 1";
       if (!empty($conditions['startDate'])) {
@@ -250,6 +208,7 @@ class HrStaffSeeker
     } else {
       $conArr[] = "staff_status = 0";
     }
+
     $conditionText = join(" AND ", $conArr);
     if (!empty($conditionText)) {
       $conditionText = 'WHERE ' . $conditionText;
@@ -276,6 +235,39 @@ class HrStaffSeeker
       "result"=>$data,
       "total"=>$count
     );
+  }
+
+  public function commonConditionArr($conditions) {
+    $conArr = array();
+    if (!empty($conditions['gradeId'])) {
+      $conArr[] = "grade_id = {$conditions['gradeId']}";
+    }
+    if (!empty($conditions['position'])) {
+      $conArr[] = "(UPPER(position_short_name) LIKE '%{$conditions['position']}%' OR position_display_name LIKE '%{$conditions['position']}%' OR UPPER(position_name) LIKE '%{$conditions['position']}%')";
+    } else if (!empty($conditions['staffGrade'])) {
+      $conArr[] = "staff_grade = '{$conditions['staffGrade']}'";
+    }
+
+    if (!empty($conditions['deptId'])) {
+      $conArr[] = "(dept_id = {$conditions['deptId']} OR dept_parent_id = {$conditions['deptId']} OR parent_parent_id = {$conditions['deptId']})";
+    }
+    if (isset($conditions['gender']) && $conditions['gender'] > -1) {
+      $conArr[] = "gender = {$conditions['gender']}";
+    }
+    if (!empty($conditions['provinceId'])) {
+      $conArr[] = "province_id = {$conditions['provinceId']}";
+    }
+    if (!empty($conditions['cityId'])) {
+      $conArr[] = "native_city_id = {$conditions['cityId']}";
+    }
+    if (!empty($conditions['education'])) {
+      $conArr[] = "education = '{$conditions['education']}'";
+    }
+    if (!empty($conditions['major'])) {
+      $conArr[] = "major LIKE '%{$conditions['major']}%'";
+    }
+
+    return $conArr;
   }
 
   public function queryStaffListByEmployee($employee, $pager) {
@@ -362,16 +354,15 @@ class HrStaffSeeker
   public function queryAnalysisIn($conditions) {
     $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
     $staffData = $this->queryStaffList($conditions);
-    // $analysis = array();
-    $parentId = empty($conditions['deptId']) ? 1 : $conditions['deptId'];
+    $deptId = empty($conditions['deptId']) ? 1 : $conditions['deptId'];
     $level = $conditions['countLevel'];
-    $analysis = $this->resolveAnalysis($staffData['result'], $parentId, $level);
+    $analysis = $this->resolveAnalysisIn($staffData['result'], $deptId, $level);
     return $analysis;
   }
 
-  public function resolveAnalysis($staffData, $parentId, $level) {
+  public function resolveAnalysisIn($staffData, $deptId, $level) {
     $analysis = array();
-    $orgData = $this->initAnalysisOrg($parentId);
+    $orgData = $this->initAnalysisOrg($deptId);
     $gradeData = $this->initAnalysisGrade();
     $staffGradeData = $this->initAnalysisStaffGrade();
     $nativeData = array(
@@ -432,32 +423,41 @@ class HrStaffSeeker
     return $analysis;
   }
 
-  public function initAnalysisOrg($parentId) {
+  public function initAnalysisOrg($deptId) {
     $analysisData = array();
-    $orgList = OrgStructureSeeker::getChildren($parentId);
+    $orgList = OrgStructureSeeker::getChildren($deptId);
     foreach ($orgList as $org) {
       $analysisData[$org['id']] = array(
         'name' => $org['display_name'],
+        'y' => 0,
+        'id' => $org['id'],
         'shortName' => $org['short_name'],
-        'managerName' => $org['manager_name'],
-        'y' => 0
+        'managerName' => $org['manager_name']
       );
     }
     return $analysisData;
   }
 
   public function initAnalysisGrade() {
-    $sql = "SELECT * FROM hr_grade ORDER BY channel";
+    $sql = "SELECT * FROM hr_grade ORDER BY channel, level DESC";
     $gradeList = Yii::app()->db->createCommand($sql)->queryAll();
 
+    $color = array(
+      '管理' => '#428bca',
+      '技术专家' => '#5cb85c',
+      '技能' => '#f0ad4e'
+    );
     $analysisData = array();
     foreach ($gradeList as $grade) {
       $analysisData[$grade['id']] = array(
-        'name' => $grade['grade_name'],
+        'name' => $grade['grade_name'] . '(' . $grade['grade'] . ')',
         'grade' => $grade['grade'],
         'channel' => $grade['channel'],
         'y' => 0
       );
+      if (!empty($color[$grade['channel']])) {
+        $analysisData[$grade['id']]['color'] = $color[$grade['channel']];
+      }
     }
     return $analysisData;
   }
@@ -473,6 +473,160 @@ class HrStaffSeeker
       );
     }
     return $analysisData;
+  }
+
+
+  public function queryAnalysisOutOrg($conditions) {
+    $deptId = empty($conditions['deptId']) ? 1 : $conditions['deptId'];
+    $analysis = $this->initAnalysisOrg($deptId);
+    $orgCon = $conditions;
+    $curDate = date('Y-m-d');
+    $startDate = !empty($conditions['startDate']) ? $conditions['startDate'] : '';
+    $endDate = !empty($conditions['endDate']) ? $conditions['endDate'] : $curDate;
+    foreach ($analysis as &$org) {
+      $orgCon['deptId'] = $org['id'];
+      $conArr = $this->commonConditionArr($orgCon);
+      $org['y'] = $this->calculateResignRate($startDate, $endDate, $conArr);
+    }
+    $analysis = $this->multi_array_sort(array_values($analysis), 'y', SORT_DESC);
+    return $analysis;
+  }
+
+  public function queryAnalysisOutTrend($conditions) {
+    $analysis = array(array(), array());
+    $datePeriods = $this->parsePeriod($conditions['startDate'], $conditions['endDate']);
+    $conArr = $this->commonConditionArr($conditions);
+    foreach ($datePeriods as $period) {
+      $analysis[0][] = array(
+        'name' => $period['point'],
+        'y' => $this->countResign($period['sDate'], $period['eDate'], $conArr, true)
+      );
+      $analysis[1][] = array(
+        'name' => $period['point'],
+        'y' => $this->calculateResignRate($period['sDate'], $period['eDate'], $conArr)
+      );
+
+    }
+    return $analysis;
+  }
+
+  public function queryAnalysisOutReason($conditions) {
+    $analysis = array();
+    $staffData = $this->queryStaffList($conditions)['result'];
+    foreach ($staffData as $staff) {
+      $reasons = explode(",", $staff['resign_reason']);
+      foreach ($reasons as $reason) {
+        if (empty($analysis[$reason])) {
+          $analysis[$reason] = array(
+            'name' => $reason,
+            'y' => 0,
+          );
+        }
+        $analysis[$reason]['y']++;
+      }
+    }
+
+    return array_values($analysis);
+  }
+
+  public function calculateResignRate($startDate, $endDate, $conArr) {
+    $countCurrent = $this->countCurrent($conArr);
+
+    $curDate = date('Y-m-d');
+    $countAddFromEnd = $this->countAdd($endDate, $curDate, $conArr);
+    $countResignFromEnd = $this->countResign($endDate, $curDate, $conArr);
+    $countStaffIn = $countCurrent - $countAddFromEnd + $countResignFromEnd;
+
+    $countResign = $this->countResign($startDate, $endDate, $conArr, true);
+
+    $countStaffBasic = $countStaffIn + $countResign;
+
+    $rate = empty($countStaffBasic) ? null : ($countResign / $countStaffBasic);
+
+    return round($rate, 2);
+  }
+
+  public function countCurrent($conArr=array()) {
+    $conArr[] = "staff_status = 0";
+    $conditionText = "WHERE " . join(' AND ', $conArr);
+    $sql = "SELECT COUNT(*) FROM view_hr_staff $conditionText";
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
+  }
+
+  public function countAdd($fromDate, $toDate, $conArr, $includeFrom = false) {
+    $conArr[] = $includeFrom ? "resign_date>='$fromDate'" : "resign_date>'$fromDate'";
+    $conArr[] = "enter_date<='$toDate'";
+    $conditionText = "WHERE " . join(' AND ', $conArr);
+    $sql = "SELECT COUNT(*) FROM view_hr_staff $conditionText";
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
+  }
+
+  public function countResign($fromDate, $toDate, $conArr=array(), $includeFrom = false) {
+    $conArr[] = $includeFrom ? "resign_date>='$fromDate'" : "resign_date>'$fromDate'";
+    $conArr[] = "resign_date<='$toDate'";
+    $conditionText = "WHERE " . join(' AND ', $conArr);
+    $sql = "SELECT COUNT(*) FROM view_hr_staff $conditionText";
+
+    $count = Yii::app()->db->createCommand($sql)->queryScalar();
+    return intval($count);
+  }
+
+  public function multi_array_sort ($multi_array,$sort_key,$sort=SORT_ASC) {
+    if(is_array($multi_array)){
+        foreach ($multi_array as $row_array){
+            if(is_array($row_array)){
+                $key_array[] = $row_array[$sort_key];
+            }else{
+                return -1;
+            }
+        }
+    }else{
+        return -1;
+    }
+    array_multisort($key_array,$sort,$multi_array);
+    return $multi_array;
+  }
+
+  public function parsePeriod($from, $to) {
+    $s = strtotime($from);
+    $e = strtotime($to);
+    $ret = array();
+
+    $format = 'Y-m-d';
+    $timespan = $e - $s;
+    if ($timespan < 86400 * 365) {
+      $pointFormat = 'Y-m';
+    } else {
+
+      $pointFormat = 'Y';
+    }
+
+    $t = $s;
+    while($t<$e) {
+      $point = date($pointFormat, $t);
+      if ($pointFormat === 'Y-m') {
+        $eNextM = strtotime('first day of next month', $t);     //next month
+        $ee = date('Y-m-d', $eNextM);                           //next month firstday
+        $etmp = strtotime($ee);                               //next month firstday
+        $eDate = date('Y-m-t', $t);
+      } else {
+        $eNextY = strtotime('first day of next year', $t);     //next month
+        $ee = date('Y-1-1', $eNextY);                           //next month firstday
+        $etmp = strtotime($ee);                                //next month firstday
+        $eDate = date('Y-12-31', $t);
+      }
+
+      $ret[] = array(
+        'sDate' => date($format, $t),
+        'eDate' => $eDate,
+        'point' => $point,
+      );
+      $t = $etmp;
+    }
+
+    return $ret;
   }
 
 }

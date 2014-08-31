@@ -134,6 +134,14 @@ define([
           transformRequest: transformRequestAsFormPost,
           data: paramObj
         });
+      },
+      queryAnalysisOut: function (paramObj) {
+        return $http({
+          method: 'post',
+          url: '/bms/staff/queryAnalysisOut',
+          transformRequest: transformRequestAsFormPost,
+          data: paramObj
+        });
       }
     };
   }]);

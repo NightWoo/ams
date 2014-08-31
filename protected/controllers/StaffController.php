@@ -320,10 +320,25 @@ class StaffController extends BmsBaseController
 
   public function actionQueryAnalysisIn() {
     $conditions = $this->validateStringVal('conditions', '{}');
-    $pager = $this->validateStringVal('pager', '{}');
     try {
       $seeker = new HrStaffSeeker();
       $data = $seeker->queryAnalysisIn($conditions);
+
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
+  public function actionQueryAnalysisOut() {
+    $conditions = $this->validateStringVal('conditions', '{}');
+    try {
+      $seeker = new HrStaffSeeker();
+      $data = array();
+      $conditions =  is_array($conditions) ? $conditions : CJSON::decode($conditions);
+      $data['org'] = $seeker->queryAnalysisOutOrg($conditions);
+      $data['trend'] = $seeker->queryAnalysisOutTrend($conditions);
+      $data['reason'] = $seeker->queryAnalysisOutReason($conditions);
 
       $this->renderJsonApp(true, 'query success', $data);
     } catch (Exception $e) {

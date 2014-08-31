@@ -164,7 +164,7 @@ define([
           // {queryKey: 'queryEduPie', name: '学历分布'},
         ];
         scope.analysisTabs = [
-          {key: 'org', name: '科室班组'},
+          {key: 'org', name: '科室/班/组'},
           {key: 'grade', name: '岗位等级'},
           {key: 'staffGrade', name: '工资等级'},
           {key: 'edu', name: '学历'},
@@ -196,6 +196,50 @@ define([
             scope.provinces = response.data;
           }
         });
+      },
+      /**
+       * 离职查询 初始化
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      initQueryOut: function (scope) {
+        scope.queryTabs = [
+          {queryKey: 'queryStaffList', name: '详细信息'},
+          {queryKey: 'queryAnalysisOut', name: '离职率分析'},
+          // {queryKey: 'queryEduPie', name: '学历分布'},
+        ];
+        scope.analysisTabs = [
+          {key: 'org', name: '科室/班/组'},
+          {key: 'trend', name: '时间趋势'},
+          {key: 'reason', name: '离职原因'},
+        ];
+        scope.chartConfig = {};
+        scope.pager = {
+          pageSize: 10,
+          // pageSizeSlots: [10,20,30,50],
+          pageNumber: 1,
+          totalCount: 0
+        };
+
+        var today = new Date();
+        scope.query = {
+          endDate: {
+            val: new Date()
+          },
+          startDate: {
+            val: today.setMonth(today.getMonth()-3)
+          },
+        };
+        StaffHttp.getGradeList().success(function (response) {
+          if (response.success) {
+            scope.gradeList = response.data;
+          }
+        });
+        scope.staffGrades = staffGrades();
+        //科室/班/组 下拉
+        getOrg(scope);
+        //岗位 下拉
+        getGradePosition(scope);
       },
       resetStaffList: function (scope) {
         scope.stafflList = [];
@@ -239,41 +283,22 @@ define([
 
           }
         });
-        scope.chartConfig.eduPie = StaffQueryCharts.eduPie;
       },
-      queryEduPie: function (scope, postData) {
-        scope.chartConfig.eduPie = StaffQueryCharts.eduPie;
-      },
-      /**
-       * 离职查询 初始化
-       * @param  {[type]} scope [description]
-       * @return {[type]}       [description]
-       */
-      initQueryOut: function (scope) {
-        scope.queryTabs = [
-          {queryKey: 'queryStaffList', name: '详细信息'},
-          // {queryKey: 'queryGradeColumn', name: '岗位等级分布'},
-          // {queryKey: 'queryEduPie', name: '学历分布'},
-        ];
-        scope.chartConfig = {};
-        scope.pager = {
-          pageSize: 10,
-          // pageSizeSlots: [10,20,30,50],
-          pageNumber: 1,
-          totalCount: 0
-        };
-
-        scope.query = {};
-        StaffHttp.getGradeList().success(function (response) {
+      queryAnalysisOut: function (scope, postData) {
+        StaffHttp.queryAnalysisOut(postData).success(function (response) {
           if (response.success) {
-            scope.gradeList = response.data;
+            // console.log(response);
+            scope.chartConfig.orgBar = angular.copy(StaffQueryCharts.basicBar);
+            scope.chartConfig.orgBar.series[0].data = response.data.org;
+
+            scope.chartConfig.colTrend = angular.copy(StaffQueryCharts.basicColTrand);
+            scope.chartConfig.colTrend.series[0].data = response.data.trend[0];
+            scope.chartConfig.colTrend.series[1].data = response.data.trend[1];
+
+            scope.chartConfig.reasonPie = angular.copy(StaffQueryCharts.basicPie);
+            scope.chartConfig.reasonPie.series[0].data = response.data.reason;
           }
         });
-        scope.staffGrades = staffGrades();
-        //科室/班/组 下拉
-        getOrg(scope);
-        //岗位 下拉
-        getGradePosition(scope);
       },
       initQueryInfo: function (scope) {
         scope.query = {};
