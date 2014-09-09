@@ -326,6 +326,13 @@ class HrStaffSeeker
       "level" => $staff['dept_level']
     );
     $staff['dept_parents'] = $parents;
+
+    if ($staff['manager_id'] === $staff['user_id']) {
+      $staff['supervisor_name'] = $staff['parent_manager_name'];
+    }
+    // if ($staff['dept_level'] == 0) {
+    //   $staff['supervisor_name'] = '段伟';
+    // }
     return $staff;
   }
 
