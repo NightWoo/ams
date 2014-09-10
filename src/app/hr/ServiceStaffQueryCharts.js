@@ -82,7 +82,7 @@ define([
           useHighStocks: false,
           //size (optional) if left out the chart will default to size of the div or something sensible.
           size: {
-            height: 300
+            height: 400
           },
           //function (optional)
           func: function(chart) {
@@ -173,7 +173,7 @@ define([
           useHighStocks: false,
           //size (optional) if left out the chart will default to size of the div or something sensible.
           size: {
-            height: 300
+            height: 400
           },
           //function (optional)
           func: function(chart) {

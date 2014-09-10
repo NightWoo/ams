@@ -23,26 +23,27 @@ class HrApprovalProcess {
 
     $type = 'differentLevel1';
     $processDepts = array(
-      '1' => $curParents[1]['id'],
-      '2' => $applyParents[1]['id'],
+      '1' => isset($curParents[1]['id']) ? $curParents[1]['id'] : $curDept->id,
+      '2' => isset($applyParents[1]['id']) ? $applyParents[1]['id'] : $applyDept->id,
       '3' => OrgStructureSeeker::getTrId(),
       '4' => 0,
       '5' => -1,
     );
 
-
-    if ($curParents[1] && $applyParents[1] && $curParents[1]['id'] === $applyParents[1]['id']) {
-      // if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
-        $type = 'differentLevel2';
-        $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
-        $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
-      // } else {
-      //   $type = 'sameLevel2';
-      //   $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
-      //   $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
-      // }
-    } else {
-      $processDepts['4'] = OrgStructureSeeker::getFactoryId();
+    if (isset($curParents[1]['id']) && isset($applyParents[1]['id'])) {
+      if ($curParents[1]['id'] === $applyParents[1]['id']) {
+        // if (empty($curParents[2]) || empty($applyParents[2]) || ($curParents[2]['id'] !== $applyParents[2]['id'])) {
+          $type = 'differentLevel2';
+          $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
+          $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
+        // } else {
+        //   $type = 'sameLevel2';
+        //   $processDepts['1'] = empty($curParents[2]) ? $curDept['id'] : $curParents[2]['id'];
+        //   $processDepts['2'] = empty($applyParents[2]) ? $applyDept['id'] : $applyParents[2]['id'];
+        // }
+      } else {
+        $processDepts['4'] = OrgStructureSeeker::getFactoryId();
+      }
     }
 
     return array($type, $processDepts);
