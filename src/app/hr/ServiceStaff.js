@@ -196,6 +196,12 @@ define([
             scope.provinces = response.data;
           }
         });
+
+        StaffHttp.getManagerList().success(function (response) {
+          if (response.success) {
+            scope.managerList = response.data;
+          }
+        });
       },
       /**
        * 离职查询 初始化

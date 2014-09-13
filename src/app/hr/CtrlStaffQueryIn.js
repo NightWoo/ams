@@ -94,7 +94,8 @@ define([
             provinceId: provinceSelected && provinceSelected.id,
             cityId: query.nativeCityId,
             education: query.education,
-            major: query.major
+            major: query.major,
+            supervisorId: query.supervisorId
           },
           pager: $scope.pager
         };

@@ -228,6 +228,9 @@ class HrStaffSeeker
     $data = Yii::app()->db->createCommand($sql)->queryAll();
     $data = $this->resovleStaffListOrg($data);
 
+    // throw new Exception("$sql", 1);
+
+
     $countSql = "SELECT COUNT(*) FROM view_hr_staff $conditionText";
     $count = Yii::app()->db->createCommand($countSql)->queryScalar();
 
@@ -266,6 +269,10 @@ class HrStaffSeeker
     if (!empty($conditions['major'])) {
       $conArr[] = "major LIKE '%{$conditions['major']}%'";
     }
+    if (!empty($conditions['supervisorId'])) {
+      $supervisorId = $conditions['supervisorId'];
+      $conArr[] = "((manager_id = $supervisorId && (user_id <> $supervisorId OR ISNULL(user_id))) OR (parent_manager_id = $supervisorId && user_id = manager_id))";
+    }
 
     return $conArr;
   }
@@ -303,7 +310,6 @@ class HrStaffSeeker
   public function resovleStaffListOrg($data) {
     if (!empty($data)) {
       $orgSeeker = new OrgStructureSeeker();
-      $parents = array();
       foreach ($data as &$staff) {
         $staff = $this->resovleStaffOrg($staff);
       }
@@ -326,9 +332,11 @@ class HrStaffSeeker
       "level" => $staff['dept_level']
     );
     $staff['dept_parents'] = $parents;
+    $staff['supervisor_id'] = $staff['manager_id'];
 
     if ($staff['manager_id'] === $staff['user_id']) {
       $staff['supervisor_name'] = $staff['parent_manager_name'];
+      $staff['supervisor_id'] = $staff['parent_manager_id'];
     }
     // if ($staff['dept_level'] == 0) {
     //   $staff['supervisor_name'] = '段伟';
@@ -420,13 +428,19 @@ class HrStaffSeeker
     }
 
 
-    $analysis['org'] = array_values($orgData);
-    $analysis['grade'] = array_values($gradeData);
-    $analysis['staffGrade'] = array_values($staffGradeData);
-    $analysis['province'] = array_values($nativeData['province']);
-    $analysis['city'] = array_values($nativeData['city']);
+    // $analysis['org'] = array_values($orgData);
+    $analysis['org'] = $this->multi_array_sort(array_values($orgData), 'y', SORT_DESC);
+    // $analysis['grade'] = array_values($gradeData);
+    $analysis['grade'] = $this->multi_array_sort(array_values($gradeData), 'y', SORT_DESC);
+    // $analysis['staffGrade'] = array_values($staffGradeData);
+    $analysis['staffGrade'] = $this->multi_array_sort(array_values($staffGradeData), 'y', SORT_DESC);
+    // $analysis['province'] = array_values($nativeData['province']);
+    $analysis['province'] = $this->multi_array_sort(array_values($nativeData['province']), 'y', SORT_DESC);
+    // $analysis['city'] = array_values($nativeData['city']);
+    $analysis['city'] = $this->multi_array_sort(array_values($nativeData['city']), 'y', SORT_DESC);
     $analysis['gender'] = array_values($genderData);
-    $analysis['edu'] = array_values($eduData);
+    // $analysis['edu'] = array_values($eduData);
+    $analysis['edu'] = $this->multi_array_sort(array_values($eduData), 'y', SORT_DESC);
     return $analysis;
   }
 

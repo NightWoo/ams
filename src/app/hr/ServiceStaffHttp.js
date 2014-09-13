@@ -142,6 +142,12 @@ define([
           transformRequest: transformRequestAsFormPost,
           data: paramObj
         });
+      },
+      getManagerList: function (paramObj) {
+        return $http({
+          method: 'get',
+          url: '/bms/staff/getManagerList'
+        });
       }
     };
   }]);

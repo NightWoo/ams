@@ -74,6 +74,25 @@ class OrgStructureSeeker
     return $org;
   }
 
+  public function getManagerList() {
+    $sql = "SELECT
+              manager_id,
+              manager_name,
+              level,
+              parent_dept_display_name
+            FROM
+              view_org_department
+            WHERE
+              manager_id > 0 AND
+              removed = 0
+            GROUP BY
+              manager_id
+            ORDER BY
+              level ASC";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
+    return $data;
+  }
+
   public static function getDeptManager($deptId) {
     $sql = "SELECT manager_id FROM org_department WHERE id=$deptId";
     $managerId  = Yii::app()->db->createCommand($sql)->queryScalar();

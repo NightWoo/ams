@@ -87,8 +87,12 @@
       <div class="col col_20p">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-addon">工号/姓名</span>
-            <input type="text" class="form-control" ng-model="query.employee" ng-change="resetStaffList()">
+            <!-- <span class="input-group-addon">工号/姓名</span>
+            <input type="text" class="form-control" ng-model="query.employee" ng-change="resetStaffList()"> -->
+            <span class="input-group-addon">考核人</span>
+              <select class="form-control" ng-model="query.supervisorId" ng-options="one.manager_id as one.manager_name group by one.parent_dept_display_name for one in managerList" ng-change="resetStaffList()">
+              <option value="">空</option>
+            </select>
           </div>
         </div>
       </div>

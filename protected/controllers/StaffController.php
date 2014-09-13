@@ -8,6 +8,7 @@ Yii::import('application.models.HR.HrStaff');
 Yii::import('application.models.HR.HrApproval');
 Yii::import('application.models.HR.HrTransfer');
 Yii::import('application.models.HR.HrStaffSeeker');
+Yii::import('application.models.HR.OrgStructureSeeker');
 
 class StaffController extends BmsBaseController
 {
@@ -208,7 +209,9 @@ class StaffController extends BmsBaseController
       $staff = $seeker->queryStaffInfo($employee);
       $data = array();
       $userId = Yii::app()->user->id;
-      $isSupervisor = ($userId==$staff['manager_id'] || $userId==$staff['parent_manager_id'] || $userId==$staff['parent_parent_manager_id'] || $userId==$staff['id']);
+      $level0 = OrgDepartmentAR::model()->find('level=0');
+      $level0ManagerId = empty($level0) ? 1 : $level0->manager_id;
+      $isSupervisor = ($userId==$staff['manager_id'] || $userId==$staff['parent_manager_id'] || $userId==$staff['parent_parent_manager_id'] || $userId==$staff['id'] || $userId == $level0ManagerId);
       if (!empty($staff) && $isSupervisor) {
         $data['staff'] = $staff;
         $data['transferRecord'] = $seeker->queryTransferRecord($staff['id']);
@@ -340,6 +343,16 @@ class StaffController extends BmsBaseController
       $data['trend'] = $seeker->queryAnalysisOutTrend($conditions);
       $data['reason'] = $seeker->queryAnalysisOutReason($conditions);
 
+      $this->renderJsonApp(true, 'query success', $data);
+    } catch (Exception $e) {
+      $this->renderJsonApp(false, $e->getMessage());
+    }
+  }
+
+  public function actionGetManagerList() {
+    try {
+      $seeker = new OrgStructureSeeker();
+      $data = $seeker->getManagerList();
       $this->renderJsonApp(true, 'query success', $data);
     } catch (Exception $e) {
       $this->renderJsonApp(false, $e->getMessage());
