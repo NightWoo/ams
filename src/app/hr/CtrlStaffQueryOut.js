@@ -56,6 +56,12 @@ define([
       }
     });
 
+    $scope.setPageSize = function (size) {
+      $scope.pager.pageSize = size;
+      resetPageNumber();
+      doQuery($scope.curQueryKey);
+    };
+
     $scope.selectAnalysis = function (analysisKey) {
       $scope.curAnalysis = analysisKey;
     };

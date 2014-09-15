@@ -174,7 +174,7 @@ define([
         scope.chartConfig = {};
         scope.pager = {
           pageSize: 10,
-          // pageSizeSlots: [10,20,30,50],
+          pageSizeSlots: [10,20,30,50],
           pageNumber: 1,
           totalCount: 0
         };
@@ -222,7 +222,7 @@ define([
         scope.chartConfig = {};
         scope.pager = {
           pageSize: 10,
-          // pageSizeSlots: [10,20,30,50],
+          pageSizeSlots: [10,20,30,50],
           pageNumber: 1,
           totalCount: 0
         };

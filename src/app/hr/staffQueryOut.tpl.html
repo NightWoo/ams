@@ -41,9 +41,23 @@
         <a class="ptb_5" ng-click="tabQuery(tab)">{{tab.name}}</a>
       </li>
     </ul>
+<!--     <div class="pull-right" ng-if="curQueryKey==='queryStaffList' && stafflList">
+      <button class="btn btn-default btn-sm pull-left mr_5" ng-click="exportStaffList()">导出全部{{pager.totalCount}}条记录</button>
+      <pagination total-items="pager.totalCount" ng-model="pager.pageNumber" class="pagination-sm m_0" boundary-links="true" rotate="false" num-pages="pager.totalPages" previous-text="&lt;" next-text="&gt;" first-text="&laquo;" last-text="&raquo;" rotate="false" max-size="10"></pagination>
+    </div> -->
     <div class="pull-right" ng-if="curQueryKey==='queryStaffList' && stafflList">
       <button class="btn btn-default btn-sm pull-left mr_5" ng-click="exportStaffList()">导出全部{{pager.totalCount}}条记录</button>
-      <pagination total-items="pager.totalCount" ng-model="pager.pageNumber" max-size="maxSize" class="pagination-sm m_0" boundary-links="true" rotate="false" num-pages="pager.totalPages" previous-text="&lt;" next-text="&gt;" first-text="&laquo;" last-text="&raquo;" rotate="false" max-size="10"></pagination>
+      <pagination total-items="pager.totalCount" ng-model="pager.pageNumber" class="pagination-sm m_0 mr_5" boundary-links="true" rotate="false" items-per-page="pager.pageSize" previous-text="&lt;" next-text="&gt;" first-text="&laquo;" last-text="&raquo;" rotate="false" max-size="10"></pagination>
+      <div class="btn-group pull-right" dropdown is-open="pageSizeDrop.isopen">
+        <button type="button" class="btn btn-default btn-sm dropdown-toggle" ng-disabled="disabled">
+          {{pager.pageSize || 10}}&nbsp;行/页&nbsp;<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="item in pager.pageSizeSlots">
+            <a ng-click="setPageSize(item)">{{item}}</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <div ng-if="curQueryKey==='queryStaffList'">

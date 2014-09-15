@@ -428,12 +428,12 @@ class HrStaffSeeker
     }
 
 
-    // $analysis['org'] = array_values($orgData);
-    $analysis['org'] = $this->multi_array_sort(array_values($orgData), 'y', SORT_DESC);
-    // $analysis['grade'] = array_values($gradeData);
-    $analysis['grade'] = $this->multi_array_sort(array_values($gradeData), 'y', SORT_DESC);
-    // $analysis['staffGrade'] = array_values($staffGradeData);
-    $analysis['staffGrade'] = $this->multi_array_sort(array_values($staffGradeData), 'y', SORT_DESC);
+    $analysis['org'] = array_values($orgData);
+    // $analysis['org'] = $this->multi_array_sort(array_values($orgData), 'y', SORT_DESC);
+    $analysis['grade'] = array_values($gradeData);
+    // $analysis['grade'] = $this->multi_array_sort(array_values($gradeData), 'y', SORT_DESC);
+    $analysis['staffGrade'] = array_values($staffGradeData);
+    // $analysis['staffGrade'] = $this->multi_array_sort(array_values($staffGradeData), 'y', SORT_DESC);
     // $analysis['province'] = array_values($nativeData['province']);
     $analysis['province'] = $this->multi_array_sort(array_values($nativeData['province']), 'y', SORT_DESC);
     // $analysis['city'] = array_values($nativeData['city']);
@@ -460,7 +460,7 @@ class HrStaffSeeker
   }
 
   public function initAnalysisGrade() {
-    $sql = "SELECT * FROM hr_grade ORDER BY channel, level DESC";
+    $sql = "SELECT * FROM hr_grade ORDER BY channel, level ASC";
     $gradeList = Yii::app()->db->createCommand($sql)->queryAll();
 
     $color = array(
@@ -484,7 +484,7 @@ class HrStaffSeeker
   }
 
   public function initAnalysisStaffGrade() {
-    $gradeList = self::$STAFF_GRADE;
+    $gradeList = array_reverse(self::$STAFF_GRADE);
 
     $analysisData = array();
     foreach ($gradeList as $grade) {
